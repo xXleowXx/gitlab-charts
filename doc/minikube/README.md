@@ -68,8 +68,34 @@ While this is simple, we may want to provide higher than default resources for d
 
 ## Using Minikube
 
+Minikube can be used directly as a Kubernetes installation, and treated as a single node cluster. There some behaviors that are slightly difference between Minikube and full-fledged Kubernetes clusters, such as [Google Container Engine (GKE)][gke].
 
+Different:
+- Persistent Volumes: `hostPath` only.
+
+Unavailable:
+- Load Balancers (requires cloud provider)
+- Advanced Scheduling Policies (requires multiple nodes)
+
+### Gotcha: Persistent Volumes
+
+Minikube supports [PersistenVolumes](k8s-pv) of the `hostPath` type, which are mapped to directories inside the VM. As Minikube boots into a `tmpfs`, most directories will not persist across reboots via `minikube stop`.
+
+Further details, and listings of directories that _do_ persist, can be found [in the getting started guide](https://kubernetes.io/docs/getting-started-guides/minikube/#persistent-volumes)
+
+### Connecting to the dashboard
+
+You can find the URL for the dashboard by calling `minikube dashboard --url`.
+
+## Hooking Helm to Minikube
+
+Once your Minikube is up and running, you can hook [Helm] to it easily with `helm init`.
+
+For further details on [Helm][helm], we'll move to [Developing for Helm](../helm/README.md)
 
 [minikube-getting-started]: https://kubernetes.io/docs/getting-started-guides/minikube/
 [k8s-io]: https://kubernetes.io/
 [gcloud-sdk]: https://cloud.google.com/sdk/
+[gke]: https://cloud.google.com/
+[k8s-pv]: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+[helm]: https://helm.sh/
