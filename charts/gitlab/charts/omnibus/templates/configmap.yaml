@@ -37,6 +37,7 @@ data:
     # Rail-Registry related
     gitlab_rails['registry_enabled'] = true
     gitlab_rails['registry_host'] = {{ .Values.registry.host | quote }}
+    gitlab_rails['registry_port'] = {{ .Values.registry.port }}
     gitlab_rails['registry_api_url'] = "http://{{ .Release.Name }}-registry:5000"
     registry['internal_key'] = File.read("/etc/gitlab-registry/registry-certificate.crt")
     # gitlab_rails['registry_key_path'] = "/etc/gitlab-registry/registry-certificate.crt"
