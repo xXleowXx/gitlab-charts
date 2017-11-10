@@ -228,8 +228,8 @@ production:
       replicas="$new_replicas"
     fi
 
-    ROOT_PASSWORD=$(cat /dev/urandom | LC_TYPE=C tr -dc "[:alpha:]" | head -c 16)
-    echo "Generated root login: $ROOT_PASSWORD"
+    #ROOT_PASSWORD=$(cat /dev/urandom | LC_TYPE=C tr -dc "[:alpha:]" | head -c 16)
+    #echo "Generated root login: $ROOT_PASSWORD"
     # YAML_FILE=""${AUTO_DEVOPS_DOMAIN//\./-}.yaml"
 
     helm upgrade --install \
