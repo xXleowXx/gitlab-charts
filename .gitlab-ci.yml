@@ -227,7 +227,7 @@ production:
       replicas="$new_replicas"
     fi
 
-    ROOT_PASSWORD=$(cat /dev/urandom | LC_TYPE=C td -dc "[:alpha:]" | head -c 16)
+    ROOT_PASSWORD=$(cat /dev/urandom | LC_TYPE=C tr -dc "[:alpha:]" | head -c 16)
     echo "Generated root login: $ROOT_PASSWORD"
     # YAML_FILE=""${AUTO_DEVOPS_DOMAIN//\./-}.yaml"
 
@@ -332,8 +332,8 @@ production:
 
   function check_domain_ip() {
     # Expect the `DOMAIN` is a wildcard.
-    domain_ip=$(nslookup fetch-ip.$DOMAIN | grep "Address 1:" | cut -d' ' -f3)
-    if [ ! -z $domain_ip ]; then
+    domain_ip=$(nslookup fetch-ip.$DOMAIN 2>/dev/null | grep "Address 1:" | cut -d' ' -f3)
+    if [ -z $domain_ip ]; then
       echo "There was a problem resolving the IP of 'fetch-ip.$DOMAIN'. Be sure you have configured a DNS wildcard entry."
       false
     else
