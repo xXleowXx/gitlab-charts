@@ -360,7 +360,7 @@ production:
 
   function create_secret() {
     kubectl create secret -n "$KUBE_NAMESPACE" \
-      docker-registry gitlab-registry \
+      docker-registry gitlab-registry-docker \
       --docker-server="$CI_REGISTRY" \
       --docker-username="$CI_REGISTRY_USER" \
       --docker-password="$CI_REGISTRY_PASSWORD" \
