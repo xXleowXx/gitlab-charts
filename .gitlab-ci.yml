@@ -61,6 +61,7 @@ review:
   stage: review
   script:
     - check_kube_domain
+    - check_domain_ip
     - install_dependencies
 #    - download_chart
     - ensure_namespace
@@ -114,6 +115,7 @@ stop_review:
   stage: staging
   script:
     - check_kube_domain
+    - check_domain_ip
     - install_dependencies
 #    - download_chart
     - ensure_namespace
@@ -138,6 +140,7 @@ stop_review:
   stage: canary
   script:
     - check_kube_domain
+    - check_domain_ip
     - install_dependencies
 #    - download_chart
     - ensure_namespace
@@ -164,6 +167,7 @@ production:
   stage: production
   script:
     - check_kube_domain
+    - check_domain_ip
     - install_dependencies
     - download_chart
     - ensure_namespace
@@ -326,7 +330,7 @@ production:
     fi
   }
 
-  function check_kube_domain_address() {
+  function check_domain_ip() {
     # Expect the `DOMAIN` is a wildcard.
     domain_ip=$(nslookup fetch-ip.$DOMAIN | grep "Address 1:" | cut -d' ' -f3)
     if [ ! -z $domain_ip ]; then
