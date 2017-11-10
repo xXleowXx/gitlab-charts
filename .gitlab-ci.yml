@@ -34,6 +34,7 @@ variables:
   POSTGRES_PASSWORD: testing-password
   POSTGRES_ENABLED: "false"
   POSTGRES_DB: $CI_ENVIRONMENT_SLUG
+  TRACE: trace
 
 stages:
   - test
