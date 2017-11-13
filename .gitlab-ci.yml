@@ -70,7 +70,7 @@ review:
     - deploy
   environment:
     name: review/$CI_COMMIT_REF_NAME
-    url: https://gitlab.$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
     on_stop: stop_review
   variables:
     DOMAIN: $CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
@@ -124,7 +124,7 @@ stop_review:
     - deploy
   environment:
     name: staging
-    url: https://gitlab.staging.$AUTO_DEVOPS_DOMAIN
+    url: https://gitlab-staging.$AUTO_DEVOPS_DOMAIN
   variables:
     DOMAIN: staging.$AUTO_DEVOPS_DOMAIN
   only:
@@ -149,7 +149,7 @@ stop_review:
     - deploy canary
   environment:
     name: production
-    url: https://gitlab.$AUTO_DEVOPS_DOMAIN
+    url: https://gitlab-$AUTO_DEVOPS_DOMAIN
   variables:
     DOMAIN: $AUTO_DEVOPS_DOMAIN
   when: manual
