@@ -73,7 +73,7 @@ review:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
     on_stop: stop_review
   variables:
-    DOMAIN: $CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    DOMAIN: "-$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN"
   only:
     refs:
       - branches
@@ -126,7 +126,7 @@ stop_review:
     name: staging
     url: https://gitlab-staging.$AUTO_DEVOPS_DOMAIN
   variables:
-    DOMAIN: staging.$AUTO_DEVOPS_DOMAIN
+    DOMAIN: -staging.$AUTO_DEVOPS_DOMAIN
   only:
     refs:
       - master
@@ -149,9 +149,9 @@ stop_review:
     - deploy canary
   environment:
     name: production
-    url: https://gitlab-$AUTO_DEVOPS_DOMAIN
+    url: https://gitlab.$AUTO_DEVOPS_DOMAIN
   variables:
-    DOMAIN: $AUTO_DEVOPS_DOMAIN
+    DOMAIN: ".$AUTO_DEVOPS_DOMAIN"
   when: manual
   only:
     refs:
@@ -179,7 +179,7 @@ production:
     name: production
     url: https://gitlab.$AUTO_DEVOPS_DOMAIN
   variables:
-    DOMAIN: $AUTO_DEVOPS_DOMAIN
+    DOMAIN: ".$AUTO_DEVOPS_DOMAIN"
 #  when: manual
   only:
     refs:
@@ -235,34 +235,34 @@ production:
       --wait \
       --set releaseOverride="$CI_ENVIRONMENT_SLUG" \
       --set nginx.service.loadBalancerIP="$DOMAIN_IP" \
-      --set nginx.ingress.hosts[0].name="gitlab-$DOMAIN" \
+      --set nginx.ingress.hosts[0].name="gitlab$DOMAIN" \
       --set nginx.ingress.hosts[0].serviceName="omnibus" \
       --set nginx.ingress.hosts[0].servicePort="og-workhorse" \
-      --set nginx.ingress.hosts[1].name="registry-$DOMAIN" \
+      --set nginx.ingress.hosts[1].name="registry$DOMAIN" \
       --set nginx.ingress.hosts[1].serviceName="registry" \
       --set nginx.ingress.hosts[1].servicePort="registry" \
       --set nginx.ingress.tls[0].secretName=helm-charts-win-tls \
-      --set nginx.ingress.tls[0].hosts[0]="gitlab-$DOMAIN" \
-      --set nginx.ingress.tls[0].hosts[1]="registry-$DOMAIN" \
+      --set nginx.ingress.tls[0].hosts[0]="gitlab$DOMAIN" \
+      --set nginx.ingress.tls[0].hosts[1]="registry$DOMAIN" \
       --set registry.enabled=true \
       --set registry.service.type=NodePort \
       --set registry.registry.replicas=1 \
       --set registry.registry.storage.filesystem.rootdirectory="/var/lib/registry" \
       --set registry.registry.storage.cache.blobdescriptor="inmemory" \
       --set registry.registry.storage.delete.enabled=true \
-      --set registry.registry.authEndpoint="https://gitlab-$DOMAIN" \
-      --set registry.registry.tokenIssuer="gitlab-issuer" \
+      --set registry.registry.authEndpoint="https://gitlab$DOMAIN" \
+      --set registry.registry.tokenIssuer="omnibus-gitlab-issuer" \
       --set registry.registry.certBundle.secretName="gitlab-registry" \
       --set registry.registry.certBundle.bundleName="registry-auth.crt" \
       --set gitlab.omnibus.enabled=true \
       --set gitlab.omnibus.service.type=NodePort \
-      --set gitlab.omnibus.external_url="https://gitlab-$DOMAIN" \
+      --set gitlab.omnibus.external_url="https://gitlab$DOMAIN" \
       --set gitlab.omnibus.initial_root_password="$ROOT_PASSWORD" \
       --set gitlab.omnibus.redis.enabled=true \
       --set gitlab.omnibus.redis.password.secret=gitlab-redis \
       --set gitlab.omnibus.redis.password.key=redis-password \
       --set gitlab.omnibus.psql.enabled=true \
-      --set gitlab.omnibus.registry.host="registry-$DOMAIN" \
+      --set gitlab.omnibus.registry.host="registry$DOMAIN" \
       --set gitlab.omnibus.registry.port=443 \
       --set gitlab.omnibus.registry.secret=gitlab-registry \
       --set gitlab.omnibus.registry.certificate=registry-auth.key \
@@ -335,13 +335,13 @@ production:
 
   function check_domain_ip() {
     # Expect the `DOMAIN` is a wildcard.
-    domain_ip=$(nslookup fetch-ip.$DOMAIN 2>/dev/null | grep "Address 1:" | cut -d' ' -f3)
+    domain_ip=$(nslookup fetch-ip$DOMAIN 2>/dev/null | grep "Address 1:" | cut -d' ' -f3)
     if [ -z $domain_ip ]; then
-      echo "There was a problem resolving the IP of 'fetch-ip.$DOMAIN'. Be sure you have configured a DNS wildcard entry."
+      echo "There was a problem resolving the IP of 'fetch-ip$DOMAIN'. Be sure you have configured a DNS wildcard entry."
       false
     else
       export DOMAIN_IP=$domain_ip
-      echo "Found IP for $DOMAIN: $DOMAIN_IP"
+      echo "Found IP for fetch-ip$DOMAIN: $DOMAIN_IP"
       true
     fi
   }
