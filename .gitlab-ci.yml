@@ -340,7 +340,7 @@ production:
       echo "There was a problem resolving the IP of 'fetch-ip.$DOMAIN'. Be sure you have configured a DNS wildcard entry."
       false
     else
-      export DOMAIN_IP=$auto_devops_ip
+      export DOMAIN_IP=$domain_ip
       echo "Found IP for $DOMAIN: $DOMAIN_IP"
       true
     fi
