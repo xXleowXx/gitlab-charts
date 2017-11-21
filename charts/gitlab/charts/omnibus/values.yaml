@@ -12,7 +12,7 @@ service:
   clusterIP: '0.0.0.0'
   ports:
     nginx: 80
-    redis: 6397
+    redis: 6379
     psql: 5432
     shell: 22
     unicorn: 8080
