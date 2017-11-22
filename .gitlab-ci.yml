@@ -233,6 +233,7 @@ production:
 
     helm upgrade --install \
       --wait \
+      --timeout 600 \
       --set releaseOverride="$CI_ENVIRONMENT_SLUG" \
       --set nginx.service.loadBalancerIP="$DOMAIN_IP" \
       --set nginx.ingress.hosts[0].name="gitlab$DOMAIN" \
