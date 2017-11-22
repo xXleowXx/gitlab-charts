@@ -4,7 +4,7 @@
 {{- $releaseName := .Release.Name -}}
 {{- $releaseService := .Release.Service -}}
 {{- $fullname := printf "%s-%s" $releaseName $name | trunc 63 | trimSuffix "-" -}}
-{{- range .Values.pods -}}
+{{-   range .Values.pods -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,19 +14,16 @@ metadata:
     queue-pod-name: {{ .name }}
 data:
   sidekiq_queues.yml.erb: |
-    # Leave this here - spacer for helm parser
-    {{- if .concurrency -}}
+    {{- if .concurrency }}
     :concurrency: {{ .concurrency }}
-    {{- end -}}
-    {{- if .timeout -}}
+    {{- end }}
+    {{- if .timeout }}
     :timeout: {{ .timeout }}
-    {{- end -}}
-    {{- if .queues -}}
+    {{- end }}
+    {{- if .queues }}
     :queues:
-      {{- range $k, $item := .queues -}}
-      - [{{ $item[0] }}, {{ $item[1] }}]
-      {{- end -}}
-    {{- end -}}
+{{ toYaml .queues | indent 6 }}
+    {{- end }}
 # Leave this here - This line denotes end of block to the parser.
 ---
 {{-   end -}}
