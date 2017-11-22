@@ -1,0 +1,33 @@
+{{- if .Values.enabled -}}
+{{- $chartName := .Chart.Name -}}
+{{- $name := default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- $releaseName := .Release.Name -}}
+{{- $releaseService := .Release.Service -}}
+{{- $fullname := printf "%s-%s" $releaseName $name | trunc 63 | trimSuffix "-" -}}
+{{- range .Values.pods -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-%s" $fullname .name | trunc 63 }}
+  labels:
+    app: {{ $fullname }}
+    queue-pod-name: {{ .name }}
+data:
+  sidekiq_queues.yml.erb: |
+    # Leave this here - spacer for helm parser
+    {{- if .concurrency -}}
+    :concurrency: {{ .concurrency }}
+    {{- end -}}
+    {{- if .timeout -}}
+    :timeout: {{ .timeout }}
+    {{- end -}}
+    {{- if .queues -}}
+    :queues:
+      {{- range $k, $item := .queues -}}
+      - [{{ $item[0] }}, {{ $item[1] }}]
+      {{- end -}}
+    {{- end -}}
+# Leave this here - This line denotes end of block to the parser.
+---
+{{-   end -}}
+{{- end }}
