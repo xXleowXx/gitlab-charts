@@ -41,6 +41,8 @@ gitlab:
         worker:
           processes: 2
           timeout: 60
+      sidekiq:
+        enabled: true
       redis:
         enabled: true
         password:
