@@ -378,7 +378,7 @@ production:
   function terraform_up() {
     pushd ci/terraform/
     terraform apply -input=false -auto-approve -var environment=${CI_ENVIRONMENT_SLUG}
-    export DOMAIN_UP=$(terraform output loadBalancerIP)
+    export DOMAIN_IP=$(terraform output loadBalancerIP)
     popd
   }
 
