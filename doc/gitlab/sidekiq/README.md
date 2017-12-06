@@ -6,7 +6,7 @@ While this chart provides a default `pods:` declaration, if you provide an empty
 
 ## Requirements
 
-This chart depends on access to Redis and PostgreSQL services, either as part of the chart or provided as external services reachable from the Kubernetes cluster this chart is deployed onto.
+This chart depends on access to Redis and PostgreSQL services, either as part of the complete GitLab chart or provided as external services reachable from the Kubernetes cluster this chart is deployed onto.
 
 ## Design Choices
 
@@ -18,11 +18,74 @@ The `sidekiq` chart is configured in three parts: chart-wide external services, 
 
 ## External Services
 
-This chart should be attached to the same Redis and PostgreSQL instances as the
+This chart should be attached to the same Redis and PostgreSQL instances as the Unicorn chart. The values of external services will be populated into a `ConfigMap` that is shared across all Sidekiq pods.
 
-#### Redis
+### Redis
 
-#### PostgreSQL
+```YAML
+redis:
+  host: rank-racoon-redis
+  serviceName: omnibus
+  port: 6379
+  password:
+    secret: gitlab-redis
+    key: redis-password
+```
+
+#### host
+
+The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`
+
+#### serviceName
+
+The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. This will default to `omnibus`
+
+#### port
+
+The port on which to connect to the Redis server. Defaults to `6379`.
+
+#### password
+
+The `password` atribute for Redis has to sub keys:
+- `secret` defines the name of the kubernetes `Secret` to pull from
+- `key` defines the name of the key in the above secret that contains the password.
+
+
+### PostgreSQL
+
+```YAML
+psql:
+  host: rank-racoon-psql
+  serviceName: omnibus
+  port: 5432
+  database: gitlabhq_production
+  username: gitlab
+  password: nil
+```
+
+#### host
+
+The hostname of the PostgreSQL server with the database to use. This can be omitted in lieu of `serviceName`
+
+#### serviceName
+
+The name of the `service` which is operating the PostgreSQL database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. This will default to `omnibus`
+
+#### port
+
+The port on which to connect to the PostgreSQL server. Defaults to `5432`.
+
+#### database
+
+The name of the database to use on the PostgreSQL server. This defaults to `gitlabhq_production`.
+
+#### username
+
+The username with which to authenticate to the database. This defaults to `gitlab`
+
+#### password
+
+The password with which to authenticate to the database. (This will be moved to a secret in the future)
 
 ## Chart-wide defaults
 
@@ -81,3 +144,22 @@ These match the kubernetes documentation.
 Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. There is no chart-wide default.
 
 These definitions match the kubernetes documentation.
+
+### Example `pod` entry
+
+```YAML
+pods:
+  - name: immediate
+    concurrency: 10
+    replicas: 3
+    - [post_receive, 5]
+    - [merge, 5]
+    - [update_merge_requests, 3]
+    - [process_commit, 3]
+    - [new_note, 2]
+    - [new_issue, 2]
+    resources:
+      limits:
+        cpu: 800m
+        memory: 2Gi
+```
