@@ -28,7 +28,7 @@ This chart should be attached to the same Redis and PostgreSQL instances as the
 
 The following values will be used chart-wide, in the event that a value is not presented on a per-pod basis.
 
-#### replicaCount
+#### replicas
 
 The number of `replicas` to use by default per pod definition. The default value is `1`.
 
