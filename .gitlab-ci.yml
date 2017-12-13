@@ -280,6 +280,7 @@ production:
       --set gitlab.omnibus.initial_root_password="$ROOT_PASSWORD" \
       --set gitlab.omnibus.sidekiq.enabled=false \
       --set gitlab.omnibus.unicorn.enabled=false \
+      --set gitlab.omnibus.unicorn.internal_api.serviceName=unicorn \
       --set gitlab.omnibus.workhorse.enabled=false \
       --set gitlab.omnibus.redis.enabled=true \
       --set gitlab.omnibus.redis.password.secret=gitlab-redis \
