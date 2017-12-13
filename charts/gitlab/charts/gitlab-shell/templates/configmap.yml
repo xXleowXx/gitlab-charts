@@ -40,11 +40,5 @@ data:
     # Set to true to see real usernames in the logs instead of key ids, which is easier to follow, but
     # incurs an extra API call on every gitlab-shell command.
     audit_usernames: false
-
-    <% if ENV['CUSTOM_HOOKS_DIR'] %>
-    # Parent directory for global custom hook directories (pre-receive.d, update.d, post-receive.d)
-    # Default is hooks in the gitlab-shell directory.
-    custom_hooks_dir: "<%= ENV['CUSTOM_HOOKS_DIR'] %>"
-    <% end %>
 # Leave this here - This line denotes end of block to the parser.
 {{- end }}
