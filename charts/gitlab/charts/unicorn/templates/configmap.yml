@@ -68,12 +68,14 @@ data:
       shared:
       gitaly:
         client_path: /home/git/gitaly/bin
-        token: gitalytokengitalytoken
+        {{- if .Values.gitaly.auth_token }}
+        token: {{ .Values.gitaly.auth_token }}
+        {{- end }}
       repositories:
         storages: # You must have at least a `default` storage path.
           default:
             path: /var/opt/gitlab/repo
-            gitaly_address: tcp://omnibus:8075 # TCP connections are supported too (e.g. tcp://host:port)
+            gitaly_address: tcp://{{ template "unicorn.gitaly.host" . }}:{{ default 8075 .Values.gitaly.port }}
       backup:
         path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
       gitlab_shell:

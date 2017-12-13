@@ -78,7 +78,7 @@ data:
     gitaly['socket_path'] = nil
     gitaly['listen_addr'] = '0.0.0.0:{{ .Values.service.ports.gitaly }}'
     {{- if .Values.gitaly.auth_token }}
-    gitaly['auth_token'] = {{ .Values.gitaly.auth_token }}
+    gitaly['auth_token'] = {{ .Values.gitaly.auth_token | quote }}
     {{- end }}
     ###################
     # PostgresQL

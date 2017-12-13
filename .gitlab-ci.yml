@@ -228,6 +228,9 @@ production:
     #echo "Generated root login: $ROOT_PASSWORD"
     # YAML_FILE=""${AUTO_DEVOPS_DOMAIN//\./-}.yaml"
 
+    # Use a dummy token until we have split gitaly out into its own chart
+    GITALY_AUTH_TOKEN="gitalytokenauthtokensample"
+
     helm upgrade --install \
       --wait \
       --set releaseOverride="$CI_ENVIRONMENT_SLUG" \
@@ -258,6 +261,7 @@ production:
       --set gitlab.sidekiq.redis.password.key=redis-password \
       --set gitlab.sidekiq.psql.serviceName=omnibus \
       --set gitlab.sidekiq.psql.password="$ROOT_PASSWORD" \
+      --set gitlab.sidekiq.gitaly.auth_token=$GITALY_AUTH_TOKEN \
       --set gitlab.unicorn.enabled=true \
       --set gitlab.unicorn.gitlab_host="gitlab$DOMAIN" \
       --set gitlab.unicorn.redis.password.secret=gitlab-redis \
@@ -266,6 +270,7 @@ production:
       --set gitlab.unicorn.psql.password="$ROOT_PASSWORD" \
       --set gitlab.unicorn.shell.secret=gitlab-shell-secret \
       --set gitlab.unicorn.shell.key=secret \
+      --set gitlab.unicorn.gitaly.auth_token=$GITALY_AUTH_TOKEN \
       --set gitlab.gitlab-shell.enabled=true \
       --set gitlab.gitlab-shell.secret_token.secret=gitlab-shell-secret \
       --set gitlab.gitlab-shell.secret_token.key=secret \
@@ -286,6 +291,8 @@ production:
       --set gitlab.omnibus.registry.port=443 \
       --set gitlab.omnibus.registry.secret=gitlab-registry \
       --set gitlab.omnibus.registry.certificate=registry-auth.key \
+      --set gitlab.omnibus.gitaly.enabled=true \
+      --set gitlab.omnibus.gitaly.auth_token=$GITALY_AUTH_TOKEN \
       --namespace="$KUBE_NAMESPACE" \
       --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
       "$name" \

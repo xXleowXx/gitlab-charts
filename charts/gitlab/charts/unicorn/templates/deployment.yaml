@@ -47,9 +47,9 @@ spec:
             exec:
               command:
               - /scripts/healthcheck
-            initialDelaySeconds: 10
+            initialDelaySeconds: 20
             timeoutSeconds: 30
-            periodSeconds: 30
+            periodSeconds: 60
           # readinessProbe:
           #   httpGet:
           #     path: /
