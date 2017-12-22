@@ -24,7 +24,7 @@ reduce collision
 */}}
 {{- define "migrations.jobname" -}}
 {{- $name := include "migrations.fullname" . | trunc 55 | trimSuffix "-" -}}
-{{- $rand := randAlphaNum 3}}
+{{- $rand := randAlphaNum 3 | lower }}
 {{- printf "%s.%d-%s" $name .Release.Revision $rand | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
