@@ -29,7 +29,7 @@ registry:
   # Do not change this
   tokenService: 'container_registry'
   # This must match your GitLab Rails configuration
-  tokenIssuer: 'gitlab-registry-issuer'
+  tokenIssuer: 'gitlab-issuer'
   # Public side of the certificate bundle used to sign JWT auth requests
   certBundle:
     secretName: 'gitlab-registry-certbundle'

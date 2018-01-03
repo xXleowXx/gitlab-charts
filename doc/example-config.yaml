@@ -26,7 +26,7 @@ registry:
       delete:
         enabled: true
     authEndpoint: 'http://gitlab.example.local'
-    tokenIssuer: omnibus-gitlab-issuer
+    tokenIssuer: gitlab-issuer
     certBundle:
       secretName: 'gitlab-registry-certbundle'
       bundleName: 'gitlab-registry.crt'
@@ -42,7 +42,7 @@ gitlab:
         port: 80
         api:
           serviceName: registry
-        tokenIssuer: omnibus-gitlab-issuer
+        tokenIssuer: gitlab-issuer
         certificate:
           secret: omnibus-registry
           key: gitlab-registry.key
