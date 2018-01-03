@@ -1,4 +1,9 @@
 nginx:
+  service:
+    # loadBalancerIP: <GKE static IP address>
+  serviceAccount:
+    # Auto Generate the service accounts for RBAC support (requires tiller to be installed with sufficient privileges)
+    autoGenerate: false
   ingress:
     enabled: true
     hosts:
@@ -29,7 +34,11 @@ registry:
     tokenIssuer: omnibus-gitlab-issuer
     certBundle:
       secretName: 'gitlab-registry-certbundle'
-      bundleName: 'gitlab-registry.crt'
+      bundleName: 'registry-auth.crt'
+
+# Redis chart
+redis:
+  enabled: true
 
 # GitLab sub-chart
 gitlab:
@@ -45,7 +54,7 @@ gitlab:
         tokenIssuer: omnibus-gitlab-issuer
         certificate:
           secret: omnibus-registry
-          key: gitlab-registry.key
+          key: registry-auth.key
       shell:
         secret: gitlab-shell-secret
       gitaly:
@@ -121,4 +130,4 @@ gitlab:
         sql_user_password: ${echo -n '${secure-pgsql-password}gitlab' | md5sum - | cut -d ' ' -f1}
       registry:
         secret: omnibus-registry
-        certificate: gitlab-registry.key
+        certificate: registry-auth.key
