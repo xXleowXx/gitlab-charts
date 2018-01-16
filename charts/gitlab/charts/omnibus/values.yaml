@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: gitlab/gitlab-ee
-  tag: latest
+  tag: nightly
   pullPolicy: Always
 service:
   name: omnibus

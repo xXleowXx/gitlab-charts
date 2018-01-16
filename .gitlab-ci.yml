@@ -101,7 +101,7 @@ qa:
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - gem install gitlab-qa
     - source variables
-    - GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD gitlab-qa Test::Instance::Any EE latest https://$REVIEW_ENVIRONMENT_URL
+    - GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD gitlab-qa Test::Instance::Any EE nightly https://$REVIEW_ENVIRONMENT_URL
 
   artifacts:
     when: on_failure
@@ -110,6 +110,7 @@ qa:
     - screenshots
   dependencies:
     - review
+  allow_failure: true
 
 stop_review:
   stage: cleanup
