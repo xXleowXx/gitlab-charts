@@ -36,7 +36,7 @@ global:
 #### domain
 
 The base domain. GitLab and Registry will be exposed on the subdomain of this setting. This defaults to `example.local`,
-but is not used for hosts that have their own `name` set. See the `gitlab.name` and `registry.name` sections below.
+but is not used for hosts that have their `name` property configured. See the `gitlab.name` and `registry.name` sections below.
 
 #### hostSuffix
 
@@ -56,8 +56,9 @@ The above config would result in using external hostnames like: `gitlab-staging.
 
 #### https
 
-Set to true for external urls to use `https://` instead of `http`. Defaults to false. If set to true, the `tls.secretName` should also
-be provided.
+Set to true for external urls to use `https://` instead of `http`. Defaults to false. If set to true, you will need to ensure
+the nginx chart has access to the certificates. This can be done by providing the `tls.secretName` (see below) or by setting
+up [kube-lego](../kube-lego/README.md) and enabling [acme support in the nginx chart](nginx/README.md#acme).
 
 #### tls.secretName
 

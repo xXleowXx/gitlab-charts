@@ -12,9 +12,8 @@ and one for TCP services configuration.
 
 ### Global Settings
 
-We share some common global settings among our charts. See the [Globals Documentation][globals] for common configuration options.
-
-Within the global settings is where you will configure your GitLab and Registry hostnames.
+We share some common global settings among our charts. See the [Globals Documentation][globals] for common configuration
+options, such as GitLab and Registry hostnames.
 
 ### Configuring the Service
 
