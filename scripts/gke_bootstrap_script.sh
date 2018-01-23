@@ -3,6 +3,8 @@
 # connect to the cluster without chaning the home kube config and finally installs
 # helm with the appropriate service account if RBAC is enabled
 
+set -e
+
 REGION=${REGION-us-central1}
 ZONE=${REGION}-a
 CLUSTER_NAME=${CLUSTER_NAME-democluster}
@@ -10,6 +12,9 @@ CLUSTER_VERSION=${CLUSTER_VERSION-1.8.5-gke.0}
 MACHINE_TYPE=${MACHINE_TYPE-n1-standard-2}
 PROJECT=${PROJECT-cloud-native-182609}
 RBAC_ENABLED=${RBAC_ENABLED-true}
+
+command -v gcloud >/dev/null 2>&1 || { echo >&2 "gcloud is required please follow: https://cloud.google.com/sdk/downloads"; exit 1; }
+command -v kubectl >/dev/null 2>&1 || { echo >&2 "kubectl is required please follow: https://kubernetes.io/docs/tasks/tools/install-kubectl"; exit 1; }
 
 gcloud container clusters create $CLUSTER_NAME --zone $ZONE \
   --cluster-version $CLUSTER_VERSION --machine-type $MACHINE_TYPE \
