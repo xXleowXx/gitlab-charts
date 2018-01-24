@@ -16,6 +16,8 @@ RBAC_ENABLED=${RBAC_ENABLED-true}
 command -v gcloud >/dev/null 2>&1 || { echo >&2 "gcloud is required please follow: https://cloud.google.com/sdk/downloads"; exit 1; }
 command -v kubectl >/dev/null 2>&1 || { echo >&2 "kubectl is required please follow: https://kubernetes.io/docs/tasks/tools/install-kubectl"; exit 1; }
 
+gcloud container clustersd list >/dev/null 2>&1 || { echo >&2 "Gcloud seems to be configured incorrectly or authentication is unsuccesfull"; exit 1; }
+
 gcloud container clusters create $CLUSTER_NAME --zone $ZONE \
   --cluster-version $CLUSTER_VERSION --machine-type $MACHINE_TYPE \
   --node-version $CLUSTER_VERSION --num-nodes 5 --project $PROJECT
