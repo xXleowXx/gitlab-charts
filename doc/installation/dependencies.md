@@ -10,7 +10,7 @@ Items and information needed:
 
 ## Google Cloud SDK
 
-Install this per [gcloud installation documentation][gcloud].
+Install this per [gcloud installation documentation][gcloud-install].
 If already installed, ensure they are up to date with `gcloud components update`.
 
 At the time of writing this doc, the output of `gcloud version`:
@@ -28,13 +28,11 @@ kubectl
 
 ## Install with defaults
 
-Google Cloud SDK is a dependency of this script, you will have to make sure it is set up correctly in order for the script to work. Follow the [instructions](../helm/README.md#connect-to-the-cluster) for connecting ot your GKE cluster.
+Google Cloud SDK is a dependency of this script, you will have to make sure it is set up correctly in order for the script to work. Follow the [instructions](../helm/README.md#connect-to-the-cluster) for connecting your GKE cluster.
 
-Run `scripts/gke_bootstrap_script.sh` to create a new GKE cluster, setup kubectl to connect to it and have helm installed and initialized. Skip next sections if you used the script.
+The `scripts/gke_bootstrap_script.sh` script creates a new GKE cluster, sets up kubectl to connect to it and has helm installed and initialized.
 
 The script reads various parameters from environment variables.
-
-> The script can work with default parameters except for the $PROJECT which needs to be set by the user.
 
 The table below describes all variables.
 
@@ -49,6 +47,15 @@ The table below describes all variables.
 | PROJECT         | the name of your project                                             | No defaults, required to be set. |
 | RBAC_ENABLED    | If you know whether your cluster has RBAC enabled set this variable. | true                             |
 
+Run the script, passing in your desired parameters. (The script can work with default parameters except for `PROJECT` which is required.)
+
+```bash
+PROJECT=<gcloud project name> ./scripts/gke_bootstrap_script.sh
+```
+
+> *Note:* You need to be logged into your account using gcloud before running the bootstrap script
+
+ Skip the Custom Install section if you used the script.
 
 ## Custom Install
 
@@ -80,6 +87,6 @@ Once all dependencies are installed and configured, you can continue to
 [GitLab configuration](configuration.md).
 
 [gcloud]: https://cloud.google.com/sdk/gcloud/
+[gcloud-install]: https://cloud.google.com/sdk/docs/quickstarts
 [kubectl]: https://kubernetes.io/docs/tasks/tools/install-kubectl/
 [helm]: ../helm/README.md
-

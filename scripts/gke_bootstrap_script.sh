@@ -31,7 +31,7 @@ external_ip_name=${CLUSTER_NAME}-external-ip
 gcloud compute addresses create $external_ip_name --region $REGION --project $PROJECT
 address=$(gcloud compute addresses describe $external_ip_name --region $REGION --project $PROJECT --format='value(address)')
 
-echo "Successfully provisioned external IP address $address , You need to add an A record to the DNS name to point to this address"
+echo "Successfully provisioned external IP address $address , You need to add an A record to the DNS name to point to this address. See https://gitlab.com/charts/helm.gitlab.io/blob/master/doc/installation/resources.md#dns-entry."
 
 mkdir -p demo/.kube
 touch demo/.kube/config

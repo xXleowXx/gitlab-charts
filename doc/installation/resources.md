@@ -10,6 +10,8 @@ You should complete the [dependencies document](dependencies.md#Install-with-def
 
 ## Static IP
 
+**If you used the default bootstrap install script to setup your cluster, the script will have output your static IP address when it completed. Skip the rest of this section and use that IP address to configure DNS in the next seciton.**
+
 External IP for ingress is required so that your cluster can be reachable. The external IP needs to be regional and in the same region as the cluster itself
 
 > A global IP or an IP outside the region will not work.
