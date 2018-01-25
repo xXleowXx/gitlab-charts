@@ -32,8 +32,6 @@ redis:
 # Minio chart provides Minio servics for Object Storage
 minio:
   enabled: true
-  credentials:
-    secret: gitlab-minio
   defaultBuckets:
     - name: registry
 

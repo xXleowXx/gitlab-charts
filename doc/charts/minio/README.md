@@ -136,11 +136,13 @@ The chart does not expect to be of the `type: NodePort`, so **do not** set it as
 
 ## Upstream items
 
-The [upstream documentation][minio-chart] for the following does not need further explanation, and applies completely to this chart.
+The [upstream documentation][minio-chart] for the following applies completely to this chart.
 - `resources`
 - `nodeSelector`
 - `minioConfig`
 
+And further explanation for the `minioConfig` settings can be found in the [minio notify documentation](https://docs.minio.io/docs/minio-bucket-notification-guide).
+This includes details on publishing notifications when Bucket Objects are accessed or changed.
 
 [minio]: https://minio.io
 [minio-chart]: https://github.com/kubernetes/charts/tree/master/stable/minio
