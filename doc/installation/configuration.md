@@ -81,6 +81,9 @@ nginx:
     autoGenerate: true
 ```
 
+
+# Next Steps
+
 Now that the template is generated, we can proceed [to deployment](README.md#deploy).
 
 [static-ip]: resources.md#static-ip
