@@ -36,6 +36,8 @@ global:
 nginx:
   service:
     loadBalancerIP: <static ip>
+  serviceAccount:
+    autoGenerate: true
 
 gitlab:
   unicorn:
@@ -72,17 +74,6 @@ global:
     tls:
       secretName: example-local-tls
 ```
-
-If you are using a cluster with [RBAC](rbac.md):
-
-```YAML
-nginx:
-  serviceAccount:
-    autoGenerate: true
-```
-
-
-# Next Steps
 
 Now that the template is generated, we can proceed [to deployment](README.md#deploy).
 
