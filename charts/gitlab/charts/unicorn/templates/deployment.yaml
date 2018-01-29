@@ -51,6 +51,9 @@ spec:
             - name: unicorn-redis
               mountPath: '/etc/gitlab-redis'
               readOnly: true
+            - name: unicorn-postgres
+              mountPath: '/etc/gitlab-postgres'
+              readOnly: true
             - name: unicorn-registry
               mountPath: '/etc/gitlab-registry'
           livenessProbe:
@@ -91,6 +94,12 @@ spec:
             - key: {{ .Values.redis.password.key }}
               path: password
           defaultMode: 0400
+      - name: unicorn-postgres
+        secret:
+          secretName: {{ .Values.psql.password.secret }}
+          items:
+            - key: {{ .Values.psql.password.key }}
+              path: psql-password
       - name: unicorn-registry
         secret:
           secretName: {{ .Values.registry.certificate.secret }}
