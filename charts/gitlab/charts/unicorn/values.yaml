@@ -40,7 +40,7 @@ psql:
   # username: 'gitlab'
   password:
     secret: gitlab-postgres
-    key: password
+    key: psql-password
 shell:
   authToken:
     secret: gitlab-shell-secret
