@@ -79,21 +79,18 @@ spec:
           items:
             - key: {{ default "secret" .Values.shell.authToken.key }}
               path: ".gitlab_shell_secret"
-          defaultMode: 0400
       - name: unicorn-gitaly
         secret:
           secretName: {{ .Values.gitaly.authToken.secret }}
           items:
             - key: {{ default "token" .Values.gitaly.authToken.key }}
               path: "gitaly_token"
-          defaultMode: 0400
       - name: unicorn-redis
         secret:
           secretName: {{ .Values.redis.password.secret }}
           items:
             - key: {{ .Values.redis.password.key }}
               path: password
-          defaultMode: 0400
       - name: unicorn-postgres
         secret:
           secretName: {{ .Values.psql.password.secret }}
@@ -106,7 +103,6 @@ spec:
           items:
             - key: {{ .Values.registry.certificate.key }}
               path: gitlab-registry.key
-          defaultMode: 0400
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}

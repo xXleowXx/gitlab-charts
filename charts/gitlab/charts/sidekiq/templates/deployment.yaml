@@ -107,21 +107,18 @@ spec:
           items:
             - key: {{ $gitalyKey }}
               path: "gitaly_token"
-          defaultMode: 0400
       - name: sidekiq-redis
         secret:
           secretName: {{ $redisSecret }}
           items:
             - key: {{ $redisKey }}
               path: password
-          defaultMode: 0400
       - name: sidekiq-postgres
         secret:
           secretName: {{ $postgresSecret }}
           items:
             - key: {{ $postgresKey }}
               path: psql-password
-          defaultMode: 0400
     {{- if .nodeSelector }}
       nodeSelector:
 {{ toYaml .nodeSelector | indent 8 }}
