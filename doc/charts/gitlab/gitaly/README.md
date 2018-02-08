@@ -148,3 +148,5 @@ The minimum volume size to request for the data persistence. Defaults to 50Gi
 #### subPath
 
 Sets the path within the volume to mount, rather than the volume root. The root is used if the subPath is empty. Defaults to empty.
+
+[access-modes]: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
