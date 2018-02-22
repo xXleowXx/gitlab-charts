@@ -14,6 +14,8 @@ service:
   workhorseExternalPort: 8181
   workhorseInternalPort: 8181
 enabled: false
+workerProcesses: 2
+workerTimeout: 60
 global:
   hosts:
     domain: example.local
