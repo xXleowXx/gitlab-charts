@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn
-  tag: bump-workers
+  tag: latest
   pullPolicy: Always
 service:
   name: unicorn
@@ -71,4 +71,4 @@ resources:
   #  memory: 2G
   requests:
     cpu: 200m
-    memory: 1.1G
+    memory: 1.4G
