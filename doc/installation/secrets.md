@@ -2,17 +2,17 @@
 
 For a functional deployment, different types of secrets are needed:
 
-* TLS certificates for GitLab
-* TLS certificates for Registry
+* TLS Certificates for GitLab, Registry, Minio
+* Registry authentication certificates
 * Passwords for individual components
 
 **Table of Contents**
 
-- [Certificates](#certificates)
+- [TLS Certificates](#tls-certificates)
   * [GitLab certificates](#gitlab-certificates)
     - [Let's Encrypt](#lets-encrypt)
     - [Wildcard certificates](#wildcard-certificates)
-  * [Registry certificates](#registry-certificates)
+- [Registry authentication certificates](#registry-authentication-certificates)
 - [Passwords](#passwords)
   * [Redis password](#redis-password)
   * [Postgres password](#postgres-password)
@@ -21,7 +21,7 @@ For a functional deployment, different types of secrets are needed:
   * [Minio Secret](#minio-secret)
 - [Next Steps](#next-steps)
 
-## Certificates
+## TLS Certificates
 
 By default Let's Encrypt certificates are used via [kube-lego](../kube-lego/README.md).
 
@@ -61,12 +61,11 @@ something like:
 kubectl create secret tls example-local-tls --cert=certs/-.example.local.chained.crt --key=certs/-.example.local.key
 ```
 
-### Registry certificates
+## Registry authentication certificates
 
-Communication between GitLab and Registry is happening behind an Ingress or a
-Load Balancer so it is sufficient in most cases to use self-signed certificates
+Communication between GitLab and Registry happens behind an Ingress so it is sufficient in most cases to use self-signed certificates
 for this communication. If this traffic is exposed over a network, you
-should generate valid certificates.
+should generate publicly valid certificates.
 
 In the example below, we assume that we require self-signed certificates.
 
