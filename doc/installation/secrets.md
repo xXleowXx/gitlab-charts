@@ -6,12 +6,20 @@ For a functional deployment, different types of secrets are needed:
 * Registry authentication certificates
 * Passwords for individual components
 
+A user of these charts may chose to provide any or all of the below secrets.
+Any secret not provided by the user will be automatically generated automatically,
+via the included [`shared-secrets` Job](../../charts/gitlab/charts/shared-secrets) which will
+populate all necessary secrets with random values. When used in combination with
+the integration of Let's Encrypt ACME, a user need not complete any of the following.
+
+To make use of automatic secret handling, you may skip to [Next steps](#next-steps)
+
+To provide one or more manual secrets, continue reading.
+
 **Table of Contents**
 
 - [TLS Certificates](#tls-certificates)
-  * [GitLab certificates](#gitlab-certificates)
-    - [Let's Encrypt](#lets-encrypt)
-    - [Wildcard certificates](#wildcard-certificates)
+  * [Custom certificates](#custom-certificates)
 - [Registry authentication certificates](#registry-authentication-certificates)
 - [Passwords](#passwords)
   * [Redis password](#redis-password)
