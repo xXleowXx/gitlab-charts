@@ -23,6 +23,7 @@ data:
     touch /gitlab-config/ssh_host_rsa_key
     touch /gitlab-config/ssh_host_ecdsa_key
     touch /gitlab-config/ssh_host_ed25519_key
+    chown 0400 /gitlab-config/ssh_host_*
   gitlab.rb: |
     ###################
     # gitlab/gitlab-rails
