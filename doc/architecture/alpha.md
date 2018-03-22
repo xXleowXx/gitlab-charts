@@ -1,5 +1,7 @@
 # GitLab Cloud Native Chart Alpha
 
+> **Note**: This chart is **alpha**. It should not be used for production deployments.
+
 We have been working hard on the chart and it's underlying containers, and are excited to to reach alpha and share it with the GitLab community.
 
 This effort has required extensive changes across the  product:
