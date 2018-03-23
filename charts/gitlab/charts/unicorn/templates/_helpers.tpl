@@ -190,6 +190,6 @@ Returns the secret name for the Secret containing the gitlab TLS certificate and
 {{/*
 Returns the nginx ingress class
 */}}
-{{- define "minio.ingressclass" -}}
+{{- define "unicorn.ingressclass" -}}
 {{- pluck "class" .Values.global.ingress (dict "class" (printf "%s-nginx" .Release.Name)) | first -}}
 {{- end -}}

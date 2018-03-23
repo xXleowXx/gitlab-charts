@@ -133,6 +133,6 @@ Returns the secret name for the Secret containing the registry TLS certificate a
 {{/*
 Returns the nginx ingress class
 */}}
-{{- define "minio.ingressclass" -}}
+{{- define "registry.ingressclass" -}}
 {{- pluck "class" .Values.global.ingress (dict "class" (printf "%s-nginx" .Release.Name)) | first -}}
 {{- end -}}
