@@ -82,12 +82,6 @@ helm upgrade --install gitlab . \
   --set nginx.service.loadBalancerIP=10.10.10.10 \
   --set gitlab.migrations.initialRootPassword="example-password" \
   --set certmanager.issuer.email=me@example.local
-
-# Second step to configure cert-manager
-helm upgrade --install gitlab . \
-  --timeout 600 \
-  --reuse-values \
-  --set global.ingress.configureCertmanager=true
 ```
 
 ## Monitoring the Deployment

@@ -10,8 +10,7 @@ using various tools. This chart comes ready to integrate with a popular choice [
 
 *If you are already using cert-manager*, you can use `globals.ingress.annotations` to configure [appropriate annotations](https://github.com/jetstack/cert-manager/blob/master/docs/user-guides/ingress-shim.md) for your cert-manager deployment.
 
-*If you don't already have cert-manager installed in your cluster*, you can install and configure it as a dependency of this chart. Due
-to limitations in `helm`, this is a multi-step process.
+*If you don't already have cert-manager installed in your cluster*, you can install and configure it as a dependency of this chart.
 
 ### Get the cert-manager chart
 
@@ -19,18 +18,10 @@ to limitations in `helm`, this is a multi-step process.
 helm dep update
 ```
 
-### Install normally with cert-manager enabled
+### Install with cert-manager enabled and configured
 
 ```
 helm install ...
-  --set certmanager.install=true
-```
-
-### Upgrade to configure cert-manager
-
-```
-helm upgrade ...
-  --reuse-values \
   --set certmanager.issuer.email=you@example.local \
   --set certmanager.install=true \
   --set global.ingress.configureCertmanager=true
@@ -41,11 +32,14 @@ helm upgrade ...
 Add you certificate to the cluster as a `Secret`
 
 ```
-kubectl --namespace yournamespace create secret tls <name> --cert=<path/to.crt> --key=<path/to.key>
+kubectl --namespace <yournamespace> create secret tls <tls-secret-name> --cert=<path/to.crt> --key=<path/to.key>
 ```
 
-Include the option to 
+Include the option to
 ```
 helm install ...
-  --namespace yournamespace \
-  --set
+  --namespace <yournamespace> \
+  --set certmanager.install=false \
+  --set global.ingress.configureCertmanager=false \
+  --set global.ingress.tls.secretName=<tls-secret-name>
+```
