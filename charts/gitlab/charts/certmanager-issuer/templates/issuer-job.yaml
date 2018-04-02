@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ template "gitlab.issuer_jobname" . }}
+  name: {{ template "certmanager-issuer.jobname" . }}
   labels:
     app: {{ template "name" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -22,9 +22,9 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: create-issuer
-          image: "{{ .Values.kubectl.image.repository }}:{{ .Values.kubectl.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           command: ['/bin/bash', '/scripts/create-issuer', '/scripts/issuer.yml']
-          imagePullPolicy: {{ .Values.kubectl.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - name: scripts
               mountPath: /scripts
