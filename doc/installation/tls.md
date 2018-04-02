@@ -22,10 +22,12 @@ helm dep update
 
 ```
 helm install ...
-  --set certmanager.issuer.email=you@example.local \
-  --set certmanager.install=true \
-  --set global.ingress.configureCertmanager=true
+  --set certmanager.issuer.email=you@example.local
 ```
+
+Intalling certmanager is controlled by the `certmanager.install` setting, and using it in the charts is controlled by the
+`global.ingress.configureCertmanager` setting. Both of these are true by default, so only the issuer email needs to be
+provided by default.
 
 ## Option 2: Use your own wildcard certificate
 
