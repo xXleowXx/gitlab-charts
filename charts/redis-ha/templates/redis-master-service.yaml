@@ -5,6 +5,8 @@ metadata:
   name: {{ template "fullname" . }}
   annotations:
 {{ toYaml .Values.servers.annotations | indent 4 }}
+  labels:
+{{ include "labels.standard" . | indent 4 }}
 spec:
   ports:
   - port: {{ .Values.servers.externalPort }}
