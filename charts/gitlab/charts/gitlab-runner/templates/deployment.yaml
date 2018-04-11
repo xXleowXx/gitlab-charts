@@ -17,6 +17,9 @@ spec:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
+      securityContext:
+        runAsUser: 100
+        fsGroup: 65533
       initContainers:
         - name: configure
           command: ['sh', '/config/configure']
@@ -64,6 +67,8 @@ spec:
         volumeMounts:
         - name: runner-secrets
           mountPath: /secrets
+        - name: etc-gitlab-runner
+          mountPath: /etc/gitlab-runner
         - name: scripts
           mountPath: /scripts
         {{- if .Values.certsSecretName }}
@@ -75,6 +80,9 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
       volumes:
       - name: runner-secrets
+        emptyDir:
+          medium: "Memory"
+      - name: etc-gitlab-runner
         emptyDir:
           medium: "Memory"
       - name: init-runner-secrets
