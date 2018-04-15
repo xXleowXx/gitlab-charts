@@ -43,6 +43,12 @@ Run the script, passing in your desired parameters. (The script can work with de
 PROJECT=<gcloud project id> ./scripts/gke_bootstrap_script.sh up
 ```
 
+Note that for working with a recent 1.8.7 or 1.8.8 cluster on GKE, a version of at least
+1.10.1 of kubectl is needed. There is an
+[incompatibility](https://github.com/kubernetes/kubectl/issues/385) with version
+1.10.0 of kubectl that is resolved in 1.10.1. The specific error message is:
+`Error from server (NotAcceptable): unknown`.
+
 The script can also be used to clean up the created GKE resources by running
 
 ```bash
