@@ -16,7 +16,7 @@ global:
     enabled: false
     address: smtp.mailgun.org
     port: 2525
-    user_name: postmaster@example.com
+    user_name: ""
     password:
       secret: ""
       key: password
