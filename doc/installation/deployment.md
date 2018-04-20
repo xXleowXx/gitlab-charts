@@ -96,7 +96,7 @@ If you have an external postgres database ready,
 
 By default we use an single, non-replicated Redis instance. If desired, a highly available redis can be deployed instead. You can learn more about configuring: [Redis](../charts/redis) and [Redis-ha](../charts/redis-ha).
 
-* To deploy `redis-ha` instead of the default `redis`, include these options in your helm install command:*
+*To deploy `redis-ha` instead of the default `redis`, include these options in your helm install command:*
 ```
 --set redis.enabled=false
 --set redis-ha.enabled=true
@@ -114,6 +114,17 @@ You can disable authentication settings with `--set global.smtp.authentication="
 
 If your Kubernetes cluster is on GKE, be aware that smtp [ports 25, 465, and 587
 are blocked](https://cloud.google.com/compute/docs/tutorials/sending-mail/#using_standard_email_ports).
+
+### Deploy the Community Edition
+
+By default, the Helm charts use the Enterprise Edition of GitLab. If desired, you can instead use the Community Edition. Learn more about the [difference between the two](https://about.gitlab.com/installation/ce-or-ee/).
+
+*To deploy Community Edition, include these options in your helm install command:*
+```
+--set gitlab.migrations.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ce
+--set gitlab.sidekiq.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce
+--set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce
+```
 
 ## Deploy using helm
 

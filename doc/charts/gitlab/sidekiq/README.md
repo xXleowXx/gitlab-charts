@@ -22,7 +22,7 @@ Table below contains all the possible charts configurations that can be supplied
 
 | Parameter                 | Description                                    | Default                                          |
 | ---                       | ---                                            | ---                                              |
-| image.repository          | Sidekiq image repository                       | registry.com/gitlab-org/build/cng/gitlab-sidekiq |
+| image.repository          | Sidekiq image repository                       | registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee |
 | image.tag                 | Sidekiq image tag                              | latest                                           |
 | image.pullPolicy          | Sidekiq image pull policy                      | Always                                           |
 | enabled                   | Sidekiq enabled flag                           | true                                             |
@@ -43,6 +43,12 @@ Table below contains all the possible charts configurations that can be supplied
 | timeout                   | Sidekiq job timeout                            | 5                                                |
 | resources.requests.cpu    | Sidekiq minimum needed cpu                     | 100m                                             |
 | resources.requests.memory | Sidekiq minimum needed memory                  | 600M                                             |
+
+## Using the Community Edition of this chart
+
+By default, the Helm charts use the Enterprise Edition of GitLab. If desired, you can instead use the Community Edition. Learn more about the [difference between the two](https://about.gitlab.com/installation/ce-or-ee/).
+
+In order to use the Community Edition, set `image.repository` to `registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce`
 
 ## External Services
 
