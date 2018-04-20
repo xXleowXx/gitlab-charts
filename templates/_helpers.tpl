@@ -56,17 +56,13 @@ ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.smtp_settings = {
   address: {{ .Values.global.smtp.address | quote }},
   port: {{ .Values.global.smtp.port | int }},
-  user_name: {{ .Values.global.smtp.user_name | quote }},
-  password: File.read("/etc/gitlab/smtp/smtp-password"),
   {{- if .Values.global.smtp.domain }}
   domain: {{ .Values.global.smtp.domain | quote }},
   {{- end }}
-  {{- if eq .Values.global.smtp.authentication "login" }}
-  authentication: :login,
-  {{- else if eq .Values.global.smtp.authentication "plain" }}
-  authentication: :plain,
-  {{- else if eq .Values.global.smtp.authentication "cram_md5" }}
-  authentication: :cram_md5,
+  {{ if has .Values.global.smtp.authentication (list "login" "plain" "cram_md5") }}
+  authentication: :{{.Values.global.smtp.authentication}},
+  user_name: {{ .Values.global.smtp.user_name | quote }},
+  password: File.read("/etc/gitlab/smtp/smtp-password"),
   {{- end }}
   {{- if .Values.global.smtp.starttls_auto }}
   enable_starttls_auto: true,
