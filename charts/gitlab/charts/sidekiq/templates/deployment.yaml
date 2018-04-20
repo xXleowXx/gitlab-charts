@@ -191,7 +191,7 @@ spec:
               items:
                 - key: {{ $postgresKey }}
                   path: postgres/psql-password
-          {{- if $.Values.global.smtp.enabled }}
+          {{- if and $.Values.global.smtp.enabled $.Values.global.smtp.authentication }}
           - secret:
               name: {{ $.Values.global.smtp.password.secret | required "Missing required secret containing the SMTP password. Make sure to set `global.smtp.password.secret`" }}
               items:
