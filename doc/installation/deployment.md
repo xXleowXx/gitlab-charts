@@ -102,6 +102,19 @@ By default we use an single, non-replicated Redis instance. If desired, a highly
 --set redis-ha.enabled=true
 ```
 
+### Outgoing email
+
+By default outgoing email is disabled. To enable it, provide details for your SMTP server
+using the `global.smtp` settings. You can find details for these settings in the
+[command line options](command-line-options.md#smtp-configuration).
+
+If your SMTP server requires authentication make sure to read the section on providing
+your password in the [secrets documentation](secrets.md#smtp-password).
+You can disable authentication settings with `--set global.smtp.authentication=""`.
+
+If your Kubernetes cluster is on GKE, be aware that smtp [ports 25, 465, and 587
+are blocked](https://cloud.google.com/compute/docs/tutorials/sending-mail/#using_standard_email_ports).
+
 ## Deploy using helm
 
 Once you have all of your configuration options collected, we can get any dependencies and
