@@ -27,9 +27,9 @@ global:
     openssl_verify_mode: "peer"
   # Email persona used in email sent by GitLab
   email:
-    from: gitlab@example.local
+    from: ''
     display_name: GitLab
-    reply_to: noreply@example.local
+    reply_to: ''
     subject_suffix: ''
 
 certmanager:
