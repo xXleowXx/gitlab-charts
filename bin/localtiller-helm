@@ -1,8 +1,9 @@
 #!/bin/bash -e
 
 export HELM_HOST=localhost:44134
-HELM_VERSION="${HELM_VERSION:-v2.8.2}"
-
+HELM_VERSION="$(helm version -c --short)"
+HELM_VERSION="${HELM_VERSION#* }"
+HELM_VERSION="${HELM_VERSION%+*}"
 
 IFS=':' read -r -a CONFIG_FILES <<< "${KUBECONFIG:-$HOME/.kube/config}"
 TILLER_KUBECONFIG="$(mktemp ${HOME}/.kube/config.XXXXXX)"
