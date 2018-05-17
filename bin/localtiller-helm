@@ -5,6 +5,8 @@ HELM_VERSION="$(helm version -c --short)"
 HELM_VERSION="${HELM_VERSION#* }"
 HELM_VERSION="${HELM_VERSION%+*}"
 
+# Split multiple paths and use the first one that exists
+#  https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/#create-a-second-configuration-file
 IFS=':' read -r -a CONFIG_FILES <<< "${KUBECONFIG:-$HOME/.kube/config}"
 TILLER_KUBECONFIG="$(mktemp ${HOME}/.kube/config.XXXXXX)"
 trap 'docker rm -f tiller >/dev/null 2>&1 || true; rm -f ${TILLER_KUBECONFIG}' EXIT
