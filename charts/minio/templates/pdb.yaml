@@ -9,7 +9,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  maxUnavailable: 1
+  maxUnavailable: {{ .Values.maxUnavailable }}
   selector:
     matchLabels:
       app: {{ template "minio.fullname" . }}
