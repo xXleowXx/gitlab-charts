@@ -13,6 +13,7 @@ Tables below contain all the possible charts configurations that can be supplied
 | global.psql.password.secret                  | Global name of the secret containing the psql password                       | _Uses in-cluster non-production postgress_ |
 | global.psql.password.key                     | Key pointing to the psql password in the psql secret                         | _Uses in-cluster non-production postgress_ |
 | global.time_zone                             | Global time zone                                                             | UTC                                        |
+| global.service.annotations                   | Annotations to add to every `Service`                                        | {}                                         |
 
 ## TLS configuration
 
@@ -61,6 +62,7 @@ Tables below contain all the possible charts configurations that can be supplied
 | nginx.service.ports                          | nginx service ports                                     | [{"http": 80}, {"https": 443}, {"ssh": 22}]                    |
 | nginx.serviceAccount.autoGenerate            | Whether chart should generate service account for RBAC  | true                                                           |
 | nginx.serviceAccount.name                    | Service account name                                    | default                                                        |
+| nginx.service.annotations                    | Annotations to add to the `Service`                     | {}                                                             |
 | nginx.proxyConnectTimeout                    | Defines a timeout for establishing a connection         | 15                                                             |
 | nginx.proxyReadTimeout                       | Defines a timeout for reading a response                | 600                                                            |
 | nginx.proxySendTimeout                       | Sets a timeout for transmitting a request               | 600                                                            |
@@ -86,6 +88,7 @@ Tables below contain all the possible charts configurations that can be supplied
 | redis.service.externalPort                   | Redis internal port                         | 6379           |
 | redis.service.internalPort                   | Redis exposed port                          | 6379           |
 | redis.service.clusterIP                      | Cluster IP                                  | 0.0.0.0        |
+| redis.service.annotations                    | Annotations to add to the `Service`         | {}             |
 | redis.replicas                               | Number of replicas                          | 1              |
 | redis.enabled                                | Enable flag for the chart                   | true           |
 | redis.timeout                                | Timeout in seconds                          | 60             |
@@ -96,7 +99,7 @@ Tables below contain all the possible charts configurations that can be supplied
 | redis.persistence.enabled                    | Enable persistence flag                     | true           |
 | redis.persistence.accessMode                 | Redis access mode                           | ReadWriteOnce  |
 | redis.persistence.size                       | Size of volume needed for redis persistence | 5Gi            |
-| redis.persistence.subPath                    | Subpath to mount persistence volume at      |                                                                   |
+| redis.persistence.subPath                    | Subpath to mount persistence volume at      |                |
 
 ## Advanced registry configuration
 
@@ -113,6 +116,7 @@ Tables below contain all the possible charts configurations that can be supplied
 | registry.minio.enabled                       | Enable minio flag                   | true                 |
 | registry.minio.bucket                        | Minio registry bucket name          | registry             |
 | registry.minio.credentials.secret            | Secret containing minio credentials | gitlab-minio         |
+| registry.service.annotations                 | Annotations to add to the `Service` | {}                   |
 
 ## Advanced minio configuration
 
@@ -131,6 +135,7 @@ Tables below contain all the possible charts configurations that can be supplied
 | minio.persistence.subPath                    | Minio persistence volume mount path |                              |
 | minio.serviceType                            | Minio service type                  | ClusterIP                    |
 | minio.servicePort                            | Minio service port                  | 9000                         |
+| minio.service.annotations                    | Annotations to add to the `Service` | {}                           |
 | minio.resources.requests.memory              | Minio minimum memory requested      | 256Mi                        |
 | minio.resources.requests.cpu                 | Minio minimum cpu requested         | 250m                         |
 | minio.defaultBuckets                         | Minio default buckets               | [{"name": "registry"}]       |
@@ -149,6 +154,7 @@ Tables below contain all the possible charts configurations that can be supplied
 | gitlab.gitaly.service.type                          | Gitaly service type                            | ClusterIP                                                  |
 | gitlab.gitaly.service.externalPort                  | Gitaly service exposed port                    | 8075                                                       |
 | gitlab.gitaly.service.internalPort                  | Gitaly internal port                           | 8075                                                       |
+| gitlab.gitaly.service.annotations                   | Annotations to add to the `Service`            | {}                                                         |
 | gitlab.gitaly.enabled                               | Gitaly enable flag                             | true                                                       |
 | gitlab.gitaly.serviceName                           | Gitaly service name                            | gitaly                                                     |
 | gitlab.gitaly.authToken.secret                      | Gitaly secret name                             | gitaly-secret                                              |
@@ -169,6 +175,7 @@ Tables below contain all the possible charts configurations that can be supplied
 | gitlab.gitlab-shell.service.type                    | Shell service type                             | ClusterIP                                                  |
 | gitlab.gitlab-shell.service.externalPort            | Shell exposed port                             | 22                                                         |
 | gitlab.gitlab-shell.service.internalPort            | Shell internal port                            | 22                                                         |
+| gitlab.gitlab-shell.service.annotations             | Annotations to add to the `Service`            | {}                                                         |
 | gitlab.gitlab-shell.enabled                         | Shell enable flag                              | true                                                       |
 | gitlab.gitlab-shell.authToken.secret                | Shell auth secret                              | gitlab-shell-secret                                        |
 | gitlab.gitlab-shell.authToken.key                   | Shell auth secret key                          | secret                                                     |
@@ -205,6 +212,7 @@ Tables below contain all the possible charts configurations that can be supplied
 | gitlab.unicorn.service.internalPort                 | Unicorn internal port                          | 8080                                                       |
 | gitlab.unicorn.service.workhorseExternalPort        | Workhorse exposed port                         | 8181                                                       |
 | gitlab.unicorn.service.workhorseInternalPort        | Workhorse internal port                        | 8181                                                       |
+| gitlab.unicorn.service.annotations                  | Annotations to add to the `Service`            | {}                                                         |
 | gitlab.unicorn.enabled                              | Unicorn enabled flag                           | true                                                       |
 | gitlab.unicorn.workerProcesses                      | Unicorn number of workers                      | 2                                                          |
 | gitlab.unicorn.workerTimeout                        | Unicorn worker timeout                         | 60                                                         |
