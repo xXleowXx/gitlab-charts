@@ -24,6 +24,27 @@ spec:
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
+      {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: {{ template "name" . }}
+                  release: {{ .Release.Name }}
+      {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app: {{ template "name" . }}
+                  release: {{ .Release.Name }}
+      {{- end }}
       initContainers:
         - name: configure
           command: ['sh', '/config/configure']
@@ -137,9 +158,9 @@ spec:
                 - key: {{ default "secret" .Values.shell.authToken.key }}
                   path: shell/.gitlab_shell_secret
           - secret:
-              name: {{ .Values.gitaly.authToken.secret }}
+              name: {{ template "gitlab.gitaly.authToken.secret" . }}
               items:
-                - key: {{ default "token" .Values.gitaly.authToken.key }}
+                - key: {{ template "gitlab.gitaly.authToken.key" . }}
                   path: gitaly/gitaly_token
           - secret:
               name: {{ coalesce .Values.redis.password.secret .Values.global.redis.password.secret }}

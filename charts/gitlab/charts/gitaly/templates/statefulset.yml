@@ -42,6 +42,27 @@ spec:
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
+      {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: {{ template "name" . }}
+                  release: {{ .Release.Name }}
+      {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app: {{ template "name" . }}
+                  release: {{ .Release.Name }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -109,9 +130,9 @@ spec:
           defaultMode: 0440
           sources:
           - secret:
-              name: {{ .Values.authToken.secret }}
+              name: {{ coalesce .Values.authToken.secret .Values.global.gitaly.authToken.secret "gitaly-secret" }}
               items:
-                - key: {{ .Values.authToken.key }}
+                - key: {{ coalesce .Values.authToken.key .Values.global.gitaly.authToken.key "token" }}
                   path: "gitaly_token"
           - secret:
               name: {{ .Values.shell.authToken.secret }}
