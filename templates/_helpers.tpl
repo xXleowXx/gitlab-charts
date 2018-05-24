@@ -174,3 +174,4 @@ Handles merging a set of service annotations
 {{- if $allAnnotations -}}
 {{- toYaml $allAnnotations -}}
 {{- end -}}
+{{- end -}}
