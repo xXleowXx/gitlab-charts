@@ -20,7 +20,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*
 Returns the hostname.
 If the hostname is set in `global.hosts.gitlab.name`, that will be returned,
-otherwise the hostname will be assembed using `gitlab` as the prefix, and the `gitlab.assembleHost` function.
+otherwise the hostname will be assembled using `gitlab` as the prefix, and the `gitlab.assembleHost` function.
 */}}
 {{- define "gitlab.gitlab.hostname" -}}
 {{- coalesce .Values.global.hosts.gitlab.name (include "gitlab.assembleHost"  (dict "name" "gitlab" "context" . )) -}}
@@ -42,7 +42,7 @@ Calls into the `gitlab.gitlabHost` function for the hostname part of the url.
 {{/*
 Returns the minio hostname.
 If the hostname is set in `global.hosts.minio.name`, that will be returned,
-otherwise the hostname will be assembed using `minio` as the prefix, and the `gitlab.assembleHost` function.
+otherwise the hostname will be assembled using `minio` as the prefix, and the `gitlab.assembleHost` function.
 */}}
 {{- define "gitlab.minio.hostname" -}}
 {{- coalesce .Values.global.hosts.minio.name (include "gitlab.assembleHost"  (dict "name" "minio" "context" . )) -}}
