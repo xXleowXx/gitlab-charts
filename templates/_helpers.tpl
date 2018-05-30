@@ -167,3 +167,10 @@ Handles merging a set of service annotations
 {{- toYaml $allAnnotations -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns gitlabUrl needed for gitlab-runner
+*/}}
+{{- define "gitlab-runner.gitlabUrl" -}}
+{{- printf "%s.%s" "gitlab" .Values.global.hosts.domain | quote -}}
+{{- end -}}
