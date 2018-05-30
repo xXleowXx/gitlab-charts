@@ -10,8 +10,7 @@ Else if the version is a semver version, we use the 'vx.x.x' image tag
 Else we just use the version passed as the image tag
 */}}
 {{- define "gitlab.versionTag" -}}
-{{- fail .Chart.AppVersion -}}
-{{- $appVersion := coalesce .Values.global.gitlabVersion .Chart.AppVersion "beef" -}}
+{{- $appVersion := coalesce .Values.global.gitlabVersion .Chart.AppVersion "master" -}}
 {{- if eq $appVersion "master" -}}
 latest
 {{- else if regexMatch "^\\d+\\.\\d+\\.\\d+(-rc\\d+)?(-pre)?$" $appVersion -}}
