@@ -5,7 +5,7 @@ The instructions here make use of the [Omnibus GitLab][] package for Ubuntu. Thi
 ## Create VM with Omnibus GitLab
 
 Create a VM on your provider of choice, or locally. This was tested with VirtualBox, KVM, and Bhyve.
-Ensure that the Gitaly instance will be reachable from the cluster.
+Ensure that the instance is reachable from the cluster.
 
 Install Ubuntu Server onto the VM that you have created. Ensure that `openssh-server` is installed, and that all packages are up to date.
 Configure networking and a hostname. Make note of the hostname/IP, and ensure it is both resolvable and reachable from your Kubernetes cluster.
