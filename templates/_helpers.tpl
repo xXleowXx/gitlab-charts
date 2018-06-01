@@ -193,5 +193,5 @@ Handles merging a set of service annotations
 Returns gitlabUrl needed for gitlab-runner
 */}}
 {{- define "gitlab-runner.gitlabUrl" -}}
-{{- printf "%s.%s" "gitlab" .Values.global.hosts.domain | quote -}}
+{{- template "gitlab.gitlab.url" . -}}
 {{- end -}}
