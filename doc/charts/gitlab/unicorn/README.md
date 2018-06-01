@@ -20,7 +20,7 @@ Table below contains all the possible charts configurations that can be supplied
 | ---                           | ---                                            | ---                                              |
 | replicaCount                  | Unicorn number of replicas                     | 1                                                |
 | image.repository              | Unicorn image repository                       | registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee |
-| image.tag                     | Unicorn image tag                              | latest                                           |
+| image.tag                     | Unicorn image tag                              |                                                  |
 | image.pullPolicy              | Unicorn image pull policy                      | Always                                           |
 | image.pullSecrets             | Secrets for the image repository               |                                                  |
 | service.name                  | Unicorn service name                           | unicorn                                          |
@@ -73,7 +73,7 @@ Table below contains all the possible charts configurations that can be supplied
 
 ## Chart configuration examples
 ### image.pullSecrets
-`pullSecrets` allow you to authenticate to a private registry to pull images for a pod. 
+`pullSecrets` allow you to authenticate to a private registry to pull images for a pod.
 
 Additional details about private registries and their authentication methods
 can be found in [the Kubernetes documentation](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
@@ -82,9 +82,8 @@ Below is an example use of `pullSecrets`
 ```YAML
 image:
   repository: my.unicorn.repository
-  tag: latest
   pullPolicy: Always
-  pullSecrets: 
+  pullSecrets:
   - name: my-secret-name
   - name: my-secondary-secret-name
 ```
@@ -358,7 +357,7 @@ registry:
 #### host
 
 The external hostname to use for providing docker commands to users in the GitLab UI. Falls back to the value set in the
-`registryHost` template. Which determines the registry hostname based on the values set in `global.hosts`. See the [Globals Documentation][globals]
+`registry.hostname` template. Which determines the registry hostname based on the values set in `global.hosts`. See the [Globals Documentation][globals]
 for more information.
 
 #### port
