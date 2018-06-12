@@ -64,7 +64,7 @@ lint:
   stage: test
   script:
     - helm init --client-only
-    - helm repo add gitlab https://charts.gitlab.com
+    - helm repo add gitlab https://charts.gitlab.io
     - helm dependencies update
     - helm lint -f test/lint-values.yaml
 
