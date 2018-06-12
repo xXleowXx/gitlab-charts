@@ -1,5 +1,16 @@
 apiVersion: v1
-description: A Helm chart for Kubernetes
 name: unicorn
 version: 0.1.0
 appVersion: master
+description: HTTP server for Gitlab
+keywords:
+- gitlab
+- unicorn
+home: https://about.gitlab.com/
+icon: https://upload.wikimedia.org/wikipedia/commons/1/18/GitLab_Logo.svg
+sources:
+- https://gitlab.com/charts/gitlab/tree/master/charts/gitlab/charts/unicorn
+- https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-unicorn
+maintainers:
+- name: GitLab Inc.
+  email: support@gitlab.com
