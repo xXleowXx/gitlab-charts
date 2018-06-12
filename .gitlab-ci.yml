@@ -44,6 +44,7 @@ stages:
   - canary
   - stable
   - qa
+  - package
   - cleanup
 
 .test:
@@ -60,13 +61,21 @@ stages:
   only:
     - branches
 
-lint:
+test-package:
   stage: test
   script:
     - helm init --client-only
     - helm repo add gitlab https://charts.gitlab.io
     - helm dependencies update
     - helm lint -f test/lint-values.yaml
+    - mkdir -p build
+    - helm package -d build
+  artifacts:
+    expire_in: 3d
+    paths:
+    - build
+  except:
+    - tags
 
 review:
   stage: review
