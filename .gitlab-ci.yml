@@ -60,6 +60,14 @@ stages:
   only:
     - branches
 
+lint:
+  stage: test
+  script:
+    - helm init --client-only
+    - helm repo add gitlab https://charts.gitlab.com
+    - helm dependencies update
+    - helm lint -f test/lint-values.yaml
+
 review:
   stage: review
   script:
