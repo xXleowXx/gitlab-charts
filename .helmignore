@@ -25,6 +25,7 @@ doc/
 images/
 certs/
 scripts/
+spec/
 test/
 build/
 *.md
