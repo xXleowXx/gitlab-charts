@@ -61,13 +61,13 @@ stages:
   only:
     - branches
 
-test_package:
+lint_package:
   stage: package
   script:
     - helm init --client-only
     - helm repo add gitlab https://charts.gitlab.io
     - helm dependencies update
-    - helm lint -f test/lint-values.yaml
+    - helm lint --set certmanager-issuer.email=support@gitlab.com
     - mkdir -p build
     - helm package -d build .
   artifacts:

@@ -1,3 +1,0 @@
-# Populate reqquired fields in order to run helm lint
-certmanager-issuer:
-  email: supprt@gitlab.com
