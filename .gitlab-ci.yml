@@ -63,6 +63,7 @@ stages:
 
 lint_package:
   stage: package
+  when: always
   script:
     - helm init --client-only
     - helm repo add gitlab https://charts.gitlab.io
