@@ -8,7 +8,7 @@ keywords:
 - gitlab
 - rake
 home: https://about.gitlab.com/
-icon: https://upload.wikimedia.org/wikipedia/commons/1/18/GitLab_Logo.svg
+icon: https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo-square.svg
 sources:
 - https://gitlab.com/charts/gitlab/tree/master/charts/gitlab/charts/task-runner
 - https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-task-runner

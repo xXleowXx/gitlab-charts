@@ -4,11 +4,11 @@ name: gitlab
 version: 0.1.0
 appVersion: master
 description: Web-based Git-repository manager with wiki and issue-tracking
-  features, using an open-source license.
+  features.
 keywords:
 - gitlab
 home: https://about.gitlab.com/
-icon: https://upload.wikimedia.org/wikipedia/commons/1/18/GitLab_Logo.svg
+icon: https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo-square.svg
 sources:
 - https://gitlab.com/charts/gitlab
 maintainers:
