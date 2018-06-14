@@ -326,7 +326,7 @@ changelog_manager:
       --namespace="$KUBE_NAMESPACE" \
       --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
       "$name" \
-      .
+      . || (kubectl -n $KUBE_NAMESPACE describe -a pod,svc,ing,secret,cm,certificates && exit 1)
   }
 
   function setup_test_db() {
