@@ -217,6 +217,8 @@ specs:
     S3_ENDPOINT: https://minio-${CI_ENVIRONMENT_SLUG}.$AUTO_DEVOPS_DOMAIN
     RELEASE_NAME: $CI_ENVIRONMENT_SLUG
     S3_CONFIG_PATH: /etc/gitlab/minio
+    REGISTRY_BUCKET_NAME: registry
+    LFS_BUCKET_NAME: git-lfs
   script:
     - apt-get update
     - apt-get install -y --no-install-recommends curl ca-certificates unzip
