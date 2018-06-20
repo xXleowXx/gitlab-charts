@@ -87,14 +87,15 @@ def pod_name
 end
 
 def ensure_backups_on_object_storage
-  Dir.glob('spec/fixtures/backups/*.tar') do |file_name|
-    File.open(file_name, 'rb') do |file|
-      ObjectStorage.put_object(
-        bucket: 'gitlab-backups',
-        key: "0_#{File.basename(file_name)}",
-        body: file
-      )
-    end
+  storage_url = 'https://storage.googleapis.com/gitlab-charts-ci/test-backups'
+  backup_file_names = ['11.0.0-pre_gitlab_backup.tar']
+  backup_file_names.each do |file_name|
+    file = open("#{storage_url}/#{file_name}").read
+    ObjectStorage.put_object(
+      bucket: 'gitlab-backups',
+      key: "0_#{file_name}",
+      body: file
+    )
     puts "Uploaded #{file_name}"
   end
 end
