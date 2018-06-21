@@ -1,6 +1,6 @@
 # Backuping up and Restoring GitLab instances
 
-GitLab Helm chart provides a specific pod named `task-runner` that acts as an interface for the purpose of backing up and restoring GitLab instances. It is equipped with a `backup-utility` executable for this task.
+GitLab Helm chart provides a specific pod named `task-runner` that acts as an interface for the purpose of backing up and restoring GitLab instances. It is equipped with a `backup-utility` executable which interacts with other necessary pods for this task.
 
 ## Prerequisites
 1. `task-runner` pod should be enabled in the deployment. This is enabled by passing `--set gitlab.task-runner.enabled=true` configuration to the `helm install` command.
@@ -37,6 +37,8 @@ Follow the steps for backing up a GitLab Helm chart based installation
 
 ## Restoring a GitLab installation
 
+> To obtain a backup tarball of an existing GitLab instance that used other installation methods like an omnibus-gitlab package or GitLab-Omnibus helm chart, follow the instructions [given in documentation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
+
 Backup utility provided by GitLab Helm chart supports restoring a tarball from either of the following two locations
 
 1. `gitlab-backups` bucket in the object storage service associated to the instance. This is the default scenario.
@@ -55,5 +57,5 @@ The steps for restoring a GitLab installation are
     $ kubectl exec <task-runner pod name> -it -- backup-utility --restore -f <URL>
     ```
 1. This process will take time depending on the size of the tarball.
-1. The restoration process will erase the existing contents of database, move existing files to temporary locations and extract the contents of the tarball to correct locations.
+1. The restoration process will erase the existing contents of database, move existing repositories to temporary locations and extract the contents of the tarball. Repositories will be moved to their corresponding locations on the disk and otherdata, like artifacts, uploads, LFS etc. will be uploaded to corresponding buckets in Object Storage.
 1. Sign in to the GitLab instance and confirm the data has been restored.
