@@ -26,7 +26,7 @@ end
 
 def gitlab_url
   protocol = ENV['PROTOCOL'] || 'https'
-  instance_url = ENV['GITLAB_URL'] || "#{ENV['GITLAB_ROOT_DOMAIN']}}"
+  instance_url = ENV['GITLAB_URL'] || "gitlab.#{ENV['GITLAB_ROOT_DOMAIN']}}"
   "#{protocol}://#{instance_url}"
 end
 
