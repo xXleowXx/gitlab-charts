@@ -3,12 +3,21 @@
 GitLab Helm chart provides a specific pod named `task-runner` that acts as an interface for the purpose of backing up and restoring GitLab instances. It is equipped with a `backup-utility` executable for this task.
 
 ## Prerequisites
-1. `task-runner` pod should be enabled in the deployment. For this, pass `--set gitlab.task-runner.enabled=true` configuration to the `helm install` command.
+1. `task-runner` pod should be enabled in the deployment. This is enabled by passing `--set gitlab.task-runner.enabled=true` configuration to the `helm install` command.
 1. Backup and Restore procedures described here are tested only with S3 compatible APIs. It is not supported on other object storage services, like Google Cloud Storage.
 1. During restoration, the backup tarball needs to be extracted to disk. This means the `task-runner` pod should have disk of necessary size available.
-1. Restoration process does not update the `gitlab-initial-root-password` secret with the value from backup. For logging in as `root`, users will have to remember the password from before backup.
+1. Restoration process does not update the `gitlab-initial-root-password` secret with the value from backup. For logging in as `root`, users will have to remember the password from before backup. In case you forgot the root password, you can reset it by followign the steps mentioned below
+    1. For that, fall into a bash shell in the unicorn pod by executing the command
 
-# Backing up a GitLab installation
+        ```bash
+        $ kubectl exec <unicorn pod name> -it bash
+        ```
+    1. Run the following command to reset the password of `root` user. Replace `#{password}` with a password of your choice
+        ```bash
+        $ /home/git/gitlab/bin/rails runner "user = User.first; user.password='#{password}'; user.password_confirmation='#{password}'; user.save!"
+        ```
+
+## Backing up a GitLab installation
 
 Follow the steps for backing up a GitLab Helm chart based installation
 
@@ -26,7 +35,7 @@ Follow the steps for backing up a GitLab Helm chart based installation
 
 1. This tarball is required for restoration.
 
-# Restoring a GitLab installation
+## Restoring a GitLab installation
 
 Backup utility provided by GitLab Helm chart supports restoring a tarball from either of the following two locations
 
@@ -41,7 +50,7 @@ The steps for restoring a GitLab installation are
     ```
     $ kubectl exec <task-runner pod name> -it -- backup-utility --restore -t <timestamp>_<version>
     ```
-   Here, `<timestamp>_<version>` is from the file name of the tarball stored in `gitlab-backups` bucket. In case you want to provide a public URL, use the following command
+   Here, `<timestamp>_<version>` is from the name of the tarball stored in `gitlab-backups` bucket. In case you want to provide a public URL, use the following command
     ```
     $ kubectl exec <task-runner pod name> -it -- backup-utility --restore -f <URL>
     ```
