@@ -3,8 +3,7 @@
 GitLab Helm chart provides a specific pod named `task-runner` that acts as an interface for the purpose of backing up and restoring GitLab instances. It is equipped with a `backup-utility` executable which interacts with other necessary pods for this task.
 
 ## Prerequisites
-1. `task-runner` pod should be enabled in the deployment. This is enabled by passing `--set gitlab.task-runner.enabled=true` configuration to the `helm install` command.
-1. Backup and Restore procedures described here are tested only with S3 compatible APIs. It is not supported on other object storage services, like Google Cloud Storage.
+1. Backup and Restore procedures described here have only been tested with S3 compatible APIs. Support for other object storage services, like Google Cloud Storage, will be tested in future revisions.
 1. During restoration, the backup tarball needs to be extracted to disk. This means the `task-runner` pod should have disk of necessary size available.
 1. Restoration process does not update the `gitlab-initial-root-password` secret with the value from backup. For logging in as `root`, use the original password included in the backup.. In case the password is no longer accessible, follow the steps below to reset it.
     1. Attach to the unicorn pod by executing the command
