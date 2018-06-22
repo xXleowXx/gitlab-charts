@@ -1,7 +1,7 @@
 # Cloud Native GitLab Helm Chart
 
 > **Notes**:
-* The chart is currently **beta**
+* The chart is currently **beta** This means that breaking changes could still be introduced on short notice but that the project is mostly stable
 * There are [known issues and limitations](doc/architecture/beta.md#known-issues-and-limitations).
 
 
