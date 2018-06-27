@@ -299,6 +299,28 @@ qa:
     refs:
       - branches
 
+debug_review:
+  stage: qa
+  when: on_failure
+  script:
+    - kubectl -n "$KUBE_NAMESPACE" describe pod
+    - kubectl -n "$KUBE_NAMESPACE" get pod,jobs,secret,ing,cm,sa,svc,role,rolebinding,pvc
+  artifacts:
+    paths:
+    - variables
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+  variables:
+    HOST_SUFFIX: "$CI_ENVIRONMENT_SLUG"
+    DOMAIN: "-$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN"
+  only:
+    refs:
+      - branches
+    kubernetes: active
+  except:
+    - master
+
 changelog_manager:
   stage: changelog
   script:
