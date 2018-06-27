@@ -1,4 +1,4 @@
-{{- if not .Values.global.ingress.configureCertmanager -}}
+{{- if not (or .Values.global.ingress.configureCertmanager .Values.global.ingress.tls) -}}
 apiVersion: batch/v1
 kind: Job
 metadata:

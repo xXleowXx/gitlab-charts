@@ -234,5 +234,5 @@ Returns gitlabUrl needed for gitlab-runner
 
 {{/* selfsigned cert for when other options aren't provided */}}
 {{- define "gitlab.wildcard-self-signed-cert-name" -}}
-{{- default (printf "%s-wildcard-tls" .Release.Name) .Values.global.ingress.tls -}}
+{{- default (printf "%s-wildcard-tls" .Release.Name) .Values.global.ingress.tls.secretName -}}
 {{- end -}}
