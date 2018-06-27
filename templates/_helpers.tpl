@@ -229,7 +229,15 @@ Handles merging a set of service annotations
 Returns gitlabUrl needed for gitlab-runner
 */}}
 {{- define "gitlab-runner.gitlabUrl" -}}
+{{- if or .Values.global.ingress.configureCertmanager .Values.global.ingress.tls -}}
 {{- template "gitlab.gitlab.url" . -}}
+{{- else -}}
+{{/* This only happens if we're using a self-signed cert and can't go through
+     the normal TLS endpoint, but it relies on a user not changing the
+     workhorseExternalPort (not sure why someone would do that)
+  */}}
+{{- printf "http://%s:8181" (printf "%s-%s" .Release.Name "unicorn" | trunc 63 | trimSuffix "-") -}}
+{{- end -}}
 {{- end -}}
 
 {{/* selfsigned cert for when other options aren't provided */}}
