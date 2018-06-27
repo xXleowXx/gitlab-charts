@@ -1,0 +1,43 @@
+{{- if not .Values.global.ingress.configureCertmanager -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "shared-secrets.jobname" . }}-selfsign
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ template "fullname" . }}
+      restartPolicy: Never
+{{- include "pullsecrets" .Values.image | indent 6}}
+      initContainers:
+      - name: omgwtfssl
+        image: "{{ .Values.selfsign.image.repository }}:{{ .Values.selfsign.image.tag }}"
+        envFrom:
+        - configMapRef:
+            name: {{ template "fullname" . }}-selfsign
+        volumeMounts:
+        - name: certs-path
+          mountPath: /certs
+      containers:
+      - name: kubectl
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["kubectl", "apply", "-f", "/certs/secret.yaml"]
+        volumeMounts:
+        - name: certs-path
+          mountPath: /certs
+      volumes:
+      - name: certs-path
+        emptyDir: {}
+{{- end -}}
