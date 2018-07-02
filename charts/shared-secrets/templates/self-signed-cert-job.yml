@@ -24,16 +24,29 @@ spec:
       initContainers:
       - name: omgwtfssl
         image: "{{ .Values.selfsign.image.repository }}:{{ .Values.selfsign.image.tag }}"
-        envFrom:
-        - configMapRef:
-            name: {{ template "fullname" . }}-selfsign
+        env:
+        - name: SSL_SUBJECT
+          value: {{ printf "*.%s" .Values.global.hosts.domain | quote }}
+        - name: SSL_EXPIRE
+          value: "30"
+        - name: SSL_SIZE
+          value: "4096"
+        - name: SILENT
+          value: "true"
+        - name: K8S_NAME
+          value: {{ template "gitlab.wildcard-self-signed-cert-name" . }}
+        - name: K8S_NAMESPACE
+          value: {{ .Release.Namespace }}
         volumeMounts:
         - name: certs-path
           mountPath: /certs
       containers:
       - name: kubectl
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        command: ["kubectl", "apply", "-f", "/certs/secret.yaml"]
+        command:
+        - /bin/bash
+        - -ec
+        - "kubectl create -f /certs/secret.yaml || true"
         volumeMounts:
         - name: certs-path
           mountPath: /certs
