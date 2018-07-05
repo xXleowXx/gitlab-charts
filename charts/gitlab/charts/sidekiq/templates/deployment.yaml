@@ -39,12 +39,8 @@ kind: Deployment
 metadata:
   name: {{ $queueName }}
   labels:
-    app: {{ $name }}
-    chart: {{ $chart }}
-    release: {{ $releaseName }}
-    heritage: {{ $releaseService }}
+{{ include "gitlab.standardLabels" $ | indent 4 }}
     queue-pod-name: {{ .name }}
-{{ include "gitlab.application.labels" $ | indent 4 }}
 spec:
   selector:
     matchLabels:
