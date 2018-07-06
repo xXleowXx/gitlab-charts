@@ -30,7 +30,7 @@ Get the application URL by running these commands:
 
 An example Ingress that makes use of the controller:
 
-  apiVersion: apps/v1beta1
+  apiVersion: apps/v1beta2
   kind: Ingress
   metadata:
     annotations:
