@@ -9,7 +9,7 @@ metadata:
     namespace: {{ .Release.Namespace }}
 ---
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   namespace: {{ .Release.Namespace }}
   name: {{ template "fullname" . }}
@@ -18,7 +18,7 @@ rules:
   resources: ["issuers"]
   verbs: ["get", "list", "update", "create", "patch"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ template "fullname" . }}
