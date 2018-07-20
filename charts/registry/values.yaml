@@ -96,6 +96,8 @@ tokenService: 'container_registry'
 tokenIssuer: 'gitlab-issuer'
 # if replicas is >1, shared storage MUST be used.
 replicas: 1
+minReplicas: 1
+maxReplicas: 10
 maxUnavailable: 1
 storage: {}
 minio:
