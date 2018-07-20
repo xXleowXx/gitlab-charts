@@ -62,6 +62,7 @@ global:
   appConfig:
     lfs:
       enabled: true
+      proxy_download: true
       bucket:
       connection: {}
     artifacts: {}
