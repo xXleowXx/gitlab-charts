@@ -108,12 +108,12 @@ global:
       proxy_download: true
       bucket:
       connection: {}
-    artifacts: {}
+    artifacts:
       enabled: true
       proxy_download: true
       bucket:
       connection: {}
-    uploads: {}
+    uploads:
       enabled: true
       proxy_download: true
       bucket:
