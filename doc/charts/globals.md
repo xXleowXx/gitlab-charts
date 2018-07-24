@@ -280,6 +280,16 @@ with the `global.appConfig` key.
 ```
 global:
 appConfig:
+  issueClosingPattern:
+  defaultTheme:
+  webhookTimeout:
+  gravatar:
+    plainUrl:
+    sslUrl:
+  extra:
+    googleAnalyticsId:
+    piwikUrl:
+    piwikSiteId:
   lfs:
     enabled: true
     proxy_download: true
