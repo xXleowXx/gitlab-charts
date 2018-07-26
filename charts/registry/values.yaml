@@ -95,7 +95,6 @@ tokenService: 'container_registry'
 # This must match your GitLab Rails configuration
 tokenIssuer: 'gitlab-issuer'
 # if replicas is >1, shared storage MUST be used.
-replicas: 2
 minReplicas: 2
 maxReplicas: 10
 maxUnavailable: 1
