@@ -218,6 +218,13 @@ spec:
               items:
                 - key: {{ $redisKey }}
                   path: redis/password
+          {{- if eq $.Values.global.appConfig.incomingEmail.enabled true}}
+          - secret:
+              name: {{ $.Values.global.appConfig.incomingEmail.password.secret | required "Missing required secret containing the IMAP password for reply-by-email. Make sure to set `global.appConfig.incomingEmail.password.secret`" }}
+              items:
+                - key: {{ $.Values.global.appConfig.incomingEmail.password.key }}
+                  path: mailroom/password
+          {{- end }}
           - secret:
               name: {{ template "gitlab.psql.password.secret" $ }}
               items:

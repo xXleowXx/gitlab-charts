@@ -103,6 +103,19 @@ global:
     enabled:
     credentials: {}
   appConfig:
+    incomingEmail:
+      enabled: false
+      address: ""
+      host: "imap.gmail.com"
+      port: 993
+      ssl: true
+      startTls: false
+      user: ""
+      password:
+        secret:
+        key: password
+      mailbox: inbox
+      idleTimeout: 60
     lfs:
       enabled: true
       proxy_download: true
