@@ -15,37 +15,8 @@ init:
 
 global:
   # imagePullPolicy: IfNotPresent
-  hosts:
-    domain: example.local
-    hostSuffix:
-    https: true
-    gitlab: {}
-      #name: gitlab.example.local
-      #https: false
-    registry: {}
-      #name: registry.example.local
-      #https: false
-    minio: {}
-      #name: minio.example.local
-      #https: false
-  psql: {}
-    # host: '0.0.0.0'
-    # port: '5432'
-    # database: 'gitlabhq_production'
-    # username: 'gitlab'
-    # password:
-    #   secret: gitlab-postgres
-    #   key: psql-password
   redis:
     password: {}
-  gitaly:
-    internal:
-      names: ["default"]
-    external: []
-    authToken: {}
-  minio:
-    enabled:
-    credentials: {}
   appConfig:
     incomingEmail:
       enabled: false
@@ -60,21 +31,6 @@ global:
         key: password
       mailbox: inbox
       idleTimeout: 60
-    lfs:
-      enabled: true
-      proxy_download: true
-      bucket:
-      connection: {}
-    artifacts:
-      enabled: true
-      proxy_download: true
-      bucket:
-      connection: {}
-    uploads:
-      enabled: true
-      proxy_download: true
-      bucket:
-      connection: {}
 
 redis:
   password: {}
