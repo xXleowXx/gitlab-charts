@@ -1,5 +1,5 @@
 image:
-  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-mailroom-ee
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-mailroom
   pullSecrets: []
   pullPolicy: Always
   tag: mailroom-image
