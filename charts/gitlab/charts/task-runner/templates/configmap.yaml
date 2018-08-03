@@ -61,8 +61,8 @@ data:
           connection:
             provider: AWS
             region: us-east-1
-            aws_access_key_id: "<%= File.read('/etc/gitlab/minio/accesskey') %>"
-            aws_secret_access_key: "<%= File.read('/etc/gitlab/minio/secretkey') %>"
+            aws_access_key_id: "<%= File.read('/etc/gitlab/s3cred/accesskey') %>"
+            aws_secret_access_key: "<%= File.read('/etc/gitlab/s3cred/secretkey') %>"
             host: {{ template "gitlab.minio.hostname" . }}
             endpoint: {{ template "gitlab.minio.endpoint" . }}
             path_style: true
@@ -122,9 +122,9 @@ data:
     cp /init-config/registry/gitlab-registry.key /init-secrets/registry/gitlab-registry.key
     cp /init-config/postgres/psql-password /init-secrets/postgres/psql-password
     cp /init-config/rails-secrets/secrets.yml /init-secrets/rails-secrets/secrets.yml
-    if [ -e /init-config/minio ]; then
-      mkdir /init-secrets/minio
-      cp /init-config/minio/* /init-secrets/minio/
+    if [ -e /init-config/s3cred ]; then
+      mkdir /init-secrets/s3cred
+      cp /init-config/s3cred/* /init-secrets/s3cred/
     fi
     if [ -e /init-config/objectstorage ]; then
       mkdir -p /init-secrets/objectstorage
@@ -133,11 +133,17 @@ data:
 
     cat << EOF > /init-secrets/.s3cfg
     [default]
-    access_key = $(cat /init-secrets/minio/accesskey)
-    secret_key = $(cat /init-secrets/minio/secretkey)
+    access_key = $(cat /init-secrets/s3cred/accesskey)
+    secret_key = $(cat /init-secrets/s3cred/secretkey)
+    {{- if .Values.global.minio.enabled }}
     bucket_location = us-east-1
     host_base = {{ template "gitlab.minio.hostname" . }}
     host_bucket = {{ template "gitlab.minio.hostname" . }}/%(bucket)
+    website_endpoint = {{ template "gitlab.minio.url" . }}
+    {{- else if eq .Values.global.appConfig.backups.storageType "s3" }}
+    bucket_location = {{ .Values.global.appConfig.backups.s3BucketLocation }}
+    host_bucket = {{ .Values.global.appConfig.backups.s3BucketName }}
+    {{- end }}
     default_mime_type = binary/octet-stream
     enable_multipart = True
     multipart_max_chunks = 10000
@@ -149,6 +155,5 @@ data:
     socket_timeout = 300
     use_mime_magic = True
     verbosity = WARNING
-    website_endpoint = {{ template "gitlab.minio.url" . }}
     EOF
 {{- end }}
