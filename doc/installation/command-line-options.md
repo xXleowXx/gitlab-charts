@@ -52,15 +52,15 @@ Tables below contain all the possible charts configurations that can be supplied
 | Parameter                                          | Description                                                                                              | Default               |
 | ---                                                | ---                                                                                                      | ---                   |
 | global.appConfig.incomingEmail.enabled             | Enable incoming email                                                                                    | false                 |
-| global.appConfig.incomingEmail.address             | The email address to reference the item being replied to (example: gitlab-incoming+%{key}@gmail.com)     | ""                    |
-| global.appConfig.incomingEmail.host                | Host for IMAP                                                                                            | "imap.gmail.com"      |
+| global.appConfig.incomingEmail.address             | The email address to reference the item being replied to (example: gitlab-incoming+%{key}@gmail.com)     | empty                 |
+| global.appConfig.incomingEmail.host                | Host for IMAP                                                                                            | empty                 |
 | global.appConfig.incomingEmail.port                | Port for IMAP                                                                                            | 993                   |
 | global.appConfig.incomingEmail.ssl                 | Whether IMAP server uses SSL                                                                             | true                  |
 | global.appConfig.incomingEmail.startTls            | Whether IMAP server uses StartTLS                                                                        | false                 |
-| global.appConfig.incomingEmail.user                | Username for IMAP authentication                                                                         | ""                    |
-| global.appConfig.incomingEmail.password.secret     | Name of a `Secret` containing the IMAP password                                                          | ""                    |
+| global.appConfig.incomingEmail.user                | Username for IMAP authentication                                                                         | empty                 |
+| global.appConfig.incomingEmail.password.secret     | Name of a `Secret` containing the IMAP password                                                          | empty                 |
 | global.appConfig.incomingEmail.password.key        | Key in `global.appConfig.incomingEmail.password.secret` that contains the IMAP password                  | password              |
-| global.appConfig.incomingEmail.mailbox             | Mailbox where incoming mail will end up.                                                                 | "inbox"               |
+| global.appConfig.incomingEmail.mailbox             | Mailbox where incoming mail will end up.                                                                 | inbox                 |
 | global.appConfig.incomingEmail.idleTimeout         | The IDLE command timeout                                                                                 | 60                    |
 
 
