@@ -104,7 +104,7 @@ spec:
                 - key: {{ template "gitlab.redis.password.key" . }}
                   path: redis/password
           - secret:
-              name: {{ .Values.global.appConfig.incomingEmail.password.secret | required "Missing required secret containing the IMAP password for reply-by-email. Make sure to set `global.appConfig.incomingEmail.password.secret`" }}
+              name: {{ .Values.global.appConfig.incomingEmail.password.secret | required "Missing required secret containing the IMAP password for incoming email. Make sure to set `global.appConfig.incomingEmail.password.secret`" }}
               items:
                 - key: {{ .Values.global.appConfig.incomingEmail.password.key }}
                   path: mailroom/password

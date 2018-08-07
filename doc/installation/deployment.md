@@ -117,13 +117,17 @@ You can disable authentication settings with `--set global.smtp.authentication="
 If your Kubernetes cluster is on GKE, be aware that smtp [ports 25, 465, and 587
 are blocked](https://cloud.google.com/compute/docs/tutorials/sending-mail/#using_standard_email_ports).
 
-### Incoming email (for reply-by-email feature)
+### Incoming email
 
 By default incoming email is disabled. To enable it, provide details of your
 IMAP server and access credentials using the `global.appConfig.incomingEmail`
 settings. You can find details for these settings in the [command line options](command-line-options.md#incoming-email-configuration).
 You will also have to create a Kubernetes secret containing IMAP password as
-described in the [secrets guide](secrets.md#imap-password-for-reply-by-email-feature).
+described in the [secrets guide](secrets.md#imap-password-for-incoming-emails).
+
+To use reply-by-email feature, where users can reply to notification emails to
+comment on issues and MRs, you need to configure both outgoing email and
+incoming email settings.
 
 ### Deploy the Community Edition
 
