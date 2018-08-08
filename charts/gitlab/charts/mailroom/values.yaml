@@ -27,7 +27,7 @@ global:
       startTls: false
       user:
       password:
-        secret:
+        secret: ""
         key: password
       mailbox: inbox
       idleTimeout: 60
