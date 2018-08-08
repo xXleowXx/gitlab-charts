@@ -121,6 +121,8 @@ nginx-ingress:
     minAvailable: 2
     scope:
       enabled: true
+    stats:
+      enabled: true
     metrics:
       enabled: true
       service:
