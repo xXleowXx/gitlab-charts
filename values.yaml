@@ -6,9 +6,9 @@ global:
   application:
     create: true
   hosts:
-    domain: example.local
+    domain: gitlab-ci.com
     https: true
-    externalIP:
+    externalIP: 104.196.96.109
   ingress:
     configureCertmanager: true
     annotations: {}
@@ -32,7 +32,7 @@ global:
     credentials: {}
   appConfig:
     issueClosingPattern:
-    defaultTheme:
+    defaultTheme: 9
     webhookTimeout:
     gravatar:
       plainUrl:
@@ -62,12 +62,12 @@ global:
     registrationToken: {}
   # Outgoing email server settings
   smtp:
-    enabled: false
+    enabled: true
     address: smtp.mailgun.org
     port: 2525
-    user_name: ""
+    user_name: "postmaster@sandbox214d1d61eb334d38bb133777d7cbf103.mailgun.org"
     password:
-      secret: ""
+      secret: "gitlab-smtp"
       key: password
     # domain:
     authentication: "plain"
@@ -75,9 +75,9 @@ global:
     openssl_verify_mode: "peer"
   # Email persona used in email sent by GitLab
   email:
-    from: ''
+    from: 'joshua@gitlab.com'
     display_name: GitLab
-    reply_to: ''
+    reply_to: 'joshua@gitlab.com'
     subject_suffix: ''
   time_zone: UTC
   service:
@@ -92,6 +92,8 @@ certmanager:
   # See https://github.com/kubernetes/charts/tree/master/stable/cert-manager#configuration
   rbac:
     create: true
+certmanager-issuer:
+  email: joshua@gitlab.com
 
 nginx-ingress:
   enabled: true
@@ -121,6 +123,10 @@ nginx-ingress:
     minAvailable: 2
     scope:
       enabled: true
+    metrics:
+      enabled: true
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "10254"
   defaultBackend:
     minAvailable: 1
     replicaCount: 2
