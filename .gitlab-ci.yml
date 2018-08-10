@@ -355,8 +355,7 @@ danger-review:
       - branches
   script:
     - git version
-    - git fetch origin master:master
-    - danger --fail-on-errors=true
+    - danger --fail-on-errors=true --base=master --head=HEAD
 
 # ---------------------------------------------------------------------------
 
