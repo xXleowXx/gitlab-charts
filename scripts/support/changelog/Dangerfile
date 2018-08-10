@@ -20,6 +20,8 @@ puts "SHA: #{ENV['CI_COMMIT_SHA']}"
 
 puts "MERGE BASE: #{`git merge-base master HEAD`}"
 
+puts gitlab.commits_json.inspect
+
 def check_changelog(path)
   yaml = YAML.safe_load(File.read(path))
 
