@@ -16,6 +16,8 @@ consider adding any of the %<labels>s labels.
 #{SEE_DOC}
 MSG
 
+puts "SHA: #{ENV['CI_COMMIT_SHA']}"
+
 def check_changelog(path)
   yaml = YAML.safe_load(File.read(path))
 
