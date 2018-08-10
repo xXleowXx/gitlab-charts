@@ -18,6 +18,8 @@ MSG
 
 puts "SHA: #{ENV['CI_COMMIT_SHA']}"
 
+puts "MERGE BASE: #{`git merge-base master HEAD`}"
+
 def check_changelog(path)
   yaml = YAML.safe_load(File.read(path))
 
