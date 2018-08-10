@@ -42,6 +42,8 @@ end
 changelog_needed = (gitlab.mr_labels & NO_CHANGELOG_LABELS).empty?
 changelog_found = git.added_files.find { |path| path =~ %r{\Achangelogs/unreleased/} }
 
+puts changelog_found.inspect
+
 if git.modified_files.include?("CHANGELOG.md")
   fail "CHANGELOG.md was edited. Please remove the additions and create an entry with `bin/changelog -m #{gitlab.mr_json["iid"]}` instead."
 end
