@@ -3,14 +3,17 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ template "migrations.jobname" . }}
+  namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
 spec:
+  selector:
+    matchLabels:
+{{ include "gitlab.immutableLabels" . | indent 6 }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
-        release: {{ .Release.Name }}
+{{ include "gitlab.standardLabels" . | indent 8 }}
     spec:
       securityContext:
         runAsUser: 1000

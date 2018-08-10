@@ -3,15 +3,19 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ template "minio.createBucketsJobName" . }}
+  namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
 spec:
   activeDeadlineSeconds: 600
+  selector:
+    matchLabels:
+{{ include "gitlab.immutableLabels" . | indent 6 }}
+      component: create-buckets
   template:
     metadata:
       labels:
-        app: {{ template "minio.name" . }}
-        release: {{ .Release.Name }}
+{{ include "gitlab.standardLabels" . | indent 8 }}
         component: create-buckets
     spec:
       restartPolicy: OnFailure

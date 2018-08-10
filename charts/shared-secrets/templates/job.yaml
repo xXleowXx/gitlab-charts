@@ -2,17 +2,20 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ template "shared-secrets.jobname" . }}
+  namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
+  selector:
+    matchLabels:
+{{ include "gitlab.immutableLabels" . | indent 6 }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
-        release: {{ .Release.Name }}
+{{ include "gitlab.standardLabels" . | indent 8 }}
     spec:
       {{- if .Values.rbac.create }}
       serviceAccountName: {{ template "fullname" . }}

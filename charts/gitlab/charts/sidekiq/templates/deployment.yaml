@@ -38,19 +38,20 @@ apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: {{ $queueName }}
+  namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" $ | indent 4 }}
     queue-pod-name: {{ .name }}
 spec:
   selector:
     matchLabels:
-      app: {{ $name }}
-      release: {{ $releaseName }}
+{{ include "gitlab.immutableLabels" $ | indent 6 }}
+      queue-pod-name: {{ .name }}
   template:
     metadata:
       labels:
-        app: {{ $name }}
-        release: {{ $releaseName }}
+{{ include "gitlab.standardLabels" $ | indent 8 }}
+        queue-pod-name: {{ .name }}
       annotations:
         checksum/configmap: {{ $configMapChecksum }}
         checksum/configmap-pod: {{ pluck ( .name | quote ) $queues | last | sha256sum }}
@@ -68,8 +69,7 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ $name }}
-                  release: {{ $releaseName }}
+{{ include "gitlab.immutableLabels" $ | indent 18 }}
       {{- else if eq (default $.Values.global.antiAffinity .antiAffinity) "soft" }}
       affinity:
         podAntiAffinity:
@@ -79,8 +79,7 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: {{ $name }}
-                  release: {{ $releaseName }}
+{{ include "gitlab.immutableLabels" $ | indent 18 }}
       {{- end }}
       initContainers:
         - name: configure
