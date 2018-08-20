@@ -39,7 +39,7 @@ Then proceed to the [restore documentation](../backup-restore/README.md#restorin
 
 > To obtain a backup tarball of an existing GitLab instance that used other installation methods like an omnibus-gitlab package or GitLab-Omnibus helm chart, follow the instructions [given in documentation](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
 >
-> **Note**: If you are restoring a backup taking from another instance, you must migrate your existing instance to using object storage before taking the backup. See [issue 646](https://gitlab.com/charts/gitlab/issues/646)
+> **Note**: If you are restoring a backup taken from another instance, you must migrate your existing instance to using object storage before taking the backup. See [issue 646](https://gitlab.com/charts/gitlab/issues/646)
 
 [Google Kubernetes Engine]: ../cloud/gke.md
 [resources]: resources.md
