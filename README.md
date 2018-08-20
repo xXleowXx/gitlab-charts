@@ -2,7 +2,7 @@
 
 The `gitlab` chart is the best way to operate GitLab on Kubernetes. This chart contains all the required components to get started, and can scale to large deployments.
 
-Some of the key benefits of this chart and corresponding containers are:
+Some of the key benefits of this chart and [corresponding containers](https://gitlab.com/gitlab-org/build/CNG) are:
 * Improved scalability and reliability
 * No requirement for root privileges
 * Utilization of object storage instead of NFS for storage
