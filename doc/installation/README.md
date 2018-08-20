@@ -1,4 +1,5 @@
 # Installing GitLab using Helm
+> **Note**: There are currently [known limitations](../../README.md#known-issues-and-limitations) when using this chart, and not all features of GitLab are available.
 
 Install GitLab on Kubernetes with the cloud native GitLab Helm chart. Follow the instructions below to get started.
 
