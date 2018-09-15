@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 
 global:
+  edition: ee
   # gitlabVersion: master
   application:
     create: false

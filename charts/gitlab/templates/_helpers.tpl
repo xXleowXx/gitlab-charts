@@ -26,3 +26,15 @@ latest
 {{- $appVersion -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns image.repositoryEE if global.edition is set to "ee", or
+image.repositoryCE otherwise.
+*/}}
+{{- define "image.repository" -}}
+{{- if eq "ee" .Values.global.edition -}}
+{{ .Values.image.repositoryEE }}
+{{- else -}}
+{{ .Values.image.repositoryCE }}
+{{- end -}}
+{{- end -}}
