@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 
 global:
+  edition: ee
   hosts:
     domain: example.local
     https: true
