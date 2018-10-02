@@ -16,3 +16,6 @@ dependencies:
   version: 0.1.33
   repository: https://charts.gitlab.io/
   condition: gitlab-runner.install
+- name: redis-ha
+  version: 2.2.3
+  repository: https://kubernetes-charts.storage.googleapis.com/
