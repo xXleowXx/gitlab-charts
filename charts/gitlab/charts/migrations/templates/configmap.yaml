@@ -10,7 +10,7 @@ data:
   database.yml.erb: |
     production:
       adapter: postgresql
-      encoding: unicode
+      encoding: {{ template "gitlab.psql.encoding" . }}
       database: {{ template "gitlab.psql.database" . }}
       pool: 10
       username: {{ template "gitlab.psql.username" . }}

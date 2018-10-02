@@ -148,6 +148,13 @@ Return the db database name
 {{- end -}}
 
 {{/*
+Return the db database encoding
+*/}}
+{{- define "gitlab.psql.encoding" -}}
+{{- coalesce .Values.global.psql.encoding "unicode" | quote -}}
+{{- end -}}
+
+{{/*
 Return the db username
 If the postgresql username is provided, it will use that, otherwise it will fallback
 to "gitlab" default
