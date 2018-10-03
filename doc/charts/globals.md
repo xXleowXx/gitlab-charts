@@ -289,6 +289,7 @@ with the `global.appConfig` key.
 global:
   appConfig:
     defaultCanCreateGroup: true
+    projectExportEnabled: true
     usernameChangingEnabled: true
     issueClosingPattern:
     defaultTheme:
@@ -350,6 +351,12 @@ application are described below.
 #### defaultCanCreateGroup
 
 A flag to decide if users are allowed to create groups.
+
+Defaults to `true`.
+
+#### projectExportEnabled
+
+A flag to decide if Gitlab project exports are enabled.
 
 Defaults to `true`.
 
