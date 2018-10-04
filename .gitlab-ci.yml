@@ -532,7 +532,8 @@ danger-review:
     release_name="gitlab-external-dns"
     if ! helm status --tiller-namespace "${TILLER_NAMESPACE}" "${release_name}" > /dev/null 2>&1 ; then
       # We need to store the credentials in a secret
-      kubectl create secret generic "${release_name}-secret" --from-literal="${GOOGLE_CLOUD_KEYFILE_JSON}"
+      echo ${GOOGLE_CLOUD_KEYFILE_JSON} > ${GOOGLE_APPLICATION_CREDENTIALS}
+      kubectl create secret generic "${release_name}-secret" --from-file="${GOOGLE_APPLICATION_CREDENTIALS}"
       helm install stable/external-dns \
         -n "${release_name}" \
         --namespace "${TILLER_NAMESPACE}" \
