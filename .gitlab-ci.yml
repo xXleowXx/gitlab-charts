@@ -573,28 +573,5 @@ danger-review:
       || true
   }
 
-  function terraform_up() {
-    pushd ci/terraform/
-    terraform apply -input=false -auto-approve -var environment=${CI_ENVIRONMENT_SLUG}
-    export DOMAIN_IP=$(terraform output loadBalancerIP)
-    popd
-  }
-
-  function terraform_down() {
-    pushd ci/terraform
-    terraform destroy -input=false -force -var environment=${CI_ENVIRONMENT_SLUG}
-    popd
-  }
-
-  function terraform_init() {
-    pushd ci/terraform
-    # gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
-    # gcloud config set project $GOOGLE_PROJECT_ID
-    terraform init -input=false \
-      -backend-config="bucket=${GOOGLE_STORAGE_BUCKET}" \
-      -backend-config="prefix=terraform/${CI_ENVIRONMENT_SLUG}"
-    popd
-  }
-
 before_script:
   - *auto_devops
