@@ -541,7 +541,8 @@ danger-review:
         --set google.project="${GOOGLE_PROJECT_ID}" \
         --set google.serviceAccountSecret="${release_name}-secret" \
         --set txtOwnerId="${TILLER_NAMESPACE}" \
-        --set rbac.create="true"
+        --set rbac.create="true" \
+        --set policy="sync"
     fi
   }
 
