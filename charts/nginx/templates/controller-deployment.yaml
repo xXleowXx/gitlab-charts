@@ -120,7 +120,7 @@ spec:
               protocol: TCP
             {{- end }}
           {{- end }}
-            - name: gitlab-shell-tcp
+            - name: gitlab-shell
               containerPort: {{ include "gitlab.shell.port" $ | int }}
               protocol: TCP
           {{- range $key, $value := .Values.tcp }}
