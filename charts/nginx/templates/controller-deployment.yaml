@@ -55,7 +55,7 @@ spec:
             - --election-id={{ .Values.controller.electionID }}
             - --ingress-class={{ template "nginx-ingress.controller.ingress-class" . }}
             - --configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.controller.fullname" . }}
-          {{- if .Values.tcp }}
+          {{- if or .Values.tcp ( include "gitlab.shell.port" $ ) }}
             - --tcp-services-configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.tcp-configmap" . }}
           {{- end }}
           {{- if .Values.udp }}
