@@ -75,6 +75,7 @@ minio:
   serviceName: 'minio-svc'
   port: 9000
 registry:
+  enabled: true
   host:
   # port: 443
   api:
