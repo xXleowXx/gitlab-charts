@@ -159,6 +159,9 @@ spec:
       spec:
         accessModes:
           - {{ .Values.persistence.accessMode | quote }}
+        {{- if .Values.persistence.volumeName }}
+        volumeName: {{ .Values.persistence.volumeName }}
+        {{- end }}
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
