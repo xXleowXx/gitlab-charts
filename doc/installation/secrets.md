@@ -25,15 +25,16 @@ To specify your own secrets, proceed to [manual secret creation](#manual-secret-
 - [Registry authentication certificates](#registry-authentication-certificates)
 - [SSH Host Keys](#ssh-host-keys)
 - [Passwords](#passwords)
+  * [Initial root password](#initial-root-password)
   * [Redis password](#redis-password)
+  * [GitLab Shell secret](#gitlab-shell-secret)
+  * [Gitaly secret](#gitaly-secret)
+  * [GitLab Rails secret](#gitlab-rails-secret)
+  * [GitLab workhorse secret](#gitlab-workhorse-secret)
+  * [GitLab runner secret](#gitlab-runner-secret)
   * [Postgres password](#postgres-password)
-  * [Registry HTTP Secret](#registry-http-secret)
-  * [GitLab Shell Secret](#gitlab-shell-secret)
-  * [Gitaly Secret](#gitaly-secret)
-  * [GitLab Rails Secret](#gitlab-rails-secret)
-  * [GitLab workhorse Secret](#gitlab-workhorse-secret)
-  * [GitLab runner Secret](#gitlab-runner-secret)
-  * [Minio Secret](#minio-secret)
+  * [Minio secret](#minio-secret)
+  * [Registry HTTP secret](#registry-http-secret)
 - [External Services](#external-services)
   * [Unicorn Omniauth](#unicorn-omniauth)
   * [SMTP Password](#smtp-password)
@@ -138,7 +139,7 @@ kubectl create secret generic gitlab-rails-secret --from-file=secrets.yml
 
 This secret is referenced by the `global.railsSecrets.secret` setting.
 
-### GitLab workhorse Secret
+### GitLab workhorse secret
 
 Generate the workhorse secret. This must have a length of 32 characters and
 base64-encoded.
@@ -173,7 +174,7 @@ Generate a set of random 20 & 64 character alpha-numeric keys for database passw
 kubectl create secret generic gitlab-postgresql-password --from-literal=postgres-password=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
 ```
 
-### Registry HTTP Secret
+### Registry HTTP secret
 
 Generate a random 64 character alpha-numeric key key shared by all registry pods.
 
