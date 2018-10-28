@@ -55,14 +55,14 @@ openssl req -new -newkey rsa:4096 -subj "/CN=gitlab-issuer" -nodes -x509 -keyout
 ```
 
 Create a secret containing these certificates.
- We will create `registry-auth.key` and `registry-auth.crt` keys inside the
-`gitlab-registry` secret.
+We will create `registry-auth.key` and `registry-auth.crt` keys inside the
+`gitlab-registry-secret` secret.
 
 ```
-kubectl create secret generic gitlab-registry --from-file=registry-auth.key=certs/registry-example-com.key --from-file=registry-auth.crt=certs/registry-example-com.crt
+kubectl create secret generic gitlab-registry-secret --from-file=registry-auth.key=certs/registry-example-com.key --from-file=registry-auth.crt=certs/registry-example-com.crt
 ```
 
-Include this secret using `--set global.registry.certificate.secret=gitlab-registry`
+This secret is referenced by the `global.registry.certificate.secret` setting.
 
 ### SSH Host Keys
 
@@ -79,19 +79,18 @@ ssh-keygen -t ed25519  -f hostKeys/ssh_host_ed25519_key -N ""
 Create the secret containing these certificates.
 
 ```
-kubectl create secret generic gitlab-shell-host-keys --from-file hostKeys
+kubectl create secret generic gitlab-gitlab-shell-host-keys --from-file hostKeys
 ```
 
-Include this secret using `--set global.shell.hostKeys.secret=gitlab-shell-host-keys`
+This secret is referenced by the `global.shell.hostKeys.secret` setting.
 
 ### Initial root password
 
 Create a kubernetes secret for storing the initial root password. The password
-should be at least 6 characters long. In the following command, replace
-`<your password>` with the value.
+should be at least 6 characters long.
 
 ```
-kubectl create secret generic gitlab-gitlab-initial-root-password --from-literal=password=<your password>
+kubectl create secret generic gitlab-gitlab-initial-root-password --from-literal=password=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32)
 ```
 
 ### Redis password
@@ -99,7 +98,7 @@ kubectl create secret generic gitlab-gitlab-initial-root-password --from-literal
 Generate a random 64 character alpha-numeric password for Redis.
 
 ```
-kubectl create secret generic gitlab-redis --from-literal=redis-password=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
+kubectl create secret generic gitlab-redis-secret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
 ```
 
 ### GitLab Shell secret
@@ -107,20 +106,20 @@ kubectl create secret generic gitlab-redis --from-literal=redis-password=$(head 
 Generate a random 64 character alpha-numeric secret for GitLab Shell.
 
 ```
-kubectl create secret generic gitlab-shell-secret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
+kubectl create secret generic gitlab-gitlab-shell-secret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
 ```
 
-Include this secret using `--set global.shell.authToken.secret=gitlab-shell-secret`
+This secret is referenced by the `global.shell.authToken.secret` setting.
 
 ### Gitaly secret
 
 Generate a random 64 character alpha-numeric token for Gitaly.
 
 ```
-kubectl create secret generic gitaly-secret --from-literal=token=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
+kubectl create secret generic gitlab-gitaly-secret --from-literal=token=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
 ```
 
-Include this secret using `--set global.gitaly.authToken.secret=gitaly-secret`
+This secret is referenced by the `global.gitaly.authToken.secret` setting.
 
 ### GitLab Rails secret
 
@@ -137,7 +136,7 @@ EOF
 kubectl create secret generic gitlab-rails-secret --from-file=secrets.yml
 ```
 
-Include this secret using `--set global.railsSecrets.secret=gitlab-rails-secret`
+This secret is referenced by the `global.railsSecrets.secret` setting.
 
 ### GitLab workhorse Secret
 
@@ -148,7 +147,7 @@ base64-encoded.
 kubectl create secret generic gitlab-gitlab-workhorse-secret --from-literal=shared_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
 ```
 
-Include this secret using `--set global.workhorse.key=gitlab-gitlab-workhorse-secret`
+This secret is referenced by the `global.workhorse.key` setting.
 
 ### GitLab runner secret
 
@@ -161,11 +160,12 @@ kubectl create secret generic gitlab-gitlab-runner-secret --from-literal=runner-
 Generate a set of random 20 & 64 character alpha-numeric keys for Minio.
 
 ```
-kubectl create secret generic gitlab-minio --from-literal=accesskey=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 20) --from-literal=secretkey=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
+kubectl create secret generic gitlab-minio-secret --from-literal=accesskey=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 20) --from-literal=secretkey=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
 ```
-Include this secret using `--set global.minio.credentials.secret=minio-secret`
 
-### Postgresql secret
+This secret is referenced by the `global.minio.credentials.secret` setting.
+
+### Postgresql password
 
 Generate a set of random 20 & 64 character alpha-numeric keys for database password.
 
@@ -178,7 +178,7 @@ kubectl create secret generic gitlab-postgresql-password --from-literal=postgres
 Generate a random 64 character alpha-numeric key key shared by all registry pods.
 
 ```
-kubectl create secret generic gitlab-registry-httpsecret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64 | base64 )
+kubectl create secret generic gitlab-registry-httpsecret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64 | base64)
 ```
 
 ## External services
