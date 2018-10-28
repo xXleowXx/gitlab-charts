@@ -30,6 +30,9 @@ To specify your own secrets, proceed to [manual secret creation](#manual-secret-
   * [Registry HTTP Secret](#registry-http-secret)
   * [GitLab Shell Secret](#gitlab-shell-secret)
   * [Gitaly Secret](#gitaly-secret)
+  * [GitLab Rails Secret](#gitlab-rails-secret)
+  * [GitLab workhorse Secret](#gitlab-workhorse-secret)
+  * [GitLab runner Secret](#gitlab-runner-secret)
   * [Minio Secret](#minio-secret)
 - [External Services](#external-services)
   * [Unicorn Omniauth](#unicorn-omniauth)
@@ -118,6 +121,40 @@ kubectl create secret generic gitaly-secret --from-literal=token=$(head -c 512 /
 ```
 
 Include this secret using `--set global.gitaly.authToken.secret=gitaly-secret`
+
+### GitLab Rails secret
+
+```
+cat << EOF > secrets.yml
+production:
+  secret_key_base: $(gen_random 'a-f0-9' 128)
+  otp_key_base: $(gen_random 'a-f0-9' 128)
+  db_key_base: $(gen_random 'a-f0-9' 128)
+  openid_connect_signing_key: |
+$(openssl genrsa 2048 | awk '{print "    " $0}')
+EOF
+
+kubectl create secret generic gitlab-rails-secret --from-file=secrets.yml
+```
+
+Include this secret using `--set global.railsSecrets.secret=gitlab-rails-secret`
+
+### GitLab workhorse Secret
+
+Generate the workhorse secret. This must have a length of 32 characters and
+base64-encoded.
+
+```
+kubectl create secret generic gitlab-gitlab-workhorse-secret --from-literal=shared_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
+```
+
+Include this secret using `--set global.workhorse.key=gitlab-gitlab-workhorse-secret`
+
+### GitLab runner secret
+
+```
+kubectl create secret generic gitlab-gitlab-runner-secret --from-literal=runner-registration-token=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
+```
 
 ### Minio secret
 
