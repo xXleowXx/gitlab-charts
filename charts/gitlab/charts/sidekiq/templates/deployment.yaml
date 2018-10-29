@@ -66,9 +66,9 @@ spec:
 {{ toYaml $metricsAnnotations | indent 8 }}
 {{- end }}
     spec:
-      {{- if .Values.tolerations }}
+      {{- if $.Values.tolerations }}
       tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+{{ toYaml $.Values.tolerations | indent 8 }}
       {{- end }}
       securityContext:
         runAsUser: 1000
