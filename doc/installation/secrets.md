@@ -21,6 +21,9 @@ To specify your own secrets, proceed to [manual secret creation](#manual-secret-
 
 ## Manual secret creation (optional)
 
+Use `gitlab` as the release name if you followed previous steps in this
+documentation.
+
 - [TLS certificates](tls.md)
 - [Registry authentication certificates](#registry-authentication-certificates)
 - [SSH Host Keys](#ssh-host-keys)
@@ -57,8 +60,7 @@ openssl req -new -newkey rsa:4096 -subj "/CN=gitlab-issuer" -nodes -x509 -keyout
 
 Create a secret containing these certificates.
 We will create `registry-auth.key` and `registry-auth.crt` keys inside the
-`<name>-registry-secret` secret. Replace `<name>` by name of the release -
-which is `gitlab` throughout this documentation.
+`<name>-registry-secret` secret. Replace `<name>` with the name of the release.
 
 ```
 kubectl create secret generic <name>-registry-secret --from-file=registry-auth.key=certs/registry-example-com.key --from-file=registry-auth.crt=certs/registry-example-com.crt
@@ -78,8 +80,8 @@ ssh-keygen -t ecdsa  -f hostKeys/ssh_host_ecdsa_key -N ""
 ssh-keygen -t ed25519  -f hostKeys/ssh_host_ed25519_key -N ""
 ```
 
-Create the secret containing these certificates. Replace `<name>` by name of
-the release - which is `gitlab` throughout this documentation.
+Create the secret containing these certificates. Replace `<name>` with the name
+of the release.
 
 ```
 kubectl create secret generic <name>-gitlab-shell-host-keys --from-file hostKeys
@@ -90,8 +92,8 @@ This secret is referenced by the `global.shell.hostKeys.secret` setting.
 ### Initial root password
 
 Create a kubernetes secret for storing the initial root password. The password
-should be at least 6 characters long. Replace `<name>` by name of the release -
-which is `gitlab` throughout this documentation.
+should be at least 6 characters long. Replace `<name>` with the name of the
+release.
 
 ```
 kubectl create secret generic <name>-gitlab-initial-root-password --from-literal=password=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32)
@@ -100,8 +102,7 @@ kubectl create secret generic <name>-gitlab-initial-root-password --from-literal
 ### Redis password
 
 Generate a random 64 character alpha-numeric password for Redis. Replace
-`<name>` by name of the release - which is `gitlab` throughout this
-documentation.
+`<name>` with the name of the release.
 
 ```
 kubectl create secret generic <name>-redis-secret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
@@ -110,8 +111,7 @@ kubectl create secret generic <name>-redis-secret --from-literal=secret=$(head -
 ### GitLab Shell secret
 
 Generate a random 64 character alpha-numeric secret for GitLab Shell. Replace
-`<name>` by name of the release - which is `gitlab` throughout this
-documentation.
+`<name>` with the name of the release.
 
 ```
 kubectl create secret generic <name>-gitlab-shell-secret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
@@ -122,7 +122,7 @@ This secret is referenced by the `global.shell.authToken.secret` setting.
 ### Gitaly secret
 
 Generate a random 64 character alpha-numeric token for Gitaly. Replace `<name>`
-by name of the release - which is `gitlab` throughout this documentation.
+with the name of the release.
 
 ```
 kubectl create secret generic <name>-gitaly-secret --from-literal=token=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
@@ -132,8 +132,7 @@ This secret is referenced by the `global.gitaly.authToken.secret` setting.
 
 ### GitLab Rails secret
 
-Replace `<name>` by name of the release - which is `gitlab` throughout this
-documentation.
+Replace `<name>` with the name of the release.
 
 ```
 cat << EOF > secrets.yml
@@ -153,19 +152,17 @@ This secret is referenced by the `global.railsSecrets.secret` setting.
 ### GitLab workhorse secret
 
 Generate the workhorse secret. This must have a length of 32 characters and
-base64-encoded. Replace `<name>` by name of the release - which is `gitlab`
-throughout this documentation.
+base64-encoded. Replace `<name>` with the name of the release.
 
 ```
 kubectl create secret generic <name>-gitlab-workhorse-secret --from-literal=shared_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
 ```
 
-This secret is referenced by the `global.workhorse.key` setting. 
+This secret is referenced by the `global.workhorse.key` setting.
 
 ### GitLab runner secret
 
-Replace `<name>` by name of the release - which is `gitlab` throughout this
-documentation.
+Replace `<name>` with the name of the release.
 
 ```
 kubectl create secret generic <name>-gitlab-runner-secret --from-literal=runner-registration-token=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
@@ -174,8 +171,7 @@ kubectl create secret generic <name>-gitlab-runner-secret --from-literal=runner-
 ### Minio secret
 
 Generate a set of random 20 & 64 character alpha-numeric keys for Minio.
-Replace `<name>` by name of the release - which is `gitlab` throughout this
-documentation.
+Replace `<name>` with the name of the release.
 
 ```
 kubectl create secret generic <name>-minio-secret --from-literal=accesskey=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 20) --from-literal=secretkey=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
@@ -186,8 +182,7 @@ This secret is referenced by the `global.minio.credentials.secret` setting.
 ### Postgresql password
 
 Generate a set of random 20 & 64 character alpha-numeric keys for database
-password. Replace `<name>` by name of the release - which is `gitlab`
-throughout this documentation.
+password. Replace `<name>` with the name of the release.
 
 ```
 kubectl create secret generic <name>-postgresql-password --from-literal=postgres-password=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
@@ -196,8 +191,7 @@ kubectl create secret generic <name>-postgresql-password --from-literal=postgres
 ### Registry HTTP secret
 
 Generate a random 64 character alpha-numeric key key shared by all registry
-pods. Replace `<name>` by name of the release - which is `gitlab` throughout
-this documentation.
+pods. Replace `<name>` with the name of the release.
 
 ```
 kubectl create secret generic <name>-registry-httpsecret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64 | base64)
