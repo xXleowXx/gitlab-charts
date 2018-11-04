@@ -102,7 +102,7 @@ backups:
     enabled: true
     concurrencyPolicy: Replace
     failedJobsHistoryLimit: 1
-    schedule: "* 1 * * *"
+    schedule: "0 1 * * *"
     successfulJobsHistoryLimit: 3
     resources:
       # limits:
