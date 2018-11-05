@@ -190,8 +190,8 @@ kubectl create secret generic <name>-postgresql-password --from-literal=postgres
 
 ### Registry HTTP secret
 
-Generate a random 64 character alpha-numeric key key shared by all registry
-pods. Replace `<name>` with the name of the release.
+Generate a random 64 character alpha-numeric key shared by all registry pods.
+Replace `<name>` with the name of the release.
 
 ```
 kubectl create secret generic <name>-registry-httpsecret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64 | base64)
