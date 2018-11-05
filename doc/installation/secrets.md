@@ -181,8 +181,8 @@ This secret is referenced by the `global.minio.credentials.secret` setting.
 
 ### Postgresql password
 
-Generate a set of random 20 & 64 character alpha-numeric keys for database
-password. Replace `<name>` with the name of the release.
+Generate a random 64 character alpha-numeric password. Replace `<name>` with
+the name of the release.
 
 ```
 kubectl create secret generic <name>-postgresql-password --from-literal=postgres-password=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
