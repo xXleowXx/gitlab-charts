@@ -137,6 +137,7 @@ data:
           {{- end }}
       packages:
         enabled: {{ eq .Values.global.appConfig.packages.enabled true }}
+        storage_path: /srv/gitlab/shared/packages
         object_store:
           enabled: true
           remote_directory: {{ .Values.global.appConfig.packages.bucket }}
