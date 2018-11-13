@@ -5,7 +5,7 @@ image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee
-  # tag: latest
+  tag: remove-config-directory
 init:
   image: busybox
   tag: latest
@@ -39,6 +39,7 @@ workerTimeout: 60
 hpa:
   targetAverageValue: 400m
 workhorse:
+  tag: remove-config-directory
   sentryDSN: ""
   extraArgs: ""
   resources:
