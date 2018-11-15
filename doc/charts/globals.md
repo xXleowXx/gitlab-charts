@@ -148,6 +148,7 @@ The GitLab global host settings are located under the `global.ingress` key.
 |[global.ingress.configureCertmanager](#global-ingress-configurecertmanger)|boolean|true|
 |[global.ingress.tls.secretName](#global-ingress-tls-secretName)|string|(empty)|
 |[global.ingress.annotations.*annotation-key*](#global-ingress-annotations-annotation-key)|string|(empty)|
+|[global.ingress.tls.enabled](#global-ingress-tls-enabled)|boolean|true|
 
 ### global.ingress.enabled
 
@@ -174,6 +175,12 @@ Defaults to `true`.
 The name of the [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) that contains a **wildcard** certificate and key for the domain used in `global.hosts.domain`.
 
 Defaults to not being set.
+
+### global.ingress.tls.enabled
+
+When set to false, you disable TLS in Gitlab. This is useful for cases in which you cannot use TLS termination of ingresses, like when you have a TLS-terminating proxy before the ingress controller.
+
+Defaults to `true`.
 
 ### global.ingress.annotations.annotation-key
 
