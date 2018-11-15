@@ -23,6 +23,7 @@ global:
   ingress:
     enabled: true
     annotations: {}
+    sslTermination: true
     tls: {}
       # secretName:
   hosts:

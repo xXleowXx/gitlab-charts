@@ -17,6 +17,7 @@ global:
     configureCertmanager: true
     annotations: {}
     enabled: true
+    sslTermination: true
   initialRootPassword: {}
   psql:
     password: {}

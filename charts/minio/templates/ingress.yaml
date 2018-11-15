@@ -29,11 +29,13 @@ spec:
             backend:
               serviceName: {{ template "minio.fullname" . }}-svc
               servicePort: {{ .Values.servicePort }}
-  {{- if $tlsSecret }}
+  {{- if and ($tlsSecret .Values.global.ingress.sslTermination) }}
   tls:
     - hosts:
       - {{ $minioHostname }}
       secretName: {{ $tlsSecret }}
+  {{- else }}
+  tls: []
   {{- end }}
 {{- end -}}
 {{- end -}}

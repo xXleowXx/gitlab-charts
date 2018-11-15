@@ -32,11 +32,13 @@ spec:
             backend:
               serviceName: {{ template "fullname" . }}
               servicePort: {{ .Values.service.externalPort }}
-  {{- if $tlsSecret }}
+  {{- if and ($tlsSecret .Values.global.ingress.sslTermination) }}
   tls:
     - hosts:
       - {{ $gitlabHostname }}
       secretName: {{ $tlsSecret }}
+  {{- else }}
+  tls: []
   {{- end }}
 {{- end -}}
 {{- end -}}
