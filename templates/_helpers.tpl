@@ -280,14 +280,14 @@ Return true in any other case.
     (hasKey .Values.global.ingress "tls")
     (and
       (hasKey .Values.global.ingress.tls "enabled")
-      (isKind "bool" .Values.global.ingress.tls.enabled))) -}}
+      (kindIs "bool" .Values.global.ingress.tls.enabled))) -}}
 {{- $localSet := and 
   (hasKey .Values "ingress")
   (and 
     (hasKey .Values.ingress "tls")
     (and
       (hasKey .Values.ingress.tls "enabled")
-      (isKind "bool" .Values.ingress.tls.enabled))) -}}
+      (kindIs "bool" .Values.ingress.tls.enabled))) -}}
 {{- if $localSet }}
 {{-   .Values.ingress.tls.enabled }}
 {{- else if $globalSet }}
