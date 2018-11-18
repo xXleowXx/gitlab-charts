@@ -1,7 +1,6 @@
 {{- if .Values.enabled -}}
 {{- if coalesce .Values.ingress.enabled .Values.global.ingress.enabled | default false -}}
 {{- $hostname := include "registry.hostname" . -}}
-{{- $tlsEnabled := or (not (isKind "bool" .Values.global.ingress.tls.enabled)) .Values.global.ingress.tls.enabled -}}
 {{- $tlsSecret := include "registry.tlsSecret" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
