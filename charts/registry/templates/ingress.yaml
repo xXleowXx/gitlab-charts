@@ -1,6 +1,7 @@
 {{- if .Values.enabled -}}
 {{- if coalesce .Values.ingress.enabled .Values.global.ingress.enabled | default false -}}
 {{- $hostname := include "registry.hostname" . -}}
+{{- $tlsEnabled := or (not (isKind "bool" .Values.global.ingress.tls.enabled)) .Values.global.ingress.tls.enabled -}}
 {{- $tlsSecret := include "registry.tlsSecret" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -29,7 +30,7 @@ spec:
             backend:
               serviceName: {{ template "fullname" . }}
               servicePort: {{ .Values.service.externalPort }}
-  {{- if (and $tlsSecret .Values.global.ingress.tls.enabled) }}
+  {{- if (and $tlsSecret (eq (include "gitlab.ingress.tls.enabled" $) "true" )) }}
   tls:
     - hosts:
       - {{ $hostname }}
