@@ -1,0 +1,5 @@
+---
+title: Fix persistence.volumeName in gitaly chart
+merge_request:
+author:
+type: fixed
