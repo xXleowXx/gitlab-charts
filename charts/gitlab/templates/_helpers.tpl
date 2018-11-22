@@ -42,3 +42,15 @@ image repository.
 {{ index .Values "global" "enterpriseImages" .Chart.Name "repository" }}
 {{- end -}}
 {{- end -}}
+
+{{- define "gitlab.extraContainers" -}}
+{{ default "" .Values.extraContainers }}
+{{- end -}}
+
+{{- define "gitlab.extraVolumes" -}}
+{{ default "" .Values.extraVolumes }}
+{{- end -}}
+
+{{- define "gitlab.extraVolumeMounts" -}}
+{{ default "" .Values.extraVolumeMounts }}
+{{- end -}}

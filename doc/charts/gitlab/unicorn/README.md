@@ -16,58 +16,61 @@ The `unicorn` chart is configured as follows: Global Settings, Ingress Settings 
 
 Table below contains all the possible charts configurations that can be supplied to `helm install` command using the `--set` flags
 
-| Parameter                        | Description                                    | Default                                          |
-| ---                              | ---                                            | ---                                              |
-| replicaCount                     | Unicorn number of replicas                     | 1                                                |
-| image.repository                 | Unicorn image repository                       | registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee |
-| image.tag                        | Unicorn image tag                              |                                                  |
-| image.pullPolicy                 | Unicorn image pull policy                      | Always                                           |
-| image.pullSecrets                | Secrets for the image repository               |                                                  |
-| init.image                       | initContainer image                            | busybox                                          |
-| init.tag                         | initContainer image tag                        | latest                                           |
-| service.name                     | Unicorn service name                           | unicorn                                          |
-| service.type                     | Unicorn service type                           | ClusterIP                                        |
-| service.externalPort             | Unicorn exposed port                           | 8080                                             |
-| service.internalPort             | Unicorn internal port                          | 8080                                             |
-| service.workhorseExternalPort    | Workhorse exposed port                         | 8181                                             |
-| service.workhorseInternalPort    | Workhorse internal port                        | 8181                                             |
-| enabled                          | Unicorn enabled flag                           | true                                             |
-| workerProcesses                  | Unicorn number of workers                      | 2                                                |
-| hpa.targetAverageValue           | Set the autoscaling target value               | 400m                                             |
-| workerTimeout                    | Unicorn worker timeout                         | 60                                               |
-| metrics.enabled                  | Toggle Prometheus metrics exporter             | true                                             |
-| ldap.servers                     | LDAP user authentication servers               | nil                                              |
-| omniauth.enabled                 | Enable OmniAuth                                | false                                            |
-| omniauth.autoSignInWithProvider  | Allow automatic SSO from this provider         | nil                                              |
-| omniauth.syncProfileFromProvider | Enable profile syncing from providers          | []                                               |
-| omniauth.syncProfileAttributes   | List of profile attributes to sync             | ['email']                                        |
-| omniauth.allowSingleSignOn       | Providers allowed automatic account creation   | ['saml']                                         |
-| omniauth.blockAutoCreatedUsers   | Block automatically created users by default   | true                                             |
-| omniauth.autoLinkLdapUser        | Automatically link LDAP users                  | false                                            |
-| omniauth.autoLinkSamlUser        | Automatically link SAML users                  | false                                            |
-| omniauth.externalProviders       | List of providers to be treated as external    | []                                               |
-| omniauth.providers               | List of secrets for Omniauth providers         | nil                                              |
-| redis.serviceName                | Redis service name                             | redis                                            |
-| psql.password.secret             | psql secret name                               | gitlab-postgres                                  |
-| psql.password.key                | Key to psql password in psql secret            | psql-password                                    |
-| shell.authToken.secret           | Shell token secret                             | gitlab-shell-secret                              |
-| shell.authToken.key              | Key to shell token in shell secret             | secret                                           |
-| gitaly.serviceName               | Gitaly service name                            | gitaly                                           |
-| minio.bucket                     | Name of storage bucket, when using Minio       | git-lfs                                          |
-| minio.serviceName                | Name of Minio service                          | minio-svc                                        |
-| minio.port                       | Port for Minio service                         | 9000                                             |
-| registry.enabled                 | Add/Remove registry link in all projects menu  | true                                             |
-| registry.api.protocol            | Registry protocol                              | http                                             |
-| registry.api.serviceName         | Registry service name                          | registry                                         |
-| registry.api.port                | Registry port                                  | 5000                                             |
-| registry.tokenIssuer             | Registry token issuer                          | gitlab-issuer                                    |
-| resources.requests.cpu           | Unicorn minimum cpu                            | 200m                                             |
-| resources.requests.memory        | Unicorn minimum memory                         | 1.4G                                             |
-| extras.google_analytics_id       | Google Analytics Id for frontend               | nil                                              |
-| rack_attack.git_basic_auth       | See [GitLab documentation][rackattack] for details | {}                                           |
-| trusted_proxies                  | See [GitLab documentation][proxies] for details | []                                              |
-| gitlab.unicorn.workhorse.image   | Workhorse image repository                     | registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee |
-| gitlab.unicorn.workhorse.tag     | Workhorse image tag                            |                                                  |
+| Parameter                        | Description                                        | Default                                                      |
+| ---                              | ---                                                | ---                                                          |
+| replicaCount                     | Unicorn number of replicas                         | 1                                                            |
+| image.repository                 | Unicorn image repository                           | registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee   |
+| image.tag                        | Unicorn image tag                                  |                                                              |
+| image.pullPolicy                 | Unicorn image pull policy                          | Always                                                       |
+| image.pullSecrets                | Secrets for the image repository                   |                                                              |
+| init.image                       | initContainer image                                | busybox                                                      |
+| init.tag                         | initContainer image tag                            | latest                                                       |
+| service.name                     | Unicorn service name                               | unicorn                                                      |
+| service.type                     | Unicorn service type                               | ClusterIP                                                    |
+| service.externalPort             | Unicorn exposed port                               | 8080                                                         |
+| service.internalPort             | Unicorn internal port                              | 8080                                                         |
+| service.workhorseExternalPort    | Workhorse exposed port                             | 8181                                                         |
+| service.workhorseInternalPort    | Workhorse internal port                            | 8181                                                         |
+| enabled                          | Unicorn enabled flag                               | true                                                         |
+| workerProcesses                  | Unicorn number of workers                          | 2                                                            |
+| hpa.targetAverageValue           | Set the autoscaling target value                   | 400m                                                         |
+| workerTimeout                    | Unicorn worker timeout                             | 60                                                           |
+| metrics.enabled                  | Toggle Prometheus metrics exporter                 | true                                                         |
+| ldap.servers                     | LDAP user authentication servers                   | nil                                                          |
+| omniauth.enabled                 | Enable OmniAuth                                    | false                                                        |
+| omniauth.autoSignInWithProvider  | Allow automatic SSO from this provider             | nil                                                          |
+| omniauth.syncProfileFromProvider | Enable profile syncing from providers              | []                                                           |
+| omniauth.syncProfileAttributes   | List of profile attributes to sync                 | ['email']                                                    |
+| omniauth.allowSingleSignOn       | Providers allowed automatic account creation       | ['saml']                                                     |
+| omniauth.blockAutoCreatedUsers   | Block automatically created users by default       | true                                                         |
+| omniauth.autoLinkLdapUser        | Automatically link LDAP users                      | false                                                        |
+| omniauth.autoLinkSamlUser        | Automatically link SAML users                      | false                                                        |
+| omniauth.externalProviders       | List of providers to be treated as external        | []                                                           |
+| omniauth.providers               | List of secrets for Omniauth providers             | nil                                                          |
+| redis.serviceName                | Redis service name                                 | redis                                                        |
+| psql.password.secret             | psql secret name                                   | gitlab-postgres                                              |
+| psql.password.key                | Key to psql password in psql secret                | psql-password                                                |
+| shell.authToken.secret           | Shell token secret                                 | gitlab-shell-secret                                          |
+| shell.authToken.key              | Key to shell token in shell secret                 | secret                                                       |
+| gitaly.serviceName               | Gitaly service name                                | gitaly                                                       |
+| minio.bucket                     | Name of storage bucket, when using Minio           | git-lfs                                                      |
+| minio.serviceName                | Name of Minio service                              | minio-svc                                                    |
+| minio.port                       | Port for Minio service                             | 9000                                                         |
+| registry.enabled                 | Add/Remove registry link in all projects menu      | true                                                         |
+| registry.api.protocol            | Registry protocol                                  | http                                                         |
+| registry.api.serviceName         | Registry service name                              | registry                                                     |
+| registry.api.port                | Registry port                                      | 5000                                                         |
+| registry.tokenIssuer             | Registry token issuer                              | gitlab-issuer                                                |
+| resources.requests.cpu           | Unicorn minimum cpu                                | 200m                                                         |
+| resources.requests.memory        | Unicorn minimum memory                             | 1.4G                                                         |
+| extras.google_analytics_id       | Google Analytics Id for frontend                   | nil                                                          |
+| rack_attack.git_basic_auth       | See [GitLab documentation][rackattack] for details | {}                                                           |
+| trusted_proxies                  | See [GitLab documentation][proxies] for details    | []                                                           |
+| gitlab.unicorn.workhorse.image   | Workhorse image repository                         | registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee |
+| gitlab.unicorn.workhorse.tag     | Workhorse image tag                                |                                                              |
+| extraContainers                  | List of extra containers to include                |                                                              |
+| extraVolumes                     | List of extra volumes to create                    |                                                              |
+| extraVolumeMounts                | List of extra volumes mountes to do                |                                                              |
 ## Chart configuration examples
 ### image.pullSecrets
 `pullSecrets` allow you to authenticate to a private registry to pull images for a pod.

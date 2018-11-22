@@ -65,6 +65,7 @@ spec:
                   release: {{ .Release.Name }}
       {{- end }}
       containers:
+{{ include "gitlab.extraContainers" . | indent 8 }}
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag (include "gitlab.parseAppVersion" .Chart.AppVersion) }}"
           {{ template "gitlab.imagePullPolicy" . }}
@@ -89,6 +90,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" . | indent 12 }}
             - name: gitaly-config
               mountPath: '/etc/gitaly/templates'
             - name: gitaly-secrets
@@ -116,6 +118,7 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
+{{ include "gitlab.extraVolumes" . | indent 6 }}
       - name: gitaly-config
         configMap:
           name: {{ template "fullname" . }}

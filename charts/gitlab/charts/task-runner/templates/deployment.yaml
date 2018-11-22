@@ -43,6 +43,7 @@ spec:
 {{ toYaml .Values.init.resources | indent 12 }}
 {{- include "pullsecrets" .Values.image | indent 6}}
       containers:
+{{ include "gitlab.extraContainers" . | indent 8 }}
         - name: {{ .Chart.Name }}
           args:
             - /bin/bash
@@ -70,6 +71,7 @@ spec:
             - name: CONFIG_DIRECTORY
               value: '/var/opt/gitlab/config/gitlab/'
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" . | indent 12 }}
             - name: task-runner-config
               mountPath: '/var/opt/gitlab/templates'
             - name: task-runner-secrets
@@ -82,6 +84,7 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
+{{ include "gitlab.extraVolumes" . | indent 6 }}
       - name: task-runner-config
         configMap:
           name: {{ template "fullname" . }}

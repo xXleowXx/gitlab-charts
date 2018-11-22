@@ -36,6 +36,7 @@ spec:
       restartPolicy: OnFailure
 {{- include "pullsecrets" .Values.image | indent 6}}
       containers:
+{{ include "gitlab.extraContainers" . | indent 8 }}
         - name: {{ .Chart.Name }}
           image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
           args:
@@ -66,10 +67,12 @@ spec:
             - name: migrations-secrets
               mountPath: /srv/gitlab/config/initial_root_password
               subPath: migrations/initial_root_password
+{{ include "gitlab.extraVolumeMounts" . | indent 12 }}
 {{ include "gitlab.certificates.volumeMount" . | indent 12 }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
+{{ include "gitlab.extraVolumes" . | indent 6 }}
       - name: migrations-config
         configMap:
           name: {{ template "fullname" . }}
