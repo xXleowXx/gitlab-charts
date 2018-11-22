@@ -2,6 +2,120 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 1.3.0 (2018-11-22)
+
+### Fixed (1 change)
+
+- Serve sidekiq assets directly from unicorn. !560
+
+### Changed (2 changes)
+
+- Make LDAP and Omniauth configuration global to rails based containers. !567
+- Pin the operator image to a specific sha digest. !571
+
+### Added (5 changes, 1 of them is from the community)
+
+- Add additional cleanup policy to Helm prehooks. !550
+- Add GitLab Rails, workhorse and runner secret to documentation. !552 (Maikel Vlasman)
+- Add support for Maven repositories. !558
+- Add support for Pseudonymizer. !562
+- Registry: default storage `delete` enabled. !579
+
+### Other (4 changes)
+
+- Add docs about using charts on OpenShift Origin. !555
+- Mount configuration files directly to /srv/gitlab/config instead of /var/opt/gitlab/config/gitlab. !565
+- Update nginx-ingress fork to 0.30.0. !578
+- Update GitLab Version to 11.5.0.
+
+
+## 1.2.6 (2018-11-20)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.7.
+
+
+## 1.2.5 (2018-11-20)
+
+### Other (2 changes)
+
+- Mount configuration files directly to /srv/gitlab/config instead of /var/opt/gitlab/config/gitlab. !565
+- Update GitLab Version to 11.4.6.
+
+
+## 1.2.4 (2018-11-05)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.5.
+
+
+## 1.2.3 (2018-11-01)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.4.
+
+
+## 1.2.2 (2018-10-29)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.3.
+
+
+## 1.2.1 (2018-10-29)
+
+### Fixed (1 change)
+
+- Skip custom CA mounts when unnecessary. !544
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.2.
+
+
+## 1.2.0 (2018-10-22)
+
+### Security (1 change)
+
+- Update redis version to 3.2.12. !511
+
+### Fixed (4 changes, 1 of them is from the community)
+
+- Better handle self-signed certificate behaviors in NOTES.txt. !500
+- NGINX: populate ingressClass from template. !520
+- Move shared-secrets jobs run as non-root. !533
+- Make gke bootstrap script work on MacOS. (Robert Marshall)
+
+### Changed (1 change)
+
+- Add safe-to-evict annotation to stateless deployments. !523
+
+### Added (6 changes, 2 of them are from the community)
+
+- Add missing settings to configure gitlab.yml. !496 (Erik Sundell)
+- Add a global flag to set the gitlab edition that will be installed. !499 (Scott Leggett)
+- Allow disabled shared-secrets chart. !510
+- Add Gitlab operator to run upgrades of Gitlab. !516
+- Move jobs management into the operator if it is enabled. !517
+- Add control of exposed SSH port. !531
+
+### Other (3 changes, 1 of them is from the community)
+
+- Update Helm minimum requirement to 2.9. !505
+- Use example.com in documentation and examples as per RFC2606. !512 (Scott Leggett)
+- Update GitLab Version to 11.4.0.
+
+
+## 1.1.6 (2018-10-17)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.3.6.
+
+
 ## 1.1.5 (2018-10-15)
 
 ### Fixed (1 change)

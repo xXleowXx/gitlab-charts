@@ -164,38 +164,61 @@ data:
           {{- else if .Values.global.appConfig.uploads.connection }}
           connection: <%= YAML.load_file("/etc/gitlab/objectstorage/uploads").to_json() %>
           {{- end }}
+      packages:
+        enabled: {{ eq .Values.global.appConfig.packages.enabled true }}
+        storage_path: /srv/gitlab/shared/packages
+        object_store:
+          enabled: true
+          remote_directory: {{ .Values.global.appConfig.packages.bucket }}
+          direct_upload: true
+          background_upload: false
+          proxy_download: {{ eq .Values.global.appConfig.packages.proxy_download true }}
+          {{- if .Values.global.minio.enabled }}
+          connection:
+            provider: AWS
+            region: us-east-1
+            aws_access_key_id: "<%= File.read('/etc/gitlab/minio/accesskey') %>"
+            aws_secret_access_key: "<%= File.read('/etc/gitlab/minio/secretkey') %>"
+            host: {{ template "gitlab.minio.hostname" . }}
+            endpoint: {{ template "gitlab.minio.endpoint" . }}
+            path_style: true
+          {{- else if .Values.global.appConfig.packages.connection }}
+          connection: <%= YAML.load_file("/etc/gitlab/objectstorage/packages").to_json() %>
+          {{- end }}
       pages:
         enabled: false
       mattermost:
         enabled: false
       gravatar:
       gitlab_ci:
+      {{- with .Values.global.appConfig }}
       ldap:
-      {{- if not .Values.ldap.servers }}
+      {{- if not .ldap.servers }}
         enabled: false
       {{- else }}
         enabled: true
         servers:
-{{ toYaml .Values.ldap.servers | indent 10 }}
+{{ toYaml .ldap.servers | indent 10 }}
       {{- end }}
-      kerberos:
-        enabled: false
       omniauth:
-        enabled: {{ .Values.omniauth.enabled }}
-        auto_sign_in_with_provider: {{ .Values.omniauth.autoSignInWithProvider | quote }}
-        sync_profile_from_provider: {{ .Values.omniauth.syncProfileFromProvider }}
-        sync_profile_attributes: {{ .Values.omniauth.syncProfileAttributes }}
-        allow_single_sign_on: {{ .Values.omniauth.allowSingleSignOn }}
-        block_auto_created_users: {{ .Values.omniauth.blockAutoCreatedUsers }}
-        auto_link_ldap_user: {{ .Values.omniauth.autoLinkLdapUser }}
-        auto_link_saml_user: {{ .Values.omniauth.autoLinkSamlUser }}
-        external_providers: {{ .Values.omniauth.externalProviders }}
-        {{- if .Values.omniauth.providers }}
+        enabled: {{ .omniauth.enabled }}
+        auto_sign_in_with_provider: {{ .omniauth.autoSignInWithProvider | quote }}
+        sync_profile_from_provider: {{ .omniauth.syncProfileFromProvider }}
+        sync_profile_attributes: {{ .omniauth.syncProfileAttributes }}
+        allow_single_sign_on: {{ .omniauth.allowSingleSignOn }}
+        block_auto_created_users: {{ .omniauth.blockAutoCreatedUsers }}
+        auto_link_ldap_user: {{ .omniauth.autoLinkLdapUser }}
+        auto_link_saml_user: {{ .omniauth.autoLinkSamlUser }}
+        external_providers: {{ .omniauth.externalProviders }}
+        {{- if .omniauth.providers }}
         providers:
-        {{-   range $index, $entry := .Values.omniauth.providers }}
+        {{-   range $index, $entry := .omniauth.providers }}
           - <%= YAML.load_file("/etc/gitlab/omniauth/{{ $entry.secret }}/provider").to_json() %>
         {{-   end }}
         {{- end }}
+      {{- end }}
+      kerberos:
+        enabled: false
       shared:
       gitaly:
         client_path: /home/git/gitaly/bin
@@ -211,6 +234,7 @@ data:
         secret_file: /etc/gitlab/shell/.gitlab_shell_secret
         upload_pack: true
         receive_pack: true
+        ssh_port: {{ include "gitlab.shell.port" . | int }}
       workhorse:
         secret_file: /etc/gitlab/gitlab-workhorse/secret
       git:
@@ -269,6 +293,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{.Release.Name }}-workhorse-config
+  namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
 data:

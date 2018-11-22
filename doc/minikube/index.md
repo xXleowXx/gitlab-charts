@@ -50,7 +50,7 @@ Minikube resource requests must be set higher than default for developing the Gi
 Once you have all the tools installed and configured, starting at stopping Minikube can be done with:
 
 ```
-minikube start --cpu 3 --memory 8192
+minikube start --cpus 3 --memory 8192
 ```
 
 This command should output something similar to:
@@ -106,7 +106,7 @@ You can find the URL for the dashboard by calling `minikube dashboard --url`.
 
 Once your Minikube is up and running, you can hook [Helm] to it with `helm init`.
 
-For further details on [Helm][helm], we'll move to [Developing for Helm](../helm/README.md)
+For further details on [Helm][helm], we'll move to [Developing for Helm](../helm/index.md)
 
 ## Deploying the chart
 
