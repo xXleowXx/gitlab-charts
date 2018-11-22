@@ -43,6 +43,7 @@ Table below contains all the possible charts configurations that can be supplied
 | persistence.storageClass     | storageClassName for provisioning        |                                          |
 | persistence.matchLabels      | Label-value matches to bind              |                                          |
 | persistence.matchExpressions | Label-expression matches to bind         |                                          |
+| extraInitContainers          | List of extra init containers to include |                                          |
 | extraContainers              | List of extra containers to include      |                                          |
 | extraVolumes                 | List of extra volumes to create          |                                          |
 | extraVolumeMounts            | List of extra volumes mountes to do      |                                          |

@@ -34,6 +34,7 @@ The `gitlab-shell` sub-chart provides a SSH server configured for Git SSH access
 | enabled              | Shell enable flag                        | true                                           |
 | unicorn.serviceName  | Unicorn service name                     | unicorn                                        |
 | redis.serviceName    | Redis service name                       | redis                                          |
+| extraInitContainers  | List of extra init containers to include |                                                |
 | extraContainers      | List of extra containers to include      |                                                |
 | extraVolumes         | List of extra volumes to create          |                                                |
 | extraVolumeMounts    | List of extra volumes mountes to do      |                                                |

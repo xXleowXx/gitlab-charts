@@ -41,6 +41,7 @@ Table below contains all the possible charts configurations that can be supplied
 | timeout                   | Sidekiq job timeout                      | 5                                                          |
 | resources.requests.cpu    | Sidekiq minimum needed cpu               | 100m                                                       |
 | resources.requests.memory | Sidekiq minimum needed memory            | 600M                                                       |
+| extraInitContainers       | List of extra init containers to include |                                                            |
 | extraContainers           | List of extra containers to include      |                                                            |
 | extraVolumes              | List of extra volumes to create          |                                                            |
 | extraVolumeMounts         | List of extra volumes mountes to do      |                                                            |

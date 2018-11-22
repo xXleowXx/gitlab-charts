@@ -24,6 +24,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       initContainers:
+{{ include "gitlab.extraInitContainers" . | indent 8 }}
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ .Values.init.image }}:{{ .Values.init.tag }}

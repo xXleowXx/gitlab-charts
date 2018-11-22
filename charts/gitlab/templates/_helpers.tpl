@@ -47,6 +47,10 @@ image repository.
 {{ default "" .Values.extraContainers }}
 {{- end -}}
 
+{{- define "gitlab.extraInitContainers" -}}
+{{ default "" .Values.extraInitContainers }}
+{{- end -}}
+
 {{- define "gitlab.extraVolumes" -}}
 {{ default "" .Values.extraVolumes }}
 {{- end -}}

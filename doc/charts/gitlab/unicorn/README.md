@@ -68,6 +68,7 @@ Table below contains all the possible charts configurations that can be supplied
 | trusted_proxies                  | See [GitLab documentation][proxies] for details    | []                                                           |
 | gitlab.unicorn.workhorse.image   | Workhorse image repository                         | registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee |
 | gitlab.unicorn.workhorse.tag     | Workhorse image tag                                |                                                              |
+| extraInitContainers              | List of extra init containers to include           |                                                              |
 | extraContainers                  | List of extra containers to include                |                                                              |
 | extraVolumes                     | List of extra volumes to create                    |                                                              |
 | extraVolumeMounts                | List of extra volumes mountes to do                |                                                              |
