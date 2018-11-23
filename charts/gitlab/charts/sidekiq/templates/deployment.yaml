@@ -94,6 +94,7 @@ spec:
           command: ['sh', '/config/configure']
           image: {{ $initImage }}:{{ $initTag }}
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" $ | indent 10 }}
           - name: sidekiq-config
             mountPath: /config
             readOnly: true
@@ -126,6 +127,7 @@ spec:
               value: 'true'
 {{- end }}
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" $ | indent 10 }}
           - name: sidekiq-config
             mountPath: '/var/opt/gitlab/templates'
             readOnly: true

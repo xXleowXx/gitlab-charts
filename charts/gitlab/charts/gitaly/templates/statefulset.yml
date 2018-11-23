@@ -29,6 +29,7 @@ spec:
           command: ['sh', '/config/configure']
           image: {{ .Values.init.image }}:{{ .Values.init.tag }}
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" . | indent 10 }}
           - name: gitaly-config
             mountPath: /config
             readOnly: true

@@ -23,6 +23,7 @@ spec:
           command: ['sh', '/config/configure']
           image: {{ .Values.init.image }}:{{ .Values.init.tag }}
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" . | indent 10 }}
           - name: migrations-config
             mountPath: /config
             readOnly: true

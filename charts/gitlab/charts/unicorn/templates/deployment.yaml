@@ -59,6 +59,7 @@ spec:
           args: [ '-c', 'sh -x /config-unicorn/configure ; sh -x /config-workhorse/configure']
           image: {{ .Values.init.image }}:{{ .Values.init.tag }}
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" . | indent 10 }}
           - name: unicorn-config
             mountPath: /config-unicorn
             readOnly: true
@@ -95,6 +96,7 @@ spec:
             - name: WORKHORSE_ARCHIVE_CACHE_DISABLED
               value: "1"
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" . | indent 12 }}
             - name: unicorn-config
               mountPath: '/var/opt/gitlab/templates'
             - name: unicorn-secrets
