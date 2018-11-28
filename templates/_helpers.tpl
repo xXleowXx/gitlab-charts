@@ -274,8 +274,8 @@ Returns `global.ingress.tls.enabled` if it is a boolean, and `ingress.tls.enable
 Return true in any other case.
 */}}
 {{- define "gitlab.ingress.tls.enabled" -}}
-{{- $globalSet := and (hasKey .Values.global "ingress") (and (hasKey .Values.global.ingress "tls") (and (hasKey .Values.global.ingress.tls "enabled") (kindIs "bool" .Values.global.ingress.tls.enabled))) -}}
-{{- $localSet := and (hasKey .Values "ingress") (and (hasKey .Values.ingress "tls") (and (hasKey .Values.ingress.tls "enabled") (kindIs "bool" .Values.ingress.tls.enabled))) -}}
+{{- $globalSet := and (hasKey .Values.global.ingress "tls") (and (hasKey .Values.global.ingress.tls "enabled") (kindIs "bool" .Values.global.ingress.tls.enabled)) -}}
+{{- $localSet := and (hasKey .Values.ingress "tls") (and (hasKey .Values.ingress.tls "enabled") (kindIs "bool" .Values.ingress.tls.enabled)) -}}
 {{- if $localSet }}
 {{-   .Values.ingress.tls.enabled }}
 {{- else if $globalSet }}

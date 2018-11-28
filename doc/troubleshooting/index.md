@@ -66,5 +66,5 @@ This can happen when you have TLS termination before the nginx ingress, and the 
 
 >>>
 **NOTE:**
-When using an external service for SSL termination, that service is responsible for redirecting to https (if so desired).  
+When using an external service for SSL termination, that service is responsible for redirecting to https (if so desired).
 >>>
