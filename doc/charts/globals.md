@@ -175,7 +175,7 @@ Defaults to `true`.
 
 ### global.ingress.tls.enabled
 
-When set to false, you disable TLS in Gitlab. This is useful for cases in which you cannot use TLS termination of ingresses, like when you have a TLS-terminating proxy before the ingress controller. If you want to disable https at all, this should be set to `false` together with [`global.hosts.https`](#https)
+When set to `false`, this disables TLS in Gitlab. This is useful for cases in which you cannot use TLS termination of ingresses, such as when you have a TLS-terminating proxy before the ingress controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#https)
 
 Defaults to `true`.
 
