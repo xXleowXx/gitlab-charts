@@ -44,17 +44,17 @@ image repository.
 {{- end -}}
 
 {{- define "gitlab.extraContainers" -}}
-{{ default "" .Values.extraContainers }}
+{{ tpl (default "" .Values.extraContainers) . }}
 {{- end -}}
 
 {{- define "gitlab.extraInitContainers" -}}
-{{ default "" .Values.extraInitContainers }}
+{{ tpl (default "" .Values.extraInitContainers) . }}
 {{- end -}}
 
 {{- define "gitlab.extraVolumes" -}}
-{{ default "" .Values.extraVolumes }}
+{{ tpl (default "" .Values.extraVolumes) . }}
 {{- end -}}
 
 {{- define "gitlab.extraVolumeMounts" -}}
-{{ default "" .Values.extraVolumeMounts }}
+{{ tpl (default "" .Values.extraVolumeMounts) . }}
 {{- end -}}
