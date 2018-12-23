@@ -45,7 +45,7 @@ global:
       connection: {}
 backups:
   cron:
-    enabled: true
+    enabled: false
     concurrencyPolicy: Replace
     failedJobsHistoryLimit: 1
     schedule: "0 1 * * *"
