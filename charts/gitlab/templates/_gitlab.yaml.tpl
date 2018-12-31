@@ -1,0 +1,17 @@
+{{- define "gitlab.configYaml.shell" -}}
+path: /home/git/gitlab-shell/
+hooks_path: /home/git/gitlab-shell/hooks/
+secret_file: /etc/gitlab/shell/.gitlab_shell_secret
+upload_pack: true
+receive_pack: true
+ssh_port: {{ include "gitlab.shell.port" . | int }}
+{{- end -}}
+
+{{- define "gitlab.configYaml.rackAttack" . }}
+git_basic_auth:
+  {{- if .Values.rack_attack.git_basic_auth.enabled }}
+{{ toYaml .Values.rack_attack.git_basic_auth | indent 2 }}
+  {{- end }}
+## Registry Integration
+{{- include "gitlab.appConfig.registry.configuration" $ | nindent 6 }}
+{{- end -}}

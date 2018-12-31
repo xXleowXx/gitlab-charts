@@ -56,7 +56,7 @@ data:
       backup:
         path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
       gitlab_shell:
-{{ include "gitlab.shellConfig" . | indent 8 }}
+{{ include "gitlab.configYaml.shell" . | indent 8 }}
       workhorse:
       git:
         bin_path: /usr/bin/git
@@ -70,10 +70,7 @@ data:
 {{ toYaml .Values.extra | indent 8 }}
         {{- end }}
       rack_attack:
-        git_basic_auth:
-          {{- if .Values.rack_attack.git_basic_auth.enabled }}
-{{ toYaml .Values.rack_attack.git_basic_auth | indent 10 }}
-          {{- end }}
+{{ include "gitlab.configYaml.rackAttack" . | indent 8 }}
       ## Registry Integration
       {{- include "gitlab.appConfig.registry.configuration" $ | nindent 6 }}
   configure: |
