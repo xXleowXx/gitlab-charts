@@ -113,11 +113,9 @@ data:
         enabled: false
       shared:
       gitaly:
-        client_path: /home/git/gitaly/bin
-        token: "<%= File.read('/etc/gitlab/gitaly/gitaly_token') %>"
+{{ include "gitlab.configYaml.gitaly" . | indent 8 }}
       repositories:
-        storages: # You must have at least a `default` storage path.
-{{ include "gitlab.gitaly.storages" . | indent 10 }}
+{{ include "gitlab.configYaml.repositories" . | indent 8 }}
       backup:
         path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
       gitlab_shell:
