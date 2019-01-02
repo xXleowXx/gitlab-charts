@@ -2,6 +2,7 @@ require 'aws-sdk-s3'
 require 'open-uri'
 require 'open3'
 require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 require 'selenium-webdriver'
 require 'gitlab_test_helper'
 
