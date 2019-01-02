@@ -589,6 +589,7 @@ danger-review:
     - kubectl get secret ${CI_ENVIRONMENT_SLUG}-minio-secret -o jsonpath='{.data.secretkey}' | base64 --decode > /etc/gitlab/minio/secretkey
     - bundle install -j $(nproc) --without non_test --path gems
     - bundle exec rspec -c -f d spec
+    - exit 1
   after_script:
     - *auto_devops
     - add_license
