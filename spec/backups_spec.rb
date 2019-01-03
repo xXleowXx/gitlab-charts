@@ -27,7 +27,6 @@ describe "Restoring a backup" do
       visit '/'
       expect(page).to have_content 'Projects'
       expect(page).to have_content 'Administrator / testproject1'
-      fail "Purposeful Fail"
     end
 
     it 'Navigating to testproject1 repo should work' do
