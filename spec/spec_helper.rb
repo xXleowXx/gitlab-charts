@@ -43,4 +43,8 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.define_derived_metadata(file_path: %r{/spec/features/}) do |metadata|
+    metadata[:type] = :feature
+  end
 end
