@@ -31,6 +31,7 @@ Capybara.configure do |config|
   config.run_server = false
   config.default_driver = :headless_chrome
   config.app_host = gitlab_url
+  config.save_path = ::File.expand_path('../tmp/cabybara', __dir__)
 end
 
 RSpec.configure do |config|
