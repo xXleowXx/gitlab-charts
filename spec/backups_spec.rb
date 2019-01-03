@@ -25,14 +25,13 @@ describe "Restoring a backup" do
 
     it 'Home page should show projects' do
       visit '/'
-      screenshot_and_save_page
       expect(page).to have_content 'Projects'
       expect(page).to have_content 'Administrator / testproject1'
+      fail "Purposeful Fail"
     end
 
     it 'Navigating to testproject1 repo should work' do
       visit '/root/testproject1'
-      screenshot_and_save_page
       expect(page).to have_content 'Dockerfile'
     end
 
