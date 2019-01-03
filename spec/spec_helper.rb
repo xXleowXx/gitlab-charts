@@ -23,6 +23,8 @@ Capybara::Screenshot.register_driver(:headless_chrome) do |driver, path|
   driver.browser.save_screenshot(path)
 end
 
+puts "SAVE PATH: #{::File.expand_path('../tmp/cabybara', __dir__)}"
+
 
 Capybara.configure do |config|
   config.run_server = false
