@@ -2,8 +2,9 @@
 {{ with $.Values.global.appConfig }}
 omniauth:
   enabled: {{ .omniauth.enabled }}
+  {{- if .omniauth.autoSignInWithProvider }}
   auto_sign_in_with_provider: {{ .omniauth.autoSignInWithProvider | quote }}
-  sync_profile_from_provider: {{ .omniauth.syncProfileFromProvider }}
+  {{- end }}  sync_profile_from_provider: {{ .omniauth.syncProfileFromProvider }}
   sync_profile_attributes: {{ .omniauth.syncProfileAttributes }}
   allow_single_sign_on: {{ .omniauth.allowSingleSignOn }}
   block_auto_created_users: {{ .omniauth.blockAutoCreatedUsers }}
