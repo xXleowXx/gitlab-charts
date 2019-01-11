@@ -41,7 +41,7 @@ documentation.
   * [Registry HTTP secret](#registry-http-secret)
 - [External Services](#external-services)
   * [Unicorn Omniauth](#unicorn-omniauth)
-  * [Unicorn LDAP](#unicorn-LDAP)
+  * [LDAP Password](#ldap-password)
   * [SMTP Password](#smtp-password)
   * [IMAP Password](#imap-password-for-incoming-emails)
 
@@ -207,7 +207,7 @@ Some charts have further secrets to enable functionality that can not be automat
 
 In order to enable the use of [Omniauth Providers](https://docs.gitlab.com/ee/integration/omniauth.html) with the deployed GitLab, please follow the [instructions in the Unicorn chart](../charts/gitlab/unicorn/index.md#omniauth.providers)
 
-### Unicorn LDAP
+### LDAP Password
 
 If you need password authentication to connect with your LDAP server, you must store the password in a Kubernetes secret.
 
