@@ -24,7 +24,7 @@ Usage example:
 {{- define "gitlab.appConfig.ldap.servers.configuration" -}}
 {{- $.name }}:
 {{- toYaml (omit $.config "password") | trimSuffix "\n" | nindent 2 -}}
-{{- if $.config.password }}
+{{- if and $.config.password (not (kindIs "string" $.config.password ))}}
   password: "<%= File.read('/etc/gitlab/ldap/{{ $.name }}/password') %>"
 {{- end -}}
 {{- end -}}{{/* gitlab.appConfig.ldap.servers.configuration */}}
@@ -33,7 +33,7 @@ Usage example:
 # mount secrets for LDAP
 {{- if .Values.global.appConfig.ldap.servers -}}
 {{-   range $name, $config := .Values.global.appConfig.ldap.servers -}}
-{{-     if $config.password }}
+{{-     if and $config.password (not (kindIs "string" $config.password ))}}
 - secret:
     name: {{ $config.password.secret }}
     items:
