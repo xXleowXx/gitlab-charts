@@ -23,12 +23,9 @@ Usage example:
 */}}
 {{- define "gitlab.appConfig.ldap.servers.configuration" -}}
 {{- $.name }}:
-{{- range $key, $value := $.config -}}
-{{-   if eq $key "password" -}}
-{{-     printf "password: %s" (printf "<%%= File.read('/etc/gitlab/ldap/%s/password') %%>" $.name | quote) | trimSuffix "\n" | nindent 2 -}}
-{{-   else -}}
-{{-     toYaml (dict $key $value) | trimSuffix "\n" | nindent 2 -}}
-{{-   end -}}
+{{- toYaml (omit $.config "password") | trimSuffix "\n" | nindent 2 -}}
+{{- if $.config.password }}
+  password: "<%= File.read('/etc/gitlab/ldap/{{ $.name }}/password') %>"
 {{- end -}}
 {{- end -}}{{/* gitlab.appConfig.ldap.servers.configuration */}}
 
