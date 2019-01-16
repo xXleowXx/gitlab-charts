@@ -100,9 +100,9 @@ data:
       cp -r /init-config/minio/. /init-secrets/minio/
     fi
 
-    if [ -e "${config_dir}/ldap" ]; then
-      mkdir -p "${secret_dir}/ldap"
-      cp -v -r "${config_dir}/ldap/." "${secret_dir}/ldap/"
+    if [ -e "/init-config/ldap" ]; then
+      mkdir -p "/init-secrets/ldap"
+      cp -v -r "/init-config/ldap/." "/init-secrets/ldap/"
     fi
     if [ -e /init-config/omniauth ]; then
       mkdir -p /init-secrets/omniauth
