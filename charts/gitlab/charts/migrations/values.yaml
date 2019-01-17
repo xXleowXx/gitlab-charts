@@ -34,5 +34,5 @@ resources:
   requests:
     cpu: 50m
     memory: 200Mi
-activeDeadlineSeconds: 300
+activeDeadlineSeconds: 3600
 backoffLimit: 6
