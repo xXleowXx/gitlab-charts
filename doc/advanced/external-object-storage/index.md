@@ -144,8 +144,8 @@ Create the secret using the [s3cmd config file format](https://s3tools.org/kb/it
     # Access and secret key can be generated in the interoperability
     # https://console.cloud.google.com/storage/settings
     # See Docs: https://cloud.google.com/storage/docs/interoperability
-    access_key = [...]
-    secret_key = [...]
+    access_key = BOGUS_ACCESS_KEY
+    secret_key = BOGUS_SECRET_KEY
 
     # Multipart needs to be disabled for GCS !
     enable_multipart = False
