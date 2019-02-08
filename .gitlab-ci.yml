@@ -588,6 +588,7 @@ danger-review:
     - kubectl get secret ${CI_ENVIRONMENT_SLUG}-minio-secret -o jsonpath='{.data.accesskey}' | base64 --decode > /etc/gitlab/minio/accesskey
     - kubectl get secret ${CI_ENVIRONMENT_SLUG}-minio-secret -o jsonpath='{.data.secretkey}' | base64 --decode > /etc/gitlab/minio/secretkey
     - bundle install -j $(nproc) --without non_test --path gems
+    - chromedriver-update 2.46
     - bundle exec rspec -c -f d spec
   after_script:
     - *auto_devops
