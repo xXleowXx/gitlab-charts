@@ -580,7 +580,6 @@ danger-review:
   script:
     - source variables
     - apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
-    - curl -sSL https://get.docker.com/ | sh
     - curl -LsO https://storage.googleapis.com/kubernetes-release/release/v1.9.3/bin/linux/amd64/kubectl
     - chmod +x kubectl
     - mv kubectl /usr/local/bin/kubectl
