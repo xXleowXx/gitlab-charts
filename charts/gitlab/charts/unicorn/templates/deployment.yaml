@@ -124,6 +124,8 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
+            - name: PYTHONPATH
+              value: '/usr/local/lib/python3.4/site-packages'
 {{- if .Values.metrics.enabled }}
             - name: prometheus_multiproc_dir
               value: /metrics
