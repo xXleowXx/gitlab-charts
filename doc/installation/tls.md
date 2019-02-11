@@ -41,7 +41,7 @@ helm install ...
 To make use of an external `cert-manager` and `Issuer` resource you must provide several items, so that self-signed certificates
 are not activated.
 
-1. Annotations to activate the external `cert-manager` (see [documentation](cm-annotations) for further details)
+1. Annotations to activate the external `cert-manager` (see [documentation][cm-annotations] for further details)
 1. Names of TLS secrets for each service (this deactivates [self-signed behaviors](#option-4-use-auto-generated-self-signed-wildcard-certificate))
 
 ```
@@ -87,7 +87,7 @@ helm install ...
 
 These charts also provide the capability to provide a auto-generated self-signed wildcard certificate.
 This can be useful in environments where Let's Encrypt is not an option, but security via SSL is stil
-desired. This functionality is provided by the [shared-secrets](../charts/shared-secrets/README.md) chart.
+desired. This functionality is provided by the [shared-secrets](../charts/shared-secrets/index.md) chart.
 
 > **Note**: The `gitlab-runner` chart does not function properly with self-signed certificates. We recommend
 disabling it, as shown below.
@@ -95,7 +95,7 @@ disabling it, as shown below.
 ```
 helm install ...
   --set certmanager.install=false \
-  --set global.ingress.confgureCertmanager=false \
+  --set global.ingress.configureCertmanager=false \
   --set gitlab-runner.install=false
 ```
 

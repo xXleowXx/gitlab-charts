@@ -6,8 +6,8 @@
 
 GitLab backup restores are taken by running the `backup-utility` command on the `task-runner` pod provided in the chart.
 
-Before running the restore for the first time, you should ensure the [task-runner is properly configured](README.md) for
-access to [object storage](README.md#object-storage)
+Before running the restore for the first time, you should ensure the [task-runner is properly configured](index.md) for
+access to [object storage](index.md#object-storage)
 
 The backup utility provided by GitLab Helm chart supports restoring a tarball from any of the following locations
 
@@ -19,7 +19,11 @@ The backup utility provided by GitLab Helm chart supports restoring a tarball fr
 
 The steps for restoring a GitLab installation are
 
-1. Make sure you have a running GitLab instance by deploying the charts. Ensure the `task-runner` pod is enabled and running.
+1. Make sure you have a running GitLab instance by deploying the charts. Ensure the `task-runner` pod is enabled and running by executing the following command
+
+    ```
+    $ kubectl get pods -lrelease=RELEASE_NAME,app=task-runner
+    ```
 1. Get the tarball ready in any of the above locations. Make sure it is named in the `<timestamp>_<version>_gitlab_backup.tar` format.
 1. Run the backup utility to restore the tarball
 
@@ -77,7 +81,7 @@ Once you have the secrets created as a local yaml file:
 ### Restore the runner registration token
 
 After restoring, the included runner will not be able to register to the instance because it no longer has the correct registration token.
-Follow these [troubleshooting steps](../troubleshooting/README.md#included-gitlab-runner-failing-to-register) to get it updated.
+Follow these [troubleshooting steps](../troubleshooting/index.md#included-gitlab-runner-failing-to-register) to get it updated.
 
 ## Restart the pods
 
@@ -103,5 +107,5 @@ The restoration process does not update the `gitlab-initial-root-password` secre
 
 ## Additional Information
 
-- [GitLab Chart Backup/Restore Introduction](README.md)
+- [GitLab Chart Backup/Restore Introduction](index.md)
 - [Backing up a GitLab installation](backup.md)

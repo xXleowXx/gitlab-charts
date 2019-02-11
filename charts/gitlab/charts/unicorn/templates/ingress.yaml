@@ -1,5 +1,5 @@
 {{- if .Values.enabled -}}
-{{- if coalesce .Values.ingress.enabled .Values.global.ingress.enabled | default false -}}
+{{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
 {{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
 {{- $tlsSecret := include "unicorn.tlsSecret" . -}}
 apiVersion: extensions/v1beta1
@@ -28,11 +28,17 @@ spec:
             backend:
               serviceName: {{ template "fullname" . }}
               servicePort: {{ .Values.service.workhorseExternalPort }}
-  {{- if $tlsSecret }}
+          - path: /admin/sidekiq
+            backend:
+              serviceName: {{ template "fullname" . }}
+              servicePort: {{ .Values.service.externalPort }}
+  {{- if (and $tlsSecret (eq (include "gitlab.ingress.tls.enabled" $) "true" )) }}
   tls:
     - hosts:
       - {{ $gitlabHostname }}
       secretName: {{ $tlsSecret }}
+  {{- else }}
+  tls: []
   {{- end }}
 {{- end -}}
 {{- end -}}

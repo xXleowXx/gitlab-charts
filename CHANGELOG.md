@@ -2,6 +2,225 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 1.5.3 (2019-02-05)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.7.5.
+
+
+## 1.5.2 (2019-02-05)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.7.4.
+
+
+## 1.5.1 (2019-01-31)
+
+### Other (2 changes)
+
+- Update gitlab-runner to 0.1.45/11.7.0. !654
+- Update GitLab Version to 11.7.3.
+
+
+## 1.5.0 (2019-01-22)
+
+### Fixed (5 changes, 1 of them is from the community)
+
+- Generate omniauth attribute values correctly as expected by GitLab. !610
+- Ensure the operator deployment uses the immutable labels properly. !613
+- Ensure a newline before appending to registry/storage/config to make sure yaml is rendered correctly. !621
+- Fix 500 error when you don't set the parameter auto_sign_in_with_provider with OmniAuth enabled. !623 (David Kulak)
+- Rails: set CA certificate path for SMTP. !625
+
+### Changed (1 change)
+
+- Update gitlab-operator version to 0.2. !645
+
+### Performance (1 change)
+
+- Add retry options for migration jobspec. !642
+
+### Added (3 changes, 3 of them are from the community)
+
+- Allow configuration of securityContext user/group on all deployments with persistent volumes. !519 (Mike Rennie)
+- add the node selector for registry chart. !602 (Jubel Han)
+- Provide a way to reference a secret containing the LDAP password. !634 (Matthias van de Meent (Cofano Software Solutions))
+
+### Other (2 changes)
+
+- Move ingress enabled detection to helper method. !607
+- Update GitLab Version to 11.7.0.
+
+
+## 1.4.4 (2019-01-17)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.6.5.
+
+
+## 1.4.3 (2019-01-16)
+
+### Other (2 changes)
+
+- Update gitlab/gitlab-runner to v0.1.44. !633
+- Update GitLab Version to 11.6.4.
+
+
+## 1.4.2 (2019-01-05)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.6.3.
+
+
+## 1.4.1 (2019-01-02)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.6.2.
+
+
+## 1.4.0 (2018-12-22)
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Move LFS and Upload temporary storage to ephemeral disk. !587 (Robert Jordan)
+
+### Changed (2 changes, 1 of them is from the community)
+
+- CI now does not run any tasks which the repository is not configured for. !569 (Matthias van de Meent (Cofano Software Solutions))
+- Refine unicorn resource resqeusts. !586
+
+### Added (8 changes, 3 of them are from the community)
+
+- Added option for annotations for use with IAM roles. !504 (Deniz Zoeteman)
+- Provide a way to skip certain steps in the backup-procedure. !574 (Matthias van de Meent (Cofano Software Solutions))
+- Add global and chart-local ingress.tls.enabled flags. !577 (Matthias van de Meent (Cofano Software Solutions))
+- Add the operator version label to the gitlab custom resource. !582
+- Added example values file for a minimal gke cluster. !589
+- Add examples for GCS object storage. !592
+- Add support for impersonation_enabled flag in gitlab.yml. !593
+- Allow support for using rediss urls. !600
+
+### Other (3 changes)
+
+- Add extraInitContainers, extraContainers, extraVolumes and extraVolumeMounts to template options. !580
+- Operator Version 0.1. !605
+- Update GitLab Version to 11.6.0.
+
+
+## 1.3.4 (2018-12-14)
+
+### Other (3 changes)
+
+- Update GitLab Runner chart 0.1.38. !590
+- Fix Broken Icon Image on Helm Hub. !597
+- Update GitLab Version to 11.5.4.
+
+
+## 1.3.3 (2018-12-06)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.5.3.
+
+
+## 1.3.2 (2018-12-04)
+
+### Added (1 change, 1 of them is from the community)
+
+- Add packages to the backups task list. !585 (Matthias van de Meent (Cofano Software Solutions))
+
+### Other (1 change)
+
+- Update GitLab Version to 11.5.2.
+
+
+## 1.3.1 (2018-11-28)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.5.1.
+
+
+## 1.3.0 (2018-11-22)
+
+### Fixed (2 changes, 1 of them is from the community)
+
+- Serve sidekiq assets directly from unicorn. !560
+- Define .metadata.namespace for resources which should have had that defined. !573 (Matthias van de Meent (Cofano Software Solutions))
+
+### Changed (2 changes)
+
+- Make LDAP and Omniauth configuration global to rails based containers. !567
+- Pin the operator image to a specific sha digest. !571
+
+### Added (5 changes, 1 of them is from the community)
+
+- Add additional cleanup policy to Helm prehooks. !550
+- Add GitLab Rails, workhorse and runner secret to documentation. !552 (Maikel Vlasman)
+- Add support for Maven repositories. !558
+- Add support for Pseudonymizer. !562
+- Registry: default storage `delete` enabled. !579
+
+### Other (4 changes)
+
+- Add docs about using charts on OpenShift Origin. !555
+- Mount configuration files directly to /srv/gitlab/config instead of /var/opt/gitlab/config/gitlab. !565
+- Update nginx-ingress fork to 0.30.0. !578
+- Update GitLab Version to 11.5.0.
+
+
+## 1.2.6 (2018-11-20)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.7.
+
+
+## 1.2.5 (2018-11-20)
+
+### Other (2 changes)
+
+- Mount configuration files directly to /srv/gitlab/config instead of /var/opt/gitlab/config/gitlab. !565
+- Update GitLab Version to 11.4.6.
+
+
+## 1.2.4 (2018-11-05)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.5.
+
+
+## 1.2.3 (2018-11-01)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.4.
+
+
+## 1.2.2 (2018-10-29)
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.3.
+
+
+## 1.2.1 (2018-10-29)
+
+### Fixed (1 change)
+
+- Skip custom CA mounts when unnecessary. !544
+
+### Other (1 change)
+
+- Update GitLab Version to 11.4.2.
+
+
 ## 1.2.0 (2018-10-22)
 
 ### Security (1 change)
@@ -19,13 +238,14 @@ entry.
 
 - Add safe-to-evict annotation to stateless deployments. !523
 
-### Added (6 changes, 2 of them are from the community)
+### Added (7 changes, 3 of them are from the community)
 
 - Add missing settings to configure gitlab.yml. !496 (Erik Sundell)
 - Add a global flag to set the gitlab edition that will be installed. !499 (Scott Leggett)
 - Allow disabled shared-secrets chart. !510
 - Add Gitlab operator to run upgrades of Gitlab. !516
 - Move jobs management into the operator if it is enabled. !517
+- Provide a way to disable the usage ping options. !525 (Mike Rennie)
 - Add control of exposed SSH port. !531
 
 ### Other (3 changes, 1 of them is from the community)
@@ -127,7 +347,7 @@ entry.
 - runner: fix gitlab-runner.cache.secret template.
 - Fix changelog danger handling.
 
-### Changed (12 changes)
+### Changed (13 changes)
 
 - Move all Minio enabled to global configuration. !389
 - Convert registry storage block to secret. !391
@@ -137,6 +357,7 @@ entry.
 - Update memory requests based on observations. !418
 - Update certmanager to v0.4.0 (#617). !424
 - Allow external object storage for task-runner. !427
+- Add securtyContext to nginx-ingress-controller deployment to run as non-root user and upgrade image version to 0.15.0. !431
 - Replace self-signed certificate generation, automatically CA add to custom CAs. !441
 - Default sidekiq chart queues to upstream source defaults. !449
 - Rails pods, except migrations, will wait for their desired schema version before starting. !462

@@ -3,7 +3,8 @@
 This document explains the technical implementation of the backup and restore into/from CNG.
 
 ## Task runner pod
-The [task runner chart](../../charts/gitlab/charts/task-runner) deploys a pod into the cluster. This pod will act as an entry point for interaction with other containers in the cluster.
+
+The [task runner chart](https://gitlab.com/charts/gitlab/tree/master/charts/gitlab/charts/task-runner) deploys a pod into the cluster. This pod will act as an entry point for interaction with other containers in the cluster.
 
 Using this pod user can run commands using `kubectl exec -it <pod name> -- <arbitrary command>`
 
@@ -18,14 +19,21 @@ in the task runner container and as the name suggests it is a script used for do
 
 ### Backups
 
-The backup utility script when run without any arguments creates a backup tar and uploads it to object storage. The sequence of execution is:
-1. Backup the repositories and database using the [GitLab backup rake task](https://gitlab.com/gitlab-org/build/CNG/blob/master/gitlab-task-runner/scripts/bin/backup-utility#L121)
-2. For each of object storage backends
-   - tar the existing data in the corresponding object storage bucket naming it `<bucket-name>.tar`
-   - Move the tar to the backup location on disk
-3. Write a `backup_information.yml` file which contains some metadata identifying the version of gitlab, the time of the backup and the skipped items if any.
-4. Create a tar file containing individual tar files along with `backup_information.yml`
-5. Upload the resulting tar file to object storage `gitlab-backups` bucket.
+The backup utility script when run without any arguments creates a backup tar and uploads it to object storage.
+You can skip parts of the backup process by using `--skip <component>` for every component that you want to skip in the backup process. Skippable components are the database (`db`), repositories (`repositories`), and any of the object storages (`artifacts`, `lfs`, `packages`, `registry` and `uploads`).
+There is also an option to manually set a part of the name of the generated backup tar via the `-t <backup-name>` command line flag, which will result in the backup file `<backup-name>_gitlab_backup.tar` to be created.
+
+The sequence of execution is:
+
+1. Backup the database (if not skipped) using the [GitLab backup rake task](https://gitlab.com/gitlab-org/build/CNG/blob/74dc35d4b481e86330bf6b244f88e5dd8876cc0c/gitlab-task-runner/scripts/bin/backup-utility#L120)
+1. Backup the repositories (if not skipped) using the [GitLab backup rake task](https://gitlab.com/gitlab-org/build/CNG/blob/74dc35d4b481e86330bf6b244f88e5dd8876cc0c/gitlab-task-runner/scripts/bin/backup-utility#L123)
+1. For each of the object storage backends
+   1. If the object storage backend is marked for skipping, skip this storage backend.
+   1. Tar the existing data in the corresponding object storage bucket naming it `<bucket-name>.tar`
+   1. Move the tar to the backup location on disk
+1. Write a `backup_information.yml` file which contains some metadata identifying the version of gitlab, the time of the backup and the skipped items.
+1. Create a tar file containing individual tar files along with `backup_information.yml`
+1. Upload the resulting tar file to object storage `gitlab-backups` bucket.
 
 #### GitLab backup bucket
 

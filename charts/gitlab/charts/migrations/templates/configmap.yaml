@@ -21,10 +21,11 @@ data:
       #   hosts:
       #     - host1.example.com
       #     - host2.example.com
+{{- include "gitlab.psql.ssl.config" . | indent 6 }}
   resque.yml.erb: |
     production:
       # Redis (single instance)
-      url: redis://:<%= File.read("/etc/gitlab/redis/password") %>@{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
+      url: {{ template "gitlab.redis.scheme" . }}://:<%= File.read("/etc/gitlab/redis/password") %>@{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
   gitlab.yml: |
     production: &base
       gitlab:
@@ -40,12 +41,15 @@ data:
     cp /init-config/postgres/psql-password  /init-secrets/postgres/psql-password
     cp /init-config/rails-secrets/secrets.yml /init-secrets/rails-secrets/secrets.yml
     cp /init-config/migrations/initial_root_password /init-secrets/migrations/initial_root_password
+    secret_dir="/init-secrets" 
+{{- include "gitlab.psql.ssl.initScript" . | indent 4 }}
 {{- if .Values.global.operator.enabled }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-migrations-jobspec
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
 data:

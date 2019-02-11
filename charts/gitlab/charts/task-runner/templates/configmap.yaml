@@ -17,10 +17,11 @@ data:
       password: <%= File.read("/etc/gitlab/postgres/psql-password") %>
       host: {{ template "gitlab.psql.host" . }}
       port: {{ template "gitlab.psql.port" . }}
+{{- include "gitlab.psql.ssl.config" . | indent 6 }}
   resque.yml.erb: |
     production:
       # Redis (single instance)
-      url: redis://:<%= File.read("/etc/gitlab/redis/password") %>@{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
+      url: {{ template "gitlab.redis.scheme" . }}://:<%= File.read("/etc/gitlab/redis/password") %>@{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
   gitlab.yml.erb: |
     production: &base
       gitlab:
@@ -35,57 +36,24 @@ data:
         email_display_name: GitLab
         email_reply_to: noreply@example.com
         email_subject_suffix: ''
-        default_projects_features:
-          issues: true
-          merge_requests: true
-          wiki: true
-          snippets: true
-          builds: true
-          container_registry: true
+        {{- include "gitlab.appConfig.defaultProjectsFeatures.configuration" $ | nindent 8 }}
       incoming_email:
         enabled: false
       artifacts:
         enabled: true
-      lfs:
-        enabled: {{ eq .Values.global.appConfig.lfs.enabled true }}
-        object_store:
-          enabled: true
-          {{- if .Values.global.minio.enabled }}
-          remote_directory: {{ .Values.minio.bucket }}
-          {{- else }}
-          remote_directory: {{ .Values.global.appConfig.lfs.bucket }}
-          {{- end }}
-          direct_upload: true
-          background_upload: false
-          proxy_download: {{ eq .Values.global.appConfig.lfs.proxy_download true }}
-          {{- if .Values.global.minio.enabled }}
-          connection:
-            provider: AWS
-            region: us-east-1
-            aws_access_key_id: "<%= File.read('/etc/gitlab/objectstorage/accesskey') %>"
-            aws_secret_access_key: "<%= File.read('/etc/gitlab/objectstorage/secretkey') %>"
-            host: {{ template "gitlab.minio.hostname" . }}
-            endpoint: {{ template "gitlab.minio.endpoint" . }}
-            path_style: true
-          {{- else if .Values.global.appConfig.lfs.connection }}
-          connection: <%= YAML.load_file("/etc/gitlab/objectstorage/lfs").to_json() %>
-          {{- end }}
+      {{- include "gitlab.appConfig.objectStorage.configuration" (dict "name" "lfs" "config" $.Values.global.appConfig.lfs "context" $) | nindent 6 }}
+      {{- include "gitlab.appConfig.objectStorage.configuration" (dict "name" "packages" "config" $.Values.global.appConfig.packages "context" $) | nindent 6 }}
+      {{- include "gitlab.appConfig.pseudonymizer.configuration" $ | nindent 6 }}
       pages:
         enabled: false
-      gitaly:
-        client_path: /home/git/gitaly/bin
-        token: "<%= File.read('/etc/gitlab/gitaly/gitaly_token') %>"
-      repositories:
-        storages: # You must have at least a `default` storage path.
-{{ include "gitlab.gitaly.storages" . | indent 10 }}
+      {{- include "gitlab.appConfig.ldap.configuration" $ | nindent 6 }}
+      {{- include "gitlab.appConfig.omniauth.configuration" $ | nindent 6 }}
+{{ include "gitlab.appConfig.gitaly" . | indent 6 }}
+{{ include "gitlab.appConfig.repositories" . | indent 6 }}
       backup:
         path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
-      gitlab_shell:
-        path: /home/git/gitlab-shell/
-        hooks_path: /home/git/gitlab-shell/hooks/
-        secret_file: /etc/gitlab/shell/.gitlab_shell_secret
-        upload_pack: true
-        receive_pack: true
+{{ include "gitlab.appConfig.shell" . | indent 6 }}
+{{ include "gitlab.appConfig.shell.secret_file" . | indent 8 }}
       workhorse:
       git:
         bin_path: /usr/bin/git
@@ -98,21 +66,8 @@ data:
         {{- if .Values.extra }}
 {{ toYaml .Values.extra | indent 8 }}
         {{- end }}
-      rack_attack:
-        git_basic_auth:
-          {{- if .Values.rack_attack.git_basic_auth.enabled }}
-{{ toYaml .Values.rack_attack.git_basic_auth | indent 10 }}
-          {{- end }}
       ## Registry Integration
-      registry:
-        enabled: true
-        host: {{ template "gitlab.registry.host" . }}
-        {{- if .Values.registry.port }}
-        port: {{ .Values.registry.port }}
-        {{- end }}
-        api_url: {{ default "http" .Values.registry.api.protocol }}://{{ template "gitlab.registry.api.host" . }}:{{ default 5000 .Values.registry.api.port }}
-        key: /etc/gitlab/registry/gitlab-registry.key
-        issuer: {{ .Values.registry.tokenIssuer }}
+      {{- include "gitlab.appConfig.registry.configuration" $ | nindent 6 }}
   configure: |
     set -e
     mkdir -p /init-secrets/redis /init-secrets/shell /init-secrets/gitaly \
@@ -128,12 +83,25 @@ data:
       mkdir -p /init-secrets/objectstorage
       cp -r /init-config/objectstorage/. /init-secrets/objectstorage/
     fi
+    if [ -e /init-config/minio ]; then
+      mkdir -p /init-secrets/minio
+      cp -r /init-config/minio/. /init-secrets/minio/
+    fi
+
+    if [ -e "/init-config/ldap" ]; then
+      mkdir -p "/init-secrets/ldap"
+      cp -v -r "/init-config/ldap/." "/init-secrets/ldap/"
+    fi
+    if [ -e /init-config/omniauth ]; then
+      mkdir -p /init-secrets/omniauth
+      cp -r /init-config/omniauth/. /init-secrets/omniauth/
+    fi
 
     if [ ! -f /init-secrets/objectstorage/.s3cfg ]; then
     cat <<EOF > /init-secrets/.s3cfg
     [default]
-    access_key = $(cat /init-secrets/objectstorage/accesskey)
-    secret_key = $(cat /init-secrets/objectstorage/secretkey)
+    access_key = $(cat /init-secrets/minio/accesskey)
+    secret_key = $(cat /init-secrets/minio/secretkey)
     bucket_location = us-east-1
     host_base = {{ template "gitlab.minio.hostname" . }}
     host_bucket = {{ template "gitlab.minio.hostname" . }}/%(bucket)
@@ -153,4 +121,6 @@ data:
     else
       mv /init-secrets/objectstorage/.s3cfg /init-secrets/.s3cfg
     fi
+    secret_dir="/init-secrets"
+{{- include "gitlab.psql.ssl.initScript" . | indent 4 }}
 {{- end }}

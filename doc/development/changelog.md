@@ -8,7 +8,7 @@ are later integrated by [changelog_manager](#changelog-manager.md)
 
 Each bullet point, or **entry**, in our [`CHANGELOG.md`][changelog.md] file is
 generated from a single data file in the [`changelogs/unreleased/`][unreleased]
-older. The file is expected to be a [YAML] file in the
+folder. The file is expected to be a [YAML] file in the
 following format:
 
 ```yaml
@@ -257,6 +257,6 @@ found the workflow to be appealing and familiar.
 
 ---
 
-[Return to Development documentation](README.md)
+[Return to Development documentation](index.md)
 
 [gl-codebase]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/development/changelog.md

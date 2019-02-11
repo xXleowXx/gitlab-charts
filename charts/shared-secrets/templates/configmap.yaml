@@ -10,17 +10,18 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 {{- end }}
 data:
   generate-secrets: |
 {{ include (print $.Template.BasePath "/_generate_secrets.sh") . | indent 4 }}
 ---
-{{- if .Values.global.operator.enabled -}}
+{{ if .Values.global.operator.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-shared-secrets-jobspec
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
 data:

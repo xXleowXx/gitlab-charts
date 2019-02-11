@@ -10,8 +10,10 @@ service:
   internalPort: 5000
   clusterIP: '0.0.0.0'
 
-## Enable/Disable
+## Enable/Disable Chart
 enabled: true
+
+annotations: {}
 
 ingress:
   enabled: true
@@ -20,6 +22,7 @@ ingress:
   proxyBuffering: "off"
   tls: {}
     # secretName:
+    # enabled: true
   annotations: {}
 
 global:
@@ -28,6 +31,7 @@ global:
     annotations: {}
     tls: {}
       # secretName:
+      # enabled: true
   hosts:
     domain: example.com
     hostSuffix:
@@ -71,6 +75,14 @@ init:
       # Copy contents of storage secret(s)
       mkdir -p /registry/storage
       cp /config/storage/* /registry/storage/
+      # Ensure there is a new line in the end
+      echo '' >> /registry/storage/config
+      # Default `delete.enabled: true` if not present.
+      ## Note: busybox grep doesn't support multiline, so we chain `egrep`.
+      if ! $(egrep -A1 '^delete:\s*$' /registry/storage/config | egrep -q '\s{2,4}enabled:') ; then
+        echo 'delete:' >> /registry/storage/config
+        echo '  enabled: true' >> /registry/storage/config
+      fi
       # Indent /registry/storage/config 2 spaces before inserting into config.yml
       sed -i 's/^/  /' /registry/storage/config
       # Insert into /registry/config.yml after `storage:`
@@ -90,8 +102,9 @@ resources:
     cpu: 50m
     memory: 32Mi
 
-# Chart operation controls
-enabled: true
+## Node labels for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
+nodeSelector: {}
 # Protocol/Host only. '/jwt/auth' will be appended.
 authEndpoint:
 # Do not change this

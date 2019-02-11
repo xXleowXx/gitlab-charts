@@ -59,6 +59,9 @@ spec:
         checksum/configmap: {{ $configMapChecksum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         checksum/configmap-pod: {{ pluck ( .name | quote ) $queues | last | sha256sum }}
+      {{- range $key, $value := $.Values.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
 {{- if $metricsEnabled }}
 {{ toYaml $metricsAnnotations | indent 8 }}
 {{- end }}
@@ -88,11 +91,14 @@ spec:
                   release: {{ $releaseName }}
       {{- end }}
       initContainers:
+{{ include "gitlab.extraInitContainers" $ | indent 8 }}
 {{ include "gitlab.certificates.initContainer" $ | indent 8 }}
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ $initImage }}:{{ $initTag }}
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" $ | indent 10 }}
+{{ include "gitlab.psql.ssl.volumeMount" $ | indent 10 }}
           - name: sidekiq-config
             mountPath: /config
             readOnly: true
@@ -125,6 +131,7 @@ spec:
               value: 'true'
 {{- end }}
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" $ | indent 10 }}
           - name: sidekiq-config
             mountPath: '/var/opt/gitlab/templates'
             readOnly: true
@@ -135,6 +142,7 @@ spec:
 {{ toYaml $.Values.init.resources | indent 12 }}
 {{- include "pullsecrets" $.Values.image | indent 6}}
       containers:
+{{ include "gitlab.extraContainers" $ | indent 8 }}
         - name: {{ $name }}
           image: "{{ $image }}"
           {{ template "gitlab.imagePullPolicy" $ }}
@@ -159,6 +167,7 @@ spec:
             name: metrics
 {{- end }}
           volumeMounts:
+{{ include "gitlab.extraVolumeMounts" $ | indent 10 }}
 {{- if $metricsEnabled }}
           - name: sidekiq-metrics
             mountPath: '/metrics'
@@ -198,6 +207,8 @@ spec:
           resources:
 {{ toYaml ( default $resources .resources ) | indent 12 }}
       volumes:
+{{ include "gitlab.extraVolumes" $ | indent 6 }}
+{{ include "gitlab.psql.ssl.volume" $ | indent 6 }}
 {{- if $metricsEnabled }}
       - name: sidekiq-metrics
         emptyDir:
@@ -210,6 +221,10 @@ spec:
                 name: {{ $fullname }}
             - configMap:
                 name: {{ $queueName }}
+            {{- if $.Values.global.appConfig.pseudonymizer.configMap }}
+            - configMap:
+                name: {{ $.Values.global.appConfig.pseudonymizer.configMap }}
+            {{- end }}
       - name: init-sidekiq-secrets
         projected:
           defaultMode: 0400
@@ -239,36 +254,14 @@ spec:
               items:
                 - key: registry-auth.key
                   path: registry/gitlab-registry.key
-          {{- if $minioEnabled }}
-          - secret:
-              name: {{ $minioSecret }}
-              items:
-                - key: accesskey
-                  path: minio/accesskey
-                - key: secretkey
-                  path: minio/secretkey
-          {{- end }}
-          {{- if $.Values.global.appConfig.lfs.connection }}
-          - secret:
-              name: {{ $.Values.global.appConfig.lfs.connection.secret }}
-              items:
-                - key: {{ default "connection" $.Values.global.appConfig.lfs.connection.key }}
-                  path: objectstorage/lfs
-          {{- end }}
-          {{- if $.Values.global.appConfig.artifacts.connection }}
-          - secret:
-              name: {{ $.Values.global.appConfig.artifacts.connection.secret }}
-              items:
-                - key: {{ default "connection" $.Values.global.appConfig.artifacts.connection.key }}
-                  path: objectstorage/artifacts
-          {{- end }}
-          {{- if $.Values.global.appConfig.uploads.connection }}
-          - secret:
-              name: {{ $.Values.global.appConfig.uploads.connection.secret }}
-              items:
-                - key: {{ default "connection" $.Values.global.appConfig.uploads.connection.key }}
-                  path: objectstorage/uploads
-          {{- end }}
+          {{- include "gitlab.minio.mountSecrets" $ | nindent 10 }}
+          {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "lfs" "config" $.Values.global.appConfig.lfs) | nindent 10 }}
+          {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "artifacts" "config" $.Values.global.appConfig.artifacts) | nindent 10 }}
+          {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "uploads" "config" $.Values.global.appConfig.uploads) | nindent 10 }}
+          {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "packages" "config" $.Values.global.appConfig.packages) | nindent 10 }}
+          {{- include "gitlab.appConfig.pseudonymizer.mountSecrets" $ | nindent 10 }}
+          {{- include "gitlab.appConfig.ldap.servers.mountSecrets" $ | nindent 10 }}
+          {{- include "gitlab.appConfig.omniauth.mountSecrets" $ | nindent 10 }}
           {{- if and $.Values.global.smtp.enabled $.Values.global.smtp.authentication }}
           - secret:
               name: {{ $.Values.global.smtp.password.secret | required "Missing required secret containing the SMTP password. Make sure to set `global.smtp.password.secret`" }}

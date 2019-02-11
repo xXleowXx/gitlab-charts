@@ -40,7 +40,7 @@ static IP. For example if you choose `example.com` and you have a static IP
 of `10.10.10.10`, then `gitlab.example.com`, `registry.example.com` and
 `minio.example.com` (if using minio) should all resolve to `10.10.10.10`.
 
-If you are using GKE, there is some documentation [here](../cloud/gke.md#creating-the-external-ip)
+If you are using GKE, there is some documentation [here](cloud/gke.md#creating-the-external-ip)
 for configuring static IPs and DNS. Consult your Cloud and/or DNS provider's
 documentation for more help on this process.
 
@@ -73,12 +73,18 @@ certificates.
 
 ### Postgresql
 
-By default this chart provides an in-cluster postgresql database. This
-configuration should not be used in production.
+By default this chart provides an in-cluster postgresql database, for trial
+purposes only.
 
-You can read more about setting up your production-ready database in the [advanced database docs](../advanced/external-db/README.md).
+> **NOTE: This configuration is not recommended for use in production.**
+>
+> - The container runs as root
+> - A single, non-resilient Deployment is used
 
-If you have an external postgres database ready,
+You can read more about setting up your production-ready database in the [advanced database docs](../advanced/external-db/index.md).
+
+If you have an external postgres database ready, the chart can be configured to
+use it as shown below.
 
 *Include these options in your helm install command:*
 ```
@@ -102,7 +108,7 @@ By default we use an single, non-replicated Redis instance. If desired, a highly
 By default this chart provides an in-cluster minio deployment to provide an object storage API.
 This configuration should not be used in production.
 
-You can read more about setting up your production-ready object storage in the [external object storage](../advanced/external-object-storage/README.md)
+You can read more about setting up your production-ready object storage in the [external object storage](../advanced/external-object-storage/index.md)
 
 ### Outgoing email
 
@@ -114,8 +120,8 @@ If your SMTP server requires authentication make sure to read the section on pro
 your password in the [secrets documentation](secrets.md#smtp-password).
 You can disable authentication settings with `--set global.smtp.authentication=""`.
 
-If your Kubernetes cluster is on GKE, be aware that smtp [ports 25, 465, and 587
-are blocked](https://cloud.google.com/compute/docs/tutorials/sending-mail/#using_standard_email_ports).
+If your Kubernetes cluster is on GKE, be aware that smtp [port 25
+is blocked](https://cloud.google.com/compute/docs/tutorials/sending-mail/#using_standard_email_ports).
 
 ### Incoming email
 
@@ -148,6 +154,19 @@ This chart defaults to creating and using RBAC. If your cluster does not have RB
 --set gitlab-runner.rbac.create=false
 ```
 
+### CPU and RAM Resource Requirements
+
+The resource requests, and number of replicas for the GitLab components (not postgresql, redis, or minio) in this Chart
+are set by default to be adequate for a small production deployment. This is intended to fit in a cluster with at least 8vCPU
+and 30gb of RAM. If you are trying to deploy a non-production instance, you can reduce the defaults in order to fit into
+a smaller cluster.
+
+The [minimal GKE example values file](https://gitlab.com/charts/gitlab/tree/master/examples/values-gke-minimum.yaml) provides an example of tuning the resources
+to fit within a 3vCPU 12gb cluster.
+
+The [minimal minikube example values file](https://gitlab.com/charts/gitlab/tree/master/examples/values-minikube-minimum.yaml) provides an example of tuning the
+resources to fit within a 2vCPU, 4gb minikube instance.
+
 ## Deploy using helm
 
 Once you have all of your configuration options collected, we can get any dependencies and
@@ -165,42 +184,13 @@ helm upgrade --install gitlab gitlab/gitlab \
 
 You can also use `--version <installation version>` option if you would like to install a specific version of GitLab.
 
-Mappings between chart versions and GitLab versions can be found [here](./version-mappings.md)
+Mappings between chart versions and GitLab versions can be found [here](../index.md#gitlab-version-mappings).
 
-#### GitLab operator (experimental)
+Instructions for installing a development branch rather than a tagged release can be found in the [developer deploy documentation](../development/deploy.md).
+
+### GitLab operator (experimental)
 
 If you would like to use GitLab operator to achieve zero downtime upgrades, please follow the [documentation for using the operator](./operator.md)
-
-### Deploy Development Branch
-
-Deploy master or a specific branch by first cloning the repository locally:
-
-```sh
-$ git clone git@gitlab.com:charts/gitlab.git
-```
-
-Check out the appropriate branch and modify `requirements.yaml` if testing changes to external dependencies.
-
-> **Note:**
->
-> It is possible to test external dependencies using a local repository. Use `file://PATH_TO_DEPENDENCY_REPO`
-> where the path may be relative to the chartpath or absolute. For example, if using
-> `/home/USER/charts/gitlab` as the main checkout and `/home/USER/charts/gitlab-runner`, the
-> relative path would be `file://../gitlab-runner/` and the absolute path would be
-> `file:///home/USER/charts/gitlab-runner/`. Pay close attention with absolute paths as it
-> is very easy to miss the leading slash on the filepath.
-
-Run the following helm commands to install:
-
-```sh
-$ helm repo add gitlab https://charts.gitlab.io/
-$ helm dependencies update
-$ helm upgrade --install gitlab . \
-  --timeout 600 \
-  --set global.hosts.domain=example.com \
-  --set global.hosts.externalIP=10.10.10.10 \
-  --set certmanager-issuer.email=me@example.com
-```
 
 ## Monitoring the Deployment
 
@@ -219,7 +209,7 @@ following command (replace `<name>` by name of the release - which is `gitlab`
 if you used the command above).
 
 ```
-kubectl get secret <name>-gitlab-initial-root-password -ojsonpath={.data.password} | base64 --decode ; echo
+kubectl get secret <name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
 ```
 
 [secret-gl-certs]: secrets.md#gitlab-certificates

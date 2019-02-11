@@ -11,6 +11,7 @@ ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.smtp_settings = {
   address: {{ .Values.global.smtp.address | quote }},
   port: {{ .Values.global.smtp.port | int }},
+  ca_file: "/etc/ssl/certs/ca-certificates.crt",
   {{- if .Values.global.smtp.domain }}
   domain: {{ .Values.global.smtp.domain | quote }},
   {{- end }}
@@ -23,6 +24,9 @@ ActionMailer::Base.smtp_settings = {
   enable_starttls_auto: true,
   {{- else }}
   enable_starttls_auto: false,
+  {{- end }}
+  {{- if has .Values.global.smtp.tls (list true false) }}
+  tls: {{ .Values.global.smtp.tls }},
   {{- end }}
   {{- if eq .Values.global.smtp.openssl_verify_mode "peer" }}
   openssl_verify_mode: 'peer'

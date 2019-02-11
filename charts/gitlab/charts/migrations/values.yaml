@@ -28,9 +28,16 @@ global:
     # password:
     #   secret: gitlab-postgres
     #   key: psql-password
+    # ssl:
+    #   secret: gitlab-ssl-secret
+    #   clientKey: client-key.pem
+    #   clientCertificate: client-cert.pem
+    #   serverCA: server-ca.pem
   redis:
     password: {}
 resources:
   requests:
     cpu: 50m
     memory: 200Mi
+activeDeadlineSeconds: 3600
+backoffLimit: 6

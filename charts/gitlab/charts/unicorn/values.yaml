@@ -12,6 +12,7 @@ init:
   resources:
     requests:
       cpu: 50m
+annotations: {}
 metrics:
   enabled: true
   annotations:
@@ -33,11 +34,12 @@ ingress:
   proxyBodySize: "512m"
   tls: {}
     # secretName:
+    # enabled: true
   annotations: {}
 workerProcesses: 2
 workerTimeout: 60
 hpa:
-  targetAverageValue: 400m
+  targetAverageValue: 1
 workhorse:
   sentryDSN: ""
   extraArgs: ""
@@ -46,30 +48,6 @@ workhorse:
       cpu: 100m
       memory: 100M
   # image: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee
-ldap:
-  servers: {}
-  # 'main' is the GitLab 'provider ID' of this LDAP server
-  # main:
-  #   label: 'LDAP'
-  #   host: '_your_ldap_server'
-  #   port: 636
-  #   uid: 'sAMAccountName'
-  #   bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
-  #   password: '_the_password_of_the_bind_user'
-  #   encryption: 'plain'
-omniauth:
-  enabled: false
-  autoSignInWithProvider:
-  syncProfileFromProvider: []
-  syncProfileAttributes: ['email']
-  allowSingleSignOn: ['saml']
-  blockAutoCreatedUsers: true
-  autoLinkLdapUser: false
-  autoLinkSamlUser: false
-  externalProviders: []
-  providers: []
-  # - secret: gitlab-google-oauth2
-  #   key: provider
 global:
   # imagePullPolicy: IfNotPresent
   ingress:
@@ -77,6 +55,7 @@ global:
     annotations: {}
     tls: {}
       # secretName:
+      # enabled: true
   hosts:
     domain: example.com
     hostSuffix:
@@ -98,6 +77,11 @@ global:
     # password:
     #   secret: gitlab-postgres
     #   key: psql-password
+    # ssl:
+    #   secret: gitlab-ssl-secret
+    #   clientKey: client-key.pem
+    #   clientCertificate: client-cert.pem
+    #   serverCA: server-ca.pem
   redis:
     # host: '0.0.0.0'
     password: {}
@@ -128,6 +112,35 @@ global:
       proxy_download: true
       bucket:
       connection: {}
+    packages:
+      enabled: true
+      proxy_download: true
+      bucket:
+      connection: {}
+    ldap:
+      servers: {}
+      # 'main' is the GitLab 'provider ID' of this LDAP server
+      # main:
+      #   label: 'LDAP'
+      #   host: '_your_ldap_server'
+      #   port: 636
+      #   uid: 'sAMAccountName'
+      #   bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
+      #   password: '_the_password_of_the_bind_user'
+      #   encryption: 'plain'
+    omniauth:
+      enabled: false
+      autoSignInWithProvider:
+      syncProfileFromProvider: []
+      syncProfileAttributes: ['email']
+      allowSingleSignOn: ['saml']
+      blockAutoCreatedUsers: true
+      autoLinkLdapUser: false
+      autoLinkSamlUser: false
+      externalProviders: []
+      providers: []
+      # - secret: gitlab-google-oauth2
+      #   key: provider
 redis:
   password: {}
 gitaly:
@@ -164,11 +177,11 @@ rack_attack:
 trusted_proxies: []
 resources:
   # limits:
-  #  cpu: 1
-  #  memory: 2G
+  #  cpu: 1.5
+  #  memory: 1.5G
   requests:
-    cpu: 100m
-    memory: 1.4G
+    cpu: 300m
+    memory: 1.2G
 maxUnavailable: 1
 minReplicas: 2
 maxReplicas: 10
