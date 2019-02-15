@@ -14,7 +14,7 @@ the Kubernetes cluster this chart is deployed onto.
 
 ## Configuration
 
-The `unicorn` chart is configured as follows: Global Settings, Ingress Settings External
+The `unicorn` chart is configured as follows: Global Settings, Ingress Settings, External
 Services, and Chart Settings.
 
 ## Installation command line options
@@ -22,52 +22,52 @@ Services, and Chart Settings.
 The table below contains all the possible chart configurations that can be supplied
 to the `helm install` command using the `--set` flags.
 
-| Parameter                      | Description                                        | Default                                                      |
-| ---                            | ---                                                | ---                                                          |
-| annotations                    | Pod annotations                                    |                                                              |
-| enabled                        | Unicorn enabled flag                               | true                                                         |
-| extraContainers                | List of extra containers to include                |                                                              |
-| extraInitContainers            | List of extra init containers to include           |                                                              |
-| extras.google_analytics_id     | Google Analytics Id for frontend                   | nil                                                          |
-| extraVolumeMounts              | List of extra volumes mountes to do                |                                                              |
-| extraVolumes                   | List of extra volumes to create                    |                                                              |
-| gitlab.unicorn.workhorse.image | Workhorse image repository                         | registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee |
-| gitlab.unicorn.workhorse.tag   | Workhorse image tag                                |                                                              |
-| hpa.targetAverageValue         | Set the autoscaling target value                   | 400m                                                         |
-| image.pullPolicy               | Unicorn image pull policy                          | Always                                                       |
-| image.pullSecrets              | Secrets for the image repository                   |                                                              |
-| image.repository               | Unicorn image repository                           | registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee   |
-| image.tag                      | Unicorn image tag                                  |                                                              |
-| init.image                     | initContainer image                                | busybox                                                      |
-| init.tag                       | initContainer image tag                            | latest                                                       |
-| metrics.enabled                | Toggle Prometheus metrics exporter                 | true                                                         |
-| minio.bucket                   | Name of storage bucket, when using Minio           | git-lfs                                                      |
-| minio.port                     | Port for Minio service                             | 9000                                                         |
-| minio.serviceName              | Name of Minio service                              | minio-svc                                                    |
-| psql.password.key              | Key to psql password in psql secret                | psql-password                                                |
-| psql.password.secret           | psql secret name                                   | gitlab-postgres                                              |
-| rack_attack.git_basic_auth     | See [GitLab documentation](https://docs.gitlab.com/ee/security/rack_attack.html) for details | {}                 |
-| redis.serviceName              | Redis service name                                 | redis                                                        |
-| registry.api.port              | Registry port                                      | 5000                                                         |
-| registry.api.protocol          | Registry protocol                                  | http                                                         |
-| registry.api.serviceName       | Registry service name                              | registry                                                     |
-| registry.enabled               | Add/Remove registry link in all projects menu      | true                                                         |
-| registry.tokenIssuer           | Registry token issuer                              | gitlab-issuer                                                |
-| replicaCount                   | Unicorn number of replicas                         | 1                                                            |
-| resources.requests.cpu         | Unicorn minimum cpu                                | 200m                                                         |
-| resources.requests.memory      | Unicorn minimum memory                             | 1.4G                                                         |
-| service.externalPort           | Unicorn exposed port                               | 8080                                                         |
-| service.internalPort           | Unicorn internal port                              | 8080                                                         |
-| service.name                   | Unicorn service name                               | unicorn                                                      |
-| service.type                   | Unicorn service type                               | ClusterIP                                                    |
-| service.workhorseExternalPort  | Workhorse exposed port                             | 8181                                                         |
-| service.workhorseInternalPort  | Workhorse internal port                            | 8181                                                         |
-| shell.authToken.key            | Key to shell token in shell secret                 | secret                                                       |
-| shell.authToken.secret         | Shell token secret                                 | gitlab-shell-secret                                          |
-| shell.port                     | Port number to use in SSH URLs generated by UI     | nil                                                          |
-| trusted_proxies                | See [GitLab documentation](https://docs.gitlab.com/ee/install/installation.html#adding-your-trusted-proxies) for details | []                                                           |
-| workerProcesses                | Unicorn number of workers                          | 2                                                            |
-| workerTimeout                  | Unicorn worker timeout                             | 60                                                           |
+| Parameter                        | Default               | Description                                    |
+| -------------------------------- | --------------------- | ---------------------------------------------- |
+| `annotations`                    |                       | Pod annotations                                |
+| `enabled`                        | true                  | Unicorn enabled flag                           |
+| `extraContainers`                |                       | List of extra containers to include            |
+| `extraInitContainers`            |                       | List of extra init containers to include       |
+| `extras.google_analytics_id`     | nil                   | Google Analytics Id for frontend               |
+| `extraVolumeMounts`              |                       | List of extra volumes mountes to do            |
+| `extraVolumes`                   |                       | List of extra volumes to create                |
+| `gitlab.unicorn.workhorse.image` | `registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee` | Workhorse image repository |
+| `gitlab.unicorn.workhorse.tag`   |                       | Workhorse image tag                            |
+| `hpa.targetAverageValue`         | `400m`                | Set the autoscaling target value               |
+| `image.pullPolicy`               | `Always`              | Unicorn image pull policy                      |
+| `image.pullSecrets`              |                       | Secrets for the image repository               |
+| `image.repository`               | `registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee` | Unicorn image repository |
+| `image.tag`                      |                       | Unicorn image tag                              |
+| `init.image`                     | `busybox`             | initContainer image                            |
+| `init.tag`                       | `latest`              | initContainer image tag                        |
+| `metrics.enabled`                | true                  | Toggle Prometheus metrics exporter             |
+| `minio.bucket`                   | `git-lfs`             | Name of storage bucket, when using Minio       |
+| `minio.port`                     | `9000`                | Port for Minio service                         |
+| `minio.serviceName`              | `minio-svc`           | Name of Minio service                          |
+| `psql.password.key`              | `psql-password`       | Key to psql password in psql secret            |
+| `psql.password.secret`           | `gitlab-postgres`     | psql secret name                               |
+| `rack_attack.git_basic_auth`     | {}                    | See [GitLab documentation](https://docs.gitlab.com/ee/security/rack_attack.html) for details |
+| `redis.serviceName`              | `redis`               | Redis service name                             |
+| `registry.api.port`              | `5000`                | Registry port                                  |
+| `registry.api.protocol`          | `http`                | Registry protocol                              |
+| `registry.api.serviceName`       | `registry`            | Registry service name                          |
+| `registry.enabled`               | true                  | Add/Remove registry link in all projects menu  |
+| `registry.tokenIssuer`           | `gitlab-issuer`       | Registry token issuer                          |
+| `replicaCount`                   | `1`                   | Unicorn number of replicas                     |
+| `resources.requests.cpu`         | `200m`                | Unicorn minimum cpu                            |
+| `resources.requests.memory`      | `1.4G`                | Unicorn minimum memory                         |
+| `service.externalPort`           | `8080`                | Unicorn exposed port                           |
+| `service.internalPort`           | `8080`                | Unicorn internal port                          |
+| `service.name`                   | `unicorn`             | Unicorn service name                           |
+| `service.type`                   | `ClusterIP`           | Unicorn service type                           |
+| `service.workhorseExternalPort`  | `8181`                | Workhorse exposed port                         |
+| `service.workhorseInternalPort`  | `8181`                | Workhorse internal port                        |
+| `shell.authToken.key`            | `secret`              | Key to shell token in shell secret             |
+| `shell.authToken.secret`         | `gitlab-shell-secret` | Shell token secret                             |
+| `shell.port`                     | nil                   | Port number to use in SSH URLs generated by UI |
+| `trusted_proxies`                | []                    |  See [GitLab documentation](https://docs.gitlab.com/ee/install/installation.html#adding-your-trusted-proxies) for details |
+| `workerProcesses`                | `2`                   | Unicorn number of workers                      |
+| `workerTimeout`                  | `60`                  | Unicorn worker timeout                         |
 
 ## Chart configuration examples
 
@@ -75,8 +75,8 @@ to the `helm install` command using the `--set` flags.
 
 `pullSecrets` allows you to authenticate to a private registry to pull images for a pod.
 
-Additional details about private registries and their authentication methods
-can be found in [the Kubernetes documentation](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
+Additional details about private registries and their authentication methods can be
+found in [the Kubernetes documentation](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
 
 Below is an example use of `pullSecrets`:
 
@@ -119,8 +119,18 @@ for common configuration options, such as GitLab and Registry hostnames.
 |:-------------------------------------|:-------:|:--------|:------------|
 | ingress.annotations.*annotation-key* | String  | (empty) | `annotation-key` is a string that will be used with the value as an annotation on every ingress. For example: `ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. |
 | ingress.enabled                      | Boolean | false   | Setting that controls whether to create ingress objects for services that support them. When `false`, the `global.ingress.enabled` setting value is used. |
+| ingress.proxyBodySize                | String  | `512m`  | [See Below](#proxyBodySize). |
 | ingress.tls.enabled                  | Boolean | true    | When set to `false`, you disable TLS for GitLab Unicorn. This is mainly useful for cases in which you cannot use TLS termination at ingress-level, like when you have a TLS-terminating proxy before the ingress controller. |
 | ingress.tls.secretName               | String  | (empty) | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the GitLab url. When not set, the `global.ingress.tls.secretName` value is used instead. |
+
+### proxyBodySize
+
+`proxyBodySize` is used to set the NGINX proxy maximum body size. This is commonly
+required to allow a larger docker image than the default. Alternatively, this can be
+set with either of the following two settings:
+
+- `gitlab.unicorn.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
+- `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
 
 ## External Services
 
@@ -137,7 +147,7 @@ redis:
 ```
 
 | Name            | Type    | Default | Description |
-|:----------------|:-------:|:--------|:------------|
+|:--------------- |:-------:|:------- |:----------- |
 | host            | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
 | serviceName     | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
 | port            | Integer | `6379`  | The port on which to connect to the Redis server. |
@@ -158,7 +168,7 @@ psql:
 ```
 
 | Name            | Type    | Default               | Description |
-|:----------------|:-------:|:----------------------|:------------|
+|:--------------- |:-------:|:--------------------- |:----------- |
 | host            | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if `postgresql.install=true` (default non-production). |
 | database        | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server. |
 | password.key    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
@@ -179,10 +189,10 @@ minio:
   port: 9000
 ```
 
-| Name        | Type    | Default               | Description |
-|:------------|:-------:|:----------------------|:------------|
-| port        | Integer | `9000`                | Port number to reach the Minio `Service` on. |
-| serviceName | String  | `minio-svc`           | Name of the `Service` that is exposed by the Minio pod. |
+| Name        | Type    | Default     | Description |
+|:----------- |:-------:|:----------- |:----------- |
+| port        | Integer | `9000`      | Port number to reach the Minio `Service` on. |
+| serviceName | String  | `minio-svc` | Name of the `Service` that is exposed by the Minio pod. |
 
 ### Registry
 
@@ -203,25 +213,25 @@ registry:
 
 | Name               | Type    | Default         | Description |
 |:-------------------|:-------:|:----------------|:------------|
-| api.host           | Integer |                 | The hostname of the Registry server to use. This can be omitted in lieu of `api.serviceName`. |
+| api.host           | String  |                 | The hostname of the Registry server to use. This can be omitted in lieu of `api.serviceName`. |
 | api.port           | Integer | `5000`          | The port on which to connect to the Registry api. |
-| api.protocol       | Integer |                 | The protocol Unicorn should use to reach the Registry api. |
-| api.serviceName    | Integer | `registry`      | The name of the `service` which is operating the Registry server. If this is present, and `api.host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `api.host` value. This is convenient when using Registry as a part of the overall GitLab chart. |
-| certificate.key    | Integer |                 | The name of the `key` in the `Secret` which houses the certificate bundle that will be provided to the [registry](https://hub.docker.com/_/registry/) container as `auth.token.rootcertbundle`. |
-| certificate.secret | Integer |                 | The name of the [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) that houses the certificate bundle to be used to verify the tokens created by the GitLab instance(s). |
+| api.protocol       | String  |                 | The protocol Unicorn should use to reach the Registry api. |
+| api.serviceName    | String  | `registry`      | The name of the `service` which is operating the Registry server. If this is present, and `api.host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `api.host` value. This is convenient when using Registry as a part of the overall GitLab chart. |
+| certificate.key    | String  |                 | The name of the `key` in the `Secret` which houses the certificate bundle that will be provided to the [registry](https://hub.docker.com/_/registry/) container as `auth.token.rootcertbundle`. |
+| certificate.secret | String  |                 | The name of the [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) that houses the certificate bundle to be used to verify the tokens created by the GitLab instance(s). |
 | host               | String  |                 | The external hostname to use for providing docker commands to users in the GitLab UI. Falls back to the value set in the `registry.hostname` template. Which determines the registry hostname based on the values set in `global.hosts`. See the [Globals Documentation](../../globals.md) for more information. |
 | port               | Integer |                 | The external port used in the hostname. Using port `80` or `443` will result in the URLs being formed with `http`/`https`. Other ports will all use `http` and append the port to the end of hostname, for example `http://registry.example.com:8443`. |
-| tokenIssuer        | Integer | `gitlab-issuer` | The name of the auth token issuer. This must match the name used in the Registry's configuration, as it incorporated into the token when it is sent. The default of `gitlab-issuer` is the same default we use in the Registry chart. |
+| tokenIssuer        | String  | `gitlab-issuer` | The name of the auth token issuer. This must match the name used in the Registry's configuration, as it incorporated into the token when it is sent. The default of `gitlab-issuer` is the same default we use in the Registry chart. |
 
 ## Chart Settings
 
 The following values are used to configure the Unicorn Pods.
 
-| Name               | Type    | Default         | Description |
-|:-------------------|:-------:|:----------------|:------------|
-| replicaCount       | Integer | `1`             | The number of Unicorn instances to create in the deployment. |
-| workerProcesses    | Integer | `2`             | The number of Unicorn workers to run per pod. You must have at least `2` workers available in your cluster in order for GitLab to function properly. Note that increasing the `workerProcesses` will increase the memory required by approximately `400MB` per worker, so you should update the pod `resources` accordingly. |
-| workerTimeout      | Integer | `60`            | The number of seconds a request can be pending before it times out. |
+| Name            | Type    | Default | Description |
+|:--------------- |:-------:|:------- |:----------- |
+| replicaCount    | Integer | `1`     | The number of Unicorn instances to create in the deployment. |
+| workerProcesses | Integer | `2`     | The number of Unicorn workers to run per pod. You must have at least `2` workers available in your cluster in order for GitLab to function properly. Note that increasing the `workerProcesses` will increase the memory required by approximately `400MB` per worker, so you should update the pod `resources` accordingly. |
+| workerTimeout   | Integer | `60`    | The number of seconds a request can be pending before it times out. |
 
 ### metrics.enabled
 

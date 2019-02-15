@@ -4,8 +4,8 @@ We provide a complete NGINX deployment to be used as an Ingress controller. Not 
 Kubernetes providers natively support the NGINX [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls),
 to ensure compatibility.
 
-This chart provides two services: `nginx` which is `nginx-ingress-controller`, and
-`nginx-default-backend` which is `defaultbackend` from the [Google Container Registry](https://gcr.io/google_containers).
+This chart provides two services: `nginx` and `nginx-default-backend`, which are `nginx-ingress-controller`
+and `defaultbackend` from the [Google Container Registry](https://gcr.io/google_containers).
 
 ## Configuring NGINX
 
