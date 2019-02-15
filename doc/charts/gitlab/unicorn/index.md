@@ -126,8 +126,8 @@ for common configuration options, such as GitLab and Registry hostnames.
 ### proxyBodySize
 
 `proxyBodySize` is used to set the NGINX proxy maximum body size. This is commonly
-required to allow a larger docker image than the default. Alternatively, this can be
-set with either of the following two settings:
+required to allow a larger docker image than the default. As an alternative option,
+you can set the body size with either of the following two parameters too:
 
 - `gitlab.unicorn.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
 - `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
