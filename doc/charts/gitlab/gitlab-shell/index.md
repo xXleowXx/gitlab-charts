@@ -23,28 +23,28 @@ with `global.shell.port`, and defaults to `22`.
 
 ## Installation command line options
 
-| Parameter              | Description                              | Default                                        |
-| ---------------------- | ---------------------------------------- | ---------------------------------------------- |
-| annotations            | Pod annotations                          |                                                |
-| enabled                | Shell enable flag                        | true                                           |
-| extraContainers        | List of extra containers to include      |                                                |
-| extraInitContainers    | List of extra init containers to include |                                                |
-| extraVolumeMounts      | List of extra volumes mountes to do      |                                                |
-| extraVolumes           | List of extra volumes to create          |                                                |
-| hpa.targetAverageValue | Set the autoscaling target value         | 100m                                           |
-| image.pullPolicy       | Shell image pull policy                  | Always                                         |
-| image.pullSecrets      | Secrets for the image repository         |                                                |
-| image.repository       | Shell image repository                   | registry.com/gitlab-org/build/cng/gitlab-shell |
-| image.tag              | Shell image tag                          | latest                                         |
-| init.image             | initContainer image                      | busybox                                        |
-| init.tag               | initContainer image tag                  | latest                                         |
-| redis.serviceName      | Redis service name                       | redis                                          |
-| replicaCount           | Shell replicas                           | 1                                              |
-| service.externalPort   | Shell exposed port                       | 22                                             |
-| service.internalPort   | Shell internal port                      | 22                                             |
-| service.name           | Shell service name                       | gitlab-shell                                   |
-| service.type           | Shell service type                       | ClusterIP                                      |
-| unicorn.serviceName    | Unicorn service name                     | unicorn                                        |
+| Parameter                | Default        | Description                              | 
+| ------------------------ | -------------- | ---------------------------------------- | 
+| `annotations`            |                | Pod annotations                          | 
+| `enabled`                | `true`         | Shell enable flag                        | 
+| `extraContainers`        |                | List of extra containers to include      | 
+| `extraInitContainers`    |                | List of extra init containers to include | 
+| `extraVolumeMounts`      |                | List of extra volumes mountes to do      | 
+| `extraVolumes`           |                | List of extra volumes to create          | 
+| `hpa.targetAverageValue` | `100m`         | Set the autoscaling target value         | 
+| `image.pullPolicy`       | `Always`       | Shell image pull policy                  | 
+| `image.pullSecrets`      |                | Secrets for the image repository         | 
+| `image.repository`       | `registry.com/gitlab-org/build/cng/gitlab-shell` | Shell image repository | 
+| `image.tag`              | `latest`       | Shell image tag                          | 
+| `init.image`             | `busybox`      | initContainer image                      | 
+| `init.tag`               | `latest`       | initContainer image tag                  | 
+| `redis.serviceName`      | `redis`        | Redis service name                       | 
+| `replicaCount`           | `1`            | Shell replicas                           | 
+| `service.externalPort`   | `22`           | Shell exposed port                       | 
+| `service.internalPort`   | `22`           | Shell internal port                      | 
+| `service.name`           | `gitlab-shell` | Shell service name                       | 
+| `service.type`           | `ClusterIP`    | Shell service type                       | 
+| `unicorn.serviceName`    | `unicorn`      | Unicorn service name                     | 
 
 ## Chart configuration examples
 
