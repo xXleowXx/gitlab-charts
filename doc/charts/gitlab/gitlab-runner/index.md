@@ -31,9 +31,9 @@ secret and fill it with the `registrationToken` provided by the running gitlab.
 In order to run docker-in-docker, the runner container needs to be set as privileged
 to have access to the needed capabilities. To enable it set the `privileged` value to `true`.
 
-> **Caution:** Privileged containers have extended capabilities, for example they
-  can mount arbitrary files from the host they run on. Make sure to run the container
-  in an isolated environment, such that nothing important runs beside it.
+CAUTION: **Caution:** Privileged containers have extended capabilities, for example they
+can mount arbitrary files from the host they run on. Make sure to run the container
+in an isolated environment, such that nothing important runs beside it.
 
 ## Installation command line options
 
