@@ -115,13 +115,13 @@ redis:
     key: redis-password
 ```
 
-| Name            | Type    | Default | Description |
-|:--------------- |:-------:|:------- |:----------- |
-| host            | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
-| password.key    | String  |         | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
-| password.secret | String  |         | The `password.secret` attribute for PostgreSQL defines the name of the kubernetes `Secret` to pull from. |
-| port            | Integer | `6379`  | The port on which to connect to the Redis server. |
-| serviceName     | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
+| Name              | Type    | Default | Description |
+|:----------------- |:-------:|:------- |:----------- |
+| `host`            | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
+| `password.key`    | String  |         | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
+| `password.secret` | String  |         | The `password.secret` attribute for PostgreSQL defines the name of the kubernetes `Secret` to pull from. |
+| `port`            | Integer | `6379`  | The port on which to connect to the Redis server. |
+| `serviceName`     | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
 
 ### PostgreSQL
 
@@ -136,14 +136,14 @@ psql:
     key: psql-password
 ```
 
-| Name            | Type    | Default               | Description |
-|:--------------- |:-------:|:--------------------- |:----------- |
-| host            | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if `postgresql.install=true` (default non-production). |
-| database        | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server. |
-| password.key    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
-| password.secret | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the kubernetes `Secret` to pull from. |
-| port            | Integer | `5432`                | The port on which to connect to the PostgreSQL server. |
-| username        | String  | `gitlab`              | The username with which to authenticate to the database. |
+| Name              | Type    | Default               | Description |
+|:----------------  |:-------:|:--------------------- |:----------- |
+| `host`            | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if `postgresql.install=true` (default non-production). |
+| `database`        | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server. |
+| `password.key`    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
+| `password.secret` | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the kubernetes `Secret` to pull from. |
+| `port`            | Integer | `5432`                | The port on which to connect to the PostgreSQL server. |
+| `username`        | String  | `gitlab`              | The username with which to authenticate to the database. |
 
 ### Gitaly
 
@@ -162,13 +162,13 @@ gitaly:
     key: token
 ```
 
-| Name             | Type    | Default  | Description |
-|:---------------- |:-------:|:-------- |:----------- |
-| host             | String  |          | The hostname of the Gitaly server to use. This can be omitted in lieu of `serviceName`. |
-| serviceName      | String  | `gitaly` | The name of the `service` which is operating the Gitaly server. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Gitaly as a part of the overall GitLab chart. |
-| port             | Integer | `8075`   | The port on which to connect to the Gitaly server. |
-| authToken.key    | String  |          | The name of the key in the secret below that contains the authToken. |
-| authToken.secret | String  |          | The name of the kubernetes `Secret` to pull from. |
+| Name               | Type    | Default  | Description |
+|:-----------------  |:-------:|:-------- |:----------- |
+| `host`             | String  |          | The hostname of the Gitaly server to use. This can be omitted in lieu of `serviceName`. |
+| `serviceName`      | String  | `gitaly` | The name of the `service` which is operating the Gitaly server. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Gitaly as a part of the overall GitLab chart. |
+| `port`             | Integer | `8075`   | The port on which to connect to the Gitaly server. |
+| `authToken.key`    | String  |          | The name of the key in the secret below that contains the authToken. |
+| `authToken.secret` | String  |          | The name of the kubernetes `Secret` to pull from. |
 
 ## Metrics
 

@@ -10,7 +10,7 @@ cluster this chart is deployed onto.
 
 ## Design Choices
 
-The Gitlay container used in this chart also contains the gitlab-shell code-base in
+The Gitaly container used in this chart also contains the gitlab-shell code-base in
 order to perform the actions on the Git repos that have not yet been ported into Gitaly.
 The Gitaly container includes a copy of the gitlab-shell container within it, and
 as a result we also need to configure gitlab-shell within this chart.
@@ -102,13 +102,13 @@ redis:
   port: 6379
 ```
 
-| Name        | Type    | Default | Description |
-|:------------|:-------:|:--------|:------------|
-| host        | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
-| port        | Integer | `6379`  | The port on which to connect to the Redis server. |
-| serviceName | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
+| Name          | Type    | Default | Description |
+|:------------- |:-------:|:------- |:----------- |
+| `host`        | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
+| `port`        | Integer | `6379`  | The port on which to connect to the Redis server. |
+| `serviceName` | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
 
-> **Note:** Credentials will be sourced from `global.redis.password` values.
+NOTE: **Note:** Credentials will be sourced from `global.redis.password` values.
 
 ### Unicorn
 
@@ -119,21 +119,19 @@ unicorn:
   port: 8080
 ```
 
-| Name        | Type    | Default   | Description |
-|:------------|:-------:|:----------|:------------|
-| host        | String  |           | The hostname of the Unicorn server. This can be omitted in lieu of `serviceName`. |
-| port        | Integer | `8080`    | The port on which to connect to the Unicorn server.|
-| serviceName | String  | `unicorn` | The name of the `service` which is operating the Unicorn server. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Unicorn as a part of the overall GitLab chart. |
+| Name          | Type    | Default   | Description |
+|:------------- |:-------:|:--------- |:----------- |
+| `host`        | String  |           | The hostname of the Unicorn server. This can be omitted in lieu of `serviceName`. |
+| `port`        | Integer | `8080`    | The port on which to connect to the Unicorn server.|
+| `serviceName` | String  | `unicorn` | The name of the `service` which is operating the Unicorn server. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Unicorn as a part of the overall GitLab chart. |
 
 ## Chart Settings
 
 The following values are used to configure the Gitaly Pods.
 
-> **Note:** Gitaly uses an Auth Token to authenticate with the Unicorn and Sidekiq
+NOTE: **Note:** Gitaly uses an Auth Token to authenticate with the Unicorn and Sidekiq
   services. The Auth Token secret and key are sourced from the `global.gitaly.authToken`
-  value.
-
-> In addition, the Gitaly container has a copy of GitLab Shell, which has some configuration
+  value. Additionally, the Gitaly container has a copy of GitLab Shell, which has some configuration
   that can be set. The Shell authToken is sourced from the `global.shell.authToken`
   values.
 
@@ -144,7 +142,7 @@ volume for the Git repository data. You'll need physical storage available in th
 Kubernetes cluster for this to work. If you'd rather use emptyDir, disable PersistentVolumeClaim
 with: `persistence.enabled: false`.
 
-> **Note:** The persistence settings for gitaly are used in a volumeClaimTemplate
+NOTE: **Note:** The persistence settings for gitaly are used in a volumeClaimTemplate
   that should be valid for all your gitaly pods. You should *not* include settings
   that are meant to reference a single specific volume (ie volumeName). If you want
   to reference a specific volume, you need to manually create the PersistentVolumeClaim.
@@ -160,12 +158,12 @@ persistence:
   subPath: "/data"
 ```
 
-| Name             | Type    | Default         | Description |
-|:-----------------|:-------:|:----------------|:------------|
-| accessMode       | String  | `ReadWriteOnce` | Sets the accessMode requested in the PersistentVolumeClaim. See [Kubernetes Access Modes Documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for details. |
-| enabled          | Boolean | `true`          | Sets whether or not to use a PersistentVolumeClaims for the repo data. If `false`, an emptyDir volume is used. |
-| matchExpressions | Array   |                 | Accepts an array of label condition objects to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
-| matchLabels      | Map     |                 | Accepts a Map of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
-| size             | String  | `50Gi`          | The minimum volume size to request for the data persistence. |
-| storageClass     | String  |                 | Sets the storageClassName on the Volume Claim for dynamic provisioning. When unset or null, the default provisioner will be used. If set to a hyphen, dynamic provisioning is disabled. |
-| subPath          | String  |                 | Sets the path within the volume to mount, rather than the volume root. The root is used if the subPath is empty. |
+| Name               | Type    | Default         | Description |
+|:------------------ |:-------:|:--------------- |:----------- |
+| `accessMode`       | String  | `ReadWriteOnce` | Sets the accessMode requested in the PersistentVolumeClaim. See [Kubernetes Access Modes Documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for details. |
+| `enabled`          | Boolean | `true`          | Sets whether or not to use a PersistentVolumeClaims for the repo data. If `false`, an emptyDir volume is used. |
+| `matchExpressions` | Array   |                 | Accepts an array of label condition objects to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
+| `matchLabels`      | Map     |                 | Accepts a Map of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
+| `size`             | String  | `50Gi`          | The minimum volume size to request for the data persistence. |
+| `storageClass`     | String  |                 | Sets the storageClassName on the Volume Claim for dynamic provisioning. When unset or null, the default provisioner will be used. If set to a hyphen, dynamic provisioning is disabled. |
+| `subPath`          | String  |                 | Sets the path within the volume to mount, rather than the volume root. The root is used if the subPath is empty. |
