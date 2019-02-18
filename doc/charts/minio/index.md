@@ -7,13 +7,14 @@ and inherits most settings from there.
 ## Design Choices
 
 Design choices related to the [upstream chart](https://github.com/kubernetes/charts/tree/master/stable/minio)
-can be found in their README.
+can be found in the project's README.
 
 GitLab chose to alter that chart in order to simplify configuration of the secrets,
 and to remove all use of secrets in environment variables. GitLab added `initContainer`s
-to control the population of secrets into the `config.json` and a chart-wide `enabled` flag.
+to control the population of secrets into the `config.json`, and a chart-wide `enabled` flag.
 
 This chart makes use of only one secret:
+
 - `global.minio.credentials.secret`: A global secret containing the `accesskey` and
   `secretkey` values that will be used for authentication to the bucket(s).
 
@@ -49,41 +50,40 @@ minio:
 The table below contains all the possible charts configurations that can be supplied
 to the `helm install` command using the `--set` flags:
 
-| Parameter                    | Description                             | Default                      |
-| ---------------------------- | --------------------------------------- | ---------------------------- |
-| defaultBuckets               | Minio default buckets                   | [{"name": "registry"}]       |
-| image                        | Minio image                             | minio/minio                  |
-| imagePullPolicy              | Minio image pull policy                 | Always                       |
-| imageTag                     | Minio image tag                         | RELEASE.2017-12-28T01-21-00Z |
-| minioConfig.browser          | Minio browser flag                      | on                           |
-| minioConfig.domain           | Minio domain                            |                              |
-| minioConfig.region           | Minio region                            | us-east-1                    |
-| minioMc.image                | Minio mc image                          | minio/mc                     |
-| minioMc.tag                  | Minio mc image tag                      | latest                       |
-| mountPath                    | Minio config file mount path            | /export                      |
-| persistence.accessMode       | Minio persistence access mode           | ReadWriteOnce                |
-| persistence.enabled          | Minio enable persistence flag           | true                         |
-| persistence.matchExpressions | Minio label-expression matches to bind  |                              |
-| persistence.matchLabels      | Minio label-value matches to bind       |                              |
-| persistence.size             | Minio persistence volume size           | 10Gi                         |
-| persistence.storageClass     | Minio storageClassName for provisioning |                              |
-| persistence.subPath          | Minio persistence volume mount path     |                              |
-| persistence.volumeName       | Minio existing persistent volume name   |                              |
-| pullSecrets                  | Secrets for the image repository        |                              |
-| replicas                     | Minio number of replicas                | 4                            |
-| resources.requests.cpu       | Minio minimum cpu requested             | 250m                         |
-| resources.requests.memory    | Minio minimum memory requested          | 256Mi                        |
-| securityContext.fsGroup      | Group ID to start the pod with          | 1000                         |
-| securityContext.runAsUser    | User ID to start the pod with           | 1000                         |
-| servicePort                  | Minio service port                      | 9000                         |
-| serviceType                  | Minio service type                      | ClusterIP                    |
-
+| Parameter                      | Default                       | Description                             |
+| ------------------------------ | ----------------------------- | --------------------------------------- |
+| `defaultBuckets`               | `[{"name": "registry"}]`      | Minio default buckets                   |
+| `image`                        | `minio/minio`                 | Minio image                             |
+| `imagePullPolicy`              | `Always`                      | Minio image pull policy                 |
+| `imageTag`                     | `RELEASE.2017-12-28T01-2100Z` | Minio image tag                         |
+| `minioConfig.browser`          | `on`                          | Minio browser flag                      |
+| `minioConfig.domain`           |                               | Minio domain                            |
+| `minioConfig.region`           | `us-east-1`                   | Minio region                            |
+| `minioMc.image`                | `minio/mc`                    | Minio mc image                          |
+| `minioMc.tag`                  | `latest`                      | Minio mc image tag                      |
+| `mountPath`                    | `/export`                     | Minio config file mount path            |
+| `persistence.accessMode`       | `ReadWriteOnce`               | Minio persistence access mode           |
+| `persistence.enabled`          | `true`                        | Minio enable persistence flag           |
+| `persistence.matchExpressions` |                               | Minio label-expression matches to bind  |
+| `persistence.matchLabels`      |                               | Minio label-value matches to bind       |
+| `persistence.size`             | `10Gi`                        | Minio persistence volume size           |
+| `persistence.storageClass`     |                               | Minio storageClassName for provisioning |
+| `persistence.subPath`          |                               | Minio persistence volume mount path     |
+| `persistence.volumeName`       |                               | Minio existing persistent volume name   |
+| `pullSecrets`                  |                               | Secrets for the image repository        |
+| `replicas`                     | `4`                           | Minio number of replicas                |
+| `resources.requests.cpu`       | `250m`                        | Minio minimum cpu requested             |
+| `resources.requests.memory`    | `256Mi`                       | Minio minimum memory requested          |
+| `securityContext.fsGroup`      | `1000`                        | Group ID to start the pod with          |
+| `securityContext.runAsUser`    | `1000`                        | User ID to start the pod with           |
+| `servicePort`                  | `9000`                        | Minio service port                      |
+| `serviceType`                  | `ClusterIP`                   | Minio service type                      |
 
 ## Chart configuration examples
 
 ### pullSecrets
 
-`pullSecrets` allow you to authenticate to a private registry to pull images for a pod.
+`pullSecrets` allows you to authenticate to a private registry to pull images for a pod.
 
 Additional details about private registries and their authentication methods can be
 found in [the Kubernetes documentation](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
@@ -92,18 +92,18 @@ Below is an example use of `pullSecrets`:
 
 ```YAML
 image: my.minio.repository
-imageTag: latest
-imagePullPolicy: Always
-pullSecrets:
-- name: my-secret-name
-- name: my-secondary-secret-name
+  imageTag: latest
+  imagePullPolicy: Always
+  pullSecrets:
+  - name: my-secret-name
+  - name: my-secondary-secret-name
 ```
 
 ## Enable the sub-chart
 
 They way we've chosen to implement compartmentalized sub-charts includes the ability
 to disable the components that you may not want in a given deployment. For this reason,
-the first settings you should decide on is `enabled:`.
+the first setting you should decide on is `enabled:`.
 
 By default, Minio is enabled out of the box, but is not recommended for production use.
 When you are ready to disable it, run `--set global.minio.enabled: false`.
@@ -123,7 +123,7 @@ init:
 ### initContainer image
 
 The initContainer image settings are just as with a normal image configuration, the
-defaults listed above.
+defaults are listed above.
 
 ### initContainer script
 
@@ -158,14 +158,13 @@ The `image`, `imageTag` and `imagePullPolicy` defaults are
 
 ## Persistence
 
+This chart provisions a `PersistentVolumeClaim` and mounts a corresponding persistent
+volume to default location `/export`. You'll need physical storage available in the
+Kubernetes cluster for this to work. If you'd rather use `emptyDir`, disable `PersistentVolumeClaim`
+by: `persistence.enabled: false`.
+
 The behaviors for [`persistence`](https://github.com/kubernetes/charts/tree/master/stable/minio#persistence)
 are [documented upstream](https://github.com/kubernetes/charts/tree/master/stable/minio#configuration).
-The key summary is:
-
-> This chart provisions a PersistentVolumeClaim and mounts a corresponding persistent
-  volume to default location /export. You'll need physical storage available in the
-  Kubernetes cluster for this to work. If you'd rather use emptyDir, disable PersistentVolumeClaim
-  by: `persistence.enabled: false`.
 
 GitLab has added a few items:
 
@@ -177,15 +176,15 @@ persistence:
 ```
 
 | Name             | Type    | Default | Description |
-|:-----------------|:-------:|:--------|:------------|
+|:---------------- |:-------:|:------- |:----------- |
 | volumeName       | String  | `false` | When `volumeName` is provided, the `PersistentVolumeClaim` will use the provided `PersistentVolume` by name, in place of creating a `PersistentVolume` dynamically. This overrides the upstream behavior. |
-| matchLabels      |         | `true`  | Accepts a dictionary of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
+| matchLabels      | Map     | `true`  | Accepts a Map of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
 | matchExpressions | Array   |         | Accepts an array of label condition objects to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
 
 ## defaultBuckets
 
 `defaultBuckets` provides a mechanism to automatically create buckets on the Minio
-pod at _installation_. This property contains an array of items, each with up to three
+pod at *installation*. This property contains an array of items, each with up to three
 properties: `name`, `policy`, and `purge`.
 
 ```
@@ -200,13 +199,13 @@ defaultBuckets:
 
 | Name   | Type    | Default | Description |
 |:-------|:-------:|:--------|:------------|
-| name   | String  |         | The name of the bucket that is created. The provided value should conform to [AWS ucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html), meaning that it should be compliant with DNS and contain only the characters a-z, 0-9, and – (hyphen) in strings between 3 and 63 characters in length. The `name` property is _required_ for all entries. |
-| policy |         | `none`  | The value of `policy` controlls the access policy of the bucket on Minio. The `policy` property is not required, and the default value is `none`. In regards to **anonymous** access, possible values are: `none` (no anonymous access), `download` (anonymous read-only access), `upload` (anonymous write-only access) or `public` (anonymous read/write access). |
+| name   | String  |         | The name of the bucket that is created. The provided value should conform to [AWS bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html), meaning that it should be compliant with DNS and contain only the characters a-z, 0-9, and – (hyphen) in strings between 3 and 63 characters in length. The `name` property is _required_ for all entries. |
+| policy |         | `none`  | The value of `policy` controls the access policy of the bucket on Minio. The `policy` property is not required, and the default value is `none`. In regards to **anonymous** access, possible values are: `none` (no anonymous access), `download` (anonymous read-only access), `upload` (anonymous write-only access) or `public` (anonymous read/write access). |
 | purge  | Boolean |         | The `purge` property is provided as a means to cause any existing bucket to be removed with force, at installation time. This only comes into play when using a pre-existing `PersistentVolume` for the volumeName property of [persistence](#persistence). If you make use of a dynamically created `PersistentVolume`, this will have no valuable effect as it only happens at chart installation and there will be no data in the `PersistentVolume` that was just created. This property is not required, but you may specify this property with a value of `true` in order to cause a bucket to purged with force `mc rm -r --force`. |
 
 ## Security Context
 
-These options allow control over which `user` and/ or `group` is used to start the pod.
+These options allow control over which `user` and/or `group` is used to start the pod.
 
 For in-depth information about security context, please refer to the official
 [Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
@@ -230,7 +229,8 @@ The chart does not expect to be of the `type: NodePort`, so **do not** set it as
 ## Upstream items
 
 The [upstream documentation](https://github.com/kubernetes/charts/tree/master/stable/minio)
-for the following applies completely to this chart.
+for the following also applies completely to this chart:
+
 - `resources`
 - `nodeSelector`
 - `minioConfig`
