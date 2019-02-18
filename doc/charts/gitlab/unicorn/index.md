@@ -116,13 +116,13 @@ for common configuration options, such as GitLab and Registry hostnames.
 
 ## Ingress Settings
 
-| Name                                 | Type    | Default | Description |
-|:-------------------------------------|:-------:|:--------|:------------|
-| ingress.annotations.*annotation-key* | String  | (empty) | `annotation-key` is a string that will be used with the value as an annotation on every ingress. For example: `ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. |
-| ingress.enabled                      | Boolean | false   | Setting that controls whether to create ingress objects for services that support them. When `false`, the `global.ingress.enabled` setting value is used. |
-| ingress.proxyBodySize                | String  | `512m`  | [See Below](#proxyBodySize). |
-| ingress.tls.enabled                  | Boolean | true    | When set to `false`, you disable TLS for GitLab Unicorn. This is mainly useful for cases in which you cannot use TLS termination at ingress-level, like when you have a TLS-terminating proxy before the ingress controller. |
-| ingress.tls.secretName               | String  | (empty) | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the GitLab url. When not set, the `global.ingress.tls.secretName` value is used instead. |
+| Name                                   | Type    | Default | Description |
+|:-------------------------------------- |:-------:|:------- |:----------- |
+| `ingress.annotations.*annotation-key*` | String  | (empty) | `annotation-key` is a string that will be used with the value as an annotation on every ingress. For example: `ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. |
+| `ingress.enabled`                      | Boolean | `false` | Setting that controls whether to create ingress objects for services that support them. When `false`, the `global.ingress.enabled` setting value is used. |
+| `ingress.proxyBodySize`                | String  | `512m`  | [See Below](#proxyBodySize). |
+| `ingress.tls.enabled`                  | Boolean | `true`  | When set to `false`, you disable TLS for GitLab Unicorn. This is mainly useful for cases in which you cannot use TLS termination at ingress-level, like when you have a TLS-terminating proxy before the ingress controller. |
+| `ingress.tls.secretName`               | String  | (empty) | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the GitLab url. When not set, the `global.ingress.tls.secretName` value is used instead. |
 
 ### proxyBodySize
 
@@ -147,13 +147,13 @@ redis:
     key: redis-password
 ```
 
-| Name            | Type    | Default | Description |
-|:--------------- |:-------:|:------- |:----------- |
-| host            | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
-| serviceName     | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
-| port            | Integer | `6379`  | The port on which to connect to the Redis server. |
-| password.key    | String  |         | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
-| password.secret | String  |         | The `password.secret` attribute for PostgreSQL defines the name of the kubernetes `Secret` to pull from. |
+| Name              | Type    | Default | Description |
+|:----------------- |:-------:|:------- |:----------- |
+| `host`            | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
+| `serviceName`     | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
+| `port`            | Integer | `6379`  | The port on which to connect to the Redis server. |
+| `password.key`    | String  |         | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
+| `password.secret` | String  |         | The `password.secret` attribute for PostgreSQL defines the name of the kubernetes `Secret` to pull from. |
 
 ### PostgreSQL
 
@@ -168,14 +168,14 @@ psql:
     key: psql-password
 ```
 
-| Name            | Type    | Default               | Description |
-|:--------------- |:-------:|:--------------------- |:----------- |
-| host            | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if `postgresql.install=true` (default non-production). |
-| database        | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server. |
-| password.key    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
-| password.secret | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the kubernetes `Secret` to pull from. |
-| port            | Integer | `5432`                | The port on which to connect to the PostgreSQL server. |
-| username        | String  | `gitlab`              | The username with which to authenticate to the database. |
+| Name              | Type    | Default               | Description |
+|:----------------- |:-------:|:--------------------- |:----------- |
+| `host`            | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if `postgresql.install=true` (default non-production). |
+| `database`        | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server. |
+| `password.key`    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
+| `password.secret` | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the kubernetes `Secret` to pull from. |
+| `port`            | Integer | `5432`                | The port on which to connect to the PostgreSQL server. |
+| `username`        | String  | `gitlab`              | The username with which to authenticate to the database. |
 
 ### Gitaly
 
@@ -190,10 +190,10 @@ minio:
   port: 9000
 ```
 
-| Name        | Type    | Default     | Description |
-|:----------- |:-------:|:----------- |:----------- |
-| port        | Integer | `9000`      | Port number to reach the Minio `Service` on. |
-| serviceName | String  | `minio-svc` | Name of the `Service` that is exposed by the Minio pod. |
+| Name          | Type    | Default     | Description |
+|:------------- |:-------:|:----------- |:----------- |
+| `port`        | Integer | `9000`      | Port number to reach the Minio `Service` on. |
+| `serviceName` | String  | `minio-svc` | Name of the `Service` that is exposed by the Minio pod. |
 
 ### Registry
 
@@ -212,27 +212,27 @@ registry:
     key: registry-auth.key
 ```
 
-| Name               | Type    | Default         | Description |
-|:-------------------|:-------:|:----------------|:------------|
-| api.host           | String  |                 | The hostname of the Registry server to use. This can be omitted in lieu of `api.serviceName`. |
-| api.port           | Integer | `5000`          | The port on which to connect to the Registry api. |
-| api.protocol       | String  |                 | The protocol Unicorn should use to reach the Registry api. |
-| api.serviceName    | String  | `registry`      | The name of the `service` which is operating the Registry server. If this is present, and `api.host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `api.host` value. This is convenient when using Registry as a part of the overall GitLab chart. |
-| certificate.key    | String  |                 | The name of the `key` in the `Secret` which houses the certificate bundle that will be provided to the [registry](https://hub.docker.com/_/registry/) container as `auth.token.rootcertbundle`. |
-| certificate.secret | String  |                 | The name of the [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) that houses the certificate bundle to be used to verify the tokens created by the GitLab instance(s). |
-| host               | String  |                 | The external hostname to use for providing docker commands to users in the GitLab UI. Falls back to the value set in the `registry.hostname` template. Which determines the registry hostname based on the values set in `global.hosts`. See the [Globals Documentation](../../globals.md) for more information. |
-| port               | Integer |                 | The external port used in the hostname. Using port `80` or `443` will result in the URLs being formed with `http`/`https`. Other ports will all use `http` and append the port to the end of hostname, for example `http://registry.example.com:8443`. |
-| tokenIssuer        | String  | `gitlab-issuer` | The name of the auth token issuer. This must match the name used in the Registry's configuration, as it incorporated into the token when it is sent. The default of `gitlab-issuer` is the same default we use in the Registry chart. |
+| Name                 | Type    | Default         | Description |
+|:-------------------- |:-------:|:--------------- |:----------- |
+| `api.host`           | String  |                 | The hostname of the Registry server to use. This can be omitted in lieu of `api.serviceName`. |
+| `api.port`           | Integer | `5000`          | The port on which to connect to the Registry api. |
+| `api.protocol`       | String  |                 | The protocol Unicorn should use to reach the Registry api. |
+| `api.serviceName`    | String  | `registry`      | The name of the `service` which is operating the Registry server. If this is present, and `api.host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `api.host` value. This is convenient when using Registry as a part of the overall GitLab chart. |
+| `certificate.key`    | String  |                 | The name of the `key` in the `Secret` which houses the certificate bundle that will be provided to the [registry](https://hub.docker.com/_/registry/) container as `auth.token.rootcertbundle`. |
+| `certificate.secret` | String  |                 | The name of the [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) that houses the certificate bundle to be used to verify the tokens created by the GitLab instance(s). |
+| `host`               | String  |                 | The external hostname to use for providing docker commands to users in the GitLab UI. Falls back to the value set in the `registry.hostname` template. Which determines the registry hostname based on the values set in `global.hosts`. See the [Globals Documentation](../../globals.md) for more information. |
+| `port`               | Integer |                 | The external port used in the hostname. Using port `80` or `443` will result in the URLs being formed with `http`/`https`. Other ports will all use `http` and append the port to the end of hostname, for example `http://registry.example.com:8443`. |
+| `tokenIssuer`        | String  | `gitlab-issuer` | The name of the auth token issuer. This must match the name used in the Registry's configuration, as it incorporated into the token when it is sent. The default of `gitlab-issuer` is the same default we use in the Registry chart. |
 
 ## Chart Settings
 
 The following values are used to configure the Unicorn Pods.
 
-| Name            | Type    | Default | Description |
-|:--------------- |:-------:|:------- |:----------- |
-| replicaCount    | Integer | `1`     | The number of Unicorn instances to create in the deployment. |
-| workerProcesses | Integer | `2`     | The number of Unicorn workers to run per pod. You must have at least `2` workers available in your cluster in order for GitLab to function properly. Note that increasing the `workerProcesses` will increase the memory required by approximately `400MB` per worker, so you should update the pod `resources` accordingly. |
-| workerTimeout   | Integer | `60`    | The number of seconds a request can be pending before it times out. |
+| Name              | Type    | Default | Description |
+|:----------------- |:-------:|:------- |:----------- |
+| `replicaCount`    | Integer | `1`     | The number of Unicorn instances to create in the deployment. |
+| `workerProcesses` | Integer | `2`     | The number of Unicorn workers to run per pod. You must have at least `2` workers available in your cluster in order for GitLab to function properly. Note that increasing the `workerProcesses` will increase the memory required by approximately `400MB` per worker, so you should update the pod `resources` accordingly. |
+| `workerTimeout`   | Integer | `60`    | The number of seconds a request can be pending before it times out. |
 
 ### metrics.enabled
 
@@ -254,8 +254,8 @@ shell:
   port:
 ```
 
-| Name             | Type    | Default | Description |
-|:-----------------|:-------:|:--------|:------------|
-| authToken.key    | String  |         | Defines the name of the key in the secret (below) that contains the authToken. |
-| authToken.secret | String  |         | Defines the name of the kubernetes `Secret` to pull from. |
-| port             | Integer | `22`    | The port number to use in the generation of SSH URLs within the GitLab UI. Controlled by `global.shell.port`. |
+| Name               | Type    | Default | Description |
+|:------------------ |:-------:|:------- |:----------- |
+| `authToken.key`    | String  |         | Defines the name of the key in the secret (below) that contains the authToken. |
+| `authToken.secret` | String  |         | Defines the name of the kubernetes `Secret` to pull from. |
+| `port`             | Integer | `22`    | The port number to use in the generation of SSH URLs within the GitLab UI. Controlled by `global.shell.port`. |
