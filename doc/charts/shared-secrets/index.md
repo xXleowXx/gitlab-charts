@@ -15,22 +15,23 @@ used across the installation, unless otherwise manually specified. This includes
 The table below contains all the possible charts configurations that can be supplied
 to the `helm install` command using the `--set` flag:
 
-| Parameter                | Description                      | Default                                  |
-| ------------------------ | -------------------------------- | ---------------------------------------- |
-| env                      | Rails environment                | production                               |
-| image.pullPolicy         | Gitaly image pull policy         | Always                                   |
-| image.pullSecrets        | Secrets for the image repository |                                          |
-| image.repository         | Gitaly image repository          | registry.gitlab.com/gitlab-org/build/cng/kubectl |
-| image.tag                | Gitaly image tag                 | 1f8690f03f7aeef27e727396927ab3cc96ac89e7 |
-| rbac.create              | Create RBAC roles and bindings   | true                                     |
-| resources                | resource requests, limits        |                                          |
-| securitContext.fsGroup   | User ID to mount filesystems as  | 65534                                    |
-| securitContext.runAsUser | User ID to run the container as  | 65534                                    |
-| selfsign.caSubject       | selfsign CA Subject              | GitLab Helm Chart                        |
-| selfsign.image           | selfsign image repository        | registry.gitlab.com/gitlab-org/build/cnf/cfssl-self-sign |
-| selfsign.keyAlgorithm    | selfsign cert key algorithm      | rsa                                      |
-| selfsign.keySize         | selfsign cert key size           | 4096                                     |
-| selfsign.tag             | selfsign image tag               |                                          |
+| Parameter                  | Default             | Description                         | 
+| -------------------------- | ------------------- | ----------------------------------- | 
+| `enabled`                  | `true`              | [See Below](#disable-functionality) | 
+| `env`                      | `production`        | Rails environment                   | 
+| `image.pullPolicy`         | `Always`            | Gitaly image pull policy            | 
+| `image.pullSecrets`        |                     | Secrets for the image repository    | 
+| `image.repository`         | `registry.gitlab.com/gitlab-org/build/cng/kubectl` | Gitaly image repository | 
+| `image.tag`                | `1f8690f03f7aeef27e727396927ab3cc96ac89e7` | Gitaly image tag | 
+| `rbac.create`              | `true`              | Create RBAC roles and bindings      | 
+| `resources`                |                     | resource requests, limits           | 
+| `securitContext.fsGroup`   | `65534`             | User ID to mount filesystems as     | 
+| `securitContext.runAsUser` | `65534`             | User ID to run the container as     | 
+| `selfsign.caSubject`       | `GitLab Helm Chart` | selfsign CA Subject                 | 
+| `selfsign.image`           | `registry.gitlab.com/gitlab-org/build/cnf/cfssl-self-sign` | selfsign image repository | 
+| `selfsign.keyAlgorithm`    | `rsa`               | selfsign cert key algorithm         | 
+| `selfsign.keySize`         | `4096`              | selfsign cert key size              | 
+| `selfsign.tag`             |                     | selfsign image tag                  | 
 
 ## Disable functionality
 
