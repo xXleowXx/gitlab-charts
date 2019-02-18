@@ -46,6 +46,6 @@ shared-secrets:
   enabled: false
 ```
 
-> **NOTE:** If you disable this sub-chart, you **must** manually create all secrets,
+NOTE: **Note:** If you disable this sub-chart, you **must** manually create all secrets,
   and provide all necessary secret content. See [installation/secrets](../../installation/secrets.md#manual-secret-creation-optional)
   for further details.

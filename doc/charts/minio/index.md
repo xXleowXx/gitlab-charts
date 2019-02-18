@@ -144,12 +144,12 @@ to provide the `config.json` to the [minio](https://minio.io) server.
 
 These settings control the minio ingress.
 
-| Name           | Type    | Default | Description |
-|:---------------|:-------:|:--------|:------------|
-| annotations    | String  |         | This field is an exact match to the standard `annotations` for [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress). |
-| enabled        | Boolean | `false` | Setting that controls whether to create ingress objects for services that support them. When `false` the `global.ingress.enabled` setting is used. |
-| tls.enabled    | Boolean | `true`  | When set to `false`, you disable TLS for Minio. This is mainly useful when you cannot use TLS termination at ingress-level, like when you have a TLS-terminating proxy before the ingress controller. |
-| tls.secretName | String  |         | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the minio url. When not set, the `global.ingress.tls.secretName` is used instead. |
+| Name             | Type    | Default | Description |
+|:---------------- |:-------:|:------- |:----------- |
+| `annotations`    | String  |         | This field is an exact match to the standard `annotations` for [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress). |
+| `enabled`        | Boolean | `false` | Setting that controls whether to create ingress objects for services that support them. When `false` the `global.ingress.enabled` setting is used. |
+| `tls.enabled`    | Boolean | `true`  | When set to `false`, you disable TLS for Minio. This is mainly useful when you cannot use TLS termination at ingress-level, like when you have a TLS-terminating proxy before the ingress controller. |
+| `tls.secretName` | String  |         | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the minio url. When not set, the `global.ingress.tls.secretName` is used instead. |
 
 ## Configuring the image
 
@@ -175,11 +175,11 @@ persistence:
   matchExpressions:
 ```
 
-| Name             | Type    | Default | Description |
-|:---------------- |:-------:|:------- |:----------- |
-| volumeName       | String  | `false` | When `volumeName` is provided, the `PersistentVolumeClaim` will use the provided `PersistentVolume` by name, in place of creating a `PersistentVolume` dynamically. This overrides the upstream behavior. |
-| matchLabels      | Map     | `true`  | Accepts a Map of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
-| matchExpressions | Array   |         | Accepts an array of label condition objects to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
+| Name               | Type    | Default | Description |
+|:------------------ |:-------:|:------- |:----------- |
+| `volumeName`       | String  | `false` | When `volumeName` is provided, the `PersistentVolumeClaim` will use the provided `PersistentVolume` by name, in place of creating a `PersistentVolume` dynamically. This overrides the upstream behavior. |
+| `matchLabels`      | Map     | `true`  | Accepts a Map of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
+| `matchExpressions` | Array   |         | Accepts an array of label condition objects to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
 
 ## defaultBuckets
 
@@ -197,11 +197,11 @@ defaultBuckets:
     policy: download
 ```
 
-| Name   | Type    | Default | Description |
-|:-------|:-------:|:--------|:------------|
-| name   | String  |         | The name of the bucket that is created. The provided value should conform to [AWS bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html), meaning that it should be compliant with DNS and contain only the characters a-z, 0-9, and – (hyphen) in strings between 3 and 63 characters in length. The `name` property is _required_ for all entries. |
-| policy |         | `none`  | The value of `policy` controls the access policy of the bucket on Minio. The `policy` property is not required, and the default value is `none`. In regards to **anonymous** access, possible values are: `none` (no anonymous access), `download` (anonymous read-only access), `upload` (anonymous write-only access) or `public` (anonymous read/write access). |
-| purge  | Boolean |         | The `purge` property is provided as a means to cause any existing bucket to be removed with force, at installation time. This only comes into play when using a pre-existing `PersistentVolume` for the volumeName property of [persistence](#persistence). If you make use of a dynamically created `PersistentVolume`, this will have no valuable effect as it only happens at chart installation and there will be no data in the `PersistentVolume` that was just created. This property is not required, but you may specify this property with a value of `true` in order to cause a bucket to purged with force `mc rm -r --force`. |
+| Name     | Type    | Default | Description |
+|:-------- |:-------:|:--------|:------------|
+| `name`   | String  |         | The name of the bucket that is created. The provided value should conform to [AWS bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html), meaning that it should be compliant with DNS and contain only the characters a-z, 0-9, and – (hyphen) in strings between 3 and 63 characters in length. The `name` property is _required_ for all entries. |
+| `policy` |         | `none`  | The value of `policy` controls the access policy of the bucket on Minio. The `policy` property is not required, and the default value is `none`. In regards to **anonymous** access, possible values are: `none` (no anonymous access), `download` (anonymous read-only access), `upload` (anonymous write-only access) or `public` (anonymous read/write access). |
+| `purge`  | Boolean |         | The `purge` property is provided as a means to cause any existing bucket to be removed with force, at installation time. This only comes into play when using a pre-existing `PersistentVolume` for the volumeName property of [persistence](#persistence). If you make use of a dynamically created `PersistentVolume`, this will have no valuable effect as it only happens at chart installation and there will be no data in the `PersistentVolume` that was just created. This property is not required, but you may specify this property with a value of `true` in order to cause a bucket to purged with force `mc rm -r --force`. |
 
 ## Security Context
 
