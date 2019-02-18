@@ -64,6 +64,14 @@ lint_package:
   except:
     - tags
 
+wait_for_images:
+  stage: prepare
+  when: always
+  script:
+    - scripts/wait-for-images.rb
+  only:
+    - tags@charts/gitlab
+
 release_package:
   stage: package
   when: always
@@ -74,7 +82,8 @@ release_package:
         https://gitlab.com/api/v4/projects/2860651/trigger/pipeline
   only:
     - tags@charts/gitlab
-
+  dependencies:
+    - wait_for_images
 
 review:
   stage: review
