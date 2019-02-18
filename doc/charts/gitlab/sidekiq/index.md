@@ -5,7 +5,7 @@ designed to provide separation of queues across multiple `Deployment`s with indi
 scalability and configuration.
 
 While this chart provides a default `pods:` declaration, if you provide an empty definition,
-you will have _no_ workers.
+you will have *no* workers.
 
 ## Requirements
 
@@ -16,46 +16,47 @@ the Kubernetes cluster this chart is deployed onto.
 ## Design Choices
 
 This chart creates multiple `Deployment`s and associated `ConfigMap`s. It was decided
-that it would be clearer to make use of `ConfigMap` behaviours over using `environment`
-attributes or additional arguments to the `command` for the containers in order to
+that it would be clearer to make use of `ConfigMap` behaviours instead of using `environment`
+attributes or additional arguments to the `command` for the containers, in order to
 avoid any concerns about command length. This choice results in a large number of
-`ConfigMap`s, but provides a very clear definition of what each pod should be doing.
+`ConfigMap`s, but provides very clear definitions of what each pod should be doing.
 
 ## Configuration
 
-The `sidekiq` chart is configured in three parts: chart-wide [external services](#external-services), chart-wide
-defaults, and per-pod definitions.
+The `sidekiq` chart is configured in three parts: chart-wide [external services](#external-services),
+[chart-wide defaults](#chart-wide-defaults), and [per-pod definitions](#per-pod-settings).
 
 ## Installation command line options
 
-Table below contains all the possible charts configurations that can be supplied to `helm install` command using the `--set` flags
+The table below contains all the possible charts configurations that can be supplied
+to the `helm install` command using the `--set` flags:
 
-| Parameter                 | Description                              | Default                                                    |
-| ---                       | ---                                      | ---                                                        |
-| annotations               | Pod annotations                          |                                                            |
-| concurrency               | Sidekiq default concurrency              | 10                                                         |
-| cron_jobs                 | Auxiliary cron jobs                      | {}                                                         |
-| enabled                   | Sidekiq enabled flag                     | true                                                       |
-| extraContainers           | List of extra containers to include      |                                                            |
-| extraInitContainers       | List of extra init containers to include |                                                            |
-| extraVolumeMounts         | List of extra volumes mountes to do      |                                                            |
-| extraVolumes              | List of extra volumes to create          |                                                            |
-| gitaly.serviceName        | gitaly service name                      | gitaly                                                     |
-| hpa.targetAverageValue    | Set the autoscaling target value         | 400m                                                       |
-| image.pullPolicy          | Sidekiq image pull policy                | Always                                                     |
-| image.pullSecrets         | Secrets for the image repository         |                                                            |
-| image.repository          | Sidekiq image repository                 | registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee |
-| image.tag                 | Sidekiq image tag                        |                                                            |
-| init.image                | initContainer image                      | busybox                                                    |
-| init.tag                  | initContainer image tag                  | latest                                                     |
-| metrics.enabled           | Toggle Prometheus metrics exporter       | true                                                       |
-| psql.password.key         | key to psql password in psql secret      | psql-password                                              |
-| psql.password.secret      | psql password secret                     | gitlab-postgres                                            |
-| redis.serviceName         | Redis service name                       | redis                                                      |
-| replicas                  | Sidekiq replicas                         | 1                                                          |
-| resources.requests.cpu    | Sidekiq minimum needed cpu               | 100m                                                       |
-| resources.requests.memory | Sidekiq minimum needed memory            | 600M                                                       |
-| timeout                   | Sidekiq job timeout                      | 5                                                          |
+| Parameter                   | Default           | Description                              | 
+| --------------------------- | ----------------- | ---------------------------------------- | 
+| `annotations`               |                   | Pod annotations                          | 
+| `concurrency`               | `10`              | Sidekiq default concurrency              | 
+| `cron_jobs`                 | `{}`              | Auxiliary cron jobs                      | 
+| `enabled`                   | `true`            | Sidekiq enabled flag                     | 
+| `extraContainers`           |                   | List of extra containers to include      | 
+| `extraInitContainers`       |                   | List of extra init containers to include | 
+| `extraVolumeMounts`         |                   | List of extra volumes mountes to do      | 
+| `extraVolumes`              |                   | List of extra volumes to create          | 
+| `gitaly.serviceName`        | `gitaly`          | gitaly service name                      | 
+| `hpa.targetAverageValue`    | `400m`            | Set the autoscaling target value         | 
+| `image.pullPolicy`          | `Always`          | Sidekiq image pull policy                | 
+| `image.pullSecrets`         |                   | Secrets for the image repository         | 
+| `image.repository`          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee` | Sidekiq image repository |
+| `image.tag`                 |                   | Sidekiq image tag                        | 
+| `init.image`                | `busybox`         | initContainer image                      | 
+| `init.tag`                  | `latest`          | initContainer image tag                  | 
+| `metrics.enabled`           | `true`            | Toggle Prometheus metrics exporter       | 
+| `psql.password.key`         | `psql-password`   | key to psql password in psql secret      | 
+| `psql.password.secret`      | `gitlab-postgres` | psql password secret                     | 
+| `redis.serviceName`         | `redis`           | Redis service name                       | 
+| `replicas`                  | `1`               | Sidekiq replicas                         | 
+| `resources.requests.cpu`    | `100m`            | Sidekiq minimum needed cpu               | 
+| `resources.requests.memory` | `600M`            | Sidekiq minimum needed memory            | 
+| `timeout`                   | `5`               | Sidekiq job timeout                      | 
 
 ## Chart configuration examples
 
@@ -66,7 +67,7 @@ Table below contains all the possible charts configurations that can be supplied
 Additional details about private registries and their authentication methods can be
 found in [the Kubernetes documentation](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
 
-Below is an example use of `pullSecrets`
+Below is an example use of `pullSecrets`:
 
 ```YAML
 image:
@@ -81,7 +82,7 @@ image:
 
 `annotations` allows you to add annotations to the sidekiq pods. 
 
-Below is an example use of `annotations`
+Below is an example use of `annotations`:
 
 ```YAML
 annotations:
@@ -115,7 +116,7 @@ redis:
 ```
 
 | Name            | Type    | Default | Description |
-|:----------------|:-------:|:--------|:------------|
+|:--------------- |:-------:|:------- |:----------- |
 | host            | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
 | password.key    | String  |         | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
 | password.secret | String  |         | The `password.secret` attribute for PostgreSQL defines the name of the kubernetes `Secret` to pull from. |
@@ -136,7 +137,7 @@ psql:
 ```
 
 | Name            | Type    | Default               | Description |
-|:----------------|:-------:|:----------------------|:------------|
+|:--------------- |:-------:|:--------------------- |:----------- |
 | host            | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if `postgresql.install=true` (default non-production). |
 | database        | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server. |
 | password.key    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
@@ -162,7 +163,7 @@ gitaly:
 ```
 
 | Name             | Type    | Default  | Description |
-|:-----------------|:-------:|:---------|:------------|
+|:---------------- |:-------:|:-------- |:----------- |
 | host             | String  |          | The hostname of the Gitaly server to use. This can be omitted in lieu of `serviceName`. |
 | serviceName      | String  | `gitaly` | The name of the `service` which is operating the Gitaly server. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Gitaly as a part of the overall GitLab chart. |
 | port             | Integer | `8075`   | The port on which to connect to the Gitaly server. |
@@ -182,19 +183,14 @@ server to discover and scrape the exposed metrics.
 The following values will be used chart-wide, in the event that a value is not presented
 on a per-pod basis.
 
-#### replicas
+| Name          | Type    | Default | Description |
+|:------------- |:-------:|:------- |:----------- |
+| `concurrency` | Integer | `25`    | The number of tasks to process simultaneously. |
+| `cron_jobs`   |         |         | [See below](#cron_jobs). |
+| `replicas`    | Integer | `1`     | The number of `replicas` to use by default per pod definition. |
+| `timeout`     | Integer | `4`     | The number of seconds _____. |
 
-The number of `replicas` to use by default per pod definition. The default value is `1`.
-
-#### timeout
-
-The number of seconds _____ . This default value is `4`.
-
-#### concurrency
-
-The number of tasks to process simultaneously. The default value is `25`.
-
-#### cron_jobs
+### cron_jobs
 
 Sidekiq includes maintenance jobs that can be configured to run on a periodic basis
 using cron style schedules. A few examples are included below. See the sample
@@ -213,59 +209,38 @@ cron_jobs:
     cron: "50 * * * *"
 ```
 
-## Per-pod Settings `pods`
+## Per-pod Settings
 
-The `pods` declaration provides declaration of all attributes for a worker pod. These
-will be templated to `Deployment`s, with individual `ConfigMap`s for their Sidekiq instances.
+The `pods` declaration provides for the declaration of all attributes for a worker
+pod. These will be templated to `Deployment`s, with individual `ConfigMap`s for their
+Sidekiq instances.
 
 You must provide no definitions, relying on the defaults, or provide at least one entry.
-If you do not, you will have _no_ workers.
+If you do not, you will have *no* workers.
 
-#### name
+| Name           | Type    | Default | Description |
+|:-------------- |:-------:|:------- |:----------- |
+| `concurrency`  | Integer |         | The number of tasks to process simultaneously. If not provided, it will be pulled from the chart-wide default. |
+| `name`         | String  |         | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries. |
+| `queues`       |         |         | [See below](#queues). |
+| `replicas`     | Integer |         | The number of `replicas` to create for this `Deployment`. If not provided, it will be pulled from the chart-wide default. |
+| `timeout`      | Integer |         | The number of seconds _____ . If not provided, it will be pulled from the chart-wide default. |
+| `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the kubernetes documentation. |
+| `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the kubernetes documentation.|
 
-The `name` attribute is used to name the `Deployment` and `ConfigMap` for this pod.
-It should be kept short, and should not be duplicated between any two entries.
-
-#### replicas
-
-The number of `replicas` to create for this `Deployment`. If not provided, this will
-pull from the chart-wide default.
-
-#### timeout
-
-The number of seconds _____ . If not provided, this will pull from the chart-wide default.
-
-#### concurrency
-
-The number of tasks to process simultaneously. If not provided, this will pull from
-the chart-wide default.
-
-#### queues
+### queues
 
 The `queues` value will be directly templated into the Sidekiq configuration file.
 As such, you may follow the documentation from Sidekiq for the value of `:queues:`.
 If this is not provided, the [upstream defaults](https://gitlab.com/gitlab-org/gitlab-ee/blob/master/config/sidekiq_queues.yml)
 will be used, resulting in the handling of *all* queues.
 
-In summary, provide an list of queue names to process. Each item in the list may be
+In summary, provide a list of queue names to process. Each item in the list may be
 a queue name (`merge`) or an array of queue names with priorities (`[merge, 5]`).
 
 Any queue to which jobs are added but are not represented as a part of at least one
 pod item *will not be processed*. See [`config/sidekiq_queues.yml`](https://gitlab.com/gitlab-org/gitlab-ee/blob/master/config/sidekiq_queues.yml)
 in the GitLab source for a complete list of all queues.
-
-#### resources
-
-Each pod can present it's own `resources` requirements, which will be added to the
-`Deployment` created for it, if present. There is no chart-wide default. These match
-the kubernetes documentation.
-
-#### nodeSelector
-
-Each pod can be configured with a `nodeSelector` attribute, which will be added to
-the `Deployment` created for it, if present. There is no chart-wide default.
-
-These definitions match the kubernetes documentation.
 
 ### Example `pod` entry
 
@@ -286,10 +261,8 @@ pods:
         memory: 2Gi
 ```
 
-### Production usage
+## Production usage
 
-By default all of sidekiq queues run in an all-in-one container which is not suitable
-for production use cases.
-
-Check the [example config](./example-queues.yaml) for a more production ready sidekiq
-deployment. You can move queues around pods as a part of your tuning.
+By default, all of sidekiq queues run in an all-in-one container which is not suitable
+for production use cases. Check the [example config](./example-queues.yaml) for a more production ready sidekiq
+deployment. You can move queues around pods as part of your tuning.

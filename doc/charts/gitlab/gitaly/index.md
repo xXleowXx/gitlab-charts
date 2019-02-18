@@ -133,7 +133,7 @@ The following values are used to configure the Gitaly Pods.
   services. The Auth Token secret and key are sourced from the `global.gitaly.authToken`
   value.
 
-> In addition, Gitaly container has a copy of GitLab Shell, which has some configuration
+> In addition, the Gitaly container has a copy of GitLab Shell, which has some configuration
   that can be set. The Shell authToken is sourced from the `global.shell.authToken`
   values.
 
@@ -142,7 +142,7 @@ The following values are used to configure the Gitaly Pods.
 This chart provisions a PersistentVolumeClaim and mounts a corresponding persistent
 volume for the Git repository data. You'll need physical storage available in the
 Kubernetes cluster for this to work. If you'd rather use emptyDir, disable PersistentVolumeClaim
-by: `persistence.enabled: false`.
+with: `persistence.enabled: false`.
 
 > **Note:** The persistence settings for gitaly are used in a volumeClaimTemplate
   that should be valid for all your gitaly pods. You should *not* include settings
@@ -164,8 +164,8 @@ persistence:
 |:-----------------|:-------:|:----------------|:------------|
 | accessMode       | String  | `ReadWriteOnce` | Sets the accessMode requested in the PersistentVolumeClaim. See [Kubernetes Access Modes Documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for details. |
 | enabled          | Boolean | `true`          | Sets whether or not to use a PersistentVolumeClaims for the repo data. If `false`, an emptyDir volume is used. |
-| matchExpressions | Array   |                 | `matchExpressions` accepts an array of label condition objects to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
-| matchLabels      | Map     |                 | `matchLabels` accepts a Map of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
+| matchExpressions | Array   |                 | Accepts an array of label condition objects to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
+| matchLabels      | Map     |                 | Accepts a Map of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
 | size             | String  | `50Gi`          | The minimum volume size to request for the data persistence. |
 | storageClass     | String  |                 | Sets the storageClassName on the Volume Claim for dynamic provisioning. When unset or null, the default provisioner will be used. If set to a hyphen, dynamic provisioning is disabled. |
 | subPath          | String  |                 | Sets the path within the volume to mount, rather than the volume root. The root is used if the subPath is empty. |
