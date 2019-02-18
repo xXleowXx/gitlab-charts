@@ -25,36 +25,36 @@ and [chart settings](#chart-settings).
 The table below contains all the possible charts configurations that can be supplied to
 the `helm install` command using the `--set` flags.
 
-| Parameter                    | Description                              | Default       |
-| ---------------------------- | ---------------------------------------- | ------------- |
-| annotations                  | Pod annotations                          |               |
-| enabled                      | Gitaly enable flag                       | true          |
-| external[].hostname          | hostname of external node                | - ""          |
-| external[].name              | name of external node storage            | - ""          |
-| external[].port              | port of external node                    | - ""          |
-| extraContainers              | List of extra containers to include      |               |
-| extraInitContainers          | List of extra init containers to include |               |
-| extraVolumeMounts            | List of extra volumes mountes to do      |               |
-| extraVolumes                 | List of extra volumes to create          |               |
-| image.pullPolicy             | Gitaly image pull policy                 | Always        |
-| image.pullSecrets            | Secrets for the image repository         |               |
-| image.repository             | Gitaly image repository                  | registry.com/gitlab-org/build/cng/gitaly |
-| image.tag                    | Gitaly image tag                         | latest        |
-| init.image                   | initContainer image                      | busybox       |
-| init.tag                     | initContainer image tag                  | latest        |
-| internal.names[]             | Ordered names of statfulset storages     | - default     |
-| service.externalPort         | Gitaly service exposed port              | 8075          |
-| service.internalPort         | Gitaly internal port                     | 8075          |
-| service.name                 | Gitaly service name                      | gitaly        |
-| service.type                 | Gitaly service type                      | ClusterIP     |
-| serviceName                  | Gitaly service name                      | gitaly        |
-| persistence.accessMode       | Gitaly persistence access mode           | ReadWriteOnce |
-| persistence.enabled          | Gitaly enable persistence flag           | true          |
-| persistence.matchExpressions | Label-expression matches to bind         |               |
-| persistence.matchLabels      | Label-value matches to bind              |               |
-| persistence.size             | Gitaly persistence volume size           | 50Gi          |
-| persistence.storageClass     | storageClassName for provisioning        |               |
-| persistence.subPath          | Gitaly persistence volume mount path     |               |
+| Parameter                      | Default         | Description                              |
+| ------------------------------ | --------------- | ---------------------------------------- |
+| `annotations`                  |                 | Pod annotations                          |
+| `enabled`                      | `true`          | Gitaly enable flag                       |
+| `external[].hostname`          | `- ""`          | hostname of external node                |
+| `external[].name`              | `- ""`          | name of external node storage            |
+| `external[].port`              | `- ""`          | port of external node                    |
+| `extraContainers`              |                 | List of extra containers to include      |
+| `extraInitContainers`          |                 | List of extra init containers to include |
+| `extraVolumeMounts`            |                 | List of extra volumes mountes to do      |
+| `extraVolumes`                 |                 | List of extra volumes to create          |
+| `image.pullPolicy`             | `Always`        | Gitaly image pull policy                 |
+| `image.pullSecrets`            |                 | Secrets for the image repository         |
+| `image.repository`             | `registry.com/gitlab-org/build/cng/gitaly` |Gitaly image repository |
+| `image.tag`                    | `latest`        | Gitaly image tag                         |
+| `init.image`                   | `busybox`       | initContainer image                      |
+| `init.tag`                     | `latest`        | initContainer image tag                  |
+| `internal.names[]`             | `- default`     | Ordered names of statfulset storages     |
+| `service.externalPort`         | `8075`          | Gitaly service exposed port              |
+| `service.internalPort`         | `8075`          | Gitaly internal port                     |
+| `service.name`                 | `gitaly`        | Gitaly service name                      |
+| `service.type`                 | `ClusterIP`     | Gitaly service type                      |
+| `serviceName`                  | `gitaly`        | Gitaly service name                      |
+| `persistence.accessMode`       | `ReadWriteOnce` | Gitaly persistence access mode           |
+| `persistence.enabled`          | `true`          | Gitaly enable persistence flag           |
+| `persistence.matchExpressions` |                 | Label-expression matches to bind         |
+| `persistence.matchLabels`      |                 | Label-value matches to bind              |
+| `persistence.size`             | `50Gi`          | Gitaly persistence volume size           |
+| `persistence.storageClass`     |                 | storageClassName for provisioning        |
+| `persistence.subPath`          |                 | Gitaly persistence volume mount path     |
 
 ## Chart configuration examples
 
@@ -81,7 +81,7 @@ image:
 
 `annotations` allows you to add annotations to the gitaly pods.
 
-Below is an example use of `annotations`
+Below is an example use of `annotations`:
 
 ```YAML
 annotations:
@@ -164,8 +164,8 @@ persistence:
 |:-----------------|:-------:|:----------------|:------------|
 | accessMode       | String  | `ReadWriteOnce` | Sets the accessMode requested in the PersistentVolumeClaim. See [Kubernetes Access Modes Documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for details. |
 | enabled          | Boolean | `true`          | Sets whether or not to use a PersistentVolumeClaims for the repo data. If `false`, an emptyDir volume is used. |
-| matchExpressions | Array   | String          | `matchExpressions` accepts an array of label condition objects to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
-| matchLabels      |         |                 | `matchLabels` accepts a dictionary of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
+| matchExpressions | Array   |                 | `matchExpressions` accepts an array of label condition objects to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
+| matchLabels      | Map     |                 | `matchLabels` accepts a Map of label names and label values to match against when choosing a volume to bind. This is used in the `PersistentVolumeClaim` `selector` section. See the [volumes documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector). |
 | size             | String  | `50Gi`          | The minimum volume size to request for the data persistence. |
-| storageClass     | String  | null            | Sets the storageClassName on the Volume Claim for dynamic provisioning. When unset or null, the default provisioner will be used. If set to a hyphen, dynamic provisioning is disabled. |
+| storageClass     | String  |                 | Sets the storageClassName on the Volume Claim for dynamic provisioning. When unset or null, the default provisioner will be used. If set to a hyphen, dynamic provisioning is disabled. |
 | subPath          | String  |                 | Sets the path within the volume to mount, rather than the volume root. The root is used if the subPath is empty. |
