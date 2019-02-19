@@ -382,6 +382,8 @@ danger-review:
     if [ -n "${OPERATOR_BOOTSTRAP}" ]; then
       WAIT=""
     fi
+    
+    kubectl get jobs --all-namespaces
 
     helm upgrade --install \
       $WAIT \
