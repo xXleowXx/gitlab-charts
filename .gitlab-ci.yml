@@ -378,7 +378,7 @@ danger-review:
     helm dep update .
 
     # If OPERATOR_BOOTSTRAP is set, we _do not_ want to use --wait / --timeout
-    WAIT="--wait --timeout 600"
+    WAIT="--wait --timeout 1200"
     if [ -n "${OPERATOR_BOOTSTRAP}" ]; then
       WAIT=""
     fi
