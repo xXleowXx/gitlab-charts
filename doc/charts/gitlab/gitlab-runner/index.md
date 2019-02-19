@@ -41,11 +41,11 @@ in an isolated environment, such that nothing important runs beside it.
 | ---------------------------------------------- | --------------- | ------------------------------------------ |
 | `gitlab-runner.checkInterval`                  | `30s`           | polling interval                           |
 | `gitlab-runner.concurrent`                     | `20`            | number of concurrent jobs                  |
-| `gitlab-runner.enabled`                        | `redis`         |                                            |
 | `gitlab-runner.image`                          | `gitlab/gitlab-runner:alpine-v10.5.0` | runner image         |
 | `gitlab-runner.imagePullPolicy`                | `IfNotPresent`  | image pull policy                          |
 | `gitlab-runner.init.image`                     | `busybox`       | initContainer image                        |
 | `gitlab-runner.init.tag`                       | `latest`        | initContainer image tag                    |
+| `gitlab-runner.install`                        | `true`          |                                            |
 | `gitlab-runner.pullSecrets`                    |                 | Secrets for the image repository           |
 | `gitlab-runner.rbac.clusterWideAccess`         | `false`         | deploy containers of jobs cluster-wide     |
 | `gitlab-runner.rbac.create`                    | `true`          | whether to create rbac service account     |
