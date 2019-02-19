@@ -92,11 +92,11 @@ Below is an example use of `pullSecrets`:
 
 ```YAML
 image: my.minio.repository
-  imageTag: latest
-  imagePullPolicy: Always
-  pullSecrets:
-  - name: my-secret-name
-  - name: my-secondary-secret-name
+imageTag: latest
+imagePullPolicy: Always
+pullSecrets:
+- name: my-secret-name
+- name: my-secondary-secret-name
 ```
 
 ## Enable the sub-chart

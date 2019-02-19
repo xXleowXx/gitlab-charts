@@ -6,7 +6,7 @@ used across the installation, unless otherwise manually specified. This includes
 1. Initial root password
 1. Self-signed TLS certificates for all public services: GitLab, Minio, and Registry
 1. Registry authentication certificates
-1. Minio, Registry, GitLab Shell and Gitaly secrets
+1. Minio, Registry, GitLab Shell, and Gitaly secrets
 1. Redis and Postgres passwords
 1. SSH host keys
 
