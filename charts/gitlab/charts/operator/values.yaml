@@ -5,10 +5,10 @@ image:
   repository: registry.gitlab.com/charts/components/gitlab-operator
   pullSecrets: []
   # pullPolicy: IfNotPresent
-  # tag: latest
+  tag: 1164-fix-broken-migration-waiting
 
 # Which version of the operator to deploy
-version: 0.2
+version: 0.3
 
 init:
   resources:
