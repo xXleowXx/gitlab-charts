@@ -35,10 +35,10 @@ default values.
 | `resources.master`      | Memory: `200Mi`, CPU: `100m` | CPU/Memory for master nodes resource requests/limits.  |
 | `resources.sentinel`    | Memory: `200Mi`, CPU: `100m` | CPU/Memory for sentinel node resource requests/limits. |
 | `resources.slave`       | Memory: `200Mi`, CPU: `100m` | CPU/Memory for slave nodes  resource requests/limits.  |
-| `servers.annotations`   | ``                           | See Appliance mode.                                    |
+| `servers.annotations`   | `{}`                         | See Appliance mode.                                    |
 | `servers.serviceType`   | `ClusterIP`                  | Set to "LoadBalancer" to enable access from the VPC.   |
 | `serviceAccount.create` | `true`                       | Whether a new service account name that the agent will use should be created. |
-| `serviceAccount.name`   | ``                           | Service account to be used. If not set and `serviceAccount.create` is `true` a name is generated using the fullname template. |
+| `serviceAccount.name`   |                              | Service account to be used. If not set and `serviceAccount.create` is `true` a name is generated using the fullname template. |
 | `tolerations`           | `[]`                         | Toleration labels for pod assignment.                  |
 
 ## Chart configuration examples
