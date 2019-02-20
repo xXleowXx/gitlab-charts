@@ -188,7 +188,7 @@ on a per-pod basis.
 | `concurrency` | Integer | `25`    | The number of tasks to process simultaneously. |
 | `cron_jobs`   |         |         | [See below](#cron_jobs). |
 | `replicas`    | Integer | `1`     | The number of `replicas` to use by default per pod definition. |
-| `timeout`     | Integer | `4`     | The number of seconds _____. |
+| `timeout`     | Integer | `4`     | The sidekiq shutdown timeout. The number of seconds after sidekiq gets the TERM signal before it forcefully shuts down its processes. |
 
 ### cron_jobs
 
@@ -215,8 +215,9 @@ The `pods` declaration provides for the declaration of all attributes for a work
 pod. These will be templated to `Deployment`s, with individual `ConfigMap`s for their
 Sidekiq instances.
 
-You must provide no definitions, relying on the defaults, or provide at least one entry.
-If you do not, you will have *no* workers.
+NOTE: **Note**: The settings default to including a single pod that is set up to monitor
+  all queues. Making changes to to the pods section will *overwrite the default pod* with
+  a different pod configuration. It will not add a new pod in addition to the default.
 
 | Name           | Type    | Default | Description |
 |:-------------- |:-------:|:------- |:----------- |
@@ -224,7 +225,7 @@ If you do not, you will have *no* workers.
 | `name`         | String  |         | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries. |
 | `queues`       |         |         | [See below](#queues). |
 | `replicas`     | Integer |         | The number of `replicas` to create for this `Deployment`. If not provided, it will be pulled from the chart-wide default. |
-| `timeout`      | Integer |         | The number of seconds _____ . If not provided, it will be pulled from the chart-wide default. |
+| `timeout`      | Integer |         | The sidekiq shutdown timeout. The number of seconds after sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. |
 | `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the kubernetes documentation. |
 | `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the kubernetes documentation.|
 
