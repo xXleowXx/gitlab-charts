@@ -105,11 +105,13 @@ spec:
                 path: redis.conf
               - key: configure
                 path: configure
+          {{- if .Values.global.redis.password.enabled }}
           - secret:
               name: {{ template "gitlab.redis.password.secret" . }}
               items:
                 - key: {{ template "gitlab.redis.password.key" . }}
                   path: password
+          {{- end }}
       - name: {{ .Release.Name }}-data
         {{- if .Values.persistence.enabled }}
         persistentVolumeClaim:
