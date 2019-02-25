@@ -54,19 +54,20 @@ Table below contains all the possible charts configurations that can be supplied
 | Parameter                | Description                             | Default              |
 | ---                      | ---                                     | ---                  |
 | image.repository         | Registry image                          | registry             |
-| image.tag                | Version of the image to use             | 2.6                  |
+| image.tag                | Version of the image to use             | 2.7.1                |
 | image.pullPolicy         | Pull policy for the registry image      |                      |
 | image.pullSecrets        | Secrets to use for image repository     |                      |
 | init.image               | initContainer image                     | busybox              |
 | init.tag                 | initContainer image tag                 | latest               |
 | enabled                  | Enable registry flag                    | true                 |
 | httpSecret               | Https secret                            |                      |
-| authEndpoint             | Auth endpoint                           | Undefined by default |
+| authEndpoint             | Auth endpoint (only host and port)      | global.hosts.gitlab.name |
+| authAutoRedirect         | Auth auto-redirect (must be true for Windows clients to work)  | true              |
 | tokenService             | JWT token service                       | container_registry   |
 | tokenIssuer              | JWT token issuer                        | gitlab-issuer        |
 | certificate.secret       | JWT certificate                         | gitlab-registry      |
 | replicas                 | Number of replicas                      | 1                    |
-| minio.bucket             | Legacy registry bucket name             | Undefined by default |
+| minio.bucket             | Legacy registry bucket name             | global.registry.bucket |
 | annotations              | Pod annotations                         |                      |
 
 ## Chart configuration examples
@@ -218,9 +219,9 @@ The contents of this secret is taken directly from [Registry Configuration: `sto
 Please refer to that documentation for extended details.
 
 Examples for [S3][storage-s3] and [GCS][storage-gcs] drivers can be found in
-[examples/objectstorage](../../examples/objectstorage).
-- [registry.s3.yaml](../../examples/objectstorage/registry.s3.yaml)
-- [registry.gcs.yaml](../../examples/objectstorage/registry.gcs.yaml)
+[examples/objectstorage](https://gitlab.com/charts/gitlab/tree/master/examples/objectstorage).
+- [registry.s3.yaml](https://gitlab.com/charts/gitlab/tree/master/examples/objectstorage/registry.s3.yaml)
+- [registry.gcs.yaml](https://gitlab.com/charts/gitlab/tree/master/examples/objectstorage/registry.gcs.yaml)
 
 Place the _contents_ of the `storage` block into the secret,
 and provide the following as items to the `storage` map:
@@ -256,10 +257,10 @@ external service, such as `s3`, `gcs`, `azure` or other compatible Object Storag
 [docker-distribution-config-docs]: https://docs.docker.com/registry/configuration
 [registry-config]: https://github.com/docker/distribution-library-image/blob/master/registry/config-example.yml
 
-[Service]: ../../../charts/registry/templates/service.yaml
-[Deployment]: ../../../charts/registry/templates/deployment.yaml
-[ConfigMap]: ../../../charts/registry/templates/configmap.yaml
-[values.yml]: ../../../charts/registry/values.yaml
+[Service]: https://gitlab.com/charts/gitlab/blob/master/charts/registry/templates/service.yaml
+[Deployment]: https://gitlab.com/charts/gitlab/blob/master/charts/registry/templates/deployment.yaml
+[ConfigMap]: https://gitlab.com/charts/gitlab/blob/master/charts/registry/templates/configmap.yaml
+[values.yml]: https://gitlab.com/charts/gitlab/blob/master/charts/registry/values.yaml
 [globals]: ../globals.md
 
 [kubernetes-secret]: https://kubernetes.io/docs/concepts/configuration/secret/
