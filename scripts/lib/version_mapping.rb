@@ -2,8 +2,8 @@ require_relative 'version'
 
 class VersionMapping
   class Document
-    TABLE_HEADER = '| Chart version | GitLab version |'
-    TABLE_DIVIDE = '|---------------|----------------|'
+    TABLE_HEADER = '| Chart version | GitLab version |'.freeze
+    TABLE_DIVIDE = '|---------------|----------------|'.freeze
 
     def initialize(filepath)
       unless filepath && File.exist?(filepath)
@@ -23,10 +23,7 @@ class VersionMapping
     end
 
     def table
-      unless @table
-        extract_version_table
-      end
-      @table
+      @table ||= extract_version_table
     end
 
     def write
@@ -38,17 +35,23 @@ class VersionMapping
     private
 
     def extract_version_table
-      @table = Table.new()
+      @table = Table.new
 
+      # find the table in the file
       @index_start = @document.find_index(TABLE_HEADER)
-      @index_end = @document.drop(@index_start).find_index("")
+      # find the first blank line after the header, denoting end of table
+      @index_end = @document.drop(@index_start).find_index('')
 
-      table_content = @document.slice(@index_start,@index_end)
+      table_content = @document.slice(@index_start, @index_end)
 
+      # convert the table into a VersionMapping::Table
+      # Note: drop(2) to dispose of TABLE_HEADER and TABLE_DIVIDE
       table_content.drop(2).each do |item|
-        items = item.split("|").delete_if {|i| i == ""}
+        items = item.split('|').delete_if { |i| i == '' }
         @table.append(Version.new(items[0].strip), Version.new(items[1].strip))
       end
+
+      @table
     end
 
     def update_version_table
@@ -58,7 +61,9 @@ class VersionMapping
         table_content << "| #{entry[0]} | #{entry[1]} |"
       end
 
-      @document[@index_start,@index_end] = table_content
+      @document[@index_start, @index_end] = table_content
+
+      @index_end = table_content.count
     end
   end
 
@@ -66,22 +71,17 @@ class VersionMapping
     include Enumerable
 
     def initialize
-      @entries = Array.new()
+      @entries = []
     end
 
     def append(chart_version, app_version)
-      unless chart_version.instance_of? Version
-        chart_version = Version.new(chart_version)
-      end
+      chart_version = Version.new(chart_version) unless chart_version.instance_of? Version
+      app_version = Version.new(app_version) unless app_version.instance_of? Version
 
-      unless app_version.instance_of? Version
-        app_version = Version.new(app_version)
-      end
+      return unless chart_version.valid? && app_version.valid?
 
-      if chart_version.valid? && app_version.valid?
-        @entries.delete_if {|item| item[0] == chart_version }
-        @entries << [chart_version, app_version]
-      end
+      @entries.delete_if { |item| item[0] == chart_version }
+      @entries << [chart_version, app_version]
     end
 
     def sort!
@@ -91,12 +91,17 @@ class VersionMapping
     def each(&block)
       @entries.each(&block)
     end
+
+    def count
+      @entries.count
+    end
   end
 
+  # VersionMapping
+  attr_reader :document
+
   def initialize(filepath)
-    if filepath
-      @document = Document.new(filepath)
-    end
+    @document = Document.new(filepath)
   end
 
   def insert_version(chart_version, app_version)
@@ -105,9 +110,5 @@ class VersionMapping
 
   def finalize
     @document.write
-  end
-
-  def document
-    @document
   end
 end
