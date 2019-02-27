@@ -2,6 +2,7 @@
 
 require 'optparse'
 require 'yaml'
+require 'rdoc'
 
 require_relative 'lib/version'
 require_relative 'lib/version_fetcher'
@@ -103,6 +104,55 @@ class ChartFile
   end
 end
 
+# Update version mappings table
+# - detects table with headings of `| chart version | gitlab version|`
+class VersionMappingsDoc
+  def initialize(filepath)
+    unless filepath && File.exist?(filepath)
+      $stderr.puts "Version mapping documention must exist: #{filepath}"
+      exit 1
+    end
+    @filepath = filepath
+
+    $stdout.puts "Reading #{@filepath}"
+    @document = RDoc::Markdown.parse(File.read(@filepath))
+  end
+
+  # find & return the listing table.
+  def find_version_table
+    @document.parts.each_index do |index|
+      if @document.parts[index].instance_of? RDoc::Markup::Paragraph
+        if @document.parts[index].parts[0].start_with?('| Chart version | GitLab version |')
+          return index
+        end
+      end
+    end
+  end
+
+  def insert_version(chart_version, app_version)
+    index = find_version_table
+    unless index
+      $stderr.puts "Unable to find table in #{@filepath}"
+      exit 1
+    end
+
+    entry = "| #{chart_version} | #{app_version} |"
+
+    # 'index' contains RDoc::Markup::Paragraph
+    # doc.parts[index].parts[0] is a multi-line string
+    @table = @document.parts[index].parts[0].split("\n")
+
+    unless @table.include?(entry)
+      @table.insert(2, entry)
+      @document.parts[index].parts[0] = @table.join("\n")
+    end
+
+    $stdout.puts "Updating #{@filepath}"
+    formatter = RDoc::Markup::ToMarkdown.new()
+    File.write(@filepath, @document.accept(formatter))
+  end
+end
+
 class VersionUpdater
   def initialize(options)
     @chart_version = options.chart_version
@@ -121,6 +171,8 @@ class VersionUpdater
 
     chart.update_versions(@chart_version, @app_version)
 
+    version_mappings.insert_version(@chart_version, @app_version)
+
     if @options.include_subcharts
       @subchart_versions.each do |sub_chart, update_app_version|
         sub_chart.update_versions(@chart_version, update_app_version)
@@ -138,6 +190,10 @@ class VersionUpdater
 
   def subcharts
     @subcharts ||= Dir[File.join(working_dir, 'charts', 'gitlab', 'charts', '*', 'Chart.yaml')].map { |path| ChartFile.new(path) }
+  end
+
+  def version_mappings
+    @version_mappings ||= VersionMappingsDoc.new(File.join(working_dir, 'doc/installation/version_mappings.md'))
   end
 
   def populate_subchart_versions
