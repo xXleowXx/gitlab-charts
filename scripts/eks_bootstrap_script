@@ -7,9 +7,13 @@
 
 set -e
 
-workdir=$(mktemp -d)
+cdir=$(dirname ${0})
 
-trap "rm -rf '${workdir}'" EXIT
+# Set default values
+cluster_name=${CLUSTER_NAME-gitlab-cluster}
+nodes=${NUM_NODES-2}
+kubernetes_version=${CLUSTER_VERSION-1.10}
+region="${REGION-us-east-2}"
 
 function print_help(){
   cat <<EOF
@@ -35,6 +39,8 @@ function echo_unless_quiet(){
 function install_eksctl(){
   kernel_name=$(uname -s)
   release="latest_release" #TODO: install a specific version that we know works
+  workdir=$(mktemp -d)
+  trap "rm -rf '${workdir}'" EXIT
   case ${kernel_name} in
     Darwin|Linux)
       curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/${release}/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C ${workdir}
@@ -45,12 +51,6 @@ function install_eksctl(){
       ;;
   esac
 }
-
-# Set default values
-cluster_name="${USER}-cluster"
-nodes=2
-kubernetes_version="1.10"
-reqion="us-east-2"
 
 while getopts qc:n:kr: opt
 do
@@ -99,7 +99,8 @@ case ${1} in
   up)
     # TODO: We should support autoscaling as well
     eksctl create cluster --name=${cluster_name} --nodes=${nodes} --version=${kubernetes_version} --region=${region}
-    #TODO install helm
+    kubectl apply -f "${cdir}/resources/helm.yaml"
+    helm init --service-account helm
     ;;
   down)
     eksctl delete cluster --name ${cluster_name}
