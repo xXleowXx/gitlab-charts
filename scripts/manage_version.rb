@@ -123,8 +123,10 @@ class VersionUpdater
 
     chart.update_versions(@chart_version, @app_version)
 
-    version_mapping.insert_version(@chart_version, @app_version)
-    version_mapping.finalize
+    if chart.version.valid? && chart.app_version.valid?
+      version_mapping.insert_version(chart.version, chart.app_version)
+      version_mapping.finalize
+    end
 
     if @options.include_subcharts
       @subchart_versions.each do |sub_chart, update_app_version|
