@@ -76,6 +76,7 @@ data:
     {{- include "gitlab.scripts.configure.secrets" (dict "required" "redis shell gitaly registry postgres rails-secrets") | nindent 4 -}}
     {{- include "gitlab.psql.ssl.initScript" . | nindent 4 }}
 
+    {{- if eq .Values.backups.objectStorage.backendType "s3" }}
     if [ ! -f "/${secret_dir}/objectstorage/.s3cfg" ]; then
     cat <<EOF > "/${secret_dir}/.s3cfg"
     [default]
@@ -100,4 +101,5 @@ data:
     else
       mv "/${secret_dir}/objectstorage/.s3cfg" "/${secret_dir}/.s3cfg"
     fi
+    {{- end }}
 {{- end }}

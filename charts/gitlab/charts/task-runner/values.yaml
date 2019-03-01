@@ -88,7 +88,11 @@ global:
       connection: {}
 backups:
   objectStorage:
+    backendType: s3
     config: {}
+    #   secret: my-backup-secret
+    #   key: s3fcf
+    #   gcpProject: my-gcp-project-id
 extra: {}
 
 rack_attack:
