@@ -14,6 +14,7 @@ cluster_name=${CLUSTER_NAME-gitlab-cluster}
 nodes=${NUM_NODES-2}
 kubernetes_version=${CLUSTER_VERSION-1.10}
 region="${REGION-us-east-2}"
+node_type="${MACHINE_TYPE-m5.xlarge}"
 
 function print_help(){
   cat <<EOF
@@ -23,6 +24,7 @@ Usage: ${0} ARGS (up|down)
 -n NODES - number of nodes to use. Defaults to 2
 -k VERSION - Kubernetes version to use. Defaults to 1.10
 -r REGION - Region to install the cluster in
+-m TYPE - Type of nodes to use. Default m5.xlarge
 up - create a cluster
 down - delete a cluster
 EOF
@@ -52,7 +54,7 @@ function install_eksctl(){
   esac
 }
 
-while getopts qc:n:kr: opt
+while getopts qc:n:kr:m: opt
 do
   case "${opt}" in
     q)
@@ -66,6 +68,9 @@ do
       ;;
     k)
       kubernetes_version="${OPTARG}"
+      ;;
+    m)
+      node_type="${OPTARG}"
       ;;
     r)
       region="${OPTARG}"
@@ -98,12 +103,15 @@ fi
 case ${1} in
   up)
     # TODO: We should support autoscaling as well
-    eksctl create cluster --name=${cluster_name} --nodes=${nodes} --version=${kubernetes_version} --region=${region}
+    eksctl create cluster --name="${cluster_name}" --nodes="${nodes}" --version="${kubernetes_version}" --region="${region}" --node-type="${node_type}"
     kubectl apply -f "${cdir}/resources/helm.yaml"
     helm init --service-account helm
     ;;
   down)
-    eksctl delete cluster --name ${cluster_name}
+    eksctl delete cluster --wait --name ${cluster_name}
+    ;;
+  list)
+    eksctl get cluster ${2}
     ;;
   *)
     print_help

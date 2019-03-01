@@ -23,6 +23,9 @@ The script will:
 The script uses [eksctl](https://eksctl.io) to initialize the cluster. If it cannot locate it in your PATH, it will install it
 to a temporary location.
 
+To authenticate, eksctl uses the same options as the aws command line. See the AWS documentation for how to
+use [environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html), or [configuration files](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
+
 The script reads various parameters from environment variables, or command line arguments and an argument
 `up` or `down` for bootstrap and clean up respectively.
 
@@ -33,7 +36,8 @@ The table below describes all variables.
 | REGION          | The region where your cluster lives                                         | us-east-2                        |
 | CLUSTER_NAME    | The name of the cluster                                                     | gitlab-cluster                   |
 | CLUSTER_VERSION | The version of your EKS cluster                                             | 1.10                             |
-| NUM_NODES       | The number of nodes required.                                               | 2                                |
+| NUM_NODES       | The number of nodes required                                                | 2                                |
+| MACHINE_TYPE    | The type of nodes to deploy                                                 | m5.xlarge                        |
 
 Run the script, by passing in your desired parameters. It can work with the
 default parameters.
