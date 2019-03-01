@@ -78,7 +78,7 @@ class VersionMapping
       chart_version = Version.new(chart_version) unless chart_version.instance_of? Version
       app_version = Version.new(app_version) unless app_version.instance_of? Version
 
-      return unless chart_version.valid? && app_version.valid?
+      return unless chart_version.release? && app_version.release?
 
       @entries.delete_if { |item| item[0] == chart_version }
       @entries << [chart_version, app_version]

@@ -74,7 +74,7 @@ describe 'scripts/manage_version.rb' do
             stub_versions(version: '0.0.1', app_version: 'master', new_app_version: '11.0.0-rc1')
 
             expect(chart_file).to receive(:update_versions).with('1.0.0', '11.0.0-rc1')
-            expect(version_mapping).to receive(:insert_version).with('1.0.0', '11.0.0-rc1')
+            expect(version_mapping).not_to receive(:insert_version)
             described_class.new(options)
           end
         end
@@ -107,7 +107,7 @@ describe 'scripts/manage_version.rb' do
           stub_versions(version: '0.0.1', app_version: '11.0.0-rc1', new_app_version: '11.0.0-rc2')
 
           expect(chart_file).to receive(:update_versions).with('0.0.1', '11.0.0-rc2')
-          expect(version_mapping).to receive(:insert_version).with('0.0.1', '11.0.0-rc2')
+          expect(version_mapping).not_to receive(:insert_version)
           described_class.new(options)
         end
       end

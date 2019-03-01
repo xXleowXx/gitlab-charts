@@ -123,7 +123,7 @@ class VersionUpdater
 
     chart.update_versions(@chart_version, @app_version)
 
-    if chart.version.valid? && chart.app_version.valid?
+    if chart.version.release? && chart.app_version.release?
       version_mapping.insert_version(chart.version, chart.app_version)
       version_mapping.finalize
     end
