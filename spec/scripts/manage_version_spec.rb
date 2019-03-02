@@ -36,6 +36,16 @@ describe 'scripts/manage_version.rb' do
         end
       end
 
+      context 'chart_version and app_version provided on master branch' do
+        it 'ignores app_version for update_versions, adds version mapping entry' do
+          stub_versions(new_version: '1.0.0', app_version: 'master', new_app_version: '1.0.0', branch: 'master')
+
+          expect(chart_file).to receive(:update_versions).with('1.0.0', nil)
+          expect(version_mapping).to receive(:insert_version).with('1.0.0', '1.0.0')
+          described_class.new(options)
+        end
+      end
+
       context 'chart_version not provided' do
         it 'exits if app_version has not changed' do
           stub_versions(app_version: '0.0.1', new_app_version: '0.0.1')
@@ -115,7 +125,7 @@ describe 'scripts/manage_version.rb' do
   end
 end
 
-def stub_versions(new_version: nil, version: '0.0.1', new_app_version: nil, app_version: '0.0.1')
+def stub_versions(new_version: nil, version: '0.0.1', new_app_version: nil, app_version: '0.0.1', branch: nil)
   options.chart_version = Version.new(new_version) if new_version
   options.app_version = Version.new(new_app_version) if new_app_version
 
@@ -127,4 +137,6 @@ def stub_versions(new_version: nil, version: '0.0.1', new_app_version: nil, app_
   end
 
   allow(version_mapping).to receive(:finalize).and_return(true)
+
+  allow_any_instance_of(described_class).to receive(:branch).and_return(branch)
 end

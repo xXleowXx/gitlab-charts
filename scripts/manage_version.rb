@@ -121,11 +121,15 @@ class VersionUpdater
 
     return if options.dry_run
 
-    chart.update_versions(@chart_version, @app_version)
+    # Never change appVersion in master branch
+    chart.update_versions(@chart_version, branch == 'master' ? nil : @app_version)
 
-    if chart.version.release? && chart.app_version.release?
-      version_mapping.insert_version(chart.version, chart.app_version)
-      version_mapping.finalize
+    # Only insert into version_mapping when we have both versions, as releases
+    unless @app_version.nil?
+      if chart.version.release? && @app_version.release?
+        version_mapping.insert_version(chart.version, @app_version)
+        version_mapping.finalize
+      end
     end
 
     if @options.include_subcharts
@@ -192,6 +196,18 @@ class VersionUpdater
         @chart_version = chart.version
       end
     end
+  end
+
+  def branch
+    @branch ||= get_current_branch
+  end
+
+  def get_current_branch
+    git_command = 'git rev-parse --abbrev-ref HEAD 2>&1'.freeze
+
+    output = `#{git_command}`
+    puts "branch: #{output}"
+    raise(StandardError.new(output)) unless $CHILD_STATUS.success?
   end
 end
 
