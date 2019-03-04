@@ -16,7 +16,6 @@ has been created to automate much of the setup process for users on EKS.
 The script will:
 
 1. Create a new EKS cluster.
-1. Allow the cluster to modify DNS records.
 1. Setup `kubectl`, and connect it to the cluster.
 1. Initialize Helm and install Tiller.
 
