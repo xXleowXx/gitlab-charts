@@ -2,7 +2,6 @@
 
 require 'optparse'
 require 'yaml'
-require 'rdoc'
 
 require_relative 'lib/version'
 require_relative 'lib/version_fetcher'
@@ -205,9 +204,9 @@ class VersionUpdater
   def get_current_branch
     git_command = 'git rev-parse --abbrev-ref HEAD 2>&1'.freeze
 
-    output = `#{git_command}`
-    puts "branch: #{output}"
-    raise(StandardError.new(output)) unless $CHILD_STATUS.success?
+    output = `#{git_command}`.chomp
+
+    raise(StandardError.new(output)) unless $?.success?
   end
 end
 
