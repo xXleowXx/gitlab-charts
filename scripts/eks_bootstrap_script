@@ -7,7 +7,15 @@
 
 set -e
 
-cdir=$(dirname ${0})
+# MacOS does not support readlink, but it does have perl
+KERNEL_NAME=$(uname -s)
+if [ "${KERNEL_NAME}" = "Darwin" ]; then
+  SCRIPT_PATH=$(perl -e 'use Cwd "abs_path";use File::Basename;print dirname(abs_path(shift))' "$0")
+else
+  SCRIPT_PATH=$(dirname "$(readlink -f "$0")")
+fi
+
+source "${SCRIPT_PATH}/common.sh"
 
 # Set default values
 cluster_name=${CLUSTER_NAME-gitlab-cluster}
@@ -19,7 +27,6 @@ node_type="${MACHINE_TYPE-m5.xlarge}"
 function print_help(){
   cat <<EOF
 Usage: ${0} ARGS (up|down)
--q - quiet output
 -c NAME - Name of the cluster to use. Defaults to USERNAME-cluster
 -n NODES - number of nodes to use. Defaults to 2
 -k VERSION - Kubernetes version to use. Defaults to 1.10
@@ -30,36 +37,33 @@ down - delete a cluster
 EOF
 }
 
-function echo_unless_quiet(){
-  message="${@}"
-  if [ "${quiet}" != "true" ]
-  then
-    echo "${@}"
-  fi
+function do_up(){
+  local cluster_name="${1}"
+  local nodes="${2}"
+  local kubernetes_version="${3}"
+  local region="${4}"
+  local node_type="${5}"
+
+  eksctl create cluster --name="${cluster_name}" --nodes="${nodes}" --version="${kubernetes_version}" --region="${region}" --node-type="${node_type}"
+  kubectl apply -f "${SCRIPT_PATH}/resources/helm.yaml"
+  helm init --service-account helm
 }
 
-function install_eksctl(){
-  kernel_name=$(uname -s)
-  release="latest_release" #TODO: install a specific version that we know works
-  workdir=$(mktemp -d)
-  trap "rm -rf '${workdir}'" EXIT
-  case ${kernel_name} in
-    Darwin|Linux)
-      curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/${release}/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C ${workdir}
-      ;;
-    *)
-      >&2 echo "Sorry, ${kernel_name} is not supported"
-      exit 1
-      ;;
-  esac
+function do_down(){
+  local cluster_name="${1}"
+
+  eksctl delete cluster --wait --name ${cluster_name}
 }
 
-while getopts qc:n:kr:m: opt
+function do_list(){
+  local cluster_name="${1}"
+
+  eksctl get cluster ${cluster_name}
+}
+
+while getopts c:n:kr:m: opt
 do
   case "${opt}" in
-    q)
-      quiet=true
-      ;;
     c)
       cluster_name="${OPTARG}"
       ;;
@@ -82,16 +86,7 @@ do
 done
 shift $((OPTIND -1))
 
-# Check if eksctl is installed, and download a temporary version if not
-if ! which eksctl > /dev/null
-then
-  echo_unless_quiet "eksctl is not installed"
-  echo_unless_quiet "We will download the executable from the internet, and install it to a temporary location"
-  echo_unless_quiet "To avoid this in the future, install eksctl to your environment"
-  echo_unless_quiet "https://eksctl.io/"
-  install_eksctl
-  export PATH="${workdir}:$PATH"
-fi
+validate_eks_required_tools
 
 # Ensure we can connect to aws
 if ! eksctl get cluster -v 0 > /dev/null
@@ -102,16 +97,13 @@ fi
 
 case ${1} in
   up)
-    # TODO: We should support autoscaling as well
-    eksctl create cluster --name="${cluster_name}" --nodes="${nodes}" --version="${kubernetes_version}" --region="${region}" --node-type="${node_type}"
-    kubectl apply -f "${cdir}/resources/helm.yaml"
-    helm init --service-account helm
+    do_up "${cluster_name}" "${nodes}" "${kubernetes_version}" "${region}" "${node_type}"
     ;;
   down)
-    eksctl delete cluster --wait --name ${cluster_name}
+    do_down "${cluster_name}"
     ;;
   list)
-    eksctl get cluster ${2}
+    do_list "${2}"
     ;;
   *)
     print_help
