@@ -157,6 +157,11 @@ spec:
             - name: shared-artifact-directory
               mountPath: /srv/gitlab/shared
               readOnly: false
+            {{- if eq (include "gitlab.smartcard.enabled" .) "true" }}
+            - name: smartcard-ca-file
+              mountPath: {{ template "gitlab.smartcard.config.ca.dir" . | quote }}
+              readOnly: true
+            {{-  end }}
 {{ include "gitlab.certificates.volumeMount" . | indent 12 }}
 {{ include "gitlab.extraVolumeMounts" . | indent 12 }}
           livenessProbe:
@@ -201,6 +206,11 @@ spec:
             - name: shared-artifact-directory
               mountPath: /srv/gitlab/shared
               readOnly: false
+            {{- if eq (include "gitlab.smartcard.enabled" .) "true" }}
+            - name: smartcard-ca-file
+              mountPath: {{ template "gitlab.smartcard.config.ca.dir" . | quote }}
+              readOnly: true
+            {{-  end }}
 {{ include "gitlab.certificates.volumeMount" . | indent 12 }}
 {{ include "gitlab.extraVolumeMounts" . | indent 12 }}
           livenessProbe:
@@ -294,6 +304,15 @@ spec:
       - name: shared-artifact-directory
         emptyDir: {}
 {{ include "gitlab.certificates.volumes" . | indent 6 }}
+      {{- if eq (include "gitlab.smartcard.enabled" .) "true" }}
+      {{- $smartcardCAKey := include "gitlab.smartcard.ca.key" . }}
+      - name: smartcard-ca-file
+        secret:
+          secretName: {{ include "gitlab.smartcard.ca.secret" . | quote }}
+          items:
+            - key: {{ $smartcardCAKey }}
+              path: {{ $smartcardCAKey }}
+      {{-  end }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}

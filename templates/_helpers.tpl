@@ -302,3 +302,61 @@ Return true in any other case.
 {{-   true }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns true if Smartcard authentication can be enabled. 
+*/}}
+{{- define "gitlab.smartcard.enabled" -}}
+{{- and .Values.global.appConfig.smartcard.enabled (eq (include "gitlab.ingress.tls.enabled" $) "true") }}
+{{- end -}}
+
+{{/*
+Validates and returns the Smartcard CA secret.
+*/}}
+{{- define "gitlab.smartcard.ca.secret" -}}
+{{- required "Smartcard CA secret is required" .Values.global.appConfig.smartcard.ca.secret -}}
+{{- end -}}
+
+{{/*
+Returns the Smartcard CA secret key or its default value if missing.
+*/}}
+{{- define "gitlab.smartcard.ca.key" -}}
+{{- default "ca.pem" .Values.global.appConfig.smartcard.ca.key -}}
+{{- end -}}
+
+{{/*
+Returns the required port for Smartcard authentication or its default value if missing.
+*/}}
+{{- define "gitlab.smartcard.port" -}}
+{{- default 3444 .Values.global.appConfig.smartcard.port -}}
+{{- end -}}
+
+
+{{/*
+Return the qualified name of the Smartcard CA secret (namespace/name), as required by nginx-ingress annotation.
+*/}}
+{{- define "gitlab.smartcard.ingress.tlsCert" -}}
+{{- printf "%s/%s" .Release.Namespace (include "gitlab.smartcard.ca.secret" .) -}}
+{{- end -}}
+
+{{/*
+Return the special ingress class name for Smartcard authentication.
+*/}}
+{{- define "gitlab.smartcard.ingress.class" -}}
+{{- "nginx-smartcard" -}}
+{{- end -}}
+
+
+{{/*
+Return the mount point of Smartcard CA.
+*/}}
+{{- define "gitlab.smartcard.config.ca.dir" -}}
+{{- "/etc/smartcard" -}}
+{{- end -}}
+
+{{/*
+Return the full path of Smartcard CA.
+*/}}
+{{- define "gitlab.smartcard.config.ca.fullPath" -}}
+{{- printf "%s/%s" (include "gitlab.smartcard.config.ca.dir" .) (include "gitlab.smartcard.ca.key" .) -}}
+{{- end -}}

@@ -1,0 +1,33 @@
+{{- if and .Values.enabled (eq (include "gitlab.ingress.enabled" $) "true") (eq (include "gitlab.smartcard.enabled" .) "true") -}}
+{{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
+{{- $tlsSecret := include "unicorn.tlsSecret" . -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ printf "%s-smartcard" (include "fullname" .) | quote }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: {{ template "gitlab.smartcard.ingress.class" . | quote }}
+    kubernetes.io/ingress.provider: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.proxyBodySize | quote }}
+    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.proxyReadTimeout | quote }}
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: {{ .Values.ingress.proxyConnectTimeout | quote }}
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "2"
+    nginx.ingress.kubernetes.io/auth-tls-secret: {{ include "gitlab.smartcard.ingress.tlsCert" . | quote }}
+spec:
+  rules:
+    - host: {{ $gitlabHostname }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ template "fullname" . }}
+              servicePort: {{ .Values.service.workhorseExternalPort }}
+  tls:
+    - hosts:
+      - {{ $gitlabHostname }}
+      secretName: {{ $tlsSecret }}
+{{- end -}}

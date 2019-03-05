@@ -108,6 +108,12 @@ data:
         enabled: false
       gitlab_ci:
       {{- include "gitlab.appConfig.ldap.configuration" $ | nindent 6 }}
+      {{- if eq (include "gitlab.smartcard.enabled" .) "true" }}
+      smartcard:
+        enabled: true
+        client_certificate_required_port: {{ template "gitlab.smartcard.port" . }}
+        ca_file: {{ include "gitlab.smartcard.config.ca.fullPath" . | quote }}
+      {{- end }}
       {{- include "gitlab.appConfig.omniauth.configuration" $ | nindent 6 }}
       kerberos:
         enabled: false

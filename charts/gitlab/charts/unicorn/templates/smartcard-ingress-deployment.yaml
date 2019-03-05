@@ -1,0 +1,73 @@
+{{- if and .Values.enabled (eq (include "gitlab.ingress.enabled" $) "true") (eq (include "gitlab.smartcard.enabled" .) "true") -}}
+{{- $appName := "nginx-smartcard" -}}
+{{- $componentName := printf "%s-smartcard-ingress-nginx" (include "fullname" .) -}}
+{{- $componentClass := "controller" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $componentName | quote }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ $appName }}
+      component: {{ $componentClass }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $appName }}
+        component: {{ $componentClass }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ printf "%s-%s" $componentName $componentClass | quote }}
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.23.0
+          args:
+            - /nginx-ingress-controller
+            - --election-id=smartcard-ingress-controller-leader
+            - --ingress-class={{ template "gitlab.smartcard.ingress.class" . }}
+            - --configmap={{ .Release.Namespace }}/{{ $componentName }}
+            - --watch-namespace={{ .Release.Namespace }}
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - NET_BIND_SERVICE
+            runAsUser: 33
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+{{- end -}}
