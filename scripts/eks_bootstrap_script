@@ -36,6 +36,7 @@ Usage: ${0} ARGS (up|down)
 -s SA - Service account to use for helm/tiller. Default tiller
 up - create a cluster
 down - delete a cluster
+list - display information about running clusters
 EOF
 }
 
@@ -55,14 +56,16 @@ function do_up(){
 
 function do_down(){
   local cluster_name="${1}"
+  local region="${2}"
 
-  eksctl delete cluster --wait --name ${cluster_name}
+  eksctl delete cluster --wait --region "${region}" --name ${cluster_name}
 }
 
 function do_list(){
   local cluster_name="${1}"
+  local region="${2}"
 
-  eksctl get cluster ${cluster_name}
+  eksctl get cluster -r "${region}" "${cluster_name}"
 }
 
 while getopts c:n:kr:m:s: opt
@@ -107,10 +110,10 @@ case ${1} in
     do_up "${cluster_name}" "${nodes}" "${kubernetes_version}" "${region}" "${node_type}" "${service_account}"
     ;;
   down)
-    do_down "${cluster_name}"
+    do_down "${cluster_name}" "${region}"
     ;;
   list)
-    do_list "${2}"
+    do_list "${2}" "${region}"
     ;;
   *)
     print_help
