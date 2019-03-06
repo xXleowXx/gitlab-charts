@@ -146,7 +146,7 @@ data:
   workhorse-config.toml.erb: |
     [redis]
     URL = "{{ template "gitlab.redis.scheme" . }}://{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}"
-    {{- if .Values.global.redis.password.enabled -}}
+    {{- if .Values.global.redis.password.enabled }}
     Password = "<%= File.read("/etc/gitlab/redis/password") %>"
     {{- end }}
   configure: |
