@@ -91,7 +91,7 @@ backups:
     backend: s3
     config: {}
     #   secret: my-backup-secret
-    #   key: s3fcf
+    #   key: config
     #   gcpProject: my-gcp-project-id
 extra: {}
 
