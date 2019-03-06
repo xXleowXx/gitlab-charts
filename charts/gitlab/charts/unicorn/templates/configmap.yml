@@ -153,7 +153,7 @@ data:
       set -e
       mkdir -p /init-secrets-workhorse/gitlab-workhorse
       cp /init-config/gitlab-workhorse/secret /init-secrets-workhorse/gitlab-workhorse/secret
-      {{- if .Values.global.redis.password.enabled -}}
+      {{- if .Values.global.redis.password.enabled }}
       mkdir -p /init-secrets-workhorse/redis
       cp /init-config/redis/password /init-secrets-workhorse/redis/
       {{- end }}
