@@ -29,7 +29,7 @@ data:
           :worker: EmailReceiverWorker
         :arbitration_method: redis
         :arbitration_options:
-          :redis_url: {{ template "gitlab.redis.scheme" . }}://:<%= File.read("/etc/gitlab/redis/password") %>@{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
+          :redis_url: {{ template "gitlab.redis.url" . }}
           :namespace: mail_room:gitlab
   configure: |
     set -e
