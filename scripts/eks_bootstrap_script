@@ -28,7 +28,7 @@ service_account="${SERVICE_ACCOUNT-tiller}"
 function print_help(){
   cat <<EOF
 Usage: ${0} ARGS (up|down)
--c NAME - Name of the cluster to use. Defaults to USERNAME-cluster
+-c NAME - Name of the cluster to use. Defaults to gitlab-cluster
 -n NODES - number of nodes to use. Defaults to 2
 -k VERSION - Kubernetes version to use. Defaults to 1.10
 -r REGION - Region to install the cluster in. Defaults to us-east-2
