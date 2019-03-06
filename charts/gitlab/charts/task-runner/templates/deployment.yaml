@@ -86,7 +86,7 @@ spec:
               value: '/srv/gitlab/config'
             {{- if eq .Values.backups.objectStorage.backend "gcs" }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: '/etc/gitlab/objectstorage/{{ .Values.backups.objectStorage.config.key }}'
+              value: '/etc/gitlab/objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}'
             {{- end }}
           volumeMounts:
 {{ include "gitlab.extraVolumeMounts" . | indent 12 }}
@@ -159,7 +159,7 @@ spec:
               name: {{ required "A valid backups.objectStorage.config.secret is needed!" .Values.backups.objectStorage.config.secret }}
               items:
                 - key: {{ default "config" .Values.backups.objectStorage.config.key }}
-                  path: objectstorage/{{ .Values.backups.objectStorage.config.key }}
+                  path: objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}
           {{- end }}
           {{- include "gitlab.minio.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "lfs" "config" $.Values.global.appConfig.lfs) | nindent 10 }}
