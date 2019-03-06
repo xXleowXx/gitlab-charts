@@ -67,7 +67,6 @@ spec:
           - name: {{ .Release.Name }}-config
             mountPath: /config/
       volumes:
-      {{- if .Values.global.redis.password.enabled }}
       - name: {{ .Release.Name }}-config
         projected:
           sources:
@@ -76,5 +75,4 @@ spec:
               items:
                 - key: {{ template "gitlab.redis.password.key" . }}
                   path: password
-      {{- end }}
 {{- end -}}

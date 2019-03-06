@@ -135,13 +135,11 @@ spec:
                   path: redis-slave.conf
                 - key: configure
                   path: configure
-          {{- if .Values.global.redis.password.enabled }}
           - secret:
               name: {{ template "gitlab.redis.password.secret" . }}
               items:
                 - key: {{ template "gitlab.redis.password.key" . }}
                   path: password
-          {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data
