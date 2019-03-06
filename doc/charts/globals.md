@@ -337,6 +337,11 @@ global:
       proxy_download: true
       bucket: gitlab-packages
       connection: {}
+    externalDiffs:
+      enabled:
+      proxy_download: true
+      bucket: gitlab-mr-diffs
+      connection: {}
     backups:
       bucket: gitlab-backups
     incomingEmail:
@@ -410,7 +415,7 @@ under the `extra` key below `appConfig`:
 | `extra.piwikSiteId`       | String | (empty) | Piwik Site ID. |
 | `extra.piwikUrl`          | String | (empty) | Piwik Url. |
 
-### LFS / Artifacts / Uploads / Packages
+### LFS / Artifacts / Uploads / Packages / External MR diffs
 
 Details on these settings are below. Documentation is not repeated individually,
 as they are structurally identical aside from the default value of the `bucket` property.
@@ -426,7 +431,7 @@ as they are structurally identical aside from the default value of the `bucket` 
 
 | Name             | Type    | Default | Description |
 |:---------------- |:-------:|:------- |:----------- |
-| `enabled`        | Boolean | `true`  | Enable the use of these features with object storage. |
+| `enabled`        | Boolean | `true` except for MR diffs  | Enable the use of these features with object storage. |
 | `proxy_download` | Boolean | `true`  | Enable proxy of all downloads via GitLab, in place of direct downloads from the `bucket`. |
 | `bucket`         | String  | Various | Name of the bucket to use from object storage provider. Default will be `git-lfs`, `gitlab-artifacts`, `gitlab-uploads`, or `gitlab-packages`, depending on the service. |
 | `connection`     | String  | `{}`    | [See below](#connection). |
@@ -753,4 +758,26 @@ To enable, set `global.application.create` to `true`:
 global:
   application:
     create: true
+```
+
+Some environments, such as Google GKE Marketplace, do not allow the creation
+of ClusterRole resources. Set the following values to disable ClusterRole
+components in the Application Custom Resource Definition as well as the
+relevant charts packaged with Cloud Native GitLab.
+
+```yaml
+global:
+  application:
+    allowClusterRoles: false
+  operator:
+     enabled: false
+nginx:
+  controller:
+    scope:
+      enabled: true
+gitlab-runner:
+  rbac:
+    clusterWideAccess: false
+certmanager:
+  install: false
 ```
