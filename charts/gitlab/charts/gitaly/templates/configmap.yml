@@ -62,7 +62,7 @@ data:
     redis:
       host: {{ template "gitlab.redis.host" . }}
       port: {{ template "gitlab.redis.port" . }}
-      {{- if .Values.global.redis.password.enabled -}}
+      {{- if .Values.global.redis.password.enabled }}
       pass: "<%= File.read("/etc/gitlab-secrets/redis/redis_password") %>"
       {{- end }}
       database: nil
