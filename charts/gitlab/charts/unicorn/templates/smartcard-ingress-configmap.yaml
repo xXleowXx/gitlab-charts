@@ -1,9 +1,0 @@
-{{- if and .Values.enabled (eq (include "gitlab.ingress.enabled" $) "true") (eq (include "gitlab.smartcard.enabled" .) "true") -}}
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ printf "%s-smartcard-ingress-nginx" (include "fullname" .) }}
-  namespace: {{ $.Release.Namespace }}
-data:
-  enable-vts-status: "false"
-{{- end }}

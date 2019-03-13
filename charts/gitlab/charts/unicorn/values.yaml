@@ -195,3 +195,19 @@ resources:
 maxUnavailable: 1
 minReplicas: 2
 maxReplicas: 10
+
+nginx-ingress:
+  nameOverride: nginx-ingress-smartcard
+  controller:
+    extraArgs:
+      https-port: 3444
+    ingressClass: nginx-smartcard
+    scope:
+      enabled: true
+    service:
+      enableHttp: false
+      enableHttps: false
+  defaultBackend:
+    enabled: false
+  tcp:
+    3444: 
