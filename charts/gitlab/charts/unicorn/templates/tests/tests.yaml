@@ -8,7 +8,7 @@ data:
   test_login: |
     set -e
     echo 'Start Test'
-    endpoint="{{ template "gitlab.gitlab.url" . }}"
+    endpoint="http://{{ template "fullname" . }}:{{ .Values.service.workhorseExternalPort }}"
     cookie_read="-c /tmp/test_login.cookie"
     cookie_readwrite="$cookie_read -b /tmp/test_login.cookie"
 
