@@ -76,7 +76,7 @@ lint_package:
     - ensure_namespace
     - install_tiller
     - create_secret
-    - install_external_dns
+    - install_external_dns "${DNS_PROVIDER}" "${KUBE_INGRESS_BASE_DOMAIN}"
     - if ! crdExists || previousDeployFailed ; then OPERATOR_BOOTSTRAP=true deploy ; fi
     - deploy
     - add_license
@@ -97,6 +97,8 @@ lint_package:
     - master
 
 review_gke:
+  variables:
+    DNS_PROVIDER: "google"
   extends: .review_template
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
@@ -104,6 +106,8 @@ review_gke:
     on_stop: stop_review_gke
 
 review_eks:
+  variables:
+    DNS_PROVIDER: "aws"
   extends: .review_template
   environment:
     name: eks_review/$CI_COMMIT_REF_NAME
@@ -539,21 +543,34 @@ check_docs_internal_links:
   }
 
   function install_external_dns() {
+    local provider="${1}"
+    local domain_filter="${2}"
+    local helm_args=''
+
     echo "Checking External DNS..."
     release_name="gitlab-external-dns"
     if ! helm status --tiller-namespace "${TILLER_NAMESPACE}" "${release_name}" > /dev/null 2>&1 ; then
-      # We need to store the credentials in a secret
-      kubectl create secret generic "${release_name}-secret" --from-literal="credentials.json=${GOOGLE_CLOUD_KEYFILE_JSON}"
+      case "${provider}" in
+        google)
+          # We need to store the credentials in a secret
+          kubectl create secret generic "${release_name}-secret" --from-literal="credentials.json=${GOOGLE_CLOUD_KEYFILE_JSON}"
+          helm_args=" --set google.project='${GOOGLE_PROJECT_ID}' --set google.serviceAccountSecret='${release_name}-secret'"
+          ;;
+        aws)
+          echo "Installing external-dns, ensure the NodeGroup has the permissions specified in"
+          echo "https://github.com/helm/charts/tree/master/stable/external-dns#iam-permissions"
+          ;;
+      esac
+
       helm install stable/external-dns \
         -n "${release_name}" \
         --namespace "${TILLER_NAMESPACE}" \
-        --set provider="google" \
-        --set domain-filter[0]="helm-charts.win" \
-        --set google.project="${GOOGLE_PROJECT_ID}" \
-        --set google.serviceAccountSecret="${release_name}-secret" \
+        --set provider="${provider}" \
+        --set domain-filter[0]="${domain_filter}" \
         --set txtOwnerId="${TILLER_NAMESPACE}" \
         --set rbac.create="true" \
-        --set policy="sync"
+        --set policy='sync' \
+        ${helm_args}
     fi
   }
 
