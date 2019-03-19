@@ -132,6 +132,11 @@ global:
       #   bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
       #   password: '_the_password_of_the_bind_user'
       #   encryption: 'plain'
+    smartcard:
+      enabled: false
+      ca: {}
+        # secret: secret-containing-ca-cert
+        # key: ca.crt
     omniauth:
       enabled: false
       autoSignInWithProvider:
@@ -191,3 +196,15 @@ minReplicas: 2
 maxReplicas: 10
 helmTests:
   enabled: true
+smartcard:
+  annotations: {}
+  nginx:
+    image: 
+      repository: nginx
+      tag: 1.15.9
+      pullPolicy: IfNotPresent
+    config:
+      key: nginx.conf
+
+  service:
+    type: ClusterIP

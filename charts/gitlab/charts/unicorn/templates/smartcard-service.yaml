@@ -1,0 +1,21 @@
+{{- if and .Values.enabled (eq (include "gitlab.smartcard.enabled" .) "true") -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}-smartcard
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+  annotations:
+{{ include "gitlab.serviceAnnotations" . | indent 4 }}
+spec:
+  type: {{ .Values.smartcard.service.type }}
+  ports:
+    - port: https-smartcard
+      targetPort: {{ template "gitlab.smartcard.port" . }}
+      protocol: TCP
+      name: smartcard
+  selector:
+    app: {{ template "name" . }}-smartcard
+    release: {{ .Release.Name }}
+{{- end }}

@@ -1,0 +1,71 @@
+{{- if and .Values.enabled (eq (include "gitlab.smartcard.enabled" .) "true") -}}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-smartcard
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}-smartcard
+      component: nginx
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}-smartcard
+        component: nginx
+        release: {{ .Release.Name }}
+    annotations:   
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+      {{- range $key, $value := .Values.smartcard.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    spec:
+      containers:
+        - name: smartcard-nginx
+          image: "{{ .Values.smartcard.nginx.image.repository }}:{{ .Values.smartcard.nginx.image.tag }}"
+          imagePullPolicy: "{{ .Values.smartcard.nginx.image.pullPolicy }}"
+          securityContext:
+            capabilities:
+                drop:
+                - ALL
+                add:
+                - NET_BIND_SERVICE
+          ports:
+            - name: https-smartcard
+              containerPort: 443
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/nginx
+              name: nginx-config-volume
+              readOnly: true
+            - mountPath: /etc/ssl/private/
+              name: ingress-tls-volume
+              readOnly: true
+            - mountPath: {{- template "gitlab.smartcard.config.ca.dir" . -}}
+              name: smartcard-ca-volume
+              readOnly: true
+      volumes:
+        - name: smartcard-ca-volume
+          secret:
+            secretName: {{- template "gitlab.smartcard.ca.secret" . -}}
+            items:
+              - key: {{- template "gitlab.smartcard.ca.key" . -}}
+        - name: nginx-config-volume
+          configMap:
+            name: {{ template "fullname" . }}-smartcard-nginx-config
+            items:
+            - key: {{ .Values.smartcard.nginx.config.key }}
+              path: nginx.conf
+        - name: ingress-tls-volume
+            secretName: {{ .Values.global.ingress.tls.secretName }}
+            defaultMode: 0600
+            items:
+              - key: cert
+                path: cert.pem
+              - key: key
+                path: key.pem
+{{- end -}}
