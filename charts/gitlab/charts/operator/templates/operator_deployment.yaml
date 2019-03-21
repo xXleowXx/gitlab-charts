@@ -8,8 +8,8 @@ metadata:
 {{ include "gitlab.standardLabels" . | indent 4 }}
 spec:
   replicas: 1
-  rollingUpdate: null
   strategy:
+    rollingUpdate: null
     type: Recreate
   selector:
     matchLabels:
