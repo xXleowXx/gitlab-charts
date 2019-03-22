@@ -752,11 +752,13 @@ which can be created to identify the GitLab application within the cluster. Requ
 [Application CRD](https://github.com/kubernetes-sigs/application#installing-the-crd),
 version `v1beta1`, to already be deployed to the cluster.
 
-To enable, set `global.application.create` to `true`:
+To enable support for the application within the chart, set `global.application.enabled` to `true`, and `global.application.create`
+to `true` to tell the chart to create the application itself.
 
 ```yaml
 global:
   application:
+    enabled: true
     create: true
 ```
 

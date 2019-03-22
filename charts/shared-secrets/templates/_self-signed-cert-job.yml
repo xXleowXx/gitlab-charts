@@ -60,7 +60,7 @@ spec:
           # create wildcard certificate secret
           kubectl create secret tls $certname \
             --cert=/output/wildcard.pem --key=/output/wildcard-key.pem || true
-{{- if not .Values.global.application.create }}
+{{- if not (include "gitlab.application.enabled" . ) }}
           kubectl --namespace=$namespace label \
             secret $certname  $(echo '{{ include "gitlab.application.labels" . | replace ": " "=" | replace "\n" " " }}' | sed -E 's/=[^ ]*/-/g')
 {{- end }}
@@ -69,7 +69,7 @@ spec:
           # create CA certificate secret
           kubectl create secret generic ${certname}-ca \
             --from-file=cfssl_ca=/output/ca.pem || true
-{{- if not .Values.global.application.create }}
+{{- if not (include "gitlab.application.enabled" . ) }}
           kubectl --namespace=$namespace label \
             secret ${certname}-ca  $(echo '{{ include "gitlab.application.labels" . | replace ": " "=" | replace "\n" " " }}' | sed -E 's/=[^ ]*/-/g')
 {{- end }}

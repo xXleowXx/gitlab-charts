@@ -18,7 +18,7 @@ function generate_secret_if_needed(){
   else
     echo "secret \"$secret_name\" already exists"
   fi;
-{{- if not .Values.global.application.create }}
+{{- if not (include "gitlab.application.enabled" . ) }}
   # Remove application labels if they exist
   kubectl --namespace=$namespace label \
     secret $secret_name $(echo '{{ include "gitlab.application.labels" . | replace ": " "=" | replace "\n" " " }}' | sed -E 's/=[^ ]*/-/g')
