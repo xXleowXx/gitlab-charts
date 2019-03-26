@@ -55,7 +55,7 @@ spec:
             - /bin/bash
             - -c
             {{- if eq .Values.backups.objectStorage.backend "s3" }}
-            - cp /etc/gitlab/.s3cfg $HOME/.s3cfg && while sleep 3600; do :; done # alpine sleep has no infinity
+            - cp -v -r -L /etc/gitlab/.s3cfg $HOME/.s3cfg && while sleep 3600; do :; done # alpine sleep has no infinity
             {{- else if eq .Values.backups.objectStorage.backend "gcs" }}
             - printf "$GOOGLE_APPLICATION_CREDENTIALS\ny\n{{ .Values.backups.objectStorage.config.gcpProject }}\nN\n" | gsutil config -e && while sleep 3600; do :; done
             {{- end }}
@@ -132,11 +132,13 @@ spec:
               items:
                 - key: {{ template "gitlab.gitaly.authToken.key" . }}
                   path: gitaly/gitaly_token
+          {{- if .Values.global.redis.password.enabled }}
           - secret:
               name: {{ template "gitlab.redis.password.secret" . }}
               items:
                 - key: {{ template "gitlab.redis.password.key" . }}
                   path: redis/password
+          {{- end }}
           - secret:
               name: {{ template "gitlab.psql.password.secret" . }}
               items:

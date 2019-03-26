@@ -14,14 +14,14 @@ data:
       database: {{ template "gitlab.psql.database" . }}
       pool: 10
       username: {{ template "gitlab.psql.username" . }}
-      password: <%= File.read("/etc/gitlab/postgres/psql-password") %>
+      password: "<%= File.read("/etc/gitlab/postgres/psql-password") %>"
       host: {{ template "gitlab.psql.host" . }}
       port: {{ template "gitlab.psql.port" . }}
 {{- include "gitlab.psql.ssl.config" . | indent 6 }}
   resque.yml.erb: |
     production:
       # Redis (single instance)
-      url: {{ template "gitlab.redis.scheme" . }}://:<%= File.read("/etc/gitlab/redis/password") %>@{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
+      url: {{ template "gitlab.redis.url" . }}
   gitlab.yml.erb: |
     production: &base
       gitlab:
@@ -73,7 +73,7 @@ data:
       ## Registry Integration
       {{- include "gitlab.appConfig.registry.configuration" $ | nindent 6 }}
   configure: |
-    {{- include "gitlab.scripts.configure.secrets" (dict "required" "redis shell gitaly registry postgres rails-secrets") | nindent 4 -}}
+    {{- include "gitlab.scripts.configure.secrets" (dict "required" "shell gitaly registry postgres rails-secrets") | nindent 4 -}}
     {{- include "gitlab.psql.ssl.initScript" . | nindent 4 }}
 
     {{- if eq .Values.backups.objectStorage.backend "s3" }}
