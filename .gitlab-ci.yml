@@ -630,7 +630,7 @@ check_docs_internal_links:
     RELEASE_NAME: $CI_ENVIRONMENT_SLUG
     S3_CONFIG_PATH: /etc/gitlab/minio
   script:
-    - source variables
+    - source "${VARIABLES_FILE}"
     - apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
     - curl -LsO https://storage.googleapis.com/kubernetes-release/release/v1.9.3/bin/linux/amd64/kubectl
     - chmod +x kubectl
