@@ -98,7 +98,7 @@ spec:
     kind: PersistentVolumeClaim
   - group: apps
     kind: Deployment
-{{ if eq (index .Values "nginx-ingress" "controller" "kind") true -}}
+{{ if eq (index .Values "nginx-ingress" "controller" "kind") DaemonSet -}}
   - group: apps
     kind: DaemonSet
 {{- end }}
