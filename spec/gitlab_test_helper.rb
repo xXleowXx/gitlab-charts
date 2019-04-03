@@ -132,7 +132,6 @@ module Gitlab
       return @object_storage if @object_storage
 
       if ENV['S3_CONFIG_PATH']
-        puts "Configuration by file"
         s3_access_key = File.read("#{ENV['S3_CONFIG_PATH']}/accesskey")
         s3_secret_key = File.read("#{ENV['S3_CONFIG_PATH']}/secretkey")
       end
@@ -140,8 +139,6 @@ module Gitlab
       s3_access_key ||= ENV['S3_ACCESS_KEY']
       s3_secret_key ||= ENV['S3_SECRET_KEY']
 
-      puts "Missing access" if s3_access_key.nil? || s3_access_key.empty?
-      puts "Missing secret" if s3_secret_key.nil? || s3_secret_key.empty?
       conf = {
         region: ENV['S3_REGION'] || 'us-east-1',
         access_key_id: s3_access_key,
