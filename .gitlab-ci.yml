@@ -618,6 +618,7 @@ check_docs_internal_links:
     GITLAB_PASSWORD: $ROOT_PASSWORD
     RELEASE_NAME: $CI_ENVIRONMENT_SLUG
     S3_CONFIG_PATH: /etc/gitlab/minio
+    VARIABLES_FILE: "variables/review_gke"
   script:
     - source "${VARIABLES_FILE}"
     - apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
@@ -645,8 +646,6 @@ check_docs_internal_links:
 
 review_specs:
   <<: *specs
-  variables:
-    VARIABLES_FILE: "variables/review_gke"
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
