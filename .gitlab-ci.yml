@@ -726,11 +726,15 @@ qa_gke:
   extends: .qa
   variables:
     VARIABLES_FILE: "variables/review_gke"
+  environment:
+    name: gke_review/$CI_COMMIT_REF_NAME
 
 qa_eks:
   extends: .qa
   variables:
     VARIABLES_FILE: "variables/review_eks"
+  environment:
+    name: eks_review/$CI_COMMIT_REF_NAME
 
 before_script:
   - *auto_devops
