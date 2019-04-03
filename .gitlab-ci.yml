@@ -655,6 +655,8 @@ check_docs_internal_links:
 
 review_specs:
   <<: *specs
+  variables:
+    VARIABLES_FILE: "review/review_gke"
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
