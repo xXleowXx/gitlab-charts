@@ -221,8 +221,6 @@ stop_review_eks:
 stable:
   stage: stable
   script:
-    - echo $KUBECONFIG
-    - cat $KUBECONFIG
     - check_kube_domain
     - check_domain_ip
     - download_chart
@@ -243,7 +241,7 @@ stable:
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
     DOMAIN: ".$KUBE_INGRESS_BASE_DOMAIN"
-    VARIABLES_FILE: "variables_stable"
+    VARIABLES_FILE: "variables/stable"
 #  when: manual
   only:
     refs:
@@ -682,7 +680,7 @@ review_specs:
 production_specs:
   extends: .specs
   variables:
-    VARIABLES_FILE: "variables_stable"
+    VARIABLES_FILE: "variables/stable"
   environment:
     name: production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
