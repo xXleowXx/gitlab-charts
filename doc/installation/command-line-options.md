@@ -289,7 +289,12 @@ See [nginx-ingress chart](../charts/nginx/index.md)
 | gitlab-runner.resources.requests.memory             | runner resources                               |                                                            |
 | gitlab-runner.resources.requests.cpu                | runner resources                               |                                                            |
 
-## Advanced prometheus configuration
+## External Charts
+
+GitLab makes use of several other charts. These are [treated as parent-child relationships](https://helm.sh/docs/developing_charts/#chart-dependencies).
+Ensure that any properties you wish to configure are provided as `chart-name.property`.
+
+## Prometheus
 
 Prefix Prometheus values with `prometheus`. For example, set the persistence
 storage value using `prometheus.server.persistentVolume.size`.
