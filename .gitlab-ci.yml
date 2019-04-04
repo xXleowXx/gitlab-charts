@@ -709,6 +709,9 @@ production_specs:
       - branches
     variables:
       - $KUBECONFIG
+  except:
+    refs:
+      - master
   retry: 1
   allow_failure: true
 
