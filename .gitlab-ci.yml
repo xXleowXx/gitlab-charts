@@ -210,6 +210,7 @@ stop_review_eks:
 stable:
   stage: stable
   script:
+    - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
     - check_domain_ip
     - download_chart
