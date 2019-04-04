@@ -210,6 +210,8 @@ stop_review_eks:
 stable:
   stage: stable
   script:
+    - echo $KUBECONFIG
+    - cat $KUBECONFIG
     - check_kube_domain
     - check_domain_ip
     - download_chart
