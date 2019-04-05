@@ -212,6 +212,7 @@ stop_review_eks:
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
+    - check_domain_ip
     - download_chart
     - ensure_namespace
     - install_tiller
@@ -236,8 +237,6 @@ stop_review_eks:
 
 stable_gke:
   extends: .stable
-  script:
-    - check_domain_ip
   environment:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
@@ -540,6 +539,12 @@ check_docs_internal_links:
   }
 
   function check_domain_ip() {
+    # Don't run on EKS clusters
+    if [[ "$CI_ENVIRONMENT_SLUG" =~ ^eks.* ]]; then
+      echo "Not running on EKS cluster"
+      true
+    fi
+
     # Expect the `DOMAIN` is a wildcard.
     domain_ip=$(nslookup gitlab$DOMAIN 2>/dev/null | grep "Address 1:" | cut -d' ' -f3)
     if [ -z $domain_ip ]; then
