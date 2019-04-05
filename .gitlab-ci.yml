@@ -212,7 +212,6 @@ stop_review_eks:
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
-    - check_domain_ip
     - download_chart
     - ensure_namespace
     - install_tiller
@@ -237,6 +236,8 @@ stop_review_eks:
 
 stable_gke:
   extends: .stable
+  script:
+    - check_domain_ip
   environment:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
