@@ -738,9 +738,6 @@ production_specs_eks:
       - branches
     variables:
       - $KUBECONFIG
-  except:
-    refs:
-      - master
   retry: 1
   allow_failure: true
 
