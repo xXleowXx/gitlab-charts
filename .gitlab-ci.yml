@@ -207,7 +207,7 @@ stop_review_eks:
 # or `canary` deploys, or you simply want more control over when you deploy
 # to production, uncomment the `when: manual` line in the `production` job.
 
-stable:
+.stable:
   stage: stable
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
@@ -226,18 +226,30 @@ stable:
   artifacts:
     paths:
     - variables
-  environment:
-    name: production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
     DOMAIN: ".$KUBE_INGRESS_BASE_DOMAIN"
-    VARIABLES_FILE: "variables/stable"
 #  when: manual
   only:
     refs:
       - master
     variables:
       - $KUBECONFIG
+
+stable_gke:
+  extends: .stable
+  environment:
+    name: production_gke
+    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
+  variables:
+    VARIABLES_FILE: "variables/stable_gke"
+
+stable_eks:
+  extends: .stable
+  environment:
+    name: production_eks
+    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
+  variables:
+    VARIABLES_FILE: "variables/stable_eks"
 
 review_helm_test:
   stage: qa
@@ -667,18 +679,29 @@ review_specs:
     refs:
       - master
 
-production_specs:
+.production_specs:
   extends: .specs
-  variables:
-    VARIABLES_FILE: "variables/stable"
-  environment:
-    name: production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   only:
     refs:
       - master
     variables:
       - $KUBECONFIG
+
+production_specs_gke:
+  extends: .production_specs
+  variables:
+    VARIABLES_FILE: "variables/stable_gke"
+  environment:
+    name: production_gke
+    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
+
+production_specs_eks:
+  extends: .production_specs
+  variables:
+    VARIABLES_FILE: "variables/stable_eks"
+  environment:
+    name: production_eks
+    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
 
 .qa:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder:ruby_docker-0.0.7
