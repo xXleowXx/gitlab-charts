@@ -249,7 +249,7 @@ stop_review_eks:
 stable_gke:
   extends: .stable
   environment:
-    name: production_gke
+    name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
     VARIABLES_FILE: "variables/stable_gke"
@@ -257,7 +257,7 @@ stable_gke:
 stable_eks:
   extends: .stable
   environment:
-    name: production_eks
+    name: eks_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
     VARIABLES_FILE: "variables/stable_eks"
@@ -703,7 +703,7 @@ production_specs_gke:
   variables:
     VARIABLES_FILE: "variables/stable_gke"
   environment:
-    name: production_gke
+    name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
 
 production_specs_eks:
@@ -711,7 +711,7 @@ production_specs_eks:
   variables:
     VARIABLES_FILE: "variables/stable_eks"
   environment:
-    name: production_eks
+    name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
 
 .qa:
