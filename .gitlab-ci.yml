@@ -252,7 +252,7 @@ stable_gke:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
-    VARIABLES_FILE: "variables/stable_gke"
+    VARIABLES_FILE: "variables/review_gke"
 
 stable_eks:
   extends: .stable
@@ -260,7 +260,7 @@ stable_eks:
     name: eks_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
-    VARIABLES_FILE: "variables/stable_eks"
+    VARIABLES_FILE: "variables/review_eks"
 
 review_helm_test:
   stage: qa
