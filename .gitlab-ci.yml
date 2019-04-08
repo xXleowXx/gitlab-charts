@@ -553,7 +553,7 @@ check_docs_internal_links:
     # Don't run on EKS clusters
     if [[ "$CI_ENVIRONMENT_SLUG" =~ ^eks.* ]]; then
       echo "Not running on EKS cluster"
-      return true
+      return 0
     fi
 
     # Expect the `DOMAIN` is a wildcard.
