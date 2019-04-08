@@ -679,7 +679,7 @@ check_docs_internal_links:
     paths:
     - gems
 
-review_specs:
+review_specs_gke:
   extends: .specs
   variables:
     VARIABLES_FILE: "variables/review_gke"
@@ -704,6 +704,29 @@ review_specs:
     variables:
       - $KUBECONFIG
 
+review_specs_eks:
+  extends: .specs
+  variables:
+    VARIABLES_FILE: "variables/review_eks"
+  environment:
+    name: eks_review/$CI_COMMIT_REF_NAME
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_eks
+  only:
+    refs:
+      - branches
+    variables:
+      - $KUBECONFIG
+  except:
+    refs:
+      - master
+
+.production_specs:
+  extends: .specs
+  only:
+    refs:
+      - master
+    variables:
 production_specs_gke:
   extends: .production_specs
   variables:
