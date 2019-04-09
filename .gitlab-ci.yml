@@ -217,7 +217,6 @@ stop_review_eks:
     - ensure_namespace
     - install_tiller
     - create_secret
-    - if ! crdExists || previousDeployFailed ; then OPERATOR_BOOTSTRAP=true deploy ; fi
     - deploy
     - delete canary
     - echo "export QA_ENVIRONMENT_URL=gitlab.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
@@ -428,12 +427,6 @@ check_docs_internal_links:
     helm repo add gitlab https://charts.gitlab.io/
     helm dep update .
 
-    # If OPERATOR_BOOTSTRAP is set, we _do not_ want to use --wait / --timeout
-    WAIT="--wait --timeout 600"
-    if [ -n "${OPERATOR_BOOTSTRAP}" ]; then
-      WAIT=""
-    fi
-
     helm upgrade --install \
       $WAIT \
       --set releaseOverride="$CI_ENVIRONMENT_SLUG" \
@@ -450,7 +443,6 @@ check_docs_internal_links:
       --set redis.resources.requests.cpu=100m \
       --set minio.resources.requests.cpu=100m \
       --set global.operator.enabled=true \
-      --set global.operator.bootstrap=${OPERATOR_BOOTSTRAP-false} \
       --namespace="$KUBE_NAMESPACE" \
       --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
       "$name" \
