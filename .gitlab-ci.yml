@@ -241,7 +241,7 @@ stable_gke:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
-    VARIABLES_FILE: "variables/review_gke"
+    VARIABLES_FILE: "variables/stable_gke"
 
 stable_eks:
   extends: .stable
@@ -249,7 +249,7 @@ stable_eks:
     name: eks_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
-    VARIABLES_FILE: "variables/review_eks"
+    VARIABLES_FILE: "variables/stable_eks"
 
 review_helm_test:
   stage: qa
@@ -685,14 +685,6 @@ review_specs_gke:
     refs:
       - master
 
-.production_specs:
-  extends: .specs
-  only:
-    refs:
-      - master
-    variables:
-      - $KUBECONFIG
-
 review_specs_eks:
   extends: .specs
   variables:
@@ -716,6 +708,8 @@ review_specs_eks:
     refs:
       - master
     variables:
+      - $KUBECONFIG
+
 production_specs_gke:
   extends: .production_specs
   variables:
@@ -791,19 +785,46 @@ release_package:
   dependencies:
     - sync_images
 
-qa_gke:
+.qa_branch:
   extends: .qa
+  except:
+    refs:
+      - master
+
+.qa_production:
+  extends: .qa
+  only:
+    refs:
+      - master
+
+qa_gke:
+  extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_gke"
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
 
 qa_eks:
-  extends: .qa
+  extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_eks"
   environment:
     name: eks_review/$CI_COMMIT_REF_NAME
+
+qa_gke_production:
+  extends: .qa_production
+  variables:
+    VARIABLES_FILE: "variables/stable_gke"
+  environment:
+    name: gke_production/$CI_COMMIT_REF_NAME
+
+qa_eks_production:
+  extends: .qa_production
+  variables:
+    VARIABLES_FILE: "variables/stable_eks"
+  environment:
+    name: eks_production/$CI_COMMIT_REF_NAME
+
 
 before_script:
   - *auto_devops
