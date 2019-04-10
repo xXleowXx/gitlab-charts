@@ -8,6 +8,7 @@ metadata:
     revision: "{{ .Release.Revision }}"
   annotations:
     "helm.sh/hook": "post-install"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
 {{ include "gitlab.standardLabels" $ | indent 4 }}
   name: {{ template "fullname" . }}
 spec:
