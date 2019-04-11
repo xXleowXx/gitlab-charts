@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe "Restoring a backup" do
   before(:all) do
+    puts "Release Name: #{ENV['RELEASE_NAME']}"
     stdout, status = wait_for_dependencies
     fail stdout unless status.success?
 
