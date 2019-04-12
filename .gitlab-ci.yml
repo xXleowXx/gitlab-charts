@@ -471,14 +471,21 @@ check_docs_internal_links:
      content = File.read("/tmp/license.gitlab").strip;
      FileUtils.rm_f("/tmp/license.gitlab");
 
-     unless License.where(data:content).empty?
-       puts "License already exists";
-       Kernel.exit 0;
-     end
+     10.times do |x|
+       begin
+         unless License.where(data:content).empty?
+           puts "License already exists";
+           Kernel.exit 0;
+         end
 
-     unless License.new(data: content).save
-       puts "Could not add license";
-       Kernel.exit 0;
+         unless License.new(data: content).save
+           puts "Could not add license";
+           Kernel.exit 0;
+         end
+       rescue StandardError
+         puts "Database not ready yet. Try #{x+1} of 10"
+         sleep 6
+       end
      end
 
      puts "License added";
