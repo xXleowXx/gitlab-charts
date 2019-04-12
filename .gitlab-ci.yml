@@ -24,7 +24,8 @@
 # `.buildpacks` that contains the URLs, one on each line, in order.
 # Note: Auto CI does not work with multiple buildpacks yet
 
-image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base
+# image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base
+image: registry.gitlab.com/ibaum/gitlab/gitlab-charts-build-base:2.12.3 # DEV
 
 variables:
   GOOGLE_APPLICATION_CREDENTIALS: ${CI_PROJECT_DIR}/.google_keyfile.json
