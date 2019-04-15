@@ -8,15 +8,6 @@ We provide an [operator chart](https://gitlab.com/charts/gitlab/tree/master/char
 
 ### Enabling the operator
 
-We provide the flag `global.operator.enabled`, when set to true it enables the operator and allows it to manage resources.
+NOTE: **Note**: This requires helm 2.12.3 or newer
 
-## Installing using the operator
-
-The operator makes use of Kubernetes CustomResourceDefinitions (CRD). Since Helm will be used for the installation, we need to ensure that this CRD is in place prior to attempting to use it. In order to do this, we have to run an additional command prior to use.
-
-1. `helm upgrade --install <release-name> . --set global.operator.enabled=true --set global.operator.bootstrap=true ... ` where `...` shall be replaced by the rest of the values you would like to set.
-2. `helm upgrade <release-name> . --set global.operator.enabled=true --set global.operator.bootstrap=false ...`.
-
-The first command will install only the `CRD` but will not actually attempt to deploy the operator. The second command will deploy the operator itself, now that the CRD is in place.
-
-**NOTE:** This needs done only the first time you install the operator, further upgrades will follow the normal [upgrade procedures](./upgrade.md)
+We provide the flag `global.operator.enabled`, when set to true it enables the operator, installs the necessary CRDs and allows it to manage resources.
