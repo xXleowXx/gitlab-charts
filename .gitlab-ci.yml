@@ -79,6 +79,7 @@ lint_package:
     - create_secret
     - install_external_dns "${DNS_PROVIDER}" "${KUBE_INGRESS_BASE_DOMAIN}"
     - deploy
+    - wait_for_unicorn
     - add_license
     - echo "export QA_ENVIRONMENT_URL=gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
@@ -385,12 +386,7 @@ check_docs_internal_links:
   }
 
   function deploy() {
-    track="${1-stable}"
-    name="$CI_ENVIRONMENT_SLUG"
-
-    if [[ "$track" != "stable" ]]; then
-      name="$name-$track"
-    fi
+    name=$(release_name)
 
     replicas="1"
     service_enabled="false"
@@ -603,12 +599,7 @@ check_docs_internal_links:
   }
 
   function delete() {
-    track="${1-stable}"
-    name="$CI_ENVIRONMENT_SLUG"
-
-    if [[ "$track" != "stable" ]]; then
-      name="$name-$track"
-    fi
+    name=$(release_name)
     helm delete --purge "$name" || true
   }
 
@@ -624,6 +615,43 @@ check_docs_internal_links:
       | xargs kubectl -n "$KUBE_NAMESPACE" delete \
       || true
   }
+
+  function release_name() {
+    track="${1-stable}"
+    name="$CI_ENVIRONMENT_SLUG"
+
+    if [[ "$track" != "stable" ]]; then
+      name="$name-$track"
+    fi
+    echo "${name}"
+  }
+
+  function unicorn_ready() {
+    release=$(release_name)
+    unicorn=$(kubectl -n ${KUBE_NAMESPACE} get deployment -l app=unicorn,release=${release} -o json)
+    unicorn_status=$(echo ${unicorn} | jq 'has("items")')
+    if [ "${unicorn_status}" = "false" ]
+    then
+        return 1
+    fi
+    status=$(echo "${unicorn})" | jq '.["items"][0]["status"]')
+    replicas=$(echo "${status}" | jq -r '.["replicas"]')
+    ready_replicas=$(echo "${status}" | jq -r '.["readyReplicas"]')
+    if [ "${replicas}" = "${ready_replicas}" ]
+    then
+      return 0
+    fi
+    return 1
+  }
+
+  function wait_for_unicorn() {
+    while ! unicorn_ready
+    do
+      echo "Waiting for unicorn to be ready"
+      sleep 5
+    done
+  }
+
 
 .specs: &specs
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:ruby-2.5.3-git-2.18-chrome-71.0-node-8.x-yarn-1.12-graphicsmagick-1.3.29-docker-18.06.1
