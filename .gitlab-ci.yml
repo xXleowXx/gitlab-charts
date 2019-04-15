@@ -79,7 +79,6 @@ lint_package:
     - create_secret
     - install_external_dns "${DNS_PROVIDER}" "${KUBE_INGRESS_BASE_DOMAIN}"
     - deploy
-    - wait_for_unicorn
     - add_license
     - echo "export QA_ENVIRONMENT_URL=gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
@@ -424,7 +423,7 @@ check_docs_internal_links:
     helm dep update .
 
     helm upgrade --install \
-      $WAIT \
+      --wait --timeout 600 \
       --set releaseOverride="$CI_ENVIRONMENT_SLUG" \
       --set global.hosts.hostSuffix="$HOST_SUFFIX" \
       --set global.hosts.domain="$KUBE_INGRESS_BASE_DOMAIN" \
@@ -625,15 +624,6 @@ check_docs_internal_links:
     fi
     echo "${name}"
   }
-
-  function wait_for_unicorn() {
-    while ! kubectl -n ${KUBE_NAMESPACE} rollout status deployment/$(release_name)-unicorn
-    do
-      echo "Waiting for unicorn to be ready"
-      sleep 5
-    done
-  }
-
 
 .specs: &specs
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:ruby-2.5.3-git-2.18-chrome-71.0-node-8.x-yarn-1.12-graphicsmagick-1.3.29-docker-18.06.1
