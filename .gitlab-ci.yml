@@ -627,7 +627,7 @@ check_docs_internal_links:
   }
 
   function wait_for_unicorn() {
-    while ! kubectl -n ${KUBE_NAMESPACE} rollout-status deployment/$(release_name)-unicorn
+    while ! kubectl -n ${KUBE_NAMESPACE} rollout status deployment/$(release_name)-unicorn
     do
       echo "Waiting for unicorn to be ready"
       sleep 5
