@@ -626,26 +626,8 @@ check_docs_internal_links:
     echo "${name}"
   }
 
-  function unicorn_ready() {
-    release=$(release_name)
-    unicorn=$(kubectl -n ${KUBE_NAMESPACE} get deployment -l app=unicorn,release=${release} -o json)
-    unicorn_status=$(echo ${unicorn} | jq 'has("items")')
-    if [ "${unicorn_status}" = "false" ]
-    then
-        return 1
-    fi
-    status=$(echo "${unicorn})" | jq '.["items"][0]["status"]')
-    replicas=$(echo "${status}" | jq -r '.["replicas"]')
-    ready_replicas=$(echo "${status}" | jq -r '.["readyReplicas"]')
-    if [ "${replicas}" = "${ready_replicas}" ]
-    then
-      return 0
-    fi
-    return 1
-  }
-
   function wait_for_unicorn() {
-    while ! unicorn_ready
+    while ! kubectl -n ${KUBE_NAMESPACE} rollout-status deployment/$(release_name)-unicorn
     do
       echo "Waiting for unicorn to be ready"
       sleep 5
