@@ -385,7 +385,11 @@ check_docs_internal_links:
 
   function deploy() {
     track="${1-stable}"
-    name=$(release_name ${track})
+    name="$CI_ENVIRONMENT_SLUG"
+
+    if [[ "$track" != "stable" ]]; then
+      name="$name-$track"
+    fi
 
     replicas="1"
     service_enabled="false"
@@ -598,8 +602,12 @@ check_docs_internal_links:
   }
 
   function delete() {
-    track=${1-stable}
-    name=$(release_name ${track})
+    track="${1-stable}"
+    name="$CI_ENVIRONMENT_SLUG"
+
+    if [[ "$track" != "stable" ]]; then
+      name="$name-$track"
+    fi
     helm delete --purge "$name" || true
   }
 
@@ -614,16 +622,6 @@ check_docs_internal_links:
       | awk '{print $1}' \
       | xargs kubectl -n "$KUBE_NAMESPACE" delete \
       || true
-  }
-
-  function release_name() {
-    track="${1-stable}"
-    name="$CI_ENVIRONMENT_SLUG"
-
-    if [[ "$track" != "stable" ]]; then
-      name="$name-$track"
-    fi
-    echo "${name}"
   }
 
 .specs: &specs
