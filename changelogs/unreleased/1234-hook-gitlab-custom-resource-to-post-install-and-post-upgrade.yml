@@ -1,5 +1,5 @@
 ---
-title: Remove release_name function
+title: Hook GitLab Custom Resource to post-install and post-ugprade
 merge_request: 754
 author:
 type: changed
