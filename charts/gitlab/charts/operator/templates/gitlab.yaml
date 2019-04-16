@@ -7,7 +7,7 @@ metadata:
     controller.gitlab.com: {{ .Values.version | quote }}
     revision: "{{ .Release.Revision }}"
   annotations:
-    "helm.sh/hook": "post-install"
+    "helm.sh/hook": "post-install,post-upgrade"
     "helm.sh/hook-delete-policy": "before-hook-creation"
 {{ include "gitlab.standardLabels" $ | indent 4 }}
   name: {{ template "fullname" . }}
