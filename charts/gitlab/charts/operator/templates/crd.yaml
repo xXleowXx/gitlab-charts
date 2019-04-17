@@ -5,6 +5,9 @@ metadata:
   labels:
     controller-tools.k8s.io: "1.0"
   name: {{ template "gitlab.operator.crdName" . }}
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
+    "helm.sh/hook-delete-policy": "before-hook-creation"
 spec:
   group: {{ template "gitlab.operator.groupName" . }}
   names:
