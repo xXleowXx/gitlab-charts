@@ -19,13 +19,11 @@ To deploy Gitlab Helm Chart, follow the instructions described [here](https://do
 Here is a light way to install it:
 
 ``` bash
-
 $ helm upgrade --install gitlab gitlab/gitlab \
   --timeout 600 \
   --set global.hosts.domain=`<your-domain>` \
   --set global.hosts.externalIP=`<external-ip>` \
   --set certmanager-issuer.email=`<email>`
-
 ```
 
 - `<your-domain>`: your desired domain, eg. `gitlab.example.com`
@@ -42,14 +40,11 @@ Please take note of the `Application ID`, `Application Secret Key`, `User API En
 
 ## Deploy Mattermost Team Edition Helm Chart
 
-Requirements:
-
-  - Mattermost Team Edition Helm Chart Version: 1.4.0
+Requirements: Mattermost Team Edition Helm Chart Version: 1.4.0
 
 To deploy Mattermost Team Edition with GitLab Helm Chart, disable the running `MySql` chart and configure InitContainer and Environment variables in `values.yaml` as follows:
 
 ``` yaml
-
   persistence:
     data:
       enabled: false
@@ -198,7 +193,6 @@ To deploy Mattermost Team Edition with GitLab Helm Chart, disable the running `M
             echo "Bucket '$MATTERMOST_BUCKET_NAME' already exists."
             exit 0
           fi
-
 ```
 
 Values that you need to replace in the above `values.yaml` file are listed below. Note that we assume the GitLab chart name is `gitlab`.
@@ -224,9 +218,7 @@ Values that you need to replace in the above `values.yaml` file are listed below
 After these changes, deploy the Mattermost Team Edition Helm Chart with following command:
 
 ``` bash
-
   $ helm upgrade --install --name mattermost -f values.yaml stable/mattermost-team-edition
-
 ```
 
 Wait for the pods to run. Then access your Mattermost server, and log in with your GitLab credentials.
