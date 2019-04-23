@@ -14,7 +14,7 @@ This document describes how to install Mattermost Team Edition Helm Chart in an 
 
 ## Deploy GitLab Helm Chart
 
-To deploy Gitlab Helm Chart, follow the instructions described [here](https://docs.gitlab.com/ee/install/kubernetes/gitlab_chart.html).
+To deploy Gitlab Helm Chart, follow the instructions described [in official documentation](https://docs.gitlab.com/charts/).
 
 Here is a light way to install it:
 
