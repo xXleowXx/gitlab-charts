@@ -101,13 +101,27 @@ Examples for [AWS][fog-aws](any S3 compatible) and [Google][fog-gcs] providers c
 
 Backups are also stored in object storage, and need to be configured to point
 externally rather than the included minio service. The backup/restore procedure makes
-use of two separate buckets. A bucket for storing backups (`global.appConfig.backups.bucket`),
+use of two separate buckets. A bucket for storing backups (`global.appConfig.backups.bucket`)
 and a tmp bucket for preserving existing data during the restore process (`global.appConfig.backups.tmpBucket`).
+Currently AWS S3-compatible object storage systems and Google Cloud Storage are supported backends
+The backend tyhp is configurable by setting `global.appConfig.backups.objectStorage.backend` to `s3` and `gcs` respectively.
 A connection configuration through the `gitlab.task-runner.backups.objectStorage.config` key must also be provided.
+When using Google Cloud Storage, the GCP project must be set with the `global.appConfig.backups.objectStorage.confi.gcpProject` value.
 
+For S3-compatible storage:
 ```
 --set global.appConfig.backups.bucket=gitlab-backup-storage
 --set global.appConfig.backups.tmpBucket=gitlab-tmp-storage
+--set gitlab.task-runner.backups.objectStorage.config.secret=storage-config
+--set gitlab.task-runner.backups.objectStorage.config.key=config
+```
+
+For Google Cloud Storage (GCS):
+```
+--set global.appConfig.backups.bucket=gitlab-backup-storage
+--set global.appConfig.backups.tmpBucket=gitlab-tmp-storage
+--set gitlab.task-runner.backups.objectStorage.backend=gcs
+--set gitlab.task-runner.backups.objectStorage.config.gcpProject=my-gcp-project-id
 --set gitlab.task-runner.backups.objectStorage.config.secret=storage-config
 --set gitlab.task-runner.backups.objectStorage.config.key=config
 ```
