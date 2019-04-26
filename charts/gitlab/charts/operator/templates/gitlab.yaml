@@ -7,6 +7,8 @@ metadata:
     controller.gitlab.com: {{ .Values.version | quote }}
     revision: "{{ .Release.Revision }}"
 {{ include "gitlab.standardLabels" $ | indent 4 }}
+  annotations:
+    gitlab.com/class: {{ .Release.Name }}
   name: {{ template "fullname" . }}
 spec:
   version: {{ include "gitlab.operator.gitlabVersion" . | quote }}
