@@ -1,4 +1,4 @@
-{{- if and .Values.global.operator.enabled (not .Values.global.operator.bootstrap) }}
+{{- if .Values.global.operator.enabled }}
 apiVersion: {{ printf "%s/v1beta1" (include "gitlab.operator.groupName" .) }}
 kind: GitLab
 metadata:
@@ -8,6 +8,8 @@ metadata:
     revision: "{{ .Release.Revision }}"
   annotations:
     gitlab.com/class: {{ .Release.Name }}
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation
 {{ include "gitlab.standardLabels" $ | indent 4 }}
   name: {{ template "fullname" . }}
 spec:

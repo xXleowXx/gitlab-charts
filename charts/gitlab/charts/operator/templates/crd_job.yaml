@@ -1,0 +1,105 @@
+{{- if .Values.global.operator.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "fullname" . }}-crd
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" $ | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "fullname" . }}-crd
+  labels:
+{{ include "gitlab.standardLabels" $ | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+rules:
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "fullname" . }}-crd
+  labels:
+{{ include "gitlab.standardLabels" $ | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "fullname" . }}-crd
+subjects:
+- kind: ServiceAccount
+  name: {{ template "fullname" . }}-crd
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-crd
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-4"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+data:
+  crd.yaml: |-
+{{ include (print $.Template.BasePath "/_crd.yaml") . | indent 4 }}
+  verify-crd.sh: |
+{{ include (print $.Template.BasePath "/_verify_crd.sh") . | indent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "fullname" . }}-crd
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "-4"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      name: {{ template "fullname" . }}-crd-verifier
+      labels:
+        release: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ template "fullname" . }}-crd
+      containers:
+      - name: verify-crd
+        image: "registry.gitlab.com/gitlab-org/build/cng/kubectl:v1.9.3"
+        command: ["/bin/bash", "/scripts/verify-crd.sh"]
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+      volumes:
+      - name: scripts
+        configMap:
+          name: {{ template "fullname" . }}-crd
+{{- end }}
