@@ -1,0 +1,40 @@
+enabled: true
+
+ingress:
+  enabled: true
+  proxyReadTimeout: 900
+  proxyBodySize: "0"
+  proxyBuffering: "off"
+  tls: {}
+    # secretName:
+    # enabled: true
+  annotations: {}
+
+global:
+  ingress:
+    enabled: true
+    annotations: {}
+    tls: {}
+      # secretName:
+      # enabled: true
+  hosts:
+    domain: example.com
+    hostSuffix:
+    https: true
+    tls: {}
+      # secretName:
+    gitlab: {}
+      #name: gitlab.example.com
+      #https: false
+    registry: {}
+      #name: registry.example.com
+      #https: false
+    minio: {}
+      #name: minio.example.com
+      #https: false
+    jaeger: {}
+      #name: jaeger.example.com
+      #https: false
+  tracing:
+    enabled: true
+    serviceName: gitlab-jaeger

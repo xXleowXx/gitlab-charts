@@ -1,0 +1,15 @@
+apiVersion: v1
+name: jaeger
+version: 0.1.0
+appVersion: master
+description: Deployment of a Jaeger resource to be used with the Jaeger operator
+  features.
+keywords:
+- gitlab
+home: https://about.gitlab.com/
+icon: https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo-square.svg
+sources:
+- https://gitlab.com/charts/gitlab
+maintainers:
+- name: GitLab Inc.
+  email: support@gitlab.com
