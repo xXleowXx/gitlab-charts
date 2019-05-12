@@ -1,0 +1,12 @@
+{{- if and .Values.global.tracing.enabled .Values.global.tracing.install -}}
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: {{ .Values.global.tracing.serviceName }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+## spec:
+##  ingress:
+##    enabled: false
+{{- end }}

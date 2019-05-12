@@ -84,6 +84,12 @@ spec:
               value: '/srv/gitlab-shell'
             - name: KEYS_DIRECTORY
               value: '/etc/gitlab-secrets/ssh'
+{{- if .Values.global.tracing.enabled }}
+            - name: GITLAB_TRACING
+              value: opentracing://jaeger?http_endpoint=http%3A%2F%2F{{.Values.global.tracing.serviceName}}-collector%3A14268%2Fapi%2Ftraces&sampler=const&sampler_param=1
+            - name: GITLAB_TRACING_URL
+              value: 'http://{{.Values.global.tracing.serviceName}}-query:16686/search?service={{ "{{" }} service {{ "}}" }}&tags=%7B"correlation_id"%3A"{{ "{{" }} correlation_id {{ "}}" }}"%7D"'
+{{- end }}
           volumeMounts:
             - name: shell-config
               mountPath: '/etc/gitlab-shell'

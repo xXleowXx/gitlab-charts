@@ -132,6 +132,12 @@ spec:
             - name: GITLAB_WORKHORSE_SENTRY_DSN
               value: {{ .Values.workhorse.sentryDSN }}
 {{- end }}
+{{- if .Values.global.tracing.enabled }}
+            - name: GITLAB_TRACING
+              value: opentracing://jaeger?http_endpoint=http%3A%2F%2F{{.Values.global.tracing.serviceName}}-collector%3A14268%2Fapi%2Ftraces&sampler=const&sampler_param=1
+            - name: GITLAB_TRACING_URL
+              value: 'http://{{.Values.global.tracing.serviceName}}-query:16686/search?service={{ "{{" }} service {{ "}}" }}&tags=%7B"correlation_id"%3A"{{ "{{" }} correlation_id {{ "}}" }}"%7D"'
+{{- end }}
           volumeMounts:
 {{- if .Values.metrics.enabled }}
             - name: unicorn-metrics
@@ -189,6 +195,12 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
+{{- if .Values.global.tracing.enabled }}
+            - name: GITLAB_TRACING
+              value: opentracing://jaeger?http_endpoint=http%3A%2F%2F{{.Values.global.tracing.serviceName}}-collector%3A14268%2Fapi%2Ftraces&sampler=const&sampler_param=1
+            - name: GITLAB_TRACING_URL
+              value: 'http://{{.Values.global.tracing.serviceName}}-query:16686/search?service={{ "{{" }} service {{ "}}" }}&tags=%7B"correlation_id"%3A"{{ "{{" }} correlation_id {{ "}}" }}"%7D"'
+{{- end }}
           volumeMounts:
             - name: workhorse-config
               mountPath: '/var/opt/gitlab/templates'

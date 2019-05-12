@@ -298,6 +298,11 @@ global:
     customCAs: []
     # - secret: custom-CA
     # - secret: more-custom-CAs
+
+  tracing:
+    enabled: true
+    install: true
+    serviceName: jaeger-gitlab
 ## End of global
 
 ## Settings to for the Let's Encrypt ACME Issuer
