@@ -455,7 +455,7 @@ grafana:
       datasources:
         - name: GitLab Omnibus
           type: prometheus
-          url: http://{{ $.Release.Namespace }}-gitlab-prometheus-server
+          url: http://{{ $.Release.Name }}-prometheus-server
           access: proxy
           isDefault: true
   dashboardProviders:
