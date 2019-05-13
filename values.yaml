@@ -439,6 +439,36 @@ gitlab-runner:
       s3CachePath: gitlab-runner
       s3CacheInsecure: false
 
+grafana:
+  install: true
+  adminUser: admin
+  adminPassword: admin
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: GitLab Omnibus
+          type: prometheus
+          url: http://{{ $.Release.Namespace }}-gitlab-prometheus-server
+          access: proxy
+          isDefault: true
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+  dashboards:
+    default:
+      overview:
+        url: https://gitlab.com/gitlab-org/grafana-dashboards/raw/sh-add-kubernetes-dashboard/k8s/overview.json
+
 ## Settings for individual sub-charts under GitLab
 ## Note: Many of these settings are configurable via globals
 # gitlab:
