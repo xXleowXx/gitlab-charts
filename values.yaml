@@ -26,6 +26,7 @@ global:
 
   ## doc/charts/globals.md#gitlab-version
   # gitlabVersion: master
+  gitlabVersion: v11-11-0-rc2-ee
 
   ## doc/charts/globals.md#application-resource
   application:
