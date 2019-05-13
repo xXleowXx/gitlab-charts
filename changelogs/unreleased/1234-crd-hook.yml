@@ -1,0 +1,5 @@
+---
+title: Reduce the install steps for the Operator to a single command
+merge_request: 784
+author:
+type: performance
