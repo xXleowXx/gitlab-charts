@@ -77,7 +77,6 @@ lint_package:
     - install_tiller
     - create_secret
     - install_external_dns "${DNS_PROVIDER}" "${KUBE_INGRESS_BASE_DOMAIN}"
-    - if ! crdExists || previousDeployFailed ; then OPERATOR_BOOTSTRAP=true deploy ; fi
     - deploy
     - add_license
     - echo "export QA_ENVIRONMENT_URL=gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
@@ -217,7 +216,6 @@ stop_review_eks:
     - ensure_namespace
     - install_tiller
     - create_secret
-    - if ! crdExists || previousDeployFailed ; then OPERATOR_BOOTSTRAP=true deploy ; fi
     - deploy
     - delete canary
     - echo "export QA_ENVIRONMENT_URL=gitlab.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
@@ -430,9 +428,6 @@ check_docs_internal_links:
 
     # If OPERATOR_BOOTSTRAP is set, we _do not_ want to use --wait / --timeout
     WAIT="--wait --timeout 600"
-    if [ -n "${OPERATOR_BOOTSTRAP}" ]; then
-      WAIT=""
-    fi
 
     helm upgrade --install \
       $WAIT \
@@ -450,7 +445,6 @@ check_docs_internal_links:
       --set redis.resources.requests.cpu=100m \
       --set minio.resources.requests.cpu=100m \
       --set global.operator.enabled=true \
-      --set global.operator.bootstrap=${OPERATOR_BOOTSTRAP-false} \
       --set gitlab.operator.crdPrefix="$CI_ENVIRONMENT_SLUG" \
       --namespace="$KUBE_NAMESPACE" \
       --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
