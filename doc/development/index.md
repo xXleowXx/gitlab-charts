@@ -266,3 +266,75 @@ Please keep in mind that Registry uses the external domain name of Minio service
 encounter an error when using internal domain names, e.g. with custom TLDs for development environment. The common symptom
 is that you can login to the Registry but you can't push or pull images. This is generally because the Registry container(s)
 can not resolve the Minio domain name and find the correct endpoint (you can see the errors in container logs).
+
+## Debugging Tips
+
+The [Kubernetes
+documentation](https://kubernetes.io/docs/tasks/debug-application-cluster)
+has some good tips on how to debug various components:
+
+* [Init containers](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-init-containers/)
+* [Pods and ReplicationControllers](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-pod-replication-controller/)
+* [Services](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-service/)
+
+### task-runner container
+
+Most containers do not have any system tools to run Rails console or use
+other system debug tools, but there is a separate `task-runner`
+container that does have these. For example, you can find the
+name of the pod via:
+
+
+    ```
+    kubectl get pods -l app=task-runner
+    ```
+
+    Sample output:
+
+    ```
+    NAME                                  READY   STATUS    RESTARTS   AGE
+    gitlab-task-runner-5864dcc4c5-wvg2h   1/1     Running   0          25h
+    ```
+
+1. Enter the container:
+
+    ```
+    kubectl exec -it gitlab-task-runner-5864dcc4c5-wvg2h /bin/bash
+    ```
+
+1. From here, you can run a number of commands. For example:
+
+    * gitlab-rake console
+    * curl
+    * ping
+    * etc.
+
+### Installing the Helm Chart without SSL
+
+By default, the GitLab Helm Chart will try to use SSL and enable HTTPS where
+it can. You can disable this behavior by disabling the cert manager by
+specifying the `--set global.ingress.configureCertmanager=false` argument.
+For example:
+
+```
+helm upgrade --namespace gitlab --install gitlab . \
+    --set global.hosts.domain=35.202.200.217.xip.io \
+    --set global.hosts.externalIP=35.202.200.217 \
+    --set certmanager.install=false \
+    --set global.ingress.configureCertmanager=false
+```
+
+### How do I get the initial GitLab root password?
+
+There are number of ways to do this. The first is to look at the Kubernetes secret:
+
+```
+kubectl get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
+```
+
+If you have doubts whether that is using that value, you can also check the logs of the `gitlab-migration` container
+if the root password were set:
+
+```
+kubectl logs -l app=migration
+```
