@@ -284,17 +284,16 @@ other system debug tools, but there is a separate `task-runner`
 container that does have these. For example, you can find the
 name of the pod via:
 
+```
+kubectl get pods -l app=task-runner
+```
 
-    ```
-    kubectl get pods -l app=task-runner
-    ```
+Sample output:
 
-    Sample output:
-
-    ```
-    NAME                                  READY   STATUS    RESTARTS   AGE
-    gitlab-task-runner-5864dcc4c5-wvg2h   1/1     Running   0          25h
-    ```
+```
+NAME                                  READY   STATUS    RESTARTS   AGE
+gitlab-task-runner-5864dcc4c5-wvg2h   1/1     Running   0          25h
+```
 
 1. Enter the container:
 
