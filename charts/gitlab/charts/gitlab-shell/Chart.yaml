@@ -2,7 +2,7 @@
 apiVersion: v1
 name: gitlab-shell
 version: 1.8.4
-appVersion: master
+appVersion: dj-ruby-2-6-3
 description: sshd for Gitlab
 keywords:
 - gitlab
