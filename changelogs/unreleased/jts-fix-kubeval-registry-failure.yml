@@ -1,5 +1,5 @@
 ---
-title: Removes replica key in favour of the HPA
+title: Defaults replica value to that of minReplica
 merge_request: 794
 author: skarbek
 type: other
