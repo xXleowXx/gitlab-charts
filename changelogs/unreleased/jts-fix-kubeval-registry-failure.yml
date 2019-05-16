@@ -1,0 +1,5 @@
+---
+title: Removes replica key in favour of the HPA
+merge_request:
+author: skarbek
+type: other
