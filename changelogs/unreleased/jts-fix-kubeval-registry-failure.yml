@@ -1,5 +1,5 @@
 ---
-title: Defaults replica value to that of minReplica
+title: Default Registry replicas to minReplicas
 merge_request: 794
 author: skarbek
 type: other
