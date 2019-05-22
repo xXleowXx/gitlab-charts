@@ -1,4 +1,4 @@
-{{- if .Values.global.operator.enabled }}
+{{- if and .Values.global.operator.enabled .Values.crdManagerEnabled }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -7,7 +7,7 @@ metadata:
   labels:
 {{ include "gitlab.standardLabels" $ | indent 4 }}
   annotations:
-    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook: pre-install,pre-upgrade,post-delete
     helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 ---
@@ -18,7 +18,7 @@ metadata:
   labels:
 {{ include "gitlab.standardLabels" $ | indent 4 }}
   annotations:
-    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook: pre-install,pre-upgrade,post-delete
     helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 rules:
@@ -42,7 +42,7 @@ metadata:
   labels:
 {{ include "gitlab.standardLabels" $ | indent 4 }}
   annotations:
-    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook: pre-install,pre-upgrade,post-delete
     helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 roleRef:
@@ -62,14 +62,14 @@ metadata:
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
   annotations:
-    helm.sh/hook: pre-install,pre-upgrade
-    helm.sh/hook-weight: "-4"
+    helm.sh/hook: pre-install,pre-upgrade,post-delete
+    helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 data:
   crd.yaml: |-
 {{ include (print $.Template.BasePath "/_crd.yaml") . | indent 4 }}
-  verify-crd.sh: |
-{{ include (print $.Template.BasePath "/_verify_crd.sh") . | indent 4 }}
+  manage-crd.sh: |
+{{ include (print $.Template.BasePath "/_manage_crd.sh") . | indent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -85,16 +85,48 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ template "fullname" . }}-crd-verifier
+      name: {{ template "fullname" . }}-crd-manager
       labels:
         release: {{ .Release.Name }}
     spec:
       restartPolicy: Never
       serviceAccountName: {{ template "fullname" . }}-crd
       containers:
-      - name: verify-crd
+      - name: manage-crd
         image: "registry.gitlab.com/gitlab-org/build/cng/kubectl:v1.9.3"
-        command: ["/bin/bash", "/scripts/verify-crd.sh"]
+        command: ["/bin/bash", "/scripts/manage-crd.sh"]
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+      volumes:
+      - name: scripts
+        configMap:
+          name: {{ template "fullname" . }}-crd
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "fullname" . }}-delete-crd
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: post-delete
+    helm.sh/hook-weight: "-4"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      name: {{ template "fullname" . }}-crd-manager
+      labels:
+        release: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ template "fullname" . }}-crd
+      containers:
+      - name: manage-crd
+        image: "registry.gitlab.com/gitlab-org/build/cng/kubectl:v1.9.3"
+        command: ["/bin/bash", "/scripts/manage-crd.sh", "delete"]
         volumeMounts:
         - name: scripts
           mountPath: /scripts

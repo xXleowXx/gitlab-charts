@@ -35,3 +35,8 @@ resources:
 # A prefix for group name of GitLab CRD. It can be used for distinguishing
 # different CRDs in a cluster, e.g. for development purposes such GitLab CI.
 #crdPrefix:
+
+# Enables/disables automatic CRD management. By default the it is  enabled.
+# Disable it if you need/want to manage CRD lifecycle outside the Chart, e.g.
+# due to restrictions on cluster-level roles.
+crdManagerEnabled: true
