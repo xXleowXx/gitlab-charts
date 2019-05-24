@@ -426,8 +426,8 @@ check_docs_internal_links:
     helm repo add gitlab https://charts.gitlab.io/
     helm dep update .
 
-    # If OPERATOR_BOOTSTRAP is set, we _do not_ want to use --wait / --timeout
-    WAIT="--wait --timeout 600"
+    # If CRD manager is enabled (which is by default), we _do not_ use --wait
+    WAIT="--timeout 600"
 
     helm upgrade --install \
       $WAIT \

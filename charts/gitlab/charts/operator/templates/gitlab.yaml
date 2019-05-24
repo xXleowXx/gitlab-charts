@@ -8,7 +8,7 @@ metadata:
     revision: "{{ .Release.Revision }}"
   annotations:
     gitlab.com/class: {{ .Release.Name }}
-    {{- if .Values.crdManagerEnabled }}
+    {{- if .Values.crdManager.enabled }}
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation
     {{- end }}

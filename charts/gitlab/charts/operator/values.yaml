@@ -36,7 +36,12 @@ resources:
 # different CRDs in a cluster, e.g. for development purposes such GitLab CI.
 #crdPrefix:
 
-# Enables/disables automatic CRD management. By default the it is  enabled.
-# Disable it if you need/want to manage CRD lifecycle outside the Chart, e.g.
-# due to restrictions on cluster-level roles.
-crdManagerEnabled: true
+crdManager:
+  # Enables/disables automatic CRD management. By default the it is enabled.
+  # Disable it if you need/want to manage CRD lifecycle outside the Chart, e.g.
+  # due to restrictions on cluster-level roles.
+  enabled: true
+  image:
+    repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
+    tag: v1.9.3
+    # pullPolicy: IfNotPresent

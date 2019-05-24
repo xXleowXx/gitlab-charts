@@ -1,4 +1,4 @@
-{{- if and .Values.global.operator.enabled .Values.crdManagerEnabled }}
+{{- if and .Values.global.operator.enabled .Values.crdManager.enabled }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -93,7 +93,8 @@ spec:
       serviceAccountName: {{ template "fullname" . }}-crd
       containers:
       - name: manage-crd
-        image: "registry.gitlab.com/gitlab-org/build/cng/kubectl:v1.9.3"
+        image: "{{ .Values.crdManager.image.repository }}:{{ .Values.crdManager.image.tag }}"
+        {{ template "gitlab.imagePullPolicy" .Values.crdManager }}
         command: ["/bin/bash", "/scripts/manage-crd.sh"]
         volumeMounts:
         - name: scripts
@@ -125,7 +126,8 @@ spec:
       serviceAccountName: {{ template "fullname" . }}-crd
       containers:
       - name: manage-crd
-        image: "registry.gitlab.com/gitlab-org/build/cng/kubectl:v1.9.3"
+        image: "{{ .Values.crdManager.image.repository }}:{{ .Values.crdManager.image.tag }}"
+        {{ template "gitlab.imagePullPolicy" .Values.crdManager }}
         command: ["/bin/bash", "/scripts/manage-crd.sh", "delete"]
         volumeMounts:
         - name: scripts
