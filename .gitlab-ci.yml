@@ -426,7 +426,7 @@ check_docs_internal_links:
     helm repo add gitlab https://charts.gitlab.io/
     helm dep update .
 
-    # If CRD manager is enabled (which is by default), we _do not_ use --wait
+    # When CRD manager is enabled, we _do not_ use --wait
     WAIT="--timeout 600"
 
     helm upgrade --install \

@@ -94,7 +94,7 @@ spec:
       containers:
       - name: manage-crd
         image: "{{ .Values.crdManager.image.repository }}:{{ .Values.crdManager.image.tag }}"
-        {{ template "gitlab.imagePullPolicy" .Values.crdManager }}
+        {{ template "gitlab.imagePullPolicy" . }}
         command: ["/bin/bash", "/scripts/manage-crd.sh"]
         volumeMounts:
         - name: scripts
@@ -127,7 +127,7 @@ spec:
       containers:
       - name: manage-crd
         image: "{{ .Values.crdManager.image.repository }}:{{ .Values.crdManager.image.tag }}"
-        {{ template "gitlab.imagePullPolicy" .Values.crdManager }}
+        {{ template "gitlab.imagePullPolicy" . }}
         command: ["/bin/bash", "/scripts/manage-crd.sh", "delete"]
         volumeMounts:
         - name: scripts

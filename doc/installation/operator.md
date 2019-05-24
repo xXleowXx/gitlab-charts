@@ -12,15 +12,16 @@ We provide the flag `global.operator.enabled`, when set to true it enables the o
 
 ## Installing using the operator
 
-The operator makes use of Kubernetes CustomResourceDefinitions (CRD). Since Helm will be used for the installation, we need to ensure that this CRD is in place prior to attempting to use it. In order to do this, we have to run an additional command prior to use.
+The operator makes use of Kubernetes CustomResourceDefinitions (CRD). Therefor, you need cluster level privilege to install
+it. Please note that this privilege is only required for CRD installation. The operator itself does not mandate it.
 
-1. `helm upgrade --install <release-name> . --set global.operator.enabled=true --set global.operator.bootstrap=true ... ` where `...` shall be replaced by the rest of the values you would like to set.
-2. `helm upgrade <release-name> . --set global.operator.enabled=true --set global.operator.bootstrap=false ...`.
+Simply run `helm upgrade --install <release-name> . --set global.operator.enabled=true ... ` where `...` shall be replaced by the rest of the values you would like to set. Along with everything else, this command will install the CRD, GitLab custom resource, and the operator.
 
-The first command will install only the `CRD` but will not actually attempt to deploy the operator. The second command will deploy the operator itself, now that the CRD is in place.
-
-**NOTE:** This needs done only the first time you install the operator, further upgrades will follow the normal [upgrade procedures](./upgrade.md)
+**NOTE:** When the operator is enabled you can not use `--no-hooks` and `--wait` flags. Otherwise it will fail the installation.
 
 **NOTE:** Test new versions of the operator by setting `gitlab.operator.image.tag` to either the branch name of a gitlab-operator container build or a specific tagged release number.
 
 **NOTE:** The operator is transitioning from a ClusterRole to a regular Role that operates within a namespace. Operator containers after version 0.4 will have this new behavior by default.
+
+**NOTE:** When the operator is enabled the CRD is managed automatically. It's this particular piece that requires cluster-level privileges. If you need/want to manage CRD installation without Helm, e.g. due to restrictions on cluster-level roles, you can disable automatic CRD management by setting `gitlab.operator.crdManager.enabled` to 
+`false`.
