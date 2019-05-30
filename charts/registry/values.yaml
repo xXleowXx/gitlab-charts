@@ -1,6 +1,6 @@
 image:
   repository: registry
-  tag: '2.6.2'
+  tag: '2.7.1'
   pullPolicy: 'IfNotPresent'
   pullSecrets: []
 service:
@@ -66,7 +66,7 @@ init:
     if [ -e /config/accesskey ] ; then
       sed -e 's@ACCESS_KEY@'"$(cat /config/accesskey)"'@' -e 's@SECRET_KEY@'"$(cat /config/secretkey)"'@' /config/config.yml > /registry/config.yml
     else
-      cp /config/config.yml  /registry/config.yml
+      cp -v -r -L /config/config.yml  /registry/config.yml
     fi
     # Place the `http.secret` value from the kubernetes secret
     sed -i -e 's@HTTP_SECRET@'"$(cat /config/httpSecret)"'@' /registry/config.yml
@@ -74,7 +74,7 @@ init:
     if [ -d /config/storage ]; then
       # Copy contents of storage secret(s)
       mkdir -p /registry/storage
-      cp /config/storage/* /registry/storage/
+      cp -v -r -L /config/storage/* /registry/storage/
       # Ensure there is a new line in the end
       echo '' >> /registry/storage/config
       # Default `delete.enabled: true` if not present.
@@ -111,9 +111,19 @@ authEndpoint:
 tokenService: 'container_registry'
 # This must match your GitLab Rails configuration
 tokenIssuer: 'gitlab-issuer'
-# if replicas is >1, shared storage MUST be used.
+# Must to be `false` to support Windows clients
+# See https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3964
+authAutoRedirect: false
+
+# if minReplicas is >1, shared storage MUST be used.
 minReplicas: 2
 maxReplicas: 10
 maxUnavailable: 1
 storage: {}
-minio: {}
+minio:
+  redirect: false
+
+# https://github.com/docker/distribution/blob/master/docs/configuration.md#compatibility
+compatibility:
+  schema1:
+    enabled: false

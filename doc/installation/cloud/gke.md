@@ -1,7 +1,17 @@
 # Preparing GKE resources
 
 For a fully functional GitLab instance, you will need a few resources before
-deploying the `gitlab` chart.
+deploying the `gitlab` chart. The following is how these charts are deployed
+and tested within GitLab.
+
+NOTE: **Note:** Google provides a whitepaper for [deploying production-ready GitLab on
+Google Kubernetes Engine][whitepaper], including all steps and external
+resource configuration. These are alternative to this document, and the
+deployed chart will behave slightly differently. For example, the default
+domain is configured with [xip.io](http://xip.io), which may experience issues due to [rate limiting](https://letsencrypt.org/docs/rate-limits/) with
+Let's Encrypt.
+
+[whitepaper]: https://cloud.google.com/solutions/deploying-production-ready-gitlab-on-gke
 
 ## Creating the GKE cluster
 
@@ -21,7 +31,7 @@ The script will:
 1. Initialize Helm and install Tiller.
 
 Google Cloud SDK is a dependency of this script, so make sure it's
-[set up correctly](../tools.md#connect-to-the-cluster) in order for the script
+[set up correctly](../tools.md#connecting-to-the-gke-cluster) in order for the script
 to work.
 
 The script reads various parameters from environment variables and an argument
@@ -32,7 +42,7 @@ The table below describes all variables.
 | Variable        | Description                                                                 | Default value                    |
 |-----------------|-----------------------------------------------------------------------------|----------------------------------|
 | REGION          | The region where your cluster lives                                         | us-central1                      |
-| ZONE            | The zone where your cluster instances lives                                 | us-central1-a                     |
+| ZONE            | The zone where your cluster instances lives                                 | us-central1-a                    |
 | CLUSTER_NAME    | The name of the cluster                                                     | gitlab-cluster                   |
 | CLUSTER_VERSION | The version of your GKE cluster                                             | GKE default, check the [GKE release notes](https://cloud.google.com/kubernetes-engine/release-notes) |
 | MACHINE_TYPE    | The cluster instances' type                                                 | n1-standard-4                    |
@@ -41,6 +51,7 @@ The table below describes all variables.
 | RBAC_ENABLED    | If you know whether your cluster has RBAC enabled set this variable.        | true                             |
 | PREEMPTIBLE     | Cheaper, clusters live at *most* 24 hrs. No SLA on nodes/disks              | false                            |
 | USE_STATIC_IP   | Create a static IP for Gitlab instead of an ephemeral IP with managed DNS   | false                            |
+| INT_NETWORK     | The IP space to use within this cluster                                     | default                          |
 
 Run the script, by passing in your desired parameters. It can work with the
 default parameters except for `PROJECT` which is required:
