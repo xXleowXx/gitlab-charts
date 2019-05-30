@@ -1,3 +1,5 @@
+#!/bin/bash
+
 _CRD_NAME='{{ template "gitlab.operator.crdName" . }}'
 
 createCRD() {
@@ -5,7 +7,7 @@ createCRD() {
 
   printf 'Waiting for CRD `%s` to become available ...\n' "$_CRD_NAME"
   _cnt=0
-  _max=10 # roughly 10ms
+  _max=10 # roughly 10s
   while [ $_cnt -lt $_max ]; do
     _out="$( kubectl get crd $_CRD_NAME 2>&1 )"
     [ "$?" = "0" ] && {

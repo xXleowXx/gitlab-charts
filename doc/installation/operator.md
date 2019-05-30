@@ -12,7 +12,7 @@ We provide the flag `global.operator.enabled`, when set to true it enables the o
 
 ## Installing using the operator
 
-The operator makes use of Kubernetes CustomResourceDefinitions (CRD). Therefor, you need cluster level privilege to install
+The operator makes use of Kubernetes CustomResourceDefinitions (CRD). Therefore, you need cluster level privilege to install
 it. Please note that this privilege is only required for CRD installation. The operator itself does not mandate it.
 
 Simply run `helm upgrade --install <release-name> . --set global.operator.enabled=true ... ` where `...` shall be replaced by the rest of the values you would like to set. Along with everything else, this command will install the CRD, GitLab custom resource, and the operator.
