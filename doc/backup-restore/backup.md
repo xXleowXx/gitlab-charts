@@ -31,6 +31,11 @@ You need to set the following parameters:
 * `gitlab.task-runner.backups.cron.enabled`: Set to true to enable cron based backups
 * `gitlab.task-runner.backups.cron.schedule`: Set as per the Kubernetes schedule docs
 
+To enable backup using the `gitlab.task-runner.backups.objectStorage` configuration created [here](index.md#object-storage), without disabling Minio.
+
+Set the following parameter:
+* `gitlab.task-runner.backups.cron.externalObjectStorage`: Set to true to enable use of specified object storage configuration
+
 ## Backup the secrets
 
 You should also save a copy of the rails secrets. (These are not included in the backup as a security precaution. We recommend keeping your full backup that includes the database separate from the copy of the secrets.)
