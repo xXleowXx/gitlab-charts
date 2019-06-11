@@ -1,0 +1,5 @@
+---
+title: Add ability to specify separate objectStorage for cron backup
+merge_request: 817
+author:
+type: changed
