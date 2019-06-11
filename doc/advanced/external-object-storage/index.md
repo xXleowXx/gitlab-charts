@@ -106,7 +106,7 @@ and a tmp bucket for preserving existing data during the restore process (`globa
 Currently AWS S3-compatible object storage systems and Google Cloud Storage are supported backends
 The backend tyhp is configurable by setting `global.appConfig.backups.objectStorage.backend` to `s3` and `gcs` respectively.
 A connection configuration through the `gitlab.task-runner.backups.objectStorage.config` key must also be provided.
-When using Google Cloud Storage, the GCP project must be set with the `global.appConfig.backups.objectStorage.confi.gcpProject` value.
+When using Google Cloud Storage, the GCP project must be set with the `global.appConfig.backups.objectStorage.config.gcpProject` value.
 
 For S3-compatible storage:
 ```
