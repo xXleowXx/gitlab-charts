@@ -27,6 +27,7 @@ Some features of GitLab are not currently available using the Helm chart:
 - [GitLab Geo](https://gitlab.com/charts/gitlab/issues/8)
 - [No in-cluster HA database](https://gitlab.com/charts/gitlab/issues/48)
 - [Smartcard authentication](https://gitlab.com/charts/gitlab/issues/988)
+- [Elasticsearch Wiki Indexing](https://gitlab.com/gitlab-org/gitlab-ee/issues/11269)
 
 Database limitations:
 
