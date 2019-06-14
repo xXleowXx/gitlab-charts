@@ -411,7 +411,7 @@ prometheus:
 ## doc/architecture/decisions.md#redis
 ## doc/charts/redis
 redis:
-  usePassword: false
+  existingSecret: 'secret'
   usePasswordFile: true
 #  enabled: true
 
