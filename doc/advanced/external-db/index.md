@@ -44,5 +44,5 @@ helm install
   --set postgresql.install=false
   --set global.psql.host=psql.example
   --set global.psql.password.secret=gitlab-postgresql-password
-  --set global.psql.password.key=postgres-password
+  --set global.psql.password.key=postgresql-password
 ```

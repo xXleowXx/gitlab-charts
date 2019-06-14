@@ -398,11 +398,16 @@ redis-ha:
 ## See requirements.yaml for current version
 postgresql:
   install: true
-  postgresUser: gitlab
-  postgresDatabase: gitlabhq_production
-  imageTag: 9.6.8
+  postgresqlDatabase: gitlabhq_production
+  image:
+    tag: 11.3.0-debian-9-r38
   usePasswordFile: true
   existingSecret: 'secret'
+  initdbScripts:
+    add_gitlab_user.sh: |
+      #!/bin/sh
+      export PGPASSWORD=$(cat /opt/bitnami/postgresql/secrets/postgresql-password)
+      psql -U postgres -c "CREATE USER gitlab WITH SUPERUSER PASSWORD '${PGPASSWORD}';"
   metrics:
     enabled: true
     ## Optionally define additional custom metrics

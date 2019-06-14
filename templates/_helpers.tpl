@@ -183,11 +183,11 @@ Alias of gitlab.psql.password.secret to override upstream postgresql chart namin
 
 {{/*
 Return the name of the key in a secret that contains the postgres password
-Uses `postgres-password` to match upstream postgresql chart when not using an
+Uses `postgresql-password` to match upstream postgresql chart when not using an
   external postegresql
 */}}
 {{- define "gitlab.psql.password.key" -}}
-{{- default "postgres-password" .Values.global.psql.password.key | quote -}}
+{{- default "postgresql-password" .Values.global.psql.password.key | quote -}}
 {{- end -}}
 
 {{/* ######### ingress templates */}}
