@@ -410,8 +410,11 @@ prometheus:
 ## Configuration of Redis
 ## doc/architecture/decisions.md#redis
 ## doc/charts/redis
-# redis:
-#   enabled: true
+redis:
+  usePassword: false
+  usePasswordFile: true
+#  enabled: true
+
 ## doc/architecture/decisions.md#redis-ha
 ## doc/charts/redis-ha
 redis-ha:
