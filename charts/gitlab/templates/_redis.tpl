@@ -9,7 +9,7 @@ to the service name
 {{- if or .Values.redis.host .Values.global.redis.host -}}
 {{- coalesce .Values.redis.host .Values.global.redis.host -}}
 {{- else -}}
-{{- $name := default "redis" .Values.redis.serviceName -}}
+{{- $name := default "redis-master" .Values.redis.serviceName -}}
 {{- printf "%s-%s" .Release.Name $name -}}
 {{- end -}}
 {{- end -}}
