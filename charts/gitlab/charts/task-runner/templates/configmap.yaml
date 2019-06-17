@@ -121,4 +121,12 @@ data:
       mv "/${secret_dir}/objectstorage/.s3cfg" "/${secret_dir}/.s3cfg"
     fi
     {{- end }}
+  configure-gsutil: |
+    # The following script is used to configure gsutil when creating backups
+    # It provides inputs to the `gsutil config -e` prompt as follows:
+    # 1) Path to service account JSON key file
+    # 2) Set permissions for key file
+    # 3) GCP Project ID
+    # 4) Decline anonymous usage statistics
+    printf "$GOOGLE_APPLICATION_CREDENTIALS\ny\n{{ .Values.backups.objectStorage.config.gcpProject }}\nN\n" | gsutil config -e && while sleep 3600; do :; done
 {{- end }}

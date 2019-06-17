@@ -64,7 +64,7 @@ spec:
             {{- if eq .Values.backups.objectStorage.backend "s3" }}
             - cp -v -r -L /etc/gitlab/.s3cfg $HOME/.s3cfg && while sleep 3600; do :; done # alpine sleep has no infinity
             {{- else if eq .Values.backups.objectStorage.backend "gcs" }}
-            - printf "$GOOGLE_APPLICATION_CREDENTIALS\ny\n{{ .Values.backups.objectStorage.config.gcpProject }}\nN\n" | gsutil config -e && while sleep 3600; do :; done
+            - sh /config/configure-gsutil && while sleep 3600; do :; done
             {{- end }}
           image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
           {{ template "gitlab.imagePullPolicy" . }}
