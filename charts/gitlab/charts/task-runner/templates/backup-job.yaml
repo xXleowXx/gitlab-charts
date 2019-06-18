@@ -63,7 +63,7 @@ spec:
                 {{- if eq .Values.backups.objectStorage.backend "s3" }}
                 - cp /etc/gitlab/.s3cfg $HOME/.s3cfg && backup-utility # alpine sleep has no infinity
                 {{- else if eq .Values.backups.objectStorage.backend "gcs" }}
-                - sh /config/configure-gsutil && backup-utility
+                - sh /var/opt/gitlab/templates/configure-gsutil && backup-utility
                 {{- end }}
               image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
               {{ template "gitlab.imagePullPolicy" . }}
