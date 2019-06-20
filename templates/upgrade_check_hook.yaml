@@ -1,0 +1,60 @@
+{{- if .Values.upgradeCheck.enabled }}
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-upgrade-check
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+data:
+  runcheck: |
+{{ include (print $.Template.BasePath "/_runcheck.sh") . | indent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name:
+  namespace: {{ .Release.Namespace }}-upgrade-check
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      {{- if .Values.upgradeCheck.tolerations }}
+      tolerations:
+{{ toYaml .Values.upgradeCheck.tolerations | indent 8 }}
+      {{- end }}
+      restartPolicy: Never
+{{- include "pullsecrets" .Values.upgradeCheck.image | indent 6}}
+      containers:
+        - name: run-check
+          image: "{{ .Values.upgradeCheck.image.repository }}:{{ .Values.upgradeCheck.image.tag }}"
+          command: ['/bin/bash', '/scripts/runcheck']
+          {{ template "gitlab.imagePullPolicy" . }}
+          volumeMounts:
+            - name: chart-info
+              mountPath: /chart-info
+            - name: scripts
+              mountPath: /scripts
+          resources:
+{{ toYaml .Values.upgradeCheck.resources | indent 12 }}
+      volumes:
+      - name: chart-info
+        configMap:
+          name: {{ template "fullname" . }}-chart-info
+          optional: true
+      - name: scripts
+        configMap:
+          name: {{ template "fullname" . }}-upgrade-check
+{{- end }}
