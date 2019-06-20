@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 notify() {
   echo "$1"
@@ -9,7 +9,7 @@ NEW_VERSION={{ coalesce .Values.global.gitlabVersion .Chart.AppVersion }}
 MIN_VERSION=11.11
 
 # Only run check for semver releases
-if ! [[ $NEW_VERSION =~ '^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' ]]; then
+if ! awk 'BEGIN{exit(!(ARGV[1] ~ /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/))}' "$NEW_VERSION"; then
   exit 0
 fi
 
@@ -26,7 +26,7 @@ fi
 OLD_VERSION_STRING=$(cat /chart-info/gitlabVersion)
 
 # Skip check if old version wasn't semver
-if ! [[ $OLD_VERSION_STRING =~ '^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' ]]; then
+if ! awk 'BEGIN{exit(!(ARGV[1] ~ /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/))}' "$OLD_VERSION_STRING"; then
   exit 0
 fi
 
