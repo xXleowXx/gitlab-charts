@@ -8,7 +8,7 @@ metadata:
 {{ include "gitlab.standardLabels" . | indent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
-    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-weight": "-11"
     "helm.sh/hook-delete-policy": before-hook-creation
 data:
   runcheck: |
@@ -26,6 +26,7 @@ metadata:
     "helm.sh/hook-weight": "-10"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
+  backoffLimit: 2
   template:
     metadata:
       labels:
@@ -43,6 +44,9 @@ spec:
           image: "{{ .Values.upgradeCheck.image.repository }}:{{ .Values.upgradeCheck.image.tag }}"
           command: ['/bin/sh', '/scripts/runcheck']
           {{ template "gitlab.imagePullPolicy" . }}
+          env:
+            - name: GITLAB_VERSION
+              value: '{{ coalesce .Values.global.gitlabVersion .Chart.AppVersion }}'
           volumeMounts:
             - name: chart-info
               mountPath: /chart-info
