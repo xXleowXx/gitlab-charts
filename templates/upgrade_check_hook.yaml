@@ -41,7 +41,7 @@ spec:
       containers:
         - name: run-check
           image: "{{ .Values.upgradeCheck.image.repository }}:{{ .Values.upgradeCheck.image.tag }}"
-          command: ['/bin/bash', '/scripts/runcheck']
+          command: ['/bin/sh', '/scripts/runcheck']
           {{ template "gitlab.imagePullPolicy" . }}
           volumeMounts:
             - name: chart-info
