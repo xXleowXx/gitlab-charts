@@ -16,8 +16,8 @@ data:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name:
-  namespace: {{ .Release.Namespace }}-upgrade-check
+  name: {{ template "fullname" . }}-upgrade-check
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
   annotations:
