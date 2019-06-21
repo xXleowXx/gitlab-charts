@@ -18,7 +18,7 @@ NEW_MINOR_VERSION=$(echo $GITLAB_VERSION | awk -F "." '{print $1"."$2}')
 if [ ! -f /chart-info/gitlabVersion ]; then
   notify "It seems you are attempting an unsupported upgrade path."
   notify "Please follow the upgrade documentation at https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations"
-  notify "and upgrade to ${MIN_VERSION} before upgrading to ${GITLAB_VERSION}."
+  notify "and upgrade to 11.11.3 (Chart Version 1.9.4) before upgrading to ${GITLAB_VERSION}."
   exit 1
 fi
 
@@ -41,7 +41,7 @@ if test ${OLD_MAJOR_VERSION} -lt ${NEW_MAJOR_VERSION}; then
     notify "It is recommended to upgrade to the last minor version in a major version series"
     notify "first before jumping to the next major version."
     notify "Please follow the upgrade documentation at https://docs.gitlab.com/ee/policy/maintenance.html#upgrade-recommendations"
-    notify "and upgrade to ${MIN_VERSION} first."
+    notify "and upgrade to 11.11.3 (Chart Version 1.9.4) first."
     exit 1
   fi
 fi
