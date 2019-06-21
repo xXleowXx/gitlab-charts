@@ -12,7 +12,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation
 data:
   runcheck: |
-{{ include (print $.Template.BasePath "/_runcheck.sh") . | indent 4 }}
+{{ include (print $.Template.BasePath "/_runcheck.tpl") . | indent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
