@@ -51,8 +51,10 @@ Limitations planned to be fixed during beta:
 
 - Cannot create a project from a template: <https://gitlab.com/charts/gitlab/issues/348>
 - Cannot create a new branch from the UI: <https://gitlab.com/charts/gitlab/issues/572>
-- GitLab project based import/~~export~~: <https://gitlab.com/charts/gitlab/issues/428>
-- ~~Backup procedure does not include repositories: <https://gitlab.com/charts/gitlab/issues/503>~~ (fixed in `0.3.0`)
+- GitLab project based import/~~export~~:
+  - <https://gitlab.com/charts/gitlab/issues/428>
+- ~~Backup procedure does not include repositories~~:
+  - <https://gitlab.com/charts/gitlab/issues/503> (fixed in `0.3.0`)
 
 Features that are currently out of scope:
 
