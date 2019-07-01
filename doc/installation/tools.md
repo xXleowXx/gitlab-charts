@@ -3,6 +3,9 @@
 Before deploying GitLab to your Kubernetes cluster, there are some tools you
 must have installed locally.
 
+NOTE: **What you need to know about going Cloud-Native**
+ [In this webcast](https://about.gitlab.com/resources/video-going-cloud-native/), learn about the advantages and challenges of going cloud-native.
+
 ## kubectl
 
 kubectl is the tool that talks to the Kubernetes API. kubectl 1.10 or higher is
