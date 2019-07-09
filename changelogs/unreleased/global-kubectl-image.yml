@@ -1,0 +1,5 @@
+---
+title: Use global values for kubectl image and deprecate char-local settings
+merge_request: 864
+author:
+type: changed
