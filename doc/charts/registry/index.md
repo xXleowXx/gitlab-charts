@@ -183,9 +183,9 @@ By default, the Service is configured as:
 | `externalPort`    | Int     | `5000`     | Port exposed by the Service |
 | `internalPort`    | Int     | `5000`     | Port utilized by the Pod to accept
 request from the service |
-| `clusterIP`       | String  | `nil`      | Allows one to configure a custom
+| `clusterIP`       | String  | `null`      | Allows one to configure a custom
 Cluster IP as necessary |
-| `loadBalancerIP`  | String  | `nil`      | Allows one to configure a custom
+| `loadBalancerIP`  | String  | `null`      | Allows one to configure a custom
 LoadBalancer IP address as necessary |
 
 ## Configuring the `ingress`
