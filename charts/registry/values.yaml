@@ -4,6 +4,7 @@ image:
   pullPolicy: 'IfNotPresent'
   pullSecrets: []
 service:
+  annotations: {}
   name: registry
   type: ClusterIP
   externalPort: 5000
