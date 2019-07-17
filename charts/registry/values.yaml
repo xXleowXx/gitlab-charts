@@ -8,8 +8,8 @@ service:
   type: ClusterIP
   externalPort: 5000
   internalPort: 5000
-  clusterIP: ''
-  loadBalancerIP: ''
+  clusterIP: nil
+  loadBalancerIP: nil
 
 ## Support for tolerations for pod scheduling
 tolerations: []
