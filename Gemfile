@@ -8,3 +8,4 @@ gem 'selenium-webdriver'
 gem 'capybara-screenshot'
 gem 'docker-api'
 gem 'rake'
+gem 'mdl', '~> 0.5.0', require: false
