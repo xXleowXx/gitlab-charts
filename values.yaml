@@ -413,6 +413,13 @@ prometheus:
 redis:
   existingSecret: 'secret'
   usePasswordFile: true
+  cluster:
+    slaveCount: 3
+  sentinel:
+    enabled: true
+    masterSet: gitlab-redis
+  metrics:
+    enabled: false
 #  enabled: true
 
 ## doc/architecture/decisions.md#redis-ha
