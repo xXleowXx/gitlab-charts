@@ -75,6 +75,14 @@ registry:
     proxyReadTimeout:
     proxyBodySize:
     proxyBuffering:
+  networkpolicy:
+    enabled: false
+    egress:
+      enabled: false
+      rules: []
+    ingress:
+      enabled: false
+      rules: []
 ```
 
 If you chose to deploy this chart as a standalone, remove the `registry` at the top level.
@@ -200,6 +208,46 @@ This section controls the registry ingress.
 | `enabled`         | Boolean | `false` | Setting that controls whether to create ingress objects for services that support them. When `false` the `global.ingress.enabled` setting is used. |
 | `tls.enabled`     | Boolean | `true`  | When set to `false`, you disable TLS for the Registry subchart. This is mainly useful for cases in which you cannot use TLS termination at ingress-level, like when you have a TLS-terminating proxy before the ingress controller. |
 | `tls.serviceName` | String  | `redis` | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the registry url. When not set, the `global.ingress.tls.secretName` is used instead. Defaults to not being set. |
+
+## Configuring the `networkpolicy`
+
+This section controls the registry networkpolicy. This configuration is optional
+and can be used to configure the registry to limit egress and ingress to specific endpoints.
+
+
+| Name              | Type    | Default | Description |
+|:----------------- |:-------:|:------- |:----------- |
+| `enabled`         | Boolean | `false` | This setting enables the networkpolicy for registry |
+| `ingress.enabled` | Boolean | `false` | When set to `true`, the `Ingress` network policy will be activated. This will block all ingress connections unless rules are specified. |
+| `ingress.rules`   | Array   | `[]`    | Rules for the ingress policy, for details see https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource and the example below |
+| `egress.enabled`  | Boolean | `false` | When set to `true`, the `Egress` network policy will be activated. This will block all egress connections unless rules are specified. |
+| `egress.rules`    | Array   | `[]`    | Rules for the egress policy, these for details see https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource and the example below |
+
+### Example policy for preventing connections to all internal endpoints
+
+The Registry service normally requires egress connections to object storage,
+ingress connections from docker clients, and kube-dns for DNS lookups. This
+prevents the Registry service so that outbound requests to the internal network
+`10.0.0.0/8` (except DNS) are restricted:
+
+```
+  networkpolicy:
+    enabled: true
+    egress:
+      enabled: true
+      # The following rules enable traffic to all external
+      # endpoints, except the local
+      # network (except DNS requests)
+      rules:
+      - ports:
+        - protocol: "UDP"
+          port: 53
+      - to:
+        - ipBlock:
+            cidr: "0.0.0.0/0"
+            except:
+            - "10.0.0.0/8"
+```
 
 ## Defining the Registry Configuration
 
