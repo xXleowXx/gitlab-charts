@@ -42,7 +42,10 @@ with `global.shell.port`, and defaults to `22`.
 | `replicaCount`           | `1`            | Shell replicas                           | 
 | `service.externalPort`   | `22`           | Shell exposed port                       | 
 | `service.internalPort`   | `22`           | Shell internal port                      | 
-| `service.name`           | `gitlab-shell` | Shell service name                       | 
+| `service.name`           | `gitlab-shell` | Shell service name                       |
+| `service.type`           | `ClusterIP`    | Shell service type                       |
+| `service.loadBalancerIP` |                | IP address to assign to LoadBalancer (if supported) |
+| `service.loadBalancerSourceRanges` |      | List of IP CIDRs allowed access to LoadBalancer (if supported)  |
 | `service.type`           | `ClusterIP`    | Shell service type                       | 
 | `tolerations`            | `[]`           | Toleration labels for pod assignment     |
 | `unicorn.serviceName`    | `unicorn`      | Unicorn service name                     | 
