@@ -231,7 +231,7 @@ The Registry service normally requires egress connections to object storage,
 ingress connections from docker clients, and kube-dns for DNS lookups. This
 adds the following network restrictions to the Registry service:
 
-* All egress requests to the local network on port 53 are allowed (for kubeDNS)
+* All egress requests to the local network on `10.0.0.0/8` port 53 are allowed (for kubeDNS)
 * Other gress requests to the local network on `10.0.0.0/8` are restricted
 * Egress requests outside of the `10.0.0.0/8` are allowed
 
