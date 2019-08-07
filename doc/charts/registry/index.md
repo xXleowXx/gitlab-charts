@@ -236,7 +236,7 @@ adds the following network restrictions to the Registry service:
 * Egress requests outside of the `10.0.0.0/8` are allowed
 
 _Note that the registry service requires outbound connectivity to the public
-internet for images on object storage_
+internet for images on [external object storage](../../advanced/external-object-storage)_
 
 ```
   networkpolicy:
