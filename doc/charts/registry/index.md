@@ -227,8 +227,14 @@ and can be used to configure the registry to limit egress and ingress to specifi
 
 The Registry service normally requires egress connections to object storage,
 ingress connections from docker clients, and kube-dns for DNS lookups. This
-prevents the Registry service so that outbound requests to the internal network
-`10.0.0.0/8` (except DNS) are restricted:
+adds the following network restrictions to the Registry service:
+
+* All egress requests to the local network on port 53 are allowed (for kubeDNS)
+* Other gress requests to the local network on `10.0.0.0/8` are restricted
+* Egress requests outside of the `10.0.0.0/8` are allowed
+
+_Note that the registry service requires outbound connectivity to the public
+internet for images on object storage_
 
 ```
   networkpolicy:
@@ -239,14 +245,17 @@ prevents the Registry service so that outbound requests to the internal network
       # endpoints, except the local
       # network (except DNS requests)
       rules:
-      - ports:
-        - protocol: "UDP"
-          port: 53
-      - to:
-        - ipBlock:
-            cidr: "0.0.0.0/0"
-            except:
-            - "10.0.0.0/8"
+        - to:
+          - ipBlock:
+              cidr: 10.0.0.0/8
+          ports:
+          - port: 53
+            protocol: UDP
+        - to:
+          - ipBlock:
+              cidr: 0.0.0.0/0
+              except:
+              - 10.0.0.0/8
 ```
 
 ## Defining the Registry Configuration
