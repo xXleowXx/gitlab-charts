@@ -23,7 +23,7 @@ spec:
     {{- end }}
   {{- if .Values.networkpolicy.ingress.enabled }}
   ingress:
-{{ toYaml .Values.networkpolicy.ingress.rules | indent 4 }}
+    {{ toYaml .Values.networkpolicy.ingress.rules | nindent 4 }}
   {{- end -}}
   {{- if .Values.networkpolicy.egress.enabled }}
   egress:
