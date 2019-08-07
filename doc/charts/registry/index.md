@@ -211,8 +211,10 @@ This section controls the registry ingress.
 
 ## Configuring the `networkpolicy`
 
-This section controls the registry networkpolicy. This configuration is optional
-and can be used to configure the registry to limit egress and ingress to specific endpoints.
+This section controls the registry
+[NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/).
+This configuration is optional and is used to limit egress and ingress of the registry to specific endpoints.
+and ingress to specific endpoints.
 
 
 | Name              | Type    | Default | Description |
