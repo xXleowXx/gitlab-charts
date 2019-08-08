@@ -35,3 +35,6 @@ global:
 
 gitlab-runner:
   enabled: false
+
+gitlab-grafana:
+  enabled: true
