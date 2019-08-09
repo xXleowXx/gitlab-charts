@@ -481,3 +481,6 @@ gitlab-runner:
 ## doc/charts/gitlab/gitlab-shell
 #   gitlab-shell:
 #     enabled: false
+## doc/charts/gitlab/gitlab-grafana
+#   gitlab-grafana:
+#     enabled: false
