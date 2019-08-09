@@ -1,3 +1,4 @@
+{{- if .Values.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1107,3 +1108,4 @@ data:
       "uid": "XDaNK6amz",
       "version": 7
     }
+{{- end }}
