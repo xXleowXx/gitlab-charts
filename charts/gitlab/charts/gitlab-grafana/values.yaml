@@ -5,6 +5,24 @@ ingress:
   tls: {}
   annotations: {}
 
+## Support for tolerations for pod scheduling
+tolerations: []
+
+serviceAccount:
+  create: true
+  name: my-gitlab-grafana  # Specify a pre-existing ServiceAccount name
+rbac:
+  create: true
+
+resources:
+  requests:
+    cpu: 50m
+securityContext:
+  # in debian/alpine based images, this is `nobody:nogroup`
+  runAsUser: 65534
+  fsGroup: 65534
+
+
 grafana:
   adminUser: admin
   adminPassword: admin
