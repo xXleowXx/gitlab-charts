@@ -147,6 +147,12 @@ compatibility:
 validation:
   disabled: true
 
+# Configure the logging mechanism for the Container Registry as desired
+log:
+  level: warn
+  fields:
+    service: registry
+
 debug:
   addr:
     port: 5001
