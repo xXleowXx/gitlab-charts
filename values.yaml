@@ -412,7 +412,23 @@ prometheus:
 ## doc/charts/redis
 redis:
   existingSecret: 'secret'
+  existingSecretPasswordKey: 'secret'
   usePasswordFile: true
+  enabled: true
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    subPath: ""
+    matchLabels: {}
+    matchExpressions: []
+    save:
+      - time: 60
+        writes: 1000
+      - time: 300
+        writes: 10
+      - time: 900
+        writes: 1
   cluster:
     slaveCount: 3
   sentinel:
@@ -420,6 +436,19 @@ redis:
     masterSet: gitlab-redis
   metrics:
     enabled: false
+  configmap: |-
+    # Enable AOF https://redis.io/topics/persistence#append-only-file
+    appendonly yes
+    # Disable RDB persistence, AOF persistence already enabled.
+    dbfilename {{ template "fullname" . }}.rdb
+    {{- if .Values.persistence.save }}
+    {{-   range .Values.persistence.save }}
+    save {{ .time }} {{ .writes }}
+    {{-   end }}
+    {{- else }}
+    save ""
+    {{- end }}
+
 #  enabled: true
 
 ## doc/architecture/decisions.md#redis-ha

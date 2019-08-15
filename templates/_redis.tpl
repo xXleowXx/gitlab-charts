@@ -11,5 +11,5 @@ Return the redis password secret name
 Return the redis password secret key
 */}}
 {{- define "gitlab.redis.password.key" -}}
-{{- coalesce .Values.global.redis.password.key "redis-password" | quote -}}
+{{- coalesce .Values.global.redis.password.key "secret" | quote -}}
 {{- end -}}

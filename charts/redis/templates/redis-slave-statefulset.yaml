@@ -140,12 +140,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ template "redis.secretName" . }}
-              key: redis-password
+              key: {{ template "redis.secretPasswordKey" . }}
         - name: REDIS_MASTER_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "redis.secretName" . }}
-              key: redis-password
+              key: {{ template "redis.secretPasswordKey" . }}
         {{- end }}
         {{- else }}
         - name: ALLOW_EMPTY_PASSWORD
@@ -238,7 +238,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ template "redis.secretName" . }}
-              key: redis-password
+              key: {{ template "redis.secretPasswordKey" . }}
         {{- end }}
         {{- else }}
         - name: ALLOW_EMPTY_PASSWORD
@@ -312,7 +312,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ template "redis.secretName" . }}
-              key: redis-password
+              key: {{ template "redis.secretPasswordKey" . }}
         {{- end }}
         {{- end }}
         volumeMounts:
@@ -370,6 +370,9 @@ spec:
       - name: redis-password
         secret:
           secretName: {{ template "redis.secretName" . }}
+          items:
+          - key: {{ template "redis.secretPasswordKey" . }}
+            path: redis-password
       {{- end }}
       - name: config
         configMap:
