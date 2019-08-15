@@ -148,6 +148,7 @@ validation:
   disabled: true
 
 # Configure the logging mechanism for the Container Registry as desired
+# See https://docs.docker.com/registry/configuration/#log
 log:
   level: warn
   fields:
