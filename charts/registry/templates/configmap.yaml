@@ -12,7 +12,7 @@ data:
   config.yml: |
     version: 0.1
     log:
-      {{ toYaml .Values.log | nindent 6 }}
+      {{- toYaml .Values.log | nindent 6 -}}
     # health:
     #   storagedriver:
     #     enabled: true
