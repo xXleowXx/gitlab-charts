@@ -19,4 +19,4 @@ dependencies:
 - name: grafana
   version: 3.5.12
   repository: https://kubernetes-charts.storage.googleapis.com/
-  condition: gitlab.gitlab-grafana.enabled
+  condition: global.grafana.enabled

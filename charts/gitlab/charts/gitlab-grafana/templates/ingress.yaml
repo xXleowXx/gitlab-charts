@@ -1,4 +1,4 @@
-{{- if .Values.enabled -}}
+{{- if .Values.global.grafana.enabled -}}
 {{/* {{- if eq (include "gitlab.ingress.enabled" $) "true" -}} */}}
 {{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
 {{- $tlsSecret := include "unicorn.tlsSecret" . -}}
