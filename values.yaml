@@ -438,6 +438,36 @@ postgresql:
 # registry:
 #   enabled: false
 
+## Instllation & configuration of stable/grafana
+## See requirements.yaml for current version
+grafana:
+  ## The following settings allow Grafana to dynamically create
+  ## dashboards and datasources from configmaps. See
+  ## https://github.com/helm/charts/tree/master/stable/grafana#sidecar-for-dashboards
+  sidecar:
+    dashboards:
+      enabled: true
+      label: gitlab_grafana_dashboard
+    datasources:
+      enabled: true
+      label: gitlab_grafana_datasource
+  grafana.ini:
+    server:
+      root_url: http://localhost/-/grafana/
+  ## The extraSecretsMounts and extraConfigmapMounts allows us to
+  ## override the handling of the administrator's password for Grafana
+  extraSecretMounts:
+    - name: initial-password
+      mountPath: /tmp/initial
+      readOnly: true
+      secretName: gitlab-grafana-initial-password
+      defaultMode: 400
+  extraConfigmapMounts:
+    - name: import-secret
+      mountPath: /tmp/scripts
+      configMap: gitlab-grafana-import-secret
+      readOnly: true
+  command: [ "sh", "-x", "/tmp/scripts/import-secret.sh" ]
 
 ## Automatic shared secret generation
 ## doc/installation/secrets.md
