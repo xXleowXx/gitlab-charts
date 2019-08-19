@@ -1,7 +1,49 @@
-{
   "default": true,
-  "MD003": { "style": "atx_closed" },
-  "MD007": { "indent": 4 },
-  "no-hard-tabs": false,
-  "whitespace": false
+  "header-style": {
+    "style": "atx"
+  },
+  "ul-style": {
+    "style": "dash"
+  },
+  "line-length": false,
+  "no-trailing-punctuation": false,
+  "ol-prefix": {
+    "style": "one"
+  },
+  "blanks-around-fences": true,
+  "no-inline-html": {
+    "allowed_elements": [
+      "table",
+      "tbody",
+      "tr",
+      "td",
+      "ul",
+      "ol",
+      "li",
+      "br",
+      "img",
+      "a",
+      "strong",
+      "i",
+      "div",
+      "details",
+      "summary",
+      "pre",
+      "b",
+      "kbd"
+    ]
+  },
+  "hr-style": {
+    "style": "---"
+  },
+  "code-block-style": {
+    "style": "fenced"
+  },
+  "fenced-code-language": false,
+  "no-duplicate-header": {
+    "allow_different_nesting": true
+  },
+  "no-emphasis-as-heading": false,
+  "commands-show-output": false,
+  "first-line-h1": false
 }
