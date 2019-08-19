@@ -334,6 +334,7 @@ check_docs_lint:
     - yarn -v
     - yarn add markdownlint
     - yarn add markdownlint-cli
+    - markdownlint --help
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
     # Lint Markdown
