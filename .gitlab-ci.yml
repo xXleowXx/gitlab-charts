@@ -335,7 +335,7 @@ check_docs_lint:
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
     - cd content/charts
-    - grep -ri "no-trailing-punctuation"
+    - grep -ri "no-trailing-punctuation" .
     - cat content/.markdownlintrc
     - markdownlint --config content/.markdownlintrc content/charts/**/*.md
     # Lint Markdown
