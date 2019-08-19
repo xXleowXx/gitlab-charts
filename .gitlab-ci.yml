@@ -330,8 +330,6 @@ check_docs_lint:
   dependencies: []
   before_script: []
   script:
-    - yarn add markdownlint
-    - yarn add markdownlint-cli
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
     # Lint Markdown
