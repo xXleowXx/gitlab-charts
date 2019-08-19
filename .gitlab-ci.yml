@@ -334,8 +334,8 @@ check_docs_lint:
     - yarn add markdownlint-cli
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
-    - cat content/charts/.markdownlintrc
-    - markdownlint --config content/charts/.markdownlintrc content/charts/**/*.md
+    - cat content/charts/.markdownlint.json
+    - markdownlint --config content/charts/.markdownlint.json content/charts/**/*.md
     # Lint Markdown
     # https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md
     # - bundle exec mdl content/charts/**/*.md --rules \
