@@ -11,29 +11,7 @@
   "ol-prefix": {
     "style": "one"
   },
-  "blanks-around-fences": true,
-  "no-inline-html": {
-    "allowed_elements": [
-      "table",
-      "tbody",
-      "tr",
-      "td",
-      "ul",
-      "ol",
-      "li",
-      "br",
-      "img",
-      "a",
-      "strong",
-      "i",
-      "div",
-      "details",
-      "summary",
-      "pre",
-      "b",
-      "kbd"
-    ]
-  },
+  "no-inline-html": false,
   "hr-style": {
     "style": "---"
   },
