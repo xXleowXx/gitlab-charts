@@ -331,7 +331,7 @@ check_docs_lint:
   before_script: []
   script:
     - node -v
-    - nodejs -v
+    - yarn -v
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
     # Lint Markdown
