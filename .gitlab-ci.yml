@@ -331,9 +331,7 @@ check_docs_lint:
   before_script: []
   script:
     - node -v
-    - sudo apt update
-    - sudo apt install npm
-    - npm -v
+    - nodejs -v
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
     # Lint Markdown
