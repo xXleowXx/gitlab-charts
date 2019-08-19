@@ -336,7 +336,7 @@ check_docs_lint:
     - cd /tmp/gitlab-docs
     - cd content/charts/charts
     - ls -la
-    - cat content/charts/.markdownlintrc
+    - cat content/.markdownlintrc
     - markdownlint --config content/.markdownlintrc content/charts/**/*.md
     # Lint Markdown
     # https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md
