@@ -330,13 +330,11 @@ check_docs_lint:
   dependencies: []
   before_script: []
   script:
-    - node -v
-    - yarn -v
     - yarn add markdownlint
     - yarn add markdownlint-cli
-    - markdownlint content/charts/**/*.md
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
+    - markdownlint content/charts/**/*.md
     # Lint Markdown
     # https://github.com/markdownlint/markdownlint/blob/master/docs/RULES.md
     - bundle exec mdl content/charts/**/*.md --rules \
