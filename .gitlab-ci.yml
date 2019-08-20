@@ -333,7 +333,7 @@ check_docs_lint:
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
     # Lint Markdown
-    - markdownlint --config content/charts/.markdownlint.json content/charts/**/*.md
+    - markdownlint --config $CI_PROJECT_DIR/.markdownlint.json content/charts/**/*.md
     # Build HTML from Markdown
     - bundle exec nanoc
     # Check the internal links
