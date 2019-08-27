@@ -841,3 +841,21 @@ qa_eks_production:
 
 before_script:
   - *auto_devops
+
+notify:slack-fail:
+  before_script:
+    - apk update && apk add git curl bash
+  image: "alpine"
+  stage: notification_fail
+  script:
+    - ./scripts/notify_slack.sh "#g_distribution" "Build on \`$CI_COMMIT_REF_NAME\` failed! See <https://gitlab.com/charts/gitlab/pipelines/"$CI_PIPELINE_ID">"
+  when: on_failure
+  only:
+    - master
+    - /.*-stable(-ee)?$/
+    - tags@charts/gitlab
+  except:
+    - triggers@charts/gitlab
+  tags:
+  - promotion
+  dependencies: []
