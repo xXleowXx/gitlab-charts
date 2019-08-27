@@ -46,6 +46,7 @@ stages:
   - qa
   - package
   - cleanup
+  - notification_fail
 
 lint_package:
   stage: package
