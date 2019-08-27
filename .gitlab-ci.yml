@@ -855,6 +855,7 @@ notify:slack-fail:
     - master
     - /.*-stable(-ee)?$/
     - tags@charts/gitlab
+    - explicit-slack-notifications  # TODO: remove this before merge
   except:
     - triggers@charts/gitlab
   tags:
