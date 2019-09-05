@@ -2,6 +2,8 @@
 
 This is the official and recommended way to install GitLab on a cloud native environment.
 
+Test
+
 Do note that it is not necessary to have GitLab installed on Kubernetes in order to use
 the [GitLab Kubernetes integration](https://docs.gitlab.com/ee/user/project/clusters/).
 
