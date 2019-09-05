@@ -31,6 +31,16 @@ unless has_qa_verified_label || is_docs_only_branch
   warn "Please check the QA job and compare with builds on master. If no new failures are reported in QA job, add 'QA:verified' label."
 end
 
+has_only_docs_changes = helper.all_changed_files.all? { |file| file.start_with?('doc/', '.markdownlint.json') || file.end_with?('.md') }
+
+if !is_docs_only_branch && has_only_docs_changes
+  warn "This merge request only contains documentation changes, but is not using a docs branch name. Next time, prepend `docs-` to the front, or apprend `-docs` to the end of your branch name for a simpler and faster CI pipeline. See https://docs.gitlab.com/ee/development/documentation/#branch-naming"
+end
+
+if is_docs_only_branch && !has_only_docs_changes
+  fail "This branch name has a `docs` prefix or suffix, but has changes to non-docs files. Please recreate this MR with a new branch name that does not include the `docs` prefix or suffix, to ensure the full CI pipeline is run."
+end
+
 THROUGHPUT_LABELS = ['Community contribution', 'security', 'bug', 'feature', 'backstage'].freeze
 if (gitlab.mr_labels & THROUGHPUT_LABELS).empty?
   warn "This merge request is missing any [throughput labels](https://about.gitlab.com/handbook/engineering/management/throughput)."
