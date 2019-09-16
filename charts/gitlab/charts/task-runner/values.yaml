@@ -2,7 +2,7 @@ image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
-  # tag: latest
+  tag: thewilli-cng-1584-rsyncable
 
 init:
   image: busybox
@@ -198,5 +198,3 @@ persistence:
   ## Only bind to a volume with the following exppression matched labels.
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
   matchExpressions: []
-
-
