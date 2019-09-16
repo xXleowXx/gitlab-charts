@@ -85,4 +85,10 @@ Backups require being stored temporarily on disk. By default, the task-runner po
 --set gitlab.task-runner.persistence.enabled=true
 ```
 
+Alternatively if you hace cron job backups enabled and wish to use a different persitent disk for tmp storage of backups because of ReadWriteOnce policies you also add the following to your helm command:
+
+```
+--set gitlab.task-runner.backups.persistence.enabled=true
+```
+
 For other providers, you may need to create a persistent volume. See our [Storage documentation](../installation/storage.md) for possible examples on how to do this.

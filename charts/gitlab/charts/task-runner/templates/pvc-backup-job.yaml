@@ -1,0 +1,34 @@
+{{- if and .Values.enabled .Values.backups.cron.enabled .Values.backups.persistence.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-backup-job-tmp
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{ include "gitlab.standardLabels" . | indent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.backups.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.backups.persistence.size | quote }}
+{{- if .Values.backups.persistence.volumeName }}
+  volumeName: {{ .Values.backups.persistence.volumeName }}
+{{- end }}
+{{- if .Values.backups.persistence.storageClass }}
+{{- if (eq "-" .Values.backups.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.backups.persistence.storageClass }}"
+{{- end -}}
+{{- end }}
+  selector:
+{{- if .Values.backups.persistence.matchLabels }}
+    matchLabels:
+{{ toYaml .Values.backups.persistence.matchLabels | indent 6 }}
+{{- end -}}
+{{- if .Values.backups.persistence.matchExpressions }}
+    matchExpressions:
+{{ toYaml .Values.backups.persistence.matchExpressions | indent 6 }}
+{{- end -}}
+{{- end }}
