@@ -126,8 +126,10 @@ spec:
                       name: {{ .Values.global.appConfig.pseudonymizer.configMap }}
                   {{- end }}
             - name: task-runner-tmp
-              {{- if .Values.persistence.enabled }}
+              {{- if .Values.backups.persistence.enabled }}
               persistentVolumeClaim:
+                claimName: {{ template "fullname" . }}-backup-job-tmp
+              {{- else if .Values.persistence.enabled }}
                 claimName: {{ template "fullname" . }}-tmp
               {{- else }}
               emptyDir: {}
