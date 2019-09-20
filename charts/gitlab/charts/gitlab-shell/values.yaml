@@ -24,7 +24,7 @@ init:
   resources:
     requests:
       cpu: 50m
-      
+
 # Tolerations for pod scheduling
 tolerations: []
 
@@ -51,10 +51,10 @@ resources:
   #  cpu: 100m
   #  memory: 128Mi
   requests:
-    cpu: 0
+    cpu: 70m
     memory: 6M
 maxUnavailable: 1
 minReplicas: 2
 maxReplicas: 10
 hpa:
-  targetAverageValue: 100m
+  targetAverageValue: 130m
