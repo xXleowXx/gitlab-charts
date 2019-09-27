@@ -32,10 +32,10 @@ example, `Test Username` is the culprit:
 helm upgrade gitlab gitlab/gitlab --timeout 600 --set global.email.display_name=Test Username ...
 ```
 
-To fix it put the parameters to double quotes like this:
+To fix it, pass the parameters in single quotes:
 
 ```sh
-helm upgrade gitlab gitlab/gitlab --timeout 600 --set global.email.display_name="Test Username" ...
+helm upgrade gitlab gitlab/gitlab --timeout 600 --set global.email.display_name='Test Username' ...
 ```
 
 ## Application containers constantly initializing
