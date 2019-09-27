@@ -34,7 +34,7 @@ helm upgrade gitlab gitlab/gitlab --timeout 600 --set global.email.display_name=
 
 To fix it put the parameters to double quotes like this:
 
-```
+```sh
 helm upgrade gitlab gitlab/gitlab --timeout 600 --set global.email.display_name="Test Username" ...
 ```
 
