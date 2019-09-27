@@ -24,7 +24,9 @@ CI server from this problem.
 
 ## Error: this command needs 2 arguments: release name, chart path
 
-Such error could be shown when one runs `helm upgrade` command and there are some spaces in the parameters e.g.
+An error like this could occur when you run `helm upgrade`
+and there are some spaces in the parameters. In the following
+example, `Test Username` is the culprit:
 
 ```
 helm upgrade gitlab gitlab/gitlab --timeout 600 --set global.email.display_name=Test Username ...
