@@ -28,7 +28,7 @@ An error like this could occur when you run `helm upgrade`
 and there are some spaces in the parameters. In the following
 example, `Test Username` is the culprit:
 
-```
+```sh
 helm upgrade gitlab gitlab/gitlab --timeout 600 --set global.email.display_name=Test Username ...
 ```
 
