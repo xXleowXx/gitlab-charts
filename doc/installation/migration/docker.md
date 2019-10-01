@@ -80,7 +80,7 @@ You may need to adjust the commands below to match your setup.
       sudo mv /srv/gitlab/data/gitlab-rails/shared/artifacts{,.bak}
       ```
 
-   1. Restart the Docker container. This will recreate empty directories in place, 
+   1. Restart the Docker container. This will recreate empty directories in place,
       so the backup task won't fail.
 
       ```sh
