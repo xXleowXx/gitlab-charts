@@ -41,26 +41,38 @@ You may need to adjust the commands below to match your setup.
       sudo docker restart gitlab
       ```
 
+   1. Open a interactive shell on the Docker container
+
+      ```sh
+      sudo docker exec -ti gitlab bash
+      ```
+
    1. Migrate existing artifacts to object storage
 
       ```sh
-      sudo docker exec -t gitlab gitlab-rake gitlab:artifacts:migrate
-      sudo docker exec -t gitlab gitlab-rake gitlab:traces:migrate
+      gitlab-rake gitlab:artifacts:migrate
+      gitlab-rake gitlab:traces:migrate
       ```
 
    1. Migrate existing LFS objects to object storage
 
       ```sh
-      sudo docker exec -t gitlab gitlab-rake gitlab:lfs:migrate
+      gitlab-rake gitlab:lfs:migrate
       ```
 
    1. Migrate existing uploads to object storage
 
       ```sh
-      sudo docker exec -t gitlab gitlab-rake gitlab:uploads:migrate:all
+      gitlab-rake gitlab:uploads:migrate:all
       ```
 
       Docs: <https://docs.gitlab.com/ee/administration/raketasks/uploads/migrate.html#migrate-to-object-storage>
+
+   1. Exit the interactive shell on the Docker container
+
+      ```sh
+      exit
+      ```
 
    1. Visit the Docker GitLab instance and make sure the
       uploads are available. For example check if user, group and project
@@ -87,7 +99,7 @@ You may need to adjust the commands below to match your setup.
       sudo docker restart gitlab
       ```
 
-1. [Create backup tarball](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
+1. [create backup tarball](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
 
    ```sh
    sudo docker exec -t gitlab gitlab:backup:create
