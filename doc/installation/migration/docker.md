@@ -99,7 +99,7 @@ You may need to adjust the commands below to match your setup.
       sudo docker restart gitlab
       ```
 
-1. [create backup tarball](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
+1. [Create backup tarball](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
 
    ```sh
    sudo docker exec -t gitlab gitlab:backup:create
