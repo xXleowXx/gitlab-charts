@@ -2,7 +2,7 @@
 apiVersion: v1
 name: gitaly
 version: 2.3.3
-appVersion: master
+appVersion: 443-ubi-images-ubi
 description: Git RPC service for handling all the git calls made by GitLab
 keywords:
 - gitlab

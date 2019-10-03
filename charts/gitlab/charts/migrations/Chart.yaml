@@ -2,7 +2,7 @@
 apiVersion: v1
 name: migrations
 version: 2.3.3
-appVersion: master
+appVersion: 443-ubi-images-ubi
 description: Database migrations and other versioning tasks for upgrading Gitlab
 keywords:
 - gitlab

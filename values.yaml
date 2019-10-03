@@ -17,6 +17,7 @@
 ## The global properties are used to configure multiple charts at once.
 ## Extended documenation at doc/charts/globals.md
 global:
+  imagePullPolicy: Always
   ## GitLab operator is Alpha. Not for production use.
   operator:
     enabled: false
@@ -324,7 +325,7 @@ global:
   kubectl:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
-      tag: v1.12.10
+      tag: 443-ubi-images-ubi
       pullSecrets: []
 ## End of global
 
