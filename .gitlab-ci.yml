@@ -338,6 +338,8 @@ check_docs_lint:
   dependencies: []
   before_script: []
   script:
+    # Fail on purpose
+    - exit 1
     # Lint Markdown
     - markdownlint --config .markdownlint.json 'doc/**/*.md'
     - mv doc/ /tmp/gitlab-docs/content/charts
