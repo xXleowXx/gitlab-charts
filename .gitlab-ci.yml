@@ -291,7 +291,7 @@ production_helm_test:
       - $KUBECONFIG
 
 
-debug_review:
+.debug_review:
   stage: qa
   when: on_failure
   script:
