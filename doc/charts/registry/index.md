@@ -121,7 +121,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `tokenService`                             | `container_registry`                         | JWT token service                                                                                    |
 | `tokenIssuer`                              | `gitlab-issuer`                              | JWT token issuer                                                                                     |
 | `tolerations`                              | `[]`                                         | Toleration labels for pod assignment                                                                 |
-| `useCustomHPA`                             | `[]`                                         | Metrics contains the specifications for which to use to calculate the desired replica count (overrides the default use of Average CPU Utilization configured in `targetCPUUtilization` |
+| `useCustomHPA`                             | `[]`                                         | Metrics contains the specifications for which to use to calculate the desired replica count (overrides the default use of Average CPU Utilization configured in `targetCPUUtilization`) |
 
 ## Chart configuration examples
 
