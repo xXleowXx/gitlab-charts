@@ -164,6 +164,7 @@ authAutoRedirect: false
 minReplicas: 2
 maxReplicas: 10
 maxUnavailable: 1
+targetCPUUtilization: 75
 storage: {}
 minio:
   redirect: false

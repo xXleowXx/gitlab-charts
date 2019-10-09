@@ -17,5 +17,5 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 75
+      targetAverageUtilization: {{ .Values.targetCPUUtilization }}
 {{- end -}}

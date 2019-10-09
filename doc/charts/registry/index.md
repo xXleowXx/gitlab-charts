@@ -117,6 +117,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
 | `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
 | `replicas`                                 | `1`                                          | Number of replicas                                                                                   |
+| `targetCPUUtilization`                     | `75`                                         | Target value of the average of the resource metric across all relevant pods which governs the HPA    |
 | `tokenService`                             | `container_registry`                         | JWT token service                                                                                    |
 | `tokenIssuer`                              | `gitlab-issuer`                              | JWT token issuer                                                                                     |
 | `tolerations`                              | `[]`                                         | Toleration labels for pod assignment                                                                 |
