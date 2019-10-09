@@ -237,6 +237,14 @@ use initContainers][initContainer-vs-env].
 There are some cases where it is needed to extend the functionality of a chart in
 such a way that an upstream may not accept.
 
+#### When to utilize `toYaml` in templates
+
+It should be frowned upon to throw a `toYaml` in the template files as this will
+force us to fully understand a customers desired configuration and potentially
+deal with problems induced by customer configurations which may not be
+supported.  We conform to a standard that provides the best default available in
+the template with the capability to override those defaults by the customer.
+
 ## Handling configuration deprecations
 
 There are times in a development where changes in behavior require a functionally breaking change. We try to avoid such changes, but some items can not be handled without such a change.

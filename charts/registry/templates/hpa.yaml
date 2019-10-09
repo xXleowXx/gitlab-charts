@@ -1,5 +1,5 @@
 {{- if .Values.enabled -}}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "fullname" . }}
@@ -14,8 +14,14 @@ spec:
   minReplicas: {{ .Values.minReplicas }}
   maxReplicas: {{ .Values.maxReplicas }}
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      targetAverageUtilization: {{ .Values.targetCPUUtilization }}
+  {{- if not .Values.useCustomHPA }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.targetCPUUtilization }}
+  {{- else -}}
+    {{- toYaml .Values.useCustomHPA | nindent 4 -}}
+  {{- end -}}
 {{- end -}}

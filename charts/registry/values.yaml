@@ -165,6 +165,7 @@ minReplicas: 2
 maxReplicas: 10
 maxUnavailable: 1
 targetCPUUtilization: 75
+useCustomHPA: []
 storage: {}
 minio:
   redirect: false
