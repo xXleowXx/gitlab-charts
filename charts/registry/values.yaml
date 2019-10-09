@@ -161,13 +161,16 @@ tokenIssuer: 'gitlab-issuer'
 authAutoRedirect: false
 
 # if minReplicas is >1, shared storage MUST be used.
-minReplicas: 2
-maxReplicas: 10
-maxUnavailable: 1
-targetCPUUtilization: 75
+hpa:
+  minReplicas: 2
+  maxReplicas: 10
+  maxUnavailable: 1
+  cpu:
+    targetCPUUtilization: 75
 
-# Note that the HPA is limited to autoscaling/v2beta1
-useCustomHPA: []
+  # Note that the HPA is limited to autoscaling/v2beta1
+  customMetrics: []
+
 storage: {}
 minio:
   redirect: false
