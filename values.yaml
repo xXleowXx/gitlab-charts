@@ -31,7 +31,8 @@ global:
   # edition: ee
 
   ## doc/charts/globals.md#gitlab-version
-  # gitlabVersion: master
+  gitlabVersion: tiger-computing-cng-backup-s3cmd-improvements
+  imagePullPolicy: Always
 
   ## doc/charts/globals.md#application-resource
   application:
