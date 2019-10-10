@@ -239,21 +239,28 @@ such a way that an upstream may not accept.
 
 #### When to utilize `toYaml` in templates
 
-It is frowned upon to utilize a `toYaml` in the template files as this will put
-undue burden on supporting all functionalities of both Kuberentes and desired
-community configurations.  We should instead provide a reasonable default with
-the ability to override this as necessary.  The reasonable default should
-contain the ability to customize via the values.yaml file as necessary.
+It is frowned upon to default to utilizing a `toYaml` in the template files as
+this will put undue burden on supporting all functionalities of both Kuberentes
+and desired community configurations.  We primary focus on providing a
+reasonable default using the bare minimum configuration.  Our secondary focus
+would be to provide the ability to override the defaults for more advanced users
+of Kubernetes.  This should be done on a case-by-case basis as there are
+certainly scenarios where either option may be too cumbersome to support, or
+provides an unnecessarily complex template to maintain.
 
-An example of this would be through the use of an if statement in our templates
-that provides a reasonable default to prevent errors on community installations,
-but still providing some mechanism to override it when the community needs it. A
-working example can be found in our registry subchart for the Horizontal Pod
-Autoscaler:
+An good example of a reasonable default with the ability to override can be
+found in the Horizontal Pod Autoscaler configuration for the registry subchart.
+We default to providing the bare minimum that can easily be supported, by
+exposing a specific configuration of controlling the HPA via the CPU Utilization
+and exposing only one configuration option to the community, the
+`averageUtilization`.  Being that an HPA can provide much more flexibility, more
+advanced users may want to target different metrics and as such, is a perfect
+example of where we can utilize and if statement allowing the end user to
+provide a more complex HPA configuration in place.
 
 ```yaml
   metrics:
-  {{- if not .Values.useCustomHPA }}
+  {{- if not .Values.customMetrics }}
     - type: Resource
       resource:
         name: cpu
@@ -261,16 +268,19 @@ Autoscaler:
           type: Utilization
           averageUtilization: {{ .Values.targetCPUUtilization }}
   {{- else -}}
-    {{- toYaml .Values.useCustomHPA | nindent 4 -}}
+    {{- toYaml .Values.customMetrics | nindent 4 -}}
   {{- end -}}
 ```
 
-The `metrics` key is a highly configurable item.  Without fully understanding
-all potential options this may be cumbersome to new users in the community.
-Therefore, in our template we utilize a sensible default which takes the average
-of CPU across all Pods.  For advanced users of Kubernetes, we still provide a
-method for which they can remove our template and insert their own as they see
-fit.
+In the above example, the minimum configuration will be a simple change in the
+`values.yaml` to update the `targetCPUUtilization`.
+
+Advanced users who have identified a better metric can override this overly
+simplistic HPA configuration by setting `.customMetrics` to an array containing
+precisely the Kubernetes API compatible configuration for the HPA metrics array.
+
+It is important that we maintain ease of use for the more advanced users to
+minimize their own configuration files without it being cumbersome.
 
 ## Handling configuration deprecations
 
