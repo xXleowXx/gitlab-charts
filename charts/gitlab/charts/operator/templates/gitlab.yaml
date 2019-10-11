@@ -10,7 +10,7 @@ metadata:
 {{ include "gitlab.standardLabels" $ | indent 4 }}
   name: {{ template "fullname" . }}
 spec:
-  version: {{ include "gitlab.operator.gitlabVersion" . | trunc 30 | quote }}
+  version: {{ include "gitlab.operator.gitlabVersion" . | trunc 16 | quote }}
   revision: "{{ .Release.Revision }}"
   helmRelease: {{ .Release.Name }}
   templates:
