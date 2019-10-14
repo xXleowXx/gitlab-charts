@@ -253,10 +253,10 @@ found in the Horizontal Pod Autoscaler configuration for the registry subchart.
 We default to providing the bare minimum that can easily be supported, by
 exposing a specific configuration of controlling the HPA via the CPU Utilization
 and exposing only one configuration option to the community, the
-`averageUtilization`.  Being that an HPA can provide much more flexibility, more
-advanced users may want to target different metrics and as such, is a perfect
-example of where we can utilize and if statement allowing the end user to
-provide a more complex HPA configuration in place.
+`targetAverageUtilization`.  Being that an HPA can provide much more
+flexibility, more advanced users may want to target different metrics and as
+such, is a perfect example of where we can utilize and if statement allowing the
+end user to provide a more complex HPA configuration in place.
 
 ```yaml
   metrics:
@@ -273,7 +273,7 @@ provide a more complex HPA configuration in place.
 ```
 
 In the above example, the minimum configuration will be a simple change in the
-`values.yaml` to update the `targetCPUUtilization`.
+`values.yaml` to update the `targetAverageUtilization`.
 
 Advanced users who have identified a better metric can override this overly
 simplistic HPA configuration by setting `.customMetrics` to an array containing

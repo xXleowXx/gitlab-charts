@@ -1,5 +1,5 @@
 ---
-title: Provides ability to customize the HPA Registry
+title: Provides ability to customize the Container Registry HPA
 merge_request: 991
 author:
 type: changed
