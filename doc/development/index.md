@@ -260,15 +260,15 @@ provide a more complex HPA configuration in place.
 
 ```yaml
   metrics:
-  {{- if not .Values.customMetrics }}
+  {{- if not .Values.hpa.customMetrics }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.targetCPUUtilization }}
+          targetAverageUtilization: {{ .Values.hpa.cpu.targetAverageUtilization }}
   {{- else -}}
-    {{- toYaml .Values.customMetrics | nindent 4 -}}
+    {{- toYaml .Values.hpa.customMetrics | nindent 4 -}}
   {{- end -}}
 ```
 

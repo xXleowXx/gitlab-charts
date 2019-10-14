@@ -18,7 +18,7 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.hpa.cpu.targetCPUUtilization }}
+        targetAverageUtilization: {{ .Values.hpa.cpu.targetAverageUtilization }}
   {{- else -}}
     {{- toYaml .Values.hpa.customMetrics | nindent 4 -}}
   {{- end -}}

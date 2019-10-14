@@ -167,7 +167,7 @@ hpa:
   minReplicas: 2
   maxReplicas: 10
   cpu:
-    targetCPUUtilization: 75
+    targetAverageUtilization: 75
 
   # Note that the HPA is limited to autoscaling/v2beta1
   customMetrics: []
