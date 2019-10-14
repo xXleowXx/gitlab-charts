@@ -419,7 +419,8 @@ kubectl create secret generic registry-storage \
 If you chose to use the `filesystem` driver:
 
 - You will need to provide persistent volumes for this data.
-- [replicas](#replicas) should be set to `1`
+- [hpa.minReplicas](#hpa) should be set to `1`
+- [hpa.maxReplicas](#hpa) should be set to `1`
 
 For the sake of resiliency and simplicity, it is recommended to make use of an
 external service, such as `s3`, `gcs`, `azure` or other compatible Object Storage.
