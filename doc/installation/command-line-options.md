@@ -338,7 +338,7 @@ See [`nginx-ingress` chart](../charts/nginx/index.md).
 | `gitlab.unicorn.shell.authToken.key`                         | Key to shell token in shell secret             | `secret`                                                         |
 | `gitlab.unicorn.shell.authToken.secret`                      | Shell token secret                             | `{Release.Name}-gitlab-shell-secret`                             |
 | `gitlab.unicorn.workerProcesses`                             | Unicorn number of workers                      | `2`                                                              |
-| `gitlab.unicorn.workerTimeout`                               | Unicorn worker timeout                         | `60`                                                             |
+| `gitlab.unicorn.workerTimeout`                               | Unicorn worker timeout                         | `120`                                                             |
 | `gitlab.unicorn.workhorse.extraArgs`                         | String of extra parameters for workhorse       | ""                                                               |
 | `gitlab.unicorn.workhorse.image`                             | Workhorse image repository                     | `registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee`   |
 | `gitlab.unicorn.workhorse.sentryDSN`                         | DSN for Sentry instance for error reporting    | ""                                                               |

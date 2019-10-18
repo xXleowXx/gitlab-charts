@@ -47,7 +47,7 @@ ingress:
     # enabled: true
   annotations: {}
 workerProcesses: 2
-workerTimeout: 60
+workerTimeout: 120
 memory: # in MB units
   min: 700
   max: 1024
