@@ -51,7 +51,7 @@ as an example, any process capable of communicating with the daemon can query th
 state of all running containers. This means that if you have a privileged container
 such as [dind][], that container can then inspect the environment of _any_ container
 on a given node, and expose _all_ secrets contained within.
-As a part of the [complete DevOps lifecycle][devops-post], [dind][] is regularly
+As a part of the [complete DevOps lifecycle](https://about.gitlab.com/blog/2017/10/11/from-dev-to-devops/), [dind][] is regularly
 used for building containers that will be pushed to a registry and subsequently
 deployed.
 
@@ -64,7 +64,6 @@ Related issues:
 - [#114](https://gitlab.com/gitlab-org/charts/gitlab/issues/114)
 
 [dind]: https://hub.docker.com/r/gitlab/dind/
-[devops-post]: https://about.gitlab.com/2017/10/11/from-dev-to-devops/
 [initContainers]: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 
 ## Sub-charts are deployed from global chart
@@ -91,14 +90,12 @@ The benefits of this are straight-forward:
 - Increased DRY behavior, leading to easier maintenance. There should be no reason
   to have duplicates of the same function across multiple sub-charts when a single
   entry will suffice.
-- Reduction of template naming conflicts. All [partials throughout a chart are compiled together][helm-dev-doc],
+- Reduction of template naming conflicts. All [partials throughout a chart are compiled together](https://helm.sh/docs/chart_template_guide/#declaring-and-using-templates-with-define-and-template),
   and thus we can treat them like the global behavior they are.
 
 Related issue:
 
 - [#352](https://gitlab.com/gitlab-org/charts/gitlab/issues/352)
-
-[helm-dev-doc]: https://docs.helm.sh/chart_template_guide/#declaring-and-using-templates-with-define-and-template
 
 ## Forked charts
 

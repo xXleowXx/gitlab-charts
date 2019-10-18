@@ -33,7 +33,7 @@ into the cluster. This should only be used when tiller cannot be normally deploy
 
 You can get Helm from the project's [releases page](https://github.com/helm/helm/releases),
 or follow other options under the official documentation of
-[installing Helm](https://docs.helm.sh/using_helm/#installing-helm).
+[installing Helm](https://helm.sh/docs/using_helm/#installing-helm).
 
 Tiller is deployed into the cluster and interacts with the Kubernetes API to
 deploy your applications. If role based access control (RBAC) is enabled, Tiller
@@ -53,7 +53,7 @@ have support for RBAC and will generate errors.
 
 Helm's Tiller will need to be granted permissions to perform operations. These
 instructions grant cluster wide permissions, however for more advanced deployments
-[permissions can be restricted to a single namespace](https://docs.helm.sh/using_helm/#example-deploy-tiller-in-a-namespace-restricted-to-deploying-resources-only-in-that-namespace).
+[permissions can be restricted to a single namespace](https://helm.sh/docs/using_helm/#example-deploy-tiller-in-a-namespace-restricted-to-deploying-resources-only-in-that-namespace).
 
 To grant access to the cluster, we will create a new `tiller` service account
 and bind it to the `cluster-admin` role:
