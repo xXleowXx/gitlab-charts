@@ -79,19 +79,6 @@ You may need to adjust the commands below to match your setup.
       avatars are rendered fine, image and other files added to issues load
       correctly, etc.
 
-   1. Move the uploaded files from their current location so that
-      they won't end up in the tarball. The default locations are:
-
-      - uploads: `/srv/gitlab/data/gitlab-rails/uploads/`
-      - lfs: `/srv/gitlab/data/gitlab-rails/shared/lfs-objects`
-      - artifacts: `/srv/gitlab/data/gitlab-rails/shared/artifacts`
-
-      ```sh
-      sudo mv /srv/gitlab/data/gitlab-rails/uploads{,.bak}
-      sudo mv /srv/gitlab/data/gitlab-rails/shared/lfs-objects{,.bak}
-      sudo mv /srv/gitlab/data/gitlab-rails/shared/artifacts{,.bak}
-      ```
-
    1. Restart the Docker container. This will recreate empty directories in place,
       so the backup task won't fail.
 
@@ -102,7 +89,7 @@ You may need to adjust the commands below to match your setup.
 1. [Create backup tarball](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
 
    ```sh
-   sudo docker exec -t gitlab gitlab:backup:create
+   sudo docker exec -t gitlab gitlab:backup:create SKIP=uploads,lfs,artifacts
    ```
 
    The backup file will be stored in `/srv/gitlab/data/backups` directory, unless
