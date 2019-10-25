@@ -56,7 +56,7 @@ to the `helm install` command using the `--set` flags:
 | `defaultBuckets`               | `[{"name": "registry"}]`      | Minio default buckets                   |
 | `image`                        | `minio/minio`                 | Minio image                             |
 | `imagePullPolicy`              | `Always`                      | Minio image pull policy                 |
-| `imageTag`                     | `RELEASE.2017-12-28T01-2100Z` | Minio image tag                         |
+| `imageTag`                     | `RELEASE.2017-12-28T01-21-00Z` | Minio image tag                         |
 | `minioConfig.browser`          | `on`                          | Minio browser flag                      |
 | `minioConfig.domain`           |                               | Minio domain                            |
 | `minioConfig.region`           | `us-east-1`                   | Minio region                            |
