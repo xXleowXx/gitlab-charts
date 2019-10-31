@@ -24,6 +24,9 @@ kubernetes_version=${CLUSTER_VERSION-1.11}
 region="${REGION-us-east-2}"
 node_type="${MACHINE_TYPE-m5.xlarge}"
 service_account="${SERVICE_ACCOUNT-tiller}"
+kubeconfig="${KUBECONFIG:-$HOME/.kube/config}"
+iam_role=
+auto_kubeconfig=0
 
 function print_help(){
   cat <<EOF
@@ -38,6 +41,11 @@ up - create a cluster
 down - delete a cluster
 list - display information about running clusters
 creds - download credentials and install into .kube/config
+  Options available when using creds subcommand
+    -K KUBECONFIG - Use an alternative .kube/config file
+    -R IAM_ROLE - AWS IAM role to assume
+    -A - save kubeconfig file by cluster name,
+         e.g. $HOME/.kube/eksctl/clusters/<name>
 EOF
 }
 
@@ -72,11 +80,25 @@ function do_list(){
 function do_creds() {
   local cluster_name="${1}"
   local region="${2}"
+  local kubeconfig="${3}"
+  local auto_kubeconfig="${4}"
+  local iam_role="${5}"
 
-  eksctl utils write-kubeconfig -r "${region}" -n "${cluster_name}"
+  local options=()
+  if [[ -n "${kubeconfig}" ]]; then
+    options+=(--kubeconfig ${kubeconfig})
+  fi
+  if [[ -n "${iam_role}" ]]; then
+    options+=(--authenticator-role-arn ${iam_role})
+  fi
+  if [[ "$auto_kubeconfig" == 1 ]]; then
+    options+=(--auto-kubeconfig)
+  fi
+
+  eksctl utils write-kubeconfig -r "${region}" -n "${cluster_name}" ${options[*]}
 }
 
-while getopts c:n:k:r:m:s: opt
+while getopts c:n:k:r:m:s:K:R:A opt
 do
   case "${opt}" in
     c)
@@ -97,8 +119,18 @@ do
     s)
       service_account="${OPTARG}"
       ;;
+    K)
+      kubeconfig="${OPTARG}"
+      ;;
+    R)
+      iam_role="${OPTARG}"
+      ;;
+    A)
+      auto_kubeconfig=1
+      ;;
     [?])
       print_help
+      exit 1
       ;;
   esac
 done
@@ -124,7 +156,7 @@ case ${1} in
     do_list "${2}" "${region}"
     ;;
   creds)
-    do_creds "${cluster_name}" "${region}"
+    do_creds "${cluster_name}" "${region}" "${kubeconfig}" "${auto_kubeconfig}" "${iam_role}"
     ;;
   *)
     print_help
