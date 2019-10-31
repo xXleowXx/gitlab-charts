@@ -37,6 +37,7 @@ Usage: ${0} ARGS (up|down)
 up - create a cluster
 down - delete a cluster
 list - display information about running clusters
+creds - download credentials and install into .kube/config
 EOF
 }
 
@@ -66,6 +67,13 @@ function do_list(){
   local region="${2}"
 
   eksctl get cluster -r "${region}" "${cluster_name}"
+}
+
+function do_creds() {
+  local cluster_name="${1}"
+  local region="${2}"
+
+  eksctl utils write-kubeconfig -r "${region}" -n "${cluster_name}"
 }
 
 while getopts c:n:k:r:m:s: opt
@@ -114,6 +122,9 @@ case ${1} in
     ;;
   list)
     do_list "${2}" "${region}"
+    ;;
+  creds)
+    do_creds "${cluster_name}" "${region}"
     ;;
   *)
     print_help
