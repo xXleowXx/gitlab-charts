@@ -30,7 +30,7 @@ auto_kubeconfig=0
 
 function print_help(){
   cat <<EOF
-Usage: ${0} ARGS (up|down)
+Usage: ${0} ARGS (up|down|list|creds)
 -c NAME - Name of the cluster to use. Defaults to gitlab-cluster
 -n NODES - number of nodes to use. Defaults to 2
 -k VERSION - Kubernetes version to use. Defaults to 1.11
