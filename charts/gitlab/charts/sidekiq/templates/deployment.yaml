@@ -206,11 +206,11 @@ spec:
           livenessProbe:
             httpGet:
               path: /liveness
-              port: {{ .Values.metrics.port }}
+              port: {{ $.Values.metrics.port }}
           readinessProbe:
             httpGet:
               path: /readiness
-              port: 3807
+              port: {{ $.Values.metrics.port }}
           lifecycle:
             preStop:
               exec:
