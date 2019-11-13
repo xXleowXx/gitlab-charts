@@ -206,7 +206,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /liveness
-              port: 3807
+              port: {{ .Values.metrics.port }}
           readinessProbe:
             httpGet:
               path: /readiness
