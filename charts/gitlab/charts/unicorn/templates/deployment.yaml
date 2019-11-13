@@ -179,7 +179,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /-/liveness
-              port: 8080
+              port: {{ .Values.service.internalPort }}
             initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
