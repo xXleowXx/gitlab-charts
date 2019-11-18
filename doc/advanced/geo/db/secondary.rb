@@ -19,14 +19,14 @@ postgresql['listen_address'] = '0.0.0.0'
 postgresql['sql_user_password'] = 'gitlab_user_password_hash'
 # !! CAUTION !!
 # This list of CIDR addresses should be customized
-# - primary application deployment
+# - secondart application cluster nodes
 # - secondary database instance(s)
 postgresql['md5_auth_cidr_addresses'] = ['0.0.0.0/0']
 geo_postgresql['listen_address'] = '0.0.0.0'
 geo_postgresql['sql_user_password'] = 'gitlab_geo_user_password_hash'
 # !! CAUTION !!
 # This list of CIDR addresses should be customized
-# - primary application deployment
+# - secondart application cluster nodes
 # - secondary database instance(s)
 geo_postgresql['md5_auth_cidr_addresses'] = ['0.0.0.0/0']
 ## Settings so we can automatically configure the FDW
