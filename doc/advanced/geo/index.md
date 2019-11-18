@@ -18,12 +18,12 @@ so has several requirements:
   included PostgreSQL does is not exposed to outside networks, or currently
   have WAL support required for replication.
 - The supplied database must
-    - Support replication.
-    - The primary database must reachable by the primary application deployment,
+  - Support replication.
+  - The primary database must reachable by the primary application deployment,
       and all secondary database nodes (for replication).
-    - Secondary databases only need to be reachable by the secondary application
+  - Secondary databases only need to be reachable by the secondary application
       deployments.
-    - Support SSL between primary and secondary.
+  - Support SSL between primary and secondary.
 - The the primary must be reachable via HTTPS by all secondaries. Secondaries
   must be accessible to the primary via HTTPS.
 
@@ -38,12 +38,12 @@ The outline below should be followed in order:
 
 1. Setup Omnibus instances
 1. Setup Kubernetes clusters
-1. Collect necessary information
-1. Configuring Primary database
+1. Collect information
+1. Configure Primary database
 1. Deploy chart as Geo Primary
-1. Configuring Secondary database and replication
 1. Set the Geo the primary node
-1. Copying secrets from primary application deployment to secondary deployment
+1. Configure Secondary database
+1. Copy secrets from primary cluster to secondary cluster
 1. Deploy chart as Geo Secondary
 1. Adding secondary via the primary
 
@@ -54,10 +54,11 @@ the Secondary. You may use any provider of machine infrastructure, on-premise or
 from a cloud provider.
 
 Bear in mind that communication is required:
-- between the two database instances for replication
-- between each database instance and their respective Kubernetes deployments
-    - Primary will need to expose TCP port `5432`
-    - Secondary will need to expose TCP ports `5432` & `5431`
+
+- Between the two database instances for replication
+- Between each database instance and their respective Kubernetes deployments
+  - Primary will need to expose TCP port `5432`
+  - Secondary will need to expose TCP ports `5432` & `5431`
 
 Install an [operating system supported by Omnibus GitLab][og-os], and then
 [install the Omnibus GitLab][og-install] onto it. Do not provide the
@@ -77,17 +78,19 @@ For this process, two Kubernetes clusters should be used. These can be from any
 provider, on-premise or from a cloud provider.
 
 Bear in mind that communication is required:
+
 - To the respective database instances
-    - Primary outbound to TCP `5432`
-    - Secondary outbound to TCP `5432` and `5431`.
+  - Primary outbound to TCP `5432`
+  - Secondary outbound to TCP `5432` and `5431`.
 - Between both Kubernetes Ingress via HTTPS
 
 Each cluster that is provisioned should have:
+
 - Enough resources to support a base-line installation of these charts
 - Access to persistent storage
-    - Minio not required if using [external object storage][ext-object]
-    - Gitaly not required if using [external Gitaly][ext-gitaly]
-    - Redis not required if using [external Redis][ext-redis]
+  - Minio not required if using [external object storage][ext-object]
+  - Gitaly not required if using [external Gitaly][ext-gitaly]
+  - Redis not required if using [external Redis][ext-redis]
 
 [ext-object]: ../external-object-storage/index.md
 [ext-gitaly]: ../external-gitaly/index.md
@@ -100,28 +103,87 @@ collected from the various sources. Collect these, and make notes for use throug
 the rest of this documentation.
 
 - Primary database:
-    - IP address
-    - hostname (optional)
+  - IP address
+  - hostname (optional)
 - Secondary database:
-    - IP address
-    - hostname (optional)
+  - IP address
+  - hostname (optional)
 - Primary cluster:
-    - IP addresses of nodes
+  - IP addresses of nodes
 - Secondary cluster:
-    - IP addresses of nodes
-- Database Passwords (_must  pre-decide the passwords_)
-    - gitlab (`postgresql['sql_user_password']`, `global.psql.password`)
-    - gitlab_geo (`geo_postgresql['sql_user_password']`, `global.geo.psql.password`)
-    - gitlab_replicator (needed for replication)
+  - IP addresses of nodes
+- Database Passwords (_must  pre-decide the password(s)_)
+  - gitlab (used in `postgresql['sql_user_password']`, `global.psql.password`)
+  - gitlab_geo (used in `geo_postgresql['sql_user_password']`, `global.geo.psql.password`)
+  - gitlab_replicator (needed for replication)
 
 The `gitlab` and `gitlab_geo` database user passwords will need to exist in two
 forms: bare password, and PostgreSQL hashed password. To obtain the hashed form,
-perform the following commands on one of the Omnibus instances:
+perform the following commands on one of the Omnibus instances, which will ask
+you to enter, and confirm the password before outputting an appropriate hash
+value for you to make note of.
 
 1. `gitlab-ctl pg-password-md5 gitlab`
 1. `gitlab-ctl pg-password-md5 gitlab_geo`
 
 ## Configure Primary database
+
+To configure the Primary database instance's Omnibus GitLab, we'll work from
+[this example configuration](db/primary.rb).
+
+```ruby
+### Geo Primary
+external_url 'http://gitlab-primary.example.com'
+roles ['geo_primary_role']
+gitlab_rails['auto_migrate'] = false
+## turn off everything but the DB
+sidekiq['enable']=false
+unicorn['enable']=false
+gitlab_workhorse['enable']=false
+nginx['enable']=false
+geo_logcursor['enable']=false
+grafana['enable']=false
+gitaly['enable']=false
+redis['enable']=false
+prometheus_monitoring['enable'] = false
+## Configure the DB for network
+postgresql['enable'] = true
+postgresql['listen_address'] = '0.0.0.0'
+postgresql['sql_user_password'] = 'gitlab_user_password_hash'
+# !! CAUTION !!
+# This list of CIDR addresses should be customized
+# - primary application deployment
+# - secondary database instance(s)
+postgresql['md5_auth_cidr_addresses'] = ['0.0.0.0/0']
+```
+
+We need to replace several items:
+
+- `external_url` must be updated to reflect the host name of our Primary
+instance.
+- `gitlab_user_password_hash` must be replaced with the hashed form of the
+`gitlab` password.
+- `postgresql['md5_auth_cidr_addresses']` can be update to be a list of
+explicit IP addresses, or address blocks in CIDR notation.
+
+The `md5_auth_cidr_addresses` should be in the form of
+`[ '127.0.0.1/24', '10.41.0.0/16']`. It is important to include `127.0.0.1` in
+this list, as the automation within Omnibus GitLab will connect using this. The
+addresses in this list should include the IP address (not hostname) of your
+Secondary database, and all nodes of your primary Kubernetes cluster.
+
+Once the configuration above is prepared:
+
+1. Place the content into `/etc/gitlab/gitlab.rb`
+1. Run `gitlab-ctl reconfigure`
+1. Run `gitlab-ctl set-replication-password` in order to set the password for
+the `gitlab_replicator` user.
+1. Retrieve the Primary database server's public certificate, this will be needed
+for the Secondary database to be able to replicate.
+  1. `cat ~gitlab-psql/data/server.crt`
+  1. **Store this output.**
+
+## Deploy chart as Geo Primary
 
 
 

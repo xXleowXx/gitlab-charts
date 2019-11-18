@@ -16,14 +16,14 @@ prometheus_monitoring['enable'] = false
 ## Configure the DBs for network
 postgresql['enable'] = true
 postgresql['listen_address'] = '0.0.0.0'
-postgresql['sql_user_password'] = 'sql_user_password_hash'
+postgresql['sql_user_password'] = 'gitlab_user_password_hash'
 # !! CAUTION !!
 # This list of CIDR addresses should be customized
 # - primary application deployment
 # - secondary database instance(s)
 postgresql['md5_auth_cidr_addresses'] = ['0.0.0.0/0']
 geo_postgresql['listen_address'] = '0.0.0.0'
-geo_postgresql['sql_user_password'] = 'sql_user_password_hash'
+geo_postgresql['sql_user_password'] = 'gitlab_geo_user_password_hash'
 # !! CAUTION !!
 # This list of CIDR addresses should be customized
 # - primary application deployment
@@ -31,5 +31,4 @@ geo_postgresql['sql_user_password'] = 'sql_user_password_hash'
 geo_postgresql['md5_auth_cidr_addresses'] = ['0.0.0.0/0']
 ## Settings so we can automatically configure the FDW
 geo_secondary['db_fdw'] = true
-gitlab_rails['db_password']='sql_user_password'
-
+gitlab_rails['db_password']='gitlab_user_password'
