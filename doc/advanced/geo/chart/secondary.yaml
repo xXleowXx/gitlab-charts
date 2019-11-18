@@ -1,8 +1,7 @@
 ## Geo Secondary
 global:
-  # must match versions to Omnibus
-  gitlabVersion: 12.4.2
-  # use our wildcard ssl, but with suffix
+  # See docs.gitlab.com/charts/charts/globals
+  # Configure host & domain
   hosts:
     hostSuffix: secondary
     domain: example.com
@@ -25,4 +24,3 @@ global:
 # External DB, disable
 postgresql:
   install: false
-
