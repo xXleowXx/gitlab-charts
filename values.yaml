@@ -344,7 +344,7 @@ global:
   kubectl:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
-      tag: v1.12.10
+      tag: 503-release-ubi-dependencies-ubi8
       pullSecrets: []
 ## End of global
 
