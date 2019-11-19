@@ -223,10 +223,10 @@ database user.
     kubectl create secret generic geo --from-literal=postgresql-password=PASSWORD
     ```
 
-1.  Update the configuration to reflect the correct values for:
+1. Update the configuration to reflect the correct values for:
 
-    - [global.hosts.domain](../../charts/globals/index.md#configure-host-settings)
-    - [global.psql.host](../../charts/globals/index.md#configure-postgresql-settings)
+    - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
+    - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
     - Also configure any additional settings, such as:
       - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
       - [Using external Redis][ext-redis]
@@ -261,7 +261,7 @@ this as the Primary instance. We will do this via the `task-runner` Pod.
     kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
     ```
 
-1.  Check the status of Geo configuration
+1. Check the status of Geo configuration
 
     ```sh
     kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
@@ -507,17 +507,17 @@ postgresql:
   install: false
 ```
 
-1.  Update the configuration to reflect the correct values for:
+1. Update the configuration to reflect the correct values for:
 
-    - [global.hosts.domain](../../charts/globals/index.md#configure-host-settings)
-    - [global.psql.host](../../charts/globals/index.md#configure-postgresql-settings)
-    - [global.geo.psql.host](../../charts/globals/index.md#configure-postgresql-settings)
+    - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
+    - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
+    - [global.geo.psql.host](../../charts/globals.md#configure-postgresql-settings)
     - Also configure any additional settings, such as:
       - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
       - [Using external Redis][ext-redis]
       - [using external Object Storage][ext-object]
 
-1.  Deploy the chart using this configuration
+1. Deploy the chart using this configuration
 
     ```sh
     helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
@@ -529,31 +529,31 @@ postgresql:
 
 We now need to configure the Geo database, via the `task-runner` Pod.
 
-1.  Find the `task-runner` Pod
+1. Find the `task-runner` Pod
 
     ```sh
     kubectl get pods -lapp=task-runner --namespace gitlab
     ```
 
-1.  Attach to the Pod with `kubectl exec`
+1. Attach to the Pod with `kubectl exec`
 
     ```sh
     kubectl exec -ti gitlab-geo-task-runner-XXX -- bash -l
     ```
 
-1.  Populate the Geo database
+1. Populate the Geo database
 
     ```sh
     gitlab-rake geo:db:setup
     ```
 
-1.  Refresh the foreign tables
+1. Refresh the foreign tables
 
     ```sh
     gitlab-rake geo:db:refresh_foreign_tables
     ```
 
-1.  Check the status of Geo configuration
+1. Check the status of Geo configuration
 
     ```sh
     gitlab-rake gitlab:geo:check
@@ -609,8 +609,7 @@ the Primary that the Secondary exists.
 1. Add the **secondary** instance. Use the full URL for the name and URL.
    **Do NOT** check the **This is a primary node** checkbox.
 1. Optionally, choose which groups or storage shards should be replicated by the
-   **secondary** instance. Leave blank to replicate all. Read more in
-   [selective synchronization](#selective-synchronization).
+   **secondary** instance. Leave blank to replicate all.
 1. Click the **Add node** button.
 
 Once added to the admin panel, the **secondary** instance will automatically start
