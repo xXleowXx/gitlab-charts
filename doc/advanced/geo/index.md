@@ -358,7 +358,7 @@ instance.
 explicit IP addresses, or address blocks in CIDR notation.
 - `gitlab_geo_user_password_hash` must be replaced with the hashed form of the
 `gitlab_geo` password.
-- `geo_postgresql['md5_auth_cidr_addresses']` can be update to be a list of
+- `geo_postgresql['md5_auth_cidr_addresses']` should be updated to be a list of
 explicit IP addresses, or address blocks in CIDR notation.
 - `gitlab_user_password` must be updated, and is used here to allow Omnibus Gitlab
 to automate the configuration of Foreign Data Wrappers in PostgreSQL.
