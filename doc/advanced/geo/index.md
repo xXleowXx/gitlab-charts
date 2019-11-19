@@ -32,7 +32,7 @@ This guide will use 2 Omnibus GitLab instances, configuring only the PostgreSQL
 services needed, and 2 deployments of the GitLab Helm chart. It is intended to be
 the _minimal_ required configuration. This documentation does not currently
 include SSL from application to database, support for other database providers, or
-promoting a secondary node to primary.
+promoting a secondary instance to primary.
 
 The outline below should be followed in order:
 
@@ -41,11 +41,11 @@ The outline below should be followed in order:
 1. [Collect information](#collect-information)
 1. [Configure Primary database](#configure-primary-database)
 1. [Deploy chart as Geo Primary](#deploy-chart-as-geo-primary)
-1. [Set the Geo primary node](#set-the-geo-primary-node)
+1. [Set the Geo primary instance](#set-the-geo-primary-instance)
 1. [Configure Secondary database](#configure-secondary-database)
 1. [Copy secrets from primary cluster to secondary cluster](#copy-secrets-from-the-primary-cluster-to-the-secondary-cluster)
 1. [Deploy chart as Geo Secondary](#deploy-chart-as-geo-secondary)
-1. [Add Secondary Geo node via Primary](#add-secondary-geo-node-via-primary)
+1. [Add Secondary Geo instance via Primary](#add-secondary-geo-instance-via-primary)
 
 ## Setup Omnibus instances
 
@@ -244,10 +244,10 @@ the application is reachable, login.
 1. Login to GitLab, and upload your GitLab license file by navigating to
 `/admin/license`. **This step is required for Geo to function.**
 
-## Set the Geo Primary node
+## Set the Geo Primary instance
 
 Now that the chart has been deployed, and a license uploaded, we can configure
-this as the Primary node. We will do this via the `task-runner` Pod.
+this as the Primary instance. We will do this via the `task-runner` Pod.
 
 1. Find the `task-runner` Pod
 
@@ -598,22 +598,22 @@ We now need to configure the Geo database, via the `task-runner` Pod.
     Rake task is checking for a local SSH server, which is actually present in the
     `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
 
-## Add Secondary Geo node via Primary
+## Add Secondary Geo instance via Primary
 
 Now that both databases are configured and applications are deployed, we must tell
 the Primary that the Secondary exists.
 
-1. Visit the **primary** node's **Admin Area > Geo**
+1. Visit the **primary** instance's **Admin Area > Geo**
    (`/admin/geo/nodes`) in your browser.
 1. Click the **New node** button.
-1. Add the **secondary** node. Use the full URL for the name and URL.
+1. Add the **secondary** instance. Use the full URL for the name and URL.
    **Do NOT** check the **This is a primary node** checkbox.
 1. Optionally, choose which groups or storage shards should be replicated by the
-   **secondary** node. Leave blank to replicate all. Read more in
+   **secondary** instance. Leave blank to replicate all. Read more in
    [selective synchronization](#selective-synchronization).
 1. Click the **Add node** button.
 
-Once added to the admin panel, the **secondary** node will automatically start
-replicating missing data from the **primary** node in a process known as **backfill**.
-Meanwhile, the **primary** node will start to notify each **secondary** node of any changes, so
-that the **secondary** node can act on those notifications immediately.
+Once added to the admin panel, the **secondary** instance will automatically start
+replicating missing data from the **primary** instance in a process known as **backfill**.
+Meanwhile, the **primary** instance will start to notify each **secondary** instance of any changes, so
+that the **secondary** instance can act on those notifications immediately.

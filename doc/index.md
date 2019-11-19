@@ -31,7 +31,7 @@ Database limitations:
 
 - MySQL will not be supported, as support is [deprecated within GitLab](https://docs.gitlab.com/omnibus/settings/database.html#using-a-mysql-database-management-server-enterprise-edition-only)
 - Support is only available for Postgres 9.6. Backup and restore [will not work with other versions](https://gitlab.com/gitlab-org/charts/gitlab/issues/852).
-- GitLab Geo functionality requires the use of external database service(s).
+- GitLab Geo functionality [requires the use of external database service(s)](advanced/geo/index.md#overview).
 
 ## GitLab version mappings
 
