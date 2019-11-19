@@ -4,8 +4,8 @@ GitLab Geo provides the ability to have read-only, geographically distributed
 application deployments.
 
 While external database services can be used, these documents currently focus on
-the use of the [Omnibus GitLab][omnibus] to provide the most platform agnostic
-guide, and make use of the automation included within `gitlab-ctl`.
+the use of the [Omnibus GitLab][omnibus] for PostgreSQL in order to provide the
+most platform agnostic guide, and make use of the automation included within `gitlab-ctl`.
 
 [omnibus]: https://docs.gitlab.com/omnibus
 
@@ -23,28 +23,29 @@ In order to use GitLab Geo with the GitLab Helm chart, the following requirement
   - Secondary databases only need to be reachable by the secondary application
       deployments.
   - Support SSL between primary and secondary.
-- The primary must be reachable via HTTPS by all secondaries. Secondaries
-  must be accessible to the primary via HTTPS.
+- The primary application instance must be reachable via HTTPS by all secondary instances.
+  Secondary application instances must be accessible to the primary instance via HTTPS.
 
 ## Overview
 
 This guide will use 2 Omnibus GitLab instances, configuring only the PostgreSQL
-services needed. It is intended to be the _minimal_ required configuration. This
-documentation does not currently include SSL from application to database,
-support for other database providers, or promoting a secondary node to primary.
+services needed, and 2 deployments of the GitLab Helm chart. It is intended to be
+the _minimal_ required configuration. This documentation does not currently
+include SSL from application to database, support for other database providers, or
+promoting a secondary node to primary.
 
 The outline below should be followed in order:
 
-1. Setup Omnibus instances
-1. Setup Kubernetes clusters
-1. Collect information
-1. Configure Primary database
-1. Deploy chart as Geo Primary
-1. Set the Geo primary node
-1. Configure Secondary database
-1. Copy secrets from primary cluster to secondary cluster
-1. Deploy chart as Geo Secondary
-1. Add Secondary Geo node via Primary
+1. [Setup Omnibus instances](#setup-omnibus-instances)
+1. [Setup Kubernetes clusters](#setup-kubernetes-clusters)
+1. [Collect information](#collect-information)
+1. [Configure Primary database](#configure-primary-database)
+1. [Deploy chart as Geo Primary](#deploy-chart-as-geo-primary)
+1. [Set the Geo primary node](#set-the-geo-primary-node)
+1. [Configure Secondary database](#configure-secondary-database)
+1. [Copy secrets from primary cluster to secondary cluster](#copy-secrets-from-the-primary-cluster-to-the-secondary-cluster)
+1. [Deploy chart as Geo Secondary](#deploy-chart-as-geo-secondary)
+1. [Add Secondary Geo node via Primary](#add-secondary-geo-node-via-primary)
 
 ## Setup Omnibus instances
 
@@ -266,7 +267,7 @@ this as the Primary node. We will do this via the `task-runner` Pod.
     kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
     ```
 
-   You should see output similar to below:
+    You should see output similar to below:
 
     ```
     WARNING: This version of GitLab depends on gitlab-shell 10.2.0, but you're running Unknown. Please update gitlab-shell.
@@ -371,7 +372,7 @@ _it is not best practice_.
 
 Once the configuration above is prepared:
 
-1. [Check TCP connectivity][rake-maintenance] to the **primary** node's PostgreSQL server:
+1. Check TCP connectivity to the **primary** node's PostgreSQL server:
 
    ```sh
    gitlab-rake gitlab:tcp_check[<primary_node_ip>,5432]
