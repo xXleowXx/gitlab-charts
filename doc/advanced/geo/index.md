@@ -14,7 +14,7 @@ guide, and make use of the automation included within `gitlab-ctl`.
 In order to use GitLab Geo with this chart, the following requirements must be met:
 
 - The use of [external PostgreSQL](../external-db/index.md) services, as the
-  included PostgreSQL does is not exposed to outside networks, or currently
+  included PostgreSQL is not exposed to outside networks, or currently
   have WAL support required for replication.
 - The supplied database must
   - Support replication.
