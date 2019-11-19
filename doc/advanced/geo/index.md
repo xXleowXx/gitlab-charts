@@ -11,7 +11,7 @@ guide, and make use of the automation included within `gitlab-ctl`.
 
 ## Requirements
 
-In order to use GitLab Geo with this chart, the following requirements must be met:
+In order to use GitLab Geo with the GitLab Helm chart, the following requirements must be met:
 
 - The use of [external PostgreSQL](../external-db/index.md) services, as the
   included PostgreSQL is not exposed to outside networks, or currently
