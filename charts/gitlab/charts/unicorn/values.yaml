@@ -5,7 +5,8 @@ image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee
-  # tag: latest
+  pullPolicy: Always
+  tag: 503-release-ubi-dependencies-ubi8
 init:
   image: busybox
   tag: latest
@@ -79,6 +80,7 @@ deployment:
     failureThreshold: 3
 
 workhorse:
+  tag: 503-release-ubi-dependencies-ubi8
   sentryDSN: ""
   extraArgs: ""
   resources:

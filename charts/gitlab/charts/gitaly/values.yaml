@@ -12,8 +12,8 @@ internal: {}
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitaly
   pullSecrets: []
-  # pullPolicy: IfNotPresent
-  # tag: latest
+  pullPolicy: Always
+  tag: 503-release-ubi-dependencies-ubi8
 service:
   name: gitaly
   type: ClusterIP

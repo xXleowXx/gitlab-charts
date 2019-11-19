@@ -1,7 +1,7 @@
 image:
-  repository: registry
-  tag: '2.7.1'
-  pullPolicy: 'IfNotPresent'
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
+  pullPolicy: Always
+  tag: 503-release-ubi-dependencies-ubi8
   pullSecrets: []
 
 deployment:
