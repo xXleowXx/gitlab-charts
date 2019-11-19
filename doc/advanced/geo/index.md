@@ -184,8 +184,8 @@ Once the configuration above is prepared:
 the `gitlab_replicator` user.
 1. Retrieve the Primary database server's public certificate, this will be needed
 for the Secondary database to be able to replicate.
-  1. `cat ~gitlab-psql/data/server.crt`
-  1. **Store this output.**
+    1. `cat ~gitlab-psql/data/server.crt`
+    1. **Store this output.**
 
 ## Deploy chart as Geo Primary
 
@@ -223,13 +223,14 @@ database user.
     kubectl create secret generic geo --from-literal=postgresql-password=PASSWORD
     ```
 
-1. Update the configuration to reflect the correct values for:
-  - [global.hosts.domain](../../charts/globals/index.md#configure-host-settings)
-  - [global.psql.host](../../charts/globals/index.md#configure-postgresql-settings)
-  - Also configure any additional settings, such as:
-    - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
-    - [Using external Redis][ext-redis]
-    - [using external Object Storage][ext-object]
+1.  Update the configuration to reflect the correct values for:
+
+    - [global.hosts.domain](../../charts/globals/index.md#configure-host-settings)
+    - [global.psql.host](../../charts/globals/index.md#configure-postgresql-settings)
+    - Also configure any additional settings, such as:
+      - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
+      - [Using external Redis][ext-redis]
+      - [using external Object Storage][ext-object]
 
 1. Deploy the chart using this configuration
 
@@ -260,13 +261,13 @@ this as the Primary node. We will do this via the `task-runner` Pod.
     kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
     ```
 
-1. Check the status of Geo configuration
+1.  Check the status of Geo configuration
 
     ```sh
     kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
     ```
 
-  You should see output similar to below:
+   You should see output similar to below:
 
     ```
     WARNING: This version of GitLab depends on gitlab-shell 10.2.0, but you're running Unknown. Please update gitlab-shell.
@@ -298,10 +299,10 @@ this as the Primary node. We will do this via the `task-runner` Pod.
     Checking Geo ... Finished
     ```
 
-  - Don't worry about `Exception: getaddrinfo: Servname not supported for ai_socktype`, as Kubernetes containers will not have access to the host clock. _This is OK_.
-  - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
-  Rake task is checking for a local SSH server, which is actually present in the
-  `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
+    - Don't worry about `Exception: getaddrinfo: Servname not supported for ai_socktype`, as Kubernetes containers will not have access to the host clock. _This is OK_.
+    - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
+    Rake task is checking for a local SSH server, which is actually present in the
+    `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
 
 ## Configure Secondary database
 
@@ -470,6 +471,7 @@ kubectl create secret generic geo \
    --from-literal=postgresql-password=gitlab_user_password \
    --from-literal=geo-postgresql-password=gitlab_geo_user_password
 ```
+
 ## Deploy chart as Geo Secondary
 
 _This section will be performed on the Secondary Kubernetes cluster._
@@ -505,16 +507,17 @@ postgresql:
   install: false
 ```
 
-1. Update the configuration to reflect the correct values for:
-  - [global.hosts.domain](../../charts/globals/index.md#configure-host-settings)
-  - [global.psql.host](../../charts/globals/index.md#configure-postgresql-settings)
-  - [global.geo.psql.host](../../charts/globals/index.md#configure-postgresql-settings)
-  - Also configure any additional settings, such as:
-    - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
-    - [Using external Redis][ext-redis]
-    - [using external Object Storage][ext-object]
+1.  Update the configuration to reflect the correct values for:
 
-1. Deploy the chart using this configuration
+    - [global.hosts.domain](../../charts/globals/index.md#configure-host-settings)
+    - [global.psql.host](../../charts/globals/index.md#configure-postgresql-settings)
+    - [global.geo.psql.host](../../charts/globals/index.md#configure-postgresql-settings)
+    - Also configure any additional settings, such as:
+      - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
+      - [Using external Redis][ext-redis]
+      - [using external Object Storage][ext-object]
+
+1.  Deploy the chart using this configuration
 
     ```sh
     helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
@@ -522,40 +525,39 @@ postgresql:
 
 1. Wait for the deployment to complete. Watch for the `task-runner` Pod to become `Ready`
 
-
 We now need to configure the Geo database, via the `task-runner` Pod.
 
-1. Find the `task-runner` Pod
+1.  Find the `task-runner` Pod
 
     ```sh
     kubectl get pods -lapp=task-runner --namespace gitlab
     ```
 
-1. Attach to the Pod with `kubectl exec`
+1.  Attach to the Pod with `kubectl exec`
 
     ```sh
     kubectl exec -ti gitlab-geo-task-runner-XXX -- bash -l
     ```
 
-1. Populate the Geo database
+1.  Populate the Geo database
 
     ```sh
     gitlab-rake geo:db:setup
     ```
 
-1. Refresh the foreign tables
+1.  Refresh the foreign tables
 
     ```sh
     gitlab-rake geo:db:refresh_foreign_tables
     ```
 
-1. Check the status of Geo configuration
+1.  Check the status of Geo configuration
 
     ```sh
     gitlab-rake gitlab:geo:check
     ```
 
-  You should see output similar to below:
+    You should see output similar to below:
 
     ```
     WARNING: This version of GitLab depends on gitlab-shell 10.2.0, but you're running Unknown. Please update gitlab-shell.
@@ -588,10 +590,11 @@ We now need to configure the Geo database, via the `task-runner` Pod.
     Checking Geo ... Finished
     ```
 
-  - Don't worry about `Exception: getaddrinfo: Servname not supported for ai_socktype`, as Kubernetes containers will not have access to the host clock. _This is OK_.
-  - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
-  Rake task is checking for a local SSH server, which is actually present in the
-  `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
+    - Don't worry about `Exception: getaddrinfo: Servname not supported for ai_socktype`,
+    as Kubernetes containers will not have access to the host clock. _This is OK_.
+    - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
+    Rake task is checking for a local SSH server, which is actually present in the
+    `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
 
 ## Add Secondary Geo node via Primary
 
