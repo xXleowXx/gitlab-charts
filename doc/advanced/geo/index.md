@@ -523,7 +523,9 @@ postgresql:
     helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
     ```
 
-1. Wait for the deployment to complete. Watch for the `task-runner` Pod to become `Ready`
+1. Wait for the deployment to complete. Watch for the `task-runner` Pod to become `Ready`.
+   **Note:** The `geo-logcursor` Pod _will not start properly_ until further configuration
+   steps are completed, as these configure the database it uses.
 
 We now need to configure the Geo database, via the `task-runner` Pod.
 
