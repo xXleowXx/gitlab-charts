@@ -354,7 +354,7 @@ We need to replace several items:
 instance.
 - `gitlab_user_password_hash` must be replaced with the hashed form of the
 `gitlab` password.
-- `postgresql['md5_auth_cidr_addresses']` can be update to be a list of
+- `postgresql['md5_auth_cidr_addresses']` should be updated to be a list of
 explicit IP addresses, or address blocks in CIDR notation.
 - `gitlab_geo_user_password_hash` must be replaced with the hashed form of the
 `gitlab_geo` password.
