@@ -23,7 +23,7 @@ In order to use GitLab Geo with this chart, the following requirements must be m
   - Secondary databases only need to be reachable by the secondary application
       deployments.
   - Support SSL between primary and secondary.
-- The the primary must be reachable via HTTPS by all secondaries. Secondaries
+- The primary must be reachable via HTTPS by all secondaries. Secondaries
   must be accessible to the primary via HTTPS.
 
 ## Overview
