@@ -63,7 +63,7 @@ Bear in mind that communication is required:
 Install an [operating system supported by Omnibus GitLab][og-os], and then
 [install the Omnibus GitLab][og-install] onto it. Do not provide the
 `EXTERNAL_URL` environment variable when installing, as we'll provide a minimal
-configuration file ([sample](db/primary.rb)) before reconfiguring the package.
+configuration file before reconfiguring the package.
 
 Once you have installed the operating system, and the GitLab package, configuration
 can be created for the services that will be used. Before we do that, information
@@ -132,7 +132,7 @@ value for you to make note of.
 _This section will be performed on the Primary Omnibus GitLab instance._
 
 To configure the Primary database instance's Omnibus GitLab, we'll work from
-[this example configuration](db/primary.rb).
+this example configuration.
 
 ```ruby
 ### Geo Primary
@@ -191,7 +191,7 @@ for the Secondary database to be able to replicate.
 
 _This section will be performed on the Primary Kubernetes cluster._
 
-In order to deploy this chart as a Geo Primary, we'll start [from this example configuration](chart/primary.yaml).
+In order to deploy this chart as a Geo Primary, we'll start [from this example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/primary.yaml).
 
 ```yaml
 ### Geo Primary
@@ -309,7 +309,7 @@ this as the Primary instance. We will do this via the `task-runner` Pod.
 _This section will be performed on the Secondary Omnibus GitLab instance._
 
 To configure the Secondary database instance's Omnibus GitLab, we'll work from
-[this example configuration](db/secondary.rb).
+this example configuration.
 
 ```ruby
 ### Geo Secondary
@@ -476,7 +476,7 @@ kubectl create secret generic geo \
 
 _This section will be performed on the Secondary Kubernetes cluster._
 
-In order to deploy this chart as a Geo Secondary, we'll start [from this example configuration](chart/secondary.yaml).
+In order to deploy this chart as a Geo Secondary, we'll start [from this example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/secondary.yaml).
 
 ```yaml
 ## Geo Secondary
