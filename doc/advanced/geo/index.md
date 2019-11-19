@@ -30,8 +30,8 @@ In order to use GitLab Geo with this chart, the following requirements must be m
 
 This guide will use 2 Omnibus GitLab instances, configuring only the PostgreSQL
 services needed. It is intended to be the _minimal_ required configuration. This
-documentation can be expanded in the future to include SSL between all services,
-support for other database providers, and promoting a secondary node to primary.
+documentation does not currently include SSL from application to database,
+support for other database providers, or promoting a secondary node to primary.
 
 The outline below should be followed in order:
 
