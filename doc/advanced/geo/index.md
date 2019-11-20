@@ -56,7 +56,7 @@ Bear in mind that communication is required:
 - Between the two database instances for replication.
 - Between each database instance and their respective Kubernetes deployments:
   - Primary will need to expose TCP port `5432`.
-  - Secondary will need to expose TCP ports `5432` & `5431`
+  - Secondary will need to expose TCP ports `5432` & `5431`.
 
 Install an [operating system supported by Omnibus GitLab][og-os], and then
 [install the Omnibus GitLab][og-install] onto it. Do not provide the
