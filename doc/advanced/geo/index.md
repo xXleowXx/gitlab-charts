@@ -19,7 +19,7 @@ In order to use GitLab Geo with the GitLab Helm chart, the following requirement
   - The primary database must reachable by the primary application deployment,
     and all secondary database nodes (for replication).
   - Secondary databases only need to be reachable by the secondary application
-      deployments.
+    deployments.
   - Support SSL between primary and secondary.
 - The primary application instance must be reachable via HTTPS by all secondary instances.
   Secondary application instances must be accessible to the primary instance via HTTPS.
