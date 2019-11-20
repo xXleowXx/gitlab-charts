@@ -14,7 +14,7 @@ In order to use GitLab Geo with the GitLab Helm chart, the following requirement
 - The use of [external PostgreSQL](../external-db/index.md) services, as the
   PostgresSQL included with the chart is not exposed to outside networks, or currently
   have WAL support required for replication.
-- The supplied database must
+- The supplied database must:
   - Support replication.
   - The primary database must reachable by the primary application deployment,
       and all secondary database nodes (for replication).
