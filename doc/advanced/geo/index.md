@@ -77,7 +77,7 @@ provider, on-premise or from a cloud provider.
 
 Bear in mind that communication is required:
 
-- To the respective database instances
+- To the respective database instances:
   - Primary outbound to TCP `5432`
   - Secondary outbound to TCP `5432` and `5431`.
 - Between both Kubernetes Ingress via HTTPS
