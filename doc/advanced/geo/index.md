@@ -7,8 +7,6 @@ While external database services can be used, these documents currently focus on
 the use of the [Omnibus GitLab](https://docs.gitlab.com/omnibus) for PostgreSQL in order to provide the
 most platform agnostic guide, and make use of the automation included within `gitlab-ctl`.
 
-[omnibus]: https://docs.gitlab.com/omnibus
-
 ## Requirements
 
 In order to use GitLab Geo with the GitLab Helm chart, the following requirements must be met:
