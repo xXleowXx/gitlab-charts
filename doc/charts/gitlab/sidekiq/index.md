@@ -31,35 +31,45 @@ The `sidekiq` chart is configured in three parts: chart-wide [external services]
 The table below contains all the possible charts configurations that can be supplied
 to the `helm install` command using the `--set` flags:
 
-| Parameter                   | Default           | Description                              |
-| --------------------------- | ----------------- | ---------------------------------------- |
-| `annotations`               |                   | Pod annotations                          |
-| `concurrency`               | `10`              | Sidekiq default concurrency              |
-| `enabled`                   | `true`            | Sidekiq enabled flag                     |
-| `extraContainers`           |                   | List of extra containers to include      |
-| `extraInitContainers`       |                   | List of extra init containers to include |
-| `extraVolumeMounts`         |                   | List of extra volumes mountes to do      |
-| `extraVolumes`              |                   | List of extra volumes to create          |
-| `gitaly.serviceName`        | `gitaly`          | Gitaly service name                      |
-| `hpa.targetAverageValue`    | `400m`            | Set the autoscaling target value         |
-| `image.pullPolicy`          | `Always`          | Sidekiq image pull policy                |
-| `image.pullSecrets`         |                   | Secrets for the image repository         |
-| `image.repository`          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee` | Sidekiq image repository |
-| `image.tag`                 |                   | Sidekiq image tag                        |
-| `init.image`                | `busybox`         | initContainer image                      |
-| `init.tag`                  | `latest`          | initContainer image tag                  |
-| `metrics.enabled`           | `true`            | Toggle Prometheus metrics exporter       |
-| `psql.password.key`         | `psql-password`   | key to psql password in psql secret      |
-| `psql.password.secret`      | `gitlab-postgres` | psql password secret                     |
-| `redis.serviceName`         | `redis`           | Redis service name                       |
-| `replicas`                  | `1`               | Sidekiq replicas                         |
-| `resources.requests.cpu`    | `100m`            | Sidekiq minimum needed cpu               |
-| `resources.requests.memory` | `600M`            | Sidekiq minimum needed memory            |
-| `timeout`                   | `5`               | Sidekiq job timeout                      |
-| `tolerations`               | `[]`              | Toleration labels for pod assignment     |
-| `memoryKiller.maxRss`       | `2000000`         | Maximum RSS before delayed shutdown triggered expressed in kilobytes |
-| `memoryKiller.graceTime`    | `900`             | Time to wait before a triggered shutdown expressed in seconds|
-| `memoryKiller.shutdownWait` | `30`              | Amount of time after triggered shutdown for existing jobs to finish expressed in seconds |
+| Parameter                            | Default                                                      | Description                                                                                           |
+| ------------------------------------ | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `annotations`                        |                                                              | Pod annotations                                                                                       |
+| `concurrency`                        | `10`                                                         | Sidekiq default concurrency                                                                           |
+| `enabled`                            | `true`                                                       | Sidekiq enabled flag                                                                                  |
+| `extraContainers`                    |                                                              | List of extra containers to include                                                                   |
+| `extraInitContainers`                |                                                              | List of extra init containers to include                                                              |
+| `extraVolumeMounts`                  |                                                              | List of extra volumes mountes to do                                                                   |
+| `extraVolumes`                       |                                                              | List of extra volumes to create                                                                       |
+| `gitaly.serviceName`                 | `gitaly`                                                     | Gitaly service name                                                                                   |
+| `hpa.targetAverageValue`             | `400m`                                                       | Set the autoscaling target value                                                                      |
+| `image.pullPolicy`                   | `Always`                                                     | Sidekiq image pull policy                                                                             |
+| `image.pullSecrets`                  |                                                              | Secrets for the image repository                                                                      |
+| `image.repository`                   | `registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee` | Sidekiq image repository                                                                              |
+| `image.tag`                          |                                                              | Sidekiq image tag                                                                                     |
+| `init.image`                         | `busybox`                                                    | initContainer image                                                                                   |
+| `init.tag`                           | `latest`                                                     | initContainer image tag                                                                               |
+| `metrics.enabled`                    | `true`                                                       | Toggle Prometheus metrics exporter                                                                    |
+| `psql.password.key`                  | `psql-password`                                              | key to psql password in psql secret                                                                   |
+| `psql.password.secret`               | `gitlab-postgres`                                            | psql password secret                                                                                  |
+| `redis.serviceName`                  | `redis`                                                      | Redis service name                                                                                    |
+| `replicas`                           | `1`                                                          | Sidekiq replicas                                                                                      |
+| `resources.requests.cpu`             | `100m`                                                       | Sidekiq minimum needed cpu                                                                            |
+| `resources.requests.memory`          | `600M`                                                       | Sidekiq minimum needed memory                                                                         |
+| `timeout`                            | `5`                                                          | Sidekiq job timeout                                                                                   |
+| `tolerations`                        | `[]`                                                         | Toleration labels for pod assignment                                                                  |
+| `memoryKiller.maxRss`                | `2000000`                                                    | Maximum RSS before delayed shutdown triggered expressed in kilobytes                                  |
+| `memoryKiller.graceTime`             | `900`                                                        | Time to wait before a triggered shutdown expressed in seconds                                         |
+| `memoryKiller.shutdownWait`          | `30`                                                         | Amount of time after triggered shutdown for existing jobs to finish expressed in seconds              |
+| `livenessProbe.initialDelaySeconds`  | 20                                                           | Delay before liveness probe is initiated                                                              |
+| `livenessProbe.periodSeconds`        | 60                                                           | How often to perform the liveness probe                                                               |
+| `livenessProbe.timeoutSeconds`       | 30                                                           | When the liveness probe times out                                                                     |
+| `livenessProbe.successThreshold`     | 1                                                            | Minimum consecutive successes for the liveness probe to be considered successful after having failed  |
+| `livenessProbe.failureThreshold`     | 3                                                            | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded    |
+| `readinessProbe.initialDelaySeconds` | 0                                                            | Delay before readiness probe is initiated                                                             |
+| `readinessProbe.periodSeconds`       | 10                                                           | How often to perform the readiness probe                                                              |
+| `readinessProbe.timeoutSeconds`      | 2                                                            | When the readiness probe times out                                                                    |
+| `readinessProbe.successThreshold`    | 1                                                            | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
+| `readinessProbe.failureThreshold`    | 3                                                            | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded   |
 
 ## Chart configuration examples
 
@@ -139,15 +149,15 @@ redis:
     key: redis-password
 ```
 
-| Name               | Type    | Default | Description |
-|:------------------ |:-------:|:------- |:----------- |
-| `host`             | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. If using Redis Sentinels, the `host` attribute needs to be set to the cluster name as specified in the `sentinel.conf`. |
-| `password.key`     | String  |         | The `password.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
-| `password.secret`  | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
-| `port`             | Integer | `6379`  | The port on which to connect to the Redis server. |
-| `serviceName`      | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
-| `sentinels.[].host`| String  |         | The hostname of Redis Sentinel server for a Redis HA setup. |
-| `sentinels.[].port`| Integer | `26379` | The port on which to connect to the Redis Sentinel server. |
+| Name                |  Type   | Default | Description                                                                                                                                                                                                                                                                                        |
+| :------------------ | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `host`              | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. If using Redis Sentinels, the `host` attribute needs to be set to the cluster name as specified in the `sentinel.conf`.                                                                   |
+| `password.key`      | String  |         | The `password.key` attribute for Redis defines the name of the key in the secret (below) that contains the password.                                                                                                                                                                               |
+| `password.secret`   | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from.                                                                                                                                                                                                |
+| `port`              | Integer | `6379`  | The port on which to connect to the Redis server.                                                                                                                                                                                                                                                  |
+| `serviceName`       | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
+| `sentinels.[].host` | String  |         | The hostname of Redis Sentinel server for a Redis HA setup.                                                                                                                                                                                                                                        |
+| `sentinels.[].port` | Integer | `26379` | The port on which to connect to the Redis Sentinel server.                                                                                                                                                                                                                                         |
 
 _Note:_ The current Redis Sentinel support only supports Sentinels that have
 been deployed separately from the GitLab chart. As a result, the Redis
@@ -170,16 +180,16 @@ psql:
     key: psql-password
 ```
 
-| Name              | Type    | Default               | Description |
-|:----------------  |:-------:|:--------------------- |:----------- |
-| `host`            | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if `postgresql.install=true` (default non-production). |
-| `serviceName`     | String  |                       | The name of the `service` which is operating the PostgreSQL database. If this is present, and `host` is not, the chart will template the hostname of the service in place of the `host` value. |
-| `database`        | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server. |
-| `password.key`    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
-| `password.secret` | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from. |
-| `port`            | Integer | `5432`                | The port on which to connect to the PostgreSQL server. |
-| `username`        | String  | `gitlab`              | The username with which to authenticate to the database. |
-| `preparedStatements`| Bool  | `false`               | If prepared statements should be used when communicating with the PostgreSQL server. |
+| Name                 |  Type   | Default               | Description                                                                                                                                                                                    |
+| :------------------- | :-----: | :-------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `host`               | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if `postgresql.install=true` (default non-production).                                                     |
+| `serviceName`        | String  |                       | The name of the `service` which is operating the PostgreSQL database. If this is present, and `host` is not, the chart will template the hostname of the service in place of the `host` value. |
+| `database`           | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server.                                                                                                                                      |
+| `password.key`       | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password.                                                                      |
+| `password.secret`    | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from.                                                                                       |
+| `port`               | Integer | `5432`                | The port on which to connect to the PostgreSQL server.                                                                                                                                         |
+| `username`           | String  | `gitlab`              | The username with which to authenticate to the database.                                                                                                                                       |
+| `preparedStatements` |  Bool   | `false`               | If prepared statements should be used when communicating with the PostgreSQL server.                                                                                                           |
 
 ### Gitaly
 
@@ -198,13 +208,13 @@ gitaly:
     key: token
 ```
 
-| Name               | Type    | Default  | Description |
-|:-----------------  |:-------:|:-------- |:----------- |
-| `host`             | String  |          | The hostname of the Gitaly server to use. This can be omitted in lieu of `serviceName`. |
+| Name               |  Type   | Default  | Description                                                                                                                                                                                                                                                                                        |
+| :----------------- | :-----: | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `host`             | String  |          | The hostname of the Gitaly server to use. This can be omitted in lieu of `serviceName`.                                                                                                                                                                                                            |
 | `serviceName`      | String  | `gitaly` | The name of the `service` which is operating the Gitaly server. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Gitaly as a part of the overall GitLab chart. |
-| `port`             | Integer | `8075`   | The port on which to connect to the Gitaly server. |
-| `authToken.key`    | String  |          | The name of the key in the secret below that contains the authToken. |
-| `authToken.secret` | String  |          | The name of the Kubernetes `Secret` to pull from. |
+| `port`             | Integer | `8075`   | The port on which to connect to the Gitaly server.                                                                                                                                                                                                                                                 |
+| `authToken.key`    | String  |          | The name of the key in the secret below that contains the authToken.                                                                                                                                                                                                                               |
+| `authToken.secret` | String  |          | The name of the Kubernetes `Secret` to pull from.                                                                                                                                                                                                                                                  |
 
 ## Metrics
 
@@ -219,14 +229,14 @@ server to discover and scrape the exposed metrics.
 The following values will be used chart-wide, in the event that a value is not presented
 on a per-pod basis.
 
-| Name          | Type    | Default | Description |
-|:------------- |:-------:|:------- |:----------- |
-| `concurrency`               | Integer | `25`      | The number of tasks to process simultaneously. |
-| `replicas`                  | Integer | `1`       | The number of `replicas` to use by default per pod definition. |
+| Name                        |  Type   | Default   | Description                                                                                                                           |
+| :-------------------------- | :-----: | :-------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `concurrency`               | Integer | `25`      | The number of tasks to process simultaneously.                                                                                        |
+| `replicas`                  | Integer | `1`       | The number of `replicas` to use by default per pod definition.                                                                        |
 | `timeout`                   | Integer | `4`       | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. |
-| `memoryKiller.maxRss`       | Integer | `2000000` | Maximum RSS before delayed shutdown triggered expressed in kilobytes |
-| `memoryKiller.graceTime`    | Integer | `900`     | Time to wait before a triggered shutdown expressed in seconds|
-| `memoryKiller.shutdownWait` | Integer | `30`      | Amount of time after triggered shutdown for existing jobs to finish expressed in seconds |
+| `memoryKiller.maxRss`       | Integer | `2000000` | Maximum RSS before delayed shutdown triggered expressed in kilobytes                                                                  |
+| `memoryKiller.graceTime`    | Integer | `900`     | Time to wait before a triggered shutdown expressed in seconds                                                                         |
+| `memoryKiller.shutdownWait` | Integer | `30`      | Amount of time after triggered shutdown for existing jobs to finish expressed in seconds                                              |
 
 NOTE: **Note**: [Detailed documentation of the Sidekiq memory killer is
   available](https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html#sidekiq-memorykiller)
@@ -242,16 +252,16 @@ NOTE: **Note**: The settings default to including a single pod that is set up to
   all queues. Making changes to to the pods section will *overwrite the default pod* with
   a different pod configuration. It will not add a new pod in addition to the default.
 
-| Name           | Type    | Default | Description |
-|:-------------- |:-------:|:------- |:----------- |
-| `concurrency`  | Integer |         | The number of tasks to process simultaneously. If not provided, it will be pulled from the chart-wide default. |
-| `name`         | String  |         | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries. |
-| `queues`       |         |         | [See below](#queues). |
-| `negateQueues` |         |         | [See below](#negateQueues). |
-| `replicas`     | Integer |         | The number of `replicas` to create for this `Deployment`. If not provided, it will be pulled from the chart-wide default. |
+| Name           |  Type   | Default | Description                                                                                                                                                                                           |
+| :------------- | :-----: | :------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `concurrency`  | Integer |         | The number of tasks to process simultaneously. If not provided, it will be pulled from the chart-wide default.                                                                                        |
+| `name`         | String  |         | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries.                                                            |
+| `queues`       |         |         | [See below](#queues).                                                                                                                                                                                 |
+| `negateQueues` |         |         | [See below](#negateQueues).                                                                                                                                                                           |
+| `replicas`     | Integer |         | The number of `replicas` to create for this `Deployment`. If not provided, it will be pulled from the chart-wide default.                                                                             |
 | `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. |
-| `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation. |
-| `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.|
+| `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation.                                 |
+| `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.                 |
 
 ### queues
 
