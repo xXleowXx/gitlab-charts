@@ -85,7 +85,7 @@ Bear in mind that communication is required:
 Each cluster that is provisioned should have:
 
 - Enough resources to support a base-line installation of these charts.
-- Access to persistent storage
+- Access to persistent storage:
   - Minio not required if using [external object storage][ext-object]
   - Gitaly not required if using [external Gitaly][ext-gitaly]
   - Redis not required if using [external Redis][ext-redis]
