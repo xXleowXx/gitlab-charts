@@ -80,7 +80,7 @@ Bear in mind that communication is required:
 - To the respective database instances:
   - Primary outbound to TCP `5432`.
   - Secondary outbound to TCP `5432` and `5431`.
-- Between both Kubernetes Ingress via HTTPS
+- Between both Kubernetes Ingress via HTTPS.
 
 Each cluster that is provisioned should have:
 
