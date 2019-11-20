@@ -166,7 +166,7 @@ spec:
             - name: SIDEKIQ_TIMEOUT
               value: {{ default $timeout .timeout | quote }}
             - name: SIDEKIQ_DAEMON_MEMORY_KILLER
-              value: "1"
+              value: {{ int $.Values.memoryKiller.daemonMode | quote }}
             - name: SIDEKIQ_MEMORY_KILLER_CHECK_INTERVAL
               value: {{ int $.Values.memoryKiller.checkInterval | quote }}
             - name: SIDEKIQ_MEMORY_KILLER_MAX_RSS
