@@ -54,7 +54,7 @@ from a cloud provider.
 Bear in mind that communication is required:
 
 - Between the two database instances for replication.
-- Between each database instance and their respective Kubernetes deployments
+- Between each database instance and their respective Kubernetes deployments:
   - Primary will need to expose TCP port `5432`
   - Secondary will need to expose TCP ports `5432` & `5431`
 
