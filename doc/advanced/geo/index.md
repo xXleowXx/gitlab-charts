@@ -207,6 +207,7 @@ global:
       key: postgresql-password
   # configure geo (primary)
   geo:
+    enabled: true
     role: primary
 # External DB, disable
 postgresql:
@@ -217,24 +218,24 @@ postgresql:
 chart to consume. Replace `PASSWORD` below with the password for the `gitlab`
 database user.
 
-    ```sh
-    kubectl create secret generic geo --from-literal=postgresql-password=PASSWORD
-    ```
+   ```sh
+   kubectl create secret generic geo --from-literal=postgresql-password=PASSWORD
+   ```
 
 1. Update the configuration to reflect the correct values for:
 
-    - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
-    - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
-    - Also configure any additional settings, such as:
-      - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
-      - [Using external Redis][ext-redis]
-      - [using external Object Storage][ext-object]
+   - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
+   - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
+   - Also configure any additional settings, such as:
+     - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
+     - [Using external Redis][ext-redis]
+     - [using external Object Storage][ext-object]
 
 1. Deploy the chart using this configuration
 
-    ```sh
-    helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f primary.yaml
-    ```
+   ```sh
+   helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f primary.yaml
+   ```
 
 1. Wait for the deployment to complete, and the application to come online. Once
 the application is reachable, login.
@@ -249,58 +250,58 @@ this as the Primary instance. We will do this via the `task-runner` Pod.
 
 1. Find the `task-runner` Pod
 
-    ```sh
-    kubectl get pods -lapp=task-runner --namespace gitlab
-    ```
+   ```sh
+   kubectl get pods -lapp=task-runner --namespace gitlab
+   ```
 
 1. Run `gitlab-rake geo:set_primary_node` with `kubectl exec`
 
-    ```sh
-    kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
-    ```
+   ```sh
+   kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
+   ```
 
 1. Check the status of Geo configuration
 
-    ```sh
-    kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
-    ```
+   ```sh
+   kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
+   ```
 
-    You should see output similar to below:
+   You should see output similar to below:
 
-    ```
-    WARNING: This version of GitLab depends on gitlab-shell 10.2.0, but you're running Unknown. Please update gitlab-shell.
-    Checking Geo ...
+   ```
+   WARNING: This version of GitLab depends on gitlab-shell 10.2.0, but you're running Unknown. Please update gitlab-shell.
+   Checking Geo ...
 
-    GitLab Geo is available ... yes
-    GitLab Geo is enabled ... yes
-    GitLab Geo secondary database is correctly configured ... not a secondary node
-    Database replication enabled? ... not a secondary node
-    Database replication working? ... not a secondary node
-    GitLab Geo tracking database is configured to use Foreign Data Wrapper? ... not a secondary node
-    GitLab Geo tracking database Foreign Data Wrapper schema is up-to-date? ... not a secondary node
-    GitLab Geo HTTP(S) connectivity ... not a secondary node
-    HTTP/HTTPS repository cloning is enabled ... yes
-    Machine clock is synchronized ... Exception: getaddrinfo: Servname not supported for ai_socktype
-    Git user has default SSH configuration? ... yes
-    OpenSSH configured to use AuthorizedKeysCommand ... no
-      Reason:
-      Cannot find OpenSSH configuration file at: /assets/sshd_config
-      Try fixing it:
-      If you are not using our official docker containers,
-      make sure you have OpenSSH server installed and configured correctly on this system
-      For more information see:
-      doc/administration/operations/fast_ssh_key_lookup.md
-    GitLab configured to disable writing to authorized_keys file ... yes
-    GitLab configured to store new projects in hashed storage? ... yes
-    All projects are in hashed storage? ... yes
+   GitLab Geo is available ... yes
+   GitLab Geo is enabled ... yes
+   GitLab Geo secondary database is correctly configured ... not a secondary node
+   Database replication enabled? ... not a secondary node
+   Database replication working? ... not a secondary node
+   GitLab Geo tracking database is configured to use Foreign Data Wrapper? ... not a secondary node
+   GitLab Geo tracking database Foreign Data Wrapper schema is up-to-date? ... not a secondary node
+   GitLab Geo HTTP(S) connectivity ... not a secondary node
+   HTTP/HTTPS repository cloning is enabled ... yes
+   Machine clock is synchronized ... Exception: getaddrinfo: Servname not supported for ai_socktype
+   Git user has default SSH configuration? ... yes
+   OpenSSH configured to use AuthorizedKeysCommand ... no
+     Reason:
+     Cannot find OpenSSH configuration file at: /assets/sshd_config
+     Try fixing it:
+     If you are not using our official docker containers,
+     make sure you have OpenSSH server installed and configured correctly on this system
+     For more information see:
+     doc/administration/operations/fast_ssh_key_lookup.md
+   GitLab configured to disable writing to authorized_keys file ... yes
+   GitLab configured to store new projects in hashed storage? ... yes
+   All projects are in hashed storage? ... yes
 
-    Checking Geo ... Finished
-    ```
+   Checking Geo ... Finished
+   ```
 
-    - Don't worry about `Exception: getaddrinfo: Servname not supported for ai_socktype`, as Kubernetes containers will not have access to the host clock. _This is OK_.
-    - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
-    Rake task is checking for a local SSH server, which is actually present in the
-    `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
+   - Don't worry about `Exception: getaddrinfo: Servname not supported for ai_socktype`, as Kubernetes containers will not have access to the host clock. _This is OK_.
+   - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
+   Rake task is checking for a local SSH server, which is actually present in the
+   `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
 
 ## Configure Secondary database
 
@@ -331,14 +332,14 @@ postgresql['listen_address'] = '0.0.0.0'
 postgresql['sql_user_password'] = 'gitlab_user_password_hash'
 # !! CAUTION !!
 # This list of CIDR addresses should be customized
-# - primary application deployment
+# - secondary application deployment
 # - secondary database instance(s)
 postgresql['md5_auth_cidr_addresses'] = ['0.0.0.0/0']
 geo_postgresql['listen_address'] = '0.0.0.0'
 geo_postgresql['sql_user_password'] = 'gitlab_geo_user_password_hash'
 # !! CAUTION !!
 # This list of CIDR addresses should be customized
-# - primary application deployment
+# - secondary application deployment
 # - secondary database instance(s)
 geo_postgresql['md5_auth_cidr_addresses'] = ['0.0.0.0/0']
 ## Settings so we can automatically configure the FDW
@@ -404,38 +405,38 @@ Once the configuration above is prepared:
    to the private key, which is **only** present on the **primary** node.
 
 1. Test that the `gitlab-psql` user can connect to the **primary** node's database
-    (the default Omnibus database name is gitlabhq_production):
+   (the default Omnibus database name is gitlabhq_production):
 
-    ```sh
-    sudo \
-       -u gitlab-psql /opt/gitlab/embedded/bin/psql \
-       --list \
-       -U gitlab_replicator \
-       -d "dbname=gitlabhq_production sslmode=verify-ca" \
-       -W \
-       -h <primary_node_ip>
-    ```
+   ```sh
+   sudo \
+      -u gitlab-psql /opt/gitlab/embedded/bin/psql \
+      --list \
+      -U gitlab_replicator \
+      -d "dbname=gitlabhq_production sslmode=verify-ca" \
+      -W \
+      -h <primary_node_ip>
+   ```
 
-    When prompted enter the password collected earlier for the
-    `gitlab_replicator` user. If all worked correctly, you should see
-    the list of **primary** node's databases.
+   When prompted enter the password collected earlier for the
+   `gitlab_replicator` user. If all worked correctly, you should see
+   the list of **primary** node's databases.
 
-    A failure to connect here indicates that the TLS configuration is incorrect.
-    Ensure that the contents of `~gitlab-psql/data/server.crt` on the **primary** node
-    match the contents of `~gitlab-psql/.postgresql/root.crt` on the **secondary** node.
+   A failure to connect here indicates that the TLS configuration is incorrect.
+   Ensure that the contents of `~gitlab-psql/data/server.crt` on the **primary** node
+   match the contents of `~gitlab-psql/.postgresql/root.crt` on the **secondary** node.
 
 1. Reconfigure again, which will configured the Foreign Data Wrapper support.
 
-    ```sh
-    gitlab-ctl reconfigure
-    ```
+   ```sh
+   gitlab-ctl reconfigure
+   ```
 
 1. Replicate the databases. Replace `PRIMARY_DATABASE_HOST` with the IP or hostname
 of your Primary database instance.
 
-    ```sh
-    gitlab-ctl replicate-geo-database --slot-name=geo_2 --host=PRIMARY_DATABASE_HOST
-    ```
+   ```sh
+   gitlab-ctl replicate-geo-database --slot-name=geo_2 --host=PRIMARY_DATABASE_HOST
+   ```
 
 ## Copy secrets from the primary cluster to the secondary cluster
 
@@ -456,10 +457,10 @@ Secondary Kubernetes deployment.
 1. Change your `kubectl` context to that of your Secondary.
 1. Apply these secrets
 
-    ```sh
-    kubectl apply -f ssh-host-keys.yaml
-    kubectl apply -f rails-secrets.yaml
-    ```
+   ```sh
+   kubectl apply -f ssh-host-keys.yaml
+   kubectl apply -f rails-secrets.yaml
+   ```
 
 We'll now need to create a secret containing the database passwords. Replace the
 passwords below with the appropriate values.
@@ -493,6 +494,7 @@ global:
       key: postgresql-password
   # configure geo (secondary)
   geo:
+    enabled: true
     role: secondary
     psql:
       host: geo-2.db.example.com
@@ -507,19 +509,19 @@ postgresql:
 
 1. Update the configuration to reflect the correct values for:
 
-    - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
-    - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
-    - [global.geo.psql.host](../../charts/globals.md#configure-postgresql-settings)
-    - Also configure any additional settings, such as:
-      - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
-      - [Using external Redis][ext-redis]
-      - [using external Object Storage][ext-object]
+   - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
+   - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
+   - [global.geo.psql.host](../../charts/globals.md#configure-postgresql-settings)
+   - Also configure any additional settings, such as:
+     - [Configuring SSL/TLS](../../installation/deployment.html#tls-certificates)
+     - [Using external Redis][ext-redis]
+     - [using external Object Storage][ext-object]
 
 1. Deploy the chart using this configuration
 
-    ```sh
-    helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
-    ```
+   ```sh
+   helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
+   ```
 
 1. Wait for the deployment to complete. Watch for the `task-runner` Pod to become `Ready`.
    **Note:** The `geo-logcursor` Pod _will not start properly_ until further configuration
@@ -529,77 +531,77 @@ We now need to configure the Geo database, via the `task-runner` Pod.
 
 1. Find the `task-runner` Pod
 
-    ```sh
-    kubectl get pods -lapp=task-runner --namespace gitlab
-    ```
+   ```sh
+   kubectl get pods -lapp=task-runner --namespace gitlab
+   ```
 
 1. Attach to the Pod with `kubectl exec`
 
-    ```sh
-    kubectl exec -ti gitlab-geo-task-runner-XXX -- bash -l
-    ```
+   ```sh
+   kubectl exec -ti gitlab-geo-task-runner-XXX -- bash -l
+   ```
 
 1. Populate the Geo database
 
-    ```sh
-    gitlab-rake geo:db:setup
-    ```
+   ```sh
+   gitlab-rake geo:db:setup
+   ```
 
 1. Refresh the foreign tables
 
-    ```sh
-    gitlab-rake geo:db:refresh_foreign_tables
-    ```
+   ```sh
+   gitlab-rake geo:db:refresh_foreign_tables
+   ```
 
 1. Check the status of Geo configuration
 
-    ```sh
-    gitlab-rake gitlab:geo:check
-    ```
+   ```sh
+   gitlab-rake gitlab:geo:check
+   ```
 
-    You should see output similar to below:
+   You should see output similar to below:
 
-    ```
-    WARNING: This version of GitLab depends on gitlab-shell 10.2.0, but you're running Unknown. Please update gitlab-shell.
-    Checking Geo ...
+   ```
+   WARNING: This version of GitLab depends on gitlab-shell 10.2.0, but you're running Unknown. Please update gitlab-shell.
+   Checking Geo ...
 
-    GitLab Geo is available ... yes
-    GitLab Geo is enabled ... yes
-    GitLab Geo secondary database is correctly configured ... yes
-    Database replication enabled? ... yes
-    Database replication working? ... yes
-    GitLab Geo tracking database is configured to use Foreign Data Wrapper? ... yes
-    GitLab Geo tracking database Foreign Data Wrapper schema is up-to-date? ... yes
-    GitLab Geo HTTP(S) connectivity ...
-    * Can connect to the primary node ... yes
-    HTTP/HTTPS repository cloning is enabled ... yes
-    Machine clock is synchronized ... Exception: getaddrinfo: Servname not supported for ai_socktype
-    Git user has default SSH configuration? ... yes
-    OpenSSH configured to use AuthorizedKeysCommand ... no
-      Reason:
-      Cannot find OpenSSH configuration file at: /assets/sshd_config
-      Try fixing it:
-      If you are not using our official docker containers,
-      make sure you have OpenSSH server installed and configured correctly on this system
-      For more information see:
-      doc/administration/operations/fast_ssh_key_lookup.md
-    GitLab configured to disable writing to authorized_keys file ... yes
-    GitLab configured to store new projects in hashed storage? ... yes
-    All projects are in hashed storage? ... yes
+   GitLab Geo is available ... yes
+   GitLab Geo is enabled ... yes
+   GitLab Geo secondary database is correctly configured ... yes
+   Database replication enabled? ... yes
+   Database replication working? ... yes
+   GitLab Geo tracking database is configured to use Foreign Data Wrapper? ... yes
+   GitLab Geo tracking database Foreign Data Wrapper schema is up-to-date? ... yes
+   GitLab Geo HTTP(S) connectivity ...
+   * Can connect to the primary node ... yes
+   HTTP/HTTPS repository cloning is enabled ... yes
+   Machine clock is synchronized ... Exception: getaddrinfo: Servname not supported for ai_socktype
+   Git user has default SSH configuration? ... yes
+   OpenSSH configured to use AuthorizedKeysCommand ... no
+     Reason:
+     Cannot find OpenSSH configuration file at: /assets/sshd_config
+     Try fixing it:
+     If you are not using our official docker containers,
+     make sure you have OpenSSH server installed and configured correctly on this system
+     For more information see:
+     doc/administration/operations/fast_ssh_key_lookup.md
+   GitLab configured to disable writing to authorized_keys file ... yes
+   GitLab configured to store new projects in hashed storage? ... yes
+   All projects are in hashed storage? ... yes
 
-    Checking Geo ... Finished
-    ```
+   Checking Geo ... Finished
+   ```
 
-    - Don't worry about `Exception: getaddrinfo: Servname not supported for ai_socktype`,
-    as Kubernetes containers will not have access to the host clock. _This is OK_.
-    - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
-    Rake task is checking for a local SSH server, which is actually present in the
-    `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
+   - Don't worry about `Exception: getaddrinfo: Servname not supported for ai_socktype`,
+   as Kubernetes containers will not have access to the host clock. _This is OK_.
+   - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
+   Rake task is checking for a local SSH server, which is actually present in the
+   `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
 
 ## Add Secondary Geo instance via Primary
 
 Now that both databases are configured and applications are deployed, we must tell
-the Primary that the Secondary exists.
+the Primary that the Secondary exists:
 
 1. Visit the **primary** instance's **Admin Area > Geo**
    (`/admin/geo/nodes`) in your browser.
