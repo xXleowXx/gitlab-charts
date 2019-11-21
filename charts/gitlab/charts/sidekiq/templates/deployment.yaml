@@ -103,6 +103,7 @@ spec:
           volumeMounts:
 {{ include "gitlab.extraVolumeMounts" $ | indent 10 }}
 {{ include "gitlab.psql.ssl.volumeMount" $ | indent 10 }}
+{{ include "gitlab.geo.psql.ssl.volumeMount" $ | indent 10 }}
           - name: sidekiq-config
             mountPath: /config
             readOnly: true
@@ -165,8 +166,16 @@ spec:
               value: {{ default $concurrency .concurrency | quote }}
             - name: SIDEKIQ_TIMEOUT
               value: {{ default $timeout .timeout | quote }}
+            - name: SIDEKIQ_DAEMON_MEMORY_KILLER
+              value: {{ int $.Values.memoryKiller.daemonMode | quote }}
+            - name: SIDEKIQ_MEMORY_KILLER_CHECK_INTERVAL
+              value: {{ int $.Values.memoryKiller.checkInterval | quote }}
             - name: SIDEKIQ_MEMORY_KILLER_MAX_RSS
               value: {{ int $.Values.memoryKiller.maxRss | quote }}
+            {{- if $.Values.memoryKiller.hardLimitRss }}
+            - name: SIDEKIQ_MEMORY_KILLER_HARD_LIMIT_RSS
+              value: {{ int $.Values.memoryKiller.hardLimitRss | quote }}
+            {{- end }}
             - name: SIDEKIQ_MEMORY_KILLER_GRACE_TIME
               value: {{ int $.Values.memoryKiller.graceTime | quote }}
             - name: SIDEKIQ_MEMORY_KILLER_SHUTDOWN_WAIT
@@ -230,6 +239,7 @@ spec:
       volumes:
 {{ include "gitlab.extraVolumes" $ | indent 6 }}
 {{ include "gitlab.psql.ssl.volume" $ | indent 6 }}
+{{ include "gitlab.geo.psql.ssl.volume" $ | indent 6 }}
 {{- if $metricsEnabled }}
       - name: sidekiq-metrics
         emptyDir:
@@ -272,6 +282,13 @@ spec:
               items:
                 - key: {{ template "gitlab.psql.password.key" $ }}
                   path: postgres/psql-password
+          {{- if $.Values.global.geo.enabled }}
+          - secret:
+              name: {{ template "gitlab.geo.psql.password.secret" $ }}
+              items:
+                - key: {{ template "gitlab.geo.psql.password.key" $ }}
+                  path: postgres/geo-psql-password
+          {{- end }}
           - secret:
               name: {{ template "gitlab.registry.certificate.secret" $ }}
               items:
