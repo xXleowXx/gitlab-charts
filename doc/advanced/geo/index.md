@@ -425,7 +425,7 @@ Once the configuration above is prepared:
    Ensure that the contents of `~gitlab-psql/data/server.crt` on the **primary** node
    match the contents of `~gitlab-psql/.postgresql/root.crt` on the **secondary** node.
 
-1. Reconfigure again, which will configured the Foreign Data Wrapper support.
+1. Reconfigure again, which will configure the Foreign Data Wrapper support.
 
    ```sh
    gitlab-ctl reconfigure
