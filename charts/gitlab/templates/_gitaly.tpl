@@ -8,7 +8,6 @@ Return gitaly host for internal statefulsets
 {{- $name := coalesce .Values.gitaly.serviceName .Values.global.gitaly.serviceName "gitaly" -}}
 {{- range $i, $storage := .Values.global.gitaly.internal.names -}}
 {{- printf "%s:\n" $storage -}}
-{{- printf  "path: /var/opt/gitlab/repo\n" | indent 2 -}}
 {{- $podName := printf "%s-gitaly-%d" $releaseName $i -}}
 {{- if $.Values.global.gitaly.tls.enabled }}
 {{- printf "gitaly_address: tls://%s.%s-%s.%s:%d\n" $podName $releaseName $name $.Release.Namespace 8076 -}}
@@ -25,7 +24,6 @@ Return gitaly storage for external hosts
 {{- define "gitlab.gitaly.storage.external" -}}
 {{- range $i, $storage := .Values.global.gitaly.external -}}
 {{- printf "%s:\n" $storage.name -}}
-{{- printf  "path: /var/opt/gitlab/repo\n" | indent 2 -}}
 {{- if $.Values.global.gitaly.tls.enabled }}
 {{- printf "gitaly_address: tls://%s:%d\n" $storage.hostname (default 8076 $storage.port | int64) -}}
 {{- else }}
@@ -41,7 +39,6 @@ Return the gitaly storages list
 {{- define "gitlab.gitaly.storages" -}}
 {{- if .Values.global.gitaly.host -}}
 default:
-  path: /var/opt/gitlab/repo
   {{- if $.Values.global.gitaly.tls.enabled }}
   gitaly_address: {{ printf "tls://%s:%d" .Values.global.gitaly.host (default 8076 .Values.global.gitaly.port | int64 ) }}
   {{- else }}
