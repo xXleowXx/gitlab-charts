@@ -4,8 +4,8 @@
 image:
   repository: registry.gitlab.com/gitlab-org/charts/components/gitlab-operator
   pullSecrets: []
-  # pullPolicy: IfNotPresent
-  # tag: latest
+  pullPolicy: Always
+  tag: kubernetes-v1-13
 
 # Which version of the operator to deploy
 version: 0.8
