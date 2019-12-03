@@ -20,13 +20,6 @@ The default deployment includes:
 There are also some [example values.yaml files](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples).
 
 ## Limitations
-
-Some features of GitLab are not currently available using the Helm chart:
-
-- [GitLab Pages](https://gitlab.com/gitlab-org/charts/gitlab/issues/37)
-- [No in-cluster HA database](https://gitlab.com/gitlab-org/charts/gitlab/issues/48)
-- [Smartcard authentication](https://gitlab.com/gitlab-org/charts/gitlab/issues/988)
-
 Database limitations:
 
 - MySQL will not be supported, as support is [deprecated within GitLab](https://docs.gitlab.com/omnibus/settings/database.html#using-a-mysql-database-management-server-enterprise-edition-only)
