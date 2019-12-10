@@ -73,6 +73,10 @@ spec:
             - name: DB_SCHEMA_TARGET
               value: geo
             {{- end }}
+            {{- if .Values.bootsnap.enabled }}
+            - name: ENABLE_BOOTSNAP
+              value: 1
+            {{- end }}
           volumeMounts:
             - name: migrations-config
               mountPath: '/var/opt/gitlab/templates'
