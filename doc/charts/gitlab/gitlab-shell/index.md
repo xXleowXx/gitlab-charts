@@ -178,7 +178,7 @@ authToken:
 
 | Name               | Type    | Default | Description |
 |:-------------------|:-------:|:--------|:------------|
-| `authToken.key`    | String  |         | The name of the key in the above secret that contains the `authToken`. |
+| `authToken.key`    | String  |         | The name of the key in the above secret that contains the auth token. |
 | `authToken.secret` | String  |         | The name of the Kubernetes `Secret` to pull from. |
 
 ### LoadBalancer Service
