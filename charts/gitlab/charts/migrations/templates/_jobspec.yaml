@@ -75,7 +75,7 @@ spec:
             {{- end }}
             {{- if .Values.bootsnap.enabled }}
             - name: ENABLE_BOOTSNAP
-              value: 1
+              value: '1'
             {{- end }}
           volumeMounts:
             - name: migrations-config
