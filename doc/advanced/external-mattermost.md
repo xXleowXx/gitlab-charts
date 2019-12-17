@@ -85,10 +85,10 @@ indicates the values that should be changed. Note that we assume the GitLab char
       enabled: false
 
   # Mattermost configuration:
-  config:
-    siteUrl: "https://<your-mattermost-domain>"
-    siteName: "Mattermost"
-    enableSignUpWithEmail: false
+  configJSON:
+    SiteUrl: "https://<your-mattermost-domain>"
+    SiteName: "Mattermost"
+    EnableSignUpWithEmail: false
 
   ingress:
     enabled: true
@@ -233,7 +233,7 @@ indicates the values that should be changed. Note that we assume the GitLab char
 After these changes, deploy the Mattermost Team Edition Helm Chart with following command:
 
 ```bash
-$ helm upgrade --install mattermost -f values.yaml stable/mattermost-team-edition
+$ helm upgrade --install mattermost -f values.yaml mattermost/mattermost-team-edition
 ```
 
 Wait for the pods to run. Then access your Mattermost server, and log in with your GitLab credentials.
