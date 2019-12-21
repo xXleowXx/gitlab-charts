@@ -186,6 +186,13 @@ Alias of gitlab.psql.password.secret to override upstream postgresql chart namin
 {{- end -}}
 
 {{/*
+ override upstream redis chart naming
+*/}}
+{{- define "redis.secretName" -}}
+{{ template "gitlab.redis.password.secret" . }}
+{{- end -}}
+
+{{/*
 Return the name of the key in a secret that contains the postgres password
 Uses `postgres-password` to match upstream postgresql chart when not using an
   external postegresql
