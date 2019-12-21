@@ -1,19 +1,17 @@
 apiVersion: v1
 name: redis
-version: 9.0.4
-appVersion: 5.0.5
-description: Open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
+version: 0.1.0
+appVersion: 3.2.6
+description: An advanced key-value cache and store.
+details: Redis used as part of GitLab deployment.
 keywords:
 - redis
-- keyvalue
-- database
-home: http://redis.io/
-icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
+- gitlab
+home: https://redis.io
+icon: https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Redis_Logo.svg/1200px-Redis_Logo.svg.png
 sources:
-- https://github.com/bitnami/bitnami-docker-redis
+- https://hub.docker.com/_/redis/
+- https://gitlab.com/gitlab-org/charts/gitlab/charts/redis
 maintainers:
-- name: Bitnami
-  email: containers@bitnami.com
-- name: desaintmartin
-  email: cedric@desaintmartin.fr
-engine: gotpl
+- name: GitLab Inc.
+  email: support@gitlab.com
