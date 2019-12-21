@@ -30,12 +30,8 @@ data:
   resque.yml.erb: |
     production:
       # Redis (single instance)
-      url: redis://:<%= URI.escape(File.read("/etc/gitlab/redis/password").strip) %>@gitlab-redis:{{ template "gitlab.redis.port" . }}
+      url: {{ template "gitlab.redis.url" . }}
       id:
-      sentinels:
-        -
-          host: {{ printf "%s-%s" .Release.Name "redis" }}
-          port: 26379
   unicorn.rb: |
     # This file should be equivalent to `unicorn.rb` from:
     # * gitlab-ce: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/config/unicorn.rb.example
@@ -193,8 +189,7 @@ data:
     gitlab-helm-chart
   workhorse-config.toml.erb: |
     [redis]
-    Sentinel = ["tcp://{{ printf "%s-%s" .Release.Name "redis" }}:26379"]
-    SentinelMaster = "gitlab-redis"
+    URL = "{{ template "gitlab.redis.scheme" . }}://{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}"
     {{- if .Values.global.redis.password.enabled }}
     Password = "<%= File.read("/etc/gitlab/redis/password").strip.dump[1..-2] %>"
     {{- end }}

@@ -30,8 +30,21 @@ data:
           class_name: Database::RowCountProber
           <<: *db_common
 
+      sidekiq: &sidekiq
+        methods:
+          - probe_queues
+          - probe_jobs
+          - probe_workers
+          - probe_retries
+          - probe_dead
+        opts:
+          redis_url: {{ template "gitlab.redis.url" . }}
+          redis_enable_client: false
+
       metrics:
         multiple: true
+        sidekiq:
+          <<: *sidekiq
         ci_builds:
           class_name: Database::CiBuildsProber
           <<: *db_common

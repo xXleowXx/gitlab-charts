@@ -4,9 +4,8 @@ image:
   pullPolicy: 'IfNotPresent'
   pullSecrets: []
 init:
-  image: {}
-    # repository:
-    # tag:
+  image: busybox
+  tag: latest
   resources:
     requests:
       cpu: 50m
@@ -28,11 +27,6 @@ resources:
 
 # Chart operation controls
 enabled: true
-
-# custom scheduling options
-nodeSelector: {}
-tolerations: []
-affinity: {}
 
 # Configuration items
 timeout: 60

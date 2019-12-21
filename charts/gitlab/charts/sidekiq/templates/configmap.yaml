@@ -30,12 +30,8 @@ data:
   resque.yml.erb: |
     production:
       # Redis (single instance)
-      url: redis://:<%= URI.escape(File.read("/etc/gitlab/redis/password").strip) %>@gitlab-redis:{{ template "gitlab.redis.port" . }}
+      url: {{ template "gitlab.redis.url" . }}
       id:
-      sentinels:
-        -
-          host: {{ printf "%s-%s" .Release.Name "redis" }}
-          port: 26379
   gitlab.yml.erb: |
     production: &base
       gitlab:
