@@ -429,13 +429,6 @@ redis:
         writes: 10
       - time: 900
         writes: 1
-  cluster:
-    slaveCount: 3
-  sentinel:
-    enabled: true
-    masterSet: gitlab-redis
-  metrics:
-    enabled: false
   configmap: |-
     # Enable AOF https://redis.io/topics/persistence#append-only-file
     appendonly yes
