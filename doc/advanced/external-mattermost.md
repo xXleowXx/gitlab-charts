@@ -173,7 +173,7 @@ indicates the values that should be changed. Note that we assume the GitLab char
         - name: POSTGRES_PASSWORD_GITLAB
           valueFrom:
             secretKeyRef:
-              name: gitlab-postgresql-password
+              name: <gitlab-postgres.passwd-secret>
               key: postgres-password
         - name: POSTGRES_USER_GITLAB
           value: <gitlab-postgres-username>
