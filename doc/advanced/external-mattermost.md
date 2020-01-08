@@ -33,9 +33,9 @@ Here is a light way to install it:
 ```bash
 $ helm upgrade --install gitlab gitlab/gitlab \
   --timeout 600 \
-  --set global.hosts.domain=``<your-domain>`` \
-  --set global.hosts.externalIP=``<external-ip>`` \
-  --set certmanager-issuer.email=``<email>``
+  --set global.hosts.domain=<your-domain> \
+  --set global.hosts.externalIP=<external-ip> \
+  --set certmanager-issuer.email=<email>
 ```
 
 - ``<your-domain>``: your desired domain, eg. ``gitlab.example.com``.
@@ -55,7 +55,7 @@ Please take note of the ``Application ID``, ``Application Secret Key``, ``User A
 
 Requirements:
 
-  - Mattermost Team Edition Helm Chart Version: 1.4.0
+  - Mattermost Team Edition Helm Chart Version: 3.8.2
 
 To deploy Mattermost Team Edition with GitLab Helm Chart, disable the running ``MySql`` chart and 
 configure InitContainer and Environment variables in ``values.yaml``. The list below
