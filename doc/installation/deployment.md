@@ -67,7 +67,7 @@ If you have your own wildcard certificate, you already have cert-manager install
 have some other way of obtaining TLS certificates, [read about more TLS options here](./tls.md).
 
 For the default configuration, you must specify an email address to register your TLS
-certificates.
+certificates. Please note that the mail domain must be the same as the value specified in `global.hosts.domain`.
 *Include these options in your Helm install command:*
 
 ```
