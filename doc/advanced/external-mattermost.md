@@ -86,10 +86,12 @@ indicates the values that should be changed. Note that we assume the GitLab char
 
   # Mattermost configuration:
   configJSON:
-    SiteUrl: "https://<your-mattermost-domain>"
-    SiteName: "Mattermost"
-    EnableSignUpWithEmail: false
-
+    ServiceSettings:
+      SiteUrl: "https://<your-mattermost-domain>"
+    TeamSettings:
+      SiteName: "Mattermost"
+    EmailSettings:
+      EnableSignUpWithEmail: false
   ingress:
     enabled: true
     path: /
