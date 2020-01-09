@@ -235,6 +235,8 @@ indicates the values that should be changed. Note that we assume the GitLab char
 After these changes, deploy the Mattermost Team Edition Helm Chart with following command:
 
 ```bash
+$ helm repo add mattermost https://helm.mattermost.com
+$ helm repo update
 $ helm upgrade --install mattermost -f values.yaml mattermost/mattermost-team-edition
 ```
 
