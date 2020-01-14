@@ -324,22 +324,22 @@ Pods to specific endpoints.
 | `egress.enabled`  | Boolean | `false` | When set to `true`, the `Egress` network policy will be activated. This will block all egress connections unless rules are specified. |
 | `egress.rules`    | Array   | `[]`    | Rules for the egress policy, these for details see <https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource> and the example below |
 
-### Example policy for preventing connections to all internal endpoints
+### Example Network Policy
 
 The Sidekiq service requires Ingress connections for only the Prometheus
-exporter if enabled.  And normally requires egress connections to various
+exporter if enabled.  And normally requires Egress connections to various
 places. This examples adds the following network policy:
 
-- All ingress requests from the local network on TCP `10.0.0.0/8` port 3807 are allowed for metrics exporting
-- All egress requests to the local network on UDP `10.0.0.0/8` port 53 are allowed for DNS
-- All egress requests to the local network on TCP `10.0.0.0/8` port 5432 are allowed for PostgreSQL
-- All egress requests to the local network on TCP `10.0.0.0/8` port 6379 are allowed for Redis
-- Other egress requests to the local network on `10.0.0.0/8` are restricted
+- All Ingress requests from the network on TCP `10.0.0.0/8` port 3807 are allowed for metrics exporting
+- All Egress requests to the network on UDP `10.0.0.0/8` port 53 are allowed for DNS
+- All Egress requests to the network on TCP `10.0.0.0/8` port 5432 are allowed for PostgreSQL
+- All Egress requests to the network on TCP `10.0.0.0/8` port 6379 are allowed for Redis
+- Other Egress requests to the local network on `10.0.0.0/8` are restricted
 - Egress requests outside of the `10.0.0.0/8` are allowed
 
 _Note the example provided is only an example and may not be complete_
 
-_Note that the registry service requires outbound connectivity to the public
+_Note that the Sidekiq service requires outbound connectivity to the public
 internet for images on [external object storage](../../advanced/external-object-storage)_
 
 ```yaml
