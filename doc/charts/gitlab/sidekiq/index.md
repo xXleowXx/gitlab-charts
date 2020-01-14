@@ -326,15 +326,18 @@ Pods to specific endpoints.
 
 ### Example policy for preventing connections to all internal endpoints
 
-The Sidekiq service does not require Ingress connections and normally requires
-egress connections to various places. This examples adds the following network
-policy:
+The Sidekiq service requires Ingress connections for only the Prometheus
+exporter if enabled.  And normally requires egress connections to various
+places. This examples adds the following network policy:
 
+- All ingress requests from the local network on TCP `10.0.0.0/8` port 3807 are allowed for metrics exporting
 - All egress requests to the local network on UDP `10.0.0.0/8` port 53 are allowed for DNS
 - All egress requests to the local network on TCP `10.0.0.0/8` port 5432 are allowed for PostgreSQL
 - All egress requests to the local network on TCP `10.0.0.0/8` port 6379 are allowed for Redis
 - Other egress requests to the local network on `10.0.0.0/8` are restricted
 - Egress requests outside of the `10.0.0.0/8` are allowed
+
+_Note the example provided is only an example and may not be complete_
 
 _Note that the registry service requires outbound connectivity to the public
 internet for images on [external object storage](../../advanced/external-object-storage)_
@@ -342,11 +345,16 @@ internet for images on [external object storage](../../advanced/external-object-
 ```yaml
 networkpolicy:
   enabled: true
+  ingress:
+    enabled: true
+    rules:
+      - from:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+        - port: 3807
   egress:
     enabled: true
-    # The following rules enable traffic to all external
-    # endpoints, except the local
-    # network (except DNS requests)
     rules:
       - to:
         - ipBlock:
