@@ -331,7 +331,7 @@ egress connections to various places. This examples adds the following network
 policy:
 
 - All egress requests to the local network on UDP `10.0.0.0/8` port 53 are allowed for DNS
-- All egress requests to the local network on TCP `10.0.0.0/8` port 5432 are allowed for Postgresql
+- All egress requests to the local network on TCP `10.0.0.0/8` port 5432 are allowed for PostgreSQL
 - All egress requests to the local network on TCP `10.0.0.0/8` port 6379 are allowed for Redis
 - Other egress requests to the local network on `10.0.0.0/8` are restricted
 - Egress requests outside of the `10.0.0.0/8` are allowed
