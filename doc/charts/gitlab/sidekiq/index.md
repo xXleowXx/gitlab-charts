@@ -324,6 +324,55 @@ Pods to specific endpoints.
 | `egress.enabled`  | Boolean | `false` | When set to `true`, the `Egress` network policy will be activated. This will block all egress connections unless rules are specified. |
 | `egress.rules`    | Array   | `[]`    | Rules for the egress policy, these for details see <https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource> and the example below |
 
+### Example policy for preventing connections to all internal endpoints
+
+The Sidekiq service does not require Ingress connections and normally requires
+egress connections to various places. This examples adds the following network
+policy:
+
+- All egress requests to the local network on UDP `10.0.0.0/8` port 53 are allowed for DNS
+- All egress requests to the local network on TCP `10.0.0.0/8` port 5432 are allowed for Postgresql
+- All egress requests to the local network on TCP `10.0.0.0/8` port 6379 are allowed for Redis
+- Other egress requests to the local network on `10.0.0.0/8` are restricted
+- Egress requests outside of the `10.0.0.0/8` are allowed
+
+_Note that the registry service requires outbound connectivity to the public
+internet for images on [external object storage](../../advanced/external-object-storage)_
+
+```yaml
+networkpolicy:
+  enabled: true
+  egress:
+    enabled: true
+    # The following rules enable traffic to all external
+    # endpoints, except the local
+    # network (except DNS requests)
+    rules:
+      - to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+        - port: 53
+          protocol: UDP
+      - to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+        - port: 5432
+          protocol: TCP
+      - to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+        - port: 6379
+          protocol: TCP
+      - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+            - 10.0.0.0/8
+```
+
 ## Production usage
 
 By default, all of Sidekiq queues run in an all-in-one container which is not
