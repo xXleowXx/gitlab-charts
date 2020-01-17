@@ -153,7 +153,7 @@ NOTE: **Note:** This will change any dynamic value for the `LoadBalancer` for NG
 ### spec.selector
 
 Sidekiq pods did not receive a unique selector prior to chart release
-`3.0.0`. [The problems with this were documented in ](https://gitlab.com/gitlab-org/charts/gitlab/issues/663) and the fix required a breaking change.
+`3.0.0`. [The problems with this were documented in](https://gitlab.com/gitlab-org/charts/gitlab/issues/663) and the fix required a breaking change.
 
 Upgrades to `3.0.0` will result in a deployment failure with `spec.selector:
 Invalid value`. Resolve these for all future upgrades with the following
