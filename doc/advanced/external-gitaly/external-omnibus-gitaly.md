@@ -59,10 +59,10 @@ gitaly['listen_addr'] = "0.0.0.0:8075"
 
 git_data_dirs({
   'default' => {
-    'path' => '/mnt/gitlab/default'
+    'path' => '/var/opt/gitlab/git-data'
   },
   'storage1' => {
-    'path' => '/mnt/gitlab/storage1'
+    'path' => '/mnt/gitlab/git-data'
   },
 })
 
