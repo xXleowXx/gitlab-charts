@@ -86,6 +86,26 @@ lint_package:
       - tags
       - /(^docs[\/-].+|.+-docs$)/
 
+kubeval:
+  image: dm3ch/kubeval:latest
+  stage: package
+  when: always
+  script:
+    - helm init --client-only
+    - helm repo add gitlab https://charts.gitlab.io
+    - helm repo add jetstack https://charts.jetstack.io
+    - helm dependencies update
+    - helm kubeval . --ignore-missing-schemas --strict --force-color --set certmanager-issuer.email=support@gitlab.com
+  artifacts:
+    expire_in: 3d
+    paths:
+    - build
+  except:
+    <<: *deps_pipeline
+    refs:
+      - tags
+      - /(^docs[\/-].+|.+-docs$)/
+
 .review_template:
   stage: review
   variables:
