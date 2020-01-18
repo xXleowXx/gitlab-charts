@@ -95,7 +95,7 @@ kubeval:
     - helm repo add gitlab https://charts.gitlab.io
     - helm repo add jetstack https://charts.jetstack.io
     - helm dependencies update
-    - helm kubeval . --ignore-missing-schemas --strict --set certmanager-issuer.email=support@gitlab.com
+    - helm kubeval . --ignore-missing-schemas --strict --force-color --set certmanager-issuer.email=support@gitlab.com
   artifacts:
     expire_in: 3d
     paths:
