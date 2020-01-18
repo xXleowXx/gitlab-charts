@@ -95,7 +95,7 @@ kubeval:
     - helm repo add gitlab https://charts.gitlab.io
     - helm repo add jetstack https://charts.jetstack.io
     - helm dependencies update
-    - helm template . -f | kubeval --ignore-missing-schemas --strict
+    - helm template . | kubeval --ignore-missing-schemas --strict
   artifacts:
     expire_in: 3d
     paths:
