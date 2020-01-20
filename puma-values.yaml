@@ -1,0 +1,13 @@
+gitlab:
+  unicorn:
+    enabled: false
+  puma:
+    enabled: true
+  
+  gitlab-shell:
+    workhorse:
+      serviceName: puma
+
+  gitlab-gitaly:
+    workhorse:
+      serviceName: puma

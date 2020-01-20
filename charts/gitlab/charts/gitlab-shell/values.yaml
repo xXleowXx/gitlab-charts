@@ -36,7 +36,7 @@ global:
 
 enabled: true
 annotations: {}
-unicorn:
+workhorse:
   serviceName: unicorn
   # host: '0.0.0.0'
   # serviceName: 'unicorn'

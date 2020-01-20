@@ -407,6 +407,10 @@ global:
   unicorn:
     workerTimeout: 60
 
+  ## doc/charts/globals.md#configure-puma
+  puma:
+    workerTimeout: 60
+
   ## doc/charts/globals.md#custom-certificate-authorities
   # configuration of certificates container & custom CA injection
   certificates:
