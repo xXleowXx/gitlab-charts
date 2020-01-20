@@ -110,6 +110,10 @@ NOTE: **Note:** If you wish to use an external `cert-manager`, you must provide 
 
 ## GitLab Version
 
+NOTE: **Note:** this value is mostly used for development purposes. Please avoid using this value
+on production environments and set the version as described
+in [Deploy using Helm](https://docs.gitlab.com/charts/installation/deployment.html#deploy-using-helm)
+
 The GitLab version used in the default image tag for the charts can be changed using
 the `global.gitlabVersion` key:
 
