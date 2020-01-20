@@ -1,5 +1,5 @@
 image:
-  repository: registry.gitlab.com/gitlab-org/build/CNG/gitlab-container-registry
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
   tag: 'v2.7.6-gitlab'
   pullPolicy: 'IfNotPresent'
   pullSecrets: []
