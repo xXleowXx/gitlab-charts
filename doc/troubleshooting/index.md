@@ -163,7 +163,7 @@ steps:
 
 1. Remove Sidekiq services
 
-   ```
+   ```sh
    kubectl delete deployment --cascade -lrelease=RELEASE_NAME,app=sidekiq
    ```
 
