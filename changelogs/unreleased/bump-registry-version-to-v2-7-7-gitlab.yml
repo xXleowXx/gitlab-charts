@@ -1,5 +1,5 @@
 ---
 title: Bump registry to v2.7.7-gitlab
-merge_request: https://gitlab.com/gitlab-org/charts/gitlab/merge_requests/1133
+merge_request: 1133
 author:
 type: changed
