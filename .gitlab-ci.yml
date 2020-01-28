@@ -379,6 +379,8 @@ check_docs_lint:
     - bundle exec nanoc check internal_links
     # Check the internal anchor links
     - bundle exec nanoc check internal_anchors
+    # Check the external links
+    - bundle exec nanoc check external_links
   <<: *except_deps_update
 
 # ---------------------------------------------------------------------------
