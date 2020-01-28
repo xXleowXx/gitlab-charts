@@ -25,7 +25,7 @@ prometheus:
 # GitLab Runner isn't a big fan of self-signed certificates
 gitlab-runner:
   install: false
-# Reduce replica counts, reducing CPU & memory requirements  
+# Reduce replica counts, reducing CPU & memory requirements
 gitlab:
   unicorn:
     minReplicas: 1
@@ -37,5 +37,6 @@ gitlab:
     minReplicas: 1
     maxReplicas: 1
 registry:
-  minReplicas: 1
-  maxReplicas: 1
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1

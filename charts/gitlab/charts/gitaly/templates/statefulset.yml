@@ -1,5 +1,5 @@
-{{- if .Values.enabled -}}
-apiVersion: apps/v1beta2
+{{- if .Values.global.gitaly.enabled -}}
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "fullname" . }}
@@ -12,8 +12,13 @@ spec:
       app: {{ template "name" . }}
       release: {{ .Release.Name }}
   serviceName: {{ template "fullname" . }}
-  replicas: {{- if .Values.global.gitaly.host }} 0 {{- else }} {{ len .Values.global.gitaly.internal.names }} {{- end }}
+  replicas: {{template "gitlab.gitaly.replicas" . }}
   podManagementPolicy: Parallel
+  {{- if .Values.global.operator.enabled }}
+  updateStrategy:
+    rollingUpdate:
+      partition: {{template "gitlab.gitaly.replicas" . }}
+  {{- end }}
   template:
     metadata:
       labels:
@@ -25,12 +30,17 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
       terminationGracePeriodSeconds: 30
       initContainers:
 {{ include "gitlab.extraInitContainers" . | indent 8 }}
+{{ include "gitlab.certificates.initContainer" . | indent 8 }}
         - name: configure
           command: ['sh', '/config/configure']
-          image: {{ .Values.init.image }}:{{ .Values.init.tag }}
+          image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
           volumeMounts:
 {{ include "gitlab.extraVolumeMounts" . | indent 10 }}
           - name: gitaly-config
@@ -72,7 +82,7 @@ spec:
       containers:
 {{ include "gitlab.extraContainers" . | indent 8 }}
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag (include "gitlab.parseAppVersion" .Chart.AppVersion) }}"
+          image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" .Chart.AppVersion "prepend" "true")) }}"
           {{ template "gitlab.imagePullPolicy" . }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
@@ -86,6 +96,8 @@ spec:
               value: '/etc/gitaly'
             - name: GITALY_CONFIG_FILE
               value: '/etc/gitaly/config.toml'
+            - name: SSL_CERT_DIR
+              value: '/etc/ssl/certs'
             {{- if .Values.metrics.enabled }}
             - name: GITALY_PROMETHEUS_LISTEN_ADDR
               value: ':{{ .Values.metrics.metricsPort }}'
@@ -96,6 +108,7 @@ spec:
                   fieldPath: metadata.name
           volumeMounts:
 {{ include "gitlab.extraVolumeMounts" . | indent 12 }}
+{{ include "gitlab.certificates.volumeMount" . | indent 12 }}
             - name: gitaly-config
               mountPath: '/etc/gitaly/templates'
             - name: gitaly-secrets
@@ -148,11 +161,23 @@ spec:
               items:
                 - key: {{ template "gitlab.gitlab-shell.authToken.key" . }}
                   path: ".gitlab_shell_secret"
+          {{- if .Values.global.redis.password.enabled }}
           - secret:
               name: {{ template "gitlab.redis.password.secret" . }}
               items:
                 - key: {{ template "gitlab.redis.password.key" . }}
                   path: redis_password
+          {{- end }}
+          {{- if .Values.global.gitaly.tls.enabled }}
+          - secret:
+              name: {{ template "gitlab.gitaly.tls.secret" . }}
+              items:
+                - key: "tls.crt"
+                  path: "gitaly.crt"
+                - key: "tls.key"
+                  path: "gitaly.key"
+          {{- end }}
+{{ include "gitlab.certificates.volumes" . | indent 6 }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
@@ -180,11 +205,11 @@ spec:
         selector:
       {{- if .Values.persistence.matchLabels }}
           matchLabels:
-      {{ toYaml .Values.persistence.matchLabels | indent 6 }}
+      {{- toYaml .Values.persistence.matchLabels | nindent 12 }}
       {{- end -}}
       {{- if .Values.persistence.matchExpressions }}
           matchExpressions:
-      {{ toYaml .Values.persistence.matchExpressions | indent 6 }}
+      {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
       {{- end -}}
   {{- end }}
-{{ end }}
+{{- end }}

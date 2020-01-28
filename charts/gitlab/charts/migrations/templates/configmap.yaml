@@ -14,32 +14,37 @@ data:
       database: {{ template "gitlab.psql.database" . }}
       pool: 10
       username: {{ template "gitlab.psql.username" . }}
-      password: <%= File.read("/etc/gitlab/postgres/psql-password") %>
-      host: {{ template "gitlab.psql.host" . }}
+      password: "<%= File.read("/etc/gitlab/postgres/psql-password").strip.dump[1..-2] %>"
+      host: {{ include "gitlab.psql.host" . | quote }}
       port: {{ template "gitlab.psql.port" . }}
+      prepared_statements: {{ template "gitlab.psql.preparedStatements" . }}
       # load_balancing:
       #   hosts:
       #     - host1.example.com
       #     - host2.example.com
+{{- include "gitlab.psql.ssl.config" . | indent 6 }}
+  {{- if include "gitlab.geo.secondary" $ }}
+  database_geo.yml.erb: |
+    {{- include "gitlab.geo.database.yml" $ | nindent 4 }}
+  {{- end }}
   resque.yml.erb: |
     production:
       # Redis (single instance)
-      url: {{ template "gitlab.redis.scheme" . }}://:<%= File.read("/etc/gitlab/redis/password") %>@{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
-  gitlab.yml: |
+      url: {{ template "gitlab.redis.url" . }}
+{{- if .Values.global.redis.sentinels }}
+{{ include "gitlab.redis.sentinels" . | indent 6 }}
+{{- end }}
+      id:
+  gitlab.yml.erb: |
     production: &base
       gitlab:
-      repositories:
-        storages:
-          default:
-            path: /var/opt/gitlab/repo
-            gitaly_address: tcp://localhost:8075
+{{ include "gitlab.appConfig.gitaly" . | indent 6 }}
+{{ include "gitlab.appConfig.repositories" . | indent 6 }}
+      {{- include "gitlab.geo.config" $ | nindent 6 }}
   configure: |
-    set -e
-    mkdir -p /init-secrets/redis /init-secrets/postgres /init-secrets/rails-secrets /init-secrets/migrations
-    cp /init-config/redis/password  /init-secrets/redis/password
-    cp /init-config/postgres/psql-password  /init-secrets/postgres/psql-password
-    cp /init-config/rails-secrets/secrets.yml /init-secrets/rails-secrets/secrets.yml
-    cp /init-config/migrations/initial_root_password /init-secrets/migrations/initial_root_password
+    {{- include "gitlab.scripts.configure.secrets" (dict "required" "postgres rails-secrets migrations gitaly") | nindent 4 -}}
+    {{- include "gitlab.psql.ssl.initScript" . | nindent 4 }}
+    {{- include "gitlab.geo.psql.ssl.initScript" . | nindent 4 }}
 {{- if .Values.global.operator.enabled }}
 ---
 apiVersion: v1

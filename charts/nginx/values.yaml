@@ -9,14 +9,15 @@ controller:
   name: controller
   image:
     repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-    tag: "0.20.0"
+    tag: "0.21.0"
     pullPolicy: IfNotPresent
     # www-data -> uid 33
     runAsUser: 33
 
   config: {}
   # Will add custom header to Nginx https://github.com/kubernetes/ingress-nginx/tree/master/docs/examples/customization/custom-headers
-  headers: {}
+  headers:
+    Referrer-Policy: strict-origin-when-cross-origin
 
   # Required for use with CNI based kubernetes installations (such as ones set up by kubeadm),
   # since CNI and hostport don't mix yet. Can be deprecated once https://github.com/kubernetes/kubernetes/issues/23920
@@ -163,7 +164,8 @@ controller:
   service:
     annotations: {}
     labels: {}
-    clusterIP: ""
+    omitClusterIP: false
+    # clusterIP: ""
 
     ## List of IP addresses at which the controller services are available
     ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
@@ -242,7 +244,8 @@ controller:
 
     service:
       annotations: {}
-      clusterIP: ""
+      omitClusterIP: false
+      # clusterIP: ""
 
       ## List of IP addresses at which the stats service is available
       ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
@@ -264,7 +267,8 @@ controller:
       # prometheus.io/scrape: "true"
       # prometheus.io/port: "10254"
 
-      clusterIP: ""
+      omitClusterIP: false
+      # clusterIP: ""
 
       ## List of IP addresses at which the stats-exporter service is available
       ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
@@ -340,7 +344,8 @@ defaultBackend:
 
   service:
     annotations: {}
-    clusterIP: ""
+    omitClusterIP: false
+    # clusterIP: ""
 
     ## List of IP addresses at which the default backend service is available
     ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips

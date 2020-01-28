@@ -20,6 +20,9 @@ ingress:
     # enabled: true
   annotations: {}
 
+## Support for tolerations for pod scheduling
+tolerations: []
+
 global:
   ingress:
     enabled:
@@ -41,9 +44,10 @@ global:
 
 ## Control the InitContainer behaviors.
 init:
-  image: "busybox"
-  tag: "latest"
-  pullPolicy: "IfNotPresent"
+  image:
+    # repository:
+    # tag:
+    pullPolicy: "IfNotPresent"
   script: |-
     sed -e 's@ACCESS_KEY@'"$(cat /config/accesskey)"'@' -e 's@SECRET_KEY@'"$(cat /config/secretkey)"'@' /config/config.json > /minio/config.json
   resources:
@@ -127,6 +131,7 @@ defaultBuckets:
   - name: gitlab-packages
   - name: tmp
   - name: gitlab-pseudo
+  - name: gitlab-mr-diffs
   ## If enabled, must be a string with length > 0
   # - name: example
   ## Can be one of none|download|upload|public, defaults to `none`
@@ -223,3 +228,8 @@ networkPolicy:
   enabled: false
   allowExternal: true
 maxUnavailable: 1
+
+## Allow to overwrite under which User and Group we're running.
+securityContext:
+  runAsUser: 1000
+  fsGroup: 1000

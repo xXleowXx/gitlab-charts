@@ -15,7 +15,9 @@ metadata:
 {{ include "gitlab.standardLabels" . | indent 4 }}
     component: "{{ .Values.controller.name }}"
 spec:
-  clusterIP: "{{ .Values.controller.stats.service.clusterIP }}"
+{{- if not .Values.controller.stats.service.omitClusterIP }}
+  {{ with .Values.controller.metrics.service.clusterIP }}clusterIP: {{ . }}{{ end }}
+{{- end }}
 {{- if .Values.controller.stats.service.externalIPs }}
   externalIPs:
 {{ toYaml .Values.controller.stats.service.externalIPs | indent 4 }}

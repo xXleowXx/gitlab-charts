@@ -4,20 +4,31 @@
 image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ee
+  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
   # tag: latest
 
 init:
-  image: busybox
-  tag: latest
+  image: {}
+    # repository:
+    # tag:
   resources:
     requests:
       cpu: 50m
+
+# Tolerations for pod scheduling
+tolerations: []
 
 enabled: true
 initialRootPassword: {}
 redis:
   password: {}
+gitaly:
+  # host: '0.0.0.0'
+  # port: 8075
+  # serviceName: 'gitaly'
+  authToken: {}
+  #   secret: gitaly-secret
+  #   key: token
 global:
   # imagePullPolicy: IfNotPresent
   psql: {}
@@ -25,12 +36,27 @@ global:
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
+    # preparedStatements: false
     # password:
     #   secret: gitlab-postgres
     #   key: psql-password
+    # ssl:
+    #   secret: gitlab-ssl-secret
+    #   clientKey: client-key.pem
+    #   clientCertificate: client-cert.pem
+    #   serverCA: server-ca.pem
   redis:
     password: {}
+  gitaly:
+    internal:
+      names: ["default"]
+    external: []
+    authToken: {}
 resources:
   requests:
-    cpu: 50m
+    cpu: 250m
     memory: 200Mi
+activeDeadlineSeconds: 3600
+backoffLimit: 6
+bootsnap:
+  enabled: true

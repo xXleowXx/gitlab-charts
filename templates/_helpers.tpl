@@ -103,8 +103,9 @@ Global gitlab imagePullPolicy
 */}}
 
 {{- define "gitlab.imagePullPolicy" -}}
-{{- if or .Values.image.pullPolicy .Values.global.imagePullPolicy -}}
-imagePullPolicy: {{ coalesce .Values.image.pullPolicy .Values.global.imagePullPolicy | quote }}
+{{- $imageObj := default (dict) .Values.image -}}
+{{- if or $imageObj.pullPolicy .Values.global.imagePullPolicy -}}
+imagePullPolicy: {{ coalesce $imageObj.pullPolicy .Values.global.imagePullPolicy | quote }}
 {{- end -}}
 {{- end -}}
 
@@ -121,16 +122,36 @@ certmanager.k8s.io/issuer: "{{ .Release.Name }}-issuer"
 {{/*
 Return the db hostname
 If an external postgresl host is provided, it will use that, otherwise it will fallback
-to the service name
+to the service name. Failing a specified service name it will fall back to the default service name.
+
 This overrides the upstream postegresql chart so that we can deterministically
 use the name of the service the upstream chart creates
 */}}
 {{- define "gitlab.psql.host" -}}
 {{- if .Values.global.psql.host -}}
-{{- .Values.global.psql.host | quote -}}
+{{- .Values.global.psql.host -}}
+{{- else if .Values.global.psql.serviceName -}}
+{{- .Values.global.psql.serviceName -}}
 {{- else -}}
 {{- printf "%s-%s" .Release.Name "postgresql" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the configmap for initializing the PostgreSQL database. This is used to enable the
+necessary postgres extensions for Gitlab to work
+This overrides the upstream postegresql chart so that we can deterministically
+use the name of the initdb scripts ConfigMap the upstream chart creates
+*/}}
+{{- define "gitlab.psql.initdbscripts" -}}
+{{- printf "%s-%s-%s" .Release.Name "postgresql" "init-db" -}}
+{{- end -}}
+
+{{/*
+Alias of gitlab.psql.initdbscripts
+*/}}
+{{- define "postgresql.initdbScriptsCM" -}}
+{{- template "gitlab.psql.initdbscripts" . -}}
 {{- end -}}
 
 {{/*
@@ -144,7 +165,7 @@ Alias of gitlab.psql.host
 Return the db database name
 */}}
 {{- define "gitlab.psql.database" -}}
-{{- coalesce .Values.global.psql.database "gitlabhq_production" | quote -}}
+{{- coalesce .Values.global.psql.database "gitlabhq_production" -}}
 {{- end -}}
 
 {{/*
@@ -168,7 +189,7 @@ to 5432 default
 {{/*
 Return the secret name
 Defaults to a release-based name and falls back to .Values.global.psql.secretName
-  when using an external postegresql
+  when using an external PostgreSQL
 */}}
 {{- define "gitlab.psql.password.secret" -}}
 {{- default (printf "%s-%s" .Release.Name "postgresql-password") .Values.global.psql.password.secret | quote -}}
@@ -183,11 +204,19 @@ Alias of gitlab.psql.password.secret to override upstream postgresql chart namin
 
 {{/*
 Return the name of the key in a secret that contains the postgres password
-Uses `postgres-password` to match upstream postgresql chart when not using an
+Uses `postgresql-password` to match upstream postgresql chart when not using an
   external postegresql
 */}}
 {{- define "gitlab.psql.password.key" -}}
-{{- default "postgres-password" .Values.global.psql.password.key | quote -}}
+{{- default "postgresql-password" .Values.global.psql.password.key | quote -}}
+{{- end -}}
+
+{{/*
+Return if prepared statements should be used by PostgreSQL.
+Defaults to false
+*/}}
+{{- define "gitlab.psql.preparedStatements" -}}
+{{- eq true (default false .Values.global.psql.preparedStatements) -}}
 {{- end -}}
 
 {{/* ######### ingress templates */}}
@@ -226,6 +255,16 @@ Handles merging a set of service annotations
 {{- end -}}
 
 {{/*
+Handles merging a set of deployment annotations
+*/}}
+{{- define "gitlab.deploymentAnnotations" -}}
+{{- $allAnnotations := merge (default (dict) (default (dict) .Values.deployment).annotations) .Values.global.deployment.annotations -}}
+{{- if $allAnnotations -}}
+{{- toYaml $allAnnotations -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns gitlabUrl needed for gitlab-runner
 */}}
 {{- define "gitlab-runner.gitlabUrl" -}}
@@ -246,7 +285,7 @@ We're explicitly checking for an actual value being present, not the existance o
 */}}
 {{- define "gitlab.ingress.tls.configured" -}}
 {{/* Pull the value, if it exists */}}
-{{- $global   := pluck "secretName" $.Values.global.ingress.tls | first -}}
+{{- $global   := pluck "secretName" (default (dict)  $.Values.global.ingress.tls) | first -}}
 {{- $unicorn  := pluck "secretName" $.Values.gitlab.unicorn.ingress.tls | first -}}
 {{- $registry := pluck "secretName" $.Values.registry.ingress.tls | first -}}
 {{- $minio    := pluck "secretName" $.Values.minio.ingress.tls | first -}}
@@ -301,4 +340,48 @@ Return true in any other case.
 {{- else }}
 {{-   true }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Constructs kubectl image name.
+*/}}
+{{- define "gitlab.kubectl.image" -}}
+{{- printf "%s:%s" .Values.global.kubectl.image.repository .Values.global.kubectl.image.tag -}}
+{{- end -}}
+
+{{/*
+Constructs busybox image name.
+*/}}
+{{- define "gitlab.busybox.image" -}}
+{{/*
+    # Earlier, init.image and init.tag were used to configure initContainer
+    # image details. We deprecated them in favor of init.image.repository and
+    # init.image.tag. However, deprecation checking happens after template
+    # rendering is done. So, we have to handle the case of `init.image` being a
+    # string to avoid the process being broken at rendering stage itself. It
+    # doesn't matter what we print there because once rendering is done
+    # deprecation check will kick-in and abort the process. That value will not
+    # be used.
+*/}}
+{{- if kindIs "map" .local.image }}
+{{- $image := default .global.image.repository .local.image.repository }}
+{{- $tag := default .global.image.tag .local.image.tag }}
+{{- printf "%s:%s" $image $tag -}}
+{{- else }}
+{{- printf "DEPRECATED:DEPRECATED" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Override upstream redis chart naming
+*/}}
+{{- define "redis.secretName" -}}
+{{ template "gitlab.redis.password.secret" . }}
+{{- end -}}
+
+{{/*
+Override upstream redis secret key name
+*/}}
+{{- define "redis.secretPasswordKey" -}}
+{{ template "gitlab.redis.password.key" . }}
 {{- end -}}

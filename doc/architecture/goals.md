@@ -6,7 +6,7 @@ We have a few core goals with this initiative:
 1. Easy to deploy, upgrade, maintain
 1. Wide support of cloud service providers
 1. Initial support for Kubernetes and Helm, with flexibility to support other
-schedulers in the future
+   schedulers in the future
 
 ## Scheduler
 
@@ -17,14 +17,16 @@ downstream Kubernetes projects like OpenShift and Tectonic. In the future other
 schedulers may also be supported like Docker Swarm and Mesosphere.
 
 We aim to support the scaling and self-healing capabilities of Kubernetes:
-* Readiness and Health checks to ensure pods are functioning, and if not to recycle them
-* Tracks to support canary and rolling deployments
-* [Auto-scaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+
+- Readiness and Health checks to ensure pods are functioning, and if not to recycle them
+- Tracks to support canary and rolling deployments
+- [Auto-scaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
 
 We will try to leverage standard Kubernetes features:
-* ConfigMaps for managing configuration. These will then get mapped or passed to
-Docker containers
-* Secrets for sensitive data
+
+- ConfigMaps for managing configuration. These will then get mapped or passed to
+  Docker containers
+- Secrets for sensitive data
 
 Since we might be also using Consul, this may be utilized instead for consistency with other installation methods.
 
@@ -39,10 +41,3 @@ to manage settings via the `values.yaml` file.
 We plan to offer a three tiered set of Helm Charts
 
 ![Helm Chart Structure](../images/charts.png)
-
-## Redis and Postgres Charts
-
-We will also likely need to create specific charts for Redis and Postgres.
-One reason is that there is a bug with variable handling between parent and
-child charts, but also because we will need to include the respective Prometheus exporters
-as well.

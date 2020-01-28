@@ -8,15 +8,29 @@ image:
   # tag: latest
 
 init:
-  image: busybox
-  tag: latest
+  image: {}
+    # repository:
+    # tag:
   resources:
     requests:
       cpu: 50m
 
+# Tolerations for pod scheduling
+tolerations: []
+
 enabled: true
 
 annotations: {}
+
+networkpolicy:
+  enabled: false
+  egress:
+    enabled: false
+    rules: []
+  ingress:
+    enabled: false
+    rules: []
+  annotations: {}
 
 metrics:
   enabled: true
@@ -27,6 +41,28 @@ metrics:
 
 redis:
   password: {}
+
+# https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html#sidekiq-memorykiller
+memoryKiller:
+  daemonMode: false
+  maxRss: 2000000
+  graceTime: 900
+  shutdownWait: 30
+  checkInterval: 3
+  #hardLimitRss: 3000000
+
+livenessProbe:
+  initialDelaySeconds: 20
+  periodSeconds: 60
+  timeoutSeconds: 30
+  successThreshold: 1
+  failureThreshold: 3
+readinessProbe:
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 2
+  successThreshold: 1
+  failureThreshold: 3
 
 global:
   # imagePullPolicy: IfNotPresent
@@ -48,9 +84,15 @@ global:
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
+    # preparedStatements: false
     # password:
     #   secret: gitlab-postgres
     #   key: psql-password
+    # ssl:
+    #   secret: gitlab-ssl-secret
+    #   clientKey: client-key.pem
+    #   clientCertificate: client-cert.pem
+    #   serverCA: server-ca.pem
   redis:
     password: {}
   gitaly:
@@ -58,6 +100,7 @@ global:
       names: ["default"]
     external: []
     authToken: {}
+  unicorn: {}
   minio:
     enabled:
     credentials: {}
@@ -85,6 +128,11 @@ global:
       proxy_download: true
       bucket:
       connection: {}
+    externalDiffs:
+      when:
+      proxy_download: true
+      bucket:
+      connection: {}
     ldap:
       servers: {}
       # 'main' is the GitLab 'provider ID' of this LDAP server
@@ -106,6 +154,7 @@ global:
       autoLinkLdapUser: false
       autoLinkSamlUser: false
       externalProviders: []
+      allowBypassTwoFactor: []
       providers: []
       # - secret: gitlab-google-oauth2
       #   key: provider
@@ -142,24 +191,6 @@ rack_attack:
     # maxretry: 10
     # findtime: 60
     # bantime: 3600
-
-cron_jobs: {}
-  # stuck_ci_jobs_worker:
-  #   cron: "0 * * * *"
-  # pipeline_schedule_worker:
-  #   cron: "19 * * * *"
-  # expire_build_artifacts_worker:
-  #   cron: "50 * * * *"
-  # repository_check_worker:
-  #   cron: "20 * * * *"
-  # admin_email_worker:
-  #   cron: "0 0 * * 0"
-  # repository_archive_cache_worker:
-  #   cron: "0 * * * *"
-  # pages_domain_verification_cron_worker:
-  #   cron: "*/15 * * * *"
-  # pseudonymizer_worker:
-  #   cron: "0 * * * *"
 
 trusted_proxies: []
 

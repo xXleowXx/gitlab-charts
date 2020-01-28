@@ -17,17 +17,21 @@ spec:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- if .Values.rbac.create }}
-      serviceAccountName: {{ template "fullname" . }}
+      serviceAccountName: {{ template "shared-secrets.serviceAccountName" . }}
       {{- end }}
       restartPolicy: Never
-{{- include "pullsecrets" .Values.image | indent 6}}
+{{- include "pullsecrets" .Values.global.kubectl.image | indent 6}}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: {{ include "gitlab.kubectl.image" . | quote }}
           command: ['/bin/bash', '/scripts/generate-secrets']
           {{ template "gitlab.imagePullPolicy" . }}
           volumeMounts:

@@ -1,7 +1,7 @@
 # IAM roles for AWS
 
-The default configuration for external object storage in the charts is to use access and secret keys. 
-It is also possible to use IAM roles in combination with [kube2iam](https://github.com/jtblin/kube2iam) or [kiam](https://github.com/uswitch/kiam). 
+The default configuration for external object storage in the charts is to use access and secret keys.
+It is also possible to use IAM roles in combination with [kube2iam](https://github.com/jtblin/kube2iam) or [kiam](https://github.com/uswitch/kiam).
 
 ## IAM role
 
@@ -19,7 +19,7 @@ An IAM role can be specified via the annotations key:
 --set registry.annotations."iam\.amazonaws\.com/role"=<role name>
 ```
 
-When creating the [registry-storage.yaml](./index.md#registry-example) secret, omit the access and secret key:
+When creating the [registry-storage.yaml](../../charts/registry/index.md#storage) secret, omit the access and secret key:
 
 ```yaml
 s3:
@@ -28,7 +28,7 @@ s3:
   region: us-east-1
 ```
 
-*Note*: If you provide the keypair, IAM role will be ignored. See [AWS documentation](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html#credentials-default) for more details. 
+*Note*: If you provide the keypair, IAM role will be ignored. See [AWS documentation](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html#credentials-default) for more details.
 
 ### LFS, Artifacts, Uploads, Packages, Pseudonymizer
 
@@ -39,8 +39,8 @@ For LFS, artifacts, uploads, packages and pseudonymizer an IAM role can be speci
 --set gitlab.unicorn.annotations."iam\.amazonaws\.com/role"=<role name>
 ```
 
-For the [object-storage.yaml](./index.md#object-storage-example) secret, omit the access and secret key.
-As unicorn uses Fog for S3 storage, the [use_iam_profile](https://docs.gitlab.com/ee/administration/job_artifacts.html#s3-compatible-connection-settings) key should be added for Fog to use the role:
+For the [object-storage.yaml](../../charts/globals.md#connection) secret, omit the access and secret key.
+As Unicorn uses Fog for S3 storage, the [use_iam_profile](https://docs.gitlab.com/ee/administration/job_artifacts.html#s3-compatible-connection-settings) key should be added for Fog to use the role:
 
 ```yaml
 provider: AWS
