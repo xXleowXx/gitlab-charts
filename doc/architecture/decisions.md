@@ -64,7 +64,7 @@ Related issues:
 - [#114](https://gitlab.com/gitlab-org/charts/gitlab/issues/114)
 
 [dind]: https://hub.docker.com/r/gitlab/dind/
-[devops-post]: https://about.gitlab.com/2017/10/11/from-dev-to-devops/
+[devops-post]: https://about.gitlab.com/blog/2017/10/11/from-dev-to-devops/
 [initContainers]: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 
 ## Sub-charts are deployed from global chart
@@ -98,12 +98,23 @@ Related issue:
 
 - [#352](https://gitlab.com/gitlab-org/charts/gitlab/issues/352)
 
-[helm-dev-doc]: https://docs.helm.sh/chart_template_guide/#declaring-and-using-templates-with-define-and-template
+[helm-dev-doc]: https://helm.sh/docs/chart_template_guide/named_templates/#declaring-and-using-templates-with-define-and-template
 
 ## Forked charts
 
 The following charts have been forked or re-created in this repository following
 our [guidelines for forking](../development/index.md#guidelines-for-forking)
+
+### Redis
+
+With the `3.0` release of the GitLab Helm chart, we no longer fork the [upstream Redis chart](https://github.com/helm/charts/tree/master/stable/redis),
+and instead include it as a dependency.
+
+### Redis HA
+
+Redis-HA was a chart we included in our releases prior to `3.0`. It has now been removed,
+and replaced with [upstream Redis chart](https://github.com/helm/charts/tree/master/stable/redis)
+which has added optional HA support.
 
 ### MinIO
 

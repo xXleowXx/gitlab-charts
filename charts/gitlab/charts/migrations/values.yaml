@@ -4,7 +4,7 @@
 image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ee
+  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
   # tag: latest
 
 init:
@@ -36,6 +36,7 @@ global:
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
+    # pool: 10
     # preparedStatements: false
     # password:
     #   secret: gitlab-postgres
