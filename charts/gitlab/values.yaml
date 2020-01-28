@@ -39,7 +39,7 @@ global:
       workhorse:
         repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
     puma:
-      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce
+      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-puma-ce
       workhorse:
         repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
 
