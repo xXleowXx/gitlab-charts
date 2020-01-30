@@ -5,7 +5,7 @@ Returns the secret name for the Secret containing the TLS certificate and key.
 Uses `ingress.tls.secretName` first and falls back to `global.ingress.tls.secretName`
 if there is a shared tls secret for all ingresses.
 */}}
-{{- define "unicorn.tlsSecret" -}}
+{{- define "railsWeb.tlsSecret" -}}
 {{- $defaultName := (dict "secretName" "") -}}
 {{- if .Values.global.ingress.configureCertmanager -}}
 {{- $_ := set $defaultName "secretName" (printf "%s-gitlab-tls" .Release.Name) -}}
@@ -25,8 +25,23 @@ image repository.
 */}}
 {{- define "workhorse.repository" -}}
 {{- if eq "ce" .Values.global.edition -}}
-{{ index .Values "global" "communityImages" .Chart.Name "workhorse" "repository" }}
+{{ index .Values "global" "communityImages" "workhorse" "repository" }}
 {{- else -}}
-{{ index .Values "global" "enterpriseImages" .Chart.Name "workhorse" "repository" }}
+{{ index .Values "global" "enterpriseImages" "workhorse" "repository" }}
 {{- end -}}
+{{- end -}}
+
+{{- define "railsWeb.repository" -}}
+{{-   if eq "ce" .Values.global.edition -}}
+{{      $images := index .Values "global" "communityImages" }}
+{{-   else -}}
+{{    $images := index .Values "global" "enterpriseImages" }}
+{{-   end -}}
+{{-   if eq .Values.webServer "unicorn" -}}
+{{      $image := index $images "unicorn" "repository"}}
+{{      coalesce .Values.image.repository.unicorn $image }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}
+{{-   else -}}
+{{      $image := index $images "puma" "repository"}}
+{{      coalesce .Values.image.repository.puma $image }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}
+{{-   end -}}
 {{- end -}}

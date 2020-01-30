@@ -17,12 +17,10 @@ global:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
     unicorn:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee
-      workhorse:
-        repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee
     puma:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-puma-ee
-      workhorse:
-        repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee
+    workhorse:
+      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee
     geo-logcursor:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-geo-logcursor
   communityImages:
@@ -36,12 +34,10 @@ global:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ce
     unicorn:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce
-      workhorse:
-        repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
     puma:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-puma-ce
-      workhorse:
-        repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
+    workhorse:
+      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
 
 gitlab-runner:
   enabled: false

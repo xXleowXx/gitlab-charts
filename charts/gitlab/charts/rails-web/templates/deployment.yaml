@@ -63,22 +63,22 @@ spec:
 {{ include "gitlab.certificates.initContainer" . | indent 8 }}
         - name: configure
           command: ['sh']
-          args: [ '-c', 'sh -x /config-puma/configure ; sh -x /config-workhorse/configure ; mkdir -p -m 3770 /tmp/gitlab']
+          args: [ '-c', 'sh -x /config-rails-web/configure ; sh -x /config-workhorse/configure ; mkdir -p -m 3770 /tmp/gitlab']
           image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
           volumeMounts:
 {{ include "gitlab.extraVolumeMounts" . | indent 10 }}
 {{ include "gitlab.psql.ssl.volumeMount" . | indent 10 }}
 {{ include "gitlab.geo.psql.ssl.volumeMount" . | indent 10 }}
-          - name: puma-config
-            mountPath: /config-puma
+          - name: rails-web-config
+            mountPath: /config-rails-web
             readOnly: true
           - name: workhorse-config
             mountPath: /config-workhorse
             readOnly: true
-          - name: init-puma-secrets
+          - name: init-rails-web-secrets
             mountPath: /init-config
             readOnly: true
-          - name: puma-secrets
+          - name: rails-web-secrets
             mountPath: /init-secrets
             readOnly: false
           - name: workhorse-secrets
@@ -109,12 +109,12 @@ spec:
               value: "1"
           volumeMounts:
 {{ include "gitlab.extraVolumeMounts" . | indent 12 }}
-            - name: puma-config
+            - name: rails-web-config
               mountPath: '/var/opt/gitlab/templates'
-            - name: puma-secrets
+            - name: rails-web-secrets
               mountPath: '/etc/gitlab'
               readOnly: true
-            - name: puma-secrets
+            - name: rails-web-secrets
               mountPath: /srv/gitlab/config/secrets.yml
               subPath: rails-secrets/secrets.yml
               readOnly: true
@@ -124,11 +124,11 @@ spec:
       containers:
 {{ include "gitlab.extraContainers" . | indent 8 }}
         - name: {{ .Chart.Name }}
-          image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+          image: "{{ include "railsWeb.image" . }}"
           {{ template "gitlab.imagePullPolicy" . }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
-              name: puma
+              name: railsWeb
           env:
             - name: TMPDIR
               value: "/tmp/gitlab"
@@ -148,21 +148,21 @@ spec:
 {{- end }}
           volumeMounts:
 {{- if .Values.metrics.enabled }}
-            - name: puma-metrics
+            - name: rails-web-metrics
               mountPath: '/metrics'
 {{- end }}
-            - name: puma-config
+            - name: rails-web-config
               mountPath: '/var/opt/gitlab/templates'
-            - name: puma-secrets
+            - name: rails-web-secrets
               mountPath: '/etc/gitlab'
               readOnly: true
-            - name: puma-secrets
+            - name: rails-web-secrets
               mountPath: /srv/gitlab/config/secrets.yml
               subPath: rails-secrets/secrets.yml
-            - name: puma-config
+            - name: rails-web-config
               mountPath: '/srv/gitlab/config/initializers/smtp_settings.rb'
               subPath: smtp_settings.rb
-            - name: puma-config
+            - name: rails-web-config
               mountPath: '/srv/gitlab/INSTALLATION_TYPE'
               subPath: installation_type
             - name: shared-upload-directory
@@ -199,10 +199,14 @@ spec:
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+{{- if eq .Values.webServer "unicorn" }}
           lifecycle:
             preStop:
               exec:
-                command: ["/bin/bash", "-c", "pkill -SIGQUIT -f 'puma master'"]
+                command: ["/bin/bash", "-c", "pkill -SIGQUIT -f 'unicorn master'"]
+{{- else }}
+#TODO: add prestop command for puma
+{{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
         - name: gitlab-workhorse
@@ -266,17 +270,17 @@ spec:
       - name: shared-tmp
         emptyDir: {}
 {{- if .Values.metrics.enabled }}
-      - name: puma-metrics
+      - name: rails-web-metrics
         emptyDir:
           medium: "Memory"
 {{- end }}
-      - name: puma-config
+      - name: rails-web-config
         configMap:
           name: {{ template "fullname" . }}
       - name: workhorse-config
         configMap:
             name: {{ .Release.Name }}-workhorse-config
-      - name: init-puma-secrets
+      - name: init-rails-web-secrets
         projected:
           defaultMode: 0400
           sources:
@@ -349,7 +353,7 @@ spec:
             - key: {{ .Values.global.email.smime.certName }}
               path: .gitlab_smime_cert
 {{- end }}
-      - name: puma-secrets
+      - name: rails-web-secrets
         emptyDir:
           medium: "Memory"
       - name: workhorse-secrets

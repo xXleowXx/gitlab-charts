@@ -405,11 +405,7 @@ global:
     # key:
 
   ## doc/charts/globals.md#configure-unicorn
-  unicorn:
-    workerTimeout: 60
-
-  ## doc/charts/globals.md#configure-puma
-  puma:
+  railsWeb:
     workerTimeout: 60
 
   ## doc/charts/globals.md#custom-certificate-authorities
@@ -654,8 +650,8 @@ grafana:
 ## doc/charts/gitlab/migrations
 #   migrations:
 #     enabled: false
-## doc/charts/gitlab/unicorn
-#   unicorn:
+## doc/charts/gitlab/rails-web
+#   railsWeb:
 #     enabled: false
 ## doc/charts/gitlab/sidekiq
 #   sidekiq:

@@ -1,10 +1,12 @@
-# Default values for unicorn-web.
+# Default values for rails-web.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee
+  # repository:
+  #   unicorn: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee
+  #   puma: registry.gitlab.com/gitlab-org/build/cng/gitlab-puma-ee
   # tag: latest
 init:
   image: {}
@@ -41,7 +43,7 @@ metrics:
     prometheus.io/port: "8080"
     prometheus.io/path: "/-/metrics"
 service:
-  name: unicorn
+  name: "rails-web" 
   type: ClusterIP
   externalPort: 8080
   internalPort: 8080
@@ -58,9 +60,15 @@ ingress:
     # enabled: true
   annotations: {}
 workerProcesses: 2
-memory: # in MB units
-  min: 700
-  max: 1024
+
+unicorn:
+  memory: # in MB units
+    min: 700
+    max: 1024
+
+puma:
+  workerMaxMemory: 1024 # in MB units
+
 hpa:
   targetAverageValue: 1
 
@@ -145,7 +153,7 @@ global:
   minio:
     enabled:
     credentials: {}
-  unicorn: {}
+  railsWeb: {}
     # workerTimeout: 60
   appConfig:
     incomingEmail:
@@ -247,3 +255,5 @@ minReplicas: 2
 maxReplicas: 10
 helmTests:
   enabled: true
+
+webServer: unicorn
