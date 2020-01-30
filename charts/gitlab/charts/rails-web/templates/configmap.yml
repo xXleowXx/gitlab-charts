@@ -47,7 +47,7 @@ data:
     worker_processes {{ .Values.workerProcesses }}
     working_directory "/srv/gitlab"
     listen "0.0.0.0:{{ .Values.service.internalPort }}", :tcp_nopush => true
-    timeout {{ .Values.global.railsWeb.workerTimeout }}
+    timeout {{ index .Values.global "rails-web" "workerTimeout" }}
     pid "/home/git/unicorn.pid"
     preload_app true
 
@@ -180,7 +180,7 @@ puma.rb: |
     # the given timeout. If not the worker process will be restarted. Default
     # value is 60 seconds.
     #
-    worker_timeout {{ .Values.global.railsWeb.workerTimeout }}
+    worker_timeout {{ index .Values.global "rails-web" "workerTimeout" }}
 
     # Use customised JSON formatter for Puma log
     require_relative "/srv/gitlab/lib/gitlab/puma_logging/json_formatter"

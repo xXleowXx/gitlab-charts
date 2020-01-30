@@ -90,7 +90,7 @@ spec:
           resources:
 {{ toYaml .Values.init.resources | indent 12 }}
         - name: dependencies
-          image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+          image: {{ include "railsWeb.image" . }}
           {{ template "gitlab.imagePullPolicy" . }}
           args:
             - /scripts/wait-for-deps
@@ -124,11 +124,11 @@ spec:
       containers:
 {{ include "gitlab.extraContainers" . | indent 8 }}
         - name: {{ .Chart.Name }}
-          image: "{{ include "railsWeb.image" . }}"
+          image: {{ include "railsWeb.image" . }}
           {{ template "gitlab.imagePullPolicy" . }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
-              name: railsWeb
+              name: rails-web
           env:
             - name: TMPDIR
               value: "/tmp/gitlab"

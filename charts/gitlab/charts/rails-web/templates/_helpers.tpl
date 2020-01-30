@@ -31,17 +31,23 @@ image repository.
 {{- end -}}
 {{- end -}}
 
-{{- define "railsWeb.repository" -}}
-{{-   if eq "ce" .Values.global.edition -}}
-{{      $images := index .Values "global" "communityImages" }}
-{{-   else -}}
-{{    $images := index .Values "global" "enterpriseImages" }}
-{{-   end -}}
+
+{{- define "railsWeb.image" -}}
 {{-   if eq .Values.webServer "unicorn" -}}
-{{      $image := index $images "unicorn" "repository"}}
-{{      coalesce .Values.image.repository.unicorn $image }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}
+{{-     if eq "ce" .Values.global.edition -}}
+{{-        $repo := index .Values "global" "communityImages" "unicorn" "repository" -}}
+"{{ coalesce .Values.image.repository $repo }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+{{-     else -}}
+{{-        $repo := index .Values "global" "enterpriseImages" "unicorn" "repository" -}}
+"{{ coalesce .Values.image.repository $repo }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+{{-     end -}}
 {{-   else -}}
-{{      $image := index $images "puma" "repository"}}
-{{      coalesce .Values.image.repository.puma $image }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}
+{{-     if eq "ce" .Values.global.edition -}}
+{{-        $repo := index .Values "global" "communityImages" "puma" "repository" -}}
+"{{ coalesce .Values.image.repository $repo }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+{{-     else -}}
+{{-       $repo := index .Values "global" "enterpriseImages" "puma" "repository" -}}
+"{{ coalesce .Values.image.repository $repo }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+{{-     end -}}
 {{-   end -}}
 {{- end -}}

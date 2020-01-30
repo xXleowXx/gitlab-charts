@@ -153,7 +153,7 @@ global:
   minio:
     enabled:
     credentials: {}
-  railsWeb: {}
+  rails-web: {}
     # workerTimeout: 60
   appConfig:
     incomingEmail:
