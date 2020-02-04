@@ -119,7 +119,7 @@ before upgrading. You can see more details in our troubleshooting documentation,
 1. Remove all affected services. RELEASE_NAME should be the name of the GitLab release from `helm list`:
 
     ```shell
-    kubectl delete services -lrelease=RELEASE_NAME
+    kubectl delete services -l release=RELEASE_NAME
     ```
 
 CAUTION: **Caution:**
@@ -162,3 +162,27 @@ NOTE: **Note:** You'll need to be using Bash 4.0 or above to run the script succ
    # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v3.0.0
    curl -s https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/scripts/database-upgrade | bash -s post
    ```
+   
+### Troubleshooting 3.0 release upgrade process
+
+- Please make sure that you are using helm 2.14.3 or >= 2.16.1 due to the bug in 2.15.x,
+see [Problematic Helm 2.15](../releases/3_0.md#problematic-helm-215) for details
+- if you see any failure during the upgrade, it may be useful to check the description `gitlab-upgrade-check` pod for details:
+
+   ```shell
+   kubectl get pods | grep gitlab-upgrade-check
+   kubectl describe pod <gitlab-upgrade-check-pod-full-name>
+   ```
+
+- you may face the error below when running `helm upgrade ...` command:
+
+   ```
+   Error: kind ConfigMap with the name "gitlab-gitlab-shell-sshd" already exists in the cluster and wasn't defined in the previous release.
+   Before upgrading, please either delete the resource from the cluster or remove it from the chart
+   Error: UPGRADE FAILED: kind ConfigMap with the name "gitlab-gitlab-shell-sshd" already exists in the cluster and wasn't defined in the previous release.
+   Before upgrading, please either delete the resource from the cluster or remove it from the chart
+   ```
+
+   The error message can also mention other configmaps like `gitlab-redis-health`, `gitlab-redis-headless`, etc.
+   To fix it please make sure that the services were removed as mentioned in if you don't follow the steps outlines in the section [Upgrade steps for 3.0 release](#delete-existing-services).
+   After that please also delete the configmaps shown in the error message using the command like `kubectl delete configmap <configmap-name>`.
