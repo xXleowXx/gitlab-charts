@@ -170,7 +170,7 @@ see [Problematic Helm 2.15](../releases/3_0.md#problematic-helm-215) for details
 - If you see any failure during the upgrade, it may be useful to check the description of `gitlab-upgrade-check` pod for details:
 
    ```shell
-   kubectl get pods | grep gitlab-upgrade-check
+   kubectl get pods -lrelease=RELEASE,app=gitlab
    kubectl describe pod <gitlab-upgrade-check-pod-full-name>
    ```
 
