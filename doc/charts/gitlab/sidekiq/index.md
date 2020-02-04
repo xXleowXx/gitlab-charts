@@ -300,7 +300,7 @@ affect.
 pods:
   - name: immediate
     concurrency: 10
-    minReplicas: 2  # defaults to inherited value 
+    minReplicas: 2  # defaults to inherited value
     maxReplicas: 10 # defaults to inherited value
     - [post_receive, 5]
     - [merge, 5]
