@@ -119,7 +119,7 @@ before upgrading. You can see more details in our troubleshooting documentation,
 1. Remove all affected services. RELEASE_NAME should be the name of the GitLab release from `helm list`:
 
     ```shell
-    kubectl delete services -l release=RELEASE_NAME
+    kubectl delete services -lrelease=RELEASE_NAME
     ```
 
 CAUTION: **Caution:**
