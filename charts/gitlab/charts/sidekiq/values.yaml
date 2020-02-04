@@ -223,3 +223,8 @@ pods:
     # minReplicas: 1
     # maxReplicas: 10
     queues:
+
+## Allow to overwrite under which User and Group we're running.
+securityContext:
+  runAsUser: 1000
+  fsGroup: 1000
