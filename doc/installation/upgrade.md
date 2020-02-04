@@ -166,7 +166,7 @@ NOTE: **Note:** You'll need to be using Bash 4.0 or above to run the script succ
 ### Troubleshooting 3.0 release upgrade process
 
 - Please make sure that you are using Helm 2.14.3 or >= 2.16.1 due to the bug in 2.15.x,
-see [Problematic Helm 2.15](../releases/3_0.md#problematic-helm-215) for details
+see [Problematic Helm 2.15](../releases/3_0.md#problematic-helm-215) for details.
 - if you see any failure during the upgrade, it may be useful to check the description `gitlab-upgrade-check` pod for details:
 
    ```shell
