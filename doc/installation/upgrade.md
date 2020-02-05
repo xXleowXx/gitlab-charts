@@ -174,7 +174,7 @@ see [Problematic Helm 2.15](../releases/3_0.md#problematic-helm-215) for details
    kubectl describe pod <gitlab-upgrade-check-pod-full-name>
    ```
 
-- you may face the error below when running `helm upgrade ...` command:
+- You may face the error below when running `helm upgrade`:
 
    ```
    Error: kind ConfigMap with the name "gitlab-gitlab-shell-sshd" already exists in the cluster and wasn't defined in the previous release.
