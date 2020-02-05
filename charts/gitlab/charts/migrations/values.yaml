@@ -61,3 +61,8 @@ activeDeadlineSeconds: 3600
 backoffLimit: 6
 bootsnap:
   enabled: true
+
+## Allow to overwrite under which User and Group we're running.
+securityContext:
+  runAsUser: 1000
+  fsGroup: 1000
