@@ -184,5 +184,5 @@ see [Problematic Helm 2.15](../releases/3_0.md#problematic-helm-215) for details
    ```
 
    The error message can also mention other configmaps like `gitlab-redis-health`, `gitlab-redis-headless`, etc.
-   To fix it please make sure that the services were removed as mentioned in if you don't follow the steps outlines in the section [Upgrade steps for 3.0 release](#delete-existing-services).
+   To fix it, make sure that the services were removed as mentioned in the [upgrade steps for 3.0 release](#delete-existing-services).
    After that please also delete the configmaps shown in the error message using the command like `kubectl delete configmap <configmap-name>`.
