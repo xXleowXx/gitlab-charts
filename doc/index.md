@@ -90,7 +90,7 @@ should be done using `helm upgrade`:
 ```sh
 helm repo add gitlab https://charts.gitlab.io/
 helm repo update
-helm get values gitlab > gitlab.yaml
+helm show values gitlab/gitlab > gitlab.yaml
 helm upgrade gitlab gitlab/gitlab -f gitlab.yaml
 ```
 
