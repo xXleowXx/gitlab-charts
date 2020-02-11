@@ -8,6 +8,7 @@ sslmode: verify-ca
 sslrootcert: '/etc/gitlab/postgres/ssl/server-ca.pem'
 sslcert: '/etc/gitlab/postgres/ssl/client-certificate.pem'
 sslkey: '/etc/gitlab/postgres/ssl/client-key.pem'
+sslcompression: '0'
 {{- end -}}
 {{- end -}}
 
