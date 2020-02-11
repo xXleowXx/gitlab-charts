@@ -97,7 +97,7 @@ and then mapping your desired DNS name to the created ELB using a CNAME record.
 
 You can fetch your ELB's hostname to place in the CNAME record with the following:
 
-```
+```shell
 kubectl get ingress/RELEASE-unicorn -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
 ```
 
