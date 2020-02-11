@@ -32,8 +32,8 @@ spec:
 {{ toYaml .Values.tolerations | indent 8 }}
       {{- end }}
       securityContext:
-        runAsUser: 1000
-        fsGroup: 1000
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
       initContainers:
 {{ include "gitlab.extraInitContainers" . | indent 8 }}
 {{ include "gitlab.certificates.initContainer" . | indent 8 }}
