@@ -2,6 +2,17 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 3.0.4
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Use the volume with Postgres client SSL certificate in the gitlab-exporter deployment. !1162 (Franciszek Walkowiak)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.7.6.
+
+
 ## 3.0.3
 
 ### Fixed (1 change)
@@ -63,6 +74,17 @@ entry.
 
 - Use mail_room gem version from Gemfile.lock as appVersion in the chart. !1088
 - Update GitLab Version to 12.7.0.
+
+
+## 2.6.8
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Use the volume with Postgres client SSL certificate in the gitlab-exporter deployment. !1162 (Franciszek Walkowiak)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.6.7.
 
 
 ## 2.6.7
@@ -155,6 +177,13 @@ entry.
 
 - Document the use of external Minio for object storage. !1005
 - Update GitLab Version to 12.6.0.
+
+
+## 2.5.11
+
+### Other (1 change)
+
+- Update GitLab Version to 12.5.10.
 
 
 ## 2.5.10
