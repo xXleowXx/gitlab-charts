@@ -8,6 +8,7 @@
 {{- $concurrency := .Values.concurrency -}}
 {{- $timeout := .Values.timeout -}}
 {{- $resources := .Values.resources -}}
+{{- $strategy := .Values.strategy -}}
 {{- $nodeSelector := .Values.nodeSelector -}}
 {{- $minioEnabled := .Values.global.minio.enabled -}}
 {{- $minioSecret := include "gitlab.minio.credentials.secret" . -}}
@@ -49,6 +50,8 @@ spec:
       app: {{ $name }}
       release: {{ $releaseName }}
       queue-pod-name: {{ .name }}
+  strategy:
+{{ toYaml ( default $strategy .strategy ) | indent 4 }}
   template:
     metadata:
       labels:
