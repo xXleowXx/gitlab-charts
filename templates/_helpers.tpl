@@ -183,7 +183,12 @@ If the postgresql port is provided, it will use that, otherwise it will fallback
 to 5432 default
 */}}
 {{- define "gitlab.psql.port" -}}
-{{- coalesce .Values.global.psql.port 5432 -}}
+{{-   if and .Values.psql }}
+{{-     if .Values.psql.port}}
+{{- $dummy := set . "psqlPort" .Values.psql.port }}
+{{-     end }}
+{{-   end }}
+{{- coalesce .psqlPort .Values.global.psql.port 5432 -}}
 {{- end -}}
 
 {{/*
