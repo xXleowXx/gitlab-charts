@@ -216,6 +216,12 @@ resources:
     memory: 650M
 maxUnavailable: 1
 
+#strategy:
+#  rollingUpdate:
+#    maxSurge: 25%
+#    maxUnavailable: 25%
+#  type: RollingUpdate
+
 # Define queue groups into Pods
 pods:
   - name: all-in-1

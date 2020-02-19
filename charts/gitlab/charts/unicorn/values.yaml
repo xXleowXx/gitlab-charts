@@ -247,3 +247,9 @@ minReplicas: 2
 maxReplicas: 10
 helmTests:
   enabled: true
+
+#strategy:
+#  rollingUpdate:
+#    maxSurge: 25%
+#    maxUnavailable: 25%
+#  type: RollingUpdate
