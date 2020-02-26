@@ -868,7 +868,7 @@ release_package:
   stage: package
   script:
     - |
-      if [[ $CI_COMMIT_REF_NAME =~ [[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\+[^\ ]{7,}\.[^\ ]{7,} ]]; then
+      if [[ $CI_COMMIT_REF_NAME =~ [[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\+[^\ ]{7,} ]]; then
         UNSTABLE="true"
       else
         UNSTABLE="false"
