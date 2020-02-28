@@ -4,8 +4,8 @@
 image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee
-  # tag: latest
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee
+  tag: webservice-has-unicorn-puma
 init:
   image: {}
     # repository:
@@ -78,6 +78,8 @@ deployment:
     failureThreshold: 3
 
 workhorse:
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee
+  tag: webservice-has-unicorn-puma
   sentryDSN: ""
   extraArgs: ""
   resources:

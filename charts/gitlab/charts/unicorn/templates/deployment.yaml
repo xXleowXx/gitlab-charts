@@ -142,6 +142,8 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
+            - name: GITLAB_WEBSERVER
+              value: 'PUMA'
 {{- if .Values.metrics.enabled }}
             - name: prometheus_multiproc_dir
               value: /metrics

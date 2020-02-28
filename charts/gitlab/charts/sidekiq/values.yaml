@@ -3,9 +3,7 @@
 # Declare variables to be passed into your templates.
 image:
   pullSecrets: []
-  # pullPolicy: IfNotPresent
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee
-  # tag: latest
+  tag: webservice-has-unicorn-puma
 
 init:
   image: {}
