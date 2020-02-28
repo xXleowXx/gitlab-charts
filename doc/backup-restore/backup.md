@@ -33,7 +33,26 @@ You need to set the following parameters:
 
 - `gitlab.task-runner.backups.cron.enabled`: Set to true to enable cron based backups
 - `gitlab.task-runner.backups.cron.schedule`: Set as per the Kubernetes schedule docs
-- `gitlab.task-runner.backups.cron.extraArgs`: Optionally set extra arguments for backup-utility (like [`--skip db`](https://gitlab.com/gitlab-org/build/CNG/blob/master/gitlab-task-runner/scripts/bin/backup-utility#L19))
+- `gitlab.task-runner.backups.cron.extraArgs`: Optionally set extra arguments for backup-utility (like `--skip db`)
+
+## Backup utility extra arguments
+```
+   Usage: backup-utility [--restore] [-f URL] [-t TIMESTAMP] [--skip COMPONENT] [--backend BACKEND]
+
+   Options:
+     -h, --help                             Show this help message and exit.
+     --restore [-t TIMESTAMP | -f URL]      When specified, utility restores from an existing backup specified
+                                            as url or timestamp in object storage.
+     -f URL                                 http(s):/ftp:/file: URL with backup location. Use with --restore.
+     -t TIMESTAMP                           Timestamp (part before '_gitlab_backup.tar' in archive name),
+                                            can be used to specify backup source or target name.
+     --rsyncable                            Pass the '--rsyncable' parameter to gzip for artifact compression.
+     --skip COMPONENT                       When specified, utility will skip the backup of COMPONENT.
+                                            May be defined multiple times. Valid values for COMPONENT are
+                                            db, repositories, and any of the object storages (e.g. 'lfs').
+     --backend BACKEND                      Object storage backend to use for backups.
+                                            Can be either 's3' or 'gcs'.
+```
 
 ## Backup the secrets
 
