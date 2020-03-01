@@ -66,7 +66,7 @@ component services are documented under the [GitLab](charts/gitlab/index.md) cha
 - GitLab/[GitLab Shell](charts/gitlab/gitlab-shell/index.md)
 - GitLab/[Migrations](charts/gitlab/migrations/index.md)
 - GitLab/[Sidekiq](charts/gitlab/sidekiq/index.md)
-- GitLab/[Unicorn](charts/gitlab/unicorn/index.md)
+- GitLab/[Unicorn](charts/gitlab/webservice/index.md)
 
 ## Global settings
 

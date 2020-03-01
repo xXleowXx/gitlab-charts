@@ -129,7 +129,7 @@ be separately updated to versions compatible with the GitLab version.
 ## Configure PostgreSQL settings
 
 The GitLab global PostgreSQL settings are located under the `global.psql` key. For
-more details, see the documentation within the [Unicorn chart](gitlab/unicorn/index.md#postgresql).
+more details, see the documentation within the [Unicorn chart](gitlab/webservice/index.md#postgresql).
 
 ```YAML
 global:
@@ -163,7 +163,7 @@ global:
 ## Configure Redis settings
 
 The GitLab global Redis settings are located under the `global.redis` key. For more
-details on these settings, see the documentation within the [Unicorn chart](gitlab/unicorn/index.md#redis).
+details on these settings, see the documentation within the [Unicorn chart](gitlab/webservice/index.md#redis).
 
 ```YAML
 global:
@@ -330,7 +330,7 @@ global:
 
 ## Configure appConfig settings
 
-The [Unicorn](gitlab/unicorn/index.md), [Sidekiq](gitlab/sidekiq/index.md), and
+The [Unicorn](gitlab/webservice/index.md), [Sidekiq](gitlab/sidekiq/index.md), and
 [Gitaly](gitlab/gitaly/index.md) charts share multiple settings, which are configured
 with the `global.appConfig` key.
 
