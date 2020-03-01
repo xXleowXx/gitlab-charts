@@ -42,8 +42,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.workerTimeout" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.redis-ha.enabled" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.redis.enabled" .) -}}
-{{- $deprecated := append $deprecated (include "gitlab.deprecate.unicorn.service.name" .) -}}
-{{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.unicorn.service.configuration" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.service.name" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.webservice.service.configuration" .) -}}
 {{- /* prepare output */}}
 {{- $deprecated := without $deprecated "" -}}
 {{- $message := join "\n" $deprecated -}}
@@ -56,7 +56,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 
 {{/* Migration of rails shared lfs/artifacts/uploads blocks to globals */}}
 {{- define "gitlab.deprecate.rails.appConfig" -}}
-{{- range $chart := list "unicorn" "sidekiq" "task-runner" -}}
+{{- range $chart := list "webservice" "sidekiq" "task-runner" -}}
 {{-   if index $.Values.gitlab $chart -}}
 {{-     range $i, $block := list "lfs" "artifacts" "uploads" -}}
 {{-       if hasKey (index $.Values.gitlab $chart) $block }}
@@ -93,7 +93,7 @@ registry:
 {{-   end -}}
 {{- end -}}
 {{- if .Values.gitlab.webservice.minio -}}
-{{-   if ( hasKey .Values.gitlab.unicorn.minio "enabled" ) }}
+{{-   if ( hasKey .Values.gitlab.webservice.minio "enabled" ) }}
 gitlab.webservice:
     Chart-local configuration of Minio features has been moved to global. Please remove `gitlab.webservice.minio.enabled` from your properties, and set `global.minio.enabled` instead.
 {{-   end -}}
@@ -209,7 +209,7 @@ gitlab:
 
 {{/* Deprecation behavious for configuration of initContainer images of gitlab sub-charts */}}
 {{- define "gitlab.deprecate.initContainerImage" -}}
-{{- range $chart:= list "geo-logcursor" "gitaly" "gitlab-exporter" "gitlab-shell" "mailroom" "migrations" "sidekiq" "task-runner" "unicorn" }}
+{{- range $chart:= list "geo-logcursor" "gitaly" "gitlab-exporter" "gitlab-shell" "mailroom" "migrations" "sidekiq" "task-runner" "webservice" }}
 {{-     if hasKey (index $.Values.gitlab $chart) "init" -}}
 {{-         with $config := index $.Values.gitlab $chart "init" -}}
 {{-             if or (and (hasKey $config "image") (kindIs "string" $config.image)) (hasKey $config "tag") }}
@@ -222,7 +222,7 @@ gitlab.{{ $chart }}:
 {{- end -}}
 {{/* END gitlab.deprecate.initContainerImage */}}
 
-{{/* Deprecation behaviors for configuration of unicorn worker timeout*/}}
+{{/* Deprecation behaviors for configuration of webservice worker timeout*/}}
 {{- define "gitlab.deprecate.webservice.workerTimeout" -}}
 {{- if hasKey .Values.gitlab.webservice "workerTimeout" -}}
 webservice:
@@ -279,24 +279,24 @@ redis:
 {{- end -}}
 {{/* END gitlab.deprecate.redis.enabled */}}
 
-{{/* Deprecation behaviors for unicorn.service.name */}}
-{{- define "gitlab.deprecate.unicorn.service.name" -}}
-{{-   if hasKey .Values.gitlab.unicorn.service "name" -}}
-unicorn:
+{{/* Deprecation behaviors for webservice.service.name */}}
+{{- define "gitlab.deprecate.webservice.service.name" -}}
+{{-   if hasKey .Values.gitlab.webservice.service "name" -}}
+webservice:
     Chart-local configuration of Unicorn's service name has been deprecated.
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.redis.enabled */}}
 
-{{- define "gitlab.deprecate.gitlab.unicorn.service.configuration" -}}
+{{- define "gitlab.deprecate.gitlab.webservice.service.configuration" -}}
 {{-   range $chart := list "gitaly" "gitlab-shell" -}}
 {{-     if index $.Values.gitlab $chart -}}
-{{-       if hasKey (index $.Values.gitlab $chart) "unicorn" }}
+{{-       if hasKey (index $.Values.gitlab $chart) "webservice" }}
 gitlab.{{ $chart }}:
-    unicorn:
-      The configuration of 'gitlab.{{ $chart }}.unicorn' has been moved to 'gitlab.{{ $chart }}.workhorse' to better reflect the underlying architecture. Please relocate this property.
+    webservice:
+      The configuration of 'gitlab.{{ $chart }}.webservice' has been moved to 'gitlab.{{ $chart }}.workhorse' to better reflect the underlying architecture. Please relocate this property.
 {{-       end -}}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.gitlab.unicorn.service.configuration */}}
+{{/* END gitlab.deprecate.gitlab.webservice.service.configuration */}}
