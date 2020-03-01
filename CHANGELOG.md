@@ -2,6 +2,84 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 3.1.1
+
+### Other (1 change)
+
+- Update GitLab Version to 12.8.1.
+
+
+## 3.1.0
+
+### Fixed (4 changes, 2 of them are from the community)
+
+- Route gitlab-shell and gitaly requests through workhorse. !1114 (Dmitry Chepurovskiy)
+- Enabled Geo configuration checks. !1121
+- Disable cert-manager's webook that validates its CRDs. !1139 (Erik Sundell (@consideRatio))
+- Corrected references to gitlab-runner.install. !1149
+
+### Changed (8 changes)
+
+- Update gitlab-exporter to 5.2.2. !1087
+- Changed migrations job to use task-runner image. !1126
+- Bump registry to v2.7.7-gitlab. !1133
+- Update registry chart versions to reflect recent changes. !1144
+- Update gitlab-exporter to 6.0.0. !1151
+- Align gitlab/unicorn chart service names for Istio environments. !1153
+- Bump Container Registry to v2.8.0-gitlab. !1172
+- Updated EKS bootstrap script to default to Kubernetes 1.14. !1175
+
+### Added (6 changes, 3 of them are from the community)
+
+- Allows the database `pool` to be configurable. !1111 (skarbek)
+- Added ability to set NodePort and ExternalTrafficPolicy for gitlab-shell service. !1112 (Dmitry Chepurovskiy)
+- Adds logging.format option to enable structured json logging for sidekiq. !1132
+- Performance: enable Bootsnap for all Rails-derived containers. !1157
+- NOTES: add notice of runner default to unprivilieged. !1158
+- Add `component` field to the nginx ingress podAntiAffinity. !1169 (Ivan Kurnosov (@zerkms))
+
+### Other (5 changes)
+
+- Document command for easily fetching ELB hostname. !1159
+- Doc: link upstream docs for why GitLab Runner is not privileged by default. !1160
+- Include GitLab Exporter & GitLab Grafana to sub-chart lists. !1161
+- Bump Container Registry to v2.8.1-gitlab. !1173
+- Update GitLab Version to 12.8.0.
+
+
+## 3.0.4
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Use the volume with Postgres client SSL certificate in the gitlab-exporter deployment. !1162 (Franciszek Walkowiak)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.7.6.
+
+
+## 3.0.3
+
+### Fixed (1 change)
+
+- Workhorse - set sentinel port default. !1135
+
+### Other (1 change)
+
+- Update GitLab Version to 12.7.5.
+
+
+## 3.0.2
+
+### Changed (1 change)
+
+- Update gitlab-runner chart to 0.13.1. !1138
+
+### Other (1 change)
+
+- Update GitLab Version to 12.7.4.
+
+
 ## 3.0.1
 
 ### Changed (1 change)
@@ -41,6 +119,24 @@ entry.
 
 - Use mail_room gem version from Gemfile.lock as appVersion in the chart. !1088
 - Update GitLab Version to 12.7.0.
+
+
+## 2.6.8
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Use the volume with Postgres client SSL certificate in the gitlab-exporter deployment. !1162 (Franciszek Walkowiak)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.6.7.
+
+
+## 2.6.7
+
+### Other (1 change)
+
+- Update GitLab Version to 12.6.6.
 
 
 ## 2.6.6
@@ -126,6 +222,20 @@ entry.
 
 - Document the use of external Minio for object storage. !1005
 - Update GitLab Version to 12.6.0.
+
+
+## 2.5.11
+
+### Other (1 change)
+
+- Update GitLab Version to 12.5.10.
+
+
+## 2.5.10
+
+### Other (1 change)
+
+- Update GitLab Version to 12.5.9.
 
 
 ## 2.5.9

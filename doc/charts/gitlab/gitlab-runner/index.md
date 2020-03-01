@@ -18,7 +18,7 @@ In this case you will need to set `gitlabUrl` value to be the url of the running
 
 ## Using docker-in-docker
 
-In order to run docker-in-docker, the runner container needs to be privileged to have access to the needed capabilities. To enable it set the `privileged` value to `true`.
+In order to run docker-in-docker, the runner container needs to be privileged to have access to the needed capabilities. To enable it set the `privileged` value to `true`. See the [upstream documentation](https://docs.gitlab.com/runner/install/kubernetes.html#running-docker-in-docker-containers-with-gitlab-runners) in regards to why this is does not default to `true`.
 
 ### Security concerns
 
@@ -29,7 +29,7 @@ Privileged containers have extended capabilities, for example they can mount arb
 | Parameter                                      | Description                                | Default                               |
 | ---------------------------------------------- | ------------------------------------------ | ------------------------------------- |
 | `gitlab-runner.image`                          | Runner image                               | `gitlab/gitlab-runner:alpine-v10.5.0` |
-| `gitlab-runner.enabled`                        |                                            | `true`                                |
+| `gitlab-runner.install`                        | Install the `gitlab-runner` chart          | `true`                                |
 | `gitlab-runner.imagePullPolicy`                | Image pull policy                          | `IfNotPresent`                        |
 | `gitlab-runner.init.image.repository`          | `initContainer` image                      |                                       |
 | `gitlab-runner.init.image.tag`                 | `initContainer` image tag                  |                                       |

@@ -14,7 +14,7 @@ The default deployment includes:
 
 - Core GitLab components: Unicorn, Shell, Workhorse, Registry, Sidekiq, and Gitaly
 - Optional dependencies: Postgres, Redis, MinIO
-- An auto-scaling, unprivileged [GitLab Runner](https://docs.gitlab.com/runner/) using the Kubernetes executor
+- An auto-scaling, [_unprivileged_](https://docs.gitlab.com/runner/install/kubernetes.html#running-docker-in-docker-containers-with-gitlab-runners) [GitLab Runner](https://docs.gitlab.com/runner/) using the Kubernetes executor
 - Automatically provisioned SSL via [Let's Encrypt](https://letsencrypt.org/).
 
 There are also some [example values.yaml files](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples).
@@ -60,11 +60,13 @@ component services are documented under the [GitLab](charts/gitlab/index.md) cha
 - [NGINX](charts/nginx/index.md)
 - [MinIO](charts/minio/index.md)
 - [Registry](charts/registry/index.md)
-- GitLab/[Sidekiq](charts/gitlab/sidekiq/index.md)
-- GitLab/[GitLab Shell](charts/gitlab/gitlab-shell/index.md)
 - GitLab/[Gitaly](charts/gitlab/gitaly/index.md)
+- GitLab/[GitLab Exporter](charts/gitlab/gitlab-exporter/index.md)
+- GitLab/[GitLab Grafana](charts/gitlab/gitlab-grafana/index.md)
+- GitLab/[GitLab Shell](charts/gitlab/gitlab-shell/index.md)
+- GitLab/[Migrations](charts/gitlab/migrations/index.md)
+- GitLab/[Sidekiq](charts/gitlab/sidekiq/index.md)
 - GitLab/[Unicorn](charts/gitlab/unicorn/index.md)
-- GitLab/[migrations](charts/gitlab/migrations/index.md)
 
 ## Global settings
 

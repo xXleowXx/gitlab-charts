@@ -44,7 +44,7 @@ registry:
     readOnly:
       enabled: false
   image:
-    tag: 'v2.7.7-gitlab'
+    tag: 'v2.8.1-gitlab'
     pullPolicy: IfoNtPresent
   annotations:
   service:
@@ -119,7 +119,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
 | `image.repository`                         | `registry`                                   | Registry image                                                                                       |
-| `image.tag`                                | `v2.7.7-gitlab`                              | Version of the image to use                                                                          |
+| `image.tag`                                | `v2.8.1-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
 | `log`                                      | `{level: warn, fields: {service: registry}}` | Configure the logging options                                                                        |
@@ -195,7 +195,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v2.7.7-gitlab'`
+- `tag: 'v2.8.1-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
@@ -474,7 +474,7 @@ Replace these values in the commands below according to your actual configuratio
 
 ```bash
 # Because of https://github.com/helm/helm/issues/2948 we can't rely on --reuse-values, so let's get our current config.
-helm get config mygitlab > mygitlab.yml
+helm get values mygitlab > mygitlab.yml
 # Upgrade Helm installation and configure the registry to be read-only.
 # The --wait parameter makes Helm wait until all ressources are in ready state, so we are safe to continue.
 helm upgrade mygitlab gitlab/gitlab -f mygitlab.yml --set registry.maintenance.readOnly.enabled=true --wait

@@ -43,7 +43,6 @@ metrics:
     prometheus.io/port: "8080"
     prometheus.io/path: "/-/metrics"
 service:
-  name: "rails-web" 
   type: ClusterIP
   externalPort: 8080
   internalPort: 8080

@@ -5,6 +5,8 @@
 - Deployment using Omnibus GitLab package needs to be running. Run `gitlab-ctl status`
   and confirm no services report a `down` state.
 
+- It is good practice to verify the integrity of Git repositories prior to migration.  See the [integrity check rake task](https://docs.gitlab.com/ee/administration/raketasks/check.html) documentation for how to perform this task.
+
 - `/etc/gitlab/gitlab-secrets.json` file from package based installation.
 
 - A Helm charts based deployment running the same GitLab version as the
@@ -17,6 +19,11 @@
   from it.
 
 ## Migration Steps
+
+CAUTION: **CAUTION:**
+JUnit test report artifact (`junit.xml.gz`) migration
+[is not supported](https://gitlab.com/gitlab-org/gitlab/issues/27698)
+by the `gitlab:artifacts:migrate` script below.
 
 1. Migrate existing files (uploads, artifacts, lfs objects) from package based
    installation to object storage.
@@ -39,7 +46,6 @@
 
       ```sh
       sudo gitlab-rake gitlab:artifacts:migrate
-      sudo gitlab-rake gitlab:traces:migrate
       ```
 
    1. Migrate existing LFS objects to object storage

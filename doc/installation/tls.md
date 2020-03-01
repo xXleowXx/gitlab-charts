@@ -79,6 +79,7 @@ Add your full chain certificates to the cluster as secrets, and then pass those 
 helm install ...
   --set certmanager.install=false \
   --set global.ingress.configureCertmanager=false \
+  --set global.ingress.tls.enabled=true \
   --set gitlab.unicorn.ingress.tls.secretName=RELEASE-gitlab-tls \
   --set registry.ingress.tls.secretName=RELEASE-registry-tls \
   --set minio.ingress.tls.secretName=RELEASE-minio-tls
@@ -105,4 +106,4 @@ accessible services. The secrets containing these will be `RELEASE-wildcard-tls`
 The `RELEASE-wildcard-tls-ca` contains the public CA certificate that can be distributed to users and systems that
 will access the deployed GitLab instance.
 
-[cm-annotations]: https://github.com/jetstack/cert-manager/blob/master/docs/tasks/issuing-certificates/ingress-shim.rst#supported-annotations
+[cm-annotations]: https://cert-manager.io/docs/usage/ingress/#supported-annotations
