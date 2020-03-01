@@ -39,7 +39,6 @@ data:
       {{- include "gitlab.redis.sentinels" . | nindent 6 }}
 {{- end }}
       id:
-{{- if eq .Values.webServer "unicorn" -}}
   unicorn.rb: |
     # This file should be equivalent to `unicorn.rb` from:
     # * gitlab-foss: https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/unicorn.rb.example
@@ -109,8 +108,7 @@ data:
 
     ENV['GITLAB_UNICORN_MEMORY_MIN'] = ({{ int .Values.unicorn.memory.min }} * 1 << 20).to_s
     ENV['GITLAB_UNICORN_MEMORY_MAX'] = ({{ int .Values.unicorn.memory.max }} * 1 << 20).to_s
-{{- else }}
-puma.rb: |
+  puma.rb: |
     # This file should be equivalent to `puma.rb` from:
     # * gitlab-foss: https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/puma.rb.example
     # * omnibus: https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-cookbooks/gitlab/templates/default/puma.rb.erb
@@ -125,7 +123,7 @@ puma.rb: |
 
     # Configure "min" to be the minimum number of threads to use to answer
     # requests and "max" the maximum.
-    threads {{ int .Values.threads.min }}, {{ int .Values.threads.max }}
+    threads {{ int .Values.puma.threads.min }}, {{ int .Values.puma.threads.max }}
 
     # By default, workers accept all requests and queue them to pass to handlers.
     # When false, workers accept the number of simultaneous requests configured.
@@ -189,7 +187,6 @@ puma.rb: |
     log_formatter do |str|
         json_formatter.call(str)
     end
-{{- end }}
   gitlab.yml.erb: |
     production: &base
       gitlab:

@@ -65,6 +65,9 @@ unicorn:
 
 puma:
   workerMaxMemory: 1024 # in MB units
+  threads:
+    min: 4
+    max: 4
 
 hpa:
   targetAverageValue: 1
