@@ -5,7 +5,7 @@ Returns the secret name for the Secret containing the TLS certificate and key.
 Uses `ingress.tls.secretName` first and falls back to `global.ingress.tls.secretName`
 if there is a shared tls secret for all ingresses.
 */}}
-{{- define "railsWeb.tlsSecret" -}}
+{{- define "webservice.tlsSecret" -}}
 {{- $defaultName := (dict "secretName" "") -}}
 {{- if .Values.global.ingress.configureCertmanager -}}
 {{- $_ := set $defaultName "secretName" (printf "%s-gitlab-tls" .Release.Name) -}}
@@ -31,23 +31,14 @@ image repository.
 {{- end -}}
 {{- end -}}
 
+{{/*
+Returns the webservice image depending on the value of global.edition.
 
-{{- define "railsWeb.image" -}}
-{{-   if eq .Values.webServer "unicorn" -}}
-{{-     if eq "ce" .Values.global.edition -}}
-{{-        $repo := index .Values "global" "communityImages" "unicorn" "repository" -}}
-"{{ coalesce .Values.image.repository $repo }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
-{{-     else -}}
-{{-        $repo := index .Values "global" "enterpriseImages" "unicorn" "repository" -}}
-"{{ coalesce .Values.image.repository $repo }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
-{{-     end -}}
-{{-   else -}}
-{{-     if eq "ce" .Values.global.edition -}}
-{{-        $repo := index .Values "global" "communityImages" "puma" "repository" -}}
-"{{ coalesce .Values.image.repository $repo }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
-{{-     else -}}
-{{-       $repo := index .Values "global" "enterpriseImages" "puma" "repository" -}}
-"{{ coalesce .Values.image.repository $repo }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
-{{-     end -}}
-{{-   end -}}
+Used to switch the deployment from Enterprise Edition (default) to Community
+Edition. If global.edition=ce, returns the Community Edition image repository
+set in the Gitlab values.yaml, otherwise returns the Enterprise Edition
+image repository.
+*/}}
+{{- define "webservice.image" -}}
+{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}
 {{- end -}}

@@ -15,10 +15,8 @@ global:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee
     task-runner:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
-    unicorn:
-      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee
-    puma:
-      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-puma-ee
+    webservice:
+      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee
     workhorse:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee
     geo-logcursor:
@@ -32,10 +30,8 @@ global:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce
     task-runner:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ce
-    unicorn:
-      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce
-    puma:
-      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-puma-ce
+    webservice:
+      repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ce
     workhorse:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
 

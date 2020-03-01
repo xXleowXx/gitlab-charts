@@ -1,3 +1,3 @@
 gitlab:
-  rails-web:
+  webservice:
     webServer: puma

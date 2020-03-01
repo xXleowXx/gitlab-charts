@@ -29,6 +29,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registryStorage" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registryHttpSecret" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registry.replicas" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.omniauth" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.ldap" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.appConfig.ldap.password" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.sidekiq.cronJobs" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.local.kubectl" .) -}}
@@ -37,6 +39,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.initContainerImage" .) -}}
 {{- $deprecated := append $deprecated (include "external.deprecate.initContainerImage" .) -}}
 {{- $deprecated := append $deprecated (include "external.deprecate.initContainerPullPolicy" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.workerTimeout" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.redis-ha.enabled" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.redis.enabled" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.unicorn.service.name" .) -}}
@@ -89,6 +92,12 @@ registry:
     Chart-local configuration of Minio features has been moved to global. Please remove `registry.minio.enabled` from your properties, and set `global.minio.enabled` instead.
 {{-   end -}}
 {{- end -}}
+{{- if .Values.gitlab.webservice.minio -}}
+{{-   if ( hasKey .Values.gitlab.unicorn.minio "enabled" ) }}
+gitlab.webservice:
+    Chart-local configuration of Minio features has been moved to global. Please remove `gitlab.webservice.minio.enabled` from your properties, and set `global.minio.enabled` instead.
+{{-   end -}}
+{{- end -}}
 {{- if .Values.gitlab.sidekiq.minio -}}
 {{-   if ( hasKey .Values.gitlab.sidekiq.minio "enabled" ) }}
 gitlab.sidekiq:
@@ -132,6 +141,24 @@ registry:
 {{- end -}}
 {{- end -}}
 {{/* END deprecate.registry.replicas */}}
+
+{{/* Deprecation behaviors for configuration of Omniauth */}}
+{{- define "gitlab.deprecate.webservice.omniauth" -}}
+{{- if hasKey .Values.gitlab.webservice "omniauth" -}}
+webservice:
+    Chart-local configuration of Omniauth has been moved to global. Please remove `webservice.omniauth.*` settings from your properties, and set `global.appConfig.omniauth.*` instead.
+{{- end -}}
+{{- end -}}
+{{/* END deprecate.webservice.omniauth */}}
+
+{{/* Deprecation behaviors for configuration of LDAP */}}
+{{- define "gitlab.deprecate.webservice.ldap" -}}
+{{- if hasKey .Values.gitlab.webservice "ldap" -}}
+webservice:
+    Chart-local configuration of LDAP has been moved to global. Please remove `webservice.ldap.*` settings from your properties, and set `global.appConfig.ldap.*` instead.
+{{- end -}}
+{{- end -}}
+{{/* END deprecate.webservice.ldap */}}
 
 {{- define "gitlab.deprecate.global.appConfig.ldap.password" -}}
 {{- if .Values.global.appConfig.ldap.servers -}}
@@ -194,6 +221,15 @@ gitlab.{{ $chart }}:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.initContainerImage */}}
+
+{{/* Deprecation behaviors for configuration of unicorn worker timeout*/}}
+{{- define "gitlab.deprecate.webservice.workerTimeout" -}}
+{{- if hasKey .Values.gitlab.webservice "workerTimeout" -}}
+webservice:
+    Chart-local configuration of Unicorn's worker timeout has been moved to global. Please remove `webservice.workerTimeout` setting from your properties, and set `global.appConfig.webservice.workerTimeout` instead.
+{{- end -}}
+{{- end -}}
+{{/* END deprecate.webservice.workerTimeout */}}
 
 {{/* Deprecation behavious for configuration of initContainer images of external charts */}}
 {{- define "external.deprecate.initContainerImage" -}}

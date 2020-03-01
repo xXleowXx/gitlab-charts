@@ -89,7 +89,7 @@ cron_jobs:
        (iv)  $result = 57
        (v)   $result = 58 (because there was a remainder, result got incremented)
 */}}
-{{- $workerTimeout := index $.Values.global "rails-web" "workerTimeout" }}
+{{- $workerTimeout := $.Values.global.webservice.workerTimeout }}
 {{- $scaledResult := mul $workerTimeout 100 95 }}
 {{- $remainder := mod $scaledResult 10000 }}
 {{- $doCeil := gt $remainder 0 }}
