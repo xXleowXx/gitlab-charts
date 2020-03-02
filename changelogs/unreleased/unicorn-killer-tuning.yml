@@ -1,0 +1,5 @@
+---
+title: "Fix unicorn worker killer configuration"
+merge_request: 
+author: Matthias van de Meent
+type: fixed
