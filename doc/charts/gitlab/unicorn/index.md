@@ -176,11 +176,47 @@ you can set the body size with either of the following two parameters too:
 - `gitlab.unicorn.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
 - `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
 
-## Memory
+## Resources
+
+### Unicorn Worker Killer memory settings
 
 Memory thresholds for the [unicorn-worker-killer](https://docs.gitlab.com/ee/administration/operations/unicorn.html#unicorn-worker-killer)
-can be customized using the `memory.min` and `memory.max` chart values. While the default values are sane, you can increase (or lower)
-these values to fine-tune them for your environment or troubleshoot performance issues.
+can be customized using the `memory.min` and `memory.max` chart values. While the 
+default values are sane, you can increase (or lower) these values to fine-tune 
+them for your environment or troubleshoot performance issues.
+
+### Memory requests/limits
+
+Each pod spawns an amount of workers equal to `workerProcesses`, who each use 
+some baseline amount of memory. The default memory requests and limits are based 
+on two workers at the [measured usage](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3853)
+of 750MB /worker, and a maximum usage of about 1G /worker. Thus, if you update 
+`workerProcesses`, you should update `requests.memory` and `limits.memory` 
+(if configured) accordingly. Note though, that as gitlab and usage changes, the
+required resources will change as well.
+
+Default:
+
+```yaml
+workerProcesses: 2
+resources:
+  requests:
+    memory: 1.5G # = 2 * 750M
+# limits:
+#   memory: 2G   # = 2 * 1G
+```
+
+With 4 workers configured:
+
+```yaml
+workerProcesses: 4
+resources:
+  requests:
+    memory: 3G   # = 4 * 750M
+# limits:
+#   memory: 4G   # = 4 * 1G
+```
+
 
 ## External Services
 
