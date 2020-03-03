@@ -29,6 +29,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registryStorage" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registryHttpSecret" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registry.replicas" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.unicorn" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.unicornWorkhorse.image" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.omniauth" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.ldap" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.appConfig.ldap.password" .) -}}
@@ -142,6 +144,45 @@ registry:
 {{- end -}}
 {{/* END deprecate.registry.replicas */}}
 
+{{/* Migration from unicorn subchart to webservice */}}
+{{- define "gitlab.deprecate.unicorn" -}}
+{{- if hasKey .Values.gitlab "unicorn" -}}
+unicorn:
+    Unicorn chart was deprecated in favour of Webservice. Please remove `gitlab.unicorn.*` settings from your properties, and set `gitlab.webservice.*` instead.
+{{- end -}}
+{{- if hasKey .Values.global "unicorn" -}}
+unicorn:
+    Unicorn chart was deprecated in favour of Webservice. Please remove `global.unicorn.*` settings from your properties, and set `global.webservice.*` instead.
+{{- end -}}
+{{- if hasKey .Values.gitlab.webservice "memory" -}}
+webservice:
+    The `gitlab.webservice.memory.*` properties has been moved under the unicorn specific section. Please create a configuration with the new path: `gitlab.webservice.unicorn.memory.*`.
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.unicorn */}}
+
+{{/* Migration from `global.enterpriseImages.unicorn.workhorse` to global.enterpriseImages.workhorse` */}}
+{{- define "gitlab.deprecate.unicornWorkhorse.image" -}}
+{{- if hasKey .Values.global "enterpriseImages" -}}
+{{-   if hasKey .Values.global.enterpriseImages "unicorn" -}}
+{{-     if hasKey .Values.global.enterpriseImages.unicorn "workhorse" -}}
+workhorse:
+   The `global.enterpriseImages.unicorn.workhorse.*` properties has been moved from the unicorn specific section. Please create a configuration with the new path: `global.enterpriseImages.workhorse.*`.
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+
+{{- if hasKey .Values.global "communityImages" -}}
+{{-   if hasKey .Values.global.communityImages "unicorn" -}}
+{{-     if hasKey .Values.global.communityImages.unicorn "workhorse" -}}
+workhorse:
+   The `global.communityImages.unicorn.workhorse.*` properties has been moved from the unicorn specific section. Please create a configuration with the new path: `global.communityImages.workhorse.*`.
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.unicornWorkhorse.image */}}
+
 {{/* Deprecation behaviors for configuration of Omniauth */}}
 {{- define "gitlab.deprecate.webservice.omniauth" -}}
 {{- if hasKey .Values.gitlab.webservice "omniauth" -}}
@@ -222,15 +263,6 @@ gitlab.{{ $chart }}:
 {{- end -}}
 {{/* END gitlab.deprecate.initContainerImage */}}
 
-{{/* Deprecation behaviors for configuration of webservice worker timeout*/}}
-{{- define "gitlab.deprecate.webservice.workerTimeout" -}}
-{{- if hasKey .Values.gitlab.webservice "workerTimeout" -}}
-webservice:
-    Chart-local configuration of Unicorn's worker timeout has been moved to global. Please remove `webservice.workerTimeout` setting from your properties, and set `global.appConfig.webservice.workerTimeout` instead.
-{{- end -}}
-{{- end -}}
-{{/* END deprecate.webservice.workerTimeout */}}
-
 {{/* Deprecation behavious for configuration of initContainer images of external charts */}}
 {{- define "external.deprecate.initContainerImage" -}}
 {{- range $chart:= list "minio" "registry" "redis" "redis-ha" }}
@@ -260,6 +292,15 @@ webservice:
 {{- end -}}
 {{- end -}}
 {{/* END external.deprecate.initContainerPullPolicy*/}}
+
+{{/* Deprecation behaviors for configuration of webservice worker timeout*/}}
+{{- define "gitlab.deprecate.webservice.workerTimeout" -}}
+{{- if hasKey .Values.gitlab.webservice "workerTimeout" -}}
+webservice:
+    Chart-local configuration of Unicorn's worker timeout has been moved to global. Please remove `webservice.workerTimeout` setting from your properties, and set `global.webservice.workerTimeout` instead.
+{{- end -}}
+{{- end -}}
+{{/* END deprecate.webservice.workerTimeout */}}
 
 {{/* Deprecation behaviors for redis-ha.enabled */}}
 {{- define "gitlab.deprecate.redis-ha.enabled" -}}
