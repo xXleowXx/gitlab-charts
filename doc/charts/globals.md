@@ -129,7 +129,7 @@ be separately updated to versions compatible with the GitLab version.
 ## Configure PostgreSQL settings
 
 The GitLab global PostgreSQL settings are located under the `global.psql` key. For
-more details, see the documentation within the [Unicorn chart](gitlab/webservice/index.md#postgresql).
+more details, see the documentation within the [webservice chart](gitlab/webservice/index.md#postgresql).
 
 ```YAML
 global:
