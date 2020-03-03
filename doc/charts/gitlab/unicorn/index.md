@@ -217,7 +217,6 @@ resources:
 #   memory: 4G   # = 4 * 1G
 ```
 
-
 ## External Services
 
 ### Redis
