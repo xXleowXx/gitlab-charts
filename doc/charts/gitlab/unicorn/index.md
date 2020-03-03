@@ -51,8 +51,8 @@ to the `helm install` command using the `--set` flags.
 | `image.tag`                      |                       | Unicorn image tag                              |
 | `init.image.repository`          |                       | initContainer image                            |
 | `init.image.tag`                 |                       | initContainer image tag                        |
-| `memory.min`                     | `400`                 | The minimum memory threshold (in megabytes) for the Unicorn worker killer |
-| `memory.max`                     | `650`                 | The maximum memory threshold (in megabytes) for the Unicorn worker killer |
+| `memory.min`                     | `1024`                | The minimum memory threshold (in megabytes) for the Unicorn worker killer |
+| `memory.max`                     | `1280`                | The maximum memory threshold (in megabytes) for the Unicorn worker killer |
 | `metrics.enabled`                | `true`                | Toggle Prometheus metrics exporter             |
 | `minio.bucket`                   | `git-lfs`             | Name of storage bucket, when using MinIO       |
 | `minio.port`                     | `9000`                | Port for MinIO service                         |
@@ -70,8 +70,8 @@ to the `helm install` command using the `--set` flags.
 | `registry.enabled`               | `true`                | Add/Remove registry link in all projects menu  |
 | `registry.tokenIssuer`           | `gitlab-issuer`       | Registry token issuer                          |
 | `replicaCount`                   | `1`                   | Unicorn number of replicas                     |
-| `resources.requests.cpu`         | `200m`                | Unicorn minimum cpu                            |
-| `resources.requests.memory`      | `1.4G`                | Unicorn minimum memory                         |
+| `resources.requests.cpu`         | `300m`                | Unicorn minimum cpu                            |
+| `resources.requests.memory`      | `1.5G`                | Unicorn minimum memory                         |
 | `service.externalPort`           | `8080`                | Unicorn exposed port                           |
 | `service.internalPort`           | `8080`                | Unicorn internal port                          |
 | `service.type`                   | `ClusterIP`           | Unicorn service type                           |
