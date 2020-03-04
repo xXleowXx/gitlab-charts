@@ -192,7 +192,7 @@ some baseline amount of memory. The default memory requests and limits are based
 on two workers at the [measured usage](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3853)
 of 750MB /worker, and a maximum usage of about 1G /worker. Thus, if you update
 `workerProcesses`, you should update `requests.memory` and `limits.memory`
-(if configured) accordingly. Note though, that as gitlab and usage changes, the
+(if configured) accordingly. Note though, that as GitLab and usage changes, the
 required resources will change as well.
 
 Default:
