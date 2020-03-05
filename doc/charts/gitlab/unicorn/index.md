@@ -185,6 +185,8 @@ can be customized using the `memory.min` and `memory.max` chart values. While th
 default values are sane, you can increase (or lower) these values to fine-tune
 them for your environment or troubleshoot performance issues.
 
+NOTE: *Note:* These settings are effective on a _per process basis_, not for an entire Pod.
+
 ### Memory requests/limits
 
 Each pod spawns an amount of workers equal to `workerProcesses`, who each use
