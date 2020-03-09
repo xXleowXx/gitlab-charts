@@ -18,6 +18,7 @@ fi
 source "${SCRIPT_PATH}/common.sh"
 
 # Set default values
+# Documentation: doc/installation/cloud/eks.md
 cluster_name=${CLUSTER_NAME-gitlab-cluster}
 nodes=${NUM_NODES-2}
 kubernetes_version=${CLUSTER_VERSION-1.14}
