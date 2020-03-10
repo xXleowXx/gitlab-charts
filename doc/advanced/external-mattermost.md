@@ -95,7 +95,7 @@ indicates the values that should be changed. Note that we assume the GitLab char
 - `<ingress-provider>`: The ingress provider. In a basic GitLab deployment, this is `nginx`.
 - `<certmanager-issuer>`: The cert manager issuer. In a basic GitLab deployment, this is `gitlab-issuer`.
 - `<gitlab-ap-secret>`: The Application secret, which you created during the GitLab SSO integration.
-- `<gitlab-app-id>``: The Application ID, which you created you created during the GitLab SSO integration.
+- `<gitlab-app-id>`: The Application ID, which you created you created during the GitLab SSO integration.
 - `<your-gitlab-domain>`: The GitLab domain name, e.g., `gitlab.example.com`.
 - `<gitlab-postgres.username>`: The GitLab PostgreSQL username. Default is `gitlab`.
 - `<gitlab-postgres.passwd-secret>`: Secret that holds your PostgreSQL password. Default is `gitlab-postgresql-password`.
