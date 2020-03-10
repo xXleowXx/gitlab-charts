@@ -31,7 +31,7 @@ Wait for the pods to run. Then, using the ingress host you specified in the conf
 
 The next part of the process is setting up the GitLab SSO integration. 
 
-To create the OAuth application to allow Mattermost to use GitLab as the authentication provider, please follow the instructions `here <https://docs.mattermost.com/deployment/sso-gitlab.html>`__. 
+To create the OAuth application to allow Mattermost to use GitLab as the authentication provider, please follow the instructions [here](https://docs.mattermost.com/deployment/sso-gitlab.html). 
 
 Please take note of the `Application ID`, `Application Secret Key`, `User API Endpoint`, `Auth Endpoint`, and `Token Endpoint` settings, as these values will be used later.
 
