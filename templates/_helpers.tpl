@@ -183,10 +183,8 @@ If the postgresql port is provided in subchart values or global values, it will 
 to 5432 default
 */}}
 {{- define "gitlab.psql.port" -}}
-{{-   if .Values.psql }}
-{{-     if .Values.psql.port}}
+{{-   if hasKey .Values.psql "port" -}}
 {{- $dummy := set . "psqlPort" .Values.psql.port }}
-{{-     end }}
 {{-   end }}
 {{- coalesce .psqlPort .Values.global.psql.port 5432 -}}
 {{- end -}}
