@@ -45,6 +45,7 @@ to the `helm install` command using the `--set` flags.
 | `service.name`                   | `gitlab-exporter`     | GitLab Exporter service name                   |
 | `service.type`                   | `ClusterIP`           | GitLab Exporter service type                   |
 | `tolerations`                    | `[]`                  | Toleration labels for pod assignment           |
+| `psql.port`                      |                       | Override PostgreSQL port in case of use the global chart |
 
 ## Chart configuration examples
 

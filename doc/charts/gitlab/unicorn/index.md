@@ -62,6 +62,7 @@ to the `helm install` command using the `--set` flags.
 | `monitoring.exporter.port`            | `8083`           | Port number to use for the metrics exporter    |
 | `psql.password.key`              | `psql-password`       | Key to psql password in psql secret            |
 | `psql.password.secret`           | `gitlab-postgres`     | psql secret name                               |
+| `psql.port`                      |                       | Override PostgreSQL port in case of use the global chart |
 | `rack_attack.git_basic_auth`     | `{}`                  | See [GitLab documentation](https://docs.gitlab.com/ee/security/rack_attack.html) for details |
 | `redis.serviceName`              | `redis`               | Redis service name                             |
 | `registry.api.port`              | `5000`                | Registry port                                  |
