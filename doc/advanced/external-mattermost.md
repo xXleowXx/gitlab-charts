@@ -26,6 +26,10 @@ Once you have installed the Mattermost Team Edition Helm Chart, you can deploy i
 
 Wait for the pods to run. Then, using the ingress host you specified in the configuration, access your Mattermost server.  
 
+For additional configuration information, refer to [this guide](https://github.com/mattermost/mattermost-helm/tree/master/charts/mattermost-team-edition#configuration). If
+you experience any issues with this, please view the [Mattermost Helm Chart issue repository](https://github.com/mattermost/mattermost-helm/issues) or 
+the [Mattermost Forum](https://forum.mattermost.org/search?q=helm).
+
 ## Deploy GitLab Helm Chart
 
 To deploy the GitLab Helm Chart, follow the instructions described [here](https://docs.gitlab.com/ee/install/kubernetes/gitlab_chart.html).
@@ -48,16 +52,11 @@ Here's a light way to install it:
 
 Once you've deployed the GitLab instance, follow the instructions for the [initial login](https://docs.gitlab.com/charts/installation/deployment.html#initial-login). 
 
-If you are following a process other than the one provided and experience authentication and/or deployment issues, 
-let us know in the Mattermost [Troubleshooting forum](http://www.mattermost.org/troubleshoot).  
-
 ## Create an OAuth application with GitLab
 
 The next part of the process is setting up the GitLab SSO integration. 
 
 To create the OAuth application to allow Mattermost to use GitLab as the authentication provider, please follow the instructions [here](https://docs.mattermost.com/deployment/sso-gitlab.html). 
-
-Please take note of the `Application ID`, `Application Secret Key`, `User API Endpoint`, `Auth Endpoint`, and `Token Endpoint` settings, as these values will be used later.
 
 **Note:**
 
@@ -65,3 +64,7 @@ Only the default GitLab SSO is officially supported. “Double SSO”, where Git
 GitLab SSO with AD, LDAP, SAML, or MFA add-ons in some cases, but because of the special logic required they’re not officially 
 supported and are known not to work on some experiences.
 
+## Troubleshooting
+
+If you are following a process other than the one provided and experience authentication and/or deployment issues, 
+let us know in the Mattermost [Troubleshooting forum](http://www.mattermost.org/troubleshoot). 
