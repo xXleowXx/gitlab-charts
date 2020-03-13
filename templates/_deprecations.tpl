@@ -44,6 +44,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.redis.enabled" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.unicorn.service.name" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.unicorn.service.configuration" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.unicorn.memory" .) -}}
 {{- /* prepare output */}}
 {{- $deprecated := without $deprecated "" -}}
 {{- $message := join "\n" $deprecated -}}
@@ -300,3 +301,11 @@ gitlab.{{ $chart }}:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.gitlab.unicorn.service.configuration */}}
+
+{{- define "gitlab.deprecate.gitlab.unicorn.memory" -}}
+{{-   if hasKey .Values.gitlab.unicorn "memory" -}}
+    unicorn:
+      The configuration of 'gitlab.unicorn.memory' has been moved to 'gitlab.unicorn.unicorn.memory' to separate unicorn specific option in favour of adding puma support to unicorn subchart.
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.gitlab.unicorn.memory */}}
