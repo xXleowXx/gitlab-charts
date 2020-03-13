@@ -28,7 +28,7 @@ helm upgrade --install mattermost -f values.yaml mattermost/mattermost-team-edit
 Wait for the pods to run. Then, using the ingress host you specified in the configuration, access your Mattermost server.  
 
 For additional configuration information, refer to the [Mattermost Helm configuration guide](https://github.com/mattermost/mattermost-helm/tree/master/charts/mattermost-team-edition#configuration).
-you experience any issues with this, please view the [Mattermost Helm Chart issue repository](https://github.com/mattermost/mattermost-helm/issues) or 
+you experience any issues with this, please view the [Mattermost Helm Chart issue repository](https://github.com/mattermost/mattermost-helm/issues) or
 the [Mattermost Forum](https://forum.mattermost.org/search?q=helm).
 
 ## Deploy GitLab Helm Chart
