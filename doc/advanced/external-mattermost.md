@@ -60,7 +60,7 @@ To do so, you need to [create the OAuth application](https://docs.mattermost.com
 
 NOTE: **Note:**
 Only the default GitLab SSO is officially supported. “Double SSO”, where GitLab SSO is chained to other SSO solutions, is not supported. It may be possible to connect 
-GitLab SSO with AD, LDAP, SAML, or MFA add-ons in some cases, but because of the special logic required they’re not officially 
+GitLab SSO with AD, LDAP, SAML, or MFA add-ons in some cases, but because of the special logic required they’re not officially
 supported and are known not to work on some experiences.
 
 ## Troubleshooting
