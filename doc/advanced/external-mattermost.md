@@ -51,7 +51,7 @@ helm upgrade --install gitlab gitlab/gitlab \
 - `<external-ip>`: the external IP pointing to your Kubernetes cluster.
 - `<email>`: email to register in Let's Encrypt to retrieve TLS certificates.
 
-Once you've deployed the GitLab instance, follow the instructions for the [initial login](../installation/deployment.md#initial-login). 
+Once you've deployed the GitLab instance, follow the instructions for the [initial login](../installation/deployment.md#initial-login).
 
 ## Create an OAuth application with GitLab
 
