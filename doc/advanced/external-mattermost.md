@@ -12,7 +12,8 @@ refer to the [Mattermost Helm configuration guide](https://github.com/mattermost
   - [Helm v2.](https://helm.sh/docs/intro/install/)
   - [Tiller](https://rancher.com/docs/rancher/v2.x/en/installation/ha/helm-init/>) (the Helm server-side component) installed on the cluster.
 
-**Note:** For the Team Edition you can have just one replica running.
+NOTE: **Note:**
+For the Team Edition you can have just one replica running.
 
 ## Deploy the Mattermost Team Edition Helm Chart
 
