@@ -55,8 +55,7 @@ Once you've deployed the GitLab instance, follow the instructions for the [initi
 ## Create an OAuth application with GitLab
 
 The next part of the process is setting up the GitLab SSO integration. 
-
-To create the OAuth application to allow Mattermost to use GitLab as the authentication provider, please follow the instructions [here](https://docs.mattermost.com/deployment/sso-gitlab.html). 
+To do so, you need to [create the OAuth application](https://docs.mattermost.com/deployment/sso-gitlab.html) to allow Mattermost to use GitLab as the authentication provider.
 
 **Note:**
 
