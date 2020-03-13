@@ -106,8 +106,8 @@ data:
       # server.listen(addr, :tries => -1, :delay => 5, :tcp_nopush => true)
     end
 
-    ENV['GITLAB_UNICORN_MEMORY_MIN'] = ({{ int .Values.unicorn.memory.min }} * 1 << 20).to_s
-    ENV['GITLAB_UNICORN_MEMORY_MAX'] = ({{ int .Values.unicorn.memory.max }} * 1 << 20).to_s
+    ENV['GITLAB_UNICORN_MEMORY_MIN'] = ({{ int .Values.memory.min }} * 1 << 20).to_s
+    ENV['GITLAB_UNICORN_MEMORY_MAX'] = ({{ int .Values.memory.max }} * 1 << 20).to_s
   puma.rb: |
     # This file should be equivalent to `puma.rb` from:
     # * gitlab-foss: https://gitlab.com/gitlab-org/gitlab-foss/blob/master/config/puma.rb.example

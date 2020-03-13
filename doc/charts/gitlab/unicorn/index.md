@@ -51,6 +51,8 @@ to the `helm install` command using the `--set` flags.
 | `image.tag`                      |                       | Unicorn image tag                              |
 | `init.image.repository`          |                       | initContainer image                            |
 | `init.image.tag`                 |                       | initContainer image tag                        |
+| `memory.min`                     | `1024`                | The minimum memory threshold (in megabytes) for the Unicorn worker killer |
+| `memory.max`                     | `1280`                | The maximum memory threshold (in megabytes) for the Unicorn worker killer |
 | `metrics.enabled`                | `true`                | Toggle Prometheus metrics exporter             |
 | `minio.bucket`                   | `git-lfs`             | Name of storage bucket, when using MinIO       |
 | `minio.port`                     | `9000`                | Port for MinIO service                         |
@@ -84,8 +86,6 @@ to the `helm install` command using the `--set` flags.
 | `shutdown.blackoutSeconds`       | `10`                  | Number of seconds to keep Unicorn running after receiving shutdown |
 | `tolerations`                    | `[]`                  | Toleration labels for pod assignment           |
 | `trusted_proxies`                | `[]`                  | See [GitLab documentation](https://docs.gitlab.com/ee/install/installation.html#adding-your-trusted-proxies) for details |
-| `unicorn.memory.min`             | `1024`                | The minimum memory threshold (in megabytes) for the Unicorn worker killer |
-| `unicorn.memory.max`             | `1280`                | The maximum memory threshold (in megabytes) for the Unicorn worker killer |
 | `workerProcesses`                | `2`                   | Unicorn number of workers                      |
 | `workhorse.livenessProbe.initialDelaySeconds`  | 20      | Delay before liveness probe is initiated       |
 | `workhorse.livenessProbe.periodSeconds`        | 60      | How often to perform the liveness probe        |
@@ -373,14 +373,6 @@ shell:
 Current version of chart supports both Unicorn and Puma web servers.
 Unicorn is a default option now days.
 You can switch web server to Puma by setting `webServer: Puma`.
-
-Puma and Unicorn have unique configuration options.
-
-Unicorn unique options:
-| Name               | Type    | Default | Description |
-|:------------------ |:-------:|:------- |:----------- |
-| `unicorn.memory.min`             | `1024`                | The minimum memory threshold (in megabytes) for the Unicorn worker killer |
-| `unicorn.memory.max`             | `1280`                | The maximum memory threshold (in megabytes) for the Unicorn worker killer |
 
 Puma unique options:
 | Name               | Type    | Default | Description |
