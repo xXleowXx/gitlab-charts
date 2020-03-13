@@ -38,13 +38,13 @@ To deploy the GitLab Helm Chart, follow the instructions described [here](https:
 Here's a light way to install it:
 
 ```shell
-  $ helm repo add gitlab https://charts.gitlab.io/
-  $ helm repo update
-  $ helm upgrade --install gitlab gitlab/gitlab \
-    --timeout 600 \
-    --set global.hosts.domain=<your-domain> \
-    --set global.hosts.externalIP=<external-ip> \
-    --set certmanager-issuer.email=<email>
+helm repo add gitlab https://charts.gitlab.io/
+helm repo update
+helm upgrade --install gitlab gitlab/gitlab \
+  --timeout 600 \
+  --set global.hosts.domain=<your-domain> \
+  --set global.hosts.externalIP=<external-ip> \
+  --set certmanager-issuer.email=<email>
 ```
 
 - `<your-domain>`: your desired domain, eg. ``gitlab.example.com``.
