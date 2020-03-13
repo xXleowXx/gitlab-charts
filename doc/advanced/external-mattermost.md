@@ -18,7 +18,7 @@ refer to [this guide](https://github.com/mattermost/mattermost-helm/tree/master/
 
 Once you have installed the Mattermost Team Edition Helm Chart, you can deploy it using the following command:
 
-```bash
+```shell
   $ helm repo add mattermost https://helm.mattermost.com
   $ helm repo update
   $ helm upgrade --install mattermost -f values.yaml mattermost/mattermost-team-edition
