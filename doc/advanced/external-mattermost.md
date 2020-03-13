@@ -36,7 +36,7 @@ To deploy the GitLab Helm Chart, follow the instructions described [here](https:
 
 Here's a light way to install it:
 
-```bash
+```shell
   $ helm repo add gitlab https://charts.gitlab.io/
   $ helm repo update
   $ helm upgrade --install gitlab gitlab/gitlab \
