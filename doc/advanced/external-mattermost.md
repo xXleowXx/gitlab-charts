@@ -20,9 +20,9 @@ For the Team Edition you can have just one replica running.
 Once you have installed the Mattermost Team Edition Helm Chart, you can deploy it using the following command:
 
 ```shell
-  $ helm repo add mattermost https://helm.mattermost.com
-  $ helm repo update
-  $ helm upgrade --install mattermost -f values.yaml mattermost/mattermost-team-edition
+helm repo add mattermost https://helm.mattermost.com
+helm repo update
+helm upgrade --install mattermost -f values.yaml mattermost/mattermost-team-edition
 ```
 
 Wait for the pods to run. Then, using the ingress host you specified in the configuration, access your Mattermost server.  
