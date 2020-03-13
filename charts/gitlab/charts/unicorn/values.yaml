@@ -1,10 +1,10 @@
-# Default values for webservice.
+# Default values for unicorn.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee
+  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee
   # tag: latest
 init:
   image: {}
@@ -153,7 +153,7 @@ global:
   minio:
     enabled:
     credentials: {}
-  webservice: {}
+  unicorn: {}
     # workerTimeout: 60
   appConfig:
     incomingEmail:
