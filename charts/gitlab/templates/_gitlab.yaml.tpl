@@ -64,7 +64,7 @@ cron_jobs:
 {{- define "gitlab.appConfig.maxRequestDurationSeconds" -}}
 {{/*
     Unless explicitly provided, we need to set maxRequestDurationSeconds to 95% of the
-    workerTimeout value specified for unicorn (and use its ceiling value).
+    workerTimeout value specified for webservice (and use its ceiling value).
     However, sprig's `mul` function does not work with floats, so a
     multiplication with `0.95` is not possible. To workaround this, we do the
     following
@@ -74,13 +74,13 @@ cron_jobs:
     3. If a reminder was present during the division (this is checked using
        modular division), we increment the result by 1. This does the function
        of `ceil` in Ruby.
-    4. For example, if unicorn's timeout is the default value of 60, the result
+    4. For example, if webservice's timeout is the default value of 60, the result
        we need is 57. The various values in this workaround will be
        (i)   $workerTimeout = 60
        (ii)  $scaledResult = 570000
        (iii) $reminder = 0
        (iv)  $result = 57
-    5. Another example, if unicorn's timeout is 61, the result we need is
+    5. Another example, if webservice's timeout is 61, the result we need is
        58 (ceiling of 0.95 * 61 = 57.95). The various values in this workaround
        will be
        (i)   $workerTimeout = 61

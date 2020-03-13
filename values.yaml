@@ -412,7 +412,7 @@ global:
     # secret:
     # key:
 
-  ## doc/charts/globals.md#configure-unicorn
+  ## doc/charts/globals.md#configure-webservice
   webservice:
     workerTimeout: 60
 
