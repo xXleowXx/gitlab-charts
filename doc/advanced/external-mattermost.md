@@ -8,9 +8,9 @@ refer to the [Mattermost Helm configuration guide](https://github.com/mattermost
 
 ## Prerequisites
 
-  - A running Kubernetes cluster.
-  - [Helm v2.](https://helm.sh/docs/intro/install/)
-  - [Tiller](https://rancher.com/docs/rancher/v2.x/en/installation/ha/helm-init/>) (the Helm server-side component) installed on the cluster.
+- A running Kubernetes cluster.
+- [Helm v2.](https://helm.sh/docs/intro/install/)
+- [Tiller](https://rancher.com/docs/rancher/v2.x/en/installation/ha/helm-init/>) (the Helm server-side component) installed on the cluster.
 
 NOTE: **Note:**
 For the Team Edition you can have just one replica running.
