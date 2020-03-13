@@ -4,7 +4,7 @@ This document describes how to install Mattermost Team Edition Helm Chart in pro
 
 As the Mattermost Helm Chart is installed in a separate namespace, it is recommended that 
 `cert-manager` and `nginx-ingress` be configured to manage cluster-wide ingress and certificate resources. For additional configuration information, 
-refer to [this guide](https://github.com/mattermost/mattermost-helm/tree/master/charts/mattermost-team-edition#configuration).
+refer to the [Mattermost Helm configuration guide](https://github.com/mattermost/mattermost-helm/tree/master/charts/mattermost-team-edition#configuration).
 
 ## Prerequisites
 
