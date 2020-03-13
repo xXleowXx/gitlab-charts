@@ -2,6 +2,31 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 3.1.4 (2020-03-11)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.8.6.
+
+
+## 3.1.3 (2020-03-09)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.8.5.
+
+
+## 3.1.2
+
+### Changed (1 change)
+
+- Update gitlab-org/charts/gitlab-runner from 0.13.1 to 0.14.0. !1187
+
+### Other (1 change)
+
+- Update GitLab Version to 12.8.2.
+
+
 ## 3.1.1
 
 ### Other (1 change)
@@ -45,6 +70,13 @@ entry.
 - Include GitLab Exporter & GitLab Grafana to sub-chart lists. !1161
 - Bump Container Registry to v2.8.1-gitlab. !1173
 - Update GitLab Version to 12.8.0.
+
+
+## 3.0.5
+
+### Other (1 change)
+
+- Update GitLab Version to 12.7.7.
 
 
 ## 3.0.4
@@ -119,6 +151,13 @@ entry.
 
 - Use mail_room gem version from Gemfile.lock as appVersion in the chart. !1088
 - Update GitLab Version to 12.7.0.
+
+
+## 2.6.9
+
+### Other (1 change)
+
+- Update GitLab Version to 12.6.8.
 
 
 ## 2.6.8
