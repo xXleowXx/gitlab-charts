@@ -3,7 +3,7 @@
 This document describes how to install Mattermost Team Edition Helm Chart in proximity with an existing GitLab Helm Chart deployment. 
 
 As the Mattermost Helm Chart is installed in a separate namespace, it is recommended that 
-`cert-manager` and `nginx-ingress` be configured to manage cluster-wide ingress and certificate resources. For additional configuration information, 
+`cert-manager` and `nginx-ingress` be configured to manage cluster-wide Ingress and certificate resources. For additional configuration information,
 refer to the [Mattermost Helm configuration guide](https://github.com/mattermost/mattermost-helm/tree/master/charts/mattermost-team-edition#configuration).
 
 ## Prerequisites
