@@ -65,5 +65,5 @@ supported and are known not to work on some experiences.
 
 ## Troubleshooting
 
-If you are following a process other than the one provided and experience authentication and/or deployment issues, 
+If you are following a process other than the one provided and experience authentication and/or deployment issues,
 let us know in the [Mattermost troubleshooting forum](http://www.mattermost.org/troubleshoot).
