@@ -25,7 +25,7 @@ helm repo update
 helm upgrade --install mattermost -f values.yaml mattermost/mattermost-team-edition
 ```
 
-Wait for the pods to run. Then, using the ingress host you specified in the configuration, access your Mattermost server.  
+Wait for the pods to run. Then, using the Ingress host you specified in the configuration, access your Mattermost server.  
 
 For additional configuration information, refer to the [Mattermost Helm configuration guide](https://github.com/mattermost/mattermost-helm/tree/master/charts/mattermost-team-edition#configuration).
 you experience any issues with this, please view the [Mattermost Helm Chart issue repository](https://github.com/mattermost/mattermost-helm/issues) or
