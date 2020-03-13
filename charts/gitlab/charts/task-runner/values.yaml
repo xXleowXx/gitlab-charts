@@ -5,14 +5,19 @@ image:
   # tag: latest
 
 init:
-  image: busybox
-  tag: latest
+  image: {}
+    # repository:
+    # tag:
   resources:
     requests:
       cpu: 50m
 
+# Tolerations for pod scheduling
+tolerations: []
+
 enabled: true
 annotations: {}
+
 global:
   # imagePullPolicy: IfNotPresent
   hosts:
@@ -27,6 +32,8 @@ global:
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
+    # pool: 10
+    # preparedStatements: false
     # ssl:
     #   secret: gitlab-ssl-secret
     #   clientKey: client-key.pem
@@ -43,8 +50,19 @@ global:
   minio:
     enabled:
     credentials: {}
+  unicorn: {}
   appConfig:
     lfs:
+      enabled: true
+      proxy_download: true
+      bucket:
+      connection: {}
+    artifacts:
+      enabled: true
+      proxy_download: true
+      bucket:
+      connection: {}
+    uploads:
       enabled: true
       proxy_download: true
       bucket:
@@ -80,6 +98,7 @@ global:
       autoLinkLdapUser: false
       autoLinkSamlUser: false
       externalProviders: []
+      allowBypassTwoFactor: []
       providers: []
       # - secret: gitlab-google-oauth2
       #   key: provider
@@ -88,8 +107,43 @@ global:
       bucket:
       connection: {}
 backups:
+  cron:
+    enabled: false
+    concurrencyPolicy: Replace
+    failedJobsHistoryLimit: 1
+    schedule: "0 1 * * *"
+    successfulJobsHistoryLimit: 3
+    extraArgs: ""
+    resources:
+      # limits:
+      #  cpu: 1
+      #  memory: 2G
+      requests:
+        cpu: 50m
+        memory: 350M
+    persistence:
+      enabled: false
+      ## task-runner temporarily Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      # storageClass: "-"
+      accessMode: ReadWriteOnce
+      size: 10Gi
+      subPath: ""
+      ## if volumeName is set, use this existing PersistentVolume
+      # volumeName:
+      matchLabels: {}
+      matchExpressions: []
   objectStorage:
+    backend: s3
     config: {}
+    #   secret: my-backup-secret
+    #   key: config
+    #   gcpProject: my-gcp-project-id
 extra: {}
 
 rack_attack:
@@ -133,3 +187,36 @@ resources:
   requests:
     cpu: 50m
     memory: 350M
+
+## Enable persistence using Persistent Volume Claims
+## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  enabled: false
+
+  ## task-runner temporarily Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+  ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
+  ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).
+  ##
+  subPath: ""
+
+  ## if volumeName is set, use this existing PersistentVolume
+  # volumeName:
+
+  ## Only bind to a volume with the following exactly matched labels with values.
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
+  matchLabels: {}
+
+  ## Only bind to a volume with the following exppression matched labels.
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
+  matchExpressions: []

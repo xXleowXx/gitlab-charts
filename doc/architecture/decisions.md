@@ -13,13 +13,13 @@ designed to detect and warn the user that their configuration will not work.
 
 This replicates the behavior of deprecations, but is specific to ensuring functional configuration.
 
-Introduced in [!757 checkConfig: add methods to test for known errors](https://gitlab.com/charts/gitlab/merge_requests/757)
+Introduced in [!757 checkConfig: add methods to test for known errors](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/757)
 
 ## Breaking changes via deprecation
 
 During the development of these charts, we occasionally make improvements that require
 alterations to the properties of existing deployments. Two examples were the centralization
-of configuring the use of Minio, and the migration of external object storage configuration
+of configuring the use of MinIO, and the migration of external object storage configuration
 from properties to secrets (in observance of our preference).
 
 As a means of preventing a user from accidentally deploying an updated version of these
@@ -28,13 +28,13 @@ have chosen to implement [deprecation](../development/index.md#handling-configur
 properties have have been relocated, altered, replaced, or removed entirely, then inform
 the user of what changes need to be made to the configuration. This may include informing
 the user to see documentation on how to replace a property with a secret. These notifications
-will cause the helm `install` or `upgrade` commands to stop with a parse error, and output a complete list of items that need to be addressed. We have taken care to ensure a user will not be placed into a loop of error, fix, repeat.
+will cause the Helm `install` or `upgrade` commands to stop with a parse error, and output a complete list of items that need to be addressed. We have taken care to ensure a user will not be placed into a loop of error, fix, repeat.
 
 All deprecations must be addressed in order for a successful deployment to occur. We believe
 the user would prefer to be informed of a breaking change over experiencing unexpected
 behavior or complete failure that requires debugging.
 
-Introduced in [!396 Deprecations: implement buffered list of deprecations](https://gitlab.com/charts/gitlab/merge_requests/396)
+Introduced in [!396 Deprecations: implement buffered list of deprecations](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/396)
 
 ## Preference of Secrets in initContainer over Environment
 
@@ -60,11 +60,11 @@ via [initContainers][].
 
 Related issues:
 
-- [#90](https://gitlab.com/charts/gitlab/issues/90)
-- [#114](https://gitlab.com/charts/gitlab/issues/114)
+- [#90](https://gitlab.com/gitlab-org/charts/gitlab/issues/90)
+- [#114](https://gitlab.com/gitlab-org/charts/gitlab/issues/114)
 
 [dind]: https://hub.docker.com/r/gitlab/dind/
-[devops-post]: https://about.gitlab.com/2017/10/11/from-dev-to-devops/
+[devops-post]: https://about.gitlab.com/blog/2017/10/11/from-dev-to-devops/
 [initContainers]: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 
 ## Sub-charts are deployed from global chart
@@ -77,7 +77,7 @@ This decision simplifies both the use and maintenance of the repository as a who
 
 Related issue:
 
-- [#352](https://gitlab.com/charts/gitlab/issues/352)
+- [#352](https://gitlab.com/gitlab-org/charts/gitlab/issues/352)
 
 ## Template partials for `gitlab/*` should be global whenever possible
 
@@ -89,68 +89,52 @@ the maintenance impact of these forks.
 The benefits of this are straight-forward:
 
 - Increased DRY behavior, leading to easier maintenance. There should be no reason
-to have duplicates of the same function across multiple sub-charts when a single
-entry will suffice.
+  to have duplicates of the same function across multiple sub-charts when a single
+  entry will suffice.
 - Reduction of template naming conflicts. All [partials throughout a chart are compiled together][helm-dev-doc],
-and thus we can treat them like the global behavior they are.
-
+  and thus we can treat them like the global behavior they are.
 
 Related issue:
 
-- [#352](https://gitlab.com/charts/gitlab/issues/352)
+- [#352](https://gitlab.com/gitlab-org/charts/gitlab/issues/352)
 
-[helm-dev-doc]: https://docs.helm.sh/chart_template_guide/#declaring-and-using-templates-with-define-and-template
+[helm-dev-doc]: https://helm.sh/docs/chart_template_guide/named_templates/#declaring-and-using-templates-with-define-and-template
 
 ## Forked charts
 
 The following charts have been forked or re-created in this repository following
 our [guidelines for forking](../development/index.md#guidelines-for-forking)
 
-### redis
+### Redis
 
-Our [redis chart][] was altered from upstream [redis][].
+With the `3.0` release of the GitLab Helm chart, we no longer fork the [upstream Redis chart](https://github.com/helm/charts/tree/master/stable/redis),
+and instead include it as a dependency.
 
-- Populate the password directly into the `redis.conf` instead of via Environment
-- Make use of pre-existing Kubernetes secrets instead of creating new ones from properties.
+### Redis HA
 
-[redis chart]: ../charts/redis/index.md
-[redis]: https://github.com/kubernetes/charts/tree/master/stable/redis
+Redis-HA was a chart we included in our releases prior to `3.0`. It has now been removed,
+and replaced with [upstream Redis chart](https://github.com/helm/charts/tree/master/stable/redis)
+which has added optional HA support.
 
-### redis-ha
+### MinIO
 
-Our [redis-ha chart][] was altered from upstream [redis-ha][].
-
-[redis-ha chart]: ../charts/redis-ha/index.md
-[redis-ha]: https://github.com/kubernetes/charts/tree/master/stable/redis-ha
-
-### minio
-
-Our [minio chart][] was altered from upstream [minio][].
+Our [MinIO chart](../charts/minio/index.md) was altered from the upstream [MinIO](https://github.com/helm/charts/tree/master/stable/minio).
 
 - Make use of pre-existing Kubernetes secrets instead of creating new ones from properties.
 - Remove providing the sensitive keys via Environment.
 - Automate the creation of multiple buckets via `defaultBuckets` in place of
-`defaultBucket.*` properties.
-
-[minio chart]: ../charts/minio/index.md
-[minio]: https://github.com/kubernetes/charts/tree/master/stable/minio
+  `defaultBucket.*` properties.
 
 ### registry
 
-Our [registry chart][] was altered from upstream [docker-registry][].
+Our [registry chart](../charts/registry/index.md) was altered from the upstream [docker-registry](https://github.com/helm/charts/tree/master/stable/docker-registry).
 
-- Enable the use of in-chart Minio services automatically.
+- Enable the use of in-chart MinIO services automatically.
 - Automatically hook authentication to the GitLab services.
 
-[registry chart]: ../charts/registry/index.md
-[docker-registry]: https://github.com/kubernetes/charts/tree/master/stable/docker-registry
+### NGINX Ingress
 
-### nginx-ingress
-
-Our [nginx-ingress chart][] was altered from upstream [nginx-ingress][].
+Our [NGINX Ingress chart](../charts/nginx/index.md) was altered from the upstream [NGINX Ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress).
 
 - Add feature to allow for the tcp configmap to be external to the chart
-- Add feature to allow ingress class to be templated based on release name
-
-[nginx-ingress chart]: ../charts/nginx/index.md
-[nginx-ingress]: https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress
+- Add feature to allow Ingress class to be templated based on release name

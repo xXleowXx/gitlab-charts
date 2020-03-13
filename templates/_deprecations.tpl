@@ -28,11 +28,22 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.minio" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registryStorage" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registryHttpSecret" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.registry.replicas" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.unicorn.omniauth" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.unicorn.ldap" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.appConfig.ldap.password" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.sidekiq.cronJobs" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.local.kubectl" .) -}}
 
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.gitaly.enabled" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.initContainerImage" .) -}}
+{{- $deprecated := append $deprecated (include "external.deprecate.initContainerImage" .) -}}
+{{- $deprecated := append $deprecated (include "external.deprecate.initContainerPullPolicy" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.unicorn.workerTimeout" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.redis-ha.enabled" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.redis.enabled" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.unicorn.service.name" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.unicorn.service.configuration" .) -}}
 {{- /* prepare output */}}
 {{- $deprecated := without $deprecated "" -}}
 {{- $message := join "\n" $deprecated -}}
@@ -121,6 +132,16 @@ registry:
 {{- end -}}
 {{- end -}}
 
+{{/* Migration of Registry `minReplicas` and `maxReplicas` to `hpa.*` */}}
+{{- define "gitlab.deprecate.registry.replicas" -}}
+{{- if or (hasKey .Values.registry "minReplicas") (hasKey .Values.registry "maxReplicas") -}}
+registry:
+    The `minReplicas` property has been moved under the hpa object. Please create a configuration with the new path: `registry.hpa.minReplicas`.
+    The `maxReplicas` property has been moved under the hpa object. Please create a configuration with the new path: `registry.hpa.maxReplicas`.
+{{- end -}}
+{{- end -}}
+{{/* END deprecate.registry.replicas */}}
+
 {{/* Deprecation behaviors for configuration of Omniauth */}}
 {{- define "gitlab.deprecate.unicorn.omniauth" -}}
 {{- if hasKey .Values.gitlab.unicorn "omniauth" -}}
@@ -162,3 +183,120 @@ sidekiq:
 {{- end -}}
 {{- end -}}
 {{/* END deprecate.sidekiq.cronJobs */}}
+
+{{/* Deprecation behaviors for configuration of local kubectl images */}}
+{{- define "gitlab.deprecate.local.kubectl" -}}
+{{- range $chart := list "certmanager-issuer" "shared-secrets" -}}
+{{-   if hasKey (index $.Values $chart) "image" -}}
+{{ $chart }}:
+    Chart-local configuration of kubectl image has been moved to global. Please remove `{{ $chart }}.image.*` settings from your properties, and set `global.kubectl.image.*` instead.
+{{-     if and (eq $chart "shared-secrets") (hasKey (index $.Values $chart "image") "pullSecrets") }}
+    If you need to set `pullSecrets` of the self-sign image, please use `shared-secrets.selfsign.image.pullSecrets` instead.
+{{     end -}}
+{{-   end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.local.kubectl */}}
+
+{{/* Deprecation behaviors for configuration of Gitaly */}}
+{{- define "gitlab.deprecate.gitlab.gitaly.enabled" -}}
+{{-   if hasKey .Values.gitlab.gitaly "enabled" -}}
+gitlab:
+    Chart-local configuration of Gitaly features has been moved to global. Please remove `gitlab.gitaly.enabled` from your properties, and set `global.gitaly.enabled` instead.
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.gitaly.enabled */}}
+
+{{/* Deprecation behavious for configuration of initContainer images of gitlab sub-charts */}}
+{{- define "gitlab.deprecate.initContainerImage" -}}
+{{- range $chart:= list "geo-logcursor" "gitaly" "gitlab-exporter" "gitlab-shell" "mailroom" "migrations" "sidekiq" "task-runner" "unicorn" }}
+{{-     if hasKey (index $.Values.gitlab $chart) "init" -}}
+{{-         with $config := index $.Values.gitlab $chart "init" -}}
+{{-             if or (and (hasKey $config "image") (kindIs "string" $config.image)) (hasKey $config "tag") }}
+gitlab.{{ $chart }}:
+    Configuring image for initContainers using gitlab.{{ $chart }}.init.image and gitlab.{{ $chart }}.init.tag has been deprecated. Please use gitlab.{{ $chart }}.init.image.repository and gitlab.{{ $chart }}.init.image.tag for that.
+{{-             end -}}
+{{-         end -}}
+{{-     end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.initContainerImage */}}
+
+{{/* Deprecation behavious for configuration of initContainer images of external charts */}}
+{{- define "external.deprecate.initContainerImage" -}}
+{{- range $chart:= list "minio" "registry" "redis" "redis-ha" }}
+{{-     if hasKey (index $.Values $chart) "init" -}}
+{{-         with $config := index $.Values $chart "init" -}}
+{{-             if or (and (hasKey $config "image") (kindIs "string" $config.image)) (hasKey $config "tag") }}
+{{ $chart }}:
+    Configuring image for initContainers using {{ $chart }}.init.image and {{ $chart }}.init.tag has been deprecated. Please use {{ $chart }}.init.image.repository and {{ $chart }}.init.image.tag for that.
+{{-             end -}}
+{{-         end -}}
+{{-     end -}}
+{{- end -}}
+{{- end -}}
+{{/* END external.deprecate.initContainerImage */}}
+
+{{/* Deprecation behavious for configuration of initContainer image pull policy of external charts */}}
+{{- define "external.deprecate.initContainerPullPolicy" -}}
+{{- range $chart:= list "minio" "registry" }}
+{{-     if hasKey (index $.Values $chart) "init" -}}
+{{-         with $config := index $.Values $chart "init" -}}
+{{-             if hasKey $config "pullPolicy" }}
+{{ $chart }}:
+    Configuring pullPolicy for initContainer images using {{ $chart }}.init.pullPolicy has been deprecated. Please use {{ $chart }}.init.image.pullPolicy for that.
+{{-             end -}}
+{{-         end -}}
+{{-     end -}}
+{{- end -}}
+{{- end -}}
+{{/* END external.deprecate.initContainerPullPolicy*/}}
+
+{{/* Deprecation behaviors for configuration of unicorn worker timeout*/}}
+{{- define "gitlab.deprecate.unicorn.workerTimeout" -}}
+{{- if hasKey .Values.gitlab.unicorn "workerTimeout" -}}
+unicorn:
+    Chart-local configuration of Unicorn's worker timeout has been moved to global. Please remove `unicorn.workerTimeout` setting from your properties, and set `global.appConfig.unicorn.workerTimeout` instead.
+{{- end -}}
+{{- end -}}
+{{/* END deprecate.unicorn.workerTimeout */}}
+
+{{/* Deprecation behaviors for redis-ha.enabled */}}
+{{- define "gitlab.deprecate.redis-ha.enabled" -}}
+{{-   if hasKey (index .Values "redis-ha") "enabled" -}}
+redis-ha:
+    The `redis-ha.enabled` has been deprecated. Redis HA is now implemented by the Redis chart.
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.redis-ha.enabled */}}
+
+{{/* Deprecation behaviors for redis.enabled */}}
+{{- define "gitlab.deprecate.redis.enabled" -}}
+{{-   if hasKey .Values.redis "enabled" -}}
+redis:
+    The `redis.enabled` has been deprecated. Please use `redis.install` to install the Redis service.
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.redis.enabled */}}
+
+{{/* Deprecation behaviors for unicorn.service.name */}}
+{{- define "gitlab.deprecate.unicorn.service.name" -}}
+{{-   if hasKey .Values.gitlab.unicorn.service "name" -}}
+unicorn:
+    Chart-local configuration of Unicorn's service name has been deprecated.
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.redis.enabled */}}
+
+{{- define "gitlab.deprecate.gitlab.unicorn.service.configuration" -}}
+{{-   range $chart := list "gitaly" "gitlab-shell" -}}
+{{-     if index $.Values.gitlab $chart -}}
+{{-       if hasKey (index $.Values.gitlab $chart) "unicorn" }}
+gitlab.{{ $chart }}:
+    unicorn:
+      The configuration of 'gitlab.{{ $chart }}.unicorn' has been moved to 'gitlab.{{ $chart }}.workhorse' to better reflect the underlying architecture. Please relocate this property.
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.gitlab.unicorn.service.configuration */}}

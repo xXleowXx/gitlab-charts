@@ -7,12 +7,33 @@ image:
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ee
   # tag: latest
 init:
-  image: busybox
-  tag: latest
+  image: {}
+    # repository:
+    # tag:
   resources:
     requests:
       cpu: 50m
+
+# Tolerations for pod scheduling
+tolerations: []
+
+monitoring:
+  # Monitoring IP whitelist
+  ipWhitelist:
+  - 0.0.0.0/0
+  exporter:
+    enabled: false
+    port: 8083
+
+# Shutdown settings
+# Defines an interval to block healthcheck,
+# but continue accepting application requests.
+shutdown:
+  blackoutSeconds: 10
+
+
 annotations: {}
+
 metrics:
   enabled: true
   annotations:
@@ -20,7 +41,6 @@ metrics:
     prometheus.io/port: "8080"
     prometheus.io/path: "/-/metrics"
 service:
-  name: unicorn
   type: ClusterIP
   externalPort: 8080
   internalPort: 8080
@@ -37,12 +57,26 @@ ingress:
     # enabled: true
   annotations: {}
 workerProcesses: 2
-workerTimeout: 60
-memory:
-  min: 400
-  max: 650
+memory: # in MB units
+  min: 1024
+  max: 1280
 hpa:
   targetAverageValue: 1
+
+deployment:
+  livenessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 60
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 2
+    successThreshold: 1
+    failureThreshold: 3
+
 workhorse:
   sentryDSN: ""
   extraArgs: ""
@@ -51,6 +85,18 @@ workhorse:
       cpu: 100m
       memory: 100M
   # image: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee
+  livenessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 60
+    timeoutSeconds: 30
+    successThreshold: 1
+    failureThreshold: 3
+  readinessProbe:
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 2
+    successThreshold: 1
+    failureThreshold: 3
 global:
   # imagePullPolicy: IfNotPresent
   ingress:
@@ -77,6 +123,8 @@ global:
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
+    # pool: 10
+    # preparedStatements: false
     # password:
     #   secret: gitlab-postgres
     #   key: psql-password
@@ -96,6 +144,8 @@ global:
   minio:
     enabled:
     credentials: {}
+  unicorn: {}
+    # workerTimeout: 60
   appConfig:
     incomingEmail:
       enabled: false
@@ -146,6 +196,7 @@ global:
       autoLinkLdapUser: false
       autoLinkSamlUser: false
       externalProviders: []
+      allowBypassTwoFactor: []
       providers: []
       # - secret: gitlab-google-oauth2
       #   key: provider
@@ -186,10 +237,10 @@ trusted_proxies: []
 resources:
   # limits:
   #  cpu: 1.5
-  #  memory: 1.5G
+  #  memory: 2G
   requests:
     cpu: 300m
-    memory: 1.2G
+    memory: 1.5G
 maxUnavailable: 1
 minReplicas: 2
 maxReplicas: 10

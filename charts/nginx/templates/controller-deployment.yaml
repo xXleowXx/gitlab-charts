@@ -1,6 +1,6 @@
 {{- if .Values.enabled -}}
 {{- if eq .Values.controller.kind "Deployment" }}
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "nginx-ingress.controller.fullname" . }}
@@ -184,6 +184,7 @@ spec:
               labelSelector:
                 matchLabels:
                   app: {{ template "name" . }}
+                  component: {{ .Values.controller.name }}
                   release: {{ .Release.Name }}
       {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
       affinity:
@@ -195,6 +196,7 @@ spec:
               labelSelector:
                 matchLabels:
                   app: {{ template "name" . }}
+                  component: {{ .Values.controller.name }}
                   release: {{ .Release.Name }}
       {{- end }}
     {{- end }}

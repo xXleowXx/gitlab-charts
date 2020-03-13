@@ -5,6 +5,7 @@ ldap:
 {{- else -}}
 ldap:
   enabled: true
+  prevent_ldap_sign_in: {{ eq true ( default false .Values.global.appConfig.ldap.preventSignin ) }}
   servers:
     {{- range $serverName, $serverConfig := .Values.global.appConfig.ldap.servers -}}
       {{- include "gitlab.appConfig.ldap.servers.configuration" (dict "name" $serverName "config" $serverConfig) | nindent 4 -}}
@@ -23,9 +24,9 @@ Usage example:
 */}}
 {{- define "gitlab.appConfig.ldap.servers.configuration" -}}
 {{- $.name }}:
-{{- toYaml (omit $.config "password") | trimSuffix "\n" | nindent 2 -}}
+{{- toYaml (omit $.config "password") | replace "\r\n" "\n" | trimSuffix "\n" | nindent 2 -}}
 {{- if and $.config.password (not (kindIs "string" $.config.password ))}}
-  password: "<%= File.read('/etc/gitlab/ldap/{{ $.name }}/password') %>"
+  password: "<%= File.read('/etc/gitlab/ldap/{{ $.name }}/password').strip.dump[1..-2] %>"
 {{- end -}}
 {{- end -}}{{/* gitlab.appConfig.ldap.servers.configuration */}}
 

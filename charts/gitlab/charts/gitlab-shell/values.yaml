@@ -11,13 +11,25 @@ service:
   type: ClusterIP
   externalPort: 22
   internalPort: 2222
+  externalTrafficPolicy: Cluster
+  # nodePort: xxx
+  # loadBalancerIP: x.x.x.x
+  # loadBalancerSourceRanges:
+  # - x.x.x.x/yy
+  # externalIPs:
+  # - x.x.x.x
+  # - y.y.y.y
 
 init:
-  image: busybox
-  tag: latest
+  image: {}
+    # repository:
+    # tag:
   resources:
     requests:
       cpu: 50m
+
+# Tolerations for pod scheduling
+tolerations: []
 
 global:
   # imagePullPolicy: IfNotPresent
@@ -26,11 +38,12 @@ global:
 
 enabled: true
 annotations: {}
-unicorn:
+workhorse:
+  # by default, Workhorse is a part of the Unicorn Pods / Service
   serviceName: unicorn
   # host: '0.0.0.0'
   # serviceName: 'unicorn'
-  # port: 8080
+  # port: 8181
 redis:
   password: {}
 resources:
@@ -49,3 +62,18 @@ minReplicas: 2
 maxReplicas: 10
 hpa:
   targetAverageValue: 100m
+
+deployment:
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 3
+
+config:
+  loginGraceTime: 120
+  maxStartups:
+    start: 10
+    rate: 30
+    full: 100

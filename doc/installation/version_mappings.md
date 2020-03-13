@@ -1,9 +1,112 @@
-# Gitlab version mappings
+# GitLab version mappings
 
 The table below maps some of the key previous chart versions and GitLab versions.
 
 | Chart version | GitLab version |
 |---------------|----------------|
+| 3.1.4 | 12.8.6 |
+| 3.1.3 | 12.8.5 |
+| 3.1.2 | 12.8.2 |
+| 3.1.1 | 12.8.1 |
+| 3.1.0 | 12.8.0 |
+| 3.0.5 | 12.7.7 |
+| 3.0.4 | 12.7.6 |
+| 3.0.3 | 12.7.5 |
+| 3.0.2 | 12.7.4 |
+| 3.0.1 | 12.7.2 |
+| 3.0.0 | 12.7.0 |
+| 2.6.9 | 12.6.8 |
+| 2.6.8 | 12.6.7 |
+| 2.6.7 | 12.6.6 |
+| 2.6.6 | 12.6.4 |
+| 2.6.5 | 12.6.4 |
+| 2.6.4 | 12.6.3 |
+| 2.6.3 | 12.6.2 |
+| 2.6.2 | 12.6.2 |
+| 2.6.1 | 12.6.1 |
+| 2.6.0 | 12.6.0 |
+| 2.5.11 | 12.5.10 |
+| 2.5.10 | 12.5.9 |
+| 2.5.9 | 12.5.7 |
+| 2.5.8 | 12.5.7 |
+| 2.5.7 | 12.5.6 |
+| 2.5.6 | 12.5.5 |
+| 2.5.5 | 12.5.4 |
+| 2.5.4 | 12.5.3 |
+| 2.5.3 | 12.5.2 |
+| 2.5.2 | 12.5.1 |
+| 2.5.1 | 12.5.0 |
+| 2.5.0 | 12.5.0 |
+| 2.4.13 | 12.4.8 |
+| 2.4.12 | 12.4.7 |
+| 2.4.10 | 12.4.5 |
+| 2.4.9 | 12.4.4 |
+| 2.4.8 | 12.4.3 |
+| 2.4.7 | 12.4.2 |
+| 2.4.6 | 12.4.2 |
+| 2.4.5 | 12.4.1 |
+| 2.4.4 | 12.4.1 |
+| 2.4.3 | 12.4.1 |
+| 2.4.2 | 12.4.0 |
+| 2.4.1 | 12.4.0 |
+| 2.4.0 | 12.4.0 |
+| 2.3.12 | 12.3.9 |
+| 2.3.11 | 12.3.8 |
+| 2.3.10 | 12.3.7 |
+| 2.3.9 | 12.3.6 |
+| 2.3.8 | 12.3.5 |
+| 2.3.7 | 12.3.5 |
+| 2.3.6 | 12.3.4 |
+| 2.3.5 | 12.3.4 |
+| 2.3.3 | 12.3.2 |
+| 2.3.2 | 12.3.1 |
+| 2.3.1 | 12.3.0 |
+| 2.3.0 | 12.3.0 |
+| 2.2.12 | 12.2.9 |
+| 2.2.11 | 12.2.8 |
+| 2.2.10 | 12.2.7 |
+| 2.2.9 | 12.2.8 |
+| 2.2.8 | 12.2.7 |
+| 2.2.7 | 12.2.6 |
+| 2.2.6 | 12.2.5 |
+| 2.2.5 | 12.2.4 |
+| 2.2.4 | 12.2.4 |
+| 2.2.3 | 12.2.4 |
+| 2.2.1 | 12.2.1 |
+| 2.2.0 | 12.2.0 |
+| 2.1.14 | 12.1.14 |
+| 2.1.13 | 12.1.14 |
+| 2.1.12 | 12.1.13 |
+| 2.1.11 | 12.1.12 |
+| 2.1.10 | 12.1.11 |
+| 2.1.9 | 12.1.9 |
+| 2.1.8 | 12.1.8 |
+| 2.1.7 | 12.1.6 |
+| 2.1.6 | 12.1.4 |
+| 2.1.5 | 12.1.4 |
+| 2.1.4 | 12.1.4 |
+| 2.1.3 | 12.1.3 |
+| 2.1.2 | 12.1.2 |
+| 2.1.1 | 12.1.1 |
+| 2.1.0 | 12.1.0 |
+| 2.0.5 | 12.0.6 |
+| 2.0.4 | 12.0.4 |
+| 2.0.3 | 12.0.3 |
+| 2.0.2 | 12.0.2 |
+| 2.0.1 | 12.0.1 |
+| 2.0.0 | 12.0.0 |
+| 1.9.8 | 11.11.8 |
+| 1.9.7 | 11.11.7 |
+| 1.9.5 | 11.11.4 |
+| 1.9.4 | 11.11.3 |
+| 1.9.3 | 11.11.3 |
+| 1.9.2 | 11.11.2 |
+| 1.9.1 | 11.11.1 |
+| 1.9.0 | 11.11.0 |
+| 1.8.4 | 11.10.4 |
+| 1.8.3 | 11.10.3 |
+| 1.8.2 | 11.10.2 |
+| 1.8.1 | 11.10.1 |
 | 1.8.0 | 11.10.0 |
 | 1.7.5 | 11.9.8 |
 | 1.7.4 | 11.9.7 |
@@ -58,8 +161,7 @@ The table below maps some of the key previous chart versions and GitLab versions
 | 0.2.1 | 11.0.1 |
 | 0.2.0 | 11.0.0 |
 
-
-To see the full list, you can issue the following command with helm:
+To see the full list, you can issue the following command with Helm:
 
 ```
 helm repo add gitlab https://charts.gitlab.io/
@@ -77,7 +179,7 @@ gitlab/gitlab           1.4.2           11.6.3
 gitlab/gitlab           1.4.1           11.6.2
 ```
 
-Read more about our charts versioning [here](https://gitlab.com/charts/gitlab/blob/master/doc/development/release.md#chart-versioning)
+Read more about our charts versioning [here](../development/release.md#chart-versioning)
 
 Check the [releases documentation](../releases/index.md) for information on important releases,
-and see the [changelog](https://gitlab.com/charts/gitlab/blob/master/CHANGELOG.md) for the full details on any release.
+and see the [changelog](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/CHANGELOG.md) for the full details on any release.

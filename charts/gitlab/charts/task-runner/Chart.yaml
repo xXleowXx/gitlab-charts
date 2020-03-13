@@ -1,7 +1,7 @@
 ---
 apiVersion: v1
 name: task-runner
-version: 1.8.0
+version: 3.1.4
 appVersion: master
 description: For manually running rake tasks through kubectl
 keywords:
@@ -10,7 +10,7 @@ keywords:
 home: https://about.gitlab.com/
 icon: https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo-square.svg
 sources:
-- https://gitlab.com/charts/gitlab/tree/master/charts/gitlab/charts/task-runner
+- https://gitlab.com/gitlab-org/charts/gitlab/tree/master/charts/gitlab/charts/task-runner
 - https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-task-runner
 maintainers:
 - name: GitLab Inc.

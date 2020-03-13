@@ -2,13 +2,13 @@
 
 This guide is meant to serve as a cross-plaform resource for setting up a local
 Kubernetes development environment. In this guide, we'll be using
-[Minikube][minikube-getting-started] as it is current defacto.
+[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) as it is the defacto standard.
 
 ## Getting Started with Minikube
 
 We'll extract and expound on the official documentation from the
 [Kubernetes project](https://kubernetes.io/),
-[Running Kubernetes Locally with Minikube](https://kubernetes.io/docs/getting-started-guides/minikube/).
+[Running Kubernetes Locally with Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/).
 
 ### Installing kubectl
 
@@ -31,9 +31,9 @@ can do one of three things:
 
 - Install directly from the [Google Storage APIs](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl).
 - Install with the appropriate package management system:
-   - Linux: your package manager of choice, or Snap.
-   - [macOS](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-homebrew-on-macos)
-   - [Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-chocolatey-on-windows)
+  - Linux: your package manager of choice, or Snap.
+  - [macOS](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-homebrew-on-macos)
+  - [Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-chocolatey-on-windows)
 
 ### Installing Minikube
 
@@ -65,7 +65,7 @@ change according to the pieces being tested, and the requirements as listed:
   NOTE: **Note**:
   This is created in your home directory under `~/.minikube/machines/minikube/`.
 
-- `--kubernetes-version string`: The kubernetes version that the minikube VM will use (e.g., `v1.2.3`).
+- `--kubernetes-version string`: The Kubernetes version that the minikube VM will use (e.g., `v1.2.3`).
 - `--registry-mirror stringSlice`: Registry mirrors to pass to the Docker daemon.
 
 NOTE: **Note:**
@@ -101,6 +101,8 @@ Stopping local Kubernetes cluster...
 Machine stopped.
 ```
 
+Take note of the result from running the `minikube ip` command. If the output is not `192.168.99.100`, the output IP will be needed later.
+
 ## Using Minikube
 
 Minikube can be used directly as a Kubernetes installation, and treated as a
@@ -123,7 +125,7 @@ of the `hostPath` type, which are mapped to directories inside the VM. As Miniku
 boots into a `tmpfs`, most directories will not persist across reboots via `minikube stop`.
 
 Further details and listings of directories that do persist, can be found
-in the [Minikube getting started guide](https://kubernetes.io/docs/getting-started-guides/minikube/#persistent-volumes).
+in the [Minikube getting started guide](https://kubernetes.io/docs/setup/learning-environment/minikube/#persistent-volumes).
 
 ### Enable Addons
 
@@ -153,7 +155,7 @@ For further details on Helm, see [Developing for Helm](../../installation/tools.
 
 When deploying this chart into minikube, some chart resources need to be reduced or disabled.
 It is not possible to use the `nginx-ingress` chart to provide ports `22`, `80`,
-`443`. It's best to disable it and set the ingress class by setting
+`443`. It's best to disable it and set the Ingress class by setting
 `nginx-ingress.enabled=false,global.ingress.class="nginx"`.
 
 The `certmanager` chart can not be used with minikube. You must disable this by
@@ -163,18 +165,47 @@ certificates will be generated. The `gitlab-runner` chart is not compatible with
 self-signed certificates at this time, and as such, should be disabled by setting
 `gitlab-runner.install=false`.
 
-When using the recommended 3 CPU, 8 GB, use
-[`values-minikube.yaml`](https://gitlab.com/charts/gitlab/blob/master/examples/values-minikube.yaml)
-as a base. If using _absolute minimum_ resources, you must reduce all replicas
-and disable unneeded services. See [`values-minikube-minimum.yaml`](https://gitlab.com/charts/gitlab/blob/master/examples/values-minikube-minimum.yaml)
-as reasonable base.
+### Deploying GitLab with recommended settings
+
+When using the recommended 3 CPU and 8 GB of RAM, use
+[`values-minikube.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/values-minikube.yaml)
+as a base.
+
+```shell
+helm repo add gitlab https://charts.gitlab.io/
+helm repo update
+helm upgrade --install gitlab gitlab/gitlab \
+  --timeout 600 \
+  -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube.yaml
+```
+
+### Deploying GitLab with minimal settings
+
+If using _absolute minimum_ resources, 2 CPU and 4GB of RAM, you must reduce all replicas
+and disable unneeded services. See [`values-minikube-minimum.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/values-minikube-minimum.yaml)
+as a reasonable base.
+
+```shell
+helm repo add gitlab https://charts.gitlab.io/
+helm repo update
+helm upgrade --install gitlab gitlab/gitlab \
+  --timeout 600 \
+  -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml
+```
+
+If the output of `minikube ip` was not `192.168.99.100`, add these arguments to override the IP endpoints in the example configuration files:
+
+```sh
+  --set global.hosts.domain=$(minikube ip).nip.io \
+  --set global.hosts.externalIP=$(minikube ip)
+```
 
 ### Handling DNS
 
 The example configurations provided, configure the domain as `192.168.99.100.nip.io`
 in an attempt to reduce the overhead of handling alterations to host files, or
 other domain name resolution services. However, this relies on the network
-reachability of [nip.io](http://nip.io).
+reachability of [nip.io](https://nip.io).
 
 If this is not available to you, then you may need to make alterations to your
 `/etc/hosts` file, or provide another means of DNS resolution.
@@ -196,3 +227,10 @@ depends on your operating system.
 [BounCA](https://www.bounca.org) has a [good tutorial](https://www.bounca.org/tutorials/install_root_certificate.html),
 covering most operating systems.
 
+### Logging in
+
+You can access the GitLab instance by visiting the domain specified, `https://gitlab.192.168.99.100.nip.io` is used in these examples. If you manually created the secret for initial root password, you can use that to sign in as root user. If not, GitLab automatically created a random password for the root user. This can be extracted by the following command (replace `<name>` by name of the release - which is `gitlab` if you used the command above).
+
+```shell
+kubectl get secret <name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
+```
