@@ -51,7 +51,7 @@ Here's a light way to install it:
 - `<external-ip>`: the external IP pointing to your Kubernetes cluster.
 - `<email>`: email to register in Let's Encrypt to retrieve TLS certificates.
 
-Once you've deployed the GitLab instance, follow the instructions for the [initial login](https://docs.gitlab.com/charts/installation/deployment.html#initial-login). 
+Once you've deployed the GitLab instance, follow the instructions for the [initial login](../installation/deployment.md#initial-login). 
 
 ## Create an OAuth application with GitLab
 
