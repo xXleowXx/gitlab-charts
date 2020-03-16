@@ -212,7 +212,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                {{- if eq .Values.webServer "unicorn" }}
+                {{- if eq (lower .Values.webServer) "unicorn" }}
                 command: ["/bin/bash", "-c", "pkill -SIGQUIT -f 'unicorn master'"]
                 {{- else }}
                 command: ["/bin/bash", "-c", "pkill -SIGINT -o ruby"]
