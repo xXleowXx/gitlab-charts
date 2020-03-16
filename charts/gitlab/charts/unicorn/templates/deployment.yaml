@@ -134,7 +134,7 @@ spec:
             - containerPort: {{ .Values.service.internalPort }}
               name: unicorn
           env:
-            - name: GITLAB_WEBSERVER 
+            - name: GITLAB_WEBSERVER
               value: {{ .Values.webServer }}
             - name: TMPDIR
               value: "/tmp/gitlab"
