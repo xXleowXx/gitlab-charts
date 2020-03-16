@@ -212,13 +212,11 @@ spec:
           lifecycle:
             preStop:
               exec:
-                {{- if eq .Values.webServer "unicorn" -}}
+                {{- if eq .Values.webServer "unicorn" }}
                 command: ["/bin/bash", "-c", "pkill -SIGQUIT -f 'unicorn master'"]
-                {{- else -}}
+                {{- else }}
                 command: ["/bin/bash", "-c", "pkill -SIGINT -o ruby"]
-                {{- end -}}
-
-{{- end }}
+                {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
         - name: gitlab-workhorse
