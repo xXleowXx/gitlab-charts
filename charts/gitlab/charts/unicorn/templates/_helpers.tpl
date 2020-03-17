@@ -25,9 +25,9 @@ image repository.
 */}}
 {{- define "workhorse.repository" -}}
 {{- if eq "ce" .Values.global.edition -}}
-{{ index .Values "global" "communityImages" "workhorse" "repository" }}
+{{ index .Values "global" "communityImages" .Chart.Name "workhorse" "repository" }}
 {{- else -}}
-{{ index .Values "global" "enterpriseImages" "workhorse" "repository" }}
+{{ index .Values "global" "enterpriseImages" .Chart.Name "workhorse" "repository" }}
 {{- end -}}
 {{- end -}}
 
