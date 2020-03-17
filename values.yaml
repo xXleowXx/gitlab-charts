@@ -31,6 +31,7 @@ global:
   edition: ee
 
   ## doc/charts/globals.md#gitlab-version
+  gitlabVersion: webservice-has-unicorn-puma
   # gitlabVersion: master
 
   ## doc/charts/globals.md#application-resource
@@ -658,12 +659,13 @@ grafana:
 
 ## Settings for individual sub-charts under GitLab
 ## Note: Many of these settings are configurable via globals
-# gitlab:
+gitlab:
 ## doc/charts/gitlab/migrations
 #   migrations:
 #     enabled: false
 ## doc/charts/gitlab/unicorn
-#   unicorn:
+  unicorn:
+    webServer: puma
 #     enabled: false
 ## doc/charts/gitlab/sidekiq
 #   sidekiq:
