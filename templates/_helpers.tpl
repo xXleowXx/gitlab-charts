@@ -188,6 +188,7 @@ to 5432 default
 {{- else -}}
 {{-   coalesce .Values.global.psql.port 5432 -}}
 {{- end -}}
+{{- end -}}
 
 {{/*
 Return the secret name
