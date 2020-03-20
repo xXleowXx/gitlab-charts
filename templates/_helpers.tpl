@@ -184,9 +184,9 @@ to 5432 default
 */}}
 {{- define "gitlab.psql.port" -}}
 {{- if hasKey .Values.psql "port" -}}
-{{-   $dummy := set . "psqlPort" .Values.psql.port }}
-{{- end }}
-{{- coalesce .psqlPort .Values.global.psql.port 5432 -}}
+{{-   .Values.psql.port -}}
+{{- else -}}
+{{-   coalesce .Values.global.psql.port 5432 -}}
 {{- end -}}
 
 {{/*
