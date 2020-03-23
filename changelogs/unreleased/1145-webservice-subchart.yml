@@ -1,5 +1,5 @@
 ---
-title: Unicorn chart replaced with webservice chart (supporting unicorn and puma)
+title: Replace unicorn chart with webservice 
 merge_request: 1125
 author: Dmitry Chepurovskiy
 type: added

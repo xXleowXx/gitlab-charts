@@ -1,3 +1,0 @@
-gitlab:
-  webservice:
-    webServer: puma
