@@ -53,8 +53,9 @@ Items below can be further customized if you are not using the defaults:
 - `global.psql.database`: The name of the database.
 - `global.psql.username`: The user with access to the database.
 
-If you use a mutual TLS connection to the database:
+If you use a TLS or mutual TLS connection to the database, you can use the following options:
 
+- `global.psql.ssl.mode`: Defines the [SSL mode](https://www.postgresql.org/docs/11/libpq-ssl.html) of the PostgreSQL connection. Defaults to "verify-ca" if SSL is enabled, otherwise it is not set.
 - `global.psql.ssl.secret`: A secret containing client certificate, key and certificate authority.
 - `global.psql.ssl.serverCA`: The key inside the secret referring the certificate authority (CA).
 - `global.psql.ssl.clientCertificate`: The key inside the secret referring the client certificate.

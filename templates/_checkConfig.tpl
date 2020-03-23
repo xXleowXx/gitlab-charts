@@ -34,6 +34,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.routingRules" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.appConfig.maxRequestDurationSeconds" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.extern.repos" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.psql.ssl" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.geo.database.ssl" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.geo.database" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.geo.secondary.database" .) -}}
 {{- $messages = append $messages (include "gitlab.task-runner.replicas" .) -}}
@@ -247,6 +249,39 @@ sidekiq:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.sidekiq.routingRules */}}
+
+{{/* Ensure secrets are correctly configured if provided */}}
+{{- define "gitlab.checkConfig.database.ssl" -}}
+{{- if .ssl -}}
+{{- if .ssl.secret -}}
+{{-   if not .ssl.serverCA }}
+{{ .item }}: SSL enabled, No CA provided
+    Missing required key name of SQL server certificate. Make sure to set `[...].ssl.serverCA`.
+{{    end -}}
+{{-   if not .ssl.clientCertificate }}
+psql: No client certificate provided
+    Missing required key name of SQL client certificate. Make sure to set `[...].ssl.clientCertificate`.
+{{    end -}}
+{{-   if not .ssl.clientKey }}
+psql: No client key provided
+    Missing required key name of SQL client key file. Make sure to set `[...].ssl.clientKey`.
+{{    end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.database.ssl */}}
+
+{{/* Ensure secrets are correctly configured for PostgreSQL database */}}
+{{- define "gitlab.checkConfig.psql.ssl" -}}
+{{- include "gitlab.checkConfig.database.ssl" (dict "ssl" $.Values.global.psql.ssl "item" "psql") -}}
+{{- end -}}
+{{/* END gitlab.psql.ssl */}}
+
+{{/* Ensure secrets are correctly configured if Geo PostgreSQL database */}}
+{{- define "gitlab.checkConfig.geo.database.ssl" -}}
+{{- include "gitlab.checkConfig.database.ssl" (dict "ssl" $.Values.global.geo.psql.ssl "item" "geo.psql") -}}
+{{- end -}}
+{{/* END gitlab.geo.database.ssl */}}
 
 {{/*
 Ensure a database is configured when using Geo

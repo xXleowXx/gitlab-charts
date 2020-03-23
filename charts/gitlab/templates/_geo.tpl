@@ -51,10 +51,18 @@ Consumed as part of "gitlab.geo.database.yml", no check of `global.geo.secondary
 */}}
 {{- define "gitlab.geo.psql.ssl.config" -}}
 {{- if .Values.global.geo.psql.ssl }}
-sslmode: verify-ca
+sslmode: {{ .Values.global.geo.psql.ssl.mode | default "verify-ca" | quote }}
+{{-   if .Values.global.geo.psql.ssl.secret }}
+{{-     if .Values.global.geo.psql.ssl.serverCA }}
 sslrootcert: '/etc/gitlab/postgres/ssl/geo-server-ca.pem'
+{{-     end -}}
+{{-     if .Values.global.geo.psql.ssl.clientCertificate }}
 sslcert: '/etc/gitlab/postgres/ssl/geo-client-certificate.pem'
+{{-     end -}}
+{{-     if .Values.global.geo.psql.ssl.clientKey }}
 sslkey: '/etc/gitlab/postgres/ssl/geo-client-key.pem'
+{{-     end -}}
+{{-   end -}}
 {{- end -}}
 {{- end -}}
 
@@ -63,20 +71,22 @@ Returns volume definition of a secret containing information required for
 a mutual TLS connection to the Geo Secondary DB.
 */}}
 {{- define "gitlab.geo.psql.ssl.volume" -}}
-{{- if and ( include "gitlab.geo.secondary" $ ) .Values.global.geo.psql.ssl }}
+{{- if and ( include "gitlab.geo.secondary" $ ) (.Values.global.geo.psql.ssl) }}
+{{-   if .Values.global.geo.psql.ssl.secret }}
 - name: geo-postgresql-ssl-secrets
   projected:
     defaultMode: 400
     sources:
     - secret:
-        name: {{ .Values.global.geo.psql.ssl.secret | required "Missing required secret containing SQL SSL certificates and keys. Make sure to set `global.geo.psql.ssl.secret`" }}
+        name: {{ .Values.global.geo.psql.ssl.secret }}
         items:
-          - key: {{ .Values.global.geo.psql.ssl.serverCA | required "Missing required key name of SQL server certificate. Make sure to set `global.geo.psql.ssl.serverCA`" }}
+          - key: {{ .Values.global.geo.psql.ssl.serverCA  }}
             path: geo-server-ca.pem
-          - key: {{ .Values.global.geo.psql.ssl.clientCertificate | required "Missing required key name of SQL client certificate. Make sure to set `global.geo.psql.ssl.clientCertificate`" }}
+          - key: {{ .Values.global.geo.psql.ssl.clientCertificate  }}
             path: geo-client-certificate.pem
-          - key: {{ .Values.global.geo.psql.ssl.clientKey | required "Missing required key name of SQL client key file. Make sure to set `global.geo.psql.ssl.clientKey`" }}
+          - key: {{ .Values.global.geo.psql.ssl.clientKey  }}
             path: geo-client-key.pem
+{{-   end -}}
 {{- end -}}
 {{- end -}}
 
