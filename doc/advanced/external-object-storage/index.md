@@ -7,7 +7,7 @@ object storage solution like Google Cloud Storage or AWS S3.
 
 To disable MinIO, set this option and then follow the related documentation below:
 
-```
+```shell
 --set global.minio.enabled=false
 ```
 
@@ -24,7 +24,7 @@ GitLab uses [fog](https://github.com/fog/fog), but [doesn't currently support Fo
 
 Configuration of object storage for the `registry` chart is done via the `registry.storage` key, and the `global.registry.bucket` key.
 
-```
+```shell
 --set registry.storage.secret=registry-storage
 --set registry.storage.key=config
 --set global.registry.bucket=bucket-name
@@ -57,7 +57,7 @@ diffs, and pseudonymizer is done via the `global.appConfig.lfs`,
 `global.appConfig.artifacts`, `global.appConfig.uploads`,
 `global.appConfig.packages`, `global.appConfig.externalDiffs` and `global.appConfig.pseudonymizer` keys.
 
-```
+```shell
 --set global.appConfig.lfs.bucket=gitlab-lfs-storage
 --set global.appConfig.lfs.connection.secret=object-storage
 --set global.appConfig.lfs.connection.key=connection
@@ -127,7 +127,7 @@ When using Google Cloud Storage, the GCP project must be set with the `global.ap
 
 For S3-compatible storage:
 
-```
+```shell
 --set global.appConfig.backups.bucket=gitlab-backup-storage
 --set global.appConfig.backups.tmpBucket=gitlab-tmp-storage
 --set gitlab.task-runner.backups.objectStorage.config.secret=storage-config
@@ -136,7 +136,7 @@ For S3-compatible storage:
 
 For Google Cloud Storage (GCS):
 
-```
+```shell
 --set global.appConfig.backups.bucket=gitlab-backup-storage
 --set global.appConfig.backups.tmpBucket=gitlab-tmp-storage
 --set gitlab.task-runner.backups.objectStorage.backend=gcs
@@ -156,7 +156,7 @@ See the [backup/restore object storage documentation](../../backup-restore/index
 
     - On Amazon S3, the contents should be in the [s3cmd config file format](https://s3tools.org/kb/item14.htm)
 
-    ```
+    ```conf
     [default]
     access_key = BOGUS_ACCESS_KEY
     secret_key = BOGUS_SECRET_KEY
@@ -177,7 +177,7 @@ See the [backup/restore object storage documentation](../../backup-restore/index
 
     - On Azure Storage
 
-    ```
+    ```conf
     [default]
     # Setup endpoint: hostname of the Web App
     host_base = https://your_minio_setup.azurewebsites.net
@@ -198,6 +198,6 @@ See the [backup/restore object storage documentation](../../backup-restore/index
 
 1. Create the secret
 
-    ```bash
+    ```shell
     kubectl create secret generic storage-config --from-file=config=storage.config
     ```
