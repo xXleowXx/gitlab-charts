@@ -1,8 +1,8 @@
 image:
   pullSecrets: []
-  # pullPolicy: IfNotPresent
+  pullPolicy: Always
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
-  # tag: latest
+  tag: dj-test-task-runner-py3
 
 init:
   image: {}
@@ -19,7 +19,7 @@ enabled: true
 annotations: {}
 
 psql: {}
-  # port: 5432 
+  # port: 5432
 
 global:
   # imagePullPolicy: IfNotPresent

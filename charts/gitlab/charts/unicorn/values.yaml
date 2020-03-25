@@ -3,9 +3,9 @@
 # Declare variables to be passed into your templates.
 image:
   pullSecrets: []
-  # pullPolicy: IfNotPresent
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee
-  # tag: latest
+  pullPolicy: Always
+  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
+  tag: dj-test-task-runner-py3
 init:
   image: {}
     # repository:
@@ -86,6 +86,9 @@ deployment:
     failureThreshold: 3
 
 workhorse:
+  pullPolicy: Always
+  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
+  tag: dj-test-task-runner-py3
   sentryDSN: ""
   extraArgs: ""
   resources:
