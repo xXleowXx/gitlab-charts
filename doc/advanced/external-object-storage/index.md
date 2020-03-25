@@ -154,50 +154,50 @@ See the [backup/restore object storage documentation](../../backup-restore/index
 
 1. Create the `storage.config` file:
 
-    - On Amazon S3, the contents should be in the [s3cmd config file format](https://s3tools.org/kb/item14.htm)
+   - On Amazon S3, the contents should be in the [s3cmd config file format](https://s3tools.org/kb/item14.htm)
 
-    ```conf
-    [default]
-    access_key = BOGUS_ACCESS_KEY
-    secret_key = BOGUS_SECRET_KEY
-    bucket_location = us-east-1
-    ```
+     ```conf
+     [default]
+     access_key = BOGUS_ACCESS_KEY
+     secret_key = BOGUS_SECRET_KEY
+     bucket_location = us-east-1
+     ```
 
-    - On Google Cloud Storage, you can create the file by creating a service account
-      with the storage.admin role and then
-      [creating a service account key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys).
-      Below is an example of using the `gcloud` CLI to create the file.
+   - On Google Cloud Storage, you can create the file by creating a service account
+     with the storage.admin role and then
+     [creating a service account key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys).
+     Below is an example of using the `gcloud` CLI to create the file.
 
-    ```shell
-    export PROJECT_ID=$(gcloud config get-value project)
-    gcloud iam service-accounts create gitlab-gcs --display-name "Gitlab Cloud Storage"
-    gcloud projects add-iam-policy-binding --role roles/storage.admin ${PROJECT_ID} --member=serviceAccount:gitlab-gcs@${PROJECT_ID}.iam.gserviceaccount.com
-    gcloud iam service-accounts keys create --iam-account gitlab-gcs@${PROJECT_ID}.iam.gserviceaccount.com storage.config
-    ```
+     ```shell
+     export PROJECT_ID=$(gcloud config get-value project)
+     gcloud iam service-accounts create gitlab-gcs --display-name "Gitlab Cloud Storage"
+     gcloud projects add-iam-policy-binding --role roles/storage.admin ${PROJECT_ID} --member=serviceAccount:gitlab-gcs@${PROJECT_ID}.iam.gserviceaccount.com
+     gcloud iam service-accounts keys create --iam-account gitlab-gcs@${PROJECT_ID}.iam.gserviceaccount.com storage.config
+     ```
 
-    - On Azure Storage
+   - On Azure Storage
 
-    ```conf
-    [default]
-    # Setup endpoint: hostname of the Web App
-    host_base = https://your_minio_setup.azurewebsites.net
-    host_bucket = https://your_minio_setup.azurewebsites.net
-    # Leave as default
-    bucket_location = us-west-1
-    use_https = True
+     ```conf
+     [default]
+     # Setup endpoint: hostname of the Web App
+     host_base = https://your_minio_setup.azurewebsites.net
+     host_bucket = https://your_minio_setup.azurewebsites.net
+     # Leave as default
+     bucket_location = us-west-1
+     use_https = True
 
-    # Setup access keys
-    # Access Key = Azure Storage Account name
-    access_key =  BOGUS_ACCOUNT_NAME
-    # Secret Key = Azure Storage Account Key
-    secret_key = BOGUS_KEY
+     # Setup access keys
+     # Access Key = Azure Storage Account name
+     access_key =  BOGUS_ACCOUNT_NAME
+     # Secret Key = Azure Storage Account Key
+     secret_key = BOGUS_KEY
 
-    # Use S3 v4 signature APIs
-    signature_v2 = False
-    ```
+     # Use S3 v4 signature APIs
+     signature_v2 = False
+     ```
 
 1. Create the secret
 
-    ```shell
-    kubectl create secret generic storage-config --from-file=config=storage.config
-    ```
+   ```shell
+   kubectl create secret generic storage-config --from-file=config=storage.config
+   ```

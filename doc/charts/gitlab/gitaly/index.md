@@ -233,8 +233,8 @@ SAN attributes.
 
 1. Create a k8s TLS secret using the certificate created.
 
-    ```shell
-    kubectl create secret tls gitaly-server-tls --cert=gitaly.crt --key=gitaly.key
-    ```
+   ```shell
+   kubectl create secret tls gitaly-server-tls --cert=gitaly.crt --key=gitaly.key
+   ```
 
 1. Redeploy the Helm chart by passing the arguments `--set global.gitaly.tls.enabled=true --set global.gitaly.tls.secretName=<secret name>`
