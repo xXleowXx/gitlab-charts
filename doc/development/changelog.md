@@ -201,7 +201,6 @@ committing anything:
 ```shell
 $ bin/changelog --amend --dry-run
 create changelogs/unreleased/feature-hey-dz.yml
-
 ---
 title: Added an awesome new feature to GitLab
 merge_request:
