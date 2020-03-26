@@ -177,7 +177,7 @@ See the [backup/restore object storage documentation](../../backup-restore/index
 
    - On Azure Storage
 
-     ```conf
+     ```ini
      [default]
      # Setup endpoint: hostname of the Web App
      host_base = https://your_minio_setup.azurewebsites.net
