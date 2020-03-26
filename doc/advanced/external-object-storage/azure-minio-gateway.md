@@ -13,29 +13,29 @@ az group create --name "gitlab-azure-minio" --location "WestUS"
 Create a Storage account in your resource group, the name of the storage account must be globally unique:
 
 ```shell
-    az storage account create \
-        --name "gitlab-azure-minio-storage" \
-        --kind BlobStorage \
-        --sku Standard_LRS \
-        --access-tier Cool \
-        --resource-group "gitlab-azure-minio" \
-        --location "WestUS"
+az storage account create \
+    --name "gitlab-azure-minio-storage" \
+    --kind BlobStorage \
+    --sku Standard_LRS \
+    --access-tier Cool \
+    --resource-group "gitlab-azure-minio" \
+    --location "WestUS"
 ```
 
 Retrieve the account key for the storage account:
 
 ```shell
-    az storage account show-connection-string \
-        --name "gitlab-azure-minio-storage" \
-        --resource-group "gitlab-azure-minio"
+az storage account show-connection-string \
+    --name "gitlab-azure-minio-storage" \
+    --resource-group "gitlab-azure-minio"
 ```
 
 The output should be in the format:
 
 ```json
-    {
-        "connectionString": "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=gitlab-azure-minio-storage;AccountKey=h0tSyeTebs+..."
-    }
+{
+    "connectionString": "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=gitlab-azure-minio-storage;AccountKey=h0tSyeTebs+..."
+}
 ```
 
 ## Deploy MinIO to Web App on Linux
