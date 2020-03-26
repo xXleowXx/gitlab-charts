@@ -58,7 +58,7 @@ The `task-runner` configuration allows for annotations to be set to upload backu
 
 The [s3cmd.config](./index.md#backups-storage-example) secret is to be created without the access and secret keys:
 
-```conf
+```ini
 [default]
 bucket_location = us-east-1
 ```
