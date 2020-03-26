@@ -141,9 +141,9 @@ This can be solved by simply removing all of the affected services.
 
 1. Remove all affected services:
 
-    ```shell
-    kubectl delete services -lrelease=RELEASE_NAME
-    ```
+   ```shell
+   kubectl delete services -lrelease=RELEASE_NAME
+   ```
 
 1. Perform an upgrade via Helm.
 1. Future upgrades will not face this error.
