@@ -156,7 +156,7 @@ See the [backup/restore object storage documentation](../../backup-restore/index
 
    - On Amazon S3, the contents should be in the [s3cmd config file format](https://s3tools.org/kb/item14.htm)
 
-     ```conf
+     ```ini
      [default]
      access_key = BOGUS_ACCESS_KEY
      secret_key = BOGUS_SECRET_KEY
