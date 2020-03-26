@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 3.2.1 (2020-03-26)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.9.1.
+
+
 ## 3.2.0 (2020-03-22)
 
 ### Fixed (4 changes, 1 of them is from the community)
@@ -19,6 +26,17 @@ entry.
 ### Other (1 change)
 
 - Update GitLab Version to 12.9.0.
+
+
+## 3.1.6 (2020-03-26)
+
+### Fixed (1 change)
+
+- Fix logic of registry HPA deprecations. !1203
+
+### Other (1 change)
+
+- Update GitLab Version to 12.8.8.
 
 
 ## 3.1.5 (2020-03-16)
@@ -96,6 +114,17 @@ entry.
 - Include GitLab Exporter & GitLab Grafana to sub-chart lists. !1161
 - Bump Container Registry to v2.8.1-gitlab. !1173
 - Update GitLab Version to 12.8.0.
+
+
+## 3.0.6 (2020-03-26)
+
+### Fixed (1 change)
+
+- Fix logic of registry HPA deprecations. !1203
+
+### Other (1 change)
+
+- Update GitLab Version to 12.7.8.
 
 
 ## 3.0.5
