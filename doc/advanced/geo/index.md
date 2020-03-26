@@ -216,8 +216,8 @@ postgresql:
 ```
 
 1. We'll need to create a secret containing the database password, for the
-chart to consume. Replace `PASSWORD` below with the password for the `gitlab`
-database user.
+   chart to consume. Replace `PASSWORD` below with the password for the `gitlab`
+   database user.
 
    ```shell
    kubectl create secret generic geo --from-literal=postgresql-password=PASSWORD
