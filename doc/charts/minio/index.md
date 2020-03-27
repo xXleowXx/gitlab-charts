@@ -92,7 +92,7 @@ found in [the Kubernetes documentation](https://kubernetes.io/docs/concepts/cont
 
 Below is an example use of `pullSecrets`:
 
-```YAML
+```yaml
 image: my.minio.repository
 imageTag: latest
 imagePullPolicy: Always
@@ -107,7 +107,7 @@ pullSecrets:
 
 Below is an example use of `tolerations`:
 
-```YAML
+```yaml
 tolerations:
 - key: "node_label"
   operator: "Equal"
