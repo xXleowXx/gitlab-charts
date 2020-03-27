@@ -534,7 +534,7 @@ check_docs_lint:
       --set global.hosts.hostSuffix="$HOST_SUFFIX" \
       --set global.hosts.domain="$KUBE_INGRESS_BASE_DOMAIN" \
       --set global.ingress.annotations."external-dns\.alpha\.kubernetes\.io/ttl"="10" \
-      --set global.ingress.tls.secretName=helm-charts-win-tls \
+      --set global.ingress.tls.secretName=eks-helm-charts-win-tls \
       --set global.ingress.configureCertmanager=false \
       --set certmanager.install=false \
       --set gitlab.unicorn.maxReplicas=3 \
