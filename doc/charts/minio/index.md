@@ -36,14 +36,14 @@ minio:
     proxyBodySize:
     proxyBuffering:
   tolerations:
-  persistence: (upstream)
+  persistence:  # Upstream
     volumeName:
     matchLabels:
     matchExpressions:
-  serviceType: (upstream)
-  servicePort: (upstream)
+  serviceType:  # Upstream
+  servicePort:  # Upstream
   defaultBuckets:
-  minioConfig: (upstream)
+  minioConfig:  # Upstream
 ```
 
 ### Installation command line options
