@@ -2,11 +2,12 @@
 
 {{/*
 Return the version tag used to fetch the GitLab images
-Defaults to using the information from the chart appVersion field, but can be
-overridden using the global.gitlabVersion field in values.
+Defaults to using the information from the chart VERSION file or the appVersion field,
+but can be overridden using the global.gitlabVersion field in values.
 */}}
 {{- define "gitlab.versionTag" -}}
-{{- template "gitlab.parseAppVersion" (dict "appVersion" (coalesce .Values.global.gitlabVersion .Chart.AppVersion) "prepend" "true") -}}
+{{- $appVersion := .Files.Get "VERSION" | default .Chart.AppVersion -}}
+{{- template "gitlab.parseAppVersion" (dict "appVersion" (coalesce .Values.global.gitlabVersion $appVersion) "prepend" "true") -}}
 {{- end -}}
 
 {{/*
