@@ -13,7 +13,8 @@ Options = Struct.new(
   :app_version,
   :chart_version,
   :include_subcharts,
-  :dry_run
+  :dry_run,
+  :auto_deploy
 )
 
 class VersionOptionsParser
@@ -25,6 +26,7 @@ class VersionOptionsParser
       options.working_dir = Dir.pwd
       options.include_subcharts = false
       options.gitlab_repo = "gitlab-org/gitlab"
+      options.auto_deploy = false
 
       OptionParser.new do |opts|
         opts.banner = "Usage: #{__FILE__} [options] \n\n"
@@ -53,6 +55,10 @@ class VersionOptionsParser
           options.dry_run = value
         end
 
+        opts.on('-A', '--auto-deploy', "Manage auto-deploy versions") do |value|
+          options.auto_deploy = value
+        end
+
         opts.on('-h', '--help', 'Print help message') do
           $stdout.puts opts
           exit
@@ -62,6 +68,18 @@ class VersionOptionsParser
       unless (options.app_version && options.app_version.valid?) || (options.chart_version && options.chart_version.valid?)
         $stderr.puts "Must specify a valid --app-version or --chart-version in the syntax 'x.x.x' eg: 11.0.0"
         exit 1
+      end
+
+      if options.auto_deploy
+        if options.chart_version
+          $stderr.puts "Must not specify --chart-version when --auto-deploy is set"
+          exit 1
+        end
+
+        unless options.app_version.build_metadata?
+          $stderr.puts "Must specify a valid --app-version with build metadata eg: 12.9.202002191723+d42c6afcade"
+          exit 1
+        end
       end
 
       unless Dir.exist?(options.working_dir)
@@ -119,6 +137,8 @@ class VersionUpdater
     @app_version = options.app_version
     @options = options
 
+    @chart_version = @app_version if @options.auto_deploy
+
     populate_chart_version
 
     msg = ["# New Versions\n# version: #{@chart_version}"]
@@ -133,7 +153,7 @@ class VersionUpdater
     chart.update_versions(@chart_version, branch == 'master' ? nil : @app_version)
 
     # Only insert into version_mapping when we have both versions, as releases
-    unless @app_version.nil?
+    if !@options.auto_deploy && @app_version
       if @chart_version.release? && @app_version.release?
         version_mapping.insert_version(@chart_version, @app_version)
         version_mapping.finalize
@@ -164,8 +184,13 @@ class VersionUpdater
   end
 
   def populate_subchart_versions
+    # In case of auto-deploy, we don't tag on gitlab repo,
+    # the build_metadata contains the gitlab commit SHA to fetch from
+    version = @app_version
+    version = version.build_metadata if @options.auto_deploy
+
     @subchart_versions = subcharts.map do |sub_chart|
-      version_fetcher = VersionFetcher.new(@app_version, @options.gitlab_repo)
+      version_fetcher = VersionFetcher.new(version, @options.gitlab_repo)
       [ sub_chart, version_fetcher.fetch(sub_chart.name) ]
     end
   end
