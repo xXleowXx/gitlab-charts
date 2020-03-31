@@ -63,7 +63,7 @@ class VersionOptionsParser
           $stdout.puts opts
           exit
         end
-      end.parse!
+      end.parse!(argv)
 
       unless (options.app_version && options.app_version.valid?) || (options.chart_version && options.chart_version.valid?)
         $stderr.puts "Must specify a valid --app-version or --chart-version in the syntax 'x.x.x' eg: 11.0.0"
