@@ -1,7 +1,9 @@
 # Installation command line options
 
 The tables below contain all the possible charts configurations that can be supplied
-to the `helm install` command using the `--set` flags.
+to the `helm install` command using the `--set` flags. 
+
+Default `values.yaml` file can be found [here](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/values.yaml).
 
 ## Basic configuration
 
