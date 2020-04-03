@@ -36,8 +36,8 @@ Grafana server environment.
 There are no required settings, it should work out of the box if you deploy
 all of the charts together. The administrator credentials are created by
 the `shared-secrets` chart and the administrator username is set to `root`.
-Password for the root user can be extracted by the following command (replace 
-`<name>` by the name of the release, which by default is `gitlab`)
+Password for the root user can be extracted by the following command:
+
 ```shell
 kubectl get secret gitlab-grafana-initial-password -ojsonpath='{.data.password}' | base64 --decode ; echo
 ```
@@ -55,12 +55,12 @@ Grafana dashboards are automatically discovered from the ConfigMaps in
 the deployed namespace. If a ConfigMap has been created with the
 `gitlab_grafana_dashboard` label set to `true`, then the JSON encoded
 dashboard in the ConfigMap will be imported into Grafana. This import happens
-once (when Grafana is restarted) and any changes to the dashboard will not be 
+once (when Grafana is restarted) and any changes to the dashboard will not be
 written back to the ConfigMap.
 
-There are no ConfigMaps for dashboards are created by default. The end user may 
-supply their own dashboards utilizing the same mechanism by supplying the `gitlab_grafana_dashboard` 
-label and managing the ConfigMap themselves.
+There are currently no dashboards created when the chart is installed. Any
+user created dashboards can be imported by creating a ConfigMap using the
+`gitlab_grafana_dashboard` label and managing the ConfigMap themselves.
 
 ## Datasource Support
 
