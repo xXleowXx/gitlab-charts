@@ -58,7 +58,7 @@ dashboard in the ConfigMap will be imported into Grafana. This mechanism does
 not allow any updates to the dashboard to be written back to the ConfigMap containing
  the JSON encoded dashboard.
 
-There are no ConfigMaps for dashboards are created by default and the end user may 
+There are no ConfigMaps for dashboards are created by default. The end user may 
 supply their own dashboards utilizing the same mechanism by supplying the `gitlab_grafana_dashboard` 
 label and managing the ConfigMap themselves.
 
