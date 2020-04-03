@@ -54,9 +54,9 @@ kubectl get secret gitlab-grafana-initial-password -ojsonpath='{.data.password}'
 Grafana dashboards are automatically discovered from the ConfigMaps in
 the deployed namespace. If a ConfigMap has been created with the
 `gitlab_grafana_dashboard` label set to `true`, then the JSON encoded
-dashboard in the ConfigMap will be imported into Grafana. This mechanism does 
-not allow any updates to the dashboard to be written back to the ConfigMap containing
- the JSON encoded dashboard.
+dashboard in the ConfigMap will be imported into Grafana. This import happens
+once (when Grafana is restarted) and any changes to the dashboard will not be 
+written back to the ConfigMap.
 
 There are no ConfigMaps for dashboards are created by default. The end user may 
 supply their own dashboards utilizing the same mechanism by supplying the `gitlab_grafana_dashboard` 
