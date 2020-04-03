@@ -39,7 +39,7 @@ the `shared-secrets` chart and the administrator username is set to `root`.
 Password for the root user can be extracted by the following command (replace 
 `<name>` by the name of the release, which by default is `gitlab`)
 ```shell
-kubectl get secret <name>-grafana-initial-password -ojsonpath='{.data.password}' | base64 --decode ; echo
+kubectl get secret gitlab-grafana-initial-password -ojsonpath='{.data.password}' | base64 --decode ; echo
 ```
 
 ## Installation command line options
