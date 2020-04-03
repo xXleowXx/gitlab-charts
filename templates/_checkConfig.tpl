@@ -46,8 +46,7 @@ listen over TLS */}}
 {{- define "gitlab.checkConfig.gitaly.tls" }}
 {{- if and (and $.Values.gitlab.gitaly.enabled $.Values.global.gitaly.tls.enabled) (not $.Values.global.gitaly.tls.secretName) -}}
 gitaly: no tls certificate
-    It appears Gitaly is specified to listen over TLS, but no certificate
-    was specified.
+    It appears Gitaly is specified to listen over TLS, but no certificate was specified.
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.gitaly.tls */}}
@@ -58,9 +57,7 @@ gitaly: no tls certificate
 {{-   range $pod := .Values.gitlab.sidekiq.pods -}}
 {{-     if and (hasKey $pod "queues") (hasKey $pod "negateQueues") -}}
 sidekiq: mixed queues
-    It appears you've supplied both `queues` and `negateQueues` for the
-    pod definition of `{{ $pod.name }}`. `negateQueues` is not usable if
-    `queues` is provided. Please use only one.
+    It appears you've supplied both `queues` and `negateQueues` for the pod definition of `{{ $pod.name }}`. `negateQueues` is not usable if `queues` is provided. Please use only one.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
@@ -75,15 +72,11 @@ listen over TLS */}}
 {{- if eq true .geo.enabled -}}
 {{-   if not .psql.host -}}
 geo: no database provided
-    It appears Geo was configured but no database was provided.
-    Geo behaviors require external databases.
-    Ensure `global.psql.host` is set.
+    It appears Geo was configured but no database was provided. Geo behaviors require external databases. Ensure `global.psql.host` is set.
 {{    end -}}
 {{-   if not .psql.password.secret -}}
 geo: no database password provided
-    It appears Geo was configured, but no database password was provided.
-    Geo behaviors require external databases.
-    Ensure `global.psql.password.secret` is set.
+    It appears Geo was configured, but no database password was provided. Geo behaviors require external databases. Ensure `global.psql.password.secret` is set.
 {{   end -}}
 {{- end -}}
 {{- end -}}
@@ -98,15 +91,11 @@ listen over TLS */}}
 {{- if include "gitlab.geo.secondary" $ }}
 {{-   if not .psql.host -}}
 geo: no secondary database provided
-    It appears Geo was configured with `role: secondary`, but no database
-    was provided. Geo behaviors require external databases.
-    Ensure `global.geo.psql.host` is set.
+    It appears Geo was configured with `role: secondary`, but no database was provided. Geo behaviors require external databases. Ensure `global.geo.psql.host` is set.
 {{    end -}}
 {{-   if not .psql.password.secret -}}
 geo: no secondary database password provided
-    It appears Geo was configured with `role: secondary`, but no database
-    password was provided. Geo behaviors require external databases.
-    Ensure `global.geo.psql.password.secret` is set.
+    It appears Geo was configured with `role: secondary`, but no database password was provided. Geo behaviors require external databases. Ensure `global.geo.psql.password.secret` is set.
 {{    end -}}
 {{- end -}}
 {{- end -}}
@@ -122,9 +111,7 @@ unicorn's worker timeout */}}
 {{- $workerTimeout := $.Values.global.unicorn.workerTimeout }}
 {{- if not (lt $maxDuration $workerTimeout) }}
 gitlab: maxRequestDurationSeconds should be smaller than Unicorn's worker timeout
-        The current value of global.appConfig.maxRequestDurationSeconds ({{ $maxDuration }})
-        is greater than or equal to global.unicorn.workerTimeout ({{ $workerTimeout }})
-        while it should be a lesser value.
+        The current value of global.appConfig.maxRequestDurationSeconds ({{ $maxDuration }}) is greater than or equal to global.unicorn.workerTimeout ({{ $workerTimeout }}) while it should be a lesser value.
 {{- end }}
 {{- end }}
 {{- end }}
