@@ -225,18 +225,18 @@ spec:
 {{- end }}
           {{- include "gitlab.certificates.volumeMount" $ | nindent 10 }}
           livenessProbe:
-            httpGet:
-              path: /liveness
-              port: {{ $.Values.metrics.port }}
+            exec:
+              command:
+              - /scripts/healthcheck           
             initialDelaySeconds: {{ $.Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ $.Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ $.Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ $.Values.livenessProbe.successThreshold }}
             failureThreshold: {{ $.Values.livenessProbe.failureThreshold }}
           readinessProbe:
-            httpGet:
-              path: /readiness
-              port: {{ $.Values.metrics.port }}
+            exec:
+              command:
+              - /scripts/healthcheck           
             initialDelaySeconds: {{ $.Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ $.Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ $.Values.readinessProbe.timeoutSeconds }}
