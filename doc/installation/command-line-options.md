@@ -8,6 +8,7 @@ These contents change over releases, but you can use Helm itself to retrieve the
 
 ```sh
 helm inspect values gitlab/gitlab
+```
 
 ## Basic configuration
 
