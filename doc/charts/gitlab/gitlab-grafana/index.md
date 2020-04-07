@@ -36,7 +36,7 @@ Grafana server environment.
 There are no required settings, it should work out of the box if you deploy
 all of the charts together. The administrator credentials are created by
 the `shared-secrets` chart and the administrator username is set to `root`.
-Password for the root user can be extracted by the following command:
+Password for Grafana's root user can be extracted by the following command:
 
 ```shell
 kubectl get secret gitlab-grafana-initial-password -ojsonpath='{.data.password}' | base64 --decode ; echo
