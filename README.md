@@ -1,8 +1,8 @@
 [![pipeline status](https://gitlab.com/gitlab-org/charts/gitlab/badges/master/pipeline.svg)](https://gitlab.com/gitlab-org/charts/gitlab/pipelines)
-
+ 
 # Cloud Native GitLab Helm Chart
 
-The `gitlab` chart is the best way to operate GitLab on Kubernetes. It contains
+The  `gitlab` chart is the best way to operate GitLab on Kubernetes. It contains
 all the required components to get started, and can scale to large deployments.
 
 Some of the key benefits of this chart and [corresponding containers](https://gitlab.com/gitlab-org/build/CNG) are:
