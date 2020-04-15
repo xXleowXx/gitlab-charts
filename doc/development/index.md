@@ -2,6 +2,18 @@
 
 Our contribution policies can be found in [CONTRIBUTING.md](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/CONTRIBUTING.md)
 
+## Common developer tools
+
+Developers working on charts often use the following tools:
+
+Tool name | Benefits | Example use case | Link(s)
+-|-|-|-
+`asdf` | Easily switch between versions of your favorite runtimes and CLI tools. | Switching between Helm 2 and Helm 3 binaries. | [Github](https://github.com/asdf-vm/asdf)
+`kubectx` & `kubens` | Manage and switch between Kubernetes contexts and namespaces. | Setting default namespace per selected cluster context. | [Github](https://github.com/ahmetb/kubectx)
+`k3s` | Lightweight Kubernetes installation (<40MB). | Quick and reliable local chart testing. | [Homepage](https://k3s.io)
+`k9s` | Greatly reduced typing of `kubectl` commands. | Navigate and manage cluster resources quickly. | [Github](https://github.com/derailed/k9s)
+`stern` | Easily follow logs from multiple pods. | See logs from a set of Gitlab pods together. | [Github](https://github.com/wercker/stern)
+
 ## Versioning and Release
 
 Details on the version scheme, branching and tags can be found in [release document](release.md).
