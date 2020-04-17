@@ -153,6 +153,8 @@ kubectl create -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/doc/ins
 
 ### Initializing Helm
 
+CAUTION: **No longer required if you've got Helm 3.0 or later**
+
 Finally, deploy Helm Tiller with a service account:
 
 ```sh
