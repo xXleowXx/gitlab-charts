@@ -163,6 +163,11 @@ authAutoRedirect: false
 
 maxUnavailable: 1
 
+# updateStrategy is utilized to configure the desired upgrade strategy and
+# configuration utilized by the deployment.  See the Kubernetes documentation
+# related to this subject.
+updateStrategy: {}
+
 # if minReplicas is >1, shared storage MUST be used.
 hpa:
   minReplicas: 2
