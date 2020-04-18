@@ -1,5 +1,5 @@
 ---
 title: Adds configurability for deployment strategy for Container Registry
-merge_request:
+merge_request: 1293
 author:
 type: added
