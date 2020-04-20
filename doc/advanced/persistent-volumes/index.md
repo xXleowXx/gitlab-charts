@@ -270,7 +270,7 @@ Finally, [apply the changes to the GitLab chart](#apply-the-changes-to-the-gitla
 ### Switching to a different Volume
 
 If you want to switch to using a new volume, using a disk that has a copy of the
-appropriate data from the old volume, then first you need to create the the new
+appropriate data from the old volume, then first you need to create the new
 [Persistent Volume][pv] in Kubernetes.
 
 In order to create a [Persistent Volume][pv] for your disk, you will need to
@@ -449,10 +449,14 @@ Update the chart, and include the updated configuration:
 Example:
 
 ```bash
-helm --namespace helm-charts-win upgrade --install review-update-app-h8qogp gitlab/gitlab \
+helm upgrade --install review-update-app-h8qogp gitlab/gitlab \
   --set gitlab.gitaly.persistence.size=100Gi \
   <your other config settings>
 ```
+
+NOTE: **Note**:
+With Helm v2, one may need to specify the namespace that the release was
+deployed to with the `--namespace <namespace>` option.
 
 [pv]: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes
 [pvc]: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims

@@ -50,13 +50,22 @@ stages:
   - package
   - cleanup
 
+tag_auto_deploy:
+  stage: package
+  rules:
+    - if: $CI_PIPELINE_TRIGGERED && $TRIGGER_JOB == "tag_auto_deploy" && $AUTO_DEPLOY_TAG && $REPOSITORY_PAT
+  script:
+    - ./scripts/tag_auto_deploy.rb
+
 .deps_pipeline: &deps_pipeline
   variables:
     - $DEPS_PIPELINE
 
 .except_deps_update: &except_deps_update
   except:
-    <<: *deps_pipeline
+    variables:
+      - $DEPS_PIPELINE
+      - $TRIGGER_JOB
 
 dependency_update:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
@@ -86,6 +95,7 @@ lint_package:
     <<: *deps_pipeline
     refs:
       - tags
+      - triggers
       - /(^docs[\/-].+|.+-docs$)/
 
 .kubeval:
@@ -101,6 +111,7 @@ lint_package:
     <<: *deps_pipeline
     refs:
       - tags
+      - triggers
       - /(^docs[\/-].+|.+-docs$)/
 
 "Validate 1.12.9":
@@ -146,6 +157,7 @@ lint_package:
     <<: *deps_pipeline
     refs:
       - master
+      - triggers
       - /(^docs[\/-].+|.+-docs$)/
 
 review_gke:
@@ -187,6 +199,7 @@ review_eks:
     <<: *deps_pipeline
     refs:
       - master
+      - triggers
       - /(^docs[\/-].+|.+-docs$)/
 
 stop_review_gke:
@@ -414,6 +427,49 @@ check_docs_lint:
     - bundle exec nanoc check internal_anchors
   <<: *except_deps_update
 
+.review-docs:
+  image: ruby:2.6-alpine
+  stage: review
+  cache: {}
+  dependencies: []
+  before_script:
+  - gem install gitlab --no-doc
+  # We need to download the script rather than clone the repo since the
+  # review-docs-cleanup job will not be able to run when the branch gets
+  # deleted (when merging the MR).
+  - apk add --update openssl
+  - wget https://gitlab.com/gitlab-org/gitlab/-/raw/master/scripts/trigger-build-docs
+  - chmod 755 trigger-build-docs
+  variables:
+    GIT_STRATEGY: none
+    DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
+  when: manual
+  except:
+    - triggers
+
+# Trigger a docs build in gitlab-docs
+# Useful to preview the docs changes live
+# https://docs.gitlab.com/ee/development/documentation/index.html#previewing-the-changes-live
+review-docs-deploy:
+  extends:
+  - .review-docs
+  environment:
+    name: docs_review/$CI_COMMIT_REF_SLUG
+    url: http://docs-preview-charts-$CI_COMMIT_REF_SLUG.$DOCS_REVIEW_APPS_DOMAIN/charts
+    on_stop: review-docs-cleanup
+  script:
+  - ./trigger-build-docs deploy
+
+# Cleanup remote environment of gitlab-docs
+review-docs-cleanup:
+  extends:
+  - .review-docs
+  environment:
+    name: docs_review/$CI_COMMIT_REF_SLUG
+    action: stop
+  script:
+  - ./trigger-build-docs cleanup
+
 # ---------------------------------------------------------------------------
 
 .auto_devops: &auto_devops |
@@ -513,6 +569,12 @@ check_docs_lint:
 
     WAIT="--wait --timeout 900"
 
+    # Only enable Prometheus on `master`
+    PROMETHEUS_INSTALL="false"
+    if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+      PROMETHEUS_INSTALL="true"
+    fi
+
     # helm's --set argument dislikes special characters, pass them as YAML
     cat << CIYAML > ci.details.yaml
     ci:
@@ -537,6 +599,7 @@ check_docs_lint:
       --set global.ingress.tls.secretName=helm-charts-win-tls \
       --set global.ingress.configureCertmanager=false \
       --set certmanager.install=false \
+      --set prometheus.install=$PROMETHEUS_INSTALL \
       --set gitlab.webservice.maxReplicas=3 \
       --set gitlab.sidekiq.maxReplicas=2 \
       --set gitlab.task-runner.enabled=true \
@@ -638,7 +701,7 @@ check_docs_lint:
     fi
 
     # Expect the `DOMAIN` is a wildcard.
-    domain_ip=$(nslookup gitlab$DOMAIN 2>/dev/null | grep "Address 1:" | cut -d' ' -f3)
+    domain_ip=$(nslookup gitlab$DOMAIN 2>/dev/null | grep "Address: \d" | awk '{print $2}')
     if [ -z $domain_ip ]; then
       echo "There was a problem resolving the IP of 'gitlab$DOMAIN'. Be sure you have configured a DNS entry."
       false
@@ -885,7 +948,7 @@ release_package:
       else
         UNSTABLE="false"
       fi
-    - curl --request POST --form "token=${COM_CHARTS_TRIGGER_TOKEN}" --form ref=master
+    - curl -fS --request POST --form "token=${COM_CHARTS_TRIGGER_TOKEN}" --form ref=master
         --form "variables[CHART_NAME]=$CI_PROJECT_NAME"
         --form "variables[RELEASE_REF]=$CI_COMMIT_REF_NAME"
         --form "variables[UNSTABLE]=$UNSTABLE"

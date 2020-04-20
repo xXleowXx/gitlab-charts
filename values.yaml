@@ -104,6 +104,7 @@ global:
     authToken: {}
       # secret:
       # key:
+    # serviceName:
     internal:
       names: ['default']
     external: []
@@ -126,6 +127,7 @@ global:
   appConfig:
     ## doc/charts/globals.md#general-application-settings
     enableUsagePing: true
+    enableSeatLink: true
     enableImpersonation:
     defaultCanCreateGroup: true
     usernameChangingEnabled: true
@@ -240,6 +242,10 @@ global:
       when:
       proxy_download: true
       bucket: gitlab-mr-diffs
+      connection: {}
+    terraformState:
+      enabled: false
+      bucket: gitlab-terraform-state
       connection: {}
 
     ## doc/charts/globals.md#pseudonymizer-settings
@@ -548,10 +554,6 @@ prometheus:
 ## Configuration of Redis
 ## doc/architecture/decisions.md#redis
 ## doc/charts/redis
-# redis:
-#   enabled: true
-## doc/architecture/decisions.md#redis-ha
-## doc/charts/redis-ha
 redis:
   install: true
   existingSecret: gitlab-redis-secret
@@ -658,7 +660,10 @@ grafana:
 
 ## Settings for individual sub-charts under GitLab
 ## Note: Many of these settings are configurable via globals
-# gitlab:
+gitlab:
+  ## doc/charts/gitlab/task-runner
+  task-runner:
+    replicas: 1
 ## doc/charts/gitlab/migrations
 #   migrations:
 #     enabled: false

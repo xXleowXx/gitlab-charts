@@ -8,11 +8,14 @@ global:
     internal:
       names: ["default"]
     external: []
+    authToken: {}
+  # serviceName:
   # imagePullPolicy: IfNotPresent
   redis:
     password: {}
-  gitaly:
-    authToken: {}
+
+gitaly: {}
+# serviceName:
 
 internal: {}
 image:
@@ -28,7 +31,6 @@ service:
   tls:
     externalPort: 8076
     internalPort: 8076
-serviceName: gitaly
 annotations: {}
 
 init:
@@ -41,6 +43,9 @@ init:
 
 ## Support for tolerations for pod scheduling
 tolerations: []
+
+## The Gitaly StatefulSet's priorityClassName
+# priorityClassName:
 
 logging:
   format: "json"
@@ -64,7 +69,6 @@ workhorse:
   # host: '0.0.0.0'
   # serviceName: 'webservice'
   # port: 8181
-redis: {}
 shell:
   authToken: {}
   concurrency: []

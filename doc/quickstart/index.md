@@ -84,7 +84,7 @@ to be allocated, services to start, and access made available.
 Once this step has completed, we can proceed to collect the IP address that has
 been dynamically allocated for the installed NGINX Ingress.
 
-## Retreive the IP address
+## Retrieve the IP address
 
 We can use `kubectl` to fetch the address that has been dynamically been
 allocated by GKE to the NGINX Ingress we've just installed and configured as
@@ -96,7 +96,7 @@ kubectl get ingress -lrelease=gitlab
 
 This output should look something like the following:
 
-```
+```plaintext
 NAME            HOSTS                 ADDRESS         PORTS     AGE
 gitlab-minio    minio.domain.tld      35.239.27.235   80, 443   118m
 gitlab-registry registry.domain.tld   35.239.27.235   80, 443   118m

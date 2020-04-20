@@ -22,7 +22,7 @@ objects. You'll need to specify a domain which will contain records to resolve
 
 *Include these options in your Helm install command:*
 
-```
+```shell
 --set global.hosts.domain=example.com
 ```
 
@@ -47,7 +47,7 @@ documentation for more help on this process.
 
 *Include these options in your Helm install command:*
 
-```
+```shell
 --set global.hosts.externalIP=10.10.10.10
 ```
 
@@ -68,9 +68,10 @@ have some other way of obtaining TLS certificates, [read about more TLS options 
 
 For the default configuration, you must specify an email address to register your TLS
 certificates.
+
 *Include these options in your Helm install command:*
 
-```
+```shell
 --set certmanager-issuer.email=me@example.com
 ```
 
@@ -91,7 +92,7 @@ use it as shown below.
 
 *Include these options in your Helm install command:*
 
-```
+```shell
 --set postgresql.install=false
 --set global.psql.host=production.postgress.hostname.local
 --set global.psql.password.secret=kubernetes_secret_name
@@ -190,7 +191,7 @@ By default, the Helm charts use the Enterprise Edition of GitLab. If desired, yo
 
 *To deploy the Community Edition, include this option in your Helm install command:*
 
-```
+```shell
 --set global.edition=ce
 ```
 
@@ -198,7 +199,7 @@ By default, the Helm charts use the Enterprise Edition of GitLab. If desired, yo
 
 This chart defaults to creating and using RBAC. If your cluster does not have RBAC enabled, you will need to disable these settings:
 
-```
+```shell
 --set certmanager.rbac.create=false
 --set nginx-ingress.rbac.createRole=false
 --set prometheus.rbac.create=false
@@ -215,23 +216,53 @@ a smaller cluster.
 The [minimal GKE example values file](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/values-gke-minimum.yaml) provides an example of tuning the resources
 to fit within a 3vCPU 12gb cluster.
 
-The [minimal minikube example values file](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/values-minikube-minimum.yaml) provides an example of tuning the
-resources to fit within a 2vCPU, 4gb minikube instance.
+The [minimal Minikube example values file](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/values-minikube-minimum.yaml) provides an example of tuning the
+resources to fit within a 2vCPU, 4gb Minikube instance.
 
 ## Deploy using Helm
 
 Once you have all of your configuration options collected, we can get any dependencies and
 run Helm. In this example, we've named our Helm release `gitlab`.
 
-```
+```shell
 helm repo add gitlab https://charts.gitlab.io/
 helm repo update
 helm upgrade --install gitlab gitlab/gitlab \
-  --timeout 600 \
+  --timeout 600s \
   --set global.hosts.domain=example.com \
   --set global.hosts.externalIP=10.10.10.10 \
   --set certmanager-issuer.email=me@example.com
 ```
+
+NOTE: **Note**:
+All Helm commands are specified using Helm v3 syntax. If the
+Helm v2 syntax differs every effort is made to provide a note that details
+the difference.
+
+NOTE: **Note**:
+If `helm install` is used there is a slight difference in the way
+that Helm v2 and Helm v3 operate. When using Helm v2 if a release name
+was not specified with the `--name` option it would randomly generate the
+release name. Helm v3 requires that the release name be specified as a
+positional argument on the command line unless the `--generate-name`
+option is used.
+
+NOTE: **Note**:
+The timeout option above is handled differently between Helm v2
+and Helm v3. With Helm v3 allows one to specify a duration with a unit
+appended to the value (e.g. `120s` = `2m` and `210s` = `3m30s`). The
+`--timeout` option is handled as the number of seconds _without_ the
+unit specification.
+
+NOTE: **Note**:
+The use of the `--timeout` option is deceptive in that there are
+multiple components that are deployed during an Helm install or upgrade
+in which the `--timeout` is applied. The `--timeout` value is applied to
+the installation of each component individually and not applied for the
+installation of all the components. So intending to abort the Helm install
+after 3 minutes by using `--timeout=3m` may result in the install completing
+after 5 minutes because none of the installed components took longer than
+3 minutes to install.
 
 You can also use `--version <installation version>` option if you would like to install a specific version of GitLab.
 
@@ -259,7 +290,7 @@ created a random password for `root` user. This can be extracted by the
 following command (replace `<name>` by name of the release - which is `gitlab`
 if you used the command above).
 
-```
+```shell
 kubectl get secret <name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
 ```
 

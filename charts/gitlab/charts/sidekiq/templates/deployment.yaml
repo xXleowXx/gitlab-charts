@@ -11,8 +11,6 @@
 {{- $nodeSelector := .Values.nodeSelector -}}
 {{- $minioEnabled := .Values.global.minio.enabled -}}
 {{- $minioSecret := include "gitlab.minio.credentials.secret" . -}}
-{{- $redisSecret := include "gitlab.redis.password.secret" . -}}
-{{- $redisKey := include "gitlab.redis.password.key" . -}}
 {{- $gitalySecret := include "gitlab.gitaly.authToken.secret" . -}}
 {{- $gitalyKey := include "gitlab.gitaly.authToken.key" . -}}
 {{- $railsSecretName := include "gitlab.rails-secrets.secret" . -}}
@@ -170,10 +168,18 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
+            - name: SIDEKIQ_CLUSTER
+              value: {{ include "gitlab.boolean.local" (dict "global" $.Values.cluster "local" .cluster "default" false) | quote }}
+            - name: SIDEKIQ_EXPERIMENTAL_QUEUE_SELECTOR
+              value: {{ include "gitlab.boolean.local" (dict "global" $.Values.experimentalQueueSelector "local" .experimentalQueueSelector "default" false) | quote }}
             - name: SIDEKIQ_CONCURRENCY
               value: {{ default $concurrency .concurrency | quote }}
             - name: SIDEKIQ_TIMEOUT
               value: {{ default $timeout .timeout | quote }}
+            - name: SIDEKIQ_QUEUES
+              value: {{ default $.Values.queues .queues | quote }}
+            - name: SIDEKIQ_NEGATE_QUEUES
+              value: {{ default $.Values.negateQueues .negateQueues | quote }}
             - name: SIDEKIQ_DAEMON_MEMORY_KILLER
               value: {{ int $.Values.memoryKiller.daemonMode | quote }}
             - name: SIDEKIQ_MEMORY_KILLER_CHECK_INTERVAL
@@ -282,13 +288,7 @@ spec:
               items:
                 - key: {{ $gitalyKey }}
                   path: gitaly/gitaly_token
-          {{- if $.Values.global.redis.password.enabled }}
-          - secret:
-              name: {{ $redisSecret }}
-              items:
-                - key: {{ $redisKey }}
-                  path: redis/password
-          {{- end }}
+          {{- include "gitlab.redis.secrets" $ | nindent 10 }}
           - secret:
               name: {{ template "gitlab.psql.password.secret" $ }}
               items:
@@ -312,6 +312,7 @@ spec:
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "uploads" "config" $.Values.global.appConfig.uploads) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "packages" "config" $.Values.global.appConfig.packages) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "external_diffs" "config" $.Values.global.appConfig.externalDiffs) | nindent 10 }}
+          {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "terraform_state" "config" $.Values.global.appConfig.terraformState) | nindent 10 }}
           {{- include "gitlab.appConfig.pseudonymizer.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.appConfig.ldap.servers.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.appConfig.omniauth.mountSecrets" $ | nindent 10 }}

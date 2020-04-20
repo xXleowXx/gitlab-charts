@@ -309,13 +309,7 @@ spec:
               items:
                 - key: {{ template "gitlab.gitaly.authToken.key" . }}
                   path: gitaly/gitaly_token
-          {{- if .Values.global.redis.password.enabled }}
-          - secret:
-              name: {{ template "gitlab.redis.password.secret" . }}
-              items:
-                - key: {{ template "gitlab.redis.password.key" . }}
-                  path: redis/password
-          {{- end }}
+          {{- include "gitlab.redis.secrets" . | nindent 10 }}
           - secret:
               name: {{ template "gitlab.psql.password.secret" . }}
               items:
@@ -344,6 +338,7 @@ spec:
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "uploads" "config" $.Values.global.appConfig.uploads) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "packages" "config" $.Values.global.appConfig.packages) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "external_diffs" "config" $.Values.global.appConfig.externalDiffs) | nindent 10 }}
+          {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "terraform_state" "config" $.Values.global.appConfig.terraformState) | nindent 10 }}
           {{- include "gitlab.appConfig.ldap.servers.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.appConfig.omniauth.mountSecrets" $ | nindent 10 }}
           {{- if and $.Values.global.smtp.enabled $.Values.global.smtp.authentication }}

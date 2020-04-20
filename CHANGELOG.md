@@ -2,6 +2,31 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 3.2.4 (2020-04-17)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.9.4.
+
+
+## 3.2.3 (2020-04-15)
+
+### Added (1 change, 1 of them is from the community)
+
+- Add support for the Seat Link enabled flag. !1272 (Matthias van de Meent)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.9.3.
+
+
+## 3.2.2 (2020-03-31)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.9.2.
+
+
 ## 3.2.1 (2020-03-26)
 
 ### Other (1 change)
@@ -26,6 +51,13 @@ entry.
 ### Other (1 change)
 
 - Update GitLab Version to 12.9.0.
+
+
+## 3.1.7 (2020-04-15)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.8.9.
 
 
 ## 3.1.6 (2020-03-26)
@@ -114,6 +146,13 @@ entry.
 - Include GitLab Exporter & GitLab Grafana to sub-chart lists. !1161
 - Bump Container Registry to v2.8.1-gitlab. !1173
 - Update GitLab Version to 12.8.0.
+
+
+## 3.0.7 (2020-04-15)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.7.9.
 
 
 ## 3.0.6 (2020-03-26)

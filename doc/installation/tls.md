@@ -14,10 +14,10 @@ using various tools. This chart comes ready to integrate with a popular choice [
 
 ### Internal cert-manager and Issuer
 
-```
+```shell
 helm repo update
 helm dep update
-helm install ...
+helm install gitlab gitlab/gitlab
   --set certmanager-issuer.email=you@example.com
 ```
 
@@ -29,8 +29,8 @@ provided by default.
 
 It is possible to make use of an external `cert-manager` but provide an Issuer as a part of this chart.
 
-```
-helm install ...
+```shell
+helm install gitlab gitlab/gitlab
   --set certmanager.install=false \
   --set certmanager-issuer.email=you@example.com \
   --set global.ingress.annotations."kubernetes\.io/tls-acme"=true
@@ -44,8 +44,8 @@ are not activated.
 1. Annotations to activate the external `cert-manager` (see [documentation][cm-annotations] for further details)
 1. Names of TLS secrets for each service (this deactivates [self-signed behaviors](#option-4-use-auto-generated-self-signed-wildcard-certificate))
 
-```
-helm install ...
+```shell
+helm install gitlab gitlab/gitlab
   --set certmanager.install=false \
   --set global.ingress.configureCertmanager=false \
   --set global.ingress.annotations."kubernetes\.io/tls-acme"=true \
@@ -58,14 +58,14 @@ helm install ...
 
 Add your full chain certificate and key to the cluster as a `Secret`, e.g.:
 
-```
+```shell
 kubectl create secret tls <tls-secret-name> --cert=<path/to-full-chain.crt> --key=<path/to.key>
 ```
 
 Include the option to
 
-```
-helm install ...
+```shell
+helm install gitlab gitlab/gitlab
   --set certmanager.install=false \
   --set global.ingress.configureCertmanager=false \
   --set global.ingress.tls.secretName=<tls-secret-name>
@@ -75,8 +75,8 @@ helm install ...
 
 Add your full chain certificates to the cluster as secrets, and then pass those secret names to each Ingress.
 
-```
-helm install ...
+```shell
+helm install gitlab gitlab/gitlab
   --set certmanager.install=false \
   --set global.ingress.configureCertmanager=false \
   --set global.ingress.tls.enabled=true \
@@ -94,8 +94,8 @@ desired. This functionality is provided by the [shared-secrets](../charts/shared
 > **Note**: The `gitlab-runner` chart does not function properly with self-signed certificates. We recommend
 disabling it, as shown below.
 
-```
-helm install ...
+```shell
+helm install gitlab gitlab/gitlab
   --set certmanager.install=false \
   --set global.ingress.configureCertmanager=false \
   --set gitlab-runner.install=false

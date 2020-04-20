@@ -3,6 +3,13 @@
 The tables below contain all the possible charts configurations that can be supplied
 to the `helm install` command using the `--set` flags.
 
+The source of the default `values.yaml` file can be found [here](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/values.yaml).
+These contents change over releases, but you can use Helm itself to retrieve these on a per-version basis:
+
+```sh
+helm inspect values gitlab/gitlab
+```
+
 ## Basic configuration
 
 | Parameter                                      | Description                                                                                 | Default                                       |
@@ -123,12 +130,12 @@ See [`nginx-ingress` chart](../charts/nginx/index.md).
 
 | Parameter                            | Description                                 | Default               |
 |--------------------------------------|---------------------------------------------|-----------------------|
-| `redis.install`                      | Install the `stable/redis` chart            | true                  |
+| `redis.install`                      | Install the `bitnami/redis` chart           | true                  |
 | `redis.existingSecret`               | Specify the Secret for Redis servers to use | `gitlab-redis-secret` |
 | `redis.existingSecretKey`            | Secret key where password is stored         | `redis-password`      |
 
 Any additional configuration of the Redis service should use the configuration
-settings from the [Redis chart](https://github.com/helm/charts/tree/master/stable/redis).
+settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis).
 
 ## Advanced registry configuration
 
@@ -207,7 +214,7 @@ settings from the [Redis chart](https://github.com/helm/charts/tree/master/stabl
 | `gitlab-runner.unregisterRunners`                            | unregister all runners before termination      | true                                                             |
 | `gitlab.gitaly.authToken.key`                                | Key to Gitaly token in the secret              | `token`                                                          |
 | `gitlab.gitaly.authToken.secret`                             | Gitaly secret name                             | `{.Release.Name}-gitaly-secret`                                  |
-| `gitlab.gitaly.image.pullPolicy`                             | Gitaly image pull policy                       | `Always`                                                         |
+| `gitlab.gitaly.image.pullPolicy`                             | Gitaly image pull policy                       |                                                         |
 | `gitlab.gitaly.image.repository`                             | Gitaly image repository                        | `registry.gitlab.com/gitlab-org/build/cng/gitaly`                |
 | `gitlab.gitaly.image.tag`                                    | Gitaly image tag                               | `latest`                                                         |
 | `gitlab.gitaly.persistence.accessMode`                       | Gitaly persistence access mode                 | `ReadWriteOnce`                                                  |
@@ -231,7 +238,7 @@ settings from the [Redis chart](https://github.com/helm/charts/tree/master/stabl
 | `gitlab.gitlab-shell.authToken.key`                          | Shell auth secret key                          | `secret`                                                         |
 | `gitlab.gitlab-shell.authToken.secret`                       | Shell auth secret                              | `{Release.Name}-gitlab-shell-secret`                             |
 | `gitlab.gitlab-shell.enabled`                                | Shell enable flag                              | true                                                             |
-| `gitlab.gitlab-shell.image.pullPolicy`                       | Shell image pull policy                        | `Always`                                                         |
+| `gitlab.gitlab-shell.image.pullPolicy`                       | Shell image pull policy                        |                                                          |
 | `gitlab.gitlab-shell.image.repository`                       | Shell image repository                         | `registry.gitlab.com/gitlab-org/build/cng/gitlab-shell`          |
 | `gitlab.gitlab-shell.image.tag`                              | Shell image tag                                | `latest`                                                         |
 | `gitlab.gitlab-shell.replicaCount`                           | Shell replicas                                 | `1`                                                              |
@@ -243,7 +250,7 @@ settings from the [Redis chart](https://github.com/helm/charts/tree/master/stabl
 | `gitlab.gitlab-shell.unicorn.serviceName`                    | Unicorn service name                           | `unicorn`                                                        |
 | `gitlab.migrations.bootsnap.enabled`                         | Migrations Bootsnap enable flag                | true                                                             |
 | `gitlab.migrations.enabled`                                  | Migrations enable flag                         | true                                                             |
-| `gitlab.migrations.image.pullPolicy`                         | Migrations pull policy                         | `Always`                                                         |
+| `gitlab.migrations.image.pullPolicy`                         | Migrations pull policy                         |                                                          |
 | `gitlab.migrations.image.repository`                         | Migrations image repository                    | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task_runner-ee`       |
 | `gitlab.migrations.image.tag`                                | Migrations image tag                           | `latest`                                                         |
 | `gitlab.migrations.psql.password.key`                        | key to psql password in psql secret            | `psql-password`                                                  |
@@ -255,7 +262,7 @@ settings from the [Redis chart](https://github.com/helm/charts/tree/master/stabl
 | `gitlab.sidekiq.gitaly.authToken.key`                        | key to Gitaly token in Gitaly secret           | `token`                                                          |
 | `gitlab.sidekiq.gitaly.authToken.secret`                     | Gitaly secret                                  | `{.Release.Name}-gitaly-secret`                                  |
 | `gitlab.sidekiq.gitaly.serviceName`                          | Gitaly service name                            | `gitaly`                                                         |
-| `gitlab.sidekiq.image.pullPolicy`                            | Sidekiq image pull policy                      | `Always`                                                         |
+| `gitlab.sidekiq.image.pullPolicy`                            | Sidekiq image pull policy                      |                                                          |
 | `gitlab.sidekiq.image.repository`                            | Sidekiq image repository                       | `registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee`     |
 | `gitlab.sidekiq.image.tag`                                   | Sidekiq image tag                              | `latest`                                                         |
 | `gitlab.sidekiq.psql.password.key`                           | key to psql password in psql secret            | `psql-password`                                                  |
@@ -309,7 +316,7 @@ settings from the [Redis chart](https://github.com/helm/charts/tree/master/stabl
 | `gitlab.unicorn.gitaly.authToken.key`                        | Key to Gitaly token in Gitaly secret           | `token`                                                          |
 | `gitlab.unicorn.gitaly.authToken.secret`                     | Gitaly secret name                             | `{.Release.Name}-gitaly-secret`                                  |
 | `gitlab.unicorn.gitaly.serviceName`                          | Gitaly service name                            | `gitaly`                                                         |
-| `gitlab.unicorn.image.pullPolicy`                            | Unicorn image pull policy                      | `Always`                                                         |
+| `gitlab.unicorn.image.pullPolicy`                            | Unicorn image pull policy                      |                                                          |
 | `gitlab.unicorn.image.repository`                            | Unicorn image repository                       | `registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee`     |
 | `gitlab.unicorn.image.tag`                                   | Unicorn image tag                              | `latest`                                                         |
 | `gitlab.unicorn.psql.password.key`                           | Key to psql password in psql secret            | `psql-password`                                                  |
