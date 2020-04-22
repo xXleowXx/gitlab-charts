@@ -3,7 +3,7 @@
 NOTE: **Note**:
 The steps below assume you are using the [default volume locations](https://docs.gitlab.com/omnibus/docker/#where-is-the-data-stored)
 for data stored on your host and that the Docker container is called **gitlab**.
-You may need to adjust the commands below to match your setup.
+To check what your volume locations are, you can run `sudo docker inspect -f '{{ .Mounts }}' <CONTAINER_ID>`.
 
 ## Prerequisites
 
