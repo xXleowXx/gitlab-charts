@@ -48,7 +48,7 @@ Read how to [use Minikube for setting up a local Kubernetes development environm
 
 ## Naming Conventions
 
-We are using [camelCase](https://en.wikipedia.org/wiki/Camel_case) for our function names, and properties where they are used in `values.yaml`
+We are using [camelCase](https://en.wikipedia.org/wiki/Camel_case) for our function names, and properties where they are used in `values.yaml`.
 
 Example: `gitlab.assembleHost`
 
