@@ -279,7 +279,6 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `maxReplicas`  | Integer | `10`    | Maximum number of replicas |
 | `maxUnavailable` | Integer | `1`   | Limit of maximum number of Pods to be unavailable |
 | `updateStrategy` |       | `{}`    | Allows one to configure the update strategy utilized by the deployment |
-| `maxUnavailable` | Integer | `1`   | Limit of maximum number of Pods to be unavailable |
 
 ### queues
 
