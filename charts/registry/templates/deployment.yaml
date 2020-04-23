@@ -15,8 +15,7 @@ spec:
       app: {{ template "name" . }}
       release: {{ .Release.Name }}
 {{- if .Values.updateStrategy }}
-  strategy:
-{{ toYaml .Values.updateStrategy | indent 4 }}
+  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
 {{- end }}
   template:
     metadata:
