@@ -1,6 +1,18 @@
-# Development styleguide
+# Development Guide
 
 Our contribution policies can be found in [CONTRIBUTING.md](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/CONTRIBUTING.md)
+
+## Common developer tools
+
+Developers working on charts often use the following tools:
+
+Tool name | Benefits | Example use case | Link(s)
+-|-|-|-
+`asdf` | Easily switch between versions of your favorite runtimes and CLI tools. | Switching between Helm 2 and Helm 3 binaries. | [GitHub](https://github.com/asdf-vm/asdf)
+`kubectx` & `kubens` | Manage and switch between Kubernetes contexts and namespaces. | Setting default namespace per selected cluster context. | [GitHub](https://github.com/ahmetb/kubectx)
+`k3s` | Lightweight Kubernetes installation (<40MB). | Quick and reliable local chart testing. | [Homepage](https://k3s.io)
+`k9s` | Greatly reduced typing of `kubectl` commands. | Navigate and manage cluster resources quickly. | [GitHub](https://github.com/derailed/k9s)
+`stern` | Easily follow logs from multiple pods. | See logs from a set of GitLab pods together. | [GitHub](https://github.com/wercker/stern)
 
 ## Versioning and Release
 
@@ -36,7 +48,7 @@ Read how to [use Minikube for setting up a local Kubernetes development environm
 
 ## Naming Conventions
 
-We are using [camelCase](https://en.wikipedia.org/wiki/Camel_case) for our function names, and properties where they are used in values.yaml
+We are using [camelCase](https://en.wikipedia.org/wiki/Camel_case) for our function names, and properties where they are used in `values.yaml`.
 
 Example: `gitlab.assembleHost`
 
@@ -47,7 +59,7 @@ Examples:
 - `gitlab.redis.host`: provides the host name of the Redis server, as a part of the `gitlab` chart.
 - `registry.minio.url`: provides the URL to the MinIO host as part of the `registry` chart.
 
-## Common structure for values.yaml
+## Common structure for `values.yaml`
 
 Many charts need to be provided with the same information, for example we need to provide the Redis and PostgreSQL connection settings to multiple charts. Here we outline our standard naming and structure for those settings.
 
