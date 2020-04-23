@@ -16,7 +16,8 @@ spec:
   maxUnavailable: {{ default $.Values.maxUnavailable .maxUnavailable }}
   selector:
     matchLabels:
-      app: {{ printf "%s-v1" ($queueName | trunc 60) }}
+      app: {{ $name }}
       release: {{ $.Release.Name }}
+      queue-pod-name: {{ .name }}
 {{- end -}}
 {{- end -}}
