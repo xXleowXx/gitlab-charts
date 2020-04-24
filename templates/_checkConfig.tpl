@@ -144,7 +144,7 @@ webservice's worker timeout */}}
 {{- $workerTimeout := $.Values.global.webservice.workerTimeout }}
 {{- if not (lt $maxDuration $workerTimeout) }}
 gitlab: maxRequestDurationSeconds should be smaller than Webservice's worker timeout
-        The current value of global.appConfig.maxRequestDurationSeconds ({{ $maxDuration }}) is greater than or equal to global.unicorn.workerTimeout ({{ $workerTimeout }}) while it should be a lesser value.
+        The current value of global.appConfig.maxRequestDurationSeconds ({{ $maxDuration }}) is greater than or equal to global.webservice.workerTimeout ({{ $workerTimeout }}) while it should be a lesser value.
 {{- end }}
 {{- end }}
 {{- end }}
