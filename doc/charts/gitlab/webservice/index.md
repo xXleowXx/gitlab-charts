@@ -1,6 +1,6 @@
-# Using the GitLab Unicorn Chart
+# Using the GitLab Webservice Chart
 
-The `unicorn` sub-chart provides the GitLab Rails webserver with two Unicorn workers
+The `webservice` sub-chart provides the GitLab Rails webserver with two Webservice workers
 per pod. (The minimum necessary for a single pod to be able to serve any web request in GitLab)
 
 Currently the container used in the chart also includes a copy of GitLab Workhorse,
@@ -14,7 +14,7 @@ the Kubernetes cluster this chart is deployed onto.
 
 ## Configuration
 
-The `unicorn` chart is configured as follows: [Global Settings](#global-settings),
+The `webservice` chart is configured as follows: [Global Settings](#global-settings),
 [Ingress Settings](#ingress-settings), [External Services](#external-services), and
 [Chart Settings](#chart-settings).
 
@@ -36,23 +36,23 @@ to the `helm install` command using the `--set` flags.
 | `deployment.readinessProbe.timeoutSeconds`      | 2      | When the readiness probe times out             |
 | `deployment.readinessProbe.successThreshold`    | 1      | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
 | `deployment.readinessProbe.failureThreshold`    | 3      | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded |
-| `enabled`                        | `true`                | Unicorn enabled flag                           |
+| `enabled`                        | `true`                | Webservice enabled flag                           |
 | `extraContainers`                |                       | List of extra containers to include            |
 | `extraInitContainers`            |                       | List of extra init containers to include       |
 | `extras.google_analytics_id`     | `nil`                 | Google Analytics Id for frontend               |
 | `extraVolumeMounts`              |                       | List of extra volumes mountes to do            |
 | `extraVolumes`                   |                       | List of extra volumes to create                |
-| `gitlab.unicorn.workhorse.image` | `registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee` | Workhorse image repository |
-| `gitlab.unicorn.workhorse.tag`   |                       | Workhorse image tag                            |
+| `gitlab.webservice.workhorse.image` | `registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee` | Workhorse image repository |
+| `gitlab.webservice.workhorse.tag`   |                       | Workhorse image tag                            |
 | `hpa.targetAverageValue`         | `1`                   | Set the autoscaling target value               |
-| `image.pullPolicy`               | `Always`              | Unicorn image pull policy                      |
+| `image.pullPolicy`               | `Always`              | Webservice image pull policy                      |
 | `image.pullSecrets`              |                       | Secrets for the image repository               |
 | `image.repository`               | `registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee` | Webservice image repository |
-| `image.tag`                      |                       | Unicorn image tag                              |
+| `image.tag`                      |                       | Webservice image tag                              |
 | `init.image.repository`          |                       | initContainer image                            |
 | `init.image.tag`                 |                       | initContainer image tag                        |
-| `memory.min`                     | `1024`                | The minimum memory threshold (in megabytes) for the Unicorn worker killer |
-| `memory.max`                     | `1280`                | The maximum memory threshold (in megabytes) for the Unicorn worker killer |
+| `unicorn.memory.min`             | `1024`                | The minimum memory threshold (in megabytes) for the Unicorn worker killer |
+| `unicorn.memory.max`             | `1280`                | The maximum memory threshold (in megabytes) for the Unicorn worker killer |
 | `metrics.enabled`                | `true`                | Toggle Prometheus metrics exporter             |
 | `minio.bucket`                   | `git-lfs`             | Name of storage bucket, when using MinIO       |
 | `minio.port`                     | `9000`                | Port for MinIO service                         |
@@ -73,21 +73,21 @@ to the `helm install` command using the `--set` flags.
 | `registry.api.serviceName`       | `registry`            | Registry service name                          |
 | `registry.enabled`               | `true`                | Add/Remove registry link in all projects menu  |
 | `registry.tokenIssuer`           | `gitlab-issuer`       | Registry token issuer                          |
-| `replicaCount`                   | `1`                   | Unicorn number of replicas                     |
-| `resources.requests.cpu`         | `300m`                | Unicorn minimum cpu                            |
-| `resources.requests.memory`      | `1.5G`                | Unicorn minimum memory                         |
-| `service.externalPort`           | `8080`                | Unicorn exposed port                           |
-| `service.internalPort`           | `8080`                | Unicorn internal port                          |
-| `service.type`                   | `ClusterIP`           | Unicorn service type                           |
+| `replicaCount`                   | `1`                   | Webservice number of replicas                     |
+| `resources.requests.cpu`         | `300m`                | Webservice minimum cpu                            |
+| `resources.requests.memory`      | `1.5G`                | Webservice minimum memory                         |
+| `service.externalPort`           | `8080`                | Webservice exposed port                           |
+| `service.internalPort`           | `8080`                | Webservice internal port                          |
+| `service.type`                   | `ClusterIP`           | Webservice service type                           |
 | `service.workhorseExternalPort`  | `8181`                | Workhorse exposed port                         |
 | `service.workhorseInternalPort`  | `8181`                | Workhorse internal port                        |
 | `shell.authToken.key`            | `secret`              | Key to shell token in shell secret             |
 | `shell.authToken.secret`         | `gitlab-shell-secret` | Shell token secret                             |
 | `shell.port`                     | `nil`                 | Port number to use in SSH URLs generated by UI |
-| `shutdown.blackoutSeconds`       | `10`                  | Number of seconds to keep Unicorn running after receiving shutdown |
+| `shutdown.blackoutSeconds`       | `10`                  | Number of seconds to keep Webservice running after receiving shutdown |
 | `tolerations`                    | `[]`                  | Toleration labels for pod assignment           |
 | `trusted_proxies`                | `[]`                  | See [GitLab documentation](https://docs.gitlab.com/ee/install/installation.html#adding-your-trusted-proxies) for details |
-| `workerProcesses`                | `2`                   | Unicorn number of workers                      |
+| `workerProcesses`                | `2`                   | Webservice number of workers                      |
 | `workhorse.livenessProbe.initialDelaySeconds`  | 20      | Delay before liveness probe is initiated       |
 | `workhorse.livenessProbe.periodSeconds`        | 60      | How often to perform the liveness probe        |
 | `workhorse.livenessProbe.timeoutSeconds`       | 30      | When the liveness probe times out              |
@@ -98,7 +98,7 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.readinessProbe.timeoutSeconds`      | 2       | When the readiness probe times out             |
 | `workhorse.readinessProbe.successThreshold`    | 1       | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
 | `workhorse.readinessProbe.failureThreshold`    | 3       | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded |
-| `webServer` | `unicorn` | Selects web server (Unicorn/Puma) that would be used for request handling |
+| `webServer` | `puma` | Selects web server (Webservice/Puma) that would be used for request handling |
 
 ## Chart configuration examples
 
@@ -113,7 +113,7 @@ Below is an example use of `pullSecrets`:
 
 ```yaml
 image:
-  repository: my.unicorn.repository
+  repository: my.webservice.repository
   pullPolicy: Always
   pullSecrets:
   - name: my-secret-name
@@ -140,7 +140,7 @@ tolerations:
 
 ### annotations
 
-`annotations` allows you to add annotations to the Unicorn pods. For example:
+`annotations` allows you to add annotations to the Webservice pods. For example:
 
 ```yaml
 annotations:
@@ -169,7 +169,7 @@ for common configuration options, such as GitLab and Registry hostnames.
 | `ingress.annotations.*annotation-key*` | String  | (empty) | `annotation-key` is a string that will be used with the value as an annotation on every Ingress. For example: `ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. |
 | `ingress.enabled`                      | Boolean | `false` | Setting that controls whether to create Ingress objects for services that support them. When `false`, the `global.ingress.enabled` setting value is used. |
 | `ingress.proxyBodySize`                | String  | `512m`  | [See Below](#proxyBodySize). |
-| `ingress.tls.enabled`                  | Boolean | `true`  | When set to `false`, you disable TLS for GitLab Unicorn. This is mainly useful for cases in which you cannot use TLS termination at Ingress-level, like when you have a TLS-terminating proxy before the Ingress Controller. |
+| `ingress.tls.enabled`                  | Boolean | `true`  | When set to `false`, you disable TLS for GitLab Webservice. This is mainly useful for cases in which you cannot use TLS termination at Ingress-level, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `ingress.tls.secretName`               | String  | (empty) | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the GitLab url. When not set, the `global.ingress.tls.secretName` value is used instead. |
 
 ### proxyBodySize
@@ -178,7 +178,7 @@ for common configuration options, such as GitLab and Registry hostnames.
 required to allow a larger docker image than the default. As an alternative option,
 you can set the body size with either of the following two parameters too:
 
-- `gitlab.unicorn.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
+- `gitlab.webservice.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
 - `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
 
 ## Resources
@@ -186,7 +186,7 @@ you can set the body size with either of the following two parameters too:
 ### Unicorn Worker Killer memory settings
 
 Memory thresholds for the [unicorn-worker-killer](https://docs.gitlab.com/ee/administration/operations/unicorn.html#unicorn-worker-killer)
-can be customized using the `memory.min` and `memory.max` chart values. While the
+can be customized using the `unicorn.memory.min` and `unicorn.memory.max` chart values. While the
 default values are sane, you can increase (or lower) these values to fine-tune
 them for your environment or troubleshoot performance issues.
 
@@ -326,7 +326,7 @@ registry:
 |:-------------------- |:-------:|:--------------- |:----------- |
 | `api.host`           | String  |                 | The hostname of the Registry server to use. This can be omitted in lieu of `api.serviceName`. |
 | `api.port`           | Integer | `5000`          | The port on which to connect to the Registry API. |
-| `api.protocol`       | String  |                 | The protocol Unicorn should use to reach the Registry API. |
+| `api.protocol`       | String  |                 | The protocol Webservice should use to reach the Registry API. |
 | `api.serviceName`    | String  | `registry`      | The name of the `service` which is operating the Registry server. If this is present, and `api.host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `api.host` value. This is convenient when using Registry as a part of the overall GitLab chart. |
 | `certificate.key`    | String  |                 | The name of the `key` in the `Secret` which houses the certificate bundle that will be provided to the [registry](https://hub.docker.com/_/registry/) container as `auth.token.rootcertbundle`. |
 | `certificate.secret` | String  |                 | The name of the [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) that houses the certificate bundle to be used to verify the tokens created by the GitLab instance(s). |
@@ -336,12 +336,12 @@ registry:
 
 ## Chart Settings
 
-The following values are used to configure the Unicorn Pods.
+The following values are used to configure the Webservice Pods.
 
 | Name              | Type    | Default | Description |
 |:----------------- |:-------:|:------- |:----------- |
-| `replicaCount`    | Integer | `1`     | The number of Unicorn instances to create in the deployment. |
-| `workerProcesses` | Integer | `2`     | The number of Unicorn workers to run per pod. You must have at least `2` workers available in your cluster in order for GitLab to function properly. Note that increasing the `workerProcesses` will increase the memory required by approximately `400MB` per worker, so you should update the pod `resources` accordingly. |
+| `replicaCount`    | Integer | `1`     | The number of Webservice instances to create in the deployment. |
+| `workerProcesses` | Integer | `2`     | The number of Webservice workers to run per pod. You must have at least `2` workers available in your cluster in order for GitLab to function properly. Note that increasing the `workerProcesses` will increase the memory required by approximately `400MB` per worker, so you should update the pod `resources` accordingly. |
 
 ### metrics.enabled
 
@@ -352,8 +352,8 @@ each pod allowing a Prometheus server to discover and scrape the exposed metrics
 
 ### GitLab Shell
 
-GitLab Shell uses an Auth Token in its communication with Unicorn. Share the token
-with GitLab Shell and Unicorn using a shared Secret.
+GitLab Shell uses an Auth Token in its communication with Webservice. Share the token
+with GitLab Shell and Webservice using a shared Secret.
 
 ```yaml
 shell:
@@ -371,8 +371,8 @@ shell:
 
 ### WebServer options
 
-Current version of chart supports both Unicorn and Puma web servers.
-Unicorn is the default, however you can switch to the experimental
+Current version of chart supports both Webservice and Puma web servers.
+Webservice is the default, however you can switch to the experimental
 Puma server by setting `webServer: puma`
 
 Puma unique options:
