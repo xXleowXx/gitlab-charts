@@ -45,6 +45,7 @@ to the `helm install` command using the `--set` flags:
 | `hpa.targetAverageValue`             | `350m`            | Set the autoscaling target value         |
 | `minReplicas`                        | `2`               | Minimum number of replicas               |
 | `maxReplicas`                        | `10`              | Maximum number of replicas               |
+| `maxUnavailable`                     | `1`               | Limit of maximum number of Pods to be unavailable |
 | `image.pullPolicy`                   | `Always`          | Sidekiq image pull policy                |
 | `image.pullSecrets`                  |                   | Secrets for the image repository         |
 | `image.repository`                   | `registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee` | Sidekiq image repository |
@@ -77,6 +78,7 @@ to the `helm install` command using the `--set` flags:
 | `readinessProbe.timeoutSeconds`      | 2                 | When the readiness probe times out                                                                    |
 | `readinessProbe.successThreshold`    | 1                 | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
 | `readinessProbe.failureThreshold`    | 3                 | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded   |
+| `updateStrategy`                     | `{}`              | Allows one to configure the update strategy utilized by the deployment |
 
 ## Chart configuration examples
 
@@ -246,6 +248,7 @@ on a per-pod basis.
 | `memoryKiller.shutdownWait` | Integer | `30`      | Amount of time after triggered shutdown for existing jobs to finish expressed in seconds |
 | `minReplicas`               | Integer | `2`       | Minimum number of replicas |
 | `maxReplicas`               | Integer | `10`      | Maximum number of replicas |
+| `maxUnavailable`            | Integer | `1`       | Limit of maximum number of Pods to be unavailable |
 
 NOTE: **Note**: [Detailed documentation of the Sidekiq memory killer is
   available](https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html#sidekiq-memorykiller)
@@ -274,6 +277,8 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.|
 | `minReplicas`  | Integer | `2`     | Minimum number of replicas |
 | `maxReplicas`  | Integer | `10`    | Maximum number of replicas |
+| `maxUnavailable` | Integer | `1`   | Limit of maximum number of Pods to be unavailable |
+| `updateStrategy` |       | `{}`    | Allows one to configure the update strategy utilized by the deployment |
 
 ### queues
 
@@ -323,6 +328,7 @@ pods:
     concurrency: 10
     minReplicas: 2  # defaults to inherited value
     maxReplicas: 10 # defaults to inherited value
+    maxUnavailable: 5 # defaults to inherited value
     queues:
     - [post_receive, 5]
     - [merge, 5]
