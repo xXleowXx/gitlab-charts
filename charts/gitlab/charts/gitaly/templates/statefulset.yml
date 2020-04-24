@@ -82,6 +82,9 @@ spec:
                   app: {{ template "name" . }}
                   release: {{ .Release.Name }}
       {{- end }}
+      {{- if .Values.global.serviceAccount.enabled }}
+      serviceAccountName: {{ default (include "fullname" . ) .Values.global.serviceAccount.name }}
+      {{- end }}
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}
