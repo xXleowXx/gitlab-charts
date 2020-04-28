@@ -265,3 +265,8 @@ helmTests:
   enabled: true
 
 webServer: puma
+
+## Allow to overwrite under which User and Group we're running.
+securityContext:
+  runAsUser: 1000
+  fsGroup: 1000

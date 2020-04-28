@@ -438,7 +438,12 @@ check_docs_lint:
     - bundle exec nanoc check internal_links
     # Check the internal anchor links
     - bundle exec nanoc check internal_anchors
-  <<: *except_deps_update
+  except:
+    variables:
+      - $DEPS_PIPELINE
+      - $TRIGGER_JOB
+    refs:
+      - *com_auto_deploy_branch_ref
 
 .review-docs:
   image: ruby:2.6-alpine
@@ -459,6 +464,7 @@ check_docs_lint:
   when: manual
   except:
     - triggers
+    - *com_auto_deploy_branch_ref
 
 # Trigger a docs build in gitlab-docs
 # Useful to preview the docs changes live
@@ -814,7 +820,7 @@ review-docs-cleanup:
     RELEASE_NAME: $CI_ENVIRONMENT_SLUG
     S3_CONFIG_PATH: /etc/gitlab/minio
   script:
-    - if [[ -n "${VARIABLES_FILE}" ]]; then source "${VARIABLES_FILE}"; ./scripts/ci_feature_spec_setup; fi
+    - if [[ -n "${VARIABLES_FILE}" ]]; then source "${VARIABLES_FILE}"; ./scripts/ci_feature_spec_setup; else ./scripts/ci_integration_spec_setup; fi
     - bundle install -j $(nproc) --without non_test --path gems
     - bundle exec rspec -c -f d spec -t "${RSPEC_TAGS}"
   after_script:
@@ -849,6 +855,7 @@ review_specs_gke:
     refs:
       - master
       - /(^docs[\/-].+|.+-docs$)/
+      - *com_auto_deploy_branch_ref
 
 review_specs_eks:
   extends: .specs
@@ -869,6 +876,7 @@ review_specs_eks:
     refs:
       - master
       - /(^docs[\/-].+|.+-docs$)/
+      - *com_auto_deploy_branch_ref
 
 specs_without_cluster:
   extends: .specs
