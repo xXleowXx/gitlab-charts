@@ -76,7 +76,7 @@ to the `helm install` command using the `--set` flags.
 | `replicaCount`                   | `1`                   | Webservice number of replicas                     |
 | `resources.requests.cpu`         | `300m`                | Webservice minimum cpu                            |
 | `resources.requests.memory`      | `1.5G`                | Webservice minimum memory                         |
-| `service.externalPort`           | `8080`                | Webservice exposed port                           | 
+| `service.externalPort`           | `8080`                | Webservice exposed port                           |
 | `securityContext.fsGroup`        | `1000`                | Group ID under which the pod should be started |
 | `securityContext.runAsUser`      | `1000`                | User ID under which the pod should be started  |
 | `service.internalPort`           | `8080`                | Webservice internal port                          |
