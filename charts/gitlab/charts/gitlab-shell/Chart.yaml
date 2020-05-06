@@ -1,7 +1,7 @@
 ---
 apiVersion: v1
 name: gitlab-shell
-version: 13.0.202005061710+a2e20e5b69d
+version: 13.0.202005062240+1b8d6bb6583
 appVersion: 12.2.0
 description: sshd for Gitlab
 keywords:

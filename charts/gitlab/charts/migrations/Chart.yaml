@@ -1,8 +1,8 @@
 ---
 apiVersion: v1
 name: migrations
-version: 13.0.202005061710+a2e20e5b69d
-appVersion: 13.0.202005061710+a2e20e5b69d
+version: 13.0.202005062240+1b8d6bb6583
+appVersion: 13.0.202005062240+1b8d6bb6583
 description: Database migrations and other versioning tasks for upgrading Gitlab
 keywords:
 - gitlab
