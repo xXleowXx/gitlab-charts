@@ -73,6 +73,8 @@ puma:
 hpa:
   targetAverageValue: 1
 
+deploymentStrategy: 'RollingUpdate'
+
 deployment:
   livenessProbe:
     initialDelaySeconds: 20
