@@ -41,6 +41,7 @@ to the `helm install` command using the `--set` flags:
 | `extraInitContainers`                |                   | List of extra init containers to include |
 | `extraVolumeMounts`                  |                   | List of extra volumes mountes to do      |
 | `extraVolumes`                       |                   | List of extra volumes to create          |
+| `extraEnvs`                          |                   | List of extra environment variables to expose |
 | `gitaly.serviceName`                 | `gitaly`          | Gitaly service name                      |
 | `hpa.targetAverageValue`             | `350m`            | Set the autoscaling target value         |
 | `minReplicas`                        | `2`               | Minimum number of replicas               |
