@@ -141,7 +141,7 @@ spec:
               value: "1"
             {{- end }}
             {{- if $.Values.extraEnvs }}
-{{ toYaml $.Values.extraEnv | nindent 12 }}
+{{ toYaml $.Values.extraEnvs | nindent 12 }}
             {{- end }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
