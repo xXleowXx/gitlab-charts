@@ -140,6 +140,9 @@ spec:
             - name: ENABLE_BOOTSNAP
               value: "1"
             {{- end }}
+            {{- if $.Values.extraEnvs }}
+{{ toYaml $.Values.extraEnvs | indent 12 }}
+            {{- end }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
           - name: sidekiq-config
