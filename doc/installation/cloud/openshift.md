@@ -30,7 +30,7 @@ oc create secret generic ${MY_SECRET_NAME} --from-literal runner_registration_to
 
 4. Now we need to make our CRD and apply it. Open your terminal and make a file.
 ```
-vi gitlab-runner.yml
+$ vi gitlab-runner.yml
 ```
 
 Now put the following in that file, Fill out the details for yourself.
@@ -48,7 +48,7 @@ spec:
 
 Now Apply those changes.
 ```
-oc apply -f gitlab-runner.yml
+$ oc apply -f gitlab-runner.yml
 ```
 
 *If you were successful in this,* in the next 3-5 minutes you should see the runner pods spin up and register with your Project/Group/GitLab Instance. You should not be able to run workloads in OpenShift.
