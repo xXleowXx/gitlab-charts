@@ -142,8 +142,8 @@ spec:
             {{- end }}
             {{- if $.Values.extraEnv }}
             {{- range $key, $value := $.Values.extraEnv }}
-            - name: {{ $key }}
-              value: {{ $value }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
             {{- end }}
             {{- end }}
           volumeMounts:
