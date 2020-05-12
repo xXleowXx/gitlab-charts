@@ -140,8 +140,11 @@ spec:
             - name: ENABLE_BOOTSNAP
               value: "1"
             {{- end }}
-            {{- if $.Values.extraEnvs }}
-{{ toYaml $.Values.extraEnvs | nindent 12 }}
+            {{- if $.Values.extraEnv }}
+            {{- range $key, $value := $.Values.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value }}
+            {{- end }}
             {{- end }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}

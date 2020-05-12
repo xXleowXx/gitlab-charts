@@ -199,13 +199,10 @@ registry:
 extra: {}
 
 ## Additional environment variables to set
-extraEnvs: []
-# extraEnvs:
-#   - name: FOO
-#     valueFrom:
-#       secretKeyRef:
-#         key: FOO
-#         name: secret-resource
+extraEnv: {}
+# extraEnv:
+#   SOMEKEY: SOMEVALUE
+#   SOMEKEY2: SOMEVALUE2
 
 rack_attack:
   git_basic_auth:
