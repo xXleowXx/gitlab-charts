@@ -85,6 +85,26 @@ to the `helm install` command using the `--set` flags:
 
 ## Chart configuration examples
 
+### extraEnv
+
+`extraEnv` allows you to expose additional environment variables in the dependencies container.
+
+Below is an example use of `extraEnv`:
+
+```yaml
+extraEnv:
+  SOME_KEY: some_value
+  SOME_OTHER_KEY: some_other_value
+```
+
+When the container is started, you can confirm that the enviornment variables are exposed:
+
+```bash
+env | grep SOME
+SOME_KEY=some_value
+SOME_OTHER_KEY=some_other_value
+```
+
 ### image.pullSecrets
 
 `pullSecrets` allows you to authenticate to a private registry to pull images for a pod.
