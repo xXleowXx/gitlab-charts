@@ -199,6 +199,8 @@ registry:
 extra: {}
 
 ## Additional environment variables to set
+## Note that these will be applied to every
+##   container in the pod.
 extraEnv: {}
 # extraEnv:
 #   SOMEKEY: SOMEVALUE
