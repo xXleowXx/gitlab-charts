@@ -33,14 +33,9 @@ deployed cloud native GitLab installation.
 
 [Read more in the GitLab QA chart docs](gitlab-qa/index.md).
 
-## Kube monkey
+## ChaosKube
 
-[kube monkey](https://github.com/asobti/kube-monkey) is an implementation of
-Netflix's [chaos monkey](https://github.com/Netflix/chaosmonkey) for Kubernetes
-clusters. It schedules randomly killing of pods in order to test fault tolerance
-of a highly available system.
-
-[Read more in the kube monkey chart docs](kube-monkey/index.md).
+Read more in the [ChaosKube chart docs](chaoskube/index.md).
 
 ## Developing for Kubernetes with Minikube
 
@@ -406,9 +401,15 @@ See the documentation of the [deprecations template][] for further information o
 
 ## Attempt to catch problematic configurations
 
-Due to the complexity of these charts and their level of flexibility, there are some overlaps where it is possible to produce a configuration that would lead to an unpredictable, or entirely non-functional deployment. In an effort to prevent known problematic settings combinations, we have implemented template logic designed to detect and warn the user that their configuration will not work
+Due to the complexity of these charts and their level of flexibility, there are some overlaps where it is possible to produce a configuration that would lead to an unpredictable, or entirely non-functional deployment. In an effort to prevent known problematic settings combinations, we have the following two patterns in place:
 
-See the documentation of the [checkConfig template](checkconfig.md) for further information on the design, functionality, and how to add new configuration checks.
+- We use [schema validations](https://helm.sh/docs/topics/charts/#schema-files) for all
+  our sub-charts to ensure the user-specified values meet expectations. See
+  [the documentation](validation.md) to learn more.
+- We implement template logic designed to detect and warn the user that their
+  configuration will not work. See the documentation of the
+  [`checkConfig` template](checkconfig.md) for further information on the design and
+  functionality, and how to add new configuration checks.
 
 ## Verifying registry
 
