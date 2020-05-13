@@ -1,7 +1,7 @@
 ---
 apiVersion: v1
 name: mailroom
-version: 13.0.202005130510+023ea2fbc0e
+version: 13.0.202005130740+a489a019016
 appVersion: 0.0.4
 description: Handling incoming emails
 keywords:
