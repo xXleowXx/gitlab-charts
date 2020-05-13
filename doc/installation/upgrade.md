@@ -85,7 +85,7 @@ The `pre` stage will create a backup of your database using the backup-utility s
 
 ```shell
 # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v3.0.0
-curl -s https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/scripts/database-upgrade | bash -s pre
+curl -s https://gitlab.com/gitlab-org/charts/gitlab/-/raw/v${GITLAB_RELEASE}/scripts/database-upgrade  | bash -s pre
 ```
 
 ### Prepare the cluster database secrets
