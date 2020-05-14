@@ -1,8 +1,8 @@
 ---
 apiVersion: v1
 name: sidekiq
-version: 13.0.202005141111+3746cd7c7b0
-appVersion: 13.0.202005141111+3746cd7c7b0
+version: 13.0.202005141310+b7c9b5f9b6d
+appVersion: 13.0.202005141310+b7c9b5f9b6d
 description: Gitlab Sidekiq for asynchronous task processing in rails
 keywords:
 - gitlab
