@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 3.2.6 (2020-05-14)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.9.7.
+
+
 ## 3.2.5 (2020-04-30)
 
 ### Other (1 change)
