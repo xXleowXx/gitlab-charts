@@ -103,6 +103,9 @@ curl -s https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/script
 
 NOTE: **Note:** If you are not using the bundled PostgreSQL chart (`postgresql.install` is false), you do not need to perform this step.
 
+CAUTION: **Caution:**
+Ensure that you have created a database backup in the previous step. Without a backup, GitLab data will be lost.
+
 The `4.0` release updates the default bundled PostgreSQL version from 10.9.0 to 11.7.0. Since the
 data format has changed, upgrading requires removing the existing PostgreSQL StatefulSet before
 upgrading to the `4.0` release. The StatefulSet will be recreated in the next step.
