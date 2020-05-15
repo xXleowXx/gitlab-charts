@@ -41,7 +41,7 @@ pre() {
 
 post() {
     # The services that connect to the database, they need to be shutdown before we can restore
-    database_connectors="unicorn sidekiq gitlab-exporter"
+    database_connectors="webservice sidekiq gitlab-exporter"
 
     # This will store the original number of replicas, so we can restore the deployments when we're done
     declare -A replicas
