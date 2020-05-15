@@ -99,7 +99,7 @@ The `pre` stage will create a backup of your database using the backup-utility s
 curl -s https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/scripts/database-upgrade | bash -s pre
 ```
 
-### Delete existing PostgreSQL StatefulSet
+### Delete existing PostgreSQL data
 
 NOTE: **Note:** If you are not using the bundled PostgreSQL chart (`postgresql.install` is false), you do not need to perform this step.
 
@@ -112,6 +112,7 @@ upgrading to the `4.0` release. The StatefulSet will be recreated in the next st
 
 ```shell
 kubectl delete statefulset RELEASE-NAME-postgresql
+kubectl delete pvc data-RELEASE_NAME-postgresql-0
 ```
 
 ### Upgrade GitLab
