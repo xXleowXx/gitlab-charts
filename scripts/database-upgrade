@@ -2,7 +2,7 @@
 set -e
 
 # Set the timestamp to something predictable so we can use it between backup and restore
-fake_timestamp="database_upgrade"
+fake_timestamp="database_upgrade_4"
 script_name="database-upgrade"
 
 usage() {
