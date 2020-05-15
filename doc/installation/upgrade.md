@@ -151,6 +151,15 @@ NOTE: **Note:** You'll need to be using Bash 4.0 or above to run the script succ
    curl -s https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/scripts/database-upgrade | bash -s post
    ```
 
+### Troubleshooting 4.0 release upgrade process
+
+- If you see any failure during the upgrade, it may be useful to check the description of `gitlab-upgrade-check` pod for details:
+
+  ```shell
+  kubectl get pods -lrelease=RELEASE,app=gitlab
+  kubectl describe pod <gitlab-upgrade-check-pod-full-name>
+  ```
+
 ## Upgrade steps for 3.0 release
 
 The `3.0.0` release requires manual steps in order to perform the upgrade.
