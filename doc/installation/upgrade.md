@@ -78,7 +78,7 @@ NOTE: **Note:**
 Remember to take a [backup](../backup-restore/index.md) before proceeding with
 the upgrade.
 
-If you are using the bundled PostgreSQL, the best way to perform this upgrade is to backup your old database, and restore into a new database instance. We've automated some of the steps, as an alternative, you can perform the steps manually.
+If you are using the bundled PostgreSQL, the best way to perform this upgrade is to back up your old database, and restore into a new database instance.
 
 CAUTION: **Caution:**
 Failure to perform these steps as documented **may** result in the loss of your database. Ensure you have a separate
