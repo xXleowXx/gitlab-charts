@@ -7,7 +7,7 @@ corresponding to the specific release you want to upgrade to and look for any
 version.
 
 CAUTION: **Caution:**
-If you are upgrading from the `3.x` version of the chart to the latest 4.0 release, you need
+If you are upgrading from the `3.x` version of the chart to the latest `4.0` release, you need
 to first update to the latest `3.3.x` patch release in order for the upgrade to work.
 The [4.0 release notes](../releases/4_0.md) describe the supported upgrade path.
 
