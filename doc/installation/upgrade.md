@@ -164,7 +164,7 @@ NOTE: **Note:** You'll need to be using Bash 4.0 or above to run the script succ
 
    ```shell
    # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v3.0.0
-   curl -s https://gitlab.com/gitlab-org/charts/gitlab/-/raw/v${GITLAB_RELEASE}/scripts/database-upgrade | bash -s post
+   curl -s https://gitlab.com/gitlab-org/charts/gitlab/-/raw/${GITLAB_RELEASE}/scripts/database-upgrade | bash -s post
    ```
   
 ### Troubleshooting 3.0 release upgrade process
