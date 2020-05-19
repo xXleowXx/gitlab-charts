@@ -1,7 +1,7 @@
 ---
 apiVersion: v1
 name: gitlab-exporter
-version: 13.1.202005190957+a9b434b9cf2
+version: 13.1.202005191540+487d87da60d
 appVersion: 7.0.3
 description: Exporter for GitLab Prometheus metrics (e.g. CI, pull mirrors)
 keywords:
