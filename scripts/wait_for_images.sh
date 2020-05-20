@@ -9,7 +9,9 @@ is_semver() {
 }
 
 is_autodeploy() {
-  if [[ $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$ ]]; then
+  if [[ -z "${AUTO_DEPLOY_TAG_REGEX}" ]]; then
+    return 1
+  elif [[ $1 =~ ${AUTO_DEPLOY_TAG_REGEX} ]]; then
     return 0
   else
     return 1
