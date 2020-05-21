@@ -11,7 +11,16 @@ global:
 certmanager:
   install: false
 
-# Specify known ports and reduce replicas to 1
+# Specify NodePort for GitLab Shell
+gitlab:
+  gitlab-shell:
+    service:
+      type: NodePort
+      # nodePort value below should match the KinD config file:
+      #   nodes[0].extraPortMappings[1].containerPort
+      nodePort: 32022
+
+# Specify NodePort for NGINX and reduce replicas to 1
 nginx-ingress:
   defaultBackend:
     replicaCount: 1
@@ -24,9 +33,6 @@ nginx-ingress:
         # http port value blow must match the KinD config file:
         #   nodes[0].extraPortMappings[0].containerPort
         http: 32080
-        # ssh port value blow must match the KinD config file:
-        #   nodes[0].extraPortMappings[1].containerPort
-        ssh: 32022
 
 # Allow privileged runners for Docker-in-Docker pipelines
 gitlab-runner:
