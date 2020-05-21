@@ -96,6 +96,9 @@ NOTE: **Note:**
 If you would prefer not to run GitLab Runner at all, you can disable it in the relevant values file: `gitlab-runner.install=false`.
 
 NOTE: **Note:**
+In this configuration, `kind` also exposes GitLab-Shell in the cluster to port 22 locally so you can interact with repositories via SSH.
+
+NOTE: **Note:**
 If you need to log into the registry with `docker login`, you will need to take additional steps to configure the registry to work with your self-signed certificates. More instructions can be found [here](https://docs.docker.com/registry/deploying/#run-an-externally-accessible-registry) and [here](https://blog.container-solutions.com/adding-self-signed-registry-certs-docker-mac).
 
 ## NGINX Ingress NodePort without SSL
@@ -110,6 +113,9 @@ helm upgrade --install gitlab gitlab/gitlab -f examples/kind/values-no-ssl.yaml
 ```
 
 Access GitLab at `http://gitlab.(your host IP).nip.io`.
+
+NOTE: **Note:**
+In this configuration, `kind` also exposes GitLab-Shell in the cluster to port 22 locally so you can interact with repositories via SSH.
 
 NOTE: **Note:**
 If you need to log into the registry with `docker login`, you will need to tell Docker to [trust your insecure registry](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry).

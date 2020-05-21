@@ -23,6 +23,9 @@ nginx-ingress:
         # https port value blow must match the KinD config file:
         #   nodes[0].extraPortMappings[0].containerPort
         https: 32443
+        # ssh port value blow must match the KinD config file:
+        #   nodes[0].extraPortMappings[1].containerPort
+        ssh: 32022
 
 gitlab-runner:
   # Specify self-signed certificate chain so Runner will connect

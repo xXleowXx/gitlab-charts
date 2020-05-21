@@ -195,9 +195,11 @@ controller:
     # nodePorts:
     #   http: 32080
     #   https: 32443
+    #   ssh: 32022
     nodePorts:
       http: ""
       https: ""
+      ssh: ""
 
   extraContainers: []
   ## Additional containers to be added to the controller pod.
