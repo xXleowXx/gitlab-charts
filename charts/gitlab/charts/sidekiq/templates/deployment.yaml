@@ -36,10 +36,10 @@ metadata:
   name: {{ printf "%s-v1" ($queueName | trunc 60) }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "gitlab.standardLabels" $ | nindent 4 }}
+    {{ include "gitlab.standardLabels" $ | nindent 4 | trim }}
     queue-pod-name: {{ .name }}
   annotations:
-    {{ include "gitlab.deploymentAnnotations" $ | nindent 4 }}
+    {{ include "gitlab.deploymentAnnotations" $ | nindent 4 | trim }}
 spec:
   {{- if $.Values.global.operator.enabled }}
   paused: true

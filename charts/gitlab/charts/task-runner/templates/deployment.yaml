@@ -5,9 +5,9 @@ metadata:
   name: {{ template "fullname" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{ include "gitlab.standardLabels" . | nindent 4 | trim }}
   annotations:
-    {{ include "gitlab.deploymentAnnotations" . | nindent 4 }}
+    {{ include "gitlab.deploymentAnnotations" . | nindent 4 | trim }}
 spec:
   replicas: {{ .Values.replicas | int }}
   strategy:
