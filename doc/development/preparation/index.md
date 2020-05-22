@@ -58,16 +58,16 @@ use `git lfs`:
 1. Next, have a non-text file on hand to add to your test repository via LFS.
    A good example is [the GitLab logo](https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.png):
 
-    ```shell
-    git clone URL
-    cd project
-    curl -JLO https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.png
-    git lfs track "*.png"
-    git add .gitattributes
-    git add logo.png
-    git commit -m "Add logo via LFS"
-    git push origin master
-    ```
+   ```shell
+   git clone URL
+   cd project
+   curl -JLO https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.png
+   git lfs track "*.png"
+   git add .gitattributes
+   git add logo.png
+   git commit -m "Add logo via LFS"
+   git push origin master
+   ```
 
 ## External resources
 
