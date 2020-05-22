@@ -20,7 +20,7 @@ need to be done in this project.
 1. You will need to have the [`gcloud`](https://cloud.google.com/sdk/gcloud/) tool
    installed on your system:
 
-    ```sh
+    ```shell
     mkdir gcloud-build && cd gcloud-build;
     wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-189.0.0-linux-x86_64.tar.gz;
     tar -xzf google-cloud-sdk-189.0.0-linux-x86_64.tar.gz
@@ -31,7 +31,7 @@ need to be done in this project.
 1. Run `gcloud` and interactively go through its authentication and
    initialization:
 
-    ```sh
+    ```shell
     ./google-cloud-sdk/bin/gcloud init
     ```
 
@@ -58,7 +58,7 @@ use `git lfs`:
 1. Next, have a non-text file on hand to add to your test repository via LFS.
    A good example is [the GitLab logo](https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.png):
 
-    ```sh
+    ```shell
     git clone URL
     cd project
     curl -JLO https://gitlab.com/gitlab-com/gitlab-artwork/raw/master/logo/logo.png
