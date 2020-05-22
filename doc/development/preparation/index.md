@@ -20,13 +20,13 @@ need to be done in this project.
 1. You will need to have the [`gcloud`](https://cloud.google.com/sdk/gcloud/) tool
    installed on your system:
 
-    ```shell
-    mkdir gcloud-build && cd gcloud-build;
-    wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-189.0.0-linux-x86_64.tar.gz;
-    tar -xzf google-cloud-sdk-189.0.0-linux-x86_64.tar.gz
-    ./google-cloud-sdk/install.sh
-    source google-cloud-sdk/path.bash.inc && echo "source google-cloud-sdk/path.bash.inc" >> $HOME/.profile
-    ```
+   ```shell
+   mkdir gcloud-build && cd gcloud-build;
+   wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-189.0.0-linux-x86_64.tar.gz;
+   tar -xzf google-cloud-sdk-189.0.0-linux-x86_64.tar.gz
+   ./google-cloud-sdk/install.sh
+   source google-cloud-sdk/path.bash.inc && echo "source google-cloud-sdk/path.bash.inc" >> $HOME/.profile
+   ```
 
 1. Run `gcloud` and interactively go through its authentication and
    initialization:
