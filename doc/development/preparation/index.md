@@ -31,9 +31,9 @@ need to be done in this project.
 1. Run `gcloud` and interactively go through its authentication and
    initialization:
 
-    ```shell
-    ./google-cloud-sdk/bin/gcloud init
-    ```
+   ```shell
+   ./google-cloud-sdk/bin/gcloud init
+   ```
 
 ### Domain name
 
