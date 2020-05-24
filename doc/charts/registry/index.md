@@ -429,9 +429,8 @@ found in [examples/objectstorage](https://gitlab.com/gitlab-org/charts/gitlab/tr
 - [`registry.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.s3.yaml)
 - [`registry.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.gcs.yaml)
 
-For s3 IAM configuration, note that 
-[the permissions needed for registry storage](https://docs.docker.com/registry/storage-drivers/s3/#s3-permission-scopes) 
-are somewhat more extensive those required by other services.
+Be sure to give the proper 
+[S3 permissions for registry storage](https://docs.docker.com/registry/storage-drivers/s3/#s3-permission-scopes).
 
 Place the *contents* of the `storage` block into the secret, and provide the following
 as items to the `storage` map:
