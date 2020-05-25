@@ -52,6 +52,8 @@ the `helm install` command using the `--set` flags.
 | `service.internalPort`          | `8075`                                     | Gitaly internal port                                                                                                                                                 |
 | `service.name`                  | `gitaly`                                   | The name of the Service port that Gitaly is behind in the Service object.                                                                                          |
 | `service.type`                  | `ClusterIP`                                | Gitaly service type                                                                                                                                                  |
+| `securityContext.fsGroup`       | `1000`                                     | Group ID under which the pod should be started                                                                                                                       |
+| `securityContext.runAsUser`     | `1000`                                     | User ID under which the pod should be started                                                                                                                        |
 | `tolerations`                   | `[]`                                       | Toleration labels for pod assignment                                                                                                                                 |
 | `persistence.accessMode`        | `ReadWriteOnce`                            | Gitaly persistence access mode                                                                                                                                       |
 | `persistence.enabled`           | `true`                                     | Gitaly enable persistence flag                                                                                                                                       |
@@ -144,7 +146,7 @@ This chart should be attached the Workhorse service.
 ```yaml
 workhorse:
   host: workhorse.example.com
-  serviceName: unicorn
+  serviceName: webservice
   port: 8181
 ```
 
@@ -152,7 +154,7 @@ workhorse:
 |:------------- |:-------:|:--------- |:----------- |
 | `host`        | String  |           | The hostname of the Workhorse server. This can be omitted in lieu of `serviceName`. |
 | `port`        | Integer | `8181`    | The port on which to connect to the Workhorse server.|
-| `serviceName` | String  | `unicorn` | The name of the `service` which is operating the Workhorse server. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Workhorse as a part of the overall GitLab chart. |
+| `serviceName` | String  | `webservice` | The name of the `service` which is operating the Workhorse server. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Workhorse as a part of the overall GitLab chart. |
 
 ## Chart Settings
 

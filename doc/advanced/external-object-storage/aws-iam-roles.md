@@ -19,7 +19,7 @@ An IAM role can be specified via the annotations key:
 --set registry.annotations."iam\.amazonaws\.com/role"=<role name>
 ```
 
-When creating the [registry-storage.yaml](../../charts/registry/index.md#storage) secret, omit the access and secret key:
+When creating the [`registry-storage.yaml`](../../charts/registry/index.md#storage) secret, omit the access and secret key:
 
 ```yaml
 s3:
@@ -32,15 +32,15 @@ s3:
 
 ### LFS, Artifacts, Uploads, Packages, Pseudonymizer
 
-For LFS, artifacts, uploads, packages and pseudonymizer an IAM role can be specified via the annotations key in the `unicorn` and `sidekiq` configuration:
+For LFS, artifacts, uploads, packages and pseudonymizer an IAM role can be specified via the annotations key in the `webservice` and `sidekiq` configuration:
 
 ```shell
 --set gitlab.sidekiq.annotations."iam\.amazonaws\.com/role"=<role name>
---set gitlab.unicorn.annotations."iam\.amazonaws\.com/role"=<role name>
+--set gitlab.webservice.annotations."iam\.amazonaws\.com/role"=<role name>
 ```
 
-For the [object-storage.yaml](../../charts/globals.md#connection) secret, omit the access and secret key.
-As Unicorn uses Fog for S3 storage, the [use_iam_profile](https://docs.gitlab.com/ee/administration/job_artifacts.html#s3-compatible-connection-settings) key should be added for Fog to use the role:
+For the [`object-storage.yaml`](../../charts/globals.md#connection) secret, omit the access and secret key.
+As GitLab's Rails codebase uses Fog for S3 storage, the [use_iam_profile](https://docs.gitlab.com/ee/administration/job_artifacts.html#s3-compatible-connection-settings) key should be added for Fog to use the role:
 
 ```yaml
 provider: AWS

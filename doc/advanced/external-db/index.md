@@ -8,7 +8,7 @@ If you do not have one, consider a cloud provided solution like [AWS Aurora](htt
 
 To use an external database with the `gitlab` chart, there are a few prerequisites.
 
-1. GitLab requires PostgreSQL 9.6.x or 10.x
+1. GitLab requires PostgreSQL 11.x or newer
 1. The `pg_trgm` extension must be available. GitLab will attempt to load
    the `pg_trgm` extension if not present. If not providing an account with
    Superuser flag to GitLab, please ensure this extension is loaded prior to
@@ -42,7 +42,7 @@ If you use a mutual TLS connection to the database:
 
 For example, pass these values via Helm's `--set` flag while deploying:
 
-```sh
+```shell
 helm install gitlab gitlab/gitlab
   --set postgresql.install=false
   --set global.psql.host=psql.example

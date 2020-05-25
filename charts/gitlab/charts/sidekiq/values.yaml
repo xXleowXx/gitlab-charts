@@ -19,7 +19,7 @@ init:
 tolerations: []
 
 enabled: true
-cluster: false
+cluster: true
 experimentalQueueSelector: false
 
 annotations: {}
@@ -111,7 +111,7 @@ global:
       names: ["default"]
     external: []
     authToken: {}
-  unicorn: {}
+  webservice: {}
   minio:
     enabled:
     credentials: {}
@@ -198,6 +198,14 @@ registry:
   tokenIssuer: gitlab-issuer
 extra: {}
 
+## Additional environment variables to set
+## Note that these will be applied to every
+##   container in the pod.
+extraEnv: {}
+# extraEnv:
+#   SOMEKEY: SOMEVALUE
+#   SOMEKEY2: SOMEVALUE2
+
 rack_attack:
   git_basic_auth:
     enabled: false
@@ -213,6 +221,13 @@ trusted_proxies: []
 minReplicas: 1
 maxReplicas: 10
 concurrency: 25
+
+# updateStrategy is utilized to configure the desired upgrade approach and
+# configuration for the deployment.  See the Kubernetes documentation
+# related to this subject.
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+updateStrategy: {}
+
 hpa:
   targetAverageValue: 350m
 timeout: 5
@@ -231,4 +246,10 @@ pods:
     # concurrency: 25
     # minReplicas: 1
     # maxReplicas: 10
-    queues:
+    # updateStrategy: {}
+    # queues: ''
+
+## Allow to overwrite under which User and Group we're running.
+securityContext:
+  runAsUser: 1000
+  fsGroup: 1000

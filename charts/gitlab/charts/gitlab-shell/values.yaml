@@ -37,10 +37,10 @@ global: {}
 enabled: true
 annotations: {}
 workhorse:
-  # by default, Workhorse is a part of the Unicorn Pods / Service
-  serviceName: unicorn
+  # by default, Workhorse is a part of the webservice Pods / Service
+  serviceName: webservice
   # host: '0.0.0.0'
-  # serviceName: 'unicorn'
+  # serviceName: 'webservice'
   # port: 8181
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -73,3 +73,8 @@ config:
     start: 10
     rate: 30
     full: 100
+
+## Allow to overwrite under which User and Group we're running.
+securityContext:
+  runAsUser: 1000
+  fsGroup: 1000

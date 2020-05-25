@@ -31,7 +31,7 @@ An error like this could occur when you run `helm upgrade`
 and there are some spaces in the parameters. In the following
 example, `Test Username` is the culprit:
 
-```sh
+```shell
 helm upgrade gitlab gitlab/gitlab --timeout 600s --set global.email.display_name=Test Username ...
 ```
 
@@ -41,13 +41,13 @@ in the [Deployment documentation](../installation/deployment.md#deploy-using-hel
 
 To fix it, pass the parameters in single quotes:
 
-```sh
+```shell
 helm upgrade gitlab gitlab/gitlab --timeout 600s --set global.email.display_name='Test Username' ...
 ```
 
 ## Application containers constantly initializing
 
-If you experience Sidekiq, Unicorn, or other Rails based containers in a constant
+If you experience Sidekiq, Webservice, or other Rails based containers in a constant
 state of Initializing, you're likely waiting on the `dependencies` container to
 pass.
 
@@ -73,7 +73,7 @@ expectations of the codebase.
 1. Find the Pod being run by the Job. `kubectl get pod -ljob-name=<job-name>`
 1. Examine the output, checking the `STATUS` column.
 
-If the `STATUS` is `Running`, continue. If the `STATUS` is `Completed`, the application conainers should start shortly after the next check passes.
+If the `STATUS` is `Running`, continue. If the `STATUS` is `Completed`, the application containers should start shortly after the next check passes.
 
 Examine the logs from this pod. `kubectl logs <pod-name>`
 
@@ -125,7 +125,7 @@ This can happen when you have TLS termination before the NGINX Ingress, and the 
 
    Via the Helm CLI:
 
-   ```sh
+   ```shell
    helm ... --set-string global.ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect"=false
    ```
 

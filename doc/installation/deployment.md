@@ -82,7 +82,6 @@ purposes only.
 
 > **NOTE: This configuration is not recommended for use in production.**
 >
-> - The container runs as root
 > - A single, non-resilient Deployment is used
 
 You can read more about setting up your production-ready database in the [advanced database docs](../advanced/external-db/index.md).
@@ -101,24 +100,8 @@ use it as shown below.
 
 ### Redis
 
-By default we use an single, non-replicated Redis instance. If desired, a
-highly available Redis can be deployed instead. To install an HA Redis
-cluster one needs to set `redis.cluster.enabled=true` when the GitLab
-chart is installed.
-
-You can bring an external Redis instance by setting `redis.install=false`, and
-following our [advanced documentation](../advanced/external-redis/index.md) for
-configuration.
-
-The installation of an HA Redis cluster from the GitLab chart does not
-support using sentinels. If sentinel support is desired, a Redis cluster
-needs to be created separately from the GitLab chart install. This can be
-done inside or outside the Kubernetes cluster. Sentinel settings can be
-found in the [Unicorn chart](../charts/gitlab/unicorn/index.md#redis).
-
-An issue to track the [supporting of sentinels in a GitLab deployed
-Redis cluster](https://gitlab.com/gitlab-org/charts/gitlab/issues/1810) has
-been created for tracking purposes.
+All the Redis configuration settings have been moved and consolidated on the
+[charts/globals.md](../charts/globals.md#configure-redis-settings) page.
 
 ### MinIO
 
@@ -129,12 +112,12 @@ You can read more about setting up your production-ready object storage in the [
 
 ### Prometheus
 
-We use the [upstream Prometheus chart][prometheus-configuration],
+We use the [upstream Prometheus chart](https://github.com/helm/charts/tree/master/stable/prometheus#configuration),
 and do not override values from our own defaults.
 We do, however, default disable `alertmanager`, `nodeExporter`, and
 `pushgateway`.
 
-Refer to the [Prometheus chart documentation][prometheus-configuration] for the
+Refer to the [Prometheus chart documentation](https://github.com/helm/charts/tree/master/stable/prometheus#configuration) for the
 exhaustive list of configuration options and ensure they are sub-keys to
 `prometheus`, as we use this as requirement chart.
 
@@ -157,8 +140,6 @@ prometheus:
       enabled: true
       size: 8Gi
 ```
-
-[prometheus-configuration]: https://github.com/helm/charts/tree/master/stable/prometheus#configuration
 
 ### Outgoing email
 
@@ -293,6 +274,3 @@ if you used the command above).
 ```shell
 kubectl get secret <name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
 ```
-
-[secret-gl-certs]: secrets.md#gitlab-certificates
-[secret-reg-certs]: secrets.md#registry-certificates

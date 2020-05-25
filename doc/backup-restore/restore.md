@@ -19,7 +19,7 @@ The backup utility provided by GitLab Helm chart supports restoring a tarball fr
 
 ### Restore the rails secrets
 
-The GitLab chart expects rails secrets to be provided as a Kubernetes Secret with content in yaml. Create a local file with the following content:
+The GitLab chart expects rails secrets to be provided as a Kubernetes Secret with content in YAML. Create a local file with the following content:
 
 ```yaml
 production:
@@ -27,37 +27,38 @@ production:
   secret_key_base: <your secret key base value>
   otp_key_base: <your otp key base value>
   openid_connect_signing_key: <your openid signing key>
+  ci_jwt_signing_key: <your ci jwt signing key>
 ```
 
 The values should be replaced with matching values from your backup instances rails secrets. For omnibus install they were found in the `/etc/gitlab/gitlab-secrets.json` file, and for other install types you should have a `secrets.yml` file that contains them.
 
-Once you have the secrets created as a local yaml file:
+Once you have the secrets created as a local YAML file:
 
 1. Find the object name for the rails secrets
 
-   ```bash
+   ```shell
    kubectl get secrets | grep rails-secret
    ```
 
 1. Delete the existing secret
 
-   ```bash
+   ```shell
    kubectl delete secret <rails-secret-name>
    ```
 
-1. Create the new secret using the same name as the old, and passing in your local yaml file
+1. Create the new secret using the same name as the old, and passing in your local YAML file
 
-   ```bash
+   ```shell
    kubectl create secret generic <rails-secret-name> --from-file=secrets.yml=<local-yaml-filepath>
    ```
 
 ### Restart the pods
 
-In order to use the new secrets, the `unicorn`, `sidekiq` and `task-runner` pods need to be restarted. The safest way to restart those pods is to run:
+In order to use the new secrets, the `webservice`, `sidekiq` and `task-runner` pods need to be restarted. The safest way to restart those pods is to run:
 
-```bash
+```shell
 kubectl delete pods -lapp=sidekiq,release=<helm release name>
-kubectl delete pods -lapp=unicorn,release=<helm release name>
+kubectl delete pods -lapp=webservice,release=<helm release name>
 kubectl delete pods -lapp=task-runner,release=<helm release name>
 ```
 
@@ -67,20 +68,20 @@ The steps for restoring a GitLab installation are
 
 1. Make sure you have a running GitLab instance by deploying the charts. Ensure the `task-runner` pod is enabled and running by executing the following command
 
-   ```bash
+   ```shell
    kubectl get pods -lrelease=RELEASE_NAME,app=task-runner
    ```
 
 1. Get the tarball ready in any of the above locations. Make sure it is named in the `<timestamp>_<version>_gitlab_backup.tar` format.
 1. Run the backup utility to restore the tarball
 
-   ```bash
+   ```shell
    kubectl exec <task-runner pod name> -it -- backup-utility --restore -t <timestamp>_<version>
    ```
 
    Here, `<timestamp>_<version>` is from the name of the tarball stored in `gitlab-backups` bucket. In case you want to provide a public URL, use the following command
 
-   ```bash
+   ```shell
    kubectl exec <task-runner pod name> -it -- backup-utility --restore -f <URL>
    ```
 
@@ -103,38 +104,38 @@ If the restored backup was not from an existing installation of the chart, you w
 
 1. Find your `task-runner` pod by executing the following command
 
-   ```bash
+   ```shell
    kubectl get pods -lrelease=RELEASE_NAME,app=task-runner
    ```
 
 1. Run the instance setup script to enable the necessary features
 
-  ```bash
+  ```shell
   kubectl exec <task-runner pod name> -it -- /scripts/custom-instance-setup
   ```
 
 ## Restart the pods
 
-In order to use the new changes, the `unicorn` and `sidekiq` pods need to be restarted. The safest way to restart those pods is to run:
+In order to use the new changes, the `webservice` and `sidekiq` pods need to be restarted. The safest way to restart those pods is to run:
 
-```bash
+```shell
 kubectl delete pods -lapp=sidekiq,release=<helm release name>
-kubectl delete pods -lapp=unicorn,release=<helm release name>
+kubectl delete pods -lapp=webservice,release=<helm release name>
 ```
 
 ## (Optional) Reset the root user's password
 
 The restoration process does not update the `gitlab-initial-root-password` secret with the value from backup. For logging in as `root`, use the original password included in the backup. In the case that the password is no longer accessible, follow the steps below to reset it.
 
-1. Attach to the Unicorn pod by executing the command
+1. Attach to the webservice pod by executing the command
 
-   ```bash
-   kubectl exec <unicorn pod name> -it bash
+   ```shell
+   kubectl exec <webservice pod name> -it bash
    ```
 
 1. Run the following command to reset the password of `root` user. Replace `#{password}` with a password of your choice
 
-   ```bash
+   ```shell
    /srv/gitlab/bin/rails runner "user = User.first; user.password='#{password}'; user.password_confirmation='#{password}'; user.save!"
    ```
 

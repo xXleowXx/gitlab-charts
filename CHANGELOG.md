@@ -2,6 +2,136 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.0.0 (2020-05-22)
+
+### Fixed (2 changes)
+
+- Add defaulting of multi-redis password enabled (#2030). !1335
+- Mailroom: follow Redis Queues instance (#2097). !1347
+
+### Changed (9 changes, 1 of them is from the community)
+
+- Deploy ChaosKube Helm chart. !1296
+- Allow configuration of security context user to help with Openshift installs. !1306 (Mickaël Canévet)
+- Moved gitlab-shell settings to gitaly config.toml. !1308
+- Make sidekiq-cluster the default. !1317
+- Update gitlab-exporter to 7.0.2. !1321
+- Bump Container Registry to v2.9.1-gitlab. !1326
+- Updated documention to include multi Redis support. !1330
+- NGINX: Enable HTTP2, as all services support it. !1338
+- Bump gitlab-exporter to 7.0.3. !1345
+
+### Added (8 changes, 2 of them are from the community)
+
+- Add task-runner pod antiAffinity support to helm chart. !1025 (Sam Wenham)
+- Replace unicorn chart with webservice. !1145 (Dmitry Chepurovskiy)
+- Provides capability to configure PDB per sidekiq pod config. !1292
+- Adds update strategy to be configured for Container Registry. !1293
+- Adds update strategy to be configured for sidekiq. !1294
+- Update min chart/gitlab versions for the major release. !1300
+- Add support for ci_jwt_signing_key Rails secret. !1318
+- Add extraEnvs for Sidekiq. !1333
+
+### Other (2 changes)
+
+- Update bitnami/postgres -> 8.9.4, postgres -> 11.7.0. !1320
+- Update GitLab Version to 13.0.0.
+
+
+## 3.3.5 (2020-05-15)
+
+### Changed (1 change)
+
+- Update GitLab runner chart to 0.16.1. !1331
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.6.
+
+
+## 3.3.4 (2020-05-14)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.5.
+
+
+## 3.3.3 (2020-05-04)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.3.
+
+
+## 3.3.2 (2020-04-30)
+
+### Fixed (3 changes)
+
+- Fixed PostgreSQL port when enabling Geo. !1304
+- Fix redis secret templating when password.enabled=false. !1312
+- Add terraform_state secret to task-runner. !1315
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.2.
+
+
+## 3.3.1 (2020-04-24)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.1.
+
+
+## 3.3.0 (2020-04-22)
+
+### Removed (1 change)
+
+- Remove Redis from Gitlab-Shell and Gitaly charts. !1271
+
+### Fixed (3 changes, 2 of them are from the community)
+
+- Fix the gitaly service name not being used correctly in all places. !1204 (Matthias van de Meent)
+- Change default concurrency setting for Sidekiq to 25 globally. !1233
+- Fixed that unnecessary secret is generated when using external Redis. !1237 (Colin Luo)
+
+### Changed (6 changes)
+
+- Updated Helm references and commands to v3 notations. !1210
+- Support queues, negateQueues, and experimentalQueueSelector for Sidekiq when cluster is enabled. !1251
+- Updated references to deprecated postgresql and redis charts. !1253
+- Make GitLab task-runner scalable, default 1 #1254. !1263
+- GitLab Exporter to 7.0.1. !1265
+- Bump Container Registry to v2.9.0-gitlab. !1273
+
+### Added (6 changes, 2 of them are from the community)
+
+- Add storage setting for terraform state. !1208
+- Ability to override PostgreSQL port for subcharts. !1212 (Stepan Kuksenko)
+- Expose settings to configure Registry notifications. !1225
+- Add option for using Sidekiq Cluster to start Sidekiq. !1247
+- Add optional `priorityClassName` configuration value to Gitaly chart. !1282 (Theo Meneau)
+- Support configuration of multiple Redis instances. !1287
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.0.
+
+
+## 3.2.6 (2020-05-14)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.9.7.
+
+
+## 3.2.5 (2020-04-30)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.9.5.
+
+
 ## 3.2.4 (2020-04-17)
 
 ### Other (1 change)
@@ -51,6 +181,13 @@ entry.
 ### Other (1 change)
 
 - Update GitLab Version to 12.9.0.
+
+
+## 3.1.8 (2020-04-30)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.8.10.
 
 
 ## 3.1.7 (2020-04-15)

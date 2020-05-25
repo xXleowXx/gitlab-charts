@@ -204,11 +204,8 @@ If the postgresql port is provided in subchart values or global values, it will 
 to 5432 default
 */}}
 {{- define "gitlab.psql.port" -}}
-{{- if hasKey .Values.psql "port" -}}
-{{-   .Values.psql.port -}}
-{{- else -}}
-{{-   coalesce .Values.global.psql.port 5432 -}}
-{{- end -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{- default 5432 (pluck "port" $local $.Values.global.psql | first ) | int -}}
 {{- end -}}
 
 {{/*
@@ -318,10 +315,10 @@ We're explicitly checking for an actual value being present, not the existance o
 */}}
 {{- define "gitlab.ingress.tls.configured" -}}
 {{/* Pull the value, if it exists */}}
-{{- $global   := pluck "secretName" (default (dict)  $.Values.global.ingress.tls) | first -}}
-{{- $unicorn  := pluck "secretName" $.Values.gitlab.unicorn.ingress.tls | first -}}
-{{- $registry := pluck "secretName" $.Values.registry.ingress.tls | first -}}
-{{- $minio    := pluck "secretName" $.Values.minio.ingress.tls | first -}}
+{{- $global      := pluck "secretName" (default (dict)  $.Values.global.ingress.tls) | first -}}
+{{- $webservice  := pluck "secretName" $.Values.gitlab.webservice.ingress.tls | first -}}
+{{- $registry    := pluck "secretName" $.Values.registry.ingress.tls | first -}}
+{{- $minio       := pluck "secretName" $.Values.minio.ingress.tls | first -}}
 {{/* Set each item to configured value, or !enabled
      This works because `false` is the same as empty, so we'll use the value when `enabled: true`
      - default "" (not true) => ''
@@ -330,11 +327,11 @@ We're explicitly checking for an actual value being present, not the existance o
      - default "valid" (not false) => 'true'
      Now, disabled sub-charts won't block this template from working properly.
 */}}
-{{- $unicorn :=  default $unicorn (not $.Values.gitlab.unicorn.enabled) -}}
-{{- $registry :=  default $registry (not $.Values.registry.enabled) -}}
-{{- $minio :=  default $minio (not $.Values.global.minio.enabled) -}}
+{{- $webservice  :=  default $webservice (not $.Values.gitlab.webservice.enabled) -}}
+{{- $registry    :=  default $registry (not $.Values.registry.enabled) -}}
+{{- $minio       :=  default $minio (not $.Values.global.minio.enabled) -}}
 {{/* Check that all enabled items have been configured */}}
-{{- if or $global (and $unicorn (and $registry $minio)) -}}
+{{- if or $global (and $webservice (and $registry $minio)) -}}
 true
 {{- end -}}
 {{- end -}}

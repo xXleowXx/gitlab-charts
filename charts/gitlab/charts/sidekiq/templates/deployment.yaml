@@ -47,6 +47,9 @@ spec:
       app: {{ $name }}
       release: {{ $releaseName }}
       queue-pod-name: {{ .name }}
+{{- if or $.Values.updateStrategy .updateStrategy }}
+  strategy: {{ default $.Values.updateStrategy .updateStrategy | toYaml | nindent 4 }}
+{{- end }}
   template:
     metadata:
       labels:
@@ -69,8 +72,8 @@ spec:
         {{- toYaml $.Values.tolerations | nindent 8 }}
       {{- end }}
       securityContext:
-        runAsUser: 1000
-        fsGroup: 1000
+        runAsUser: {{ $.Values.securityContext.runAsUser }}
+        fsGroup: {{ $.Values.securityContext.fsGroup }}
       {{- if eq (default $.Values.global.antiAffinity .antiAffinity) "hard" }}
       affinity:
         podAntiAffinity:
@@ -101,6 +104,13 @@ spec:
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global.busybox) | quote }}
+          {{- if $.Values.extraEnv }}
+          env:
+          {{- range $key, $value := $.Values.extraEnv }}
+          - name: {{ $key | quote }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
           {{- include "gitlab.psql.ssl.volumeMount" $ | nindent 10 }}
@@ -140,6 +150,12 @@ spec:
             - name: ENABLE_BOOTSNAP
               value: "1"
             {{- end }}
+            {{- if $.Values.extraEnv }}
+            {{- range $key, $value := $.Values.extraEnv }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
           - name: sidekiq-config
@@ -172,7 +188,7 @@ spec:
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
             - name: SIDEKIQ_CLUSTER
-              value: {{ include "gitlab.boolean.local" (dict "global" $.Values.cluster "local" .cluster "default" false) | quote }}
+              value: {{ include "gitlab.boolean.local" (dict "global" $.Values.cluster "local" .cluster "default" true) | quote }}
             - name: SIDEKIQ_EXPERIMENTAL_QUEUE_SELECTOR
               value: {{ include "gitlab.boolean.local" (dict "global" $.Values.experimentalQueueSelector "local" .experimentalQueueSelector "default" false) | quote }}
             - name: SIDEKIQ_CONCURRENCY
@@ -200,6 +216,12 @@ spec:
             {{- if $.Values.global.rails.bootsnap.enabled }}
             - name: ENABLE_BOOTSNAP
               value: "1"
+            {{- end }}
+            {{- if $.Values.extraEnv }}
+            {{- range $key, $value := $.Values.extraEnv }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
             {{- end }}
 {{- if $metricsEnabled }}
           ports:
