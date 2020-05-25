@@ -450,8 +450,9 @@ global:
   ## Enable deployments to use serviceAccounts
   serviceAccount:
     enabled: false
+    annotations: {}
     ## Name of an already existing service account. Setting this value disables the automatic service account creation.
-    # name: 
+    # name:
 
 ## End of global
 
@@ -470,10 +471,10 @@ upgradeCheck:
       cpu: 50m
 
 ## Settings to for the Let's Encrypt ACME Issuer
-# certmanager-issuer:
-#   # The email address to register certificates requested from Let's Encrypt.
-#   # Required if using Let's Encrypt.
-#   email: email@example.com
+certmanager-issuer:
+  # The email address to register certificates requested from Let's Encrypt.
+  # Required if using Let's Encrypt.
+  email: email@example.com
 
 ## Installation & configuration of jetstack/cert-manager
 ## See requirements.yaml for current version
