@@ -431,6 +431,8 @@ found in [examples/objectstorage](https://gitlab.com/gitlab-org/charts/gitlab/tr
 
 For S3, make sure you give the correct
 [permissions for registry storage](https://docs.docker.com/registry/storage-drivers/s3/#s3-permission-scopes).
+There is more information about storage configuration in the 
+[admin documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-storage-driver).
 
 Place the *contents* of the `storage` block into the secret, and provide the following
 as items to the `storage` map:
