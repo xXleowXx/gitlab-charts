@@ -2,6 +2,17 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 3.3.6 (2020-05-27)
+
+### Fixed (1 change)
+
+- backport Mailroom: follow Redis Queues instance (#2097). !1354
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.7.
+
+
 ## 3.3.5 (2020-05-15)
 
 ### Changed (1 change)
