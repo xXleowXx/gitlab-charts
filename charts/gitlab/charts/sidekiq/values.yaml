@@ -21,8 +21,6 @@ tolerations: []
 enabled: true
 cluster: true
 experimentalQueueSelector: false
-queues: ""
-negateQueues: ""
 
 annotations: {}
 

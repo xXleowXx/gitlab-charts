@@ -193,9 +193,9 @@ spec:
             - name: SIDEKIQ_TIMEOUT
               value: {{ default $timeout .timeout | quote }}
             - name: SIDEKIQ_QUEUES
-              value: {{ default $.Values.queues .queues | nospace | quote }}
+              value: {{ default "" $.Values.queues .queues | nospace | quote }}
             - name: SIDEKIQ_NEGATE_QUEUES
-              value: {{ default $.Values.negateQueues .negateQueues | nospace | quote }}
+              value: {{ default "" $.Values.negateQueues .negateQueues | nospace | quote }}
             - name: SIDEKIQ_DAEMON_MEMORY_KILLER
               value: {{ int $.Values.memoryKiller.daemonMode | quote }}
             - name: SIDEKIQ_MEMORY_KILLER_CHECK_INTERVAL
