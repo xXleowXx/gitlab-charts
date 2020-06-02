@@ -72,7 +72,7 @@ securityContext:
 ## Enable deployment to use a serviceAccount
 serviceAccount:
   enabled: false
-  create: true
+  create: false
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
   # name: 
