@@ -278,6 +278,25 @@ global:
       mailbox: inbox
       idleTimeout: 60
 
+    ## doc/charts/globals.md#service-desk-email-settings
+    ## doc/installation/deployment.md#service-desk-email
+    serviceDeskEmail:
+      enabled: false
+      address: ""
+      host: "imap.gmail.com"
+      port: 993
+      ssl: true
+      startTls: false
+      user: ""
+      password:
+        secret: ""
+        key: password
+      expungeDeleted: false
+      logger:
+        logPath: "/dev/stdout"
+      mailbox: inbox
+      idleTimeout: 60
+
     ## doc/charts/globals.md#ldap
     ldap:
       # prevent the use of LDAP for sign-in via web.
@@ -454,7 +473,12 @@ global:
     annotations: {}
     ## Name to be used for serviceAccount, otherwise defaults to chart fullname
     # name:
-
+  
+  ## docs/charts/globals/tracing.md#tracing
+  tracing:
+    connection:
+      string: ""
+    urlTemplate: ""
 ## End of global
 
 upgradeCheck:
@@ -586,6 +610,13 @@ postgresql:
   usePasswordFile: true
   existingSecret: 'bogus'
   initdbScriptsConfigMap: 'bogus'
+  master:
+    extraVolumeMounts:
+      - name: custom-init-scripts
+        mountPath: /docker-entrypoint-preinitdb.d/init_revision.sh
+        subPath: init_revision.sh
+    podAnnotations:
+      postgresql.gitlab/init-revision: "1"
   metrics:
     enabled: true
     ## Optionally define additional custom metrics

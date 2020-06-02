@@ -247,7 +247,7 @@ and Ingress to specific endpoints.
 ### Example policy for preventing connections to all internal endpoints
 
 The Registry service normally requires egress connections to object storage,
-Ingress connections from docker clients, and kube-dns for DNS lookups. This
+Ingress connections from Docker clients, and kube-dns for DNS lookups. This
 adds the following network restrictions to the Registry service:
 
 - All egress requests to the local network on `10.0.0.0/8` port 53 are allowed (for kubeDNS)
@@ -365,7 +365,7 @@ If you _must_ support older verions of Docker clients, you can do so by setting
 
 ### validation
 
-The `validation` field is a map that controls the docker image validation
+The `validation` field is a map that controls the Docker image validation
 process in the registry. When image validation is enabled the registry rejects
 windows images with foreign layers.
 
@@ -500,7 +500,7 @@ health:
 
 The Docker Registry will build up extraneous data over time which can be freed using
 [garbage collection](https://docs.docker.com/registry/garbage-collection/).
-As of [now](https://gitlab.com/gitlab-org/charts/gitlab/issues/1586) there is no
+As of [now](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1586) there is no
 fully automated or scheduled way to run the garbage collection with this Chart.
 
 ### Manual Garbage Collection

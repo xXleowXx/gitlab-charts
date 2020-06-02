@@ -2,6 +2,38 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.0.2 (2020-05-29)
+
+### Fixed (3 changes, 1 of them is from the community)
+
+- Mailroom: follow Redis Queues instance (#2097). !1347
+- Fix an bug in which it was impossible to configure the unicorn memory killer. !1365 (Matthias van de Meent)
+- Ensure database-upgrade scripts ignores running on the backup pods. !1367
+
+### Changed (1 change)
+
+- Update GitLab Runner to 0.17.0. !1356
+
+### Other (1 change)
+
+- Update GitLab Version to 13.0.3.
+
+
+## 4.0.1 (2020-05-27)
+
+### Fixed (1 change)
+
+- Ensure database-upgrade scripts ignores running on the backup pods. !1367
+
+### Changed (1 change)
+
+- Update GitLab Runner to 0.17.0. !1356
+
+### Other (1 change)
+
+- Update GitLab Version to 13.0.1.
+
+
 ## 4.0.0 (2020-05-22)
 
 ### Fixed (2 changes)
@@ -36,6 +68,24 @@ entry.
 
 - Update bitnami/postgres -> 8.9.4, postgres -> 11.7.0. !1320
 - Update GitLab Version to 13.0.0.
+
+
+## 3.3.7 (2020-05-29)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.8.
+
+
+## 3.3.6 (2020-05-27)
+
+### Fixed (1 change)
+
+- backport Mailroom: follow Redis Queues instance (#2097). !1354
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.7.
 
 
 ## 3.3.5 (2020-05-15)
@@ -116,6 +166,13 @@ entry.
 ### Other (1 change)
 
 - Update GitLab Version to 12.10.0.
+
+
+## 3.2.7 (2020-05-27)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.9.8.
 
 
 ## 3.2.6 (2020-05-14)
