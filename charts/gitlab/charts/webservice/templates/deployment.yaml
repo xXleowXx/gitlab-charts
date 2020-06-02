@@ -59,7 +59,7 @@ spec:
                   release: {{ .Release.Name }}
       {{- end }}
       {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
-      serviceAccountName: {{ coalesce .Values.serviceAccount.name .Values.global.serviceAccount.name (include "fullname" . ) }}
+      serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
       {{- end }}
       initContainers:
         {{- include "gitlab.extraInitContainers" . | nindent 8 }}

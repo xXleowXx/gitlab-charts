@@ -61,7 +61,8 @@ securityContext:
 ## Enable deployment to use a serviceAccount
 serviceAccount:
   enabled: false
+  create: true
   annotations: {}
-  ## Name of an already existing service account. Setting this value disables the automatic service account creation.
+  ## Name to be used for serviceAccount, otherwise defaults to chart fullname
   # name: 
   
