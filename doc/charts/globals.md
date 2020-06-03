@@ -23,6 +23,7 @@ for more information on how the global variables work.
 - [Application Resource](#application-resource)
 - [Busybox image](#busybox-image)
 - [Service Accounts](#service-accounts)
+- [Annotations](#annotations)
 - [Tracing](#tracing)
 
 ## Configure Host settings
@@ -1099,6 +1100,25 @@ global:
 - Setting `global.serviceAccount.enabled` to `true` will create a custom service account for each deployment.
 - Setting `global.serviceAccount.create` to `false` will disable automatic service account creation.
 - Setting `global.serviceAccount.name` will use that name in the deployment for either auto-generated or manually created service accounts.
+
+## Annotations
+
+Custom annotations can be applied to Deployment, Service, and Ingress objects.
+
+```yaml
+global:
+  deployment:
+    annotations:
+      environment: production
+
+  service:
+    annotations:
+      environment: production
+
+  ingress:
+    annotations:
+      environment: production
+```
 
 ## Tracing
 
