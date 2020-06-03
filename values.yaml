@@ -466,7 +466,7 @@ global:
       repository: busybox
       tag: latest
 
-  ## Enable deployments to use serviceAccounts
+  ## docs/charts/globals.md#service-accounts
   serviceAccount:
     enabled: false
     create: true
