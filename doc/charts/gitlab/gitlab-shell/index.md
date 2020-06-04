@@ -25,7 +25,8 @@ or update the AuthorizedKeys file within these pods.
 
 The `gitlab-shell` chart is configured in two parts: [external services](#external-services),
 and [chart settings](#chart-settings). The port exposed through Ingress is configured
-with `global.shell.port`, and defaults to `22`.
+with `global.shell.port`, and defaults to `22`. The Service's external port is also
+controlled by `global.shell.port`.
 
 ## Installation command line options
 
