@@ -976,7 +976,7 @@ global:
 
 | Name        | Type    | Default | Description |
 |:----------- |:-------:|:------- |:----------- |
-| `port`      | Integer | `22`    | You can control the port used by the Ingress to pass SSH traffic, as well as the port used in SSH URLs provided from GitLab via `global.shell.port`. |
+| `port`      | Integer | `22`    | You can control the port used by the Ingress to pass SSH traffic, as well as the port used in SSH URLs provided from GitLab via `global.shell.port`. Additionally, if used in combination with `nginx-ingress.controller.service.type` set to `true`, this will set the `nodePort` for `gitlab-shell` on the NGINX controller Service object. Note that `nginx-ingress.controller.service.nodePorts.gitlab-shell` will override `global.shell.port` if provided. |
 | `authToken` |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
 | `hostKeys`  |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
 
