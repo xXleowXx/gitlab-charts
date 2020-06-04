@@ -976,9 +976,39 @@ global:
 
 | Name        | Type    | Default | Description |
 |:----------- |:-------:|:------- |:----------- |
-| `port`      | Integer | `22`    | You can control the port used by the Ingress to pass SSH traffic, as well as the port used in SSH URLs provided from GitLab via `global.shell.port`. Additionally, if used in combination with `nginx-ingress.controller.service.type` set to `true`, this will set the `nodePort` for `gitlab-shell` on the NGINX controller Service object. Note that `nginx-ingress.controller.service.nodePorts.gitlab-shell` will override `global.shell.port` if provided. |
+| `port`      | Integer | `22`    | See [port](#port) below for specific documentation. |
 | `authToken` |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
 | `hostKeys`  |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
+
+### Port
+
+You can control the port used by the Ingress to pass SSH traffic, as well as the port used
+in SSH URLs provided from GitLab via `global.shell.port`.
+
+Additionally, you can use `global.shell.port` together with `nginx-ingress.controller.service.type=NodePort`
+to set a NodePort for the NGINX controller Service object.
+
+Note that if `nginx-ingress.controller.service.nodePorts.gitlab-shell` is set, it will
+override `global.shell.port` when setting the NodePort.
+
+```yaml
+# Tell the Ingress to pass SSH traffic on port 32022
+# Also tell GitLab to use port 32022 in the SSH URL
+# Also tell GitLab Shell's Service object to listen on port 32022
+global:
+  shell:
+    port: 32022
+
+# Tell NGINX to expose port 32022 on the node(s) for GitLab Shell traffic
+nginx-ingress:
+  controller:
+    service:
+      type: NodePort
+
+      # Uncomment the section below to override the NodePort value
+      # nodePorts:
+      #   gitlab-shell: 2222
+```
 
 ## Configure Webservice
 
