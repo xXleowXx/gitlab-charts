@@ -10,7 +10,7 @@ In certain scenarios (i.e. air-gapping), you may want to bring your own images r
 
 ## Example values file
 
-Below is an example **values.yaml** file that demonstrates how to configure a custom Docker registry/repository and tag. You can copy relevant sections of this file for your own releases. Note that some of the charts (especially third party charts) sometimes have slightly different conventions for specifying the image registry/repository and tag.
+Below is an example values file that demonstrates how to configure a custom Docker registry/repository and tag. You can copy relevant sections of this file for your own releases. Note that some of the charts (especially third party charts) sometimes have slightly different conventions for specifying the image registry/repository and tag.
 
   ```yaml
   # Need to set certmanager-issuer.email before templating
