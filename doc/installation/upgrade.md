@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Upgrade Guide
 
 Before upgrading your GitLab installation, you need to check the
@@ -117,7 +123,7 @@ kubectl delete pvc data-RELEASE_NAME-postgresql-0
 
 ### Upgrade GitLab
 
-Upgrade GitLab following our [standard procedure](#upgrade-guide), with the following additions of:
+Upgrade GitLab following our [standard procedure](#steps), with the following additions of:
 
 If you are using the bundled PostgreSQL, disable migrations using the following flag on your upgrade command:
 
@@ -234,7 +240,7 @@ This will change any dynamic value for the `LoadBalancer` for NGINX Ingress from
 
 ### Upgrade GitLab
 
-Upgrade GitLab following our [standard procedure](#upgrade-guide), with the following additions of:
+Upgrade GitLab following our [standard procedure](#steps), with the following additions of:
 
 If you are using the bundled PostgreSQL, disable migrations using the following flag on your upgrade command:
 

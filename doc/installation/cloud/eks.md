@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Preparing EKS resources
 
 For a fully functional GitLab instance, you will need a few resources before
@@ -42,13 +48,13 @@ The table below describes all variables.
 Run the script, by passing in your desired parameters. It can work with the
 default parameters.
 
-```bash
+```shell
 ./scripts/eks_bootstrap_script up
 ```
 
 The script can also be used to clean up the created EKS resources:
 
-```bash
+```shell
 ./scripts/eks_bootstrap_script down
 ```
 

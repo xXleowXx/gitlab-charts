@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Installation command line options
 
 The tables below contain all the possible charts configurations that can be supplied
@@ -6,7 +12,7 @@ to the `helm install` command using the `--set` flags.
 The source of the default `values.yaml` file can be found [here](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/values.yaml).
 These contents change over releases, but you can use Helm itself to retrieve these on a per-version basis:
 
-```sh
+```shell
 helm inspect values gitlab/gitlab
 ```
 
@@ -31,6 +37,7 @@ helm inspect values gitlab/gitlab
 | `global.psql.password.secret`                  | Global name of the secret containing the psql password                                      | _Uses in-cluster non-production PostgreSQL_   |
 | `global.registry.bucket`                       | registry bucket name                                                                        | `registry`                                    |
 | `global.service.annotations`                   | Annotations to add to every `Service`                                                       | {}                                            |
+| `global.deployment.annotations`                | Annotations to add to every `Deployment`                                                    | {}                                            |
 | `global.time_zone`                             | Global time zone                                                                            | UTC                                           |
 
 ## TLS configuration
@@ -55,7 +62,7 @@ helm inspect values gitlab/gitlab
 | `global.email.smime.certName`     | Secret object key value for locating the S/MIME certificate file                        | tls.crt               |
 | `global.email.smime.enabled`      | Add the S/MIME signatures to outgoing email                                             | false                 |
 | `global.email.smime.keyName`      | Secret object key value for locating the S/MIME key file                                | tls.key               |
-| `global.email.smime.secretName`   | Kubernetes Secret object to find the X.509 certificate ([S/MIME Cert][] for creation )  | ""                    |
+| `global.email.smime.secretName`   | Kubernetes Secret object to find the X.509 certificate ([S/MIME Cert](secrets.md#smime-certificate) for creation )  | ""                    |
 | `global.email.subject_suffix`     | Suffix on the subject of all outgoing email from GitLab                                 | ""                    |
 | `global.smtp.address`             | Hostname or IP of the remote mail server                                                | `smtp.mailgun.org`    |
 | `global.smtp.authentication`      | Type of SMTP authentication ("plain", "login", "cram_md5", or "" for no authentication) | `plain`               |
@@ -68,8 +75,6 @@ helm inspect values gitlab/gitlab
 | `global.smtp.starttls_auto`       | Use STARTTLS if enabled on the mail server                                              | false                 |
 | `global.smtp.tls`                 | Enables SMTP/TLS (SMTPS: SMTP over direct TLS connection)                               | _none_                |
 | `global.smtp.user_name`           | Username for SMTP authentication https                                                  | ""                    |
-
-[S/MIME Cert]: secrets.md#smime-certificate
 
 ## Incoming Email configuration
 
@@ -88,6 +93,30 @@ helm inspect values gitlab/gitlab
 | `global.appConfig.incomingEmail.user`            | Username for IMAP authentication                                                                       | empty       |
 | `global.appConfig.incomingEmail.expungeDeleted`  | Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery | false       |
 | `global.appConfig.incomingEmail.logger.logPath`  | Path to write JSON structured logs to; set to "" to disable this logging                               | /dev/stdout |
+
+## Service Desk Email configuration
+
+As a requirement for Service Desk, the Incoming Mail must be [configured](#incoming-email-configuration).
+Note that the email address for both Incoming Mail and Service Desk must use
+[email sub-addressing](https://docs.gitlab.com/ee/administration/incoming_email.html#email-sub-addressing).
+When setting the email addresses in each section the tag added to the username
+must be `+%{key}`.
+
+| Parameter                                        | Description                                                                                            | Default     |
+|--------------------------------------------------|--------------------------------------------------------------------------------------------------------|-------------|
+| `global.appConfig.serviceDeskEmail.address`         | The email address to reference the item being replied to (example: `project_contact+%{key}@gmail.com`) | empty       |
+| `global.appConfig.serviceDeskEmail.enabled`         | Enable service desk email                                                                              | false       |
+| `global.appConfig.serviceDeskEmail.host`            | Host for IMAP                                                                                          | empty       |
+| `global.appConfig.serviceDeskEmail.idleTimeout`     | The IDLE command timeout                                                                               | `60`        |
+| `global.appConfig.serviceDeskEmail.mailbox`         | Mailbox where service desk mail will end up.                                                           | `inbox`     |
+| `global.appConfig.serviceDeskEmail.password.key`    | Key in `global.appConfig.serviceDeskEmail.password.secret` that contains the IMAP password             | `password`  |
+| `global.appConfig.serviceDeskEmail.password.secret` | Name of a `Secret` containing the IMAP password                                                        | empty       |
+| `global.appConfig.serviceDeskEmail.port`            | Port for IMAP                                                                                          | `993`       |
+| `global.appConfig.serviceDeskEmail.ssl`             | Whether IMAP server uses SSL                                                                           | true        |
+| `global.appConfig.serviceDeskEmail.startTls`        | Whether IMAP server uses StartTLS                                                                      | false       |
+| `global.appConfig.serviceDeskEmail.user`            | Username for IMAP authentication                                                                       | empty       |
+| `global.appConfig.serviceDeskEmail.expungeDeleted`  | Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery | false       |
+| `global.appConfig.serviceDeskEmail.logger.logPath`  | Path to write JSON structured logs to; set to "" to disable this logging                               | /dev/stdout |
 
 ## Default Project Features configuration
 
@@ -141,7 +170,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | Parameter                            | Description                                    | Default              |
 |--------------------------------------|------------------------------------------------|----------------------|
 | `registry.authEndpoint`              | Auth endpoint                                  | Undefined by default |
-| `registry.enabled`                   | Enable docker registry                         | true                 |
+| `registry.enabled`                   | Enable Docker registry                         | true                 |
 | `registry.httpSecret`                | Https secret                                   |                      |
 | `registry.minio.bucket`              | MinIO registry bucket name                     | `registry`           |
 | `registry.service.annotations`       | Annotations to add to the `Service`            | {}                   |

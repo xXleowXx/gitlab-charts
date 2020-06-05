@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Resource usage
 
 ## Resource Requests
@@ -115,7 +121,7 @@ Load was tested using <https://gitlab.com/andrewn/gitlab-load-kit> and a custom 
   - cpu: 50m (from minimal load)
   - memory: 650M (from average load)
   - target cpu average: 350m (from average loads)
-    - *In the future [we should be using custom metrics](https://gitlab.com/gitlab-org/charts/gitlab/issues/1008) that measure the number of busy workers.*
+    - *In the future [we should be using custom metrics](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1008) that measure the number of busy workers.*
 
 - **Recommended Limits**
   - cpu: > 1 (greater than stress task)

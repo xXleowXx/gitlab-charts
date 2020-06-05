@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Deployment Guide
 
 Before running `helm install`, you need to make some decisions about how you will run GitLab.
@@ -112,12 +118,12 @@ You can read more about setting up your production-ready object storage in the [
 
 ### Prometheus
 
-We use the [upstream Prometheus chart][prometheus-configuration],
+We use the [upstream Prometheus chart](https://github.com/helm/charts/tree/master/stable/prometheus#configuration),
 and do not override values from our own defaults.
 We do, however, default disable `alertmanager`, `nodeExporter`, and
 `pushgateway`.
 
-Refer to the [Prometheus chart documentation][prometheus-configuration] for the
+Refer to the [Prometheus chart documentation](https://github.com/helm/charts/tree/master/stable/prometheus#configuration) for the
 exhaustive list of configuration options and ensure they are sub-keys to
 `prometheus`, as we use this as requirement chart.
 
@@ -140,8 +146,6 @@ prometheus:
       enabled: true
       size: 8Gi
 ```
-
-[prometheus-configuration]: https://github.com/helm/charts/tree/master/stable/prometheus#configuration
 
 ### Outgoing email
 
@@ -167,6 +171,16 @@ described in the [secrets guide](secrets.md#imap-password-for-incoming-emails).
 To use reply-by-email feature, where users can reply to notification emails to
 comment on issues and MRs, you need to configure both outgoing email and
 incoming email settings.
+
+### Service desk email
+
+By default service desk email is disabled. To enable it, provide details of your
+IMAP server and access credentials using the `global.appConfig.serviceDeskEmail`
+settings. You can find details for these settings in the [command line options](command-line-options.md#service-desk-email-configuration).
+You will also have to create a Kubernetes secret containing IMAP password as
+described in the [secrets guide](secrets.md#imap-password-for-service-desk-emails).
+
+NOTE: **Note** Service desk email _requires_ that [Incoming email](#incoming-email) be configured.
 
 ### Deploy the Community Edition
 
@@ -276,6 +290,3 @@ if you used the command above).
 ```shell
 kubectl get secret <name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
 ```
-
-[secret-gl-certs]: secrets.md#gitlab-certificates
-[secret-reg-certs]: secrets.md#registry-certificates

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Using the Container Registry
 
 The `registry` sub-chart provides the Registry component to a complete cloud-native
@@ -247,7 +253,7 @@ and Ingress to specific endpoints.
 ### Example policy for preventing connections to all internal endpoints
 
 The Registry service normally requires egress connections to object storage,
-Ingress connections from docker clients, and kube-dns for DNS lookups. This
+Ingress connections from Docker clients, and kube-dns for DNS lookups. This
 adds the following network restrictions to the Registry service:
 
 - All egress requests to the local network on `10.0.0.0/8` port 53 are allowed (for kubeDNS)
@@ -365,7 +371,7 @@ If you _must_ support older verions of Docker clients, you can do so by setting
 
 ### validation
 
-The `validation` field is a map that controls the docker image validation
+The `validation` field is a map that controls the Docker image validation
 process in the registry. When image validation is enabled the registry rejects
 windows images with foreign layers.
 
@@ -429,6 +435,10 @@ found in [examples/objectstorage](https://gitlab.com/gitlab-org/charts/gitlab/tr
 - [`registry.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.s3.yaml)
 - [`registry.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.gcs.yaml)
 
+For S3, make sure you give the correct
+[permissions for registry storage](https://docs.docker.com/registry/storage-drivers/s3/#s3-permission-scopes). For more information about storage configuration, see
+[Container Registry storage driver](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-storage-driver) in the administration documentation.
+
 Place the *contents* of the `storage` block into the secret, and provide the following
 as items to the `storage` map:
 
@@ -438,7 +448,7 @@ as items to the `storage` map:
   to `/etc/docker/registry/storage/${extraKey}` within the container. This can be
   used to provide the `keyfile` for the `gcs` driver.
 
-```bash
+```shell
 # Example using S3
 kubectl create secret generic registry-storage \
     --from-file=config=registry-storage.yaml
@@ -496,7 +506,7 @@ health:
 
 The Docker Registry will build up extraneous data over time which can be freed using
 [garbage collection](https://docs.docker.com/registry/garbage-collection/).
-As of [now](https://gitlab.com/gitlab-org/charts/gitlab/issues/1586) there is no
+As of [now](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1586) there is no
 fully automated or scheduled way to run the garbage collection with this Chart.
 
 ### Manual Garbage Collection
@@ -505,7 +515,7 @@ Manual garbage collection requires the registry to be in read-only mode first. L
 installed the GitLab Chart using Helm, named it `mygitlab` and installed it in the namespace `gitlabns`.
 Replace these values in the commands below according to your actual configuration.
 
-```bash
+```shell
 # Because of https://github.com/helm/helm/issues/2948 we can't rely on --reuse-values, so let's get our current config.
 helm get values mygitlab > mygitlab.yml
 # Upgrade Helm installation and configure the registry to be read-only.

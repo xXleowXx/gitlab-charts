@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Development Guide
 
 Our contribution policies can be found in [CONTRIBUTING.md](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/CONTRIBUTING.md)
@@ -251,7 +257,7 @@ Let's look at two snippet examples, which easily exmplify the reasoning:
       gravatar:
 ```
 
-Related issue: [#729 Refactoring: Helm templates](https://gitlab.com/gitlab-org/charts/gitlab/issues/729)
+Related issue: [#729 Refactoring: Helm templates](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/729)
 
 ### When to utilize `toYaml` in templates
 
@@ -384,9 +390,7 @@ for our use *should not* be forked into this repository.
 
 If a given chart expects that sensitive communication secrets will be presented
 from within environment, such as passwords or cryptographic keys, [we prefer to
-use initContainers][initContainer-vs-env].
-
-[initContainer-vs-env]: ../architecture/decisions.md#preference-of-secrets-in-initcontainer-over-environment
+use initContainers](../architecture/decisions.md#preference-of-secrets-in-initcontainer-over-environment).
 
 #### Extending functionality
 
@@ -397,11 +401,9 @@ such a way that an upstream may not accept.
 
 There are times in a development where changes in behavior require a functionally breaking change. We try to avoid such changes, but some items can not be handled without such a change.
 
-To handle this, we have implemented the [deprecations template][]. This template is designed to recognize properties that need to be replaced or relocated, and inform the user of the actions they need to take. This template will compile all messages into a list, and then cause the deployment to stop via a `fail` call. This provides a method to inform the user at the same time as preventing the deployment the chart in a broken or unexpected state.
+To handle this, we have implemented the [deprecations template](deprecations.md). This template is designed to recognize properties that need to be replaced or relocated, and inform the user of the actions they need to take. This template will compile all messages into a list, and then cause the deployment to stop via a `fail` call. This provides a method to inform the user at the same time as preventing the deployment the chart in a broken or unexpected state.
 
-See the documentation of the [deprecations template][] for further information on the design, functionality, and how to add new deprecations.
-
-[deprecations template]: deprecations.md
+See the documentation of the [deprecations template](deprecations.md) for further information on the design, functionality, and how to add new deprecations.
 
 ## Attempt to catch problematic configurations
 

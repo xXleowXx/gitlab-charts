@@ -6,6 +6,8 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+  annotations:
+    {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas | int }}
   strategy:
@@ -34,6 +36,9 @@ spec:
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
+      serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
+      {{- end }}
       initContainers:
         {{- include "gitlab.extraInitContainers" . | nindent 8 }}
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
@@ -103,6 +108,10 @@ spec:
               value: {{ .Values.global.appConfig.uploads.bucket }}
             - name: PACKAGES_BUCKET_NAME
               value: {{ .Values.global.appConfig.packages.bucket }}
+            - name: EXTERNAL_DIFFS_BUCKET_NAME
+              value: {{ .Values.global.appConfig.externalDiffs.bucket }}
+            - name: TERRAFORM_STATE_BUCKET_NAME
+              value: {{ .Values.global.appConfig.terraformState.bucket }}
             - name: BACKUP_BUCKET_NAME
               value: {{ .Values.global.appConfig.backups.bucket }}
             - name: BACKUP_BACKEND

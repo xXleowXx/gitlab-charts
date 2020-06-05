@@ -119,6 +119,9 @@ global:
     incomingEmail:
       enabled: false
       address:
+    serviceDeskEmail:
+      enabled: false
+      address:
     lfs:
       enabled: true
       proxy_download: true
@@ -248,8 +251,19 @@ pods:
     # maxReplicas: 10
     # updateStrategy: {}
     # queues: ''
+    # extraVolumes
+    # extraVolumeMounts
 
 ## Allow to overwrite under which User and Group we're running.
 securityContext:
   runAsUser: 1000
   fsGroup: 1000
+
+## Enable deployment to use a serviceAccount
+serviceAccount:
+  enabled: false
+  create: false
+  annotations: {}
+  ## Name to be used for serviceAccount, otherwise defaults to chart fullname
+  # name: 
+  

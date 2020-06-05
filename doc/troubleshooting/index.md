@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Troubleshooting
 
 ## UPGRADE FAILED: "$name" has no deployed releases
@@ -21,8 +27,8 @@ and attempt to update the release.
 
 Otherwise, if you received this error after having previously had successful deploys
 of the GitLab chart, then you are encountering a bug. Please open an issue on our
-[issue tracker](https://gitlab.com/gitlab-org/charts/gitlab/issues), and also check out
-[issue #630](https://gitlab.com/gitlab-org/charts/gitlab/issues/630) where we recovered our
+[issue tracker](https://gitlab.com/gitlab-org/charts/gitlab/-/issues), and also check out
+[issue #630](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/630) where we recovered our
 CI server from this problem.
 
 ## Error: this command needs 2 arguments: release name, chart path
@@ -31,7 +37,7 @@ An error like this could occur when you run `helm upgrade`
 and there are some spaces in the parameters. In the following
 example, `Test Username` is the culprit:
 
-```sh
+```shell
 helm upgrade gitlab gitlab/gitlab --timeout 600s --set global.email.display_name=Test Username ...
 ```
 
@@ -41,7 +47,7 @@ in the [Deployment documentation](../installation/deployment.md#deploy-using-hel
 
 To fix it, pass the parameters in single quotes:
 
-```sh
+```shell
 helm upgrade gitlab gitlab/gitlab --timeout 600s --set global.email.display_name='Test Username' ...
 ```
 
@@ -125,7 +131,7 @@ This can happen when you have TLS termination before the NGINX Ingress, and the 
 
    Via the Helm CLI:
 
-   ```sh
+   ```shell
    helm ... --set-string global.ingress.annotations."nginx.ingress.kubernetes.io/ssl-redirect"=false
    ```
 
@@ -141,7 +147,7 @@ When using an external service for SSL termination, that service is responsible 
 ### spec.clusterIP
 
 Prior to the 3.0.0 release of these charts, the `spec.clusterIP` property
-[had been populated into several Services](https://gitlab.com/gitlab-org/charts/gitlab/issues/1710)
+[had been populated into several Services](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1710)
 despite having no actual value (`""`). This was a bug, and causes problems with Helm 3's three-way
 merge of properties.
 
@@ -149,7 +155,7 @@ Once the chart was deployed with Helm 3, there would be _no possible upgrade pat
 collected the `clusterIP` properties from the various Services and populated those into the values
 provided to Helm, or the affected services are removed from Kubernetes.
 
-The [3.0.0 release of this chart corrected this error](https://gitlab.com/gitlab-org/charts/gitlab/issues/1710), but it requires manual correction.
+The [3.0.0 release of this chart corrected this error](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1710), but it requires manual correction.
 
 This can be solved by simply removing all of the affected services.
 
@@ -167,7 +173,7 @@ NOTE: **Note:** This will change any dynamic value for the `LoadBalancer` for NG
 ### spec.selector
 
 Sidekiq pods did not receive a unique selector prior to chart release
-`3.0.0`. [The problems with this were documented in](https://gitlab.com/gitlab-org/charts/gitlab/issues/663).
+`3.0.0`. [The problems with this were documented in](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/663).
 
 Upgrades to `3.0.0` using Helm will automatically delete the old Sidekiq deployments and create new ones by appending `-v1` to the
 name of the Sidekiq `Deployments`,`HPAs`, and `Pods`.

@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # GitLab cloud native Helm Chart
 
 This is the official, recommended, and supported method to install GitLab on a cloud native environment.
@@ -37,8 +43,8 @@ can be installed separately.
 
 Some features of GitLab are not currently available using the Helm chart:
 
-- [GitLab Pages](https://gitlab.com/gitlab-org/charts/gitlab/issues/37)
-- [Smartcard authentication](https://gitlab.com/gitlab-org/charts/gitlab/issues/988)
+- [GitLab Pages](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/37)
+- [Smartcard authentication](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/988)
 
 Database limitations:
 
@@ -96,7 +102,7 @@ the amount of context we're comfortable placing here. Please see our (nearly)
 Once your GitLab Chart is installed, configuration changes and chart updates
 should be done using `helm upgrade`:
 
-```sh
+```shell
 helm repo add gitlab https://charts.gitlab.io/
 helm repo update
 helm get values gitlab > gitlab.yaml
@@ -109,7 +115,7 @@ For more detailed information see [Upgrading](installation/upgrade.md).
 
 To uninstall the GitLab Chart, run the following:
 
-```sh
+```shell
 helm uninstall gitlab
 ```
 

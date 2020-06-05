@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Using the GitLab-Sidekiq chart
 
 The `sidekiq` sub-chart provides configurable deployment of Sidekiq workers, explicitly
@@ -39,8 +45,8 @@ to the `helm install` command using the `--set` flags:
 | `enabled`                            | `true`            | Sidekiq enabled flag                     |
 | `extraContainers`                    |                   | List of extra containers to include      |
 | `extraInitContainers`                |                   | List of extra init containers to include |
-| `extraVolumeMounts`                  |                   | List of extra volumes mountes to do      |
-| `extraVolumes`                       |                   | List of extra volumes to create          |
+| `extraVolumeMounts`                  |                   | String template of extra volume mounts to configure |
+| `extraVolumes`                       |                   | String template of extra volumes to configure |
 | `extraEnv`                           |                   | List of extra environment variables to expose |
 | `gitaly.serviceName`                 | `gitaly`          | Gitaly service name                      |
 | `hpa.targetAverageValue`             | `350m`            | Set the autoscaling target value         |
@@ -67,7 +73,7 @@ to the `helm install` command using the `--set` flags:
 | `memoryKiller.maxRss`                | `2000000`         | Maximum RSS before delayed shutdown triggered expressed in kilobytes |
 | `memoryKiller.graceTime`             | `900`             | Time to wait before a triggered shutdown expressed in seconds|
 | `memoryKiller.shutdownWait`          | `30`              | Amount of time after triggered shutdown for existing jobs to finish expressed in seconds |
-| `memoryKiller.hardLimitRss`          |                   | Maximum RSS before imediate shutdown triggered expressed in kilobyte in daemon mode |
+| `memoryKiller.hardLimitRss`          |                   | Maximum RSS before immediate shutdown triggered expressed in kilobyte in daemon mode |
 | `memoryKiller.checkInterval`         | `3`               | Amount of time between memory checks in daemon mode |
 | `livenessProbe.initialDelaySeconds`  | 20                | Delay before liveness probe is initiated                                                              |
 | `livenessProbe.periodSeconds`        | 60                | How often to perform the liveness probe                                                               |
@@ -97,12 +103,37 @@ extraEnv:
   SOME_OTHER_KEY: some_other_value
 ```
 
-When the container is started, you can confirm that the enviornment variables are exposed:
+When the container is started, you can confirm that the environment variables are exposed:
 
-```bash
+```shell
 env | grep SOME
 SOME_KEY=some_value
 SOME_OTHER_KEY=some_other_value
+```
+
+### extraVolumes
+
+`extraVolumes` allows you to configure extra volumes chart-wide.
+
+Below is an example use of `extraVolumes`:
+
+```yaml
+extraVolumes: |
+  - name: example-volume
+    persistentVolumeClaim:
+      claimName: example-pvc
+```
+
+### extraVolumeMounts
+
+`extraVolumeMounts` allows you to configure extra volumeMounts on all containers chart-wide.
+
+Below is an example use of `extraVolumeMounts`:
+
+```yaml
+extraVolumeMounts: |
+  - name: example-volume-mount
+    mountPath: /etc/example
 ```
 
 ### image.pullSecrets
@@ -302,11 +333,16 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `maxReplicas`  | Integer | `10`    | Maximum number of replicas |
 | `maxUnavailable` | Integer | `1`   | Limit of maximum number of Pods to be unavailable |
 | `updateStrategy` |       | `{}`    | Allows one to configure the update strategy utilized by the deployment |
+| `extraVolumes` | String  |         | Configures extra volumes for the given pod. |
+| `extraVolumeMounts` | String |     | Configures extra volume mounts for the given pod. |
 
 ### queues
 
 The `queues` value is a string containing a comma-separated list of queues to be
 processed. By default, it is not set, meaning that all queues will be processed.
+
+The string should not contain spaces: `merge,post_receive,process_commit` will
+work, but `merge, post_receive, process_commit` will not.
 
 Any queue to which jobs are added but are not represented as a part of at least
 one pod item *will not be processed*. For a complete list of all queues, see
@@ -322,6 +358,9 @@ queue names as strings.
 
 `negateQueues` is in the same format as [`queues`](#queues), but it represents
 queues to be ignored rather than processed.
+
+The string should not contain spaces: `merge,post_receive,process_commit` will
+work, but `merge, post_receive, process_commit` will not.
 
 This is useful if you have a pod processing important queues, and another pod
 processing other queues: they can use the same list of queues, with one being in
@@ -364,6 +403,13 @@ pods:
     - [process_commit, 3]
     - [new_note, 2]
     - [new_issue, 2]
+    extraVolumeMounts: |
+      - name: example-volume-mount
+        mountPath: /etc/example
+    extraVolumes: |
+      - name: example-volume
+        persistentVolumeClaim:
+          claimName: example-pvc
     resources:
       limits:
         cpu: 800m

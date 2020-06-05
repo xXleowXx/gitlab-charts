@@ -1,8 +1,14 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # Deploy Development Branch
 
 Clone the repository, and checkout the branch you want to deploy:
 
-```sh
+```shell
 git clone git@gitlab.com:gitlab-org/charts/gitlab.git
 git checkout <BRANCH_NAME>
 ```
@@ -23,7 +29,7 @@ Git repo location to the Helm command.
 
 From within your Git checkout of the repo, run the following Helm commands to install:
 
-```sh
+```shell
 helm dependency update
 helm upgrade --install gitlab . \
   --timeout 600s \

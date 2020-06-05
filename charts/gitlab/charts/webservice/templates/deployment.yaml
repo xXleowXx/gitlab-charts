@@ -6,6 +6,8 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+  annotations:
+    {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
 spec:
   {{- if .Values.global.operator.enabled }}
   paused: true
@@ -57,6 +59,9 @@ spec:
                 matchLabels:
                   app: {{ template "name" . }}
                   release: {{ .Release.Name }}
+      {{- end }}
+      {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
+      serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
       {{- end }}
       initContainers:
         {{- include "gitlab.extraInitContainers" . | nindent 8 }}
@@ -173,10 +178,13 @@ spec:
               value: "{{ .Values.puma.disableWorkerKiller }}"
             {{- else }}
             - name: UNICORN_MEMORY_MIN
-              value: "{{ .Values.memory.min }}"
+              value: "{{ .Values.unicorn.memory.min }}"
             - name: UNICORN_MEMORY_MAX
-              value: "{{ .Values.memory.max }}"
+              value: "{{ .Values.unicorn.memory.max }}"
             {{- end }}
+            {{- include "gitlab.tracing.env" . | nindent 12 }}
+            - name: GITLAB_TRACING_URL
+              value: {{ .Values.global.tracing.urlTemplate | quote }}
           volumeMounts:
 {{- if .Values.metrics.enabled }}
             - name: webservice-metrics
@@ -257,6 +265,7 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
+            {{- include "gitlab.tracing.env" . | nindent 12 }}
           volumeMounts:
             - name: workhorse-config
               mountPath: '/var/opt/gitlab/templates'

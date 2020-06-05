@@ -6,6 +6,8 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+  annotations:
+    {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
@@ -71,6 +73,9 @@ spec:
                 matchLabels:
                   app: {{ template "name" . }}
                   release: {{ .Release.Name }}
+      {{- end }}
+      {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
+      serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
       {{- end }}
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}

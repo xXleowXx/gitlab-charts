@@ -1,3 +1,9 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+---
+
 # External PostgreSQL database
 
 This document assumes you already have your own PostgreSQL database.
@@ -42,7 +48,7 @@ If you use a mutual TLS connection to the database:
 
 For example, pass these values via Helm's `--set` flag while deploying:
 
-```sh
+```shell
 helm install gitlab gitlab/gitlab
   --set postgresql.install=false
   --set global.psql.host=psql.example
