@@ -74,22 +74,30 @@ registry:
     init: *custom
 
 postgresql:
-  global:
-    imageRegistry: custom-repository
   image:
-    repository: custom-repository
+    registry: custom-registry
+    repository: custom-image
     tag: 11-custom-tag # start with number to make checkConfig happy
-  metrics: *custom
+  metrics:
+    image:
+      registry: custom-registry
+      repository: custom-image
+      tag: custom-tag
 
 prometheus:
   server: *custom
   configmapReload: *custom
 
 redis:
-  global:
-    imageRegistry: custom-repository
-  <<: *custom
-  metrics: *custom
+  image:
+    registry: custom-registry
+    repository: custom-image
+    tag: custom-tag
+  metrics:
+    image:
+      registry: custom-registry
+      repository: custom-image
+      tag: custom-tag
 
 upgradeCheck: *custom
 
