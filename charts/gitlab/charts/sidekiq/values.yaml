@@ -266,4 +266,7 @@ serviceAccount:
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
   # name: 
-  
+
+## Allow setting a priorityClassName. See k8s docs for more info on how pod priority works:
+#  https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+priorityClassName: ""
