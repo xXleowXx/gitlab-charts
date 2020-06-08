@@ -14,8 +14,6 @@ global:
   <<: *custom
   kubectl: *custom
   certificates: *custom
-  grafana:
-    enabled: true
 
 # --- GitLab charts ---
 
@@ -27,7 +25,8 @@ gitlab:
   gitlab-exporter:
     <<: *custom
     init: *custom
-  gitlab-grafana: *custom
+  # If `global.grafana.enabled=true`, uncomment below to set the custom image
+  # gitlab-grafana: *custom
   gitlab-shell:
     <<: *custom
     init: *custom
@@ -94,7 +93,8 @@ redis:
 
 upgradeCheck: *custom
 
-grafana:
-  <<: *custom
-  sidecar:
-    image: custom-repository:custom-tag
+# If `global.grafana.enabled=true`, uncomment below to set the custom image
+# grafana:
+#   <<: *custom
+#   sidecar:
+#     image: custom-repository:custom-tag
