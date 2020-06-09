@@ -72,7 +72,7 @@ helm upgrade --install gitlab gitlab/gitlab -f examples/kind/values-base.yaml -f
 
 You can then access GitLab at `https://gitlab.(your host IP).nip.io`.
 
-### (Optional) Add root CA
+#### (Optional) Add root CA
 
 In order for your browser to trust our self-signed certificate, download the root CA and trust it:
 
