@@ -1,8 +1,8 @@
 ---
 apiVersion: v1
 name: gitaly
-version: 13.1.202006091040+c0da6e634fd
-appVersion: 6a3f3a4bb4dce6543dfd448ac2c4deb5d36ac9a9
+version: 13.1.202006091309+2ae454142de
+appVersion: 0d5e6b09284f377c703bd96eb77c735f260b9ab4
 description: Git RPC service for handling all the git calls made by GitLab
 keywords:
 - gitlab
