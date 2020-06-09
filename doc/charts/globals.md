@@ -573,6 +573,11 @@ global:
       bucket: gitlab-pseudo
       connection: {}
     cron_jobs: {}
+    sentry:
+      enabled: false
+      dsn:
+      clientside_dsn:
+      environment:
 ```
 
 ### General application settings
@@ -941,6 +946,27 @@ global:
         cron: "50 * * * *"
 ```
 
+### Sentry settings
+
+Use these settings to enable [GitLab error reporting with Sentry](https://docs.gitlab.com/omnibus/settings/configuration.html#error-reporting-and-logging-with-sentry).
+
+```yaml
+global:
+  appConfig:
+    sentry:
+      enabled:
+      dsn:
+      clientside_dsn:
+      environment:
+```
+
+| Name        | Type    | Default | Description |
+|:----------- |:-------:|:------- |:----------- |
+| `enabled`        | Boolean | `false`  | Enable or Disable the integration |
+| `dsn`            | String  |        | Sentry DSN for backend errors |
+| `clientside_dsn` | String  |        | Sentry DSN for front-end errors |
+| `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/enriching-error-data/environments/) |
+
 ## Configure Rails settings
 
 A large portion of the GitLab suite is based upon Rails. As such, many containers within this project operate with this stack. These settings apply to all of those containers, and provide an easy access method to setting them globally versus individually.
@@ -977,9 +1003,37 @@ global:
 
 | Name        | Type    | Default | Description |
 |:----------- |:-------:|:------- |:----------- |
-| `port`      | Integer | `22`    | You can control the port used by the Ingress to pass SSH traffic, as well as the port used in SSH URLs provided from GitLab via `global.shell.port`. |
+| `port`      | Integer | `22`    | See [port](#port) below for specific documentation. |
 | `authToken` |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
 | `hostKeys`  |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
+
+### Port
+
+You can control the port used by the Ingress to pass SSH traffic, as well as the port used
+in SSH URLs provided from GitLab via `global.shell.port`. This is reflected in the
+port on which the service listens, as well as the SSH clone URLs provided in project UI.
+
+```yaml
+global:
+  shell:
+    port: 32022
+```
+
+You can combine `global.shell.port` and `nginx-ingress.controller.service.type=NodePort`
+to set a NodePort for the NGINX controller Service object. Note that if
+`nginx-ingress.controller.service.nodePorts.gitlab-shell` is set, it will
+override `global.shell.port` when setting the NodePort for NGINX.
+
+```yaml
+global:
+  shell:
+    port: 32022
+
+nginx-ingress:
+  controller:
+    service:
+      type: NodePort
+```
 
 ## Configure Webservice
 
