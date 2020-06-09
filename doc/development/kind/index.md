@@ -55,7 +55,7 @@ The following instructions use files in the [GitLab Chart repository](https://gi
 
 ### Enter your host domain
 
-With the GitLab chart repository cloned, open **examples/kind/values-base.yaml** and replace `(your host IP)` with the value obtained [above](#required-information) under `global.hosts.domain`.
+With the GitLab chart repository cloned, open `examples/kind/values-base.yaml` and replace `(your host IP)` with the value obtained [above](#required-information) under `global.hosts.domain`.
 
 ## Deployment options
 
