@@ -1,40 +1,16 @@
+# Disable SSL altogether
 global:
   hosts:
-    domain: (your host IP).nip.io
     https: false
   ingress:
-    configureCertmanager: false
     tls:
       enabled: false
 
-# Don't use certmanager, we'll use http
-certmanager:
-  install: false
-
-# Specify NodePort for GitLab Shell
-gitlab:
-  gitlab-shell:
-    service:
-      type: NodePort
-      # nodePort value below should match the KinD config file:
-      #   nodes[0].extraPortMappings[1].containerPort
-      nodePort: 32022
-
-# Specify NodePort for NGINX and reduce replicas to 1
+# Specify NodePort for HTTP on NGINX
 nginx-ingress:
-  defaultBackend:
-    replicaCount: 1
   controller:
-    replicaCount: 1
-    minAavailable: 1
     service:
-      type: NodePort
       nodePorts:
-        # http port value blow must match the KinD config file:
+        # http port value below must match the KinD config file:
         #   nodes[0].extraPortMappings[0].containerPort
         http: 32080
-
-# Allow privileged runners for Docker-in-Docker pipelines
-gitlab-runner:
-  runners:
-    privileged: true
