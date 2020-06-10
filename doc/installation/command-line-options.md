@@ -408,4 +408,4 @@ for the exhaustive list of configuration options.
 
 In certain scenarios (i.e. air-gapping), you may want to bring your own images rather than pulling them down from the Internet. This requires specifying your own Docker image registry/repository for each of the charts that make up the GitLab release.
 
-Refer to the [custom images documentation](../advanced/custom-images/index.md) for the exhaustive list of configuration options.
+Refer to the [custom images documentation](../advanced/custom-images/index.md) for more information.

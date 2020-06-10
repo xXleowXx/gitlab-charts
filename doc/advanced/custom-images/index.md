@@ -10,7 +10,7 @@ In certain scenarios (i.e. air-gapping), you may want to bring your own images r
 
 ## Default image format
 
-Our default format for the image in most cases includes the full path to the image, excluding the tag.
+Our default format for the image in most cases includes the full path to the image, excluding the tag:
 
 ```yaml
 image:
@@ -24,5 +24,5 @@ The end result will be `repo.example.com/image:custom-tag`.
 
 There is an [example values file](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/custom-images/values.yaml) that demonstrates how to configure a custom Docker registry/repository and tag. You can copy relevant sections of this file for your own releases.
 
-NOTE: Note:
+NOTE: **Note:**
 Some of the charts (especially third party charts) sometimes have slightly different conventions for specifying the image registry/repository and tag. You can find documentation for third party charts on the [Helm Hub](https://hub.helm.sh/).
