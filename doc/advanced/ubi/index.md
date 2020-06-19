@@ -11,8 +11,8 @@ versions of its images, allowing you to replace standard images with UBI-based
 images. These images use the same tag as standard images with `-ubi8` extension.
 
 The GitLab Chart uses third-party images that are not based on UBI. These images
-are mostly offer external services to GitLab, such as Redis, PostgreSQL, etc.
-If you wish to deploy a GitLab instance that purely based on UBI you must
+are mostly external services to GitLab, such as Redis, PostgreSQL, etc.
+If you wish to deploy a GitLab instance that is purely based on UBI you must
 disable the internal services, and use external deployments or services.
 
 The services that must be disabled and provided externally are:
@@ -21,7 +21,7 @@ The services that must be disabled and provided externally are:
 - MinIO (Object Store)
 - Redis
 
-The services must be disabled are:
+The services that must be disabled are:
 
 - CertManager (Let's Encrypt integration)
 - NGINX Ingress
