@@ -75,7 +75,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
       ```
 
    1. Visit the Docker GitLab instance and make sure the
-      uploads are available. For example check if user, group and project
+      uploads are available. For example, check if user, group and project
       avatars are rendered fine, image and other files added to issues load
       correctly, etc.
 
