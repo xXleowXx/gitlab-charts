@@ -103,7 +103,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 
 1. Restart all pods to make sure changes are applied
 
-   ```sh
+      ```shell
    kubectl delete pods -lrelease=<helm release name>
    ```
 
