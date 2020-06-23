@@ -86,7 +86,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
       sudo docker restart gitlab
       ```
 
-1. [Create backup tarball](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
+1. [Create a backup](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system):
 
    ```sh
    sudo docker exec -t gitlab gitlab:backup:create SKIP=uploads,lfs,artifacts
