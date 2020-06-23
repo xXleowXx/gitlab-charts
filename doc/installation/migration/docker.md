@@ -96,7 +96,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
    [explicitly changed](https://docs.gitlab.com/omnibus/settings/backups.html#manually-manage-backup-directory)
    in `gitlab.rb`.
 
-1. [Restore backup tarball to Helm chart based deployment](../../backup-restore/restore.md)
+1. [Restore the backup to Helm chart based deployment](../../backup-restore/restore.md).
 
 1. Follow [official documentation](../../backup-restore/restore.md#restoring-the-secrets)
 1. Follow the documentation on how to
