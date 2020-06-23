@@ -1,4 +1,4 @@
-# Migrating from Docker-GitLab image based installation
+# Migrating from Docker-based GitLab installation
 
 NOTE: **Note**:
 The steps below assume you are using the [default volume locations](https://docs.gitlab.com/omnibus/docker/#where-is-the-data-stored)
