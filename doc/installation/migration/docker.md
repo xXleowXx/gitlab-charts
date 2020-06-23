@@ -14,7 +14,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 - `/srv/gitlab/config/gitlab-secrets.json` file from package based installation.
 
 - A Helm charts based deployment running the same GitLab version as the
-  Docker GitLab image-based installation.
+  Docker-based GitLab installation.
 
 - Object storage service which the Helm chart based deployment is configured to
   use. For production use, we recommend you use an [external object storage](../../advanced/external-object-storage/index.md)
