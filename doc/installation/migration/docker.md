@@ -80,7 +80,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
       correctly, etc.
 
    1. Restart the Docker container. This will recreate empty directories in place,
-      so the backup task won't fail.
+      so the backup task won't fail:
 
       ```sh
       sudo docker restart gitlab
