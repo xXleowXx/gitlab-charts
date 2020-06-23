@@ -37,7 +37,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 
    1. Restart the Docker container to apply the changes
 
-      ```sh
+      ```shell
       sudo docker restart gitlab
       ```
 
