@@ -68,7 +68,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 
       Docs: <https://docs.gitlab.com/ee/administration/raketasks/uploads/migrate.html#migrate-to-object-storage>
 
-   1. Exit the interactive shell on the Docker container
+   1. Exit the interactive shell on the Docker container:
 
       ```sh
       exit
