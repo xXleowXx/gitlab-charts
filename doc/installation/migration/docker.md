@@ -25,7 +25,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 ## Migration Steps
 
 1. Migrate existing files (uploads, artifacts, lfs objects) from Docker based
-   installation to object storage.
+   installation to object storage:
 
    1. Modify `/srv/gitlab/config/gitlab.rb` and configure object storage for
       [uploads](https://docs.gitlab.com/ee/administration/uploads.html#s3-compatible-connection-settings),
