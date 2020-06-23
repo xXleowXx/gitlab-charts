@@ -1,9 +1,9 @@
 # Migrating from Docker-based GitLab installation
 
 NOTE: **Note**:
-The steps below assume you are using the [default volume locations](https://docs.gitlab.com/omnibus/docker/#where-is-the-data-stored)
-for data stored on your host and that the Docker container is called **gitlab**.
-To check what your volume locations are, you can run `sudo docker inspect -f '{{ .Mounts }}' <CONTAINER_ID>`.
+The steps below assume you are using the [default Linux volumes location](https://docs.gitlab.com/omnibus/docker/#set-up-the-volumes-location)
+for data stored on your host and that the Docker container is called `gitlab`.
+To check what your volume locations are, you can run `sudo docker inspect -f '{{ .Mounts }}' gitlab`.
 
 ## Prerequisites
 
