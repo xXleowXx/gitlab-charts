@@ -32,7 +32,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
       [artifacts](https://docs.gitlab.com/ee/administration/job_artifacts.html#s3-compatible-connection-settings)
       and [LFS](https://docs.gitlab.com/ee/workflow/lfs/lfs_administration.html#s3-for-omnibus-installations).
 
-      **`Note:`** This **must** be the same object storage service that the
+      NOTE: **Note:** This **must** be the same object storage service that the
       Helm charts based deployment is connected to.
 
    1. Restart the Docker container to apply the changes
