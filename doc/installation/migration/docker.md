@@ -43,7 +43,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 
    1. Open a interactive shell on the Docker container:
 
-      ```sh
+      ```shell
       sudo docker exec -ti gitlab bash
       ```
 
