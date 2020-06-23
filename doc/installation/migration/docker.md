@@ -49,7 +49,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 
    1. Migrate existing artifacts to object storage:
 
-      ```sh
+      ```shell
       gitlab-rake gitlab:artifacts:migrate
       gitlab-rake gitlab:traces:migrate
       ```
