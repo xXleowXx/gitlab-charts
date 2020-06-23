@@ -70,7 +70,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 
    1. Exit the interactive shell on the Docker container:
 
-      ```sh
+      ```shell
       exit
       ```
 
