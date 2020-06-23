@@ -99,7 +99,8 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 1. [Restore backup tarball to Helm chart based deployment](../../backup-restore/restore.md)
 
 1. Follow [official documentation](../../backup-restore/restore.md#restoring-the-secrets)
-   on how to restore the secrets from package based installation.
+1. Follow the documentation on how to
+   [restore the secrets](../../backup-restore/restore.md#restoring-the-secrets) from a package based installation.
 
 1. Restart all pods to make sure changes are applied:
 
