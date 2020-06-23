@@ -101,7 +101,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 1. Follow [official documentation](../../backup-restore/restore.md#restoring-the-secrets)
    on how to restore the secrets from package based installation.
 
-1. Restart all pods to make sure changes are applied
+1. Restart all pods to make sure changes are applied:
 
       ```shell
    kubectl delete pods -lrelease=<helm release name>
