@@ -62,7 +62,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 
    1. Migrate existing uploads to object storage
 
-      ```sh
+      ```shell
       gitlab-rake gitlab:uploads:migrate:all
       ```
 
