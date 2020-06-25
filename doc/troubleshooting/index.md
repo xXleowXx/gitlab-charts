@@ -191,6 +191,43 @@ steps:
 
 1. Perform an upgrade via Helm.
 
+### cannot patch "RELEASE-NAME-cert-manager" with kind Deployment
+
+Upgrading from **CertManager** version `0.10` introduced a number of
+breaking changes. The old Custom Resource Definitions must be uninstalled
+and removed from Helm's tracking and then re-installed.
+
+If this error message was encountered, then upgrading requires one more step
+than normal in order to ensure the new Custom Resource Definitions are
+actually applied to the deployment.
+
+1. Remove the old **CertManager** Deployment.
+
+    ```shell
+    kubectl delete deployments -l app=cert-manager --cascade
+    ```
+
+1. Run upgrade to fix the **CertManager** release. Remove the old Custom
+   Resource Definitions, and stop Helm from tracking them.
+
+    ```shell
+    helm upgrade --install --values - --set certmanager.installCRDs=false YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
+    ```
+
+1. Remove the **CertManager** Deployment again. This step is required to
+   overcome the error state created by trying to upgrade without having
+   first deleted the **CertManager** Deployment.
+
+    ```shell
+    kubectl delete deployments -l app=cert-manager --cascade
+    ```
+
+1. Run the upgrade again. This time install the new Custom Resource Definitions
+
+    ```shell
+    helm upgrade --install --values - --set certmanager.installCRDs=true YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
+    ```
+
 ## `ImagePullBackOff`, `Failed to pull image` and `manifest unknown` errors
 
 If you are using [`global.gitlabVersion`](../charts/globals.md#gitlab-version),
