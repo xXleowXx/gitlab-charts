@@ -228,6 +228,17 @@ Alias of gitlab.psql.password.secret to override upstream postgresql chart namin
 {{- end -}}
 
 {{/*
+Returns the path to the file where the PostgreSQL password is stored.
+*/}}
+{{- define "gitlab.psql.password.file" -}}
+{{- if .Values.global.psql.password.useSecret }}
+{{- "/etc/gitlab/postgres/psql-password" | quote -}}
+{{- else -}}
+{{ .Values.global.psql.password.file | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the name of the key in a secret that contains the postgres password
 Uses `postgresql-password` to match upstream postgresql chart when not using an
   external postegresql

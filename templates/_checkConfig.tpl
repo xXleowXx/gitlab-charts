@@ -36,6 +36,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := append $messages (include "gitlab.checkConfig.multipleRedis" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.hostWhenNoInstall" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.postgresql.deprecatedVersion" .) -}}
+{{- $messages := append $messages (include "gitlab.checkConfig.postgresql.noPasswordFile" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.database.externalLoadBalancing" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.serviceDesk" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sentry" .) -}}
@@ -227,6 +228,26 @@ postgresql:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.postgresql.deprecatedVersion */}}
+
+
+{{/*
+Ensure that if `psql.password.useSecret` is set to false, a path to the password file is provided
+*/}}
+{{- define "gitlab.checkConfig.postgresql.noPasswordFile" -}}
+{{-   range $subchart := .Values.gitlab -}}
+{{-     $vals := deepCopy $.Values.global.psql | merge (pluck "psql" $subchart | first) }}
+{{-     if and (not $vals.password.useSecret) (hasKey $vals.password "useSecret") -}}
+{{-       if not (hasKey $vals.password "file") -}}
+postgresql:
+  If `psql.password.useSecret` is set to false, you must specify a value for `psql.password.file`. This configuration is not supported.
+{{-       else if (empty $vals.password.file) -}}
+postgresql:
+  If `psql.password.useSecret` is set to false, `psql.password.file` must not be empty. This configuration is not supported.
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.postgresql.noPasswordFile */}}
 
 {{/*
 Ensure that `postgresql.install: false` when `global.psql.load_balancing` defined

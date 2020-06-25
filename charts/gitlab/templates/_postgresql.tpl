@@ -59,3 +59,32 @@ if [ -d /etc/postgresql/ssl ]; then
 fi
 {{- end -}}
 {{- end -}}
+
+{{- define "gitlab.psql.secret" -}}
+{{- $vals := deepCopy $.Values.global.psql -}}
+{{- if hasKey .Values "psql" -}}
+{{- $vals = $vals | merge .Values.psql }}
+{{- end -}}
+{{- if or ($vals.password.useSecret) (not (hasKey $vals.password "useSecret")) -}}
+- secret:
+    name: {{ template "gitlab.psql.password.secret" . }}
+    items:
+      - key: {{ template "gitlab.psql.password.key" . }}
+        path: postgres/psql-password
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the quoted path to the file where the PostgreSQL password is stored.
+*/}}
+{{- define "gitlab.psql.password.file" -}}
+{{- $vals := deepCopy $.Values.global.psql -}}
+{{- if hasKey .Values "psql" -}}
+{{- $vals = $vals | merge .Values.psql }}
+{{- end -}}
+{{- if and (not $vals.password.useSecret) (hasKey $vals.password "useSecret") -}}
+{{- $vals.password.file | quote -}}
+{{- else -}}
+{{- "/etc/gitlab/postgres/psql-password" | quote -}}
+{{- end -}}
+{{- end -}}
