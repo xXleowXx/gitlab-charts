@@ -4,6 +4,8 @@
 
 global:
   gitaly:
+    deploys:
+      - gitaly
     enabled: true
     internal:
       names: ["default"]
