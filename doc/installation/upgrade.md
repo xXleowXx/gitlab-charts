@@ -18,7 +18,7 @@ provided by GitLab, you must follow the following steps first.
 
 1. Remove the old **CertManager** Deployment.
     ```
-    kubectl delete deployment gitlab-cert-manager --cascade
+    kubectl delete delete deployments -l app=cert-manager --cascade
     ```
 1. Run upgrade to fix the **CertManager** release. Remove the old Custom
    Resource Definitions, and stop Helm from tracking them.
