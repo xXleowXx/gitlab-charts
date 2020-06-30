@@ -203,7 +203,7 @@ steps:
 
 Upgrading from **CertManager** version `0.10` introduced a number of
 breaking changes. The old Custom Resource Definitions must be uninstalled
-and removed from helm's tracking and then re-installed.
+and removed from Helm's tracking and then re-installed.
 
 NOTE: **Note**:
 If this error message was encountered, then upgrading requires one more step
