@@ -196,3 +196,35 @@ steps:
    ```
 
 1. Perform an upgrade via Helm.
+
+### cannot patch "gitlab-cert-manager"
+
+>Error: UPGRADE FAILED: cannot patch "gitlab-cert-manager" with kind Deployment: Deployment.apps "gitlab-cert-manager" is invalid: spec.selector: Invalid value: v1.LabelSelector{MatchLabels:map[string]string{"app.kubernetes.io/component":"controller", "app.kubernetes.io/instance":"gitlab", "app.kubernetes.io/name":"cert-manager"}, MatchExpressions:[]v1.LabelSelectorRequirement(nil)}: field is immutable
+
+Upgrading from **CertManager** version `0.10` introduced a number of
+breaking changes. The old Custom Resource definitions must be uninstalled
+and removed from helm's tracking and then re-installed.
+
+NOTE: **Note**:
+If this error message was encountered, then upgrading requires one more step
+than normal in order to ensure the new Custom Resource Definitions are
+actually applied to the deployment.
+
+1. Remove the old **CertManager** deployment.
+    ```
+    kubectl delete deployment gitlab-cert-manager --cascade
+    ```
+1. Upgrade to fix the **CertManager** release, remove the old Custom
+   Resource Definitinos, and stop helm from tracking them.
+    ```
+    helm upgrade --install gitlab gitlab/gitlab --set certmanager.installCRDs=false
+    ```
+1. Remove the **CertManager** deployment again now to ensure all the old
+   CustomResourceDefinitions are actually removed.
+    ```
+    kubectl delete deployment gitlab-cert-manager --cascade
+    ```
+1. Run the upgrade again installing the new Custom Resource Definitions
+    ```
+    helm upgrade --install gitlab gitlab/gitlab --set certmanager.installCRDs=true
+    ```
