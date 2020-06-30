@@ -23,7 +23,7 @@ provided by GitLab, you must follow the following steps first.
 1. Run upgrade to fix the **CertManager** release. Remove the old Custom
    Resource Definitions, and stop Helm from tracking them.
     ```
-    helm upgrade --install gitlab gitlab/gitlab --set certmanager.installCRDs=false
+    helm upgrade --install --values - --set certmanager.installCRDs=false YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
     ```
 1. Run the upgrade again installing the new Custom Resource Definitions
     ```
