@@ -416,6 +416,8 @@ pods:
       limits:
         cpu: 800m
         memory: 2Gi
+    hpa:
+      targetAverageValue: 350m
 ```
 
 ## Configuring the `networkpolicy`
