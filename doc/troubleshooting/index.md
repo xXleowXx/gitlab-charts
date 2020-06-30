@@ -197,9 +197,7 @@ steps:
 
 1. Perform an upgrade via Helm.
 
-### cannot patch "RELEASE-NAME-cert-manager"
-
->Error: UPGRADE FAILED: cannot patch "RELEASE-NAME-cert-manager" with kind Deployment: Deployment.apps "gitlab-cert-manager" is invalid: spec.selector: Invalid value: v1.LabelSelector{MatchLabels:map[string]string{"app.kubernetes.io/component":"controller", "app.kubernetes.io/instance":"gitlab", "app.kubernetes.io/name":"cert-manager"}, MatchExpressions:[]v1.LabelSelectorRequirement(nil)}: field is immutable
+### cannot patch "RELEASE-NAME-cert-manager" with kind Deployment
 
 Upgrading from **CertManager** version `0.10` introduced a number of
 breaking changes. The old Custom Resource Definitions must be uninstalled
