@@ -203,7 +203,6 @@ Upgrading from **CertManager** version `0.10` introduced a number of
 breaking changes. The old Custom Resource Definitions must be uninstalled
 and removed from Helm's tracking and then re-installed.
 
-NOTE: **Note**:
 If this error message was encountered, then upgrading requires one more step
 than normal in order to ensure the new Custom Resource Definitions are
 actually applied to the deployment.
@@ -211,25 +210,25 @@ actually applied to the deployment.
 1. Remove the old **CertManager** deployment.
 
     ```shell
-    kubectl delete deployment gitlab-cert-manager --cascade
+    kubectl delete deployments -l app=cert-manager --cascade
     ```
 
 1. Upgrade to fix the **CertManager** release, remove the old Custom
    Resource Definitinos, and stop Helm from tracking them.
 
     ```shell
-    helm upgrade --install gitlab gitlab/gitlab --set certmanager.installCRDs=false
+    helm upgrade --install --values - --set certmanager.installCRDs=false YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
     ```
 
 1. Remove the **CertManager** deployment again now to ensure all the old
    CustomResourceDefinitions are actually removed.
 
     ```shell
-    kubectl delete deployment gitlab-cert-manager --cascade
+    kubectl delete deployments -l app=cert-manager --cascade
     ```
 
 1. Run the upgrade again installing the new Custom Resource Definitions
 
     ```shell
-    helm upgrade --install gitlab gitlab/gitlab --set certmanager.installCRDs=true
+    helm upgrade --install --values - --set certmanager.installCRDs=true YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
     ```
