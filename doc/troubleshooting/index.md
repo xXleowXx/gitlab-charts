@@ -212,26 +212,26 @@ actually applied to the deployment.
 
 1. Remove the old **CertManager** deployment.
 
-    ```sh
+    ```shell
     kubectl delete deployment gitlab-cert-manager --cascade
     ```
 
 1. Upgrade to fix the **CertManager** release, remove the old Custom
    Resource Definitinos, and stop helm from tracking them.
 
-    ```sh
+    ```shell
     helm upgrade --install gitlab gitlab/gitlab --set certmanager.installCRDs=false
     ```
 
 1. Remove the **CertManager** deployment again now to ensure all the old
    CustomResourceDefinitions are actually removed.
 
-    ```sh
+    ```shell
     kubectl delete deployment gitlab-cert-manager --cascade
     ```
 
 1. Run the upgrade again installing the new Custom Resource Definitions
 
-    ```sh
+    ```shell
     helm upgrade --install gitlab gitlab/gitlab --set certmanager.installCRDs=true
     ```
