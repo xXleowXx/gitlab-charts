@@ -25,7 +25,7 @@ provided by GitLab, you must follow the following steps first.
     ```
     helm upgrade --install --values - --set certmanager.installCRDs=false YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
     ```
-1. Run the upgrade again installing the new Custom Resource Definitions
+1. Run the upgrade again. This time install the new Custom Resource Definitions
     ```
     helm upgrade --install gitlab gitlab/gitlab --set certmanager.installCRDs=true
     ```
