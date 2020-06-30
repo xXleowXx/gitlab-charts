@@ -207,27 +207,28 @@ If this error message was encountered, then upgrading requires one more step
 than normal in order to ensure the new Custom Resource Definitions are
 actually applied to the deployment.
 
-1. Remove the old **CertManager** deployment.
+1. Remove the old **CertManager** Deployment.
 
     ```shell
     kubectl delete deployments -l app=cert-manager --cascade
     ```
 
-1. Upgrade to fix the **CertManager** release, remove the old Custom
-   Resource Definitinos, and stop Helm from tracking them.
+1. Run upgrade to fix the **CertManager** release. Remove the old Custom
+   Resource Definitions, and stop Helm from tracking them.
 
     ```shell
     helm upgrade --install --values - --set certmanager.installCRDs=false YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
     ```
 
-1. Remove the **CertManager** deployment again now to ensure all the old
-   CustomResourceDefinitions are actually removed.
+1. Remove the **CertManager** Deployment again. This step is required to
+   overcome the error state created by trying to upgrade without having
+   first deleted the **CertManager** Deployment.
 
     ```shell
     kubectl delete deployments -l app=cert-manager --cascade
     ```
 
-1. Run the upgrade again installing the new Custom Resource Definitions
+1. Run the upgrade again. This time install the new Custom Resource Definitions
 
     ```shell
     helm upgrade --install --values - --set certmanager.installCRDs=true YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
