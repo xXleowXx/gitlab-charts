@@ -13,7 +13,7 @@ corresponding to the specific release you want to upgrade to and look for any
 version.
 
 CAUTION: **Caution:**
-If you are upgrading and use the **CertManager** Custom Resource Definitions
+Since version x.x.x, GitLab Chart uses CertManager 0.15.1. If you have installed CertManager Custom Resource Definitions (you can verify this by checking `certmanager.createCustomResource` value)
 provided by GitLab, you must follow the following steps first.
 
 1. Remove the old **CertManager** deployment.
