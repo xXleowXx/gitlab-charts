@@ -16,7 +16,7 @@ CAUTION: **Caution:**
 Since version x.x.x, GitLab Chart uses CertManager 0.15.1. If you have installed CertManager Custom Resource Definitions (you can verify this by checking `certmanager.createCustomResource` value)
 provided by GitLab, you must follow the following steps first.
 
-1. Remove the old **CertManager** deployment.
+1. Remove the old **CertManager** Deployment.
     ```
     kubectl delete deployment gitlab-cert-manager --cascade
     ```
