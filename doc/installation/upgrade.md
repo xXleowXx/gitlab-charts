@@ -17,16 +17,21 @@ Since version x.x.x, GitLab Chart uses CertManager 0.15.1. If you have installed
 provided by GitLab, you must follow the following steps first.
 
 1. Remove the old **CertManager** Deployment.
-    ```
+
+    ```sh
     kubectl delete delete deployments -l app=cert-manager --cascade
     ```
+
 1. Run upgrade to fix the **CertManager** release. Remove the old Custom
    Resource Definitions, and stop Helm from tracking them.
-    ```
+
+    ```sh
     helm upgrade --install --values - --set certmanager.installCRDs=false YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
     ```
+
 1. Run the upgrade again. This time install the new Custom Resource Definitions
-    ```
+
+    ```sh
     helm upgrade --install --values - --set certmanager.installCRDs=true YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
     ```
 
