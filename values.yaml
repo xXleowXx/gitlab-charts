@@ -930,15 +930,25 @@ gitlab:
     antiAffinityLabels:
       matchLabels:
         app: 'gitaly'
+
 ## doc/charts/gitlab/migrations
-#   migrations:
-#     enabled: false
+  migrations:
+    enabled: false
+    annotations:
+      sidecar.istio.io/inject: "false"
+
 ## doc/charts/gitlab/webservice
-#   webservice:
-#     enabled: false
+  webservice:
+    enabled: false
+    annotations:
+      traffic.sidecar.istio.io/excludeOutboundPorts: "5432"
+
 ## doc/charts/gitlab/sidekiq
-#   sidekiq:
-#     enabled: false
+  sidekiq:
+    enabled: false
+    annotations:
+      traffic.sidecar.istio.io/excludeOutboundPorts: "5432"
+
 ## doc/charts/gitlab/gitaly
 #   gitaly:
 ## doc/charts/gitlab/gitlab-shell
