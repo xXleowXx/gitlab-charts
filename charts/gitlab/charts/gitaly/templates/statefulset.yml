@@ -217,5 +217,6 @@ spec:
       {{- toYaml $.Values.persistence.matchExpressions | nindent 12 }}
       {{- end -}}
   {{- end }}
+{{ printf "---\n" }}
 {{- end }}
 {{- end }}
