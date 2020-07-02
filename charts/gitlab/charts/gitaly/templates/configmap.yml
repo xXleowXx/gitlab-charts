@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $.Release.Name }}-{{ $deploy }}
+  name: {{ $.Release.Name }}-gitaly-{{ $deploy }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $oldscope | nindent 4 }}
@@ -139,5 +139,6 @@ data:
     {{- end }}
     {{- end }}
 # Leave this here - This line denotes end of block to the parser.
+{{ printf "---\n" }}
 {{- end }}
 {{- end }}

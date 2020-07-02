@@ -33,5 +33,6 @@ spec:
   selector:
     app: {{ template "name" $oldscope }}
     release: {{ $.Release.Name }}
+{{ printf "---\n" }}
 {{- end }}
 {{- end }}
