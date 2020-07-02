@@ -113,6 +113,9 @@ workhorse:
     timeoutSeconds: 2
     successThreshold: 1
     failureThreshold: 3
+  storage:
+    enabled: false
+    provider: AWS
 
 psql: {}
   # port: 5432
@@ -293,7 +296,7 @@ serviceAccount:
   create: false
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
-  # name: 
+  # name:
 
 ## Allow configuring pods' priorityClassName. This is used to control pod priority in case of eviction:
 #  https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
