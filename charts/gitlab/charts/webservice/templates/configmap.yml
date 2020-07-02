@@ -138,8 +138,8 @@ data:
     provider = "{{ .Values.workhorse.storage.provider }}"
 
     [object_storage.s3]
-    aws_access_key_id = "<%= File.read('/etc/gitlab/objectstorage/accesskey').strip.dump[1..-2] %>"
-    aws_secret_access_key = "<%= File.read('/etc/gitlab/objectstorage/secretkey').strip.dump[1..-2] %>"
+    aws_access_key_id = "<%= File.read('/etc/gitlab/minio/accesskey').strip.dump[1..-2] %>"
+    aws_secret_access_key = "<%= File.read('/etc/gitlab/minio/secretkey').strip.dump[1..-2] %>"
     {{- end }}
   configure: |
       set -e
@@ -147,8 +147,8 @@ data:
       cp -v -r -L /init-config/gitlab-workhorse/secret /init-secrets-workhorse/gitlab-workhorse/secret
       {{- if .Values.workhorse.storage.enabled }}
       if [ -e "/init-config/objectstorage" ]; then
-        mkdir /init-secrets-workhorse/objectstorage
-        cp -v -r -L "/init-config/objectstorage/." "/init-secrets-workhorse/objectstorage/"
+        mkdir /init-secrets-workhorse/minio
+        cp -v -r -L "/init-config/minio/." "/init-secrets-workhorse/minio/"
       fi
       {{- end }}
       {{- if .Values.global.redis.password.enabled }}
