@@ -1,8 +1,8 @@
 ---
 apiVersion: v1
 name: operator
-version: 13.2.202007021040+29f368b11a9
-appVersion: 13.2.202007021040+29f368b11a9
+version: 13.2.202007021710+7482a2dd736
+appVersion: 13.2.202007021710+7482a2dd736
 description: Gitlab operator for managing upgrades
 keywords:
 - gitlab
