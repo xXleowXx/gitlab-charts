@@ -15,7 +15,7 @@ metadata:
   name: {{ template "fullname" . }}
   namespace: {{ .Release.Namespace }}
 rules:
-- apiGroups: ["certmanager.k8s.io"]
+- apiGroups: ["cert-manager.io"]
   resources: ["issuers"]
   verbs: ["get", "list", "update", "create", "patch"]
 ---
