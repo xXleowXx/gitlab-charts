@@ -1,4 +1,5 @@
 {{- if .Values.global.grafana.enabled -}}
+{{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
 {{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
 {{- if .Values.global.hosts.gitlab.hostnameOverride -}}
 {{-   $gitlabHostname = .Values.global.hosts.gitlab.hostnameOverride -}}
@@ -39,4 +40,5 @@ spec:
   {{- else }}
   tls: []
   {{- end }}
+{{- end -}}
 {{- end -}}
