@@ -152,7 +152,7 @@ spec:
       {{- include "gitlab.extraVolumes" $oldscope | nindent 6 }}
       - name: gitaly-config
         configMap:
-          name: {{ template "fullname" $oldscope }}-{{ $deploy }}
+          name: {{$.Release.Name }}-{{ $deploy }}
       {{- if not $.Values.persistence.enabled }}
       - name: repo-data
         emptyDir: {}
