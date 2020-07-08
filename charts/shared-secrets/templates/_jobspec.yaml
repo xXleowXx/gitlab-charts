@@ -18,7 +18,9 @@ spec:
         release: {{ .Release.Name }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
+      {{- if .Values.global.istio.enabled }}
         sidecar.istio.io/inject: "false"
+      {{- end }}
     spec:
       {{- if .Values.tolerations }}
       tolerations:
