@@ -1,6 +1,7 @@
 {{- if .Values.global.gitaly.enabled -}}
 {{- $oldscope := . -}}
-{{- range $i, $deploy := .Values.global.gitaly.deploys }}
+{{- $deploys := default (list "gitaly") .Values.global.gitaly.deploys }}
+{{- range $i, $deploy := $deploys }}
 apiVersion: v1
 kind: Service
 metadata:
