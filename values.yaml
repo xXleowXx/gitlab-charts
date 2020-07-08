@@ -65,6 +65,9 @@ global:
     #   enabled: true
     #   secretName:
 
+  istio:
+    enabled: true
+
   gitlab:
     ## Enterprise license for this GitLab installation
     ## Secret created according to doc/installation/secrets.md#initial-enterprise-license
@@ -931,19 +934,16 @@ gitlab:
 
 ## doc/charts/gitlab/migrations
   migrations:
-    enabled: false
     annotations:
       sidecar.istio.io/inject: "false"
 
 ## doc/charts/gitlab/webservice
   webservice:
-    enabled: false
     annotations:
       traffic.sidecar.istio.io/excludeOutboundPorts: "5432"
 
 ## doc/charts/gitlab/sidekiq
   sidekiq:
-    enabled: false
     annotations:
       traffic.sidecar.istio.io/excludeOutboundPorts: "5432"
 

@@ -33,7 +33,9 @@ spec:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
       annotations:
+      {{- if .Values.global.istio.enabled }}
         sidecar.istio.io/inject: "false"
+      {{- end }}
     spec:
       {{- if .Values.upgradeCheck.tolerations }}
       tolerations:
