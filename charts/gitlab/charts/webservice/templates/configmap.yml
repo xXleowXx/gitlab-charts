@@ -146,7 +146,7 @@ data:
       mkdir -p /init-secrets-workhorse/gitlab-workhorse
       cp -v -r -L /init-config/gitlab-workhorse/secret /init-secrets-workhorse/gitlab-workhorse/secret
       {{- if .Values.workhorse.storage.enabled }}
-      if [ -e "/init-config/objectstorage" ]; then
+      if [ -e "/init-config/minio" ]; then
         mkdir /init-secrets-workhorse/minio
         cp -v -r -L "/init-config/minio/." "/init-secrets-workhorse/minio/"
       fi
