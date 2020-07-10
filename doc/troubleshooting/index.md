@@ -199,5 +199,7 @@ steps:
 
 ## `ImagePullBackOff`, `Failed to pull image` and `manifest unknown` errors
 
-Check the [version mappings between the chart and GitLab](../index.md#gitlab-version-mappings)
-and specificy compatible versions in your `helm` command.
+If you are using [`global.gitlabVersion`](https://docs.gitlab.com/charts/charts/globals#gitlab-version),
+start by removing that property.
+Check the [version mappings between the chart and GitLab](../index.md/#gitlab-version-mappings)
+and specify a compatible of the `gitlab/gitlab` chart in your `helm` command.
