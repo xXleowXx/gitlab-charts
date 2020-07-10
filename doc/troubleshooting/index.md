@@ -196,3 +196,8 @@ steps:
    ```
 
 1. Perform an upgrade via Helm.
+
+## `ImagePullBackOff`, `Failed to pull image` and `manifest unknown` errors
+
+Check the [version mappings between the chart and GitLab](../index.md/#gitlab-version-mappings)
+and specificy compatible versions in your `helm` command.
