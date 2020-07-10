@@ -1,0 +1,5 @@
+---
+title: Added support to workhorse for object storage consolidated configuration
+merge_request: 1427
+author:
+type: added
