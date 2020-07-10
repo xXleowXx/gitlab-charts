@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "gitlab.gitaly.serviceName" $oldscope }}-{{ $deploy }}
+  name: {{ $.Release.Name }}-{{ $deploy }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $oldscope | nindent 4 }}
