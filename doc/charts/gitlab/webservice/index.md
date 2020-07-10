@@ -109,6 +109,8 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.readinessProbe.timeoutSeconds`      | 2       | When the readiness probe times out             |
 | `workhorse.readinessProbe.successThreshold`    | 1       | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
 | `workhorse.readinessProbe.failureThreshold`    | 3       | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded |
+| `workhorse.storage.enabled`                    | `false` | Allow Workhorse to directly access object storage |
+| `workhorse.storage.provider`                   | `AWS`   | Object storage provider, AWS for S3 compatible stores |
 | `webServer` | `puma` | Selects web server (Webservice/Puma) that would be used for request handling |
 | `priorityClassName`                            | `""`    | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction |
 
