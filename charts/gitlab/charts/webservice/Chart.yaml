@@ -1,8 +1,8 @@
 ---
 apiVersion: v1
 name: webservice
-version: 4.1.4
-appVersion: master
+version: 13.2.202007120410+f9b3b8ef15e
+appVersion: 13.2.202007120410+f9b3b8ef15e
 description: HTTP server for Gitlab
 keywords:
 - gitlab
