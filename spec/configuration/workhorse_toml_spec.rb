@@ -54,7 +54,7 @@ describe 'Workhorse TOML configuration', :focus => true do
         ).merge(default_values)
       end
 
-      it 'disables workhorse storage' do
+      it 'disables object storage' do
         t = HelmTemplate.new(values)
         expect(t.exit_code).to eq(0)
         expect(t.dig('ConfigMap/test-workhorse-config','data','workhorse-config.toml.erb')).to include("[object_storage]\nenabled = \"false\"")
