@@ -204,6 +204,20 @@ deployment:
 
 For more details, see the [Kubernetes documentation](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
 
+### storage
+
+`workhorse.storage.enabled` configures the Workhorse pods the object storage
+directly instead of being dependent on Rails to retrieve files from the object
+store. Currently only S3 compatible object stores are supported. If using
+another object store such as Google Storage, then `workhorse.storage.enabled`
+must not be enabled.
+
+The endpoint that the Workhorse pods connect to need not be configured as the
+endpoint is passed to Workhorse by Rails. Until [issue #2158][] has been closed
+Workhorse will only connect to the internal Minio pod directly.
+
+[issue #2158]: https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2158
+
 ## Using the Community Edition of this chart
 
 By default, the Helm charts use the Enterprise Edition of GitLab. If desired, you
