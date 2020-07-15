@@ -61,11 +61,8 @@ fi
 {{- end -}}
 
 {{- define "gitlab.psql.secret" -}}
-{{- $vals := (pick $.Values.global "psql").psql -}}
-{{- if hasKey .Values "psql" -}}
-{{- $vals = $vals | merge .Values.psql }}
-{{- end -}}
-{{- if or ($vals.password.useSecret) (not (hasKey $vals.password "useSecret")) -}}
+{{- $useSecret := include "gitlab.boolean.local" (dict "local" (pluck "useSecret" (index .Values.psql "password") | first) "global" .Values.global.psql.password.useSecret "default" true) -}}
+{{- if $useSecret -}}
 - secret:
     name: {{ template "gitlab.psql.password.secret" . }}
     items:
@@ -78,12 +75,9 @@ fi
 Returns the quoted path to the file where the PostgreSQL password is stored.
 */}}
 {{- define "gitlab.psql.password.file" -}}
-{{- $vals := (pick $.Values.global "psql").psql -}}
-{{- if hasKey .Values "psql" -}}
-{{- $vals = $vals | merge .Values.psql }}
-{{- end -}}
-{{- if and (not $vals.password.useSecret) (hasKey $vals.password "useSecret") -}}
-{{- $vals.password.file | quote -}}
+{{- $useSecret := include "gitlab.boolean.local" (dict "local" (pluck "useSecret" (index .Values.psql "password") | first) "global" .Values.global.psql.password.useSecret "default" true) -}}
+{{- if not $useSecret -}}
+{{- pluck "file" (index .Values.psql "password") (.Values.global.psql.password) | first | quote -}}
 {{- else -}}
 {{- "/etc/gitlab/postgres/psql-password" | quote -}}
 {{- end -}}

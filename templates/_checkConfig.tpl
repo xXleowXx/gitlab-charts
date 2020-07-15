@@ -237,21 +237,17 @@ Ensure that if `psql.password.useSecret` is set to false, a path to the password
 {{- $errorMsg := list -}}
 {{- $subcharts := pick .Values.gitlab "geo-logcursor" "gitlab-exporter" "migrations" "sidekiq" "task-runner" "webservice" -}}
 {{- range $name, $sub := $subcharts -}}
-{{-   $vals := (pick $.Values.global "psql").psql | merge (pluck "psql" $sub | first) }}
-{{-   if and (not $vals.password.useSecret) (hasKey $vals.password "useSecret") -}}
-{{-     if not (hasKey $vals.password "file") -}}
+{{-   $useSecret := include "gitlab.boolean.local" (dict "local" (pluck "useSecret" (index $sub "psql" "password") | first) "global" $.Values.global.psql.password.useSecret "default" true) -}}
+{{-   if and (not $useSecret) (not (pluck "file" (index $sub "psql" "password") ($.Values.global.psql.password) | first)) -}}
 {{-       $errorMsg = append $errorMsg (printf "%s: If `psql.password.useSecret` is set to false, you must specify a value for `psql.password.file`." $name) -}}
-{{-     else if (empty $vals.password.file) -}}
-{{-       $errorMsg = append $errorMsg (printf "%s: If `psql.password.useSecret` is set to false, `psql.password.file` must not be empty." $name) -}}
-{{-     end -}}
 {{-   end -}}
 {{- end -}}
-{{- if not (empty $errorMsg) -}}
+{{- if not (empty $errorMsg) }}
 postgresql:
-{{ range $msg := $errorMsg -}}
-{{-   $msg -}}
+{{- range $msg := $errorMsg }}
+    {{ $msg }}
 {{- end }}
-This configuration is not supported.
+    This configuration is not supported.
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.postgresql.noPasswordFile */}}
