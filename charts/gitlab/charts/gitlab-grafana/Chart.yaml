@@ -1,7 +1,7 @@
 ---
 apiVersion: v1
 name: gitlab-grafana
-version: 13.2.202007151340+df1b576ddd8
+version: 13.2.202007151410+5433dadb44a
 description: Adapt the Grafana chart to interface to the GitLab App
 keywords:
 - gitlab
@@ -14,4 +14,4 @@ sources:
 maintainers:
 - name: GitLab Inc.
   email: support@gitlab.com
-appVersion: 13.2.202007151340+df1b576ddd8
+appVersion: 13.2.202007151410+5433dadb44a
