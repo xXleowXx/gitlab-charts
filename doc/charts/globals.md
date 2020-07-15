@@ -149,7 +149,7 @@ global:
     database: gitlabhq_production
     username: gitlab
     preparedStatements: false
-    pool: 10
+    pool: 1
     password:
       useSecret: true
       secret: gitlab-postgres
@@ -166,7 +166,7 @@ global:
 | `password.file`   | String  |                       | Defines the path to the file that contains the password for PostgreSQL. Ignored if `password.useSecret` is true |
 | `password.key`    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. Ignored if `password.useSecret` is false. |
 | `password.secret` | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from. Ignored if `password.useSecret` is false. |
-| `pool`            | Integer | `10`                  | How many connections are made to the database. |
+| `pool`            | Integer | `1`                   | How many connections are made to the database. |
 | `port`            | Integer | `5432`                | The port on which to connect to the PostgreSQL server. |
 | `username`        | String  | `gitlab`              | The username with which to authenticate to the database. |
 | `preparedStatements`| Bool  | `false`               | If prepared statements should be used when communicating with the PostgreSQL server. |
@@ -749,7 +749,7 @@ application are described below:
 | `usernameChangingEnabled`           | Boolean | `true`  | A flag to decide if users are allowed to change their username. |
 | `issueClosingPattern`               | String  | (empty) | [Pattern to close issues automatically](https://docs.gitlab.com/ee/administration/issue_closing_pattern.html). |
 | `defaultTheme`                      | Integer |         | [Numeric ID of the default theme for the GitLab instance](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/themes.rb#L17-27). It takes a number, denoting the id of the theme. |
-| `defaultProjectsFeatures.*feature*` | Boolean | `true`  | [See below](#defaultProjectsFeatures) |
+| `defaultProjectsFeatures.*feature*` | Boolean | `true`  | [See below](#defaultprojectsfeatures). |
 | `webHookTimeout`                    | Integer |         | Waiting time in seconds before a [hook is deemed to have failed](https://docs.gitlab.com/ce/user/project/integrations/webhooks.html#receiving-duplicate-or-multiple-web-hook-requests-triggered-by-one-event). |
 
 #### defaultProjectsFeatures
@@ -1029,7 +1029,7 @@ global:
 | Name          | Type    | Default         | Description |
 |:------------- |:-------:|:--------------- |:----------- |
 | `bucket`      | String  | `gitlab-pseudo` | Name of the bucket to use from the object storage provider. |
-| `configMap`   | String  |                 | [See Below](#configMap). |
+| `configMap`   | String  |                 | [See Below](#configmap). |
 | `connnection` |         | `{}`            | [See Below](#connection). |
 
 #### configMap
