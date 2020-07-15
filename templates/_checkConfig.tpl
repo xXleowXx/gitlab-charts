@@ -234,18 +234,25 @@ postgresql:
 Ensure that if `psql.password.useSecret` is set to false, a path to the password file is provided
 */}}
 {{- define "gitlab.checkConfig.postgresql.noPasswordFile" -}}
-{{-   range $subchart := .Values.gitlab -}}
-{{-     $vals := deepCopy $.Values.global.psql | merge (pluck "psql" $subchart | first) }}
-{{-     if and (not $vals.password.useSecret) (hasKey $vals.password "useSecret") -}}
-{{-       if not (hasKey $vals.password "file") -}}
-postgresql:
-  If `psql.password.useSecret` is set to false, you must specify a value for `psql.password.file`. This configuration is not supported.
-{{-       else if (empty $vals.password.file) -}}
-postgresql:
-  If `psql.password.useSecret` is set to false, `psql.password.file` must not be empty. This configuration is not supported.
-{{-       end -}}
+{{- $errorMsg := list -}}
+{{- $subcharts := pick .Values.gitlab "geo-logcursor" "gitlab-exporter" "migrations" "sidekiq" "task-runner" "webservice" -}}
+{{- range $name, $sub := $subcharts -}}
+{{-   $vals := (pick $.Values.global "psql").psql | merge (pluck "psql" $sub | first) }}
+{{-   if and (not $vals.password.useSecret) (hasKey $vals.password "useSecret") -}}
+{{-     if not (hasKey $vals.password "file") -}}
+{{-       $errorMsg = append $errorMsg (printf "%s: If `psql.password.useSecret` is set to false, you must specify a value for `psql.password.file`." $name) -}}
+{{-     else if (empty $vals.password.file) -}}
+{{-       $errorMsg = append $errorMsg (printf "%s: If `psql.password.useSecret` is set to false, `psql.password.file` must not be empty." $name) -}}
 {{-     end -}}
 {{-   end -}}
+{{- end -}}
+{{- if not (empty $errorMsg) -}}
+postgresql:
+{{ range $msg := $errorMsg -}}
+{{-   $msg -}}
+{{- end }}
+This configuration is not supported.
+{{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.postgresql.noPasswordFile */}}
 

@@ -61,7 +61,7 @@ fi
 {{- end -}}
 
 {{- define "gitlab.psql.secret" -}}
-{{- $vals := deepCopy $.Values.global.psql -}}
+{{- $vals := (pick $.Values.global "psql").psql -}}
 {{- if hasKey .Values "psql" -}}
 {{- $vals = $vals | merge .Values.psql }}
 {{- end -}}
@@ -78,7 +78,7 @@ fi
 Returns the quoted path to the file where the PostgreSQL password is stored.
 */}}
 {{- define "gitlab.psql.password.file" -}}
-{{- $vals := deepCopy $.Values.global.psql -}}
+{{- $vals := (pick $.Values.global "psql").psql -}}
 {{- if hasKey .Values "psql" -}}
 {{- $vals = $vals | merge .Values.psql }}
 {{- end -}}
