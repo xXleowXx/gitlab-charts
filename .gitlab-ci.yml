@@ -422,31 +422,31 @@ danger-review:
     - git version
     - danger --fail-on-errors=true
 
-check_docs_lint:
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs:lint"
-  stage: prepare
-  cache: {}
-  dependencies: []
-  before_script: []
-  script:
-    # Lint prose
-    - vale --minAlertLevel error doc
-    # Lint Markdown
-    - markdownlint --config .markdownlint.json 'doc/**/*.md'
-    - mv doc/ /tmp/gitlab-docs/content/charts
-    - cd /tmp/gitlab-docs
-    # Build HTML from Markdown
-    - bundle exec nanoc
-    # Check the internal links
-    - bundle exec nanoc check internal_links
-    # Check the internal anchor links
-    - bundle exec nanoc check internal_anchors
-  except:
-    variables:
-      - $DEPS_PIPELINE
-      - $TRIGGER_JOB
-    refs:
-      - *com_auto_deploy_branch_ref
+# check_docs_lint:
+#   image: "registry.gitlab.com/gitlab-org/gitlab-docs:lint"
+#   stage: prepare
+#   cache: {}
+#   dependencies: []
+#   before_script: []
+#   script:
+#     # Lint prose
+#     - vale --minAlertLevel error doc
+#     # Lint Markdown
+#     - markdownlint --config .markdownlint.json 'doc/**/*.md'
+#     - mv doc/ /tmp/gitlab-docs/content/charts
+#     - cd /tmp/gitlab-docs
+#     # Build HTML from Markdown
+#     - bundle exec nanoc
+#     # Check the internal links
+#     - bundle exec nanoc check internal_links
+#     # Check the internal anchor links
+#     - bundle exec nanoc check internal_anchors
+#   except:
+#     variables:
+#       - $DEPS_PIPELINE
+#       - $TRIGGER_JOB
+#     refs:
+#       - *com_auto_deploy_branch_ref
 
 .review-docs:
   image: ruby:2.6-alpine
