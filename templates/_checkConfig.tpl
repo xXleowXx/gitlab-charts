@@ -239,7 +239,10 @@ Ensure that if `psql.password.useSecret` is set to false, a path to the password
 {{- range $name, $sub := $subcharts -}}
 {{-   $useSecret := include "gitlab.boolean.local" (dict "local" (pluck "useSecret" (index $sub "psql" "password") | first) "global" $.Values.global.psql.password.useSecret "default" true) -}}
 {{-   if and (not $useSecret) (not (pluck "file" (index $sub "psql" "password") ($.Values.global.psql.password) | first)) -}}
-{{-       $errorMsg = append $errorMsg (printf "%s: If `psql.password.useSecret` is set to false, you must specify a value for `psql.password.file`." $name) -}}
+{{-      $errorMsg = append $errorMsg (printf "%s: If `psql.password.useSecret` is set to false, you must specify a value for `psql.password.file`." $name) -}}
+{{-   end -}}
+{{-   if and (not $useSecret) ($.Values.postgresql.install) -}}
+{{-      $errorMsg = append $errorMsg (printf "%s: PostgreSQL can not be deployed with this chart when using `psql.password.useSecret` is false." $name) -}}
 {{-   end -}}
 {{- end -}}
 {{- if not (empty $errorMsg) }}
