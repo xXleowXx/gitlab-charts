@@ -59,7 +59,9 @@ if [ -d /etc/postgresql/ssl ]; then
 fi
 {{- end -}}
 {{- end -}}
-
+{{/*
+Returns the K8s Secret definition for the PostgreSQL password.
+*/}}
 {{- define "gitlab.psql.secret" -}}
 {{- $useSecret := include "gitlab.boolean.local" (dict "local" (pluck "useSecret" (index .Values.psql "password") | first) "global" .Values.global.psql.password.useSecret "default" true) -}}
 {{- if $useSecret -}}
