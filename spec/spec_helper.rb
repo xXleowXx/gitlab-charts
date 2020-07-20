@@ -55,4 +55,15 @@ RSpec.configure do |config|
   config.around :each, :feature do |example|
     example.run_with_retry retry: 2
   end
+
+  # enable the use of :focus to run a subset of specs
+  config.filter_run :focus => true
+  config.run_all_when_everything_filtered = true
+
+  # disable spec test requiring access to k8s cluster
+  k8s_access = system('kubectl --request-timeout 1s get nodes >/dev/null 2>&1')
+  unless k8s_access
+    puts 'Excluding specs that require access to k8s cluster'
+    config.filter_run_excluding :type => 'feature'
+  end
 end

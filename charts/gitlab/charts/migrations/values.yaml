@@ -18,6 +18,9 @@ init:
 # Tolerations for pod scheduling
 tolerations: []
 
+# Annotations for the job
+annotations: {}
+
 enabled: true
 initialRootPassword: {}
 redis:
@@ -40,7 +43,7 @@ global:
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
-    # pool: 10
+    # pool: 1
     # preparedStatements: false
     # password:
     #   secret: gitlab-postgres

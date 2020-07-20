@@ -149,10 +149,12 @@ global:
     database: gitlabhq_production
     username: gitlab
     preparedStatements: false
-    pool: 10
+    pool: 1
     password:
+      useSecret: true
       secret: gitlab-postgres
       key: psql-password
+      file:
 ```
 
 | Name              | Type    | Default               | Description |
@@ -160,12 +162,33 @@ global:
 | `host`            | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if using PostgreSQL deployed by this chart. |
 | `serviceName`     | String  |                       | The name of the `service` which is operating the PostgreSQL database. If this is present, and `host` is not, the chart will template the hostname of the service in place of the `host` value. |
 | `database`        | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server. |
-| `password.key`    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. |
-| `password.secret` | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from. |
-| `pool`            | Integer | `10`                  | How many connections are made to the database. |
+| `password.useSecret`| Bool  | `true`                | Controls whether the password for PostgreSQL is read from a secret or file. |
+| `password.file`   | String  |                       | Defines the path to the file that contains the password for PostgreSQL. Ignored if `password.useSecret` is true |
+| `password.key`    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. Ignored if `password.useSecret` is false. |
+| `password.secret` | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from. Ignored if `password.useSecret` is false. |
+| `pool`            | Integer | `1`                   | How many connections are made to the database. |
 | `port`            | Integer | `5432`                | The port on which to connect to the PostgreSQL server. |
 | `username`        | String  | `gitlab`              | The username with which to authenticate to the database. |
 | `preparedStatements`| Bool  | `false`               | If prepared statements should be used when communicating with the PostgreSQL server. |
+
+### PostgreSQL per chart
+
+In some complex deployments, it may be desired to configure different parts of
+this chart with different configurations for PostgreSQL. As of `v4.2.0`, all
+properties available within `global.psql` can be set on a per-chart basis,
+for example `gitlab.sidekiq.psql`. The local settings will override global values
+when supplied, with some key settings being inherited when not present.
+
+Properties that will inherit from global:
+
+- `port`
+- `password.secret`
+- `password.key`
+- `password.useSecret`
+- `password.file`
+
+[PostgreSQL load balancing](#postgresql-load-balancing) will _never_ inherit
+from the global, by design.
 
 ### PostgreSQL SSL
 
@@ -556,6 +579,7 @@ Each item of this list has 3 keys:
 - `name`: The name of the [storage](https://docs.gitlab.com/ee/administration/repository_storage_paths.html).
 - `hostname`: The host of Gitaly services.
 - `port`: (optional) The port number to reach the host on. Defaults to `8075`.
+- `tlsEnabled`: (optional) Override `global.gitaly.tls.enabled` for this particular entry.
 
 NOTE: **Note:** You must have an entry with `name: default`.
 
@@ -597,7 +621,7 @@ NOTE: **Note:** All Gitaly nodes **must** share the same authentication token.
 
 ### TLS settings
 
-Configuring Gitaly over TLS is detailed [in the Gitaly chart's documentation](gitlab/gitaly#running-gitaly-over-tls).
+Configuring Gitaly to serve via TLS is detailed [in the Gitaly chart's documentation](gitlab/gitaly#running-gitaly-over-tls).
 
 ## Configure MinIO settings
 
@@ -725,8 +749,8 @@ application are described below:
 | `defaultCanCreateGroup`             | Boolean | `true`  | A flag to decide if users are allowed to create groups. |
 | `usernameChangingEnabled`           | Boolean | `true`  | A flag to decide if users are allowed to change their username. |
 | `issueClosingPattern`               | String  | (empty) | [Pattern to close issues automatically](https://docs.gitlab.com/ee/administration/issue_closing_pattern.html). |
-| `defaultTheme`                      | Integer |         | [Numeric ID of the default theme for the GitLab instance](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/themes.rb#L14-25). It takes a number, denoting the id of the theme. |
-| `defaultProjectsFeatures.*feature*` | Boolean | `true`  | [See below](#defaultProjectsFeatures) |
+| `defaultTheme`                      | Integer |         | [Numeric ID of the default theme for the GitLab instance](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/themes.rb#L17-27). It takes a number, denoting the id of the theme. |
+| `defaultProjectsFeatures.*feature*` | Boolean | `true`  | [See below](#defaultprojectsfeatures). |
 | `webHookTimeout`                    | Integer |         | Waiting time in seconds before a [hook is deemed to have failed](https://docs.gitlab.com/ce/user/project/integrations/webhooks.html#receiving-duplicate-or-multiple-web-hook-requests-triggered-by-one-event). |
 
 #### defaultProjectsFeatures
@@ -1006,7 +1030,7 @@ global:
 | Name          | Type    | Default         | Description |
 |:------------- |:-------:|:--------------- |:----------- |
 | `bucket`      | String  | `gitlab-pseudo` | Name of the bucket to use from the object storage provider. |
-| `configMap`   | String  |                 | [See Below](#configMap). |
+| `configMap`   | String  |                 | [See Below](#configmap). |
 | `connnection` |         | `{}`            | [See Below](#connection). |
 
 #### configMap

@@ -194,6 +194,10 @@ spec:
         labels:
           app: {{ template "name" $oldscope }}
           release: {{ $.Release.Name }}
+        annotations:
+        {{- range $key, $value := .Values.persistence.annotations }}
+          {{ $key }}: {{ $value | quote }}
+        {{- end }}
       spec:
         accessModes:
           - {{ $.Values.persistence.accessMode | quote }}

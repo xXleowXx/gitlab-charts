@@ -59,7 +59,7 @@ to the `helm install` command using the `--set` flags:
 | `image.tag`                          |                   | Sidekiq image tag                        |
 | `init.image.repository`              |                   | initContainer image                      |
 | `init.image.tag`                     |                   | initContainer image tag                  |
-| `logging.format`                     | `default`         | Set to json for json structured logs     |
+| `logging.format`                     | `default`         | Set to `json` for JSON-structured logs   |
 | `metrics.enabled`                    | `true`            | Toggle Prometheus metrics exporter       |
 | `psql.password.key`                  | `psql-password`   | key to psql password in psql secret      |
 | `psql.password.secret`               | `gitlab-postgres` | psql password secret                     |
@@ -111,6 +111,24 @@ env | grep SOME
 SOME_KEY=some_value
 SOME_OTHER_KEY=some_other_value
 ```
+
+You can also set `extraEnv` for a specific pod:
+
+```yaml
+extraEnv:
+  SOME_KEY: some_value
+  SOME_OTHER_KEY: some_other_value
+pods:
+  - name: mailers
+    queues: mailers
+    extraEnv:
+      SOME_POD_KEY: some_pod_value
+  - name: catchall
+    negateQueues: mailers
+```
+
+This will set `SOME_POD_KEY` only for application containers in the `mailers`
+pod. Pod-level `extraEnv` settings are not added to [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### extraVolumes
 
@@ -325,7 +343,7 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `cluster`      | Bool    | `true`  | [See below](#cluster). |
 | `name`         | String  |         | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries. |
 | `queues`       | String / Array |         | [See below](#queues). |
-| `negateQueues` | String / Array |         | [See below](#negateQueues). |
+| `negateQueues` | String / Array |         | [See below](#negatequeues). |
 | `experimentalQueueSelector` | Bool | `false` | Use the [experimental queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector-experimental). Only valid when `cluster` is enabled. |
 | `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. |
 | `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation. |
@@ -337,6 +355,8 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `extraVolumes` | String  |         | Configures extra volumes for the given pod. |
 | `extraVolumeMounts` | String |     | Configures extra volume mounts for the given pod. |
 | `priorityClassName` | String | `""` | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction |
+| `hpa.targetAverageValue` | String |  | Overrides the autoscaling target value for the given pod. |
+| `extraEnv` | Map | | List of extra environment variables to expose. The chart-wide value is merged into this, with values from the pod taking precedence |
 
 ### queues
 
@@ -416,6 +436,8 @@ pods:
       limits:
         cpu: 800m
         memory: 2Gi
+    hpa:
+      targetAverageValue: 350m
 ```
 
 ## Configuring the `networkpolicy`

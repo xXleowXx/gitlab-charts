@@ -2,6 +2,31 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.1.4 (2020-07-09)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.4.
+
+
+## 4.1.3 (2020-07-06)
+
+### Changed (1 change)
+
+- Update GitLab Runner chart to 0.18.1. !1433
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.3.
+
+
+## 4.1.2 (2020-07-01)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.2.
+
+
 ## 4.1.1 (2020-06-24)
 
 ### Fixed (1 change)
@@ -51,6 +76,27 @@ entry.
 - Ensure upgraded to 4.0 before 4.1. !1403
 - Update GitLab Runner chart to 0.18.0. !1416
 - Update GitLab Version to 13.1.0.
+
+
+## 4.0.9 (2020-07-09)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.0.10.
+
+
+## 4.0.8 (2020-07-06)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.0.9.
+
+
+## 4.0.7 (2020-07-01)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.0.8.
 
 
 ## 4.0.6 (2020-06-25)
@@ -151,6 +197,20 @@ entry.
 
 - Update bitnami/postgres -> 8.9.4, postgres -> 11.7.0. !1320
 - Update GitLab Version to 13.0.0.
+
+
+## 3.3.13 (2020-07-06)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.14.
+
+
+## 3.3.12 (2020-07-01)
+
+### Other (1 change)
+
+- Update GitLab Version to 12.10.13.
 
 
 ## 3.3.11 (2020-06-25)

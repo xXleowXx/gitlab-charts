@@ -17,8 +17,10 @@ Tool name | Benefits | Example use case | Link(s)
 `asdf` | Easily switch between versions of your favorite runtimes and CLI tools. | Switching between Helm 2 and Helm 3 binaries. | [GitHub](https://github.com/asdf-vm/asdf)
 `kubectx` & `kubens` | Manage and switch between Kubernetes contexts and namespaces. | Setting default namespace per selected cluster context. | [GitHub](https://github.com/ahmetb/kubectx)
 `k3s` | Lightweight Kubernetes installation (<40MB). | Quick and reliable local chart testing. | [Homepage](https://k3s.io)
-`k9s` | Greatly reduced typing of `kubectl` commands. | Navigate and manage cluster resources quickly. | [GitHub](https://github.com/derailed/k9s)
+`k9s` | Greatly reduced typing of `kubectl` commands. | Navigate and manage cluster resources quickly in a command line interface. | [GitHub](https://github.com/derailed/k9s)
+`lens` | Highly visual management and navigation of clusters. | Navigate and manage cluster resources quickly in a standalone desktop application. | [Homepage](https://k8slens.dev/)
 `stern` | Easily follow logs from multiple pods. | See logs from a set of GitLab pods together. | [GitHub](https://github.com/wercker/stern)
+`dive` | Explore container layers. | A tool for exploring a container image, layer contents, and discovering ways to shrink the size of your Docker/OCI image. | [GitHub](https://github.com/wagoodman/dive), [GitLab Unfiltered](https://youtu.be/9kdE-ye6vlc)
 
 ## Versioning and Release
 
