@@ -195,7 +195,7 @@ spec:
           app: {{ template "name" $oldscope }}
           release: {{ $.Release.Name }}
         annotations:
-        {{- range $key, $value := .Values.persistence.annotations }}
+        {{- range $key, $value := $.Values.persistence.annotations }}
           {{ $key }}: {{ $value | quote }}
         {{- end }}
       spec:
