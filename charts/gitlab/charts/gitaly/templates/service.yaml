@@ -1,11 +1,10 @@
 {{- if .Values.global.gitaly.enabled -}}
 {{- $oldscope := . -}}
-{{- $deploys := default (list "gitaly") .Values.global.gitaly.deploys }}
-{{- range $i, $deploy := $deploys }}
+{{- range $i, $deploy := .Values.global.gitaly.deploys }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $.Release.Name }}-{{ $deploy }}
+  name: {{ $.Release.Name }}-{{ $deploy.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $oldscope | nindent 4 }}

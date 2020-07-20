@@ -1,11 +1,10 @@
 {{- if .Values.global.gitaly.enabled -}}
 {{- $oldscope := . -}}
-{{- $deploys := default (list "gitaly") .Values.global.gitaly.deploys }}
-{{- range $i, $deploy := $deploys -}}
+{{- range $i, $deploy := .Values.global.gitaly.deploys -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ $.Release.Name }}-{{ $deploy }}
+  name: {{ $.Release.Name }}-{{ $deploy.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.immutableLabels" $oldscope | nindent 4 }}
@@ -152,7 +151,7 @@ spec:
       {{- include "gitlab.extraVolumes" $oldscope | nindent 6 }}
       - name: gitaly-config
         configMap:
-          name: {{$.Release.Name }}-{{ $deploy }}
+          name: {{$.Release.Name }}-{{ $deploy.name }}
       {{- if not $.Values.persistence.enabled }}
       - name: repo-data
         emptyDir: {}
