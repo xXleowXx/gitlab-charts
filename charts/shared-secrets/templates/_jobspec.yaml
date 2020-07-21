@@ -17,9 +17,9 @@ spec:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
       annotations:
-      #{{- if .Values.global.istio.enabled }}
+      {{- if .Values.global.istio.enabled }}
         sidecar.istio.io/inject: "false"
-      #{{- end }}
+      {{- end }}
     spec:
       {{- if .Values.tolerations }}
       tolerations:
