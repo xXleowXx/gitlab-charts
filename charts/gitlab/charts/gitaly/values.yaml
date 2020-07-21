@@ -4,8 +4,6 @@
 
 global:
   gitaly:
-    deploys:
-      - name: gitaly
     enabled: true
     internal:
       names: ["default"]
@@ -143,3 +141,4 @@ serviceAccount:
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
   # name: 
+gitalyDeploys: []

@@ -1,11 +1,11 @@
 {{- if .Values.global.gitaly.enabled -}}
 {{- $oldscope := . -}}
-{{- $deploys := default (list "gitaly")  }}
-{{- range $i, $deploy := .Values.global.gitaly.deploys }}
+{{- range $i, $instance := coalesce .Values.global.gitalyDeploys .Values.global.gitaly }}
+{{- $instance := merge $instance $.Values.global.gitaly -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $.Release.Name }}-{{ $deploy.name }}
+  name: {{ $.Release.Name }}-{{ $instance.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $oldscope | nindent 4 }}
@@ -38,13 +38,13 @@ data:
     prometheus_listen_addr = "localhost:{{ $oldscope.Values.metrics.metricsPort }}"
     {{- end }}
 
-    {{- if $.Values.global.gitaly.tls.enabled }}
+    {{- if $instance.tls.enabled }}
     [tls]
     certificate_path = '/etc/gitlab-secrets/gitaly/gitaly.crt'
     key_path = '/etc/gitlab-secrets/gitaly/gitaly.key'
     {{- end }}
 
-    <% @storages = [ {{- range (coalesce $oldscope.Values.internal.names $oldscope.Values.global.gitaly.internal.names) }} {{ . | quote }}, {{- end }} ] %>
+    <% @storages = [ {{- range (coalesce $oldscope.Values.internal.names $instance) }} {{ . | quote }}, {{- end }} ] %>
     <% @index=`echo ${HOSTNAME##*-}`.to_i %>
     <% if @storages.length > @index %>
     [[storage]]
