@@ -1,10 +1,10 @@
 {{- if .Values.global.gitaly.enabled -}}
 {{- $oldscope := . -}}
-{{- range $i, $deploy := .Values.global.gitaly.deploys }}
+{{- range $i, $instance := coalesce .Values.global.gitalyDeploys (list .Values.global.gitaly) }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $.Release.Name }}-{{ $deploy.name }}
+  name: {{ $.Release.Name }}-{{default "gitaly" $instance.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $oldscope | nindent 4 }}
@@ -25,7 +25,7 @@ spec:
     - port: {{ $.Values.metrics.metricsPort }}
       name: {{ $.Values.service.name }}-metrics
    {{- end }}
-   {{- if $.Values.global.gitaly.tls.enabled }}
+   {{- if $instance.tls.enabled }}
     - port: {{ $.Values.service.tls.externalPort }}
       name: {{ $.Values.service.name }}-tls
       targetPort: {{ $.Values.service.tls.internalPort }}

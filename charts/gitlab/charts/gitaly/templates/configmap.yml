@@ -1,11 +1,13 @@
 {{- if .Values.global.gitaly.enabled -}}
 {{- $oldscope := . -}}
-{{- range $i, $instance := coalesce .Values.global.gitalyDeploys .Values.global.gitaly }}
+{{- range $i, $instance := coalesce .Values.global.gitalyDeploys (list .Values.global.gitaly) }}
+{{- if $.Values.global.gitalyDeploys -}}
 {{- $instance := merge $instance $.Values.global.gitaly -}}
+{{- end -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $.Release.Name }}-{{ $instance.name }}
+  name: {{ $.Release.Name }}-{{ default "gitaly" $instance.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $oldscope | nindent 4 }}
@@ -29,7 +31,7 @@ data:
     # Directory where internal sockets reside
     internal_socket_dir = "/home/git"
 
-    {{- if $.Values.global.gitaly.tls.enabled }}
+    {{- if $instance.tls.enabled }}
     tls_listen_addr = "0.0.0.0:{{ $.Values.service.tls.internalPort }}"
     {{- end }}
 
@@ -44,7 +46,7 @@ data:
     key_path = '/etc/gitlab-secrets/gitaly/gitaly.key'
     {{- end }}
 
-    <% @storages = [ {{- range (coalesce $oldscope.Values.internal.names $instance) }} {{ . | quote }}, {{- end }} ] %>
+    <% @storages = [ {{- range (coalesce $oldscope.Values.internal.names $instance.internal.names) }} {{ . | quote }}, {{- end }} ] %>
     <% @index=`echo ${HOSTNAME##*-}`.to_i %>
     <% if @storages.length > @index %>
     [[storage]]

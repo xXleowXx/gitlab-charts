@@ -113,6 +113,7 @@ global:
     tls:
       enabled: false
       # secretName:
+  # gitalyDeploys: []
 
   ## doc/charts/globals.md#configure-minio-settings
   minio:
