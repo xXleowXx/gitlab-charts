@@ -149,8 +149,15 @@ This overrides the upstream postegresql chart so that we can deterministically
 use the name of the service the upstream chart creates
 */}}
 {{- define "gitlab.psql.host" -}}
-{{- $local := pluck "psql" $.Values | first -}}
-{{- coalesce (pluck "host" $local .Values.global.psql | first) (pluck "serviceName" $local .Values.global.psql | first) (printf "%s-%s" $.Release.Name "postgresql") -}}
+{{- with default .Values.global.psql .Values.psql -}}
+{{- if .host -}}
+{{- .host -}}
+{{- else if .serviceName -}}
+{{- .serviceName -}}
+{{- else -}}
+{{- printf "%s-%s" $.Release.Name "postgresql" -}}
+{{- end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -181,8 +188,7 @@ Alias of gitlab.psql.host
 Return the db database name
 */}}
 {{- define "gitlab.psql.database" -}}
-{{- $local := pluck "psql" $.Values | first -}}
-{{- coalesce (pluck "database" $local .Values.global.psql | first) "gitlabhq_production" -}}
+{{- coalesce (default .Values.global.psql .Values.psql).database "gitlabhq_production" -}}
 {{- end -}}
 
 {{/*
@@ -191,8 +197,7 @@ If the postgresql username is provided, it will use that, otherwise it will fall
 to "gitlab" default
 */}}
 {{- define "gitlab.psql.username" -}}
-{{- $local := pluck "psql" $.Values | first -}}
-{{- coalesce (pluck "username" $local .Values.global.psql | first) "gitlab" -}}
+{{- coalesce (default .Values.global.psql .Values.psql).username "gitlab" -}}
 {{- end -}}
 
 {{/*
@@ -212,8 +217,7 @@ Defaults to a release-based name and falls back to .Values.global.psql.secretNam
 */}}
 {{- define "gitlab.psql.password.secret" -}}
 {{- $local := pluck "psql" $.Values | first -}}
-{{- $localPass := pluck "password" $local | first -}}
-{{- default (printf "%s-%s" .Release.Name "postgresql-password") (pluck "secret" $localPass $.Values.global.psql.password | first ) | quote -}}
+{{- default (printf "%s-%s" .Release.Name "postgresql-password") (pluck "password" $local $.Values.global.psql | first ).secret | quote -}}
 {{- end -}}
 
 {{/*
@@ -230,8 +234,7 @@ Uses `postgresql-password` to match upstream postgresql chart when not using an
 */}}
 {{- define "gitlab.psql.password.key" -}}
 {{- $local := pluck "psql" $.Values | first -}}
-{{- $localPass := pluck "password" $local | first -}}
-{{- default "postgresql-password" (pluck "key" $localPass $.Values.global.psql.password | first ) | quote -}}
+{{- default "postgresql-password" (pluck "password" $local $.Values.global.psql | first ).key | quote -}}
 {{- end -}}
 
 {{/*
@@ -239,7 +242,7 @@ Return if pool should be used by PostgreSQL.
 Defaults to 1
 */}}
 {{- define "gitlab.psql.pool" -}}
-{{- default 1 (pluck "pool" .Values.psql .Values.global.psql | first) | int -}}
+{{- default 1 (default .Values.global.psql .Values.psql).pool | int -}}
 {{- end -}}
 
 {{/*
@@ -247,8 +250,7 @@ Return if prepared statements should be used by PostgreSQL.
 Defaults to false
 */}}
 {{- define "gitlab.psql.preparedStatements" -}}
-{{- $local := pluck "psql" $.Values | first -}}
-{{- eq true (default false (pluck "preparedStatements" $local .Values.global.psql | first)) -}}
+{{- eq true (default false (default .Values.global.psql .Values.psql).preparedStatements) -}}
 {{- end -}}
 
 {{/* ######### ingress templates */}}
