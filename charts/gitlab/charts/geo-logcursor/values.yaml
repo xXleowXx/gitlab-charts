@@ -48,6 +48,7 @@ global:
       #name: minio.example.com
       #https: false
 
+psql: {}
 redis:
   password: {}
 gitaly:
