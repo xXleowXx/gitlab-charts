@@ -23,7 +23,7 @@ replicas: 1
 annotations: {}
 
 psql: {}
-  # port: 5432 
+  # port: 5432
 
 global:
   # imagePullPolicy: IfNotPresent
@@ -86,6 +86,11 @@ global:
       connection: {}
     terraformState:
       enabled: false
+      bucket:
+      connection: {}
+    dependencyProxy:
+      enabled: false
+      proxy_download: true
       bucket:
       connection: {}
     ldap:
@@ -241,5 +246,4 @@ serviceAccount:
   create: false
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
-  # name: 
-  
+  # name:

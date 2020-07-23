@@ -249,6 +249,11 @@ global:
       enabled: false
       bucket: gitlab-terraform-state
       connection: {}
+    dependencyProxy:
+      enabled: false
+      proxy_download: true
+      bucket: gitlab-dependency-proxy
+      connection: {}
 
     ## doc/charts/globals.md#pseudonymizer-settings
     pseudonymizer:
