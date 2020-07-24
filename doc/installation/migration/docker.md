@@ -19,7 +19,7 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 - Object storage service which the Helm chart based deployment is configured to
   use. For production use, we recommend you use an [external object storage](../../advanced/external-object-storage/index.md)
   and have the login credentials to access it ready. If you are using the built-in
-  Minio service, [read the docs](minio.md) on how to grab the login credentials
+  MinIO service, [read the docs](minio.md) on how to grab the login credentials
   from it.
 
 ## Migration Steps
