@@ -51,7 +51,6 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
 
       ```shell
       gitlab-rake gitlab:artifacts:migrate
-      gitlab-rake gitlab:traces:migrate
       ```
 
    1. Migrate existing LFS objects to object storage:
