@@ -67,15 +67,21 @@ function bootstrap(){
   gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECT;
 
   # Create roles for RBAC Helm
-  if $RBAC_ENABLED && [ ! $IS_HELM_3 -eq 0 ]; then
-    status_code=$(curl -L -w '%{http_code}' -o rbac-config.yaml -s "https://gitlab.com/gitlab-org/charts/gitlab/raw/master/doc/installation/examples/rbac-config.yaml");
-    if [ "$status_code" != 200 ]; then
-      echo "Failed to download rbac-config.yaml, status code: $status_code";
-      exit 1;
-    fi
-
+  if $RBAC_ENABLED; then
     kubectl config set-credentials ${CLUSTER_NAME}-admin-user --username=admin --password=$(cluster_admin_password_gke)
-    kubectl --user=${CLUSTER_NAME}-admin-user create -f rbac-config.yaml;
+
+    if [ $IS_HELM_3 -eq 0 ]; then
+      current_user=$(gcloud config list account --format "value(core.account)")
+      kubectl --dry-run=client --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $current_user | kubectl --user=${CLUSTER_NAME}-admin-user apply -f -
+    else
+      status_code=$(curl -L -w '%{http_code}' -o rbac-config.yaml -s "https://gitlab.com/gitlab-org/charts/gitlab/raw/master/doc/installation/examples/rbac-config.yaml");
+      if [ "$status_code" != 200 ]; then
+        echo "Failed to download rbac-config.yaml, status code: $status_code";
+        exit 1;
+      fi
+
+      kubectl --user=${CLUSTER_NAME}-admin-user create -f rbac-config.yaml;
+    fi
   fi
 
   echo "Wait for metrics API service"
