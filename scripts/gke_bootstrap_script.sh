@@ -71,8 +71,11 @@ function bootstrap(){
     kubectl config set-credentials ${CLUSTER_NAME}-admin-user --username=admin --password=$(cluster_admin_password_gke)
 
     if [ $IS_HELM_3 -eq 0 ]; then
-      current_user=$(gcloud config list account --format "value(core.account)")
-      kubectl --dry-run=client --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $current_user | kubectl --user=${CLUSTER_NAME}-admin-user apply -f -
+      if [ -z "${ADMIN_USER}" ]; then
+        ADMIN_USER=$(gcloud config list account --format "value(core.account)")
+      fi
+
+      kubectl --dry-run=client --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $ADMIN_USER | kubectl --user=${CLUSTER_NAME}-admin-user apply -f -
     else
       status_code=$(curl -L -w '%{http_code}' -o rbac-config.yaml -s "https://gitlab.com/gitlab-org/charts/gitlab/raw/master/doc/installation/examples/rbac-config.yaml");
       if [ "$status_code" != 200 ]; then
