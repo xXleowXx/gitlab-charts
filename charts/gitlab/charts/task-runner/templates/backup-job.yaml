@@ -83,6 +83,8 @@ spec:
                   value: {{ .Values.global.appConfig.packages.bucket }}
                 - name: BACKUP_BUCKET_NAME
                   value: {{ .Values.global.appConfig.backups.bucket }}
+                - name: DEPENDENCY_PROXY_BUCKET_NAME
+                  value: {{ .Values.global.appConfig.dependencyProxy.bucket }}
                 - name: BACKUP_BACKEND
                   value: {{ .Values.backups.objectStorage.backend }}
                 - name: TMP_BUCKET_NAME
