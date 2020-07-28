@@ -92,7 +92,7 @@ helm upgrade --install gitlab gitlab/gitlab -f examples/kind/values-ssl.yaml
 
 You can then access GitLab at `https://gitlab.(your host IP).nip.io`.
 
-### (Optional) Add root CA
+#### (Optional) Add root CA
 
 In order for your browser to trust our self-signed certificate, download the root CA and trust it:
 
@@ -108,7 +108,7 @@ If you would prefer not to run GitLab Runner at all, you can disable it in the r
 NOTE: **Note:**
 If you need to log into the registry with `docker login`, you will need to take additional steps to configure the registry to work with your self-signed certificates. More instructions can be found [here](https://docs.docker.com/registry/deploying/#run-an-externally-accessible-registry) and [here](https://blog.container-solutions.com/adding-self-signed-registry-certs-docker-mac).
 
-## NGINX Ingress NodePort without SSL
+### NGINX Ingress NodePort without SSL
 
 In this method, we will use `kind` to expose the NGINX controller service's NodePorts to ports on your local machine with SSL disabled.
 
