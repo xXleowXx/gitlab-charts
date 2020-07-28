@@ -42,6 +42,10 @@ To install `helm`, you can follow the instructions [here](https://github.com/hel
 
 To install `kind`, you can follow the instructions [here](https://github.com/kubernetes-sigs/kind#installation-and-usage).
 
+### Cloning GitLab Helm chart repo
+
+The instructions below use example configuration files in the repository that ease setup. We recommend cloning the repository to have a copy of them locally: `git clone https://gitlab.com/gitlab-org/charts/gitlab.git`.
+
 ### Adding GitLab Helm chart
 
 Follow these commands to set up your system to access the GitLab Helm charts:
