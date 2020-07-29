@@ -1,8 +1,8 @@
 ---
 apiVersion: v1
 name: gitlab
-version: 13.3.202007290940+7989d359599
-appVersion: 13.3.202007290940+7989d359599
+version: 13.3.202007291011+ae6579087f8
+appVersion: 13.3.202007291011+ae6579087f8
 description: Web-based Git-repository manager with wiki and issue-tracking features.
 keywords:
 - gitlab
