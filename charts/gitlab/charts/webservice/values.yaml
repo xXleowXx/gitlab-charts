@@ -34,6 +34,8 @@ shutdown:
 
 annotations: {}
 
+podLabels: {}
+
 metrics:
   enabled: true
   annotations:

@@ -1329,6 +1329,19 @@ global:
       environment: production
 ```
 
+## Labels
+
+Custom labels can be applied to various Deployments and Jobs. These labels are
+supplementary to existing or preconfigured labels constructed by this Helm
+chart. These supplementary labels will **not** be utilized for `matchSelectors`.
+
+```yaml
+global:
+  pod:
+    labels:
+      environment: production
+```
+
 ## Tracing
 
 GitLab Helm charts support tracing, and you can configure it with:
