@@ -108,6 +108,6 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
    ```
 
 1. Visit the Helm based deployment and confirm projects, groups, users, issues
-   etc. that existed in your Docker GitLab image-based installation are restored.
+   etc. that existed in your Docker based installation are restored.
    Also verify if the uploaded files (avatars, files uploaded to issues, etc.)
    are loaded fine.
