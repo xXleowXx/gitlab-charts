@@ -18,6 +18,8 @@ init:
 ## Support for tolerations for pod scheduling
 tolerations: []
 
+podLabels: {}
+
 resources:
   # limits:
   #  cpu: 1
