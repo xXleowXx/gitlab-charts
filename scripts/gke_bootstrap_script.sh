@@ -72,7 +72,7 @@ function bootstrap(){
 
     if [ $IS_HELM_3 -eq 0 ]; then
       if [ -z "${ADMIN_USER}" ]; then
-        ADMIN_USER=$(gcloud config list account --format "value(core.account)")
+        ADMIN_USER=$(gcloud config list account --format "value(core.account)" --filter="core.account:*" --quiet)
       fi
 
       kubectl --dry-run=client --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $ADMIN_USER | kubectl --user=${CLUSTER_NAME}-admin-user apply -f -
