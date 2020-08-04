@@ -40,6 +40,14 @@ You can use `asdf` ([more info](../index.md#common-developer-tools)) to install 
 
 Note that `kind` uses Docker to run local Kubernetes clusters, so be sure to [install Docker](https://docs.docker.com/get-docker/).
 
+### Obtaining configuration examples
+
+Clone the GitLab Chart repository for local copies of the configuration example files referenced in the next steps:
+
+```shell
+git clone https://gitlab.com/gitlab-org/charts/gitlab.git
+```
+
 ### Adding GitLab Helm chart
 
 Follow these commands to set up your system to access the GitLab Helm charts:
