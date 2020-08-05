@@ -35,10 +35,10 @@ To check what your volume locations are, you can run `sudo docker inspect -f '{{
       NOTE: **Note:** This **must** be the same object storage service that the
       Helm charts based deployment is connected to.
 
-   1. Restart the Docker container to apply the changes:
+   1. Run reconfigure to apply the changes:
 
       ```shell
-      sudo docker restart gitlab
+      sudo docker exec -ti gitlab gitlab-ctl reconfigure
       ```
 
    1. Open a interactive shell on the Docker container:
