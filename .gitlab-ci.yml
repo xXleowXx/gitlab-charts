@@ -196,8 +196,10 @@ review_eks:
   stage: review
   variables:
     GIT_CHECKOUT: "false"
+  before_script: []
   script:
     - git checkout master
+    - source scripts/ci/autodevops.sh
     - delete
     - cleanup
   when: manual
