@@ -37,7 +37,7 @@ spec:
         {{- include "gitlab.extraInitContainers" . | nindent 8 }}
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
         - name: configure
-          command: ['sh','-c', '/config/configure ; sleep 600']
+          command: ['sh', '/config/configure']
           image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
