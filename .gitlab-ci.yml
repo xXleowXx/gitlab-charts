@@ -123,15 +123,15 @@ lint_package:
       - /(^docs[\/-].+|.+-docs$)/
       - *com_auto_deploy_branch_ref
 
-"Validate 1.12.9":
+"Validate 1.13.11":
   extends: .kubeval
   variables:
-    KUBE_VERSION: "1.12.9"
+    KUBE_VERSION: "1.13.11"
 
-"Validate 1.16.0":
+"Validate 1.18.1":
   extends: .kubeval
   variables:
-    KUBE_VERSION: "1.16.0"
+    KUBE_VERSION: "1.18.1"
 
 .review_template:
   stage: review
