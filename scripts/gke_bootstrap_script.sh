@@ -69,14 +69,13 @@ function bootstrap(){
   # Create roles for RBAC Helm
   if $RBAC_ENABLED; then
     kubectl config set-credentials ${CLUSTER_NAME}-admin-user --username=admin --password=$(cluster_admin_password_gke)
+    if [ -z "${ADMIN_USER}" ]; then
+      ADMIN_USER=$(gcloud config list account --format "value(core.account)" 2> /dev/null)
+    fi
 
-    if [ $IS_HELM_3 -eq 0 ]; then
-      if [ -z "${ADMIN_USER}" ]; then
-        ADMIN_USER=$(gcloud config list account --format "value(core.account)" 2> /dev/null)
-      fi
+    kubectl --dry-run=client --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $ADMIN_USER | kubectl --user=${CLUSTER_NAME}-admin-user apply -f -
 
-      kubectl --dry-run=client --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $ADMIN_USER | kubectl --user=${CLUSTER_NAME}-admin-user apply -f -
-    else
+    if [ ! $IS_HELM_3 -eq 0 ]; then
       status_code=$(curl -L -w '%{http_code}' -o rbac-config.yaml -s "https://gitlab.com/gitlab-org/charts/gitlab/raw/master/doc/installation/examples/rbac-config.yaml");
       if [ "$status_code" != 200 ]; then
         echo "Failed to download rbac-config.yaml, status code: $status_code";
