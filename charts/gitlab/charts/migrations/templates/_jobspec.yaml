@@ -37,8 +37,7 @@ spec:
         {{- include "gitlab.extraInitContainers" . | nindent 8 }}
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
         - name: configure
-          # command: ['sh', '/config/configure']
-          command: ['tail', '-f', '/dev/null']
+          command: ['sh', '/config/configure']
           image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
@@ -62,6 +61,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}
+          command: ['tail', '-f', '/dev/null']
           image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
           args:
             - /scripts/wait-for-deps
