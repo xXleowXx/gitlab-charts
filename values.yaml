@@ -35,7 +35,7 @@ global:
   edition: ee
 
   ## doc/charts/globals.md#gitlab-version
-  # gitlabVersion: master
+  gitlabVersion: relocate-bootsnap-cache
 
   ## doc/charts/globals.md#application-resource
   application:
