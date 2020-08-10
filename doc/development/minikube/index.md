@@ -68,7 +68,7 @@ change according to the pieces being tested, and the requirements as listed:
   [database](https://docs.gitlab.com/ce/install/requirements.html#database)
   requirements.
 
-  NOTE: **Note**:
+  NOTE: **Note:**
   This is created in your home directory under `~/.minikube/machines/minikube/`.
 
 - `--kubernetes-version string`: The Kubernetes version that the Minikube VM will use (e.g., `v1.2.3`).
@@ -188,7 +188,7 @@ helm upgrade --install gitlab gitlab/gitlab \
   -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube.yaml
 ```
 
-NOTE: **Note**:
+NOTE: **Note:**
 If using Helm v2, please see notes about the `--timeout` option
 in the [Deployment documentation](../../installation/deployment.md#deploy-using-helm).
 
@@ -206,7 +206,7 @@ helm upgrade --install gitlab gitlab/gitlab \
   -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml
 ```
 
-NOTE: **Note**:
+NOTE: **Note:**
 If using Helm v2, please see notes about the `--timeout` option
 in the [Deployment documentation](../../installation/deployment.md#deploy-using-helm).
 
