@@ -49,7 +49,7 @@ choice:
 - [Amazon EKS](cloud/eks.md)
 - [OpenShift Origin](cloud/openshift.md)
 - Azure Container Service - Documentation to be added.
-- Pivotal Container Service - Documentation to be added.
+- VMware Tanzu - Documentation to be added.
 - On-Premises solutions - Documentation to be added.
 
 ## Deploying GitLab

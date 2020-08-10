@@ -2,6 +2,35 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.2.3 (2020-08-05)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.3.
+
+
+## 4.2.2 (2020-07-30)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.2.
+
+
+## 4.2.1 (2020-07-24)
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Use the global `psql` config parameters when the local `psql` configuration does not contain that config key, instead of going to the default option. !1461 (Matthias van de Meent)
+
+### Changed (1 change)
+
+- Update GitLab Runner to 0.19.1. !500
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.1.
+
+
 ## 4.2.0 (2020-07-22)
 
 ### Fixed (2 changes)
@@ -24,6 +53,27 @@ entry.
 
 - Add an annotations support to the migrations job template. !1423 (Tiago Posse)
 - Update GitLab Version to 13.2.0.
+
+
+## 4.1.7 (2020-08-05)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.6.
+
+
+## 4.1.6 (2020-07-24)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.5.
+
+
+## 4.1.5 (2020-07-24)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.5.
 
 
 ## 4.1.4 (2020-07-09)
@@ -100,6 +150,13 @@ entry.
 - Ensure upgraded to 4.0 before 4.1. !1403
 - Update GitLab Runner chart to 0.18.0. !1416
 - Update GitLab Version to 13.1.0.
+
+
+## 4.0.10 (2020-08-05)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.0.12.
 
 
 ## 4.0.9 (2020-07-09)
