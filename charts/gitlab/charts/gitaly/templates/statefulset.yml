@@ -1,5 +1,4 @@
 {{- if .Values.global.gitaly.enabled -}}
-{{- $oldscope := . -}}
 {{- range $i, $instance := coalesce .Values.global.gitalyDeploys (list .Values.global.gitaly) }}
 apiVersion: apps/v1
 kind: StatefulSet
@@ -7,27 +6,27 @@ metadata:
   name: {{ $.Release.Name }}-{{default "gitaly" $instance.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "gitlab.immutableLabels" $oldscope | nindent 4 }}
+    {{- include "gitlab.immutableLabels" $ | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "name" $oldscope }}
+      app: {{ template "name" $ }}
       release: {{ $.Release.Name }}
-  serviceName: {{ template "gitlab.gitaly.serviceName" $oldscope }}
-  replicas: {{template "gitlab.gitaly.replicas" $oldscope }}
+  serviceName: {{ template "gitlab.gitaly.serviceName" $ }}
+  replicas: {{template "gitlab.gitaly.replicas" $ }}
   podManagementPolicy: Parallel
   {{- if $.Values.global.operator.enabled }}
   updateStrategy:
     rollingUpdate:
-      partition: {{template "gitlab.gitaly.replicas" $oldscope }}
+      partition: {{template "gitlab.gitaly.replicas" $ }}
   {{- end }}
   template:
     metadata:
       labels:
-        app: {{ template "name" $oldscope }}
+        app: {{ template "name" $ }}
         release: {{ $.Release.Name }}
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $oldscope | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
       {{- range $key, $value := $.Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -41,15 +40,15 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 30
       initContainers:
-        {{- include "gitlab.extraInitContainers" $oldscope | nindent 8 }}
-        {{- include "gitlab.certificates.initContainer" $oldscope | nindent 8 }}
+        {{- include "gitlab.extraInitContainers" $ | nindent 8 }}
+        {{- include "gitlab.certificates.initContainer" $ | nindent 8 }}
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global.busybox) | quote }}
           env:
-          {{- include "gitlab.extraEnv" $oldscope | nindent 10 }}
+          {{- include "gitlab.extraEnv" $ | nindent 10 }}
           volumeMounts:
-          {{- include "gitlab.extraVolumeMounts" $oldscope | nindent 10 }}
+          {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
           - name: gitaly-config
             mountPath: /config
             readOnly: true
@@ -72,7 +71,7 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" $oldscope }}
+                  app: {{ template "name" $ }}
                   release: {{ $.Release.Name }}
       {{- else if eq (default $.Values.global.antiAffinity $.Values.antiAffinity) "soft" }}
       affinity:
@@ -83,17 +82,17 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" $oldscope }}
+                  app: {{ template "name" $ }}
                   release: {{ $.Release.Name }}
       {{- end }}
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
-      serviceAccountName: {{ include "gitlab.serviceAccount.name" $oldscope }}
+      serviceAccountName: {{ include "gitlab.serviceAccount.name" $ }}
       {{- end }}
       containers:
-        {{- include "gitlab.extraContainers" $oldscope | nindent 8 }}
-        - name: {{ $oldscope.Chart.Name }}
-          image: "{{ $.Values.image.repository }}:{{ coalesce $.Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" $oldscope.Chart.AppVersion "prepend" "true")) }}"
-          {{ template "gitlab.imagePullPolicy" $oldscope }}
+        {{- include "gitlab.extraContainers" $ | nindent 8 }}
+        - name: {{ $.Chart.Name }}
+          image: "{{ $.Values.image.repository }}:{{ coalesce $.Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" $.Chart.AppVersion "prepend" "true")) }}"
+          {{ template "gitlab.imagePullPolicy" $ }}
           ports:
             - containerPort: {{ $.Values.service.internalPort }}
            {{- if $.Values.metrics.enabled }}
@@ -116,11 +115,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            {{- include "gitlab.tracing.env" $oldscope | nindent 12 }}
-            {{- include "gitlab.extraEnv" $oldscope | nindent 12 }}
+            {{- include "gitlab.tracing.env" $ | nindent 12 }}
+            {{- include "gitlab.extraEnv" $ | nindent 12 }}
           volumeMounts:
-            {{- include "gitlab.extraVolumeMounts" $oldscope | nindent 12 }}
-            {{- include "gitlab.certificates.volumeMount" $oldscope | nindent 12 }}
+            {{- include "gitlab.extraVolumeMounts" $ | nindent 12 }}
+            {{- include "gitlab.certificates.volumeMount" $ | nindent 12 }}
             - name: gitaly-config
               mountPath: '/etc/gitaly/templates'
             - name: gitaly-secrets
@@ -148,7 +147,7 @@ spec:
           resources:
             {{- toYaml $.Values.resources | nindent 12 }}
       volumes:
-      {{- include "gitlab.extraVolumes" $oldscope | nindent 6 }}
+      {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       - name: gitaly-config
         configMap:
           name: {{$.Release.Name }}-{{default "gitaly" $instance.name }}
@@ -164,25 +163,25 @@ spec:
           defaultMode: 0440
           sources:
           - secret:
-              name: {{ template "gitlab.gitaly.authToken.secret" $oldscope }}
+              name: {{ template "gitlab.gitaly.authToken.secret" $ }}
               items:
-                - key: {{ template "gitlab.gitaly.authToken.key" $oldscope }}
+                - key: {{ template "gitlab.gitaly.authToken.key" $ }}
                   path: "gitaly_token"
           - secret:
-              name: {{ template "gitlab.gitlab-shell.authToken.secret" $oldscope }}
+              name: {{ template "gitlab.gitlab-shell.authToken.secret" $ }}
               items:
-                - key: {{ template "gitlab.gitlab-shell.authToken.key" $oldscope }}
+                - key: {{ template "gitlab.gitlab-shell.authToken.key" $ }}
                   path: ".gitlab_shell_secret"
           {{- if $.Values.global.gitaly.tls.enabled }}
           - secret:
-              name: {{ template "gitlab.gitaly.tls.secret" $oldscope }}
+              name: {{ template "gitlab.gitaly.tls.secret" $ }}
               items:
                 - key: "tls.crt"
                   path: "gitaly.crt"
                 - key: "tls.key"
                   path: "gitaly.key"
           {{- end }}
-      {{- include "gitlab.certificates.volumes" $oldscope | nindent 6 }}
+      {{- include "gitlab.certificates.volumes" $ | nindent 6 }}
     {{- if $.Values.nodeSelector }}
       nodeSelector:
         {{- toYaml $.Values.nodeSelector | nindent 8 }}
@@ -192,7 +191,7 @@ spec:
     - metadata:
         name: repo-data
         labels:
-          app: {{ template "name" $oldscope }}
+          app: {{ template "name" $ }}
           release: {{ $.Release.Name }}
         annotations:
         {{- range $key, $value := $.Values.persistence.annotations }}
