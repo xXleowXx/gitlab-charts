@@ -1,5 +1,5 @@
 ---
-title: Update runner chart to 0.19.2
+title: Update GitLab Runner chart to 0.19.2
 merge_request: 1489
 author:
 type: changed
