@@ -39,6 +39,9 @@ podLabels: {}
 metrics:
   enabled: true
   annotations:
+    gitlab.com/prometheus_scrape: "true"
+    gitlab.com/prometheus_port: "8080"
+    gitlab.com/prometheus_path: "/-/metrics"
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
     prometheus.io/path: "/-/metrics"
@@ -295,7 +298,7 @@ serviceAccount:
   create: false
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
-  # name: 
+  # name:
 
 ## Allow configuring pods' priorityClassName. This is used to control pod priority in case of eviction:
 #  https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
