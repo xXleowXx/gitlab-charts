@@ -181,6 +181,23 @@ review_gke:
     auto_stop_in: 4 days
   resource_group: "gke-review-app-${CI_COMMIT_REF_NAME}"
 
+review_gke_dev:
+  variables:
+    DNS_PROVIDER: "google"
+    HELM_EXTRA_ARGS: "-f scripts/ci/values-dev-images.yaml"
+  extends: .review_template
+  environment:
+    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke_dev
+    auto_stop_in: 4 days
+  resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
+  only:
+    refs:
+      - /.*-stable/@gitlab/charts/gitlab
+    variables:
+      - $KUBECONFIG
+
 review_eks:
   variables:
     DNS_PROVIDER: "aws"
@@ -220,6 +237,17 @@ stop_review_gke:
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
     action: stop
+
+stop_review_gke_dev:
+  extends: .stop_review_template
+  environment:
+    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    action: stop
+  only:
+    refs:
+      - /.*-stable/@gitlab/charts/gitlab
+    variables:
+      - $KUBECONFIG
 
 stop_review_eks:
   extends: .stop_review_template
@@ -544,6 +572,22 @@ review_specs_gke:
       - master
       - /(^docs[\/-].+|.+-docs$)/
       - *com_auto_deploy_branch_ref
+
+review_specs_gke_dev:
+  extends: .specs
+  variables:
+    VARIABLES_FILE: "variables/review_gke_dev"
+    RSPEC_TAGS: type:feature
+  environment:
+    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke_dev
+  resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
+  only:
+    refs:
+      - /.*-stable/@gitlab/charts/gitlab
+    variables:
+      - $KUBECONFIG
 
 review_specs_eks:
   extends: .specs
