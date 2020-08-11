@@ -138,6 +138,7 @@ CIYAML
     --set global.gitlab.license.secret="$CI_ENVIRONMENT_SLUG-gitlab-license" \
     --namespace="$KUBE_NAMESPACE" \
     --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
+    $HELM_EXTRA_ARGS \
     "$name" \
     .
 }
