@@ -115,6 +115,7 @@ global:
       # secretName:
   # gitalyDeploys: []
 
+  praefect: {}
   ## doc/charts/globals.md#configure-minio-settings
   minio:
     enabled: true

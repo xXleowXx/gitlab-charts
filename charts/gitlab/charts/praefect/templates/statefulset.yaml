@@ -1,0 +1,134 @@
+{{- if .Values.global.praefect.enabled -}}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "gitlab.standardLabels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}
+      release: {{ $.Release.Name }}
+  serviceName: {{ template "gitlab.praefect.serviceName" . }}
+  replicas: {{ template "gitlab.gitaly.replicas" . }}
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ $.Release.Name }}
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app:  {{ template "name" . }}
+                  release: {{ $.Release.Name }}
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - env:
+        - name: CONFIG_TEMPLATE_DIRECTORY
+          value: /etc/gitaly/templates
+        - name: CONFIG_DIRECTORY
+          value: /etc/praefect
+        - name: PRAEFECT_CONFIG_FILE
+          value: /etc/praefect/config.toml
+        - name: SSL_CERT_DIR
+          value: /etc/ssl/certs
+        - name: PRAEFECT_PROMETHEUS_LISTEN_ADDR
+          value: :9236
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        name: {{ $.Chart.Name }}
+        image: "{{ $.Values.image.repository }}:{{ coalesce $.Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" $.Chart.AppVersion "prepend" "true")) }}"
+        {{ template "gitlab.imagePullPolicy" $ }}
+        command:
+          - /usr/local/bin/praefect
+          - -config
+          - /etc/praefect/config.toml
+        ports:
+        - containerPort: {{ $.Values.service.internalPort }}
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/ssl/certs/
+          name: etc-ssl-certs
+          readOnly: true
+        - mountPath: /etc/gitlab-secrets
+          name: praefect-secrets
+          readOnly: true
+        - mountPath: /etc/praefect
+          name: praefect-config
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      initContainers:
+        {{- include "gitlab.extraInitContainers" $ | nindent 8 }}
+        {{- include "gitlab.certificates.initContainer" $ | nindent 8 }}
+        - name: configure
+          command: ['sh', '-x', '/config/configure']
+          image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" .Values.global.busybox) | quote }}
+          env:
+          {{- include "gitlab.extraEnv" $ | nindent 10 }}
+          volumeMounts:
+          {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
+          - name: praefect-config
+            mountPath: /config
+            readOnly: true
+          - name: praefect-secrets
+            mountPath: /init-secrets
+            readOnly: false
+          - name: init-praefect-secrets
+            mountPath: /init-config
+            readOnly: true
+          resources:
+            {{- toYaml $.Values.init.resources | nindent 12 }}
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: {{ template "fullname" . }}
+        name: praefect-config
+      - emptyDir:
+          medium: Memory
+        name: praefect-secrets
+      - name: init-praefect-secrets
+        projected:
+          defaultMode: 288
+          sources:
+          - secret:
+              items:
+              - key: {{ template "gitlab.gitaly.authToken.key" . }}
+                path: gitaly_token
+              name: {{ template "gitlab.gitaly.authToken.secret" . }}
+          - secret:
+              items:
+              - key: {{ template "gitlab.gitlab-shell.authToken.key" }}
+                path: .gitlab_shell_secret
+              name: {{ template "gitlab.gitlab-shell.authToken.secret" . }}
+      - emptyDir:
+          medium: Memory
+        name: etc-ssl-certs
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+{{- end -}}
