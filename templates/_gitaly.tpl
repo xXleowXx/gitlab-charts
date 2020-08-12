@@ -48,3 +48,12 @@ Call:
 {{- $name := include "gitlab.gitaly.serviceName" .context -}}
 {{ include "gitlab.other.fullname" (dict "context" .context "chartName" "gitaly" ) }}-{{ .index }}.{{ $name }}
 {{- end -}}
+
+{{/*
+Return the appropriate name for a gitaly object. This should just be 'gitaly' for a single instance gitaly install.
+For multiple 'gitaly' installs, we hardcode 'gitaly' in to the names
+*/}}
+{{- define "gitlab.gitaly.objectName" -}}
+{{ ternary "gitaly" (printf "%s%s" "gitaly-" .name) (empty .name) -}}
+{{- end -}}
+

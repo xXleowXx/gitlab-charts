@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ $.Release.Name }}-{{default "gitaly" $instance.name }}
+  name: {{ $.Release.Name }}-{{ template "gitlab.gitaly.objectName" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.immutableLabels" $ | nindent 4 }}
