@@ -49,6 +49,17 @@ data:
     validation:
       disabled: {{ eq true .Values.validation.disabled }}
     {{- include "registry.notifications.config" $ | nindent 4 }}
+    profiling:
+      {{- if .Values.profiling.stackdriver.enabled }}
+      stackdriver:
+        enabled: true
+        service: {{ .Values.profiling.stackdriver.service }}
+        serviceversion: {{ .Values.image.tag }}
+        {{- if .Values.profiling.stackdriver.projectid }}
+        projectid: {{ .Values.profiling.stackdriver.projectid }}
+        {{- end }}
+        keyfile: /etc/docker/registry/profiling-key.json
+      {{- end }}
     storage:
       maintenance:
         readonly:

@@ -167,17 +167,24 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 
 ## Advanced registry configuration
 
-| Parameter                            | Description                                    | Default              |
-|--------------------------------------|------------------------------------------------|----------------------|
-| `registry.authEndpoint`              | Auth endpoint                                  | Undefined by default |
-| `registry.enabled`                   | Enable Docker registry                         | true                 |
-| `registry.httpSecret`                | Https secret                                   |                      |
-| `registry.minio.bucket`              | MinIO registry bucket name                     | `registry`           |
-| `registry.service.annotations`       | Annotations to add to the `Service`            | {}                   |
-| `registry.securityContext.fsGroup`   | Group ID under which the pod should be started | `1000`               |
-| `registry.securityContext.runAsUser` | User ID under which the pod should be started  | `1000`               |
-| `registry.tokenIssuer`               | JWT token issuer                               | `gitlab-issuer`      |
-| `registry.tokenService`              | JWT token service                              | `container_registry` |
+| Parameter                                           | Description                                              | Default                           |
+|-----------------------------------------------------|----------------------------------------------------------|-----------------------------------|
+| `registry.authEndpoint`                             | Auth endpoint                                            | Undefined by default              |
+| `registry.enabled`                                  | Enable Docker registry                                   | true                              |
+| `registry.httpSecret`                               | Https secret                                             |                                   |
+| `registry.minio.bucket`                             | MinIO registry bucket name                               | `registry`                        |
+| `registry.service.annotations`                      | Annotations to add to the `Service`                      | {}                                |
+| `registry.securityContext.fsGroup`                  | Group ID under which the pod should be started           | `1000`                            |
+| `registry.securityContext.runAsUser`                | User ID under which the pod should be started            | `1000`                            |
+| `registry.tokenIssuer`                              | JWT token issuer                                         | `gitlab-issuer`                   |
+| `registry.tokenService`                             | JWT token service                                        | `container_registry`              |
+| `registry.profiling.stackdriver.enabled`            | Enable continuous profiling using stackdriver            | `false`                           |
+| `registry.profiling.stackdriver.credentials.secret` | Name of the secret containing creds                      | `gitlab-registry-profiling-creds` |
+| `registry.profiling.stackdriver.credentials.key`    | Secret key in which the creds are stored                 | `credentials`                     |
+| `registry.profiling.stackdriver.service`            | Name of the stackdriver service to record profiles under | `container-registry`              |
+| `registry.profiling.stackdriver.projectid`          | GCP project to report profiles to                        | GCP project where running         |
+
+The value stored in registry.profiling.stackdriver.credentials.key is a base64-encoded JSON key of the service account credentials to use
 
 ## Advanced MinIO configuration
 

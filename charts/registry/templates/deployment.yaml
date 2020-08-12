@@ -146,6 +146,13 @@ spec:
                   path: storage/{{ .Values.storage.extraKey }}
                 {{- end }}
           {{- end }}
+          {{- if .Values.profiling.stackdriver.enabled }}
+          - secret:
+              name: {{ template "gitlab.registry.profiling.stackdriver.credentials.secret" . }}
+              items:
+                - key: {{ template "gitlab.registry.profiling.stackdriver.credentials.key" . }}
+                  path: profiling-key.json
+          {{- end }}
           {{- include "registry.notifications.secrets" $ | nindent 10 }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end -}}
