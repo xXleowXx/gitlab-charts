@@ -817,7 +817,8 @@ as they are structurally identical aside from the default value of the `bucket` 
 | `bucket`         | String  | Various | Name of the bucket to use from object storage provider. Default will be `git-lfs`, `gitlab-artifacts`, `gitlab-uploads`, or `gitlab-packages`, depending on the service. |
 | `connection`     | String  | `{}`    | [See below](#connection). |
 
-NOTE: **Note:** `enabled` defaults to `true` for LFS, artifacts, uploads, and packages.
+NOTE: **Note:**
+`enabled` defaults to `true` for LFS, artifacts, uploads, and packages.
 
 #### connection
 
