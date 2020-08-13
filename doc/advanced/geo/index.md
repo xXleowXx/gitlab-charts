@@ -281,8 +281,6 @@ this as the Primary instance. We will do this via the `task-runner` Pod.
    GitLab Geo secondary database is correctly configured ... not a secondary node
    Database replication enabled? ... not a secondary node
    Database replication working? ... not a secondary node
-   GitLab Geo tracking database is configured to use Foreign Data Wrapper? ... not a secondary node
-   GitLab Geo tracking database Foreign Data Wrapper schema is up-to-date? ... not a secondary node
    GitLab Geo HTTP(S) connectivity ... not a secondary node
    HTTP/HTTPS repository cloning is enabled ... yes
    Machine clock is synchronized ... Exception: getaddrinfo: Servname not supported for ai_socktype
@@ -346,8 +344,6 @@ geo_postgresql['sql_user_password'] = 'gitlab_geo_user_password_hash'
 # - secondary application deployment
 # - secondary database instance(s)
 geo_postgresql['md5_auth_cidr_addresses'] = ['0.0.0.0/0']
-## Settings so we can automatically configure the FDW
-geo_secondary['db_fdw'] = true
 gitlab_rails['db_password']='gitlab_user_password'
 ```
 
@@ -364,7 +360,7 @@ explicit IP addresses, or address blocks in CIDR notation.
 - `geo_postgresql['md5_auth_cidr_addresses']` should be updated to be a list of
 explicit IP addresses, or address blocks in CIDR notation.
 - `gitlab_user_password` must be updated, and is used here to allow Omnibus GitLab
-to automate the configuration of Foreign Data Wrappers in PostgreSQL.
+to automate the PostgreSQL configuration.
 
 The `md5_auth_cidr_addresses` should be in the form of
 `[ '127.0.0.1/24', '10.41.0.0/16']`. It is important to include `127.0.0.1` in
@@ -435,12 +431,6 @@ Once the configuration above is prepared:
    A failure to connect here indicates that the TLS configuration is incorrect.
    Ensure that the contents of `~gitlab-psql/data/server.crt` on the **primary** node
    match the contents of `~gitlab-psql/.postgresql/root.crt` on the **secondary** node.
-
-1. Reconfigure again, which will configure the Foreign Data Wrapper support.
-
-   ```shell
-   gitlab-ctl reconfigure
-   ```
 
 1. Replicate the databases. Replace `PRIMARY_DATABASE_HOST` with the IP or hostname
 of your Primary database instance.
@@ -600,8 +590,6 @@ configured, via the `task-runner` Pod.
    GitLab Geo secondary database is correctly configured ... yes
    Database replication enabled? ... yes
    Database replication working? ... yes
-   GitLab Geo tracking database is configured to use Foreign Data Wrapper? ... yes
-   GitLab Geo tracking database Foreign Data Wrapper schema is up-to-date? ... yes
    GitLab Geo HTTP(S) connectivity ...
    * Can connect to the primary node ... yes
    HTTP/HTTPS repository cloning is enabled ... yes
