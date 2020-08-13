@@ -174,6 +174,12 @@ certificates will be generated. The `gitlab-runner` chart will accept the self-s
 certificates via `gitlab-runner.certsSecretName`. Assuming your release name is `gitlab`,
 the certificate name will be `gitlab-wildcard-tls-chain`.
 
+The `gitlab-shell` chart can be used with Minikube, but requires mapping to a port other
+than 22 as it used by Minikube already. You can configure `gitlab.gitlab-shell.service.type=NodePort`
+and `gitlab.gitlab-shell.service.nodePort=<high-numbered port>`, which will allow cloning a repository
+via the specified port. To ensure this port is reflected in the clone link in the UI, configure
+`global.shell.port=<high-numbered port>`.
+
 ### Deploying GitLab with recommended settings
 
 When using the recommended 3 CPU and 8 GB of RAM, use
