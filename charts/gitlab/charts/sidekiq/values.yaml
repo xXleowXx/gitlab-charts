@@ -152,6 +152,11 @@ global:
       enabled: false
       bucket:
       connection: {}
+    dependencyProxy:
+      enabled: false
+      proxy_download: true
+      bucket:
+      connection: {}
     ldap:
       servers: {}
       # 'main' is the GitLab 'provider ID' of this LDAP server

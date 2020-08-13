@@ -699,6 +699,10 @@ global:
       enabled: false
       bucket: gitlab-terraform-state
       connection: {}
+    dependencyProxy:
+      enabled: false
+      bucket: gitlab-dependency-proxy
+      connection: {}
     backups:
       bucket: gitlab-backups
     incomingEmail:
@@ -792,7 +796,7 @@ under the `extra` key below `appConfig`:
 | `extra.piwikSiteId`       | String | (empty) | Piwik Site ID. |
 | `extra.piwikUrl`          | String | (empty) | Piwik URL. |
 
-### LFS, Artifacts, Uploads, Packages, and External MR diffs
+### LFS, Artifacts, Uploads, Packages, External MR diffs, and Dependency Proxy
 
 Details on these settings are below. Documentation is not repeated individually,
 as they are structurally identical aside from the default value of the `bucket` property.
@@ -808,10 +812,12 @@ as they are structurally identical aside from the default value of the `bucket` 
 
 | Name             | Type    | Default | Description |
 |:---------------- |:-------:|:------- |:----------- |
-| `enabled`        | Boolean | `true` except for MR diffs  | Enable the use of these features with object storage. |
+| `enabled`        | Boolean | See note below  | Enable the use of these features with object storage. |
 | `proxy_download` | Boolean | `true`  | Enable proxy of all downloads via GitLab, in place of direct downloads from the `bucket`. |
 | `bucket`         | String  | Various | Name of the bucket to use from object storage provider. Default will be `git-lfs`, `gitlab-artifacts`, `gitlab-uploads`, or `gitlab-packages`, depending on the service. |
 | `connection`     | String  | `{}`    | [See below](#connection). |
+
+NOTE: **Note:** `enabled` defaults to `true` for LFS, artifacts, uploads, and packages.
 
 #### connection
 
