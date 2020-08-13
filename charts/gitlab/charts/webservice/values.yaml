@@ -109,6 +109,7 @@ deployment:
 workhorse:
   sentryDSN: ""
   extraArgs: ""
+  logFormat: json # valid: (json, structured, text)
   resources:
     requests:
       cpu: 100m
