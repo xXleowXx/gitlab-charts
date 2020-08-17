@@ -28,7 +28,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 CAUTION: **Caution:**
 JUnit test report artifact (`junit.xml.gz`) migration
-[is not supported](https://gitlab.com/gitlab-org/gitlab/-/issues/27698)
+[was not supported until GitLab 12.8](https://gitlab.com/gitlab-org/gitlab/-/issues/27698#note_317190991)
 by the `gitlab:artifacts:migrate` script below.
 
 1. Migrate existing files (uploads, artifacts, lfs objects) from package based
