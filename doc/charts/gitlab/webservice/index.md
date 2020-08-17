@@ -99,6 +99,7 @@ to the `helm install` command using the `--set` flags.
 | `shutdown.blackoutSeconds`       | `10`                  | Number of seconds to keep Webservice running after receiving shutdown |
 | `tolerations`                    | `[]`                  | Toleration labels for pod assignment           |
 | `trusted_proxies`                | `[]`                  | See [GitLab documentation](https://docs.gitlab.com/ee/install/installation.html#adding-your-trusted-proxies) for details |
+| `workhorse.logFormat`            | `json`                | Logging format. Valid formats: `json`, `structured`, `text` |
 | `workerProcesses`                | `2`                   | Webservice number of workers                      |
 | `workhorse.livenessProbe.initialDelaySeconds`  | 20      | Delay before liveness probe is initiated       |
 | `workhorse.livenessProbe.periodSeconds`        | 60      | How often to perform the liveness probe        |
