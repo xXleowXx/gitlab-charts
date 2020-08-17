@@ -55,7 +55,7 @@ psql: {}
 
 # https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html#sidekiq-memorykiller
 memoryKiller:
-  daemonMode: false
+  daemonMode: true
   maxRss: 2000000
   graceTime: 900
   shutdownWait: 30
