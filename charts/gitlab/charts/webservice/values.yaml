@@ -39,6 +39,9 @@ podLabels: {}
 metrics:
   enabled: true
   annotations:
+    gitlab.com/prometheus_scrape: "true"
+    gitlab.com/prometheus_port: "8080"
+    gitlab.com/prometheus_path: "/-/metrics"
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
     prometheus.io/path: "/-/metrics"
