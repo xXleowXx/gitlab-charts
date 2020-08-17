@@ -25,10 +25,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
               serviceName: {{ template "fullname" . }}
               servicePort: {{ .Values.service.workhorseExternalPort }}
           - path: /admin/sidekiq
+            pathType: Prefix
             backend:
               serviceName: {{ template "fullname" . }}
               servicePort: {{ .Values.service.externalPort }}
