@@ -180,6 +180,10 @@ and `gitlab.gitlab-shell.service.nodePort=<high-numbered port>`, which will allo
 via the specified port. To ensure this port is reflected in the clone link in the UI, configure
 `global.shell.port=<high-numbered port>`.
 
+In the following sections, we'll show how to install these charts from your local Git clone.
+Be sure that you have checked out the desired branch or tag, and are at the base folder of
+that checkout.
+
 ### Deploying GitLab with recommended settings
 
 When using the recommended 3 CPU and 8 GB of RAM, use
