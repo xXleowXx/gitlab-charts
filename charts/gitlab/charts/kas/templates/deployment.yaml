@@ -28,6 +28,7 @@ spec:
       containers:
         - name: {{ template "name" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
           args:
             - "--gitlab-address=http://$(GITLAB_WEBSERVICE_SERVICE_HOST):$(GITLAB_WEBSERVICE_SERVICE_PORT_HTTP_WORKHORSE)"
             - "--listen-address=:{{ .Values.service.internalPort }}"
