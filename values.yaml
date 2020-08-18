@@ -378,6 +378,12 @@ global:
         # clientCertificate:
         # serverCA:
 
+  ## doc/installation/secrets.md#gitlab-kas-secret
+  kas:
+    enabled: false
+    # secret:
+    # key:
+
   ## doc/charts/globals.md#configure-gitlab-shell-settings
   shell:
     authToken: {}

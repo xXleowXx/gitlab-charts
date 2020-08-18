@@ -36,4 +36,18 @@ spec:
           ports:
             - containerPort: {{ .Values.service.internalPort }}
               name: {{ template "name" . }}
+          volumeMounts:
+            - name: init-kas-secrets
+              mountPath: /etc/kas
+              readOnly: true
+      volumes:
+        - name: init-kas-secrets
+          projected:
+            defaultMode: 0440
+            sources:
+              - secret:
+                  name: {{ template "gitlab.kas.secret" . }}
+                  items:
+                    - key: {{ template "gitlab.kas.key" . }}
+                      path: .gitlab_kas_secret
 {{- end }}
