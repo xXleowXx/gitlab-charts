@@ -53,7 +53,7 @@ controlled by `global.shell.port`.
 | `image.pullPolicy`       | `Always`       | Shell image pull policy                  |
 | `image.pullSecrets`      |                | Secrets for the image repository         |
 | `image.repository`       | `registry.com/gitlab-org/build/cng/gitlab-shell` | Shell image repository |
-| `image.tag`              | `latest`       | Shell image tag                          |
+| `image.tag`              | `master`       | Shell image tag                          |
 | `init.image.repository`  |                | initContainer image                      |
 | `init.image.tag`         |                | initContainer image tag                  |
 | `replicaCount`           | `1`            | Shell replicas                           |
