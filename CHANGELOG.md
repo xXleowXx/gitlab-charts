@@ -80,6 +80,13 @@ entry.
 - Update GitLab Version to 13.2.0.
 
 
+## 4.1.9 (2020-08-18)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.8.
+
+
 ## 4.1.7 (2020-08-05)
 
 ### Other (1 change)
