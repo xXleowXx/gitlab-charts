@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.0.12 (2020-08-18)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.0.14.
+
+
 ## 4.0.11 (2020-08-18)
 
 ### Other (1 change)
