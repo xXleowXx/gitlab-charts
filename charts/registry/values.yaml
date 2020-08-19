@@ -245,5 +245,4 @@ securityContext:
 profiling:
   stackdriver:
     enabled: false
-    service: container-registry
     credentials: {}
