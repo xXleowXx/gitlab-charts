@@ -184,8 +184,6 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `registry.profiling.stackdriver.service`            | Name of the stackdriver service to record profiles under | `container-registry`              |
 | `registry.profiling.stackdriver.projectid`          | GCP project to report profiles to                        | GCP project where running         |
 
-The value stored in registry.profiling.stackdriver.credentials.key is a base64-encoded JSON key of the service account credentials to use
-
 ## Advanced MinIO configuration
 
 | Parameter                            | Description                             | Default                        |

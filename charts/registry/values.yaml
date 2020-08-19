@@ -149,7 +149,7 @@ init:
     cat /config/certificate.crt > /registry/certificate.crt
     # Copy the optional profiling keyfile to the expected location
     if [ -f /config/profiling-key.json ]; then
-      cat /config/profiling-key.json > /registry/profiling-key.json
+      cp /config/profiling-key.json /registry/profiling-key.json
     fi
 
 # define some sane resource requests and limitations
