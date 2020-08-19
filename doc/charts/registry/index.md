@@ -524,6 +524,7 @@ The `profiling` property is optional and enables [continuous profiling](https://
 ```yaml
 profiling:
   stackdriver:
+    enabled: true
     credentials:
       secret: gitlab-registry-profiling-creds
       key: credentials
