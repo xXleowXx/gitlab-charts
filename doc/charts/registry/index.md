@@ -44,7 +44,7 @@ This chart makes use of two required secrets and one optional:
 
 - `profiling.stackdriver.secret`: If stackdriver profiling is enabled and
   you need to provide service account credentials, then the value in this secret
-  (in the `credentials` key by default) is a base64 encoded GCP service account
+  (in the `credentials` key by default) is base64 encoded GCP service account
   credentials (which are themselves originally JSON)
 
 ## Configuration
