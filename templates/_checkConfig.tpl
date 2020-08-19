@@ -336,7 +336,7 @@ Ensure Registry notifications settings are in global scope
 Registry: Notifications should be defined in the global scope. Use `global.registry.notifications` setting instead of `registry.notifications`.
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.registryl.notifications */}}
+{{/* END gitlab.checkConfig.registry.notifications */}}
 
 {{/*
 Ensure Puma is used when the dependency proxy is enabled

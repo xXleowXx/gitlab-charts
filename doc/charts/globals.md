@@ -669,6 +669,10 @@ global:
       googleAnalyticsId:
       piwikUrl:
       piwikSiteId:
+    object_store:
+      enabled: true
+      proxy_download: true
+      connection: {}
     lfs:
       enabled: true
       proxy_download: true
@@ -795,6 +799,40 @@ under the `extra` key below `appConfig`:
 | `extra.googleAnalyticsId` | String | (empty) | Tracking ID for Google Analytics. |
 | `extra.piwikSiteId`       | String | (empty) | Piwik Site ID. |
 | `extra.piwikUrl`          | String | (empty) | Piwik URL. |
+
+### Consolidated object storage
+
+In addition to the following section that describes how to configured individual settings
+for object storage, we've added a consolidated object storage configuration to ease the use
+of shared configuration for these items. Making use of `object_store`, you can configure a
+`connection` once, and it will be used for any and all object storage backed features that
+are not individually configured with a `connection` property.
+
+```yaml
+  enabled: true
+  proxy_download: true
+  connection:
+    secret:
+    key:
+```
+
+| Name             | Type    | Default | Description |
+|:---------------- |:-------:|:------- |:----------- |
+| `enabled`        | Boolean | `true`  | Enable the use of consolidated object storage. |
+| `proxy_download` | Boolean | `true`  | Enable proxy of all downloads via GitLab, in place of direct downloads from the `bucket`. |
+| `connection`     | String  | `{}`    | [See below](#connection). |
+
+The property structure is shared, and all properties here can be overriden by the individual
+items below. The `connection` property structure is identical.
+
+**Notice:** The `bucket` and `enabled` properties are the only properties that must be
+configured on a per-item level (`global.appConfig.artifacts.bucket`, ...) if you wish to
+deviate from the default values.
+
+When using the `AWS` provider for the [connection](#connection) (which is any
+S3 compatible provider such as the included MinIO), GitLab Workhorse can offload
+all storage related uploads. This will automatically be enabled for you, when
+using this consolidated configuration.
 
 ### LFS, Artifacts, Uploads, Packages, External MR diffs, and Dependency Proxy
 
