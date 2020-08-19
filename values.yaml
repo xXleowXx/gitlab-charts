@@ -218,6 +218,12 @@ global:
       piwikSiteId:
 
     ## doc/charts/globals.md#lfs-artifacts-uploads-packages-external-mr-diffs
+    object_store:
+      enabled: true
+      proxy_download: true
+      connection: {}
+        # secret:
+        # key:
     lfs:
       enabled: true
       proxy_download: true

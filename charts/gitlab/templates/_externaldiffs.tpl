@@ -12,5 +12,7 @@ Usage:
 external_diffs:
   enabled: {{ if kindIs "bool" .config.enabled }}{{ eq .config.enabled true }}{{ end }}
   when: {{ .config.when }}
-  {{- include "gitlab.appConfig.objectStorage.configuration" (dict "name" "external_diffs" "config" .config "context" .context) | nindent 2 }}
+  {{- if .config.connection }}
+  {{-   include "gitlab.appConfig.objectStorage.configuration" (dict "name" "external_diffs" "config" .config "context" .context) | nindent 2 }}
+  {{- end -}}
 {{- end -}}{{/* "gitlab.appConfig.external_diffs.configuration" */}}

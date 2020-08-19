@@ -190,6 +190,13 @@ global:
     serviceDeskEmail:
       enabled: false
       address:
+    object_store:
+      connection: {}
+        # provider: AWS
+        # region: us-east-1
+        # secret:
+        # secret_key:
+        # access_key:
     lfs:
       enabled: true
       proxy_download: true

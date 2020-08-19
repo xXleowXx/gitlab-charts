@@ -11,5 +11,7 @@ Usage:
 {{- define "gitlab.appConfig.terraformState.configuration" -}}
 terraform_state:
   enabled: {{ if kindIs "bool" .config.enabled }}{{ eq .config.enabled true }}{{ end }}
-  {{- include "gitlab.appConfig.objectStorage.configuration" (dict "name" "terraform_state" "config" .config "context" .context) | nindent 2 }}
+  {{- if .config.connection }}
+  {{-   include "gitlab.appConfig.objectStorage.configuration" (dict "name" "terraform_state" "config" .config "context" .context) | nindent 2 }}
+  {{- end -}}
 {{- end -}}{{/* "gitlab.appConfig.terraformState.configuration" */}}
