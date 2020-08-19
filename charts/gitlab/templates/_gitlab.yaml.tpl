@@ -23,6 +23,11 @@ service_desk_email:
   address: {{ .serviceDeskEmail.address | quote }}
 {{- end -}}
 
+{{- define "gitlab.appConfig.kas" -}}
+gitlab_kas:
+  secret_file: /etc/gitlab/kas/.gitlab_kas_secret
+{{- end -}}
+
 {{- define "gitlab.appConfig.shell" -}}
 gitlab_shell:
   path: /home/git/gitlab-shell/
