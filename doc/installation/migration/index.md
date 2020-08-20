@@ -74,30 +74,10 @@ by the `gitlab:artifacts:migrate` script below.
       avatars are rendered fine, image and other files added to issues load
       correctly, etc.
 
-   1. Move the uploaded files from their current location so that
-      they won't end up in the tarball. The default locations are:
-
-      - uploads: `/var/opt/gitlab/gitlab-rails/uploads/`
-      - lfs: `/var/opt/gitlab/gitlab-rails/shared/lfs-objects`
-      - artifacts: `/var/opt/gitlab/gitlab-rails/shared/artifacts`
-
-      ```shell
-      sudo mv /var/opt/gitlab/gitlab-rails/uploads{,.bak}
-      sudo mv /var/opt/gitlab/gitlab-rails/shared/lfs-objects{,.bak}
-      sudo mv /var/opt/gitlab/gitlab-rails/shared/artifacts{,.bak}
-      ```
-
-   1. Run reconfigure to recreate empty directories in place, so backup task
-      won't fail.
-
-      ```shell
-      sudo gitlab-ctl reconfigure
-      ```
-
-1. [Create backup tarball](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system)
+1. [Create backup tarball](https://docs.gitlab.com/ee/raketasks/backup_restore.html#creating-a-backup-of-the-gitlab-system) and exclude already migrated uploads:
 
    ```shell
-   sudo gitlab-rake gitlab:backup:create
+   sudo gitlab-rake gitlab:backup:create SKIP=artifacts,lfs,uploads
    ```
 
    The backup file will be stored in `/var/opt/gitlab/backups` directory, unless
