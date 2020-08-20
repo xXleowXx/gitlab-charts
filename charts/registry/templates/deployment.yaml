@@ -148,7 +148,7 @@ spec:
           {{- end }}
           {{- if .Values.profiling.stackdriver.enabled }}
           - secret:
-              name: {{ template "gitlab.registry.profiling.stackdriver.credentials.secret" . }}
+              name: {{ required "A value is required for (registry).profiling.stackdriver.credentials.secret" .Values.profiling.stackdriver.credentials.secret }}
               items:
                 - key: {{ template "gitlab.registry.profiling.stackdriver.credentials.key" . }}
                   path: profiling-key.json
