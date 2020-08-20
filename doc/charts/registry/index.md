@@ -44,7 +44,9 @@ This chart makes use of two required secrets and one optional:
 
 - `profiling.stackdriver.secret`: If stackdriver profiling is enabled and
   you need to provide service account credentials, then the value in this secret
-  (in the `credentials` key by default) is the GCP service account JSON credentials
+  (in the `credentials` key by default) is the GCP service account JSON credentials.
+  The service account requires the role `roles/cloudprofiler.agent` or equivalent
+  manual permissions to those noted at https://cloud.google.com/profiler/docs/iam#roles
 
 ## Configuration
 
