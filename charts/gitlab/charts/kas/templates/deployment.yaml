@@ -33,6 +33,7 @@ spec:
             - "--gitlab-address=http://$(GITLAB_WEBSERVICE_SERVICE_HOST):$(GITLAB_WEBSERVICE_SERVICE_PORT_HTTP_WORKHORSE)"
             - "--listen-address=:{{ .Values.service.internalPort }}"
             - "--listen-websocket=true"
+            - "--authentication-secret-file=/etc/kas/.gitlab_kas_secret"
           ports:
             - containerPort: {{ .Values.service.internalPort }}
               name: {{ template "name" . }}
