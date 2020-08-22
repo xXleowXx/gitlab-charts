@@ -2,6 +2,36 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.3.0 (2020-08-22)
+
+### Removed (1 change)
+
+- Geo - Remove FDW related config. !1496
+
+### Fixed (1 change)
+
+- Fix misaligned indent for rack_attack.
+
+### Changed (4 changes)
+
+- Changed Prometheus to use GitLab specific annotations. !1439
+- Update GitLab Operator to v0.10. !1478
+- Bump Container Registry to v2.10.1-gitlab. !1483
+- Flips daemonMode option for Memory Killer. !1490
+
+### Added (5 changes, 1 of them is from the community)
+
+- Provide possibility of passing the postgresql password via a file instead of secret. !1422 (Tiago Posse <tiagoposse@gmail.com>)
+- Add support for DependencyProxy. !1464
+- Support consolidated object storage configuration. !1479
+- Adds NetworkPolicy object for the Webservice. !1491
+- Workhorse: support configuring logFormat, default JSON. !1497
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.0.
+
+
 ## 4.2.6 (2020-08-18)
 
 ### Other (1 change)
