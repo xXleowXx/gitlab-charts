@@ -68,8 +68,10 @@ generate_secret_if_needed {{ template "gitlab.minio.credentials.secret" . }} --f
 # Gitlab runner secret
 generate_secret_if_needed {{ template "gitlab.gitlab-runner.registrationToken.secret" . }} --from-literal=runner-registration-token=$(gen_random 'a-zA-Z0-9' 64) --from-literal=runner-token=""
 
+{{ if .Values.global.kas.enabled -}}
 # Gitlab-kas secret
 generate_secret_if_needed {{ template "gitlab.kas.secret" . }} --from-literal={{ template "gitlab.kas.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
+{{ end }}
 
 # Registry certificates
 mkdir -p certs

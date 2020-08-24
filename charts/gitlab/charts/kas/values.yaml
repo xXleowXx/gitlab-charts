@@ -3,8 +3,9 @@
 # Declare variables to be passed into your templates.
 
 annotations: {}
-enabled: false
-global: {}
+global:
+  kas:
+    enabled: false
 hpa:
   targetAverageValue: 100m
 image:

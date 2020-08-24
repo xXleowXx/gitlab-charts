@@ -1,4 +1,4 @@
-{{- if .Values.enabled -}}
+{{- if .Values.global.kas.enabled -}}
 {{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
 {{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
 {{- $tlsSecret := include "webservice.tlsSecret" . -}}
