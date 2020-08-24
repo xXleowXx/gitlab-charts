@@ -161,15 +161,13 @@ function wait_for_deploy {
     iteration=$((iteration+1))
     sleep 5;
 
+    # LOG PROBLEMATIC PODS EVERY 20 ITERATIONS
     if [[ $(($iteration % 20)) == 0 ]]; then
       echo "################ grepping pods ###################"
       kubectl get pods -n "$KUBE_NAMESPACE"
       echo "################ grepping pods INIT state ###################"
       kubectl get pods -n "$KUBE_NAMESPACE" | \
       grep CrashLoopBackOff || true
-      echo "################ grepping pods CrashLoopBackOff state first column ###################"
-      kubectl get pods -n "$KUBE_NAMESPACE" | \
-      grep CrashLoopBackOff || true | awk '{print $1}'
       echo "-------------- LOGGING CONTAINER PODS dependencies WITH CrashLoopBackOff PROBLEMS ----------"
       kubectl get pods -n "$KUBE_NAMESPACE" | \
       grep CrashLoopBackOff | awk '{print $1}' | \
@@ -180,6 +178,11 @@ function wait_for_deploy {
       grep CrashLoopBackOff | awk '{print $1}' | \
       xargs -I {} kubectl -n "$KUBE_NAMESPACE" logs {} configure || true
       echo "-------------- LOGGING CONTAINER configure PODS WITH CrashLoopBackOff PROBLEMS ----------"
+      echo "-------------- LOGGING CONTAINER PODS SIDEKIQ WITH CrashLoopBackOff PROBLEMS ----------"
+      kubectl get pods -n "$KUBE_NAMESPACE" | \
+      grep CrashLoopBackOff | awk '{print $1}' | \
+      xargs -I {} kubectl -n "$KUBE_NAMESPACE" logs {} sidekiq || true
+      echo "-------------- LOGGING CONTAINER SIDEKIQ PODS WITH CrashLoopBackOff PROBLEMS ----------"
     fi
 
   done
