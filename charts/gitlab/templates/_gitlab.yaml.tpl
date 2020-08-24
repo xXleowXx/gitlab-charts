@@ -25,7 +25,9 @@ service_desk_email:
 
 {{- define "gitlab.appConfig.kas" -}}
 gitlab_kas:
+  {{- if .Values.global.kas.enabled }}
   secret_file: /etc/gitlab/kas/.gitlab_kas_secret
+  {{- end -}}
 {{- end -}}
 
 {{- define "gitlab.appConfig.shell" -}}
