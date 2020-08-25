@@ -10,13 +10,6 @@ repositories:
     {{- include "gitlab.gitaly.storages" . | nindent 4 }}
 {{- end -}}
 
-
-{{- define "gitlab.appConfig.incoming_email" -}}
-incoming_email:
-  enabled: {{ eq .incomingEmail.enabled true }}
-  address: {{ .incomingEmail.address | quote }}
-{{- end -}}
-
 {{- define "gitlab.appConfig.service_desk_email" -}}
 service_desk_email:
   enabled: {{ eq .serviceDeskEmail.enabled true }}
