@@ -4,7 +4,6 @@ metadata:
   labels:
     app: gitaly
   name: gitlab-gitaly-gitconfig
-  namespace: default
 data:
   gitconfig: |
     [core]
