@@ -18,6 +18,11 @@ describe 'gitlab.yml.erb configuration' do
         'data',
         'gitlab.yml.erb'
       )).not_to include('incoming_email')
+      expect(t.dig(
+        'ConfigMap/test-webservice',
+        'data',
+        'gitlab.yml.erb'
+      )).not_to include('incoming_email')
     end
   end
 
@@ -54,6 +59,11 @@ describe 'gitlab.yml.erb configuration' do
       t = HelmTemplate.new(required_values)
       expect(t.dig(
         'ConfigMap/test-sidekiq',
+        'data',
+        'gitlab.yml.erb'
+      )).to include('incoming_email')
+      expect(t.dig(
+        'ConfigMap/test-webservice',
         'data',
         'gitlab.yml.erb'
       )).to include('incoming_email')
