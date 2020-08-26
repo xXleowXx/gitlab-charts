@@ -28,10 +28,10 @@ spec:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         {{- if .Values.debug.prometheus.enabled }}
         gitlab.com/prometheus_scrape: "true"
-        gitlab.com/prometheus_path: {{ .Values.debug.prometheus.path }}
+        gitlab.com/prometheus_path: {{ .Values.debug.prometheus.path | quote }}
         gitlab.com/prometheus_port: {{ .Values.debug.addr.port | quote }}
         prometheus.io/scrape: "true"
-        prometheus.io/path: {{ .Values.debug.prometheus.path }}
+        prometheus.io/path: {{ .Values.debug.prometheus.path | quote }}
         prometheus.io/port: {{ .Values.debug.addr.port | quote }}
         {{- end }}
       {{- range $key, $value := .Values.annotations }}
