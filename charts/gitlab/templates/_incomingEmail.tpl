@@ -12,8 +12,7 @@ incoming_email:
   mailbox: {{ .mailbox }}
   idle_timeout: {{ .idleTimeout }}
   {{- if ne .logger.logPath "" }}
-  logger:
-    log_path: "{{ .logger.logPath }}"
+  log_path: "{{ .logger.logPath }}"
   {{- end }}
   expunge_deleted: {{ .expungeDeleted }}
   {{- end }}
