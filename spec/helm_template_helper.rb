@@ -53,6 +53,11 @@ class HelmTemplate
     @mapped.dig(item,'spec','template','spec','volumes')
   end
 
+  def find_secret(item, volume_name, secret_name)
+    volume = projected_volume_sources(item, volume_name)
+    volume.select { |i| i['secret']['name'] == secret_name }
+  end
+
   def find_volume(item, volume_name)
     volumes = volumes(item)
     volumes.keep_if { |volume| volume['name'] == volume_name }

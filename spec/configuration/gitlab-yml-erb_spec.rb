@@ -4,6 +4,7 @@ require 'yaml'
 require 'hash_deep_merge'
 
 describe 'gitlab.yml.erb configuration' do
+  secret_name = 'incomingEmail-v1'
   let(:default_values) do
     {
       'certmanager-issuer' => { 'email' => 'test@example.com' }
@@ -18,11 +19,23 @@ describe 'gitlab.yml.erb configuration' do
         'data',
         'gitlab.yml.erb'
       )).not_to include('incoming_email')
+      sidekiq_incoming_mail_secret = t.find_secret(
+        'Deployment/test-sidekiq-all-in-1-v1',
+        'init-sidekiq-secrets',
+        secret_name
+      )
+      expect(sidekiq_incoming_mail_secret).to be_empty
       expect(t.dig(
         'ConfigMap/test-webservice',
         'data',
         'gitlab.yml.erb'
       )).not_to include('incoming_email')
+      webservice_incoming_mail_secret = t.find_secret(
+        'Deployment/test-webservice',
+        'init-webservice-secrets',
+        secret_name
+      )
+      expect(webservice_incoming_mail_secret).to be_empty
     end
   end
 
@@ -34,7 +47,7 @@ describe 'gitlab.yml.erb configuration' do
             'incomingEmail' => {
               'enabled' => true,
               'password' => {
-                'secret' => 'incomingEmail-v1',
+                'secret' => secret_name,
                 'key' => 'password'
               },
             }
@@ -62,11 +75,23 @@ describe 'gitlab.yml.erb configuration' do
         'data',
         'gitlab.yml.erb'
       )).to include('incoming_email')
+      sidekiq_incoming_mail_secret = t.find_secret(
+        'Deployment/test-sidekiq-all-in-1-v1',
+        'init-sidekiq-secrets',
+        secret_name
+      )
+      expect(sidekiq_incoming_mail_secret).not_to be_empty
       expect(t.dig(
         'ConfigMap/test-webservice',
         'data',
         'gitlab.yml.erb'
       )).to include('incoming_email')
+      webservice_incoming_mail_secret = t.find_secret(
+        'Deployment/test-webservice',
+        'init-webservice-secrets',
+        secret_name
+      )
+      expect(webservice_incoming_mail_secret).not_to be_empty
     end
 
     it 'fails when we are missing a required value' do
