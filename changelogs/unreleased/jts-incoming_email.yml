@@ -1,0 +1,5 @@
+---
+title: adds incomingEmail configuration to the gitlab.yml
+merge_request: 1519
+author:
+type: other
