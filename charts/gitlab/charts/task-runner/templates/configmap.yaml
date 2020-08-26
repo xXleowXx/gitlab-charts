@@ -127,7 +127,7 @@ data:
     server_side_encryption = False
     signature_v2 = True
     socket_timeout = 300
-    use_mime_magic = True
+    use_mime_magic = False
     verbosity = WARNING
     website_endpoint = {{ template "gitlab.minio.url" . }}
     EOF
