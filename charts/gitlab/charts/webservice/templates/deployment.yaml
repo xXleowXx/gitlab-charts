@@ -127,8 +127,8 @@ spec:
               value: "1"
             {{- end }}
             {{- if .Values.workhorse.monitoring.exporter.enabled }}
-            - name: WORKHORSE_PROM_LISTEN_ADDR
-              value: "-prometheusListenAddr 0.0.0.0:{{ .Values.workhorse.monitoring.exporter.port }}
+            - name: GITLAB_WORKHORSE_PROM_LISTEN_ADDR
+              value: "0.0.0.0:{{ .Values.workhorse.monitoring.exporter.port }}"
             {{- end }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
           volumeMounts:
