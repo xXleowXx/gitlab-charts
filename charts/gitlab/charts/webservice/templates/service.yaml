@@ -27,7 +27,7 @@ spec:
     {{- end }}
     {{- if eq .Values.workhorse.monitoring.exporter.enabled true }}
     - port: {{ .Values.workhorse.monitoring.exporter.port }}
-      targetPort: {{ .Values.monitoring.exporter.port }}
+      targetPort: {{ .Values.workhorse.monitoring.exporter.port }}
       protocol: TCP
       name: http-workhorse-exporter
     {{- end }}
