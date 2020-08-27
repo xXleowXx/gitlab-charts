@@ -9,5 +9,5 @@ Return the registry's profiling credentials secret key
 Construct a default registry profiling service name, if not supplied
 */}}
 {{- define "gitlab.registry.profiling.stackdriver.service" -}}
-{{- default (printf "%s-container-registry" .Release.Name) .Values.profiling.stackdriver.service | quote -}}
+{{- default (include "fullname" .) .Values.profiling.stackdriver.service | quote -}}
 {{- end -}}

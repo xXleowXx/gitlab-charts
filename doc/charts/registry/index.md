@@ -529,7 +529,7 @@ profiling:
     credentials:
       secret: gitlab-registry-profiling-creds
       key: credentials
-    service: container-registry
+    service: gitlab-registry
 ```
 
 ## Garbage Collection
