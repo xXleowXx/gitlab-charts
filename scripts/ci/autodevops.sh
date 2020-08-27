@@ -179,11 +179,11 @@ function disable_sign_ups() {
   local task_runner_pod=$(kubectl -n ${KUBE_NAMESPACE} get pods --field-selector=status.phase=Running -lapp=task-runner,release=${CI_ENVIRONMENT_SLUG} --no-headers -o=custom-columns=NAME:.metadata.name | tail -n 1)
 
   # Create the root token
-  local ruby_cmd="token = User.find_by_username('root').personal_access_tokens.create(scopes: [:api], name: 'Token to disable sign-ups'); token.set_token('${ROOT_TOKEN}'); begin; token.save!; rescue(ActiveRecord::RecordNotUnique); end"
+  local ruby_cmd="token = User.find_by_username('root').personal_access_tokens.create(scopes: [:api], name: 'Token to disable sign-ups'); token.set_token('${REVIEW_APPS_ROOT_TOKEN}'); begin; token.save!; rescue(ActiveRecord::RecordNotUnique); end"
   kubectl -n ${KUBE_NAMESPACE} exec -it  "${task_runner_pod}" -- gitlab-rails runner "${ruby_cmd}"
 
   # Disable sign-ups
-  curl --silent --show-error --request PUT --header "PRIVATE-TOKEN: ${ROOT_TOKEN}" "${CI_ENVIRONMENT_URL}/api/v4/application/settings?signup_enabled=false"
+  curl --silent --show-error --request PUT --header "PRIVATE-TOKEN: ${REVIEW_APPS_ROOT_TOKEN}" "${CI_ENVIRONMENT_URL}/api/v4/application/settings?signup_enabled=false"
 }
 
 
