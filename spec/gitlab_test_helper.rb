@@ -82,7 +82,7 @@ module Gitlab
     end
 
     def restore_from_backup
-      backup = ENV['BACKUP_TIMESTAMP'] || '0_13.0.13'
+      backup = ENV['BACKUP_TIMESTAMP'] || '0_13.0.14'
       cmd = full_command("backup-utility --restore -t #{backup}")
       stdout, status = Open3.capture2e(cmd)
 
