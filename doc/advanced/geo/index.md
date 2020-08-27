@@ -136,6 +136,8 @@ this example configuration.
 ### Geo Primary
 external_url 'http://gitlab-primary.example.com'
 roles ['geo_primary_role']
+# The unique identifier for the Geo node.
+gitlab_rails['geo_node_name'] = 'gitlab-primary.example.com'
 gitlab_rails['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
@@ -162,6 +164,7 @@ We need to replace several items:
 
 - `external_url` must be updated to reflect the host name of our Primary
 instance.
+- `gitlab_rails['geo_node_name']` must be replaced with a unique name for your node.
 - `gitlab_user_password_hash` must be replaced with the hashed form of the
 `gitlab` password.
 - `postgresql['md5_auth_cidr_addresses']` can be update to be a list of
@@ -207,6 +210,7 @@ global:
       key: postgresql-password
   # configure geo (primary)
   geo:
+    nodeName: primary.example.com
     enabled: true
     role: primary
 # External DB, disable
@@ -316,6 +320,8 @@ this example configuration.
 ### Geo Secondary
 external_url 'http://gitlab-secondary.example.com'
 roles ['geo_secondary_role']
+# The unique identifier for the Geo node.
+gitlab_rails['geo_node_name'] = 'gitlab-secondary.example.com'
 gitlab_rails['auto_migrate'] = false
 geo_secondary['auto_migrate'] = false
 ## turn off everything but the DB
@@ -351,6 +357,7 @@ We need to replace several items:
 
 - `external_url` must be updated to reflect the host name of our Secondary
 instance.
+- `gitlab_rails['geo_node_name']` must be replaced with a unique name for your node.
 - `gitlab_user_password_hash` must be replaced with the hashed form of the
 `gitlab` password.
 - `postgresql['md5_auth_cidr_addresses']` should be updated to be a list of
@@ -504,6 +511,7 @@ global:
   geo:
     enabled: true
     role: secondary
+    nodeName: secondary.example.com
     psql:
       host: geo-2.db.example.com
       port: 5431
@@ -545,8 +553,9 @@ the Primary that the Secondary exists:
 1. Visit the **primary** instance's **Admin Area > Geo**
    (`/admin/geo/nodes`) in your browser.
 1. Click the **New node** button.
-1. Add the **secondary** instance. Use the full URL for the name and URL.
+1. Add the **secondary** instance. Use the full URL for the URL.
    **Do NOT** check the **This is a primary node** checkbox.
+1. Fill in Name with the `global.geo.nodeName`. These values must always match exactly, character for character.
 1. Optionally, choose which groups or storage shards should be replicated by the
    **secondary** instance. Leave blank to replicate all.
 1. Click the **Add node** button.
