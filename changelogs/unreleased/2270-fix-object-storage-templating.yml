@@ -1,0 +1,5 @@
+---
+title: Only create object_storage 'connection' block if feature enabled
+merge_request: 1517
+author:
+type: fixed
