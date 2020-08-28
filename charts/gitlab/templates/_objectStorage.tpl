@@ -18,7 +18,7 @@ object_store:
   direct_upload: true
   background_upload: false
   proxy_download: {{ or (not (kindIs "bool" .config.proxy_download)) .config.proxy_download }}
-  {{- if .config.connection }}
+  {{- if and .config.enabled .config.connection }}
   connection: <%= YAML.load_file("/etc/gitlab/objectstorage/{{ .name }}").to_json() %>
   {{- else if .context.Values.global.minio.enabled }}
   {{-   include "gitlab.appConfig.objectStorage.connection.minio" . | nindent 2 }}
