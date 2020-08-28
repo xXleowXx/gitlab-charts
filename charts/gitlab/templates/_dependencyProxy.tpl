@@ -12,6 +12,6 @@ Usage:
 dependency_proxy:
   enabled: {{ if kindIs "bool" .config.enabled }}{{ eq .config.enabled true }}{{ end }}
   {{- if .config.connection }}
-  {{- include "gitlab.appConfig.objectStorage.configuration" (dict "name" "dependencyProxy" "config" .config "context" .context) | nindent 2 }}
+  {{- include "gitlab.appConfig.objectStorage.configuration" (dict "name" "dependency_proxy" "config" .config "context" .context) | nindent 2 }}
   {{- end }}
 {{- end -}}{{/* "gitlab.appConfig.dependencyProxy.configuration" */}}
