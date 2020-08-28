@@ -47,7 +47,7 @@ to the `helm install` command using the `--set` flags.
 | `enabled`                        | `true`                | Webservice enabled flag                           |
 | `extraContainers`                |                       | List of extra containers to include            |
 | `extraInitContainers`            |                       | List of extra init containers to include       |
-| `extras.google_analytics_id`     | `nil`                 | Google Analytics Id for frontend               |
+| `extras.google_analytics_id`     | `nil`                 | Google Analytics ID for frontend               |
 | `extraVolumeMounts`              |                       | List of extra volumes mountes to do            |
 | `extraVolumes`                   |                       | List of extra volumes to create                |
 | `extraEnv`                       |                       | List of extra environment variables to expose  |
