@@ -19,8 +19,8 @@ incoming_email:
 {{- end -}}{{/* "gitlab.appConfig.incoming_email" */}}
 
 {{- define "gitlab.appConfig.incoming_email.mountSecrets" -}}
-# mount secrets for incoming_email
 {{- if $.Values.global.appConfig.incomingEmail.enabled }}
+# mount secrets for incoming_email
 - secret:
     name: {{ $.Values.global.appConfig.incomingEmail.password.secret | required "Missing required secret containing the IMAP password for incoming email. Make sure to set `global.appConfig.incomingEmail.password.secret`" }}
     items:
