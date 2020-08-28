@@ -2,6 +2,18 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.3.2 (2020-08-28)
+
+### Fixed (2 changes, 2 of them are from the community)
+
+- Add missing bucket variables. !1515 (Chris Boot)
+- Add object_store secret to backup CronJob. !1516 (Chris Boot)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.2.
+
+
 ## 4.3.1 (2020-08-25)
 
 ### Changed (1 change)
