@@ -196,6 +196,8 @@ spec:
             {{- include "gitlab.tracing.env" . | nindent 12 }}
             - name: GITLAB_TRACING_URL
               value: {{ .Values.global.tracing.urlTemplate | quote }}
+            - name: WORKHORSE_ARCHIVE_CACHE_DISABLED
+              value: "true"
             {{- include "gitlab.extraEnv" . | nindent 12 }}
           volumeMounts:
 {{- if .Values.metrics.enabled }}
@@ -218,9 +220,6 @@ spec:
               subPath: installation_type
             - name: shared-upload-directory
               mountPath: /srv/gitlab/public/uploads/tmp
-              readOnly: false
-            - name: shared-artifact-directory
-              mountPath: /srv/gitlab/shared
               readOnly: false
             - name: shared-tmp
               mountPath: '/tmp'
@@ -289,9 +288,6 @@ spec:
               readOnly: true
             - name: shared-upload-directory
               mountPath: /srv/gitlab/public/uploads/tmp
-              readOnly: false
-            - name: shared-artifact-directory
-              mountPath: /srv/gitlab/shared
               readOnly: false
             - name: shared-tmp
               mountPath: '/tmp'
@@ -408,8 +404,6 @@ spec:
         emptyDir:
           medium: "Memory"
       - name: shared-upload-directory
-        emptyDir: {}
-      - name: shared-artifact-directory
         emptyDir: {}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
     {{- if .Values.nodeSelector }}
