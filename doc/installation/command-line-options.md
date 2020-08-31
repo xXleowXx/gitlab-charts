@@ -181,7 +181,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `registry.profiling.stackdriver.enabled`            | Enable continuous profiling using stackdriver            | `false`                           |
 | `registry.profiling.stackdriver.credentials.secret` | Name of the secret containing creds                      | `gitlab-registry-profiling-creds` |
 | `registry.profiling.stackdriver.credentials.key`    | Secret key in which the creds are stored                 | `credentials`                     |
-| `registry.profiling.stackdriver.service`            | Name of the stackdriver service to record profiles under | `container-registry`              |
+| `registry.profiling.stackdriver.service`            | Name of the stackdriver service to record profiles under | `RELEASE-registry` (templated Service name) |
 | `registry.profiling.stackdriver.projectid`          | GCP project to report profiles to                        | GCP project where running         |
 
 ## Advanced MinIO configuration
