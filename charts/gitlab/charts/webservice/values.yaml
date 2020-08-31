@@ -130,6 +130,10 @@ workhorse:
     timeoutSeconds: 2
     successThreshold: 1
     failureThreshold: 3
+  monitoring:
+    exporter:
+      enabled: false
+      port: 9229
 
 psql: {}
   # port: 5432
