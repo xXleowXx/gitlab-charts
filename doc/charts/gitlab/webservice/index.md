@@ -107,7 +107,7 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.livenessProbe.successThreshold`     | 1       | Minimum consecutive successes for the liveness probe to be considered successful after having failed |
 | `workhorse.livenessProbe.failureThreshold`     | 3       | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded |
 | `workhorse.monitoring.exporter.enabled`        | `false` | Enable workhorse to expose Prometheus metrics  |
-| `workhorse.monitoring.exporter.port`           | `9229`  | Port number to use for workhorse Prometheus metrics |
+| `workhorse.monitoring.exporter.port`           | 9229  | Port number to use for workhorse Prometheus metrics |
 | `workhorse.readinessProbe.initialDelaySeconds` | 0       | Delay before readiness probe is initiated      |
 | `workhorse.readinessProbe.periodSeconds`       | 10      | How often to perform the readiness probe       |
 | `workhorse.readinessProbe.timeoutSeconds`      | 2       | When the readiness probe times out             |
