@@ -146,7 +146,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `profiling.stackdriver.enabled`            | `false`                                      | Enable continuous profiling using stackdriver                                                        |
 | `profiling.stackdriver.credentials.secret` | `gitlab-registry-profiling-creds`            | Name of the secret containing creds                                                                  |
 | `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the creds are stored                                                             |
-| `profiling.stackdriver.service`            | `container-registry`                         | Name of the stackdriver service to record profiles under                                             |
+| `profiling.stackdriver.service`            | `RELEASE-registry` (templated Service name)| Name of the stackdriver service to record profiles under                                             |
 | `profiling.stackdriver.projectid`          | GCP project where running                    | GCP project to report profiles to                                                                    |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
