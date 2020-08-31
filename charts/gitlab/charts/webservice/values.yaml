@@ -133,7 +133,7 @@ workhorse:
   monitoring:
     exporter:
       enabled: false
-      port: '9229'
+      port: 9229
 
 psql: {}
   # port: 5432
