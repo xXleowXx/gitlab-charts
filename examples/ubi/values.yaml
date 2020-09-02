@@ -41,6 +41,10 @@ global:
     image:
       tag: 1.12.10-ubi8
 
+  certificates:
+    image:
+      tag: master-ubi8
+
   # See: https://gitlab.com/gitlab-org/charts/gitlab/blob/master/doc/installation/tls.md#option-2-use-your-own-wildcard-certificate
   ingress:
     configureCertmanager: false
