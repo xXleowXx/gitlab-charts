@@ -1,0 +1,5 @@
+---
+title: Add support for configuring smartcard authentication
+merge_request: 1510
+author:
+type: added

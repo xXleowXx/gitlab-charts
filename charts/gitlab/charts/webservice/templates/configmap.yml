@@ -121,6 +121,7 @@ data:
       {{- include "gitlab.appConfig.rackAttack" . | nindent 6 }}
       ## Registry Integration
       {{- include "gitlab.appConfig.registry.configuration" $ | nindent 6 }}
+      {{- include "gitlab.appConfig.smartcard.configuration" $ | nindent 6 }}
   configure: |
     {{- include "gitlab.scripts.configure.secrets" (dict) | nindent 4 -}}
     {{- include "gitlab.psql.ssl.initScript" . | nindent 4 }}

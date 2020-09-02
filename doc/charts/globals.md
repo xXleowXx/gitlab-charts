@@ -53,6 +53,8 @@ global:
     minio:
       name: minio.example.com
       https: false
+    smartcard:
+      name: smartcard.example.com
 ```
 
 | Name                   | Type    | Default       | Description |
@@ -73,6 +75,7 @@ global:
 | `registry.name`        | String  |               | The hostname for Registry. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `registry.serviceName` | String  | `registry`    | The name of the `service` which is operating the Registry server. The chart will template the hostname of the service (and current `.Release.Name`) to create the proper internal serviceName. |
 | `registry.servicePort` | String  | `registry`    | The named port of the `service` where the Registry server can be reached. |
+| `smartcard.name`       | String  |               | The hostname for smartcard authentication. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 
 ### hostSuffix
 
@@ -745,6 +748,10 @@ global:
       dsn:
       clientside_dsn:
       environment:
+    smartcard:
+      enabled: false
+      CASecret:
+      clientCertificateRequiredHost:
 ```
 
 ### General application settings
@@ -1173,6 +1180,27 @@ global:
 | `dsn`            | String  |        | Sentry DSN for backend errors |
 | `clientside_dsn` | String  |        | Sentry DSN for front-end errors |
 | `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/product/sentry-basics/environments/) |
+
+### Smartcard Authentication settings
+
+```yaml
+global:
+  appConfig:
+    smartcard:
+      enabled: false
+      CASecret:
+      clientCertificateRequiredHost:
+      sanExtensions: false
+      requiredForGitAccess: false
+```
+
+| Name                            | Type    | Default | Description                                      |
+| :------------------------------ | :-----: | :------ | :----------------------------------------------- |
+| `enabled`                       | Boolean | `false` | Enable or Disable smartcard authentication       |
+| `CASecret`                      | String  |         | Name of the secret containing the CA certificate |
+| `clientCertificateRequiredHost` | String  |         | Hostname to use for smartcard authentication. By default, the provided or computed smartcard hostname is used. |
+| `sanExtensions`                 | Boolean | `false` | Enable the use of SAN extensions to match users with certificates. |
+| `requiredForGitAccess`          | Boolean | `false` | Require browser session with smartcard sign-in for Git access. |
 
 ## Configure Rails settings
 

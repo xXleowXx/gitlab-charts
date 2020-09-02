@@ -46,6 +46,7 @@ helm inspect values gitlab/gitlab
 |-----------------------------------------|-------------------------------------------------------------------|---------|
 | `certmanager-issuer.email`              | Email for Let's Encrypt account                                   | false   |
 | `gitlab.webservice.ingress.tls.secretName` | Existing `Secret` containing TLS certificate and key for GitLab   | _none_  |
+| `gitlab.webservice.ingress.tls.smartcardSecretName` | Existing `Secret` containg TLS certificate and key for GitLab's smartcard auth domain | _none_ |
 | `global.hosts.https`                    | Serve over https                                                  | true    |
 | `global.ingress.configureCertmanager`   | Configure cert-manager to get certificates from Let's Encrypt     | true    |
 | `global.ingress.tls.secretName`         | Existing `Secret` containing wildcard TLS certificate and key     | _none_  |

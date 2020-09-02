@@ -16,6 +16,22 @@ if there is a shared tls secret for all ingresses.
 {{- end -}}
 
 {{/*
+Returns the secret name for the Secret containing the TLS certificate and key for
+the smartcard host.
+Uses `ingress.tls.secretName` first and falls back to `global.ingress.tls.secretName`
+if there is a shared tls secret for all ingresses.
+*/}}
+{{- define "smartcard.tlsSecret" -}}
+{{- $defaultName := (dict "secretName" "") -}}
+{{- if .Values.global.ingress.configureCertmanager -}}
+{{- $_ := set $defaultName "secretName" (printf "%s-gitlab-tls-smartcard" .Release.Name) -}}
+{{- else -}}
+{{- $_ := set $defaultName "secretName" (include "gitlab.wildcard-self-signed-cert-name" .) -}}
+{{- end -}}
+{{- coalesce .Values.ingress.tls.smartcardSecretName (pluck "secretName" .Values.global.ingress.tls $defaultName | first) -}}
+{{- end -}}
+
+{{/*
 Returns the workhorse image repository depending on the value of global.edition.
 
 Used to switch the deployment from Enterprise Edition (default) to Community

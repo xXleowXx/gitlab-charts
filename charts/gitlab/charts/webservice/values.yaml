@@ -70,6 +70,7 @@ ingress:
   proxyBodySize: "512m"
   tls: {}
     # secretName:
+    # smartcardSecretName:
     # enabled: true
   annotations: {}
 workerProcesses: 2

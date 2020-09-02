@@ -22,6 +22,7 @@ Optional External Services:
 - IMAP for incoming emails (via mail_room service)
 - IMAP for service desk emails (via mail_room service)
 - S/MIME certificate
+- Smartcard authentication
 
 Any secret not provided manually will be automatically generated with a random value. Automatic generation of HTTPS certificates is provided by Let's Encrypt.
 
@@ -57,6 +58,7 @@ documentation.
   - [IMAP Password for incoming email](#imap-password-for-incoming-emails)
   - [IMAP Password for service desk](#imap-password-for-service-desk-emails)
   - [S/MIME Certificate](#smime-certificate)
+  - [Smartcard Authentication](#smartcard-authentication)
 
 ### Registry authentication certificates
 
@@ -347,6 +349,21 @@ S/MIME settings can be set through the `values.yaml` file or on the command
 line. Use `--set global.email.smime.enabled=true` to enable S/MIME and
 `--set global.email.smime.secretName=smime-certificate` to specify the
 secret that contains the S/MIME certificate.
+
+### Smartcard Authentication
+
+[Smartcard authentication](https://docs.gitlab.com/ee/administration/auth/smartcard.html)
+uses a custom Certificate Authority (CA) to sign client certificates. The
+certificate of this custom CA needs to be injected to the Webservice pod for it
+to verify whether a client certificate is valid or not. This is provided as a
+k8s secret.
+
+```shell
+kubectl create secret generic <secret name> --from-file=ca.crt=<path to CA certificate>
+```
+
+The key name inside the secret where the certificate is stored MUST BE
+`ca.crt`.
 
 ## Next steps
 
