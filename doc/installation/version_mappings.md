@@ -10,6 +10,7 @@ The table below maps some of the key previous chart versions and GitLab versions
 
 | Chart version | GitLab version |
 |---------------|----------------|
+| 4.2.7 | 13.2.7 |
 | 4.2.6 | 13.2.6 |
 | 4.2.5 | 13.2.5 |
 | 4.2.4 | 13.2.4 |
