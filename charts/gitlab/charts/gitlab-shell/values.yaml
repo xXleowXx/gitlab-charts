@@ -18,6 +18,7 @@ service:
   # externalIPs:
   # - x.x.x.x
   # - y.y.y.y
+  additionalLabels: {}
 
 init:
   image: {}

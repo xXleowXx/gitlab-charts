@@ -62,6 +62,7 @@ service:
   internalPort: 8080
   workhorseExternalPort: 8181
   workhorseInternalPort: 8181
+  additionalLabels: {}
 enabled: true
 ingress:
   enabled: true

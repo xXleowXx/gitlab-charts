@@ -31,6 +31,7 @@ service:
   tls:
     externalPort: 8076
     internalPort: 8076
+  additionalLabels: {}
 annotations: {}
 podLabels: {}
 

@@ -6,6 +6,9 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- if .Values.service.additionalLabels }}
+    {{ toYaml .Values.service.additionalLabels | nindent 4 }}
+    {{- end }}
   annotations:
     {{- include "gitlab.serviceAnnotations" . | nindent 4 }}
 spec:
