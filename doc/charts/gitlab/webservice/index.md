@@ -47,7 +47,7 @@ to the `helm install` command using the `--set` flags.
 | `enabled`                        | `true`                | Webservice enabled flag                           |
 | `extraContainers`                |                       | List of extra containers to include            |
 | `extraInitContainers`            |                       | List of extra init containers to include       |
-| `extras.google_analytics_id`     | `nil`                 | Google Analytics Id for frontend               |
+| `extras.google_analytics_id`     | `nil`                 | Google Analytics ID for frontend               |
 | `extraVolumeMounts`              |                       | List of extra volumes mountes to do            |
 | `extraVolumes`                   |                       | List of extra volumes to create                |
 | `extraEnv`                       |                       | List of extra environment variables to expose  |
@@ -106,6 +106,8 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.livenessProbe.timeoutSeconds`       | 30      | When the liveness probe times out              |
 | `workhorse.livenessProbe.successThreshold`     | 1       | Minimum consecutive successes for the liveness probe to be considered successful after having failed |
 | `workhorse.livenessProbe.failureThreshold`     | 3       | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded |
+| `workhorse.monitoring.exporter.enabled`        | `false` | Enable workhorse to expose Prometheus metrics  |
+| `workhorse.monitoring.exporter.port`           | 9229  | Port number to use for workhorse Prometheus metrics |
 | `workhorse.readinessProbe.initialDelaySeconds` | 0       | Delay before readiness probe is initiated      |
 | `workhorse.readinessProbe.periodSeconds`       | 10      | How often to perform the readiness probe       |
 | `workhorse.readinessProbe.timeoutSeconds`      | 2       | When the readiness probe times out             |

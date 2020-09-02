@@ -2,6 +2,29 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.3.3 (2020-09-02)
+
+### Fixed (1 change)
+
+- Only create object_storage 'connection' block if feature enabled. !1517
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.3.
+
+
+## 4.3.2 (2020-08-28)
+
+### Fixed (2 changes, 2 of them are from the community)
+
+- Add missing bucket variables. !1515 (Chris Boot)
+- Add object_store secret to backup CronJob. !1516 (Chris Boot)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.2.
+
+
 ## 4.3.1 (2020-08-25)
 
 ### Changed (1 change)
@@ -41,6 +64,13 @@ entry.
 ### Other (1 change)
 
 - Update GitLab Version to 13.3.0.
+
+
+## 4.2.7 (2020-09-02)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.7.
 
 
 ## 4.2.6 (2020-08-18)
@@ -119,6 +149,13 @@ entry.
 
 - Add an annotations support to the migrations job template. !1423 (Tiago Posse)
 - Update GitLab Version to 13.2.0.
+
+
+## 4.1.10 (2020-09-02)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.9.
 
 
 ## 4.1.9 (2020-08-18)

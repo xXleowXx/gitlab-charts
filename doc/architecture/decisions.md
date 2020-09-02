@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Design Decisions
 
-This documentation collects reasoning and documentation regard decisions made
+This documentation collects reasoning and decisions made
 regarding the design of the Helm charts in this repository.
 
 ## Attempt to catch problematic configurations

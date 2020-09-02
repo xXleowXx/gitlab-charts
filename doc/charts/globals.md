@@ -760,7 +760,7 @@ application are described below:
 | `defaultCanCreateGroup`             | Boolean | `true`  | A flag to decide if users are allowed to create groups. |
 | `usernameChangingEnabled`           | Boolean | `true`  | A flag to decide if users are allowed to change their username. |
 | `issueClosingPattern`               | String  | (empty) | [Pattern to close issues automatically](https://docs.gitlab.com/ee/administration/issue_closing_pattern.html). |
-| `defaultTheme`                      | Integer |         | [Numeric ID of the default theme for the GitLab instance](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/themes.rb#L17-27). It takes a number, denoting the id of the theme. |
+| `defaultTheme`                      | Integer |         | [Numeric ID of the default theme for the GitLab instance](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/themes.rb#L17-27). It takes a number, denoting the ID of the theme. |
 | `defaultProjectsFeatures.*feature*` | Boolean | `true`  | [See below](#defaultprojectsfeatures). |
 | `webHookTimeout`                    | Integer |         | Waiting time in seconds before a [hook is deemed to have failed](https://docs.gitlab.com/ce/user/project/integrations/webhooks.html#receiving-duplicate-or-multiple-web-hook-requests-triggered-by-one-event). |
 
@@ -920,6 +920,7 @@ ldap:
       port: 636
       uid: 'sAMAccountName'
       bind_dn: 'cn=administrator,cn=Users,dc=domain,dc=net'
+      base: 'dc=domain,dc=net'
       password:
         secret: my-ldap-password-secret
         key: the-key-containing-the-password
@@ -932,8 +933,9 @@ Example `--set` configuration items, when using the global chart:
 --set global.appConfig.ldap.servers.main.host='your_ldap_server' \
 --set global.appConfig.ldap.servers.main.port='636' \
 --set global.appConfig.ldap.servers.main.uid='sAMAccountName' \
---set global.appConfig.ldap.servers.main.bind_dn='cn=administrator\,cn=Users\,dc=domain\,dc=net'
---set global.appConfig.ldap.servers.main.password.secret='my-ldap-password-secret'
+--set global.appConfig.ldap.servers.main.bind_dn='cn=administrator\,cn=Users\,dc=domain\,dc=net' \
+--set global.appConfig.ldap.servers.main.base='dc=domain\,dc=net' \
+--set global.appConfig.ldap.servers.main.password.secret='my-ldap-password-secret' \
 --set global.appConfig.ldap.servers.main.password.key='the-key-containing-the-password'
 ```
 

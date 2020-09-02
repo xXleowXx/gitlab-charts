@@ -25,6 +25,12 @@ spec:
       protocol: TCP
       name: http-exporter
     {{- end }}
+    {{- if eq .Values.workhorse.monitoring.exporter.enabled true }}
+    - port: {{ .Values.workhorse.monitoring.exporter.port | int }}
+      targetPort: {{ .Values.workhorse.monitoring.exporter.port | int }}
+      protocol: TCP
+      name: http-workhorse-exporter
+    {{- end }}
   selector:
     app: {{ template "name" . }}
     release: {{ .Release.Name }}
