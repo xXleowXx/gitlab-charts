@@ -258,15 +258,17 @@ function install_external_dns() {
         ;;
       aws)
         echo "Installing external-dns, ensure the NodeGroup has the permissions specified in"
-        echo "https://github.com/helm/charts/tree/master/stable/external-dns#iam-permissions"
+        echo "https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-permissions"
         ;;
     esac
 
-    helm install stable/external-dns \
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+
+    helm install bitnami/external-dns \
       -n "${release_name}" \
       --namespace "${TILLER_NAMESPACE}" \
       --set provider="${provider}" \
-      --set domain-filter[0]="${domain_filter}" \
+      --set domainFilters[0]="${domain_filter}" \
       --set txtOwnerId="${TILLER_NAMESPACE}" \
       --set rbac.create="true" \
       --set policy='sync' \
