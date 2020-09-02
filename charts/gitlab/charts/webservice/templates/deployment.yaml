@@ -395,6 +395,13 @@ spec:
                 - key: {{ .Values.global.smtp.password.key }}
                   path: smtp/smtp-password
           {{- end }}
+          {{- if and $.Values.global.appConfig.smartcard.enabled $.Values.global.appConfig.smartcard.CASecret }}
+          - secret:
+              name: {{ $.Values.global.appConfig.smartcard.CASecret }}
+              items:
+                - key: "ca.crt"
+                  path: rails-secrets/smartcard-ca.crt
+          {{- end }}
 {{- if .Values.global.email.smime.enabled }}
       - name: smime-creds
         secret:

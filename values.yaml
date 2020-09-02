@@ -53,6 +53,7 @@ global:
     minio: {}
     registry: {}
     tls: {}
+    smartcard: {}
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:
@@ -353,6 +354,12 @@ global:
       clientside_dsn:
       environment:
 
+    smartcard:
+      enabled: false
+      CASecret:
+      clientCertificateRequiredHost:
+      sanExtensions: false
+      requiredForGitAccess: false
   ## End of global.appConfig
 
   ## doc/charts/geo.md
