@@ -12,7 +12,6 @@ service:
   type: ClusterIP
   externalPort: 9168
   internalPort: 9168
-  additionalLabels: {}
 
 metrics:
   enabled: true
@@ -30,6 +29,7 @@ enabled: true
 tolerations: []
 
 podLabels: {}
+serviceLabels: {}
 
 init:
   image: {}

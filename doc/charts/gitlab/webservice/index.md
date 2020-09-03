@@ -89,7 +89,7 @@ to the `helm install` command using the `--set` flags.
 | `service.externalPort`           | `8080`                | Webservice exposed port                           |
 | `securityContext.fsGroup`        | `1000`                | Group ID under which the pod should be started |
 | `securityContext.runAsUser`      | `1000`                | User ID under which the pod should be started  |
-| `service.additionalLabels`       | `{}`                  | Additional labels to add to the service        |
+| `serviceLabels`                  | `{}`                  | Supplemental service labels. |
 | `service.internalPort`           | `8080`                | Webservice internal port                          |
 | `service.type`                   | `ClusterIP`           | Webservice service type                           |
 | `service.workhorseExternalPort`  | `8181`                | Workhorse exposed port                         |

@@ -461,8 +461,9 @@ global:
   ## Timezone for containers.
   time_zone: UTC
 
-  ## Global Service Annotations
+  ## Global Service Annotations and Labels
   service:
+    labels: {}
     annotations: {}
 
   ## Global Deployment Annotations

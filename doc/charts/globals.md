@@ -1389,6 +1389,8 @@ global:
 
 ## Labels
 
+### Pod
+
 Custom labels can be applied to various Deployments and Jobs. These labels are
 supplementary to existing or preconfigured labels constructed by this Helm
 chart. These supplementary labels will **not** be utilized for `matchSelectors`.
@@ -1396,6 +1398,19 @@ chart. These supplementary labels will **not** be utilized for `matchSelectors`.
 ```yaml
 global:
   pod:
+    labels:
+      environment: production
+```
+
+### Service
+
+Custom labels can be applied to services. These labels are
+supplementary to existing or preconfigured labels constructed by this Helm
+chart.
+
+```yaml
+global:
+  service:
     labels:
       environment: production
 ```
