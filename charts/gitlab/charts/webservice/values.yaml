@@ -35,6 +35,7 @@ shutdown:
 annotations: {}
 
 podLabels: {}
+serviceLabels: {}
 
 metrics:
   enabled: true

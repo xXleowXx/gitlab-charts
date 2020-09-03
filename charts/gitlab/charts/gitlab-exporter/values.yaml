@@ -29,6 +29,7 @@ enabled: true
 tolerations: []
 
 podLabels: {}
+serviceLabels: {}
 
 init:
   image: {}

@@ -57,6 +57,7 @@ controlled by `global.shell.port`.
 | `init.image.repository`  |                | initContainer image                      |
 | `init.image.tag`         |                | initContainer image tag                  |
 | `replicaCount`           | `1`            | Shell replicas                           |
+| `serviceLabels`          | `{}`           | Supplemental service labels |
 | `service.externalTrafficPolicy` | `Cluster` | Shell service external traffic policy (Cluster or Local)  |
 | `service.internalPort`   | `2222`         | Shell internal port                      |
 | `service.nodePort`       |                | Sets shell nodePort if set               |

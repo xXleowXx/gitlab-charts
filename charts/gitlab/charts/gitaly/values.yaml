@@ -33,6 +33,7 @@ service:
     internalPort: 8076
 annotations: {}
 podLabels: {}
+serviceLabels: {}
 
 init:
   image: {}

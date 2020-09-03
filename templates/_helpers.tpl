@@ -311,6 +311,18 @@ Handles merging a set of non-selector labels
 {{- end -}}
 
 {{/*
+Handles merging a set of labels for services
+*/}}
+{{- define "gitlab.serviceLabels" -}}
+{{- $allLabels := merge (default (dict) .Values.serviceLabels) .Values.global.service.labels -}}
+{{- if $allLabels -}}
+{{-   range $key, $value := $allLabels }}
+{{ $key }}: {{ $value }}
+{{-   end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns gitlabUrl needed for gitlab-runner
 */}}
 {{- define "gitlab-runner.gitlabUrl" -}}
