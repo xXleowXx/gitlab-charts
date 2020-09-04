@@ -41,6 +41,9 @@ describe "Restoring a backup" do
 
     it 'Navigating to testproject1 repo should work' do
       visit '/root/testproject1'
+      wait(reload: false) do
+        has_select?('span', class: 'position-relative', text: 'Dockerfile')
+      end
       expect(page).to have_content 'Dockerfile'
     end
 
