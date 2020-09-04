@@ -5,7 +5,7 @@ image:
   repository: registry.gitlab.com/gitlab-org/charts/components/gitlab-operator
   pullSecrets: []
   # pullPolicy: IfNotPresent
-  # tag: latest
+  tag: 90a497e22e7c362cccccc0433c07b7a145bf7f91
 
 # Which version of the operator to deploy
 version: "0.10"
