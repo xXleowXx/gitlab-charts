@@ -919,6 +919,7 @@ providers can be found in [examples/objectstorage](https://gitlab.com/gitlab-org
 
 - [`rails.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.s3.yaml)
 - [`rails.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.gcs.yaml)
+- [`rails.azurerm.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.azurerm.yaml)
 
 Once a YAML file containing the contents of the `connection` has been created, use
 this file to create the secret in Kubernetes.
