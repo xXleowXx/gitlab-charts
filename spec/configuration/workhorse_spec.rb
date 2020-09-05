@@ -19,9 +19,16 @@ describe 'Workhorse configuration', :focus => true do
     # env var. This is set on webserver and workhorse retrives the setting
     # from internal API. Also note that the value is irrevelent as the rails
     # code only checks for the existance of the variable not the value.
-    containers = t.dig('Deploy/test-webservice', :spec, :template, :spec, :containers)
-
-    expect(t.dig, 'env', 'name'))
-        .to include("WORKHORSE_ARCHIVE_CACHE_DISABLED")
+    containers = t.dig('Deployment/test-webservice', 'spec', 'template', 'spec', 'containers')
+    found = false
+    containers.each do |c|
+      if c['name'] == 'webservice'
+        vars = c['env'].map {|entry| entry['name']}
+        if vars.include? 'WORKHORSE_ARCHIVE_CACHE_DISABLED'
+          found = true
+        end
+      end
+    end
+    expect(found).to eq(true)
   end
 end
