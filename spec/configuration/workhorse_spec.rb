@@ -3,7 +3,7 @@ require 'helm_template_helper'
 require 'yaml'
 require 'hash_deep_merge'
 
-describe 'Workhorse configuration', :focus => true do
+describe 'Workhorse configuration' do
   let(:default_values) do
     {
       # provide required setting
