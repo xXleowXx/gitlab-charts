@@ -55,14 +55,14 @@ Calls into the `gitlab.gitlabHost` function for the hostname part of the url.
 
 {{- define "gitlab.gitlab.url" -}}
 {{- if or .Values.global.hosts.https .Values.global.hosts.gitlab.https -}}
-{{-   if .Values.controller.service.ports.https -}}
-{{-     printf "https://%s:%s" (include "gitlab.gitlab.hostname" .) .Values.controller.service.ports.https -}}
+{{-   if .Values.global.hosts.httpsPort -}}
+{{-     printf "https://%s:%s" (include "gitlab.gitlab.hostname" .) .Values.global.hosts.httpsPort -}}
 {{-   else -}}
 {{-     printf "https://%s" (include "gitlab.gitlab.hostname" .) -}}
 {{-   end -}}
 {{- else -}}
-{{-   if .Values.controller.service.ports.http -}}
-{{-     printf "http://%s:%s" (include "gitlab.gitlab.hostname" .) .Values.controller.service.ports.http -}}
+{{-   if .Values.global.hosts.httpPort -}}
+{{-     printf "http://%s:%s" (include "gitlab.gitlab.hostname" .) .Values.global.hosts.httpPort -}}
 {{-   else -}}
 {{-     printf "http://%s" (include "gitlab.gitlab.hostname" .) -}}
 {{-   end -}}
