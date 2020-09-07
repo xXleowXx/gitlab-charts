@@ -52,11 +52,20 @@ Returns the GitLab Url, ex: `http://gitlab.example.com`
 If `global.hosts.https` or `global.hosts.gitlab.https` is true, it uses https, otherwise http.
 Calls into the `gitlab.gitlabHost` function for the hostname part of the url.
 */}}
+
 {{- define "gitlab.gitlab.url" -}}
 {{- if or .Values.global.hosts.https .Values.global.hosts.gitlab.https -}}
-{{-   printf "https://%s" (include "gitlab.gitlab.hostname" .) -}}
+{{-   if .Values.global.hosts.httpsPort -}}
+{{-     printf "https://%s:%s" (include "gitlab.gitlab.hostname" .) .Values.global.hosts.httpsPort -}}
+{{-   else -}}
+{{-     printf "https://%s" (include "gitlab.gitlab.hostname" .) -}}
+{{-   end -}}
 {{- else -}}
-{{-   printf "http://%s" (include "gitlab.gitlab.hostname" .) -}}
+{{-   if .Values.global.hosts.httpPort -}}
+{{-     printf "http://%s:%s" (include "gitlab.gitlab.hostname" .) .Values.global.hosts.httpPort -}}
+{{-   else -}}
+{{-     printf "http://%s" (include "gitlab.gitlab.hostname" .) -}}
+{{-   end -}}
 {{- end -}}
 {{- end -}}
 
