@@ -203,6 +203,9 @@ global:
         # secret:
         # secret_key:
         # access_key:
+      storage_options: {}
+        # server_side_encryption:
+        # server_side_encrypton_kms_key_id:
     lfs:
       enabled: true
       proxy_download: true

@@ -18,6 +18,11 @@ object_store:
   direct_upload: true
   background_upload: false
   proxy_download: {{ or (not (kindIs "bool" .config.proxy_download)) .config.proxy_download }}
+  {{- if and .config.enabled .config.storage_options }}
+  storage_options:
+    server_side_encryption: {{ .config.storage_options.server_side_encryption }}
+    server_side_encryption_kms_key_id: {{ .config.storage_options.server_side_encryption_kms_key_id }}
+  {{- end -}}
   {{- if and .config.enabled .config.connection }}
   connection: <%= YAML.load_file("/etc/gitlab/objectstorage/{{ .name }}").to_json() %>
   {{- else if .context.Values.global.minio.enabled }}

@@ -675,6 +675,7 @@ global:
     object_store:
       enabled: true
       proxy_download: true
+      storage_options: {}
       connection: {}
     lfs:
       enabled: true
@@ -818,6 +819,7 @@ are not individually configured with a `connection` property.
 ```yaml
   enabled: true
   proxy_download: true
+  storage_options:
   connection:
     secret:
     key:
@@ -827,6 +829,7 @@ are not individually configured with a `connection` property.
 |:---------------- |:-------:|:------- |:----------- |
 | `enabled`        | Boolean | `true`  | Enable the use of consolidated object storage. |
 | `proxy_download` | Boolean | `true`  | Enable proxy of all downloads via GitLab, in place of direct downloads from the `bucket`. |
+| `storage_options`| String  | `{}`    | [See below](#storage_options). |
 | `connection`     | String  | `{}`    | [See below](#connection). |
 
 The property structure is shared, and all properties here can be overriden by the individual
@@ -840,6 +843,37 @@ When using the `AWS` provider for the [connection](#connection) (which is any
 S3 compatible provider such as the included MinIO), GitLab Workhorse can offload
 all storage related uploads. This will automatically be enabled for you, when
 using this consolidated configuration.
+
+#### storage_options
+
+> Introduced in GitLab 13.4.
+
+The `storage_options` are used to configure [S3 Server Side
+Encryption](https://docs.gitlab.com/ee/administration/object_storage.html#server-side-encryption-headers).
+
+Setting a default encryption on an S3 bucket is the easiest way to
+enable encryption, but you may want to [set a bucket policy to ensure
+only encrypted objects are uploaded](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
+To do this, you must configure GitLab to send the proper encryption headers
+in the `storage_options` configuration section:
+
+|            Setting                  | Description |
+|-------------------------------------|-------------|
+| `server_side_encryption`            | Encryption mode (AES256 or aws:kms) |
+| `server_side_encryption_kms_key_id` | Amazon Resource Name. Only needed when `aws:kms` is used in `server_side_encryption`. See the [Amazon documentation on using KMS encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html) |
+
+Example:
+
+```yaml
+  enabled: true
+  proxy_download: true
+  connection:
+    secret: gitlab-rails-storage
+    key:connection
+  storage_options:
+    server_side_encryption: aws:kms
+    server_side_encryption_kms_key_id: arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+```
 
 ### LFS, Artifacts, Uploads, Packages, External MR diffs, and Dependency Proxy
 
