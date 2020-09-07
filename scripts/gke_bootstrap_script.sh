@@ -102,6 +102,7 @@ function bootstrap(){
     name_flag=$(set_helm_name_flag)
 
     helm install $name_flag dns --namespace kube-system bitnami/external-dns \
+      --version '^3.3.1' \
       --set provider=google \
       --set google.project=$PROJECT \
       --set txtOwnerId=$CLUSTER_NAME \
