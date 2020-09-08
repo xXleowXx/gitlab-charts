@@ -92,19 +92,17 @@ function bootstrap(){
 
   echo "Installing helm..."
 
-  if [ $IS_HELM_3 -eq 0 ]; then
-    helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-  else
+  if [ ! $IS_HELM_3 -eq 0 ]; then
     helm init --wait --service-account tiller
   fi
 
-  helm repo update
+  helm repo add bitnami https://charts.bitnami.com/bitnami
 
   if ! ${USE_STATIC_IP}; then
     name_flag=$(set_helm_name_flag)
 
-    helm install $name_flag dns --namespace kube-system stable/external-dns \
-      --version '^2.1.2' \
+    helm install $name_flag dns --namespace kube-system bitnami/external-dns \
+      --version '^3.3.1' \
       --set provider=google \
       --set google.project=$PROJECT \
       --set txtOwnerId=$CLUSTER_NAME \
