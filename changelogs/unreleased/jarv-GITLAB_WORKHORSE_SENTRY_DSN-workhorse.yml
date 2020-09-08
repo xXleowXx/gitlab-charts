@@ -1,0 +1,5 @@
+---
+title: Moves GITLAB_WORKHORSE_SENTRY_DSN to the workhorse container
+merge_request: 1543
+author:
+type: fixed

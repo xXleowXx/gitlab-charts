@@ -164,10 +164,6 @@ spec:
             - name: prometheus_multiproc_dir
               value: /metrics
 {{- end }}
-{{- if .Values.workhorse.sentryDSN }}
-            - name: GITLAB_WORKHORSE_SENTRY_DSN
-              value: {{ .Values.workhorse.sentryDSN }}
-{{- end }}
             {{- if .Values.global.rails.bootsnap.enabled }}
             - name: ENABLE_BOOTSNAP
               value: "1"
@@ -282,6 +278,10 @@ spec:
             {{- if .Values.workhorse.monitoring.exporter.enabled }}
             - name: GITLAB_WORKHORSE_PROM_LISTEN_ADDR
               value: "0.0.0.0:{{ .Values.workhorse.monitoring.exporter.port }}"
+            {{- end }}
+            {{- if .Values.workhorse.sentryDSN }}
+            - name: GITLAB_WORKHORSE_SENTRY_DSN
+              value: {{ .Values.workhorse.sentryDSN }}
             {{- end }}
             {{- include "gitlab.tracing.env" . | nindent 12 }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
