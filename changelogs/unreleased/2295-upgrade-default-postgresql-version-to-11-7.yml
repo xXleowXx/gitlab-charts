@@ -1,0 +1,5 @@
+---
+title: Upgrade default PostgreSQL version to 11.9
+merge_request: 1550
+author:
+type: changed

@@ -766,7 +766,7 @@ postgresql:
   install: true
   postgresqlDatabase: gitlabhq_production
   image:
-    tag: 11.7.0
+    tag: 11.9.0
   usePasswordFile: true
   existingSecret: 'bogus'
   initdbScriptsConfigMap: 'bogus'
