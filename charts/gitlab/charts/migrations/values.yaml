@@ -46,7 +46,6 @@ global:
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
-    # pool: 1
     # preparedStatements: false
     # password:
     #   secret: gitlab-postgres

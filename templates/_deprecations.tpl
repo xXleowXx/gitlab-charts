@@ -47,6 +47,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.service.name" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.webservice.service.configuration" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.gitaly.serviceName" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.psql.pool" .) -}}
+
 {{- /* prepare output */}}
 {{- $deprecated := without $deprecated "" -}}
 {{- $message := join "\n" $deprecated -}}
@@ -351,3 +353,13 @@ gitlab.gitaly.serviceName:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.gitlab.gitaly.serviceName */}}
+
+{{- define "gitlab.deprecate.gitlab.psql.pool" -}}
+{{-   if hasKey $.Values.gitlab "psql" -}}
+{{-     if hasKey $.Values.gitlab.psql "pool" -}}
+gitlab.psql.pool:
+      Manually configuring the database connection pool has been removed. The application now manages the connection pool size.
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.gitlab.psql.pool */}}

@@ -16,7 +16,6 @@ describe 'Database configuration' do
           'host' => '',
           'serviceName' => '',
           'port' => nil,
-          'pool' => '',
           'username' => '',
           'database' => '',
           'preparedStatements' => '',
@@ -169,7 +168,6 @@ describe 'Database configuration' do
                 'port' => 5431,
                 'database' => 'sidekiq',
                 'username' => 'sidekiq',
-                'pool' => 5,
                 'preparedStatements' => true,
                 'connectTimeout' => 55,
               },
@@ -189,7 +187,6 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('port: 5431')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('database: sidekiq')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('username: sidekiq')
-        expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('pool: 5')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('prepared_statements: true')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('connect_timeout: 55')
       end
@@ -211,7 +208,6 @@ describe 'Database configuration' do
                 'port' => 5431,
                 'database' => 'webservice',
                 'username' => 'webservice',
-                'pool' => 5,
                 'preparedStatements' => true,
                 'password' => {
                   'secret' => 'other-postgresql-password',
@@ -239,7 +235,6 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('port: 5431')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('database: webservice')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('username: webservice')
-        expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('pool: 5')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('prepared_statements: true')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('connect_timeout: 55')
         webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice','init-webservice-secrets').select { |item|
@@ -276,7 +271,6 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('port: 5432')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('database: gitlabhq_production')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('username: gitlab')
-        expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('pool: 1')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('prepared_statements: false')
           .and match(/connect_timeout: $/)
         sidekiq_secret_mounts =  t.projected_volume_sources('Deployment/test-sidekiq-all-in-1-v1','init-sidekiq-secrets').select { |item|
@@ -288,7 +282,6 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('port: 5432')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('database: gitlabhq_production')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('username: gitlab')
-        expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('pool: 1')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('prepared_statements: false')
           .and match(/connect_timeout: $/)
         webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice','init-webservice-secrets').select { |item|
