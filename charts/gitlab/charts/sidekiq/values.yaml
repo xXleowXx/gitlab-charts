@@ -260,6 +260,11 @@ maxUnavailable: 1
 pods:
   - name: all-in-1
     # concurrency: 25
+    # memoryKiller:
+    #   maxRss: 2000000
+    #   graceTime: 900
+    #   shutdownWait: 30
+    #   checkInterval: 3
     # minReplicas: 1
     # maxReplicas: 10
     # updateStrategy: {}

@@ -317,6 +317,7 @@ on a per-pod basis.
 | `concurrency`               | Integer | `25`      | The number of tasks to process simultaneously. |
 | `cluster`                   | Bool    | `true`    | [See below](#cluster). Overridden by per-Pod value, if present. |
 | `timeout`                   | Integer | `4`       | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. |
+| `memoryKiller.checkInterval`| Integer | `3`       | Amount of time in seconds between memory checks     |
 | `memoryKiller.maxRss`       | Integer | `2000000` | Maximum RSS before delayed shutdown triggered expressed in kilobytes |
 | `memoryKiller.graceTime`    | Integer | `900`     | Time to wait before a triggered shutdown expressed in seconds|
 | `memoryKiller.shutdownWait` | Integer | `30`      | Amount of time after triggered shutdown for existing jobs to finish expressed in seconds |
@@ -351,6 +352,10 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. |
 | `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation. |
 | `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.|
+| `memoryKiller.checkInterval`| Integer | `3`       | Amount of time between memory checks     |
+| `memoryKiller.maxRss`       | Integer | `2000000` | Overrides the maximum RSS for a given pod. |
+| `memoryKiller.graceTime`    | Integer | `900`     | Overrides the time to wait before a triggered shutdown for a given Pod |
+| `memoryKiller.shutdownWait` | Integer | `30`      | Overrides the amount of time after triggered shutdown for existing jobs to finish for a given Pod |
 | `minReplicas`  | Integer | `2`     | Minimum number of replicas |
 | `maxReplicas`  | Integer | `10`    | Maximum number of replicas |
 | `maxUnavailable` | Integer | `1`   | Limit of maximum number of Pods to be unavailable |
