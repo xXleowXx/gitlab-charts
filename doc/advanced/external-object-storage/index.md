@@ -46,7 +46,11 @@ for more details.
 
 > [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/25877) in GitLab 13.4.
 
-Direct support for Azure Blob storage is available. In previous GitLab versions, an [Azure MinIO gateway](azure-minio-gateway.md) was needed.
+Direct support for Azure Blob storage is available for
+[uploaded attachments, CI job artifacts, LFS, and other object types supported via the consolidated settngs](https://docs.gitlab.com/ee/administration/object_storage.html#storage-specific-configuration). In previous GitLab versions, an [Azure MinIO gateway](azure-minio-gateway.md) was needed.
+
+The Azure MinIO gateway is still needed for backups. Follow [this issue](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2298)
+for more details.
 
 NOTE: **Note:**
 GitLab [does not support](https://github.com/minio/minio/issues/9978) the Azure MinIO gateway as the storage for the Docker Registry.
