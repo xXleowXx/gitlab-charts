@@ -64,7 +64,7 @@ Azure Blob storage requires the use of the [consolidated object storage
 settings](../../charts/globals.md#consolidated-object-storage). A
 single Azure storage account name and key must be used across multiple
 Azure blob containers. Customizing individual `connection` settings by
-object type (e.g. `artifacts`, `uploads`, etc.) is not permitted.
+object type (for example, `artifacts`, `uploads`, and so on) is not permitted.
 
 To enable Azure Blob storage, see
 [`rails.azurerm.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.azurerm.yaml)
@@ -82,6 +82,8 @@ Then, disable MinIO and set these global settings:
 --set global.appConfig.object_store.enabled=true
 --set global.appConfig.object_store.connection.secret=gitlab-rails-storage
 ```
+
+Be sure to create Azure containers for the [default names or set the container names in the bucket configuration](../../charts/globals.md#specify-buckets).
 
 ## Docker Registry images
 
