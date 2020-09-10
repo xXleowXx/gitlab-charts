@@ -24,9 +24,11 @@ This documentation specifies usage of access and secret keys for AWS. It is also
 
 ## S3 encryption
 
-Since GitLab 13.3, GitLab supports [Amazon KMS](https://aws.amazon.com/kms/)
+> [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2251) in GitLab 13.4.
+
+GitLab supports [Amazon KMS](https://aws.amazon.com/kms/)
 to [encrypt data stored in S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets).
-You can do this in two ways:
+You can enable this in two ways:
 
 1. In AWS, [configure the S3 bucket to use default encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html).
 1. In GitLab, enable [server side encryption headers](../../charts/globals.md#storage_options).
@@ -37,7 +39,7 @@ want to [set an S3 bucket policy to require encrypted objects](https://aws.amazo
 You can set a default encryption policy but also enable server side
 encryption headers to override those defaults.
 
-See the [GitLab docuemntation on encrypted S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets)
+See the [GitLab documentation on encrypted S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets)
 for more details.
 
 ## Azure Blob Storage
