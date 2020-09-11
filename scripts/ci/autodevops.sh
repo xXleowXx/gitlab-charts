@@ -47,6 +47,11 @@ function deploy() {
   track="${1-stable}"
   name="$CI_ENVIRONMENT_SLUG"
 
+  local enable_kas=()
+  if [[ -n "$KAS_ENABLED" ]]; then
+    enable_kas=("--set" "global.kas.enabled=true")
+  fi
+
   if [[ "$track" != "stable" ]]; then
     name="$name-$track"
   fi
@@ -136,10 +141,30 @@ CIYAML
     --set global.operator.enabled=true \
     --set gitlab.operator.crdPrefix="$CI_ENVIRONMENT_SLUG" \
     --set global.gitlab.license.secret="$CI_ENVIRONMENT_SLUG-gitlab-license" \
+    "${enable_kas[@]}" \
     --namespace="$KUBE_NAMESPACE" \
     --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
+    $HELM_EXTRA_ARGS \
     "$name" \
     .
+}
+
+function check_kas_status() {
+  iteration=0
+  kasState=""
+
+  while [ "${kasState[1]}" != "Running" ]; do
+    if [ $iteration -eq 0 ]; then
+      echo ""
+      echo -n "Waiting for KAS deploy to complete.";
+    else
+      echo -n "."
+    fi
+
+    iteration=$((iteration+1))
+    kasState=($(kubectl get pods -n "$KUBE_NAMESPACE" | grep "\-kas" | awk '{print $3}'))
+    sleep 5;
+  done
 }
 
 function wait_for_deploy {
@@ -160,6 +185,11 @@ function wait_for_deploy {
     iteration=$((iteration+1))
     sleep 5;
   done
+
+  if [[ -n "$KAS_ENABLED" ]]; then
+    check_kas_status
+  fi
+
   echo ""
 }
 
@@ -257,15 +287,17 @@ function install_external_dns() {
         ;;
       aws)
         echo "Installing external-dns, ensure the NodeGroup has the permissions specified in"
-        echo "https://github.com/helm/charts/tree/master/stable/external-dns#iam-permissions"
+        echo "https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-permissions"
         ;;
     esac
 
-    helm install stable/external-dns \
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+
+    helm install bitnami/external-dns \
       -n "${release_name}" \
       --namespace "${TILLER_NAMESPACE}" \
       --set provider="${provider}" \
-      --set domain-filter[0]="${domain_filter}" \
+      --set domainFilters[0]="${domain_filter}" \
       --set txtOwnerId="${TILLER_NAMESPACE}" \
       --set rbac.create="true" \
       --set policy='sync' \

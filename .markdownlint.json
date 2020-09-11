@@ -7,6 +7,7 @@
   "ul-style": {
     "style": "dash"
   },
+  "no-trailing-spaces": false,
   "line-length": false,
   "no-duplicate-header": {
     "allow_different_nesting": true
@@ -70,6 +71,7 @@
       "Gzip",
       "Helm",
       "HipChat",
+      "ID",
       "Ingress",
       "jasmine-jquery",
       "JavaScript",

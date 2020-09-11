@@ -311,6 +311,18 @@ Handles merging a set of non-selector labels
 {{- end -}}
 
 {{/*
+Handles merging a set of labels for services
+*/}}
+{{- define "gitlab.serviceLabels" -}}
+{{- $allLabels := merge (default (dict) .Values.serviceLabels) .Values.global.service.labels -}}
+{{- if $allLabels -}}
+{{-   range $key, $value := $allLabels }}
+{{ $key }}: {{ $value }}
+{{-   end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns gitlabUrl needed for gitlab-runner
 */}}
 {{- define "gitlab-runner.gitlabUrl" -}}
@@ -335,6 +347,7 @@ We're explicitly checking for an actual value being present, not the existance o
 {{- $webservice  := pluck "secretName" $.Values.gitlab.webservice.ingress.tls | first -}}
 {{- $registry    := pluck "secretName" $.Values.registry.ingress.tls | first -}}
 {{- $minio       := pluck "secretName" $.Values.minio.ingress.tls | first -}}
+{{- $smartcard   := pluck "smartcardSecretName" $.Values.gitlab.webservice.ingress.tls | first -}}
 {{/* Set each item to configured value, or !enabled
      This works because `false` is the same as empty, so we'll use the value when `enabled: true`
      - default "" (not true) => ''
@@ -346,8 +359,9 @@ We're explicitly checking for an actual value being present, not the existance o
 {{- $webservice  :=  default $webservice (not $.Values.gitlab.webservice.enabled) -}}
 {{- $registry    :=  default $registry (not $.Values.registry.enabled) -}}
 {{- $minio       :=  default $minio (not $.Values.global.minio.enabled) -}}
+{{- $smartcard   :=  default $smartcard (not $.Values.global.appConfig.smartcard.enabled) -}}
 {{/* Check that all enabled items have been configured */}}
-{{- if or $global (and $webservice (and $registry $minio)) -}}
+{{- if or $global (and $webservice $registry $minio $smartcard) -}}
 true
 {{- end -}}
 {{- end -}}

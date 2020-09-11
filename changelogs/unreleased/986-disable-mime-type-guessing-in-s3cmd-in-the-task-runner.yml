@@ -1,0 +1,5 @@
+---
+title: Disable MIME type guessing in s3cmd
+merge_request: 1512
+author:
+type: changed

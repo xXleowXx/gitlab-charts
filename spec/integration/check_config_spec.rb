@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'helm_template_helper'
 require 'yaml'
 
 describe 'checkConfig template' do
@@ -478,5 +479,36 @@ describe 'checkConfig template' do
     include_examples 'config validation',
                      success_description: 'when Redis is set to install with a single Redis instance',
                      error_description: 'when Redis is set to install with multiple Redis instances'
+  end
+
+  describe 'dependencyProxy.puma' do
+    let(:success_values) do
+      {
+        'global' => {
+          'appConfig' => {
+            'dependencyProxy' => { 'enabled' => true }
+          }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_values) do
+      {
+        'global' => {
+          'appConfig' => {
+            'dependencyProxy' => { 'enabled' => true }
+          }
+        },
+        'gitlab' => {
+          'webservice' => { 'webServer' => 'unicorn' }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_output) { 'You must be using the Puma webservice in order to use Dependency Proxy.' }
+
+    include_examples 'config validation',
+                     success_description: 'when dependencyProxy is enabled with a default install',
+                     error_description: 'when dependencyProxy is enabled with the unicorn webservice'
   end
 end

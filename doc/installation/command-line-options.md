@@ -46,6 +46,7 @@ helm inspect values gitlab/gitlab
 |-----------------------------------------|-------------------------------------------------------------------|---------|
 | `certmanager-issuer.email`              | Email for Let's Encrypt account                                   | false   |
 | `gitlab.webservice.ingress.tls.secretName` | Existing `Secret` containing TLS certificate and key for GitLab   | _none_  |
+| `gitlab.webservice.ingress.tls.smartcardSecretName` | Existing `Secret` containg TLS certificate and key for GitLab's smartcard auth domain | _none_ |
 | `global.hosts.https`                    | Serve over https                                                  | true    |
 | `global.ingress.configureCertmanager`   | Configure cert-manager to get certificates from Let's Encrypt     | true    |
 | `global.ingress.tls.secretName`         | Existing `Secret` containing wildcard TLS certificate and key     | _none_  |
@@ -167,17 +168,22 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 
 ## Advanced registry configuration
 
-| Parameter                            | Description                                    | Default              |
-|--------------------------------------|------------------------------------------------|----------------------|
-| `registry.authEndpoint`              | Auth endpoint                                  | Undefined by default |
-| `registry.enabled`                   | Enable Docker registry                         | true                 |
-| `registry.httpSecret`                | Https secret                                   |                      |
-| `registry.minio.bucket`              | MinIO registry bucket name                     | `registry`           |
-| `registry.service.annotations`       | Annotations to add to the `Service`            | {}                   |
-| `registry.securityContext.fsGroup`   | Group ID under which the pod should be started | `1000`               |
-| `registry.securityContext.runAsUser` | User ID under which the pod should be started  | `1000`               |
-| `registry.tokenIssuer`               | JWT token issuer                               | `gitlab-issuer`      |
-| `registry.tokenService`              | JWT token service                              | `container_registry` |
+| Parameter                                           | Description                                              | Default                           |
+|-----------------------------------------------------|----------------------------------------------------------|-----------------------------------|
+| `registry.authEndpoint`                             | Auth endpoint                                            | Undefined by default              |
+| `registry.enabled`                                  | Enable Docker registry                                   | true                              |
+| `registry.httpSecret`                               | Https secret                                             |                                   |
+| `registry.minio.bucket`                             | MinIO registry bucket name                               | `registry`                        |
+| `registry.service.annotations`                      | Annotations to add to the `Service`                      | {}                                |
+| `registry.securityContext.fsGroup`                  | Group ID under which the pod should be started           | `1000`                            |
+| `registry.securityContext.runAsUser`                | User ID under which the pod should be started            | `1000`                            |
+| `registry.tokenIssuer`                              | JWT token issuer                                         | `gitlab-issuer`                   |
+| `registry.tokenService`                             | JWT token service                                        | `container_registry`              |
+| `registry.profiling.stackdriver.enabled`            | Enable continuous profiling using stackdriver            | `false`                           |
+| `registry.profiling.stackdriver.credentials.secret` | Name of the secret containing creds                      | `gitlab-registry-profiling-creds` |
+| `registry.profiling.stackdriver.credentials.key`    | Secret key in which the creds are stored                 | `credentials`                     |
+| `registry.profiling.stackdriver.service`            | Name of the stackdriver service to record profiles under | `RELEASE-registry` (templated Service name) |
+| `registry.profiling.stackdriver.projectid`          | GCP project to report profiles to                        | GCP project where running         |
 
 ## Advanced MinIO configuration
 
@@ -248,7 +254,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab.gitaly.authToken.secret`                             | Gitaly secret name                             | `{.Release.Name}-gitaly-secret`                                  |
 | `gitlab.gitaly.image.pullPolicy`                             | Gitaly image pull policy                       |                                                         |
 | `gitlab.gitaly.image.repository`                             | Gitaly image repository                        | `registry.gitlab.com/gitlab-org/build/cng/gitaly`                |
-| `gitlab.gitaly.image.tag`                                    | Gitaly image tag                               | `latest`                                                         |
+| `gitlab.gitaly.image.tag`                                    | Gitaly image tag                               | `master`                                                         |
 | `gitlab.gitaly.persistence.accessMode`                       | Gitaly persistence access mode                 | `ReadWriteOnce`                                                  |
 | `gitlab.gitaly.persistence.enabled`                          | Gitaly enable persistence flag                 | true                                                             |
 | `gitlab.gitaly.persistence.matchExpressions`                 | Label-expression matches to bind               |                                                                  |
@@ -274,7 +280,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab.gitlab-shell.enabled`                                | Shell enable flag                              | true                                                             |
 | `gitlab.gitlab-shell.image.pullPolicy`                       | Shell image pull policy                        |                                                          |
 | `gitlab.gitlab-shell.image.repository`                       | Shell image repository                         | `registry.gitlab.com/gitlab-org/build/cng/gitlab-shell`          |
-| `gitlab.gitlab-shell.image.tag`                              | Shell image tag                                | `latest`                                                         |
+| `gitlab.gitlab-shell.image.tag`                              | Shell image tag                                | `master`                                                         |
 | `gitlab.gitlab-shell.replicaCount`                           | Shell replicas                                 | `1`                                                              |
 | `gitlab.gitlab-shell.securityContext.fsGroup`                | Group ID under which the pod should be started | `1000`                                                           |
 | `gitlab.gitlab-shell.securityContext.runAsUser`              | User ID under which the pod should be started  | `1000`                                                           |
@@ -289,7 +295,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab.migrations.enabled`                                  | Migrations enable flag                         | true                                                             |
 | `gitlab.migrations.image.pullPolicy`                         | Migrations pull policy                         |                                                          |
 | `gitlab.migrations.image.repository`                         | Migrations image repository                    | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task_runner-ee`       |
-| `gitlab.migrations.image.tag`                                | Migrations image tag                           | `latest`                                                         |
+| `gitlab.migrations.image.tag`                                | Migrations image tag                           | `master`                                                         |
 | `gitlab.migrations.psql.password.key`                        | key to psql password in psql secret            | `psql-password`                                                  |
 | `gitlab.migrations.psql.password.secret`                     | psql secret                                    | `gitlab-postgres`                                                |
 | `gitlab.migrations.psql.port`                                | Set PostgreSQL server port. Takes precedence over `global.psql.port`
@@ -303,7 +309,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab.sidekiq.gitaly.serviceName`                          | Gitaly service name                            | `gitaly`                                                         |
 | `gitlab.sidekiq.image.pullPolicy`                            | Sidekiq image pull policy                      |                                                          |
 | `gitlab.sidekiq.image.repository`                            | Sidekiq image repository                       | `registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee`     |
-| `gitlab.sidekiq.image.tag`                                   | Sidekiq image tag                              | `latest`                                                         |
+| `gitlab.sidekiq.image.tag`                                   | Sidekiq image tag                              | `master`                                                         |
 | `gitlab.sidekiq.psql.password.key`                           | key to psql password in psql secret            | `psql-password`                                                  |
 | `gitlab.sidekiq.psql.password.secret`                        | psql password secret                           | `gitlab-postgres`                                                |
 | `gitlab.sidekiq.psql.port`                                   | Set PostgreSQL server port. Takes precedence over `global.psql.port`
@@ -337,7 +343,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab.task-runner.enabled`                                 | Task runner enabled flag                       | true                                                             |
 | `gitlab.task-runner.image.pullPolicy`                        | Task runner image pull policy                  | `IfNotPresent`                                                   |
 | `gitlab.task-runner.image.repository`                        | Task runner image repository                   | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee` |
-| `gitlab.task-runner.image.tag`                               | Task runner image tag                          | `latest`                                                         |
+| `gitlab.task-runner.image.tag`                               | Task runner image tag                          | `master`                                                         |
 | `gitlab.task-runner.init.image.repository`                   | Task runner init image repository              |                                                                  |
 | `gitlab.task-runner.init.image.tag`                          | Task runner init image tag                     |                                                                  |
 | `gitlab.task-runner.init.resources.requests.cpu`             | Task runner init minimum needed cpu            | `50m`                                                            |
@@ -361,7 +367,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab.webservice.gitaly.serviceName`                          | Gitaly service name                            | `gitaly`                                                         |
 | `gitlab.webservice.image.pullPolicy`                            | webservice image pull policy                      |                                                          |
 | `gitlab.webservice.image.repository`                            | webservice image repository                       | `registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee`     |
-| `gitlab.webservice.image.tag`                                   | webservice image tag                              | `latest`                                                         |
+| `gitlab.webservice.image.tag`                                   | webservice image tag                              | `master`                                                         |
 | `gitlab.webservice.psql.password.key`                           | Key to psql password in psql secret            | `psql-password`                                                  |
 | `gitlab.webservice.psql.password.secret`                        | psql secret name                               | `gitlab-postgres`                                                |
 | `gitlab.webservice.psql.port`                                   | Set PostgreSQL server port. Takes precedence over `global.psql.port`

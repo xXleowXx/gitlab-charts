@@ -81,6 +81,10 @@ spec:
                   value: {{ .Values.global.appConfig.uploads.bucket }}
                 - name: PACKAGES_BUCKET_NAME
                   value: {{ .Values.global.appConfig.packages.bucket }}
+                - name: EXTERNAL_DIFFS_BUCKET_NAME
+                  value: {{ .Values.global.appConfig.externalDiffs.bucket }}
+                - name: TERRAFORM_STATE_BUCKET_NAME
+                  value: {{ .Values.global.appConfig.terraformState.bucket }}
                 - name: BACKUP_BUCKET_NAME
                   value: {{ .Values.global.appConfig.backups.bucket }}
                 - name: BACKUP_BACKEND
@@ -176,12 +180,14 @@ spec:
                         path: objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}
                 {{- end }}
                 {{- include "gitlab.minio.mountSecrets" $ | nindent 16 }}
+                {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "object_store" "config" $.Values.global.appConfig.object_store) | nindent 16 }}
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "artifacts" "config" $.Values.global.appConfig.artifacts) | nindent 16 }}
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "lfs" "config" $.Values.global.appConfig.lfs) | nindent 16 }}
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "uploads" "config" $.Values.global.appConfig.uploads) | nindent 16 }}
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "packages" "config" $.Values.global.appConfig.packages) | nindent 16 }}
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "external_diffs" "config" $.Values.global.appConfig.externalDiffs) | nindent 16 }}
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "terraform_state" "config" $.Values.global.appConfig.terraformState) | nindent 16 }}
+                {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "dependency_proxy" "config" $.Values.global.appConfig.dependencyProxy) | nindent 16 }}
                 {{- include "gitlab.appConfig.pseudonymizer.mountSecrets" $ | nindent 16 }}
                 {{- include "gitlab.appConfig.ldap.servers.mountSecrets" $ | nindent 16 }}
                 {{- include "gitlab.appConfig.omniauth.mountSecrets" $ | nindent 16 }}

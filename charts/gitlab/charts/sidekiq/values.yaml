@@ -5,7 +5,7 @@ image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee
-  # tag: latest
+  # tag: master
 
 init:
   image: {}
@@ -44,9 +44,10 @@ metrics:
   enabled: true
   port: 3807
   annotations:
+    gitlab.com/prometheus_scrape: "true"
+    gitlab.com/prometheus_port: "3807"
     prometheus.io/scrape: "true"
     prometheus.io/port: "3807"
-
 redis:
   password: {}
 
@@ -55,7 +56,7 @@ psql: {}
 
 # https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html#sidekiq-memorykiller
 memoryKiller:
-  daemonMode: false
+  daemonMode: true
   maxRss: 2000000
   graceTime: 900
   shutdownWait: 30
@@ -150,6 +151,11 @@ global:
       connection: {}
     terraformState:
       enabled: false
+      bucket:
+      connection: {}
+    dependencyProxy:
+      enabled: false
+      proxy_download: true
       bucket:
       connection: {}
     ldap:
@@ -254,6 +260,11 @@ maxUnavailable: 1
 pods:
   - name: all-in-1
     # concurrency: 25
+    # memoryKiller:
+    #   maxRss: 2000000
+    #   graceTime: 900
+    #   shutdownWait: 30
+    #   checkInterval: 3
     # minReplicas: 1
     # maxReplicas: 10
     # updateStrategy: {}

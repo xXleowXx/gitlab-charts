@@ -41,6 +41,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := append $messages (include "gitlab.checkConfig.serviceDesk" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
+{{- $messages := append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
 {{- /* prepare output */}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -201,7 +202,7 @@ redis:
 {{/* END gitlab.checkConfig.multipleRedis */}}
 
 {{/*
-Ensure that `global.redis.host: <hostname>` is present if `redis.install: false` 
+Ensure that `global.redis.host: <hostname>` is present if `redis.install: false`
 */}}
 {{- define "gitlab.checkConfig.hostWhenNoInstall" -}}
 {{-   if and (not .Values.redis.install) (not .Values.global.redis.host) }}
@@ -335,4 +336,14 @@ Ensure Registry notifications settings are in global scope
 Registry: Notifications should be defined in the global scope. Use `global.registry.notifications` setting instead of `registry.notifications`.
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.registryl.notifications */}}
+{{/* END gitlab.checkConfig.registry.notifications */}}
+
+{{/*
+Ensure Puma is used when the dependency proxy is enabled
+*/}}
+{{- define "gitlab.checkConfig.dependencyProxy.puma" -}}
+{{- if and $.Values.global.appConfig.dependencyProxy.enabled (ne .Values.gitlab.webservice.webServer "puma") }}
+You must be using the Puma webservice in order to use Dependency Proxy. Set `gitlab.webservice.webServer` to `puma`.
+{{  end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.dependencyProxy.puma */}}

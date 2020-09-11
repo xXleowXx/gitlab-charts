@@ -53,10 +53,11 @@ controlled by `global.shell.port`.
 | `image.pullPolicy`       | `Always`       | Shell image pull policy                  |
 | `image.pullSecrets`      |                | Secrets for the image repository         |
 | `image.repository`       | `registry.com/gitlab-org/build/cng/gitlab-shell` | Shell image repository |
-| `image.tag`              | `latest`       | Shell image tag                          |
+| `image.tag`              | `master`       | Shell image tag                          |
 | `init.image.repository`  |                | initContainer image                      |
 | `init.image.tag`         |                | initContainer image tag                  |
 | `replicaCount`           | `1`            | Shell replicas                           |
+| `serviceLabels`          | `{}`           | Supplemental service labels |
 | `service.externalTrafficPolicy` | `Cluster` | Shell service external traffic policy (Cluster or Local)  |
 | `service.internalPort`   | `2222`         | Shell internal port                      |
 | `service.nodePort`       |                | Sets shell nodePort if set               |

@@ -47,7 +47,7 @@ to the `helm install` command using the `--set` flags.
 | `enabled`                        | `true`                | Webservice enabled flag                           |
 | `extraContainers`                |                       | List of extra containers to include            |
 | `extraInitContainers`            |                       | List of extra init containers to include       |
-| `extras.google_analytics_id`     | `nil`                 | Google Analytics Id for frontend               |
+| `extras.google_analytics_id`     | `nil`                 | Google Analytics ID for frontend               |
 | `extraVolumeMounts`              |                       | List of extra volumes mountes to do            |
 | `extraVolumes`                   |                       | List of extra volumes to create                |
 | `extraEnv`                       |                       | List of extra environment variables to expose  |
@@ -89,6 +89,7 @@ to the `helm install` command using the `--set` flags.
 | `service.externalPort`           | `8080`                | Webservice exposed port                           |
 | `securityContext.fsGroup`        | `1000`                | Group ID under which the pod should be started |
 | `securityContext.runAsUser`      | `1000`                | User ID under which the pod should be started  |
+| `serviceLabels`                  | `{}`                  | Supplemental service labels |
 | `service.internalPort`           | `8080`                | Webservice internal port                          |
 | `service.type`                   | `ClusterIP`           | Webservice service type                           |
 | `service.workhorseExternalPort`  | `8181`                | Workhorse exposed port                         |
@@ -99,12 +100,15 @@ to the `helm install` command using the `--set` flags.
 | `shutdown.blackoutSeconds`       | `10`                  | Number of seconds to keep Webservice running after receiving shutdown |
 | `tolerations`                    | `[]`                  | Toleration labels for pod assignment           |
 | `trusted_proxies`                | `[]`                  | See [GitLab documentation](https://docs.gitlab.com/ee/install/installation.html#adding-your-trusted-proxies) for details |
+| `workhorse.logFormat`            | `json`                | Logging format. Valid formats: `json`, `structured`, `text` |
 | `workerProcesses`                | `2`                   | Webservice number of workers                      |
 | `workhorse.livenessProbe.initialDelaySeconds`  | 20      | Delay before liveness probe is initiated       |
 | `workhorse.livenessProbe.periodSeconds`        | 60      | How often to perform the liveness probe        |
 | `workhorse.livenessProbe.timeoutSeconds`       | 30      | When the liveness probe times out              |
 | `workhorse.livenessProbe.successThreshold`     | 1       | Minimum consecutive successes for the liveness probe to be considered successful after having failed |
 | `workhorse.livenessProbe.failureThreshold`     | 3       | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded |
+| `workhorse.monitoring.exporter.enabled`        | `false` | Enable workhorse to expose Prometheus metrics  |
+| `workhorse.monitoring.exporter.port`           | 9229  | Port number to use for workhorse Prometheus metrics |
 | `workhorse.readinessProbe.initialDelaySeconds` | 0       | Delay before readiness probe is initiated      |
 | `workhorse.readinessProbe.periodSeconds`       | 10      | How often to perform the readiness probe       |
 | `workhorse.readinessProbe.timeoutSeconds`      | 2       | When the readiness probe times out             |
@@ -227,6 +231,7 @@ for common configuration options, such as GitLab and Registry hostnames.
 | `ingress.proxyBodySize`                | String  | `512m`  | [See Below](#proxybodysize). |
 | `ingress.tls.enabled`                  | Boolean | `true`  | When set to `false`, you disable TLS for GitLab Webservice. This is mainly useful for cases in which you cannot use TLS termination at Ingress-level, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `ingress.tls.secretName`               | String  | (empty) | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the GitLab URL. When not set, the `global.ingress.tls.secretName` value is used instead. |
+| `ingress.tls.smardcardSecretName`      | String  | (empty) | The name of the Kubernetes TLS SEcret that contains a valid certificate and key for the GitLab smartcard URL if enabled. When not set, the `global.ingress.tls.secretName` value is used instead. |
 
 ### proxyBodySize
 
@@ -246,7 +251,8 @@ can be customized using the `unicorn.memory.min` and `unicorn.memory.max` chart 
 default values are sane, you can increase (or lower) these values to fine-tune
 them for your environment or troubleshoot performance issues.
 
-NOTE: **Note:** These settings are effective on a _per process basis_, not for an entire Pod.
+NOTE: **Note:**
+These settings are effective on a _per process basis_, not for an entire Pod.
 
 ### Memory requests/limits
 
@@ -387,3 +393,83 @@ Puma unique options:
 | `puma.workerMaxMemory`           | Integer | `1024`                | The maximum memory (in megabytes) for the Puma worker killer |
 | `puma.threads.min`               | Integer | `4`                   | The minimum amount of Puma threads |
 | `puma.threads.max`               | Integer | `4`                   | The maximum amount of Puma threads |
+
+## Configuring the `networkpolicy`
+
+This section controls the
+[NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/).
+This configuration is optional and is used to limit Egress and Ingress of the
+Pods to specific endpoints.
+
+| Name              | Type    | Default | Description |
+|:----------------- |:-------:|:------- |:----------- |
+| `enabled`         | Boolean | `false` | This setting enables the networkpolicy |
+| `ingress.enabled` | Boolean | `false` | When set to `true`, the `Ingress` network policy will be activated. This will block all Ingress connections unless rules are specified. |
+| `ingress.rules`   | Array   | `[]`    | Rules for the Ingress policy, for details see <https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource> and the example below |
+| `egress.enabled`  | Boolean | `false` | When set to `true`, the `Egress` network policy will be activated. This will block all egress connections unless rules are specified. |
+| `egress.rules`    | Array   | `[]`    | Rules for the egress policy, these for details see <https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource> and the example below |
+
+### Example Network Policy
+
+The webservice service requires Ingress connections for only the Prometheus
+exporter if enabled and traffic coming from the NGINX Ingress, and normally
+requires Egress connections to various places. This examples adds the following
+network policy:
+
+- All Ingress requests from the network on TCP `10.0.0.0/8` port 8080 are allowed for metrics exporting and NGINX Ingress
+- All Egress requests to the network on UDP `10.0.0.0/8` port 53 are allowed for DNS
+- All Egress requests to the network on TCP `10.0.0.0/8` port 5432 are allowed for PostgreSQL
+- All Egress requests to the network on TCP `10.0.0.0/8` port 6379 are allowed for Redis
+- All Egress requests to the network on TCP `10.0.0.0/8` port 8075 are allowed for Gitaly
+- Other Egress requests to the local network on `10.0.0.0/8` are restricted
+- Egress requests outside of the `10.0.0.0/8` are allowed
+
+_Note the example provided is only an example and may not be complete_
+
+_Note that the Webservice requires outbound connectivity to the public internet
+for images on [external object storage](../../../advanced/external-object-storage)_
+
+```yaml
+networkpolicy:
+  enabled: true
+  ingress:
+    enabled: true
+    rules:
+      - from:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+        - port: 8080
+  egress:
+    enabled: true
+    rules:
+      - to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+        - port: 53
+          protocol: UDP
+      - to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+        - port: 5432
+          protocol: TCP
+      - to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+        - port: 6379
+          protocol: TCP
+      - to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+        - port: 8075
+          protocol: TCP
+      - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+            - 10.0.0.0/8
+```

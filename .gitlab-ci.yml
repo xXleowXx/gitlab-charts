@@ -181,6 +181,23 @@ review_gke:
     auto_stop_in: 4 days
   resource_group: "gke-review-app-${CI_COMMIT_REF_NAME}"
 
+review_gke_dev:
+  variables:
+    DNS_PROVIDER: "google"
+    HELM_EXTRA_ARGS: "-f scripts/ci/values-dev-images.yaml"
+  extends: .review_template
+  environment:
+    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke_dev
+    auto_stop_in: 4 days
+  resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
+  only:
+    refs:
+      - /.*-stable/@gitlab/charts/gitlab
+    variables:
+      - $KUBECONFIG
+
 review_eks:
   variables:
     DNS_PROVIDER: "aws"
@@ -222,6 +239,17 @@ stop_review_gke:
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
     action: stop
+
+stop_review_gke_dev:
+  extends: .stop_review_template
+  environment:
+    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    action: stop
+  only:
+    refs:
+      - /.*-stable/@gitlab/charts/gitlab
+    variables:
+      - $KUBECONFIG
 
 stop_review_eks:
   extends: .stop_review_template
@@ -428,7 +456,7 @@ danger-review:
     - danger --fail-on-errors=true
 
 check_docs_lint:
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs:lint"
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:vale-2.3.3-markdownlint-0.23.2"
   stage: prepare
   cache: {}
   dependencies: []
@@ -512,7 +540,7 @@ review-docs-cleanup:
     RELEASE_NAME: $CI_ENVIRONMENT_SLUG
     S3_CONFIG_PATH: /etc/gitlab/minio
   script:
-    - if [[ -n "${VARIABLES_FILE}" ]]; then source "${VARIABLES_FILE}"; ./scripts/ci_feature_spec_setup; else ./scripts/ci_integration_spec_setup; fi
+    - if [[ -n "${VARIABLES_FILE}" ]]; then source "${VARIABLES_FILE}"; ./scripts/ci/feature_spec_setup; else ./scripts/ci/integration_spec_setup; fi
     - bundle install -j $(nproc) --without non_test --path gems
     - bundle exec rspec -c -f d spec -t "${RSPEC_TAGS}"
   artifacts:
@@ -546,6 +574,22 @@ review_specs_gke:
       - master
       - /(^docs[\/-].+|.+-docs$)/
       - *com_auto_deploy_branch_ref
+
+review_specs_gke_dev:
+  extends: .specs
+  variables:
+    VARIABLES_FILE: "variables/review_gke_dev"
+    RSPEC_TAGS: type:feature
+  environment:
+    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke_dev
+  resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
+  only:
+    refs:
+      - /.*-stable/@gitlab/charts/gitlab
+    variables:
+      - $KUBECONFIG
 
 review_specs_eks:
   extends: .specs

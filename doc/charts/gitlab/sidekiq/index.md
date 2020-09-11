@@ -70,12 +70,12 @@ to the `helm install` command using the `--set` flags:
 | `resources.requests.memory`          | `600M`            | Sidekiq minimum needed memory            |
 | `timeout`                            | `5`               | Sidekiq job timeout                      |
 | `tolerations`                        | `[]`              | Toleration labels for pod assignment     |
-| `memoryKiller.daemonMode`            | `false`           | If `true` enables daemon memory killer mode |
+| `memoryKiller.daemonMode`            | `true`            | If `false`, uses the legacy memory killer mode |
 | `memoryKiller.maxRss`                | `2000000`         | Maximum RSS before delayed shutdown triggered expressed in kilobytes |
 | `memoryKiller.graceTime`             | `900`             | Time to wait before a triggered shutdown expressed in seconds|
 | `memoryKiller.shutdownWait`          | `30`              | Amount of time after triggered shutdown for existing jobs to finish expressed in seconds |
 | `memoryKiller.hardLimitRss`          |                   | Maximum RSS before immediate shutdown triggered expressed in kilobyte in daemon mode |
-| `memoryKiller.checkInterval`         | `3`               | Amount of time between memory checks in daemon mode |
+| `memoryKiller.checkInterval`         | `3`               | Amount of time between memory checks     |
 | `livenessProbe.initialDelaySeconds`  | 20                | Delay before liveness probe is initiated                                                              |
 | `livenessProbe.periodSeconds`        | 60                | How often to perform the liveness probe                                                               |
 | `livenessProbe.timeoutSeconds`       | 30                | When the liveness probe times out                                                                     |
@@ -317,6 +317,7 @@ on a per-pod basis.
 | `concurrency`               | Integer | `25`      | The number of tasks to process simultaneously. |
 | `cluster`                   | Bool    | `true`    | [See below](#cluster). Overridden by per-Pod value, if present. |
 | `timeout`                   | Integer | `4`       | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. |
+| `memoryKiller.checkInterval`| Integer | `3`       | Amount of time in seconds between memory checks     |
 | `memoryKiller.maxRss`       | Integer | `2000000` | Maximum RSS before delayed shutdown triggered expressed in kilobytes |
 | `memoryKiller.graceTime`    | Integer | `900`     | Time to wait before a triggered shutdown expressed in seconds|
 | `memoryKiller.shutdownWait` | Integer | `30`      | Amount of time after triggered shutdown for existing jobs to finish expressed in seconds |
@@ -324,9 +325,10 @@ on a per-pod basis.
 | `maxReplicas`               | Integer | `10`      | Maximum number of replicas |
 | `maxUnavailable`            | Integer | `1`       | Limit of maximum number of Pods to be unavailable |
 
-NOTE: **Note**: [Detailed documentation of the Sidekiq memory killer is
-  available](https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html#sidekiq-memorykiller)
-  in the Omnibus documentation.
+NOTE: **Note:**
+[Detailed documentation of the Sidekiq memory killer is
+available](https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html#sidekiq-memorykiller)
+in the Omnibus documentation.
 
 ## Per-pod Settings
 
@@ -334,7 +336,8 @@ The `pods` declaration provides for the declaration of all attributes for a work
 pod. These will be templated to `Deployment`s, with individual `ConfigMap`s for their
 Sidekiq instances.
 
-NOTE: **Note**: The settings default to including a single pod that is set up to monitor
+NOTE: **Note:**
+The settings default to including a single pod that is set up to monitor
 all queues. Making changes to the pods section will *overwrite the default pod* with
 a different pod configuration. It will not add a new pod in addition to the default.
 
@@ -349,6 +352,10 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. |
 | `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation. |
 | `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.|
+| `memoryKiller.checkInterval`| Integer | `3`       | Amount of time between memory checks     |
+| `memoryKiller.maxRss`       | Integer | `2000000` | Overrides the maximum RSS for a given pod. |
+| `memoryKiller.graceTime`    | Integer | `900`     | Overrides the time to wait before a triggered shutdown for a given Pod |
+| `memoryKiller.shutdownWait` | Integer | `30`      | Overrides the amount of time after triggered shutdown for existing jobs to finish for a given Pod |
 | `minReplicas`  | Integer | `2`     | Minimum number of replicas |
 | `maxReplicas`  | Integer | `10`    | Maximum number of replicas |
 | `maxUnavailable` | Integer | `1`   | Limit of maximum number of Pods to be unavailable |
@@ -375,8 +382,8 @@ these files in the GitLab source:
 1. [`app/workers/all_queues.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/workers/all_queues.yml)
 1. [`ee/app/workers/all_queues.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/app/workers/all_queues.yml)
 
-NOTE: **Note**: When [`cluster`](#cluster) is `false`, this must be an array of
-queue names as strings.
+NOTE: **Note:**
+When [`cluster`](#cluster) is `false`, this must be an array of queue names as strings.
 
 ### negateQueues
 
@@ -390,8 +397,8 @@ This is useful if you have a pod processing important queues, and another pod
 processing other queues: they can use the same list of queues, with one being in
 `queues` and the other being in `negateQueues`.
 
-NOTE: **Note**: `negateQueues` _should not_ be provided alongside `queues`, as
-it will have no effect.
+NOTE: **Note:**
+`negateQueues` _should not_ be provided alongside `queues`, as it will have no effect.
 
 ### cluster
 
@@ -407,7 +414,8 @@ not using Sidekiq Cluster, they must be an array of strings. The latter option
 will [not be supported from GitLab
 14.0](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/337).
 
-NOTE: **Note**: Unlike in other installation methods, `cluster` will never start
+NOTE: **Note:**
+Unlike in other installation methods, `cluster` will never start
 more than one Sidekiq process inside a pod. To run additional Sidekiq processes,
 run additional pods.
 

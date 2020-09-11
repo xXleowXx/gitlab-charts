@@ -23,6 +23,13 @@ service_desk_email:
   address: {{ .serviceDeskEmail.address | quote }}
 {{- end -}}
 
+{{- define "gitlab.appConfig.kas" -}}
+{{- if .Values.global.kas.enabled -}}
+gitlab_kas:
+  secret_file: /etc/gitlab/kas/.gitlab_kas_secret
+{{- end -}}
+{{- end -}}
+
 {{- define "gitlab.appConfig.shell" -}}
 gitlab_shell:
   path: /home/git/gitlab-shell/
@@ -56,7 +63,7 @@ extra:
 rack_attack:
   git_basic_auth:
     {{- if .Values.rack_attack.git_basic_auth.enabled }}
-  {{- toYaml .Values.rack_attack.git_basic_auth | nindent 2 }}
+    {{- toYaml .Values.rack_attack.git_basic_auth | nindent 4 }}
     {{- end }}
 {{- end -}}
 

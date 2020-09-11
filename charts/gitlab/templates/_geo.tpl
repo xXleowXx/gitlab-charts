@@ -38,7 +38,6 @@ production:
   #   hosts:
   #     - host1.example.com
   #     - host2.example.com
-  fdw: true
   {{- include "gitlab.geo.psql.ssl.config" . | nindent 2 }}
 {{- end -}}
 

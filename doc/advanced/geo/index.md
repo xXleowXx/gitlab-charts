@@ -136,6 +136,8 @@ this example configuration.
 ### Geo Primary
 external_url 'http://gitlab-primary.example.com'
 roles ['geo_primary_role']
+# The unique identifier for the Geo node.
+gitlab_rails['geo_node_name'] = 'gitlab-primary.example.com'
 gitlab_rails['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
@@ -162,6 +164,7 @@ We need to replace several items:
 
 - `external_url` must be updated to reflect the host name of our Primary
 instance.
+- `gitlab_rails['geo_node_name']` must be replaced with a unique name for your node.
 - `gitlab_user_password_hash` must be replaced with the hashed form of the
 `gitlab` password.
 - `postgresql['md5_auth_cidr_addresses']` can be update to be a list of
@@ -207,6 +210,7 @@ global:
       key: postgresql-password
   # configure geo (primary)
   geo:
+    nodeName: primary.example.com
     enabled: true
     role: primary
 # External DB, disable
@@ -237,7 +241,7 @@ postgresql:
    helm upgrade --install gitlab-geo gitlab/gitlab -f primary.yaml
    ```
 
-   NOTE: **Note**:
+   NOTE: **Note:**
    With Helm v2, one may need to specify the namespace that the release was
    deployed to with the `--namespace <namespace>` option.
 
@@ -281,8 +285,6 @@ this as the Primary instance. We will do this via the `task-runner` Pod.
    GitLab Geo secondary database is correctly configured ... not a secondary node
    Database replication enabled? ... not a secondary node
    Database replication working? ... not a secondary node
-   GitLab Geo tracking database is configured to use Foreign Data Wrapper? ... not a secondary node
-   GitLab Geo tracking database Foreign Data Wrapper schema is up-to-date? ... not a secondary node
    GitLab Geo HTTP(S) connectivity ... not a secondary node
    HTTP/HTTPS repository cloning is enabled ... yes
    Machine clock is synchronized ... Exception: getaddrinfo: Servname not supported for ai_socktype
@@ -318,6 +320,8 @@ this example configuration.
 ### Geo Secondary
 external_url 'http://gitlab-secondary.example.com'
 roles ['geo_secondary_role']
+# The unique identifier for the Geo node.
+gitlab_rails['geo_node_name'] = 'gitlab-secondary.example.com'
 gitlab_rails['auto_migrate'] = false
 geo_secondary['auto_migrate'] = false
 ## turn off everything but the DB
@@ -346,8 +350,6 @@ geo_postgresql['sql_user_password'] = 'gitlab_geo_user_password_hash'
 # - secondary application deployment
 # - secondary database instance(s)
 geo_postgresql['md5_auth_cidr_addresses'] = ['0.0.0.0/0']
-## Settings so we can automatically configure the FDW
-geo_secondary['db_fdw'] = true
 gitlab_rails['db_password']='gitlab_user_password'
 ```
 
@@ -355,6 +357,7 @@ We need to replace several items:
 
 - `external_url` must be updated to reflect the host name of our Secondary
 instance.
+- `gitlab_rails['geo_node_name']` must be replaced with a unique name for your node.
 - `gitlab_user_password_hash` must be replaced with the hashed form of the
 `gitlab` password.
 - `postgresql['md5_auth_cidr_addresses']` should be updated to be a list of
@@ -364,7 +367,7 @@ explicit IP addresses, or address blocks in CIDR notation.
 - `geo_postgresql['md5_auth_cidr_addresses']` should be updated to be a list of
 explicit IP addresses, or address blocks in CIDR notation.
 - `gitlab_user_password` must be updated, and is used here to allow Omnibus GitLab
-to automate the configuration of Foreign Data Wrappers in PostgreSQL.
+to automate the PostgreSQL configuration.
 
 The `md5_auth_cidr_addresses` should be in the form of
 `[ '127.0.0.1/24', '10.41.0.0/16']`. It is important to include `127.0.0.1` in
@@ -435,12 +438,6 @@ Once the configuration above is prepared:
    A failure to connect here indicates that the TLS configuration is incorrect.
    Ensure that the contents of `~gitlab-psql/data/server.crt` on the **primary** node
    match the contents of `~gitlab-psql/.postgresql/root.crt` on the **secondary** node.
-
-1. Reconfigure again, which will configure the Foreign Data Wrapper support.
-
-   ```shell
-   gitlab-ctl reconfigure
-   ```
 
 1. Replicate the databases. Replace `PRIMARY_DATABASE_HOST` with the IP or hostname
 of your Primary database instance.
@@ -514,6 +511,7 @@ global:
   geo:
     enabled: true
     role: secondary
+    nodeName: secondary.example.com
     psql:
       host: geo-2.db.example.com
       port: 5431
@@ -541,7 +539,7 @@ postgresql:
    helm upgrade --install gitlab-geo gitlab/gitlab -f secondary.yaml
    ```
 
-   NOTE: **Note**:
+   NOTE: **Note:**
    With Helm v2, one may need to specify the namespace that the release was
    deployed to with the `--namespace <namespace>` option.
 
@@ -555,8 +553,9 @@ the Primary that the Secondary exists:
 1. Visit the **primary** instance's **Admin Area > Geo**
    (`/admin/geo/nodes`) in your browser.
 1. Click the **New node** button.
-1. Add the **secondary** instance. Use the full URL for the name and URL.
+1. Add the **secondary** instance. Use the full URL for the URL.
    **Do NOT** check the **This is a primary node** checkbox.
+1. Fill in Name with the `global.geo.nodeName`. These values must always match exactly, character for character.
 1. Optionally, choose which groups or storage shards should be replicated by the
    **secondary** instance. Leave blank to replicate all.
 1. Click the **Add node** button.
@@ -600,8 +599,6 @@ configured, via the `task-runner` Pod.
    GitLab Geo secondary database is correctly configured ... yes
    Database replication enabled? ... yes
    Database replication working? ... yes
-   GitLab Geo tracking database is configured to use Foreign Data Wrapper? ... yes
-   GitLab Geo tracking database Foreign Data Wrapper schema is up-to-date? ... yes
    GitLab Geo HTTP(S) connectivity ...
    * Can connect to the primary node ... yes
    HTTP/HTTPS repository cloning is enabled ... yes

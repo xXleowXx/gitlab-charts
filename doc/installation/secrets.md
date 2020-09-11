@@ -22,6 +22,7 @@ Optional External Services:
 - IMAP for incoming emails (via mail_room service)
 - IMAP for service desk emails (via mail_room service)
 - S/MIME certificate
+- Smartcard authentication
 
 Any secret not provided manually will be automatically generated with a random value. Automatic generation of HTTPS certificates is provided by Let's Encrypt.
 
@@ -57,6 +58,7 @@ documentation.
   - [IMAP Password for incoming email](#imap-password-for-incoming-emails)
   - [IMAP Password for service desk](#imap-password-for-service-desk-emails)
   - [S/MIME Certificate](#smime-certificate)
+  - [Smartcard Authentication](#smartcard-authentication)
 
 ### Registry authentication certificates
 
@@ -224,6 +226,16 @@ Replace `<name>` with the name of the release.
 kubectl create secret generic <name>-gitlab-runner-secret --from-literal=runner-registration-token=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
 ```
 
+### GitLab KAS secret
+
+GitLab Rails will always requires that a secret for KAS is present, even if one deploys this chart without installing the KAS sub-chart. Still, one can create this secret manually by following the below procedure or leave it to the chart to auto-generate the secret.
+
+Replace `<name>` with the name of the release.
+
+```shell
+kubectl create secret generic <name>-gitlab-kas-secret --from-literal=kas_shared_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
+```
+
 ### MinIO secret
 
 Generate a set of random 20 & 64 character alpha-numeric keys for MinIO.
@@ -282,7 +294,8 @@ kubectl create secret generic ldap-main-password --from-literal=password=yourpas
 Then use `--set global.appConfig.ldap.servers.main.password.secret=ldap-main-password` to
 inject the password into your configuration.
 
-NOTE: **Note** Use the `Secret` name, not the _actual password_ when configuring the Helm property.
+NOTE: **Note:**
+Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### SMTP password
 
@@ -295,7 +308,8 @@ kubectl create secret generic smtp-password --from-literal=password=yourpassword
 
 Then use `--set global.smtp.password.secret=smtp-password` in your Helm command.
 
-NOTE: **Note** Use the `Secret` name, not the _actual password_ when configuring the Helm property.
+NOTE: **Note:**
+Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### IMAP password for incoming emails
 
@@ -309,7 +323,8 @@ kubectl create secret generic incoming-email-password --from-literal=password=yo
 Then use `--set global.appConfig.incomingEmail.password.secret=incoming-email-password`
 in your Helm command along with other required settings as specified [in the docs](command-line-options.md#incoming-email-configuration).
 
-NOTE: **Note** Use the `Secret` name, not the _actual password_ when configuring the Helm property.
+NOTE: **Note:**
+Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### IMAP password for service desk emails
 
@@ -323,7 +338,8 @@ kubectl create secret generic service-desk-email-password --from-literal=passwor
 Then use `--set global.appConfig.serviceDeskEmail.password.secret=service-desk-email-password`
 in your Helm command along with other required settings as specified [in the docs](command-line-options.md#service-desk-email-configuration).
 
-NOTE: **Note** Use the `Secret` name, not the _actual password_ when configuring the Helm property.
+NOTE: **Note:**
+Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### S/MIME Certificate
 
@@ -343,6 +359,21 @@ S/MIME settings can be set through the `values.yaml` file or on the command
 line. Use `--set global.email.smime.enabled=true` to enable S/MIME and
 `--set global.email.smime.secretName=smime-certificate` to specify the
 secret that contains the S/MIME certificate.
+
+### Smartcard Authentication
+
+[Smartcard authentication](https://docs.gitlab.com/ee/administration/auth/smartcard.html)
+uses a custom Certificate Authority (CA) to sign client certificates. The
+certificate of this custom CA needs to be injected to the Webservice pod for it
+to verify whether a client certificate is valid or not. This is provided as a
+k8s secret.
+
+```shell
+kubectl create secret generic <secret name> --from-file=ca.crt=<path to CA certificate>
+```
+
+The key name inside the secret where the certificate is stored MUST BE
+`ca.crt`.
 
 ## Next steps
 

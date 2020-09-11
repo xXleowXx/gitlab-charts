@@ -73,7 +73,7 @@ function bootstrap(){
       ADMIN_USER=$(gcloud config list account --format "value(core.account)" 2> /dev/null)
     fi
 
-    kubectl --dry-run=client --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $ADMIN_USER | kubectl --user=${CLUSTER_NAME}-admin-user apply -f -
+    kubectl --dry-run --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $ADMIN_USER 2> /dev/null | kubectl --user=${CLUSTER_NAME}-admin-user apply -f -
 
     if [ ! $IS_HELM_3 -eq 0 ]; then
       status_code=$(curl -L -w '%{http_code}' -o rbac-config.yaml -s "https://gitlab.com/gitlab-org/charts/gitlab/raw/master/doc/installation/examples/rbac-config.yaml");
@@ -92,19 +92,17 @@ function bootstrap(){
 
   echo "Installing helm..."
 
-  if [ $IS_HELM_3 -eq 0 ]; then
-    helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-  else
+  if [ ! $IS_HELM_3 -eq 0 ]; then
     helm init --wait --service-account tiller
   fi
 
-  helm repo update
+  helm repo add bitnami https://charts.bitnami.com/bitnami
 
   if ! ${USE_STATIC_IP}; then
     name_flag=$(set_helm_name_flag)
 
-    helm install $name_flag dns --namespace kube-system stable/external-dns \
-      --version '^2.1.2' \
+    helm install $name_flag dns --namespace kube-system bitnami/external-dns \
+      --version '^3.3.1' \
       --set provider=google \
       --set google.project=$PROJECT \
       --set txtOwnerId=$CLUSTER_NAME \

@@ -8,7 +8,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This is the official, recommended, and supported method to install GitLab on a cloud native environment.
 
-NOTE: **Note:** It is not necessary to have GitLab installed on Kubernetes in order to use
+NOTE: **Note:**
+It is not necessary to have GitLab installed on Kubernetes in order to use
 the [GitLab Kubernetes integration](https://docs.gitlab.com/ee/user/project/clusters/).
 
 ## Introduction
@@ -200,7 +201,7 @@ helm repo add gitlab https://charts.gitlab.io/
 helm search repo -l gitlab/gitlab
 ```
 
-NOTE: **Note**
+NOTE: **Note:**
 With Helm v2, the search command would be `helm search -l gitlab/gitlab`
 
 For more information, visit the [version mappings docs](installation/version_mappings.md).

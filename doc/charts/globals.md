@@ -53,6 +53,8 @@ global:
     minio:
       name: minio.example.com
       https: false
+    smartcard:
+      name: smartcard.example.com
 ```
 
 | Name                   | Type    | Default       | Description |
@@ -73,6 +75,7 @@ global:
 | `registry.name`        | String  |               | The hostname for Registry. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `registry.serviceName` | String  | `registry`    | The name of the `service` which is operating the Registry server. The chart will template the hostname of the service (and current `.Release.Name`) to create the proper internal serviceName. |
 | `registry.servicePort` | String  | `registry`    | The named port of the `service` where the Registry server can be reached. |
+| `smartcard.name`       | String  |               | The hostname for smartcard authentication. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 
 ### hostSuffix
 
@@ -112,7 +115,8 @@ If `false` and `global.ingress.tls.secretName` is not set, this will activate au
 self-signed certificate generation, which creates a **wildcard** certificate for all
 Ingress objects.
 
-NOTE: **Note:** If you wish to use an external `cert-manager`, you must provide the following:
+NOTE: **Note:**
+If you wish to use an external `cert-manager`, you must provide the following:
 
 - `gitlab.webservice.ingress.tls.secretName`
 - `registry.ingress.tls.secretName`
@@ -121,7 +125,8 @@ NOTE: **Note:** If you wish to use an external `cert-manager`, you must provide 
 
 ## GitLab Version
 
-NOTE: **Note:** this value should only used for development purposes, or by explicit request of GitLab support. Please avoid using this value
+NOTE: **Note:**
+This value should only used for development purposes, or by explicit request of GitLab support. Please avoid using this value
 on production environments and set the version as described
 in [Deploy using Helm](../installation/deployment.md#deploy-using-helm)
 
@@ -185,7 +190,8 @@ from the global, by design.
 
 ### PostgreSQL SSL
 
-NOTE: **Note**: Currently, SSL support is mutual TLS only.
+NOTE: **Note:**
+Currently, SSL support is mutual TLS only.
 See [issue #2034](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2034)
 and [issue #1817](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1817).
 
@@ -212,7 +218,8 @@ global:
 
 ### PostgreSQL load balancing
 
-NOTE: **Note**: This feature currently requires the use of an
+NOTE: **Note:**
+This feature currently requires the use of an
 [external PostgreSQL](../advanced/external-db/), as this chart does not
 deploy PostgreSQL in an HA fashion.
 
@@ -346,7 +353,7 @@ global:
 | `sentinels.[].host`| String  |         | The hostname of Redis Sentinel server for a Redis HA setup. |
 | `sentinels.[].port`| Integer | `26379` | The port on which to connect to the Redis Sentinel server. |
 
-NOTE: **Note**:
+NOTE: **Note:**
 All the prior Redis attributes in the general [configure Redis settings](#configure-redis-settings)
 continue to apply with the Sentinel support unless respecified in the table above.
 
@@ -420,11 +427,11 @@ Redis instances.
 | `.password.key`    | String  |         | The `password.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
 | `.password.secret` | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
 
-NOTE: **Note**:
+NOTE: **Note:**
 The primary Redis definition is required as there are additional persistence
- classes that have not been separated.
+classes that have not been separated.
 
-NOTE: **Note**:
+NOTE: **Note:**
 Each instance definition may also use Redis Sentinel support. Sentinel
 configurations **are not shared** and needs to be specified for each
 instance that uses Sentinels. Please refer to the [Sentinel configuration](#redis-sentinel-support)
@@ -535,10 +542,12 @@ Administrators can chose to use Gitaly nodes in the following ways:
 See [Repository Storage Paths](https://docs.gitlab.com/ee/administration/repository_storage_paths.html)
 documentation for details on managing which nodes will be used for new projects.
 
-NOTE: **Note:** If `gitaly.host` is provided, `gitaly.internal` and `gitaly.external`
-  properties will *be ignored*. See the [deprecated Gitaly settings](#deprecated-gitaly-settings).
+NOTE: **Note:**
+If `gitaly.host` is provided, `gitaly.internal` and `gitaly.external` properties will *be ignored*.
+See the [deprecated Gitaly settings](#deprecated-gitaly-settings).
 
-NOTE: **Note:** The Gitaly authentication token is expected to be identical for
+NOTE: **Note:**
+The Gitaly authentication token is expected to be identical for
 all Gitaly services at this time, internal or external. Ensure these are aligned.
 See [issue #1992](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1992) for further details.
 
@@ -554,12 +563,13 @@ will match.
 This list defaults to `['default']`, which provides for 1 pod related to one
 [storage path](https://docs.gitlab.com/ee/administration/repository_storage_paths.html).
 
-NOTE: **Note:** Manual scaling of this item is required, by adding or removing entries in
-  `gitaly.internal.names`. When scaling down, any repository that has not been moved
-  to another node will become unavailable. Since the Gitaly chart is a `StatefulSet`,
-  dynamically provisioned disks *will not* be reclaimed. This means the data disks
-  will persist, and the data on them can be accessed when the set is scaled up again
-  by re-adding a node to the `names` list.
+NOTE: **Note:**
+Manual scaling of this item is required, by adding or removing entries in
+`gitaly.internal.names`. When scaling down, any repository that has not been moved
+to another node will become unavailable. Since the Gitaly chart is a `StatefulSet`,
+dynamically provisioned disks *will not* be reclaimed. This means the data disks
+will persist, and the data on them can be accessed when the set is scaled up again
+by re-adding a node to the `names` list.
 
 A sample [configuration of multiple internal nodes](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/gitaly/values-multiple-internal.yaml)
 can be found in the examples folder.
@@ -574,14 +584,16 @@ Each item of this list has 3 keys:
 - `port`: (optional) The port number to reach the host on. Defaults to `8075`.
 - `tlsEnabled`: (optional) Override `global.gitaly.tls.enabled` for this particular entry.
 
-NOTE: **Note:** You must have an entry with `name: default`.
+NOTE: **Note:**
+You must have an entry with `name: default`.
 
 We provide an [advanced configuration](../advanced/index.md) guide for
 [using an external Gitaly service](../advanced/external-gitaly/index.md). You can also
 find sample [configuration of multiple external services](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/gitaly/values-multiple-external.yaml)
 in the examples folder.
 
-NOTE: **Note:** You may use an external [Praefect](https://docs.gitlab.com/ee/administration/gitaly/praefect.html)
+NOTE: **Note:**
+You may use an external [Praefect](https://docs.gitlab.com/ee/administration/gitaly/praefect.html)
 to provide highly available Gitaly services. Configuration of the two is
 interchangeable, as from the viewpoint of the clients, there is no difference.
 
@@ -602,7 +614,8 @@ The `authToken` attribute for Gitaly has two sub keys:
 - `secret` defines the name of the Kubernetes `Secret` to pull from.
 - `key` defines the name of the key in the above secret that contains the authToken.
 
-NOTE: **Note:** All Gitaly nodes **must** share the same authentication token.
+NOTE: **Note:**
+All Gitaly nodes **must** share the same authentication token.
 
 ### Deprecated Gitaly settings
 
@@ -659,6 +672,11 @@ global:
       googleAnalyticsId:
       piwikUrl:
       piwikSiteId:
+    object_store:
+      enabled: true
+      proxy_download: true
+      storage_options: {}
+      connection: {}
     lfs:
       enabled: true
       proxy_download: true
@@ -688,6 +706,10 @@ global:
     terraformState:
       enabled: false
       bucket: gitlab-terraform-state
+      connection: {}
+    dependencyProxy:
+      enabled: false
+      bucket: gitlab-dependency-proxy
       connection: {}
     backups:
       bucket: gitlab-backups
@@ -727,6 +749,10 @@ global:
       dsn:
       clientside_dsn:
       environment:
+    smartcard:
+      enabled: false
+      CASecret:
+      clientCertificateRequiredHost:
 ```
 
 ### General application settings
@@ -742,7 +768,7 @@ application are described below:
 | `defaultCanCreateGroup`             | Boolean | `true`  | A flag to decide if users are allowed to create groups. |
 | `usernameChangingEnabled`           | Boolean | `true`  | A flag to decide if users are allowed to change their username. |
 | `issueClosingPattern`               | String  | (empty) | [Pattern to close issues automatically](https://docs.gitlab.com/ee/administration/issue_closing_pattern.html). |
-| `defaultTheme`                      | Integer |         | [Numeric ID of the default theme for the GitLab instance](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/themes.rb#L17-27). It takes a number, denoting the id of the theme. |
+| `defaultTheme`                      | Integer |         | [Numeric ID of the default theme for the GitLab instance](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/themes.rb#L17-27). It takes a number, denoting the ID of the theme. |
 | `defaultProjectsFeatures.*feature*` | Boolean | `true`  | [See below](#defaultprojectsfeatures). |
 | `webHookTimeout`                    | Integer |         | Waiting time in seconds before a [hook is deemed to have failed](https://docs.gitlab.com/ce/user/project/integrations/webhooks.html#receiving-duplicate-or-multiple-web-hook-requests-triggered-by-one-event). |
 
@@ -782,7 +808,74 @@ under the `extra` key below `appConfig`:
 | `extra.piwikSiteId`       | String | (empty) | Piwik Site ID. |
 | `extra.piwikUrl`          | String | (empty) | Piwik URL. |
 
-### LFS, Artifacts, Uploads, Packages, and External MR diffs
+### Consolidated object storage
+
+In addition to the following section that describes how to configured individual settings
+for object storage, we've added a consolidated object storage configuration to ease the use
+of shared configuration for these items. Making use of `object_store`, you can configure a
+`connection` once, and it will be used for any and all object storage backed features that
+are not individually configured with a `connection` property.
+
+```yaml
+  enabled: true
+  proxy_download: true
+  storage_options:
+  connection:
+    secret:
+    key:
+```
+
+| Name             | Type    | Default | Description |
+|:---------------- |:-------:|:------- |:----------- |
+| `enabled`        | Boolean | `true`  | Enable the use of consolidated object storage. |
+| `proxy_download` | Boolean | `true`  | Enable proxy of all downloads via GitLab, in place of direct downloads from the `bucket`. |
+| `storage_options`| String  | `{}`    | [See below](#storage_options). |
+| `connection`     | String  | `{}`    | [See below](#connection). |
+
+The property structure is shared, and all properties here can be overriden by the individual
+items below. The `connection` property structure is identical.
+
+**Notice:** The `bucket` and `enabled` properties are the only properties that must be
+configured on a per-item level (`global.appConfig.artifacts.bucket`, ...) if you wish to
+deviate from the default values.
+
+When using the `AWS` provider for the [connection](#connection) (which is any
+S3 compatible provider such as the included MinIO), GitLab Workhorse can offload
+all storage related uploads. This will automatically be enabled for you, when
+using this consolidated configuration.
+
+#### storage_options
+
+> Introduced in GitLab 13.4.
+
+The `storage_options` are used to configure [S3 Server Side
+Encryption](https://docs.gitlab.com/ee/administration/object_storage.html#server-side-encryption-headers).
+
+Setting a default encryption on an S3 bucket is the easiest way to
+enable encryption, but you may want to [set a bucket policy to ensure
+only encrypted objects are uploaded](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
+To do this, you must configure GitLab to send the proper encryption headers
+in the `storage_options` configuration section:
+
+|            Setting                  | Description |
+|-------------------------------------|-------------|
+| `server_side_encryption`            | Encryption mode (AES256 or aws:kms) |
+| `server_side_encryption_kms_key_id` | Amazon Resource Name. Only needed when `aws:kms` is used in `server_side_encryption`. See the [Amazon documentation on using KMS encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html) |
+
+Example:
+
+```yaml
+  enabled: true
+  proxy_download: true
+  connection:
+    secret: gitlab-rails-storage
+    key:connection
+  storage_options:
+    server_side_encryption: aws:kms
+    server_side_encryption_kms_key_id: arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+```
+
+### LFS, Artifacts, Uploads, Packages, External MR diffs, and Dependency Proxy
 
 Details on these settings are below. Documentation is not repeated individually,
 as they are structurally identical aside from the default value of the `bucket` property.
@@ -798,10 +891,13 @@ as they are structurally identical aside from the default value of the `bucket` 
 
 | Name             | Type    | Default | Description |
 |:---------------- |:-------:|:------- |:----------- |
-| `enabled`        | Boolean | `true` except for MR diffs  | Enable the use of these features with object storage. |
+| `enabled`        | Boolean | See note below  | Enable the use of these features with object storage. |
 | `proxy_download` | Boolean | `true`  | Enable proxy of all downloads via GitLab, in place of direct downloads from the `bucket`. |
 | `bucket`         | String  | Various | Name of the bucket to use from object storage provider. Default will be `git-lfs`, `gitlab-artifacts`, `gitlab-uploads`, or `gitlab-packages`, depending on the service. |
 | `connection`     | String  | `{}`    | [See below](#connection). |
+
+NOTE: **Note:**
+`enabled` defaults to `true` for LFS, artifacts, uploads, and packages.
 
 #### connection
 
@@ -843,6 +939,28 @@ assigned by the Rails code.
 
 The incoming email settings are explained in the [command line options page](../installation/command-line-options.md#incoming-email-configuration).
 
+### KAS settings
+
+One can optionally customize the KAS `secret` name as well and `key`, either by
+using Helm's `--set variable` option:
+
+```shell
+--set global.appConfig.gitlab_kas.secret=custom-secret-name \
+--set global.appConfig.gitlab_kas.key=custom-secret-key \
+```
+
+or by configuring your `values.yml`.
+
+```yaml
+global:
+  appConfig:
+    gitlab_kas:
+      secret: "custom-secret-name"
+      key: "custom-secret-key"
+```
+
+If you'd like to customize the secret value, refer to the [secrets documentation](../installation/secrets.md#gitlab-kas-secret).
+
 ### LDAP
 
 The `ldap.servers` setting allows for the configuration of [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap.html)
@@ -865,6 +983,7 @@ ldap:
       port: 636
       uid: 'sAMAccountName'
       bind_dn: 'cn=administrator,cn=Users,dc=domain,dc=net'
+      base: 'dc=domain,dc=net'
       password:
         secret: my-ldap-password-secret
         key: the-key-containing-the-password
@@ -877,12 +996,13 @@ Example `--set` configuration items, when using the global chart:
 --set global.appConfig.ldap.servers.main.host='your_ldap_server' \
 --set global.appConfig.ldap.servers.main.port='636' \
 --set global.appConfig.ldap.servers.main.uid='sAMAccountName' \
---set global.appConfig.ldap.servers.main.bind_dn='cn=administrator\,cn=Users\,dc=domain\,dc=net'
---set global.appConfig.ldap.servers.main.password.secret='my-ldap-password-secret'
+--set global.appConfig.ldap.servers.main.bind_dn='cn=administrator\,cn=Users\,dc=domain\,dc=net' \
+--set global.appConfig.ldap.servers.main.base='dc=domain\,dc=net' \
+--set global.appConfig.ldap.servers.main.password.secret='my-ldap-password-secret' \
 --set global.appConfig.ldap.servers.main.password.key='the-key-containing-the-password'
 ```
 
-NOTE: **Note**:
+NOTE: **Note:**
 Commas are considered [special characters](https://helm.sh/docs/intro/using_helm/#the-format-and-limitations-of---set)
 within Helm `--set` items. Be sure to escape commas in values such as `bind_dn`:
 `--set global.appConfig.ldap.servers.main.bind_dn='cn=administrator\,cn=Users\,dc=domain\,dc=net'`.
@@ -1039,9 +1159,10 @@ First, create a configMap:
 kubectl create configmap <name of the configmap> --from-file=pseudonymizer.yml=<path to pseudonymizer_config.yml>
 ```
 
-NOTE: **Note:** Please make sure the key specified in the above command to create configMap
-  is `pseudonymizer.yml`. It is used to point the service to the correct location and
-  an incorrect key will cause Pseudonymizer to not work.
+NOTE: **Note:**
+Please make sure the key specified in the above command to create configMap is `pseudonymizer.yml`.
+It is used to point the service to the correct location and an incorrect key will cause
+Pseudonymizer to not work.
 
 Then pass the argument `--set global.appConfig.pseudonymizer.configMap=<name of the configmap>`
 to the `helm install` command to instruct GitLab to use this manifest instead of the
@@ -1114,7 +1235,28 @@ global:
 | `enabled`        | Boolean | `false`  | Enable or Disable the integration |
 | `dsn`            | String  |        | Sentry DSN for backend errors |
 | `clientside_dsn` | String  |        | Sentry DSN for front-end errors |
-| `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/enriching-error-data/environments/) |
+| `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/product/sentry-basics/environments/) |
+
+### Smartcard Authentication settings
+
+```yaml
+global:
+  appConfig:
+    smartcard:
+      enabled: false
+      CASecret:
+      clientCertificateRequiredHost:
+      sanExtensions: false
+      requiredForGitAccess: false
+```
+
+| Name                            | Type    | Default | Description                                      |
+| :------------------------------ | :-----: | :------ | :----------------------------------------------- |
+| `enabled`                       | Boolean | `false` | Enable or Disable smartcard authentication       |
+| `CASecret`                      | String  |         | Name of the secret containing the CA certificate |
+| `clientCertificateRequiredHost` | String  |         | Hostname to use for smartcard authentication. By default, the provided or computed smartcard hostname is used. |
+| `sanExtensions`                 | Boolean | `false` | Enable the use of SAN extensions to match users with certificates. |
+| `requiredForGitAccess`          | Boolean | `false` | Require browser session with smartcard sign-in for Git access. |
 
 ## Configure Rails settings
 
@@ -1202,8 +1344,8 @@ is killed by the Webservice master process. The default value is 60 seconds.
 
 ## Custom Certificate Authorities
 
-NOTE: **Note:**: These settings do not affect charts from outside of this repository,
-  via `requirements.yaml`.
+NOTE: **Note:**
+These settings do not affect charts from outside of this repository, via `requirements.yaml`.
 
 Some users may need to add custom certificate authorities, such as when using internally
 issued SSL certificates for TLS services. To provide this functionaliy, we provide
@@ -1221,8 +1363,8 @@ A user can provide any number of secrets, each containing any number of keys tha
 PEM encoded CA certificates. These are configured as entries under `global.certificates.customCAs`.
 All keys within the secret will be mounted, so all keys across all secrets must be unique.
 
-NOTE: **Note:** These secrets can be named in any fashion, but they *must not* contain
-  key names that collide.
+NOTE: **Note:**
+These secrets can be named in any fashion, but they *must not* contain key names that collide.
 
 To create a secret:
 
@@ -1331,6 +1473,8 @@ global:
 
 ## Labels
 
+### Pod
+
 Custom labels can be applied to various Deployments and Jobs. These labels are
 supplementary to existing or preconfigured labels constructed by this Helm
 chart. These supplementary labels will **not** be utilized for `matchSelectors`.
@@ -1338,6 +1482,19 @@ chart. These supplementary labels will **not** be utilized for `matchSelectors`.
 ```yaml
 global:
   pod:
+    labels:
+      environment: production
+```
+
+### Service
+
+Custom labels can be applied to services. These labels are
+supplementary to existing or preconfigured labels constructed by this Helm
+chart.
+
+```yaml
+global:
+  service:
     labels:
       environment: production
 ```

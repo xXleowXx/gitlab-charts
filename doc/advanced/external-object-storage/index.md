@@ -22,9 +22,25 @@ has been provided in the [examples](https://gitlab.com/gitlab-org/charts/gitlab/
 
 This documentation specifies usage of access and secret keys for AWS. It is also possible to use [IAM roles](aws-iam-roles.md).
 
-NOTE: **Note:** GitLab does not currently support using [Amazon KMS](https://aws.amazon.com/kms/)
-to encrypt data stored in S3 buckets. Adding KMS support is being discussed in
-[issue #1012](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1012).
+## S3 encryption
+
+> [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2251) in GitLab 13.4.
+
+GitLab supports [Amazon KMS](https://aws.amazon.com/kms/)
+to [encrypt data stored in S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets).
+You can enable this in two ways:
+
+1. In AWS, [configure the S3 bucket to use default encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html).
+1. In GitLab, enable [server side encryption headers](../../charts/globals.md#storage_options).
+
+Note that these two options are not mutually exclusive. If you choose
+option 1, you do not need to do option 2, unless you
+want to [set an S3 bucket policy to require encrypted objects](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
+You can set a default encryption policy but also enable server side
+encryption headers to override those defaults.
+
+See the [GitLab documentation on encrypted S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets)
+for more details.
 
 ## Azure Blob Storage
 
@@ -64,12 +80,13 @@ Examples for [S3](https://docs.docker.com/registry/storage-drivers/s3/)(S3 compa
 1. Follow [registry chart documentation on storage](../../charts/registry/index.md#storage) for creating the secret.
 1. Configure the chart as documented.
 
-## LFS, Artifacts, Uploads, Packages, External Diffs, Pseudonymizer, Terraform State
+## LFS, Artifacts, Uploads, Packages, External Diffs, Pseudonymizer, Terraform State, Dependency Proxy
 
 Configuration of object storage for LFS, artifacts, uploads, packages, external
 diffs, and pseudonymizer is done via the `global.appConfig.lfs`,
 `global.appConfig.artifacts`, `global.appConfig.uploads`,
-`global.appConfig.packages`, `global.appConfig.externalDiffs` and `global.appConfig.pseudonymizer` keys.
+`global.appConfig.packages`, `global.appConfig.externalDiffs`,
+`global.appConfig.dependencyProxy` and `global.appConfig.pseudonymizer` keys.
 
 ```shell
 --set global.appConfig.lfs.bucket=gitlab-lfs-storage
@@ -99,6 +116,10 @@ diffs, and pseudonymizer is done via the `global.appConfig.lfs`,
 --set global.appConfig.pseudonymizer.bucket=gitlab-pseudonymizer-storage
 --set global.appConfig.pseudonymizer.connection.secret=object-storage
 --set global.appConfig.pseudonymizer.connection.key=connection
+
+--set global.appConfig.dependencyProxy.bucket=gitlab-dependencyproxy-storage
+--set global.appConfig.dependencyProxy.connection.secret=object-storage
+--set global.appConfig.dependencyProxy.connection.key=connection
 ```
 
 NOTE: **Note:**
@@ -108,6 +129,11 @@ NOTE: **Note:**
 Storing MR diffs on external storage is not enabled by default. So,
 for the object storage settings for `externalDiffs` to take effect,
 `global.appConfig.externalDiffs.enabled` key should have a `true` value.
+
+NOTE: **Note:**
+The dependency proxy feature is not enabled by default. So,
+for the object storage settings for `dependencyProxy` to take effect,
+`global.appConfig.dependencyProxy.enabled` key should have a `true` value.
 
 See the [charts/globals documentation on appConfig](../../charts/globals.md#configure-appconfig-settings) for full details.
 

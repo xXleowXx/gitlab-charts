@@ -68,7 +68,7 @@ change according to the pieces being tested, and the requirements as listed:
   [database](https://docs.gitlab.com/ce/install/requirements.html#database)
   requirements.
 
-  NOTE: **Note**:
+  NOTE: **Note:**
   This is created in your home directory under `~/.minikube/machines/minikube/`.
 
 - `--kubernetes-version string`: The Kubernetes version that the Minikube VM will use (e.g., `v1.2.3`).
@@ -170,9 +170,19 @@ It is not possible to use the `nginx-ingress` chart to provide ports `22`, `80`,
 The `certmanager` chart can not be used with Minikube. You must disable this by
 setting `certmanager.install=false,global.ingress.configureCertmanager=false`.
 As a result, if you don't provide your own SSL certificates, self-signed
-certificates will be generated. The `gitlab-runner` chart is not compatible with
-self-signed certificates at this time, and as such, should be disabled by setting
-`gitlab-runner.install=false`.
+certificates will be generated. The `gitlab-runner` chart will accept the self-signed
+certificates via `gitlab-runner.certsSecretName`. Assuming your release name is `gitlab`,
+the certificate name will be `gitlab-wildcard-tls-chain`.
+
+The `gitlab-shell` chart can be used with Minikube, but requires mapping to a port other
+than 22 as it used by Minikube already. You can configure `gitlab.gitlab-shell.service.type=NodePort`
+and `gitlab.gitlab-shell.service.nodePort=<high-numbered port>`, which will allow cloning a repository
+via the specified port. To ensure this port is reflected in the clone link in the UI, configure
+`global.shell.port=<high-numbered port>`.
+
+In the following sections, we'll show how to install these charts from your local Git clone.
+Be sure that you have checked out the desired branch or tag, and are at the base folder of
+that checkout.
 
 ### Deploying GitLab with recommended settings
 
@@ -183,12 +193,12 @@ as a base.
 ```shell
 helm repo add gitlab https://charts.gitlab.io/
 helm repo update
-helm upgrade --install gitlab gitlab/gitlab \
+helm upgrade --install gitlab . \
   --timeout 600s \
   -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube.yaml
 ```
 
-NOTE: **Note**:
+NOTE: **Note:**
 If using Helm v2, please see notes about the `--timeout` option
 in the [Deployment documentation](../../installation/deployment.md#deploy-using-helm).
 
@@ -201,12 +211,12 @@ as a reasonable base.
 ```shell
 helm repo add gitlab https://charts.gitlab.io/
 helm repo update
-helm upgrade --install gitlab gitlab/gitlab \
+helm upgrade --install gitlab . \
   --timeout 600s \
   -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml
 ```
 
-NOTE: **Note**:
+NOTE: **Note:**
 If using Helm v2, please see notes about the `--timeout` option
 in the [Deployment documentation](../../installation/deployment.md#deploy-using-helm).
 

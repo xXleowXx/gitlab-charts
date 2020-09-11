@@ -5,7 +5,7 @@ image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee
-  # tag: latest
+  # tag: master
 init:
   image: {}
     # repository:
@@ -35,13 +35,28 @@ shutdown:
 annotations: {}
 
 podLabels: {}
+serviceLabels: {}
 
 metrics:
   enabled: true
   annotations:
+    gitlab.com/prometheus_scrape: "true"
+    gitlab.com/prometheus_port: "8080"
+    gitlab.com/prometheus_path: "/-/metrics"
     prometheus.io/scrape: "true"
     prometheus.io/port: "8080"
     prometheus.io/path: "/-/metrics"
+
+networkpolicy:
+  enabled: false
+  egress:
+    enabled: false
+    rules: []
+  ingress:
+    enabled: false
+    rules: []
+  annotations: {}
+
 service:
   type: ClusterIP
   externalPort: 8080
@@ -56,6 +71,7 @@ ingress:
   proxyBodySize: "512m"
   tls: {}
     # secretName:
+    # smartcardSecretName:
     # enabled: true
   annotations: {}
 workerProcesses: 2
@@ -98,6 +114,7 @@ deployment:
 workhorse:
   sentryDSN: ""
   extraArgs: ""
+  logFormat: json # valid: (json, structured, text)
   resources:
     requests:
       cpu: 100m
@@ -115,6 +132,10 @@ workhorse:
     timeoutSeconds: 2
     successThreshold: 1
     failureThreshold: 3
+  monitoring:
+    exporter:
+      enabled: false
+      port: 9229
 
 psql: {}
   # port: 5432
@@ -175,6 +196,16 @@ global:
     serviceDeskEmail:
       enabled: false
       address:
+    object_store:
+      connection: {}
+        # provider: AWS
+        # region: us-east-1
+        # secret:
+        # secret_key:
+        # access_key:
+      storage_options: {}
+        # server_side_encryption:
+        # server_side_encrypton_kms_key_id:
     lfs:
       enabled: true
       proxy_download: true
@@ -202,6 +233,11 @@ global:
       connection: {}
     terraformState:
       enabled: false
+      bucket:
+      connection: {}
+    dependencyProxy:
+      enabled: false
+      proxy_download: true
       bucket:
       connection: {}
     ldap:
@@ -272,7 +308,7 @@ trusted_proxies: []
 resources:
   # limits:
   #  cpu: 1.5
-  #  memory: 2G
+  #  memory: 2.5G
   requests:
     cpu: 300m
     memory: 1.5G
@@ -295,7 +331,7 @@ serviceAccount:
   create: false
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
-  # name: 
+  # name:
 
 ## Allow configuring pods' priorityClassName. This is used to control pod priority in case of eviction:
 #  https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/

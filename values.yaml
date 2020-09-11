@@ -53,6 +53,7 @@ global:
     minio: {}
     registry: {}
     tls: {}
+    smartcard: {}
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:
@@ -218,6 +219,15 @@ global:
       piwikSiteId:
 
     ## doc/charts/globals.md#lfs-artifacts-uploads-packages-external-mr-diffs
+    object_store:
+      enabled: true
+      proxy_download: true
+      storage_options: {}
+        # server_side_encryption:
+        # server_side_encryption_kms_key_id
+      connection: {}
+        # secret:
+        # key:
     lfs:
       enabled: true
       proxy_download: true
@@ -252,6 +262,11 @@ global:
     terraformState:
       enabled: false
       bucket: gitlab-terraform-state
+      connection: {}
+    dependencyProxy:
+      enabled: false
+      proxy_download: true
+      bucket: gitlab-dependency-proxy
       connection: {}
 
     ## doc/charts/globals.md#pseudonymizer-settings
@@ -320,6 +335,11 @@ global:
       #     key: _the_key_which_holds_your_ldap_password
       #   encryption: 'plain'
 
+    ## doc/charts/globals.md#kas
+    gitlab_kas: {}
+      # secret:
+      # key:
+
     ## doc/charts/globals.md#omniauth
     omniauth:
       enabled: false
@@ -342,6 +362,12 @@ global:
       clientside_dsn:
       environment:
 
+    smartcard:
+      enabled: false
+      CASecret:
+      clientCertificateRequiredHost:
+      sanExtensions: false
+      requiredForGitAccess: false
   ## End of global.appConfig
 
   ## doc/charts/geo.md
@@ -366,6 +392,12 @@ global:
         # clientKey:
         # clientCertificate:
         # serverCA:
+
+  ## doc/installation/secrets.md#gitlab-kas-secret
+  kas:
+    enabled: false
+    # secret:
+    # key:
 
   ## doc/charts/globals.md#configure-gitlab-shell-settings
   shell:
@@ -450,8 +482,9 @@ global:
   ## Timezone for containers.
   time_zone: UTC
 
-  ## Global Service Annotations
+  ## Global Service Annotations and Labels
   service:
+    labels: {}
     annotations: {}
 
   ## Global Deployment Annotations
@@ -585,6 +618,8 @@ nginx-ingress:
       enabled: true
       service:
         annotations:
+          gitlab.com/prometheus_scrape: "true"
+          gitlab.com/prometheus_port: "10254"
           prometheus.io/scrape: "true"
           prometheus.io/port: "10254"
   defaultBackend:
@@ -617,6 +652,111 @@ prometheus:
     enabled: false
   server:
     retention: 15d
+  #
+  serverFiles:
+    prometheus.yml:
+      scrape_configs:
+        - job_name: prometheus
+          static_configs:
+            - targets:
+              - localhost:9090
+        - job_name: 'kubernetes-apiservers'
+          kubernetes_sd_configs:
+            - role: endpoints
+          scheme: https
+          tls_config:
+            ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            insecure_skip_verify: true
+          bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+              action: keep
+              regex: default;kubernetes;https
+        - job_name: 'kubernetes-pods'
+          kubernetes_sd_configs:
+            - role: pod
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_annotation_gitlab_com_prometheus_scrape]
+              action: keep
+              regex: true
+            - source_labels: [__meta_kubernetes_pod_annotation_gitlab_com_prometheus_path]
+              action: replace
+              target_label: __metrics_path__
+              regex: (.+)
+            - source_labels: [__address__, __meta_kubernetes_pod_annotation_gitlab_com_prometheus_port]
+              action: replace
+              regex: ([^:]+)(?::\d+)?;(\d+)
+              replacement: $1:$2
+              target_label: __address__
+            - action: labelmap
+              regex: __meta_kubernetes_pod_label_(.+)
+            - source_labels: [__meta_kubernetes_namespace]
+              action: replace
+              target_label: kubernetes_namespace
+            - source_labels: [__meta_kubernetes_pod_name]
+              action: replace
+              target_label: kubernetes_pod_name
+        - job_name: 'kubernetes-service-endpoints'
+          kubernetes_sd_configs:
+            - role: endpoints
+          relabel_configs:
+            - action: keep
+              regex: true
+              source_labels:
+                - __meta_kubernetes_service_annotation_gitlab_com_prometheus_scrape
+            - action: replace
+              regex: (https?)
+              source_labels:
+                - __meta_kubernetes_service_annotation_gitlab_com_prometheus_scheme
+              target_label: __scheme__
+            - action: replace
+              regex: (.+)
+              source_labels:
+                - __meta_kubernetes_service_annotation_gitlab_com_prometheus_path
+              target_label: __metrics_path__
+            - action: replace
+              regex: ([^:]+)(?::\d+)?;(\d+)
+              replacement: $1:$2
+              source_labels:
+                - __address__
+                - __meta_kubernetes_service_annotation_gitlab_com_prometheus_port
+              target_label: __address__
+            - action: labelmap
+              regex: __meta_kubernetes_service_label_(.+)
+            - action: replace
+              source_labels:
+                - __meta_kubernetes_namespace
+              target_label: kubernetes_namespace
+            - action: replace
+              source_labels:
+                - __meta_kubernetes_service_name
+              target_label: kubernetes_name
+            - action: replace
+              source_labels:
+                - __meta_kubernetes_pod_node_name
+              target_label: kubernetes_node
+        - job_name: 'kubernetes-services'
+          metrics_path: /probe
+          params:
+            module: [http_2xx]
+          kubernetes_sd_configs:
+            - role: service
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_service_annotation_gitlab_com_prometheus_probe]
+              action: keep
+              regex: true
+            - source_labels: [__address__]
+              target_label: __param_target
+            - target_label: __address__
+              replacement: blackbox
+            - source_labels: [__param_target]
+              target_label: instance
+            - action: labelmap
+              regex: __meta_kubernetes_service_label_(.+)
+            - source_labels: [__meta_kubernetes_namespace]
+              target_label: kubernetes_namespace
+            - source_labels: [__meta_kubernetes_service_name]
+              target_label: kubernetes_name
 
 ## Configuration of Redis
 ## doc/architecture/decisions.md#redis
@@ -686,7 +826,9 @@ gitlab-runner:
       s3BucketLocation: us-east-1
       s3CachePath: gitlab-runner
       s3CacheInsecure: false
-
+  podAnnotations:
+    gitlab.com/prometheus_scrape: "true"
+    gitlab.com/prometheus_port: 9252
 
 ## Installation & configuration of stable/grafana
 ## See requirements.yaml for current version

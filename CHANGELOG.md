@@ -2,6 +2,130 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.3.5 (2020-09-04)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.5.
+
+
+## 4.3.4 (2020-09-02)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.4.
+
+
+## 4.3.3 (2020-09-02)
+
+### Fixed (1 change)
+
+- Only create object_storage 'connection' block if feature enabled. !1517
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.3.
+
+
+## 4.3.2 (2020-08-28)
+
+### Fixed (2 changes, 2 of them are from the community)
+
+- Add missing bucket variables. !1515 (Chris Boot)
+- Add object_store secret to backup CronJob. !1516 (Chris Boot)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.2.
+
+
+## 4.3.1 (2020-08-25)
+
+### Changed (1 change)
+
+- Update GitLab Runner to 13.3.0 (runner chart 0.20.0). !1513
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.1.
+
+
+## 4.3.0 (2020-08-22)
+
+### Removed (1 change)
+
+- Geo - Remove FDW related config. !1496
+
+### Fixed (1 change)
+
+- Fix misaligned indent for rack_attack.
+
+### Changed (4 changes)
+
+- Changed Prometheus to use GitLab specific annotations. !1439
+- Update GitLab Operator to v0.10. !1478
+- Bump Container Registry to v2.10.1-gitlab. !1483
+- Flips daemonMode option for Memory Killer. !1490
+
+### Added (5 changes, 1 of them is from the community)
+
+- Provide possibility of passing the postgresql password via a file instead of secret. !1422 (Tiago Posse <tiagoposse@gmail.com>)
+- Add support for DependencyProxy. !1464
+- Support consolidated object storage configuration. !1479
+- Adds NetworkPolicy object for the Webservice. !1491
+- Workhorse: support configuring logFormat, default JSON. !1497
+
+### Other (1 change)
+
+- Update GitLab Version to 13.3.0.
+
+
+## 4.2.9 (2020-09-04)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.9.
+
+
+## 4.2.8 (2020-09-02)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.8.
+
+
+## 4.2.7 (2020-09-02)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.7.
+
+
+## 4.2.6 (2020-08-18)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.6.
+
+
+## 4.2.5 (2020-08-18)
+
+### Changed (1 change)
+
+- Update GitLab Runner chart to 0.19.2. !1489
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.5.
+
+
+## 4.2.4 (2020-08-11)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.2.4.
+
+
 ## 4.2.3 (2020-08-05)
 
 ### Other (1 change)
@@ -53,6 +177,34 @@ entry.
 
 - Add an annotations support to the migrations job template. !1423 (Tiago Posse)
 - Update GitLab Version to 13.2.0.
+
+
+## 4.1.12 (2020-09-04)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.11.
+
+
+## 4.1.11 (2020-09-02)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.10.
+
+
+## 4.1.10 (2020-09-02)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.9.
+
+
+## 4.1.9 (2020-08-18)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.1.8.
 
 
 ## 4.1.7 (2020-08-05)
@@ -150,6 +302,20 @@ entry.
 - Ensure upgraded to 4.0 before 4.1. !1403
 - Update GitLab Runner chart to 0.18.0. !1416
 - Update GitLab Version to 13.1.0.
+
+
+## 4.0.12 (2020-08-18)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.0.14.
+
+
+## 4.0.11 (2020-08-18)
+
+### Other (1 change)
+
+- Update GitLab Version to 13.0.13.
 
 
 ## 4.0.10 (2020-08-05)

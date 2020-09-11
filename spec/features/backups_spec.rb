@@ -41,7 +41,8 @@ describe "Restoring a backup" do
 
     it 'Navigating to testproject1 repo should work' do
       visit '/root/testproject1'
-      expect(page).to have_content 'Dockerfile'
+      expect(find('table[data-qa-selector="file_tree_table"]'))
+        .to have_content('Dockerfile')
     end
 
     it 'Should have runner registered' do
@@ -68,11 +69,10 @@ describe "Restoring a backup" do
 
     it 'Could pull image from registry' do
       stdout, status = Open3.capture2e("docker login #{registry_url} --username root --password #{ENV['GITLAB_PASSWORD']}")
-      expect(status.success?).to eq true
-      fail "Login failed: #{stdout}" unless status.success?
+      expect(status.success?).to be(true), "Login failed: #{stdout}"
 
       stdout, status = Open3.capture2e("docker pull #{registry_url}/root/testproject1/master:d88102fe7cf105b72643ecb9baf41a03070c9f1b")
-      fail "Pulling image failed: #{stdout}" unless status.success?
+      expect(status.success?).to be(true), "Pulling image failed: #{stdout}"
     end
 
   end
@@ -80,17 +80,17 @@ describe "Restoring a backup" do
   describe 'Backups' do
     it 'Should be able to backup an identical tar' do
       stdout, status = backup_instance
-      fail stdout unless status.success?
+      expect(status.success?).to be(true), "Error backing up instance: #{stdout}"
 
       object_storage.get_object(
         response_target: '/tmp/original_backup.tar',
         bucket: 'gitlab-backups',
-        key: '0_12.10.8_gitlab_backup.tar'
+        key: '0_13.0.14_gitlab_backup.tar'
       )
 
       cmd = 'mkdir -p /tmp/original_backup && tar -xf /tmp/original_backup.tar -C /tmp/original_backup'
       stdout, status = Open3.capture2e(cmd)
-      fail stdout unless status.success?
+      expect(status.success?).to be(true), "Error unarchiving original backup: #{stdout}"
 
       object_storage.get_object(
         response_target: '/tmp/test_generated_backup.tar',
@@ -99,7 +99,7 @@ describe "Restoring a backup" do
       )
       cmd = 'mkdir -p /tmp/test_backup && tar -xf /tmp/test_generated_backup.tar -C /tmp/test_backup'
       stdout, status = Open3.capture2e(cmd)
-      fail stdout unless status.success?
+      expect(status.success?).to be(true), "Error unarchiving generated backup: #{stdout}"
 
       Dir.glob("/tmp/original_backup/*") do |file|
         expect(File.exist?("/tmp/test_backup/#{File.basename(file)}")).to be_truthy
@@ -107,11 +107,12 @@ describe "Restoring a backup" do
         if File.extname(file) == 'tar'
           cmd = "tar -xf #{file} -C /tmp/original_backup"
           stdout, status = Open3.capture2e(cmd)
-          fail stdout unless status.success?
+          expect(status.success?).to be(true), "Error extracting tar #{file}: #{stdout}"
 
-          cmd = "tar -xf #{file.gsub('original_backup', 'test_backup')} -C /tmp/test_backup"
+          f_name = file.gsub('original_backup', 'test_backup')
+          cmd = "tar -xf #{f_name} -C /tmp/test_backup"
           stdout, status = Open3.capture2e(cmd)
-          fail stdout unless status.success?
+          expect(status.success?).to be(true), "Error extracting tar #{f_name}: #{stdout}"
         end
       end
 

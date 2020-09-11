@@ -2,7 +2,7 @@ image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
-  # tag: latest
+  # tag: master
 
 init:
   image: {}
@@ -24,7 +24,7 @@ annotations: {}
 podLabels: {}
 
 psql: {}
-  # port: 5432 
+  # port: 5432
 
 global:
   # imagePullPolicy: IfNotPresent
@@ -87,6 +87,11 @@ global:
       connection: {}
     terraformState:
       enabled: false
+      bucket:
+      connection: {}
+    dependencyProxy:
+      enabled: false
+      proxy_download: true
       bucket:
       connection: {}
     ldap:
@@ -242,5 +247,4 @@ serviceAccount:
   create: false
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
-  # name: 
-  
+  # name:

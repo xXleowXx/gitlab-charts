@@ -6,8 +6,11 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.serviceLabels" . | nindent 4 }}
   annotations:
   {{- if .Values.metrics.enabled }}
+    gitlab.com/prometheus_scrape: "true"
+    gitlab.com/prometheus_port: "{{ .Values.metrics.metricsPort }}"
     prometheus.io/scrape: "true"
     prometheus.io/port: "{{ .Values.metrics.metricsPort }}"
   {{- end }}

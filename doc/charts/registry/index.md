@@ -29,7 +29,9 @@ A Kubernetes `Deployment` was chosen as the deployment method for this chart to 
 for simple scaling of instances, while allowing for
 [rolling updates](https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/).
 
-This chart makes use of only two secrets:
+This chart makes use of two required secrets and one optional:
+
+### Required
 
 - `global.registry.certificate.secret`: A global secret that will contain the public
   certificate bundle to verify the authentication tokens provided by the associated
@@ -37,6 +39,14 @@ This chart makes use of only two secrets:
   on using GitLab as an auth endpoint.
 - `global.registry.httpSecret.secret`: A global secret that will contain the
   [shared secret](https://docs.docker.com/registry/configuration/#http) between registry pods.
+
+### Optional
+
+- `profiling.stackdriver.credentials.secret`: If stackdriver profiling is enabled and
+  you need to provide service account credentials, then the value in this secret
+  (in the `credentials` key by default) is the GCP service account JSON credentials.
+  The service account requires the role `roles/cloudprofiler.agent` or equivalent
+  [manual permissions](https://cloud.google.com/profiler/docs/iam#roles)
 
 ## Configuration
 
@@ -133,6 +143,11 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `log`                                      | `{level: warn, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
 | `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
+| `profiling.stackdriver.enabled`            | `false`                                      | Enable continuous profiling using stackdriver                                                        |
+| `profiling.stackdriver.credentials.secret` | `gitlab-registry-profiling-creds`            | Name of the secret containing creds                                                                  |
+| `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the creds are stored                                                             |
+| `profiling.stackdriver.service`            | `RELEASE-registry` (templated Service name)| Name of the stackdriver service to record profiles under                                             |
+| `profiling.stackdriver.projectid`          | GCP project where running                    | GCP project to report profiles to                                                                    |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
 | `tokenService`                             | `container_registry`                         | JWT token service                                                                                    |
@@ -470,10 +485,11 @@ If you chose to use the `filesystem` driver:
 For the sake of resiliency and simplicity, it is recommended to make use of an
 external service, such as `s3`, `gcs`, `azure` or other compatible Object Storage.
 
-NOTE: **Note:** The chart will populate `delete.enabled: true` into this configuration
-  by default if not specified by the user. This keeps expected behavior in line with
-  the default use of MinIO, as well as the Omnibus GitLab. Any user provided value
-  will supersede this default.
+NOTE: **Note:**
+The chart will populate `delete.enabled: true` into this configuration
+by default if not specified by the user. This keeps expected behavior in line with
+the default use of MinIO, as well as the Omnibus GitLab. Any user provided value
+will supersede this default.
 
 ### debug
 
@@ -501,6 +517,20 @@ health:
     enabled: false
     interval: 10s
     threshold: 3
+```
+
+### profiling
+
+The `profiling` property is optional and enables [continuous profiling](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#profiling)
+
+```yaml
+profiling:
+  stackdriver:
+    enabled: true
+    credentials:
+      secret: gitlab-registry-profiling-creds
+      key: credentials
+    service: gitlab-registry
 ```
 
 ## Garbage Collection
