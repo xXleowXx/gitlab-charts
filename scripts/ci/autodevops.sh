@@ -47,6 +47,11 @@ function deploy() {
   track="${1-stable}"
   name="$CI_ENVIRONMENT_SLUG"
 
+  local enable_kas=()
+  if [[ -n "$KAS_ENABLED" ]]; then
+    enable_kas=("--set" "global.kas.enabled=true")
+  fi
+
   if [[ "$track" != "stable" ]]; then
     name="$name-$track"
   fi
@@ -136,11 +141,30 @@ CIYAML
     --set global.operator.enabled=true \
     --set gitlab.operator.crdPrefix="$CI_ENVIRONMENT_SLUG" \
     --set global.gitlab.license.secret="$CI_ENVIRONMENT_SLUG-gitlab-license" \
+    "${enable_kas[@]}" \
     --namespace="$KUBE_NAMESPACE" \
     --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
     $HELM_EXTRA_ARGS \
     "$name" \
     .
+}
+
+function check_kas_status() {
+  iteration=0
+  kasState=""
+
+  while [ "${kasState[1]}" != "Running" ]; do
+    if [ $iteration -eq 0 ]; then
+      echo ""
+      echo -n "Waiting for KAS deploy to complete.";
+    else
+      echo -n "."
+    fi
+
+    iteration=$((iteration+1))
+    kasState=($(kubectl get pods -n "$KUBE_NAMESPACE" | grep "\-kas" | awk '{print $3}'))
+    sleep 5;
+  done
 }
 
 function wait_for_deploy {
@@ -161,6 +185,11 @@ function wait_for_deploy {
     iteration=$((iteration+1))
     sleep 5;
   done
+
+  if [[ -n "$KAS_ENABLED" ]]; then
+    check_kas_status
+  fi
+
   echo ""
 }
 

@@ -939,6 +939,28 @@ assigned by the Rails code.
 
 The incoming email settings are explained in the [command line options page](../installation/command-line-options.md#incoming-email-configuration).
 
+### KAS settings
+
+One can optionally customize the KAS `secret` name as well and `key`, either by
+using Helm's `--set variable` option:
+
+```shell
+--set global.appConfig.gitlab_kas.secret=custom-secret-name \
+--set global.appConfig.gitlab_kas.key=custom-secret-key \
+```
+
+or by configuring your `values.yml`.
+
+```yaml
+global:
+  appConfig:
+    gitlab_kas:
+      secret: "custom-secret-name"
+      key: "custom-secret-key"
+```
+
+If you'd like to customize the secret value, refer to the [secrets documentation](../installation/secrets.md#gitlab-kas-secret).
+
 ### LDAP
 
 The `ldap.servers` setting allows for the configuration of [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap.html)

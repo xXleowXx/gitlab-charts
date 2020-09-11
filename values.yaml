@@ -335,6 +335,11 @@ global:
       #     key: _the_key_which_holds_your_ldap_password
       #   encryption: 'plain'
 
+    ## doc/charts/globals.md#kas
+    gitlab_kas: {}
+      # secret:
+      # key:
+
     ## doc/charts/globals.md#omniauth
     omniauth:
       enabled: false
@@ -387,6 +392,12 @@ global:
         # clientKey:
         # clientCertificate:
         # serverCA:
+
+  ## doc/installation/secrets.md#gitlab-kas-secret
+  kas:
+    enabled: false
+    # secret:
+    # key:
 
   ## doc/charts/globals.md#configure-gitlab-shell-settings
   shell:
