@@ -24,6 +24,26 @@ function retry() {
   return 1
 }
 
+function echoerr() {
+  local header="${2}"
+
+  if [ -n "${header}" ]; then
+    printf "\n\033[0;31m** %s **\n\033[0m" "${1}" >&2;
+  else
+    printf "\033[0;31m%s\n\033[0m" "${1}" >&2;
+  fi
+}
+
+function echoinfo() {
+  local header="${2}"
+
+  if [ -n "${header}" ]; then
+    printf "\n\033[0;33m** %s **\n\033[0m" "${1}" >&2;
+  else
+    printf "\033[0;33m%s\n\033[0m" "${1}" >&2;
+  fi
+}
+
 function previousDeployFailed() {
   set +e
   echo "Checking for previous deployment of $CI_ENVIRONMENT_SLUG"
@@ -197,8 +217,8 @@ function get_pod() {
   local status="${2-Running}"
 
   get_pod_cmd="kubectl get pods --namespace ${namespace} --field-selector=status.phase=${status} -lapp=${app_name},release=${release} --no-headers -o=custom-columns=NAME:.metadata.name | tail -n 1"
-  echo "Waiting till '${app_name}' pod is ready"
-  echo "Running '${get_pod_cmd}'"
+  echoinfo "Waiting till '${app_name}' pod is ready" true
+  echoinfo "Running '${get_pod_cmd}'"
 
   local interval=5
   local elapsed_seconds=0
@@ -209,7 +229,7 @@ function get_pod() {
     [[ "${pod_name}" == "" ]] || break
 
     if [[ "${elapsed_seconds}" -gt "${max_seconds}" ]]; then
-      echo "The pod name couldn't be found after ${elapsed_seconds} seconds, aborting."
+      echoerr "The pod name couldn't be found after ${elapsed_seconds} seconds, aborting."
       break
     fi
 
@@ -217,7 +237,7 @@ function get_pod() {
     sleep ${interval}
   done
 
-  echo "The pod name is '${pod_name}'."
+  echoinfo "The pod name is '${pod_name}'."
   echo "${pod_name}"
 }
 
@@ -231,7 +251,7 @@ function run_task() {
 
 function disable_sign_ups() {
   if [ -z ${REVIEW_APPS_ROOT_TOKEN+x} ]; then
-    echo "In order to protect Review Apps, REVIEW_APPS_ROOT_TOKEN variable must be set"
+    echoerr "In order to protect Review Apps, REVIEW_APPS_ROOT_TOKEN variable must be set"
     false
   else
     true
@@ -245,9 +265,9 @@ function disable_sign_ups() {
   local signup_enabled=$(retry 'curl --silent --show-error --request PUT --header "PRIVATE-TOKEN: ${REVIEW_APPS_ROOT_TOKEN}" "${CI_ENVIRONMENT_URL}/api/v4/application/settings?signup_enabled=false" | jq ".signup_enabled"')
 
   if [[ "${signup_enabled}" == "false" ]]; then
-    echo "Sign-ups have been disabled successfully."
+    echoinfo "Sign-ups have been disabled successfully."
   else
-    echo "Sign-ups are still enabled!"
+    echoerr "Sign-ups are still enabled!"
     false
   fi
 }
