@@ -68,6 +68,11 @@ generate_secret_if_needed {{ template "gitlab.minio.credentials.secret" . }} --f
 # Gitlab runner secret
 generate_secret_if_needed {{ template "gitlab.gitlab-runner.registrationToken.secret" . }} --from-literal=runner-registration-token=$(gen_random 'a-zA-Z0-9' 64) --from-literal=runner-token=""
 
+{{ if .Values.global.kas.enabled -}}
+# Gitlab-kas secret
+generate_secret_if_needed {{ template "gitlab.kas.secret" . }} --from-literal={{ template "gitlab.kas.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
+{{ end }}
+
 # Registry certificates
 mkdir -p certs
 openssl req -new -newkey rsa:4096 -subj "/CN=gitlab-issuer" -nodes -x509 -keyout certs/registry-example-com.key -out certs/registry-example-com.crt -days 3650
@@ -132,4 +137,3 @@ generate_secret_if_needed {{ template "gitlab.registry.httpSecret.secret" . }} -
 # Grafana password
 generate_secret_if_needed "gitlab-grafana-initial-password" --from-literal=password=$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
-
