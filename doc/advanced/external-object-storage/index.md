@@ -57,8 +57,7 @@ GitLab [does not support](https://github.com/minio/minio/issues/9978) the Azure 
 Please refer to the [corresponding Azure example](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.azure.yaml) when [setting up the Docker Registry](#docker-registry-images).
 
 Although Azure uses the word container to denote a collection of blobs,
-GitLab standardizes on the term bucket. Be sure to configure Azure
-container names in the bucket settings.
+GitLab standardizes on the term bucket.
 
 Azure Blob storage requires the use of the [consolidated object storage
 settings](../../charts/globals.md#consolidated-object-storage). A
