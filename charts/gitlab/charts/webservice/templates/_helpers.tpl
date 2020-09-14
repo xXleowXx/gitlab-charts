@@ -70,10 +70,13 @@ If consolidated object storage is in use, read the connection YAML
 <%
   require 'yaml'
 
-  supported_providers = ['AWS']
+  supported_providers = %w(AWS AzureRM)
   provider = ''
   aws_access_key_id = ''
   aws_secret_access_key = ''
+
+  azure_storage_account_name = ''
+  azure_storage_access_key = ''
 
   if File.exists? '/etc/gitlab/minio/accesskey'
     provider = 'AWS'
@@ -87,6 +90,9 @@ If consolidated object storage is in use, read the connection YAML
     if connection.has_key? 'aws_access_key_id'
       aws_access_key_id = connection['aws_access_key_id']
       aws_secret_access_key = connection['aws_secret_access_key']
+    elsif connection.has_key? 'azure_storage_account_name'
+      azure_storage_account_name = connection['azure_storage_account_name']
+      azure_storage_access_key = connection['azure_storage_access_key']
     end
   end
 
@@ -100,6 +106,11 @@ provider = "<%= provider %>"
 # access/secret can be blank!
 aws_access_key_id = "<%= aws_access_key_id %>"
 aws_secret_access_key = "<%= aws_secret_access_key %>"
+<%   elsif provider.eql? 'AzureRM' %>
+# Azure Blob storage configuration.
+[object_storage.azurerm]
+azure_storage_account_name = "<%= azure_storage_account_name %>"
+azure_storage_access_key = "<%= azure_storage_access_key %>"
 <%
     end
   end

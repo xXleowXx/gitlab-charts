@@ -42,11 +42,45 @@ for more details.
 
 ## Azure Blob Storage
 
-GitLab uses [fog](https://github.com/fog/fog), but [doesn't currently support Fog Azure](https://gitlab.com/gitlab-org/gitlab-foss/-/issues/55624). To make use Azure Blob Storage, you will have to set up an [Azure MinIO gateway](azure-minio-gateway.md).
+> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/25877) in GitLab 13.4.
+
+Direct support for Azure Blob storage is available for
+[uploaded attachments, CI job artifacts, LFS, and other object types supported via the consolidated settngs](https://docs.gitlab.com/ee/administration/object_storage.html#storage-specific-configuration). In previous GitLab versions, an [Azure MinIO gateway](azure-minio-gateway.md) was needed.
+
+The Azure MinIO gateway is still needed for backups. Follow [this issue](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2298)
+for more details.
 
 NOTE: **Note:**
 GitLab [does not support](https://github.com/minio/minio/issues/9978) the Azure MinIO gateway as the storage for the Docker Registry.
 Please refer to the [corresponding Azure example](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.azure.yaml) when [setting up the Docker Registry](#docker-registry-images).
+
+Although Azure uses the word container to denote a collection of blobs,
+GitLab standardizes on the term bucket.
+
+Azure Blob storage requires the use of the [consolidated object storage
+settings](../../charts/globals.md#consolidated-object-storage). A
+single Azure storage account name and key must be used across multiple
+Azure blob containers. Customizing individual `connection` settings by
+object type (for example, `artifacts`, `uploads`, and so on) is not permitted.
+
+To enable Azure Blob storage, see
+[`rails.azurerm.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.azurerm.yaml)
+as an example to define the Azure `connection`. You can load this as a
+secret via:
+
+```shell
+kubectl create secret generic gitlab-rails-storage --from-file=connection=rails.azurerm.yml
+```
+
+Then, disable MinIO and set these global settings:
+
+```shell
+--set global.minio.enabled=false
+--set global.appConfig.object_store.enabled=true
+--set global.appConfig.object_store.connection.secret=gitlab-rails-storage
+```
+
+Be sure to create Azure containers for the [default names or set the container names in the bucket configuration](../../charts/globals.md#specify-buckets).
 
 ## Docker Registry images
 
@@ -143,6 +177,7 @@ Examples for [AWS](https://fog.io/storage/#using-amazon-s3-and-fog) (any S3 comp
 - [`rails.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.s3.yaml)
 - [`rails.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.gcs.yaml)
 - [`rails.azure.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.azure.yaml)
+- [`rails.azurerm.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.azurerm.yaml)
 
 ### appConfig configuration
 

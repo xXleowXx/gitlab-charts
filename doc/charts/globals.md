@@ -844,6 +844,33 @@ S3 compatible provider such as the included MinIO), GitLab Workhorse can offload
 all storage related uploads. This will automatically be enabled for you, when
 using this consolidated configuration.
 
+### Specify buckets
+
+Each object type should be stored in different buckets.
+By default, GitLab uses these bucket names for each type:
+
+|Object type                 |Bucket Name              |
+|----------------------------|-------------------------|
+|CI artifacts                |`gitlab-artifacts`       |
+|Git LFS                     |`git-lfs`                |
+|Packages                    |`gitlab-packages`        |
+|Uploads                     |`gitlab-uploads`         |
+|External merge request diffs|`gitlab-mr-diffs`        |
+|Terraform State             |`gitlab-terraform-state` |
+|Dependency Proxy            |`gitlab-dependency-proxy`|
+
+You can use these defaults or configure the bucket names:
+
+```shell
+--set global.appConfig.artifacts.bucket=<BUCKET NAME> \
+--set global.appConfig.lfs.bucket=<BUCKET NAME> \
+--set global.appConfig.packages.bucket=<BUCKET NAME> \
+--set global.appConfig.uploads.bucket=<BUCKET NAME> \
+--set global.appConfig.externalDiffs.bucket=<BUCKET NAME> \
+--set global.appConfig.terraformState.bucket=<BUCKET NAME> \
+--set global.appConfig.dependencyProxy.bucket=<BUCKET NAME>
+```
+
 #### storage_options
 
 > Introduced in GitLab 13.4.
@@ -919,6 +946,7 @@ providers can be found in [examples/objectstorage](https://gitlab.com/gitlab-org
 
 - [`rails.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.s3.yaml)
 - [`rails.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.gcs.yaml)
+- [`rails.azurerm.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.azurerm.yaml)
 
 Once a YAML file containing the contents of the `connection` has been created, use
 this file to create the secret in Kubernetes.
