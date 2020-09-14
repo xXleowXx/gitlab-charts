@@ -48,7 +48,7 @@ This chart makes use of two required secrets and one optional:
   If you are using GKE and are providing service accounts to your workloads using
   [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
   (or node service accounts, although this is not recommended), then this secret is not required
-  and should not be supplied.  In either case, the service account requires the role
+  and should not be supplied. In either case, the service account requires the role
   `roles/cloudprofiler.agent` or equivalent [manual permissions](https://cloud.google.com/profiler/docs/iam#roles)
 
 ## Configuration
