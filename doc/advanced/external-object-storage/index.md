@@ -30,14 +30,12 @@ GitLab supports [Amazon KMS](https://aws.amazon.com/kms/)
 to [encrypt data stored in S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets).
 You can enable this in two ways:
 
-1. In AWS, [configure the S3 bucket to use default encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html).
-1. In GitLab, enable [server side encryption headers](../../charts/globals.md#storage_options).
+- In AWS, [configure the S3 bucket to use default encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html).
+- In GitLab, enable [server side encryption headers](../../charts/globals.md#storage_options).
 
-Note that these two options are not mutually exclusive. If you choose
-option 1, you do not need to do option 2, unless you
-want to [set an S3 bucket policy to require encrypted objects](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
-You can set a default encryption policy but also enable server side
-encryption headers to override those defaults.
+These two options are not mutually exclusive. If you choose the first option, you do not need to do
+the other option, unless you want to [set an S3 bucket policy to require encrypted objects](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
+You can set a default encryption policy but also enable server-side encryption headers to override those defaults.
 
 See the [GitLab documentation on encrypted S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets)
 for more details.
