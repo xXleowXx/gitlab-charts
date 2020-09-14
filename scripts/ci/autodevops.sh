@@ -246,7 +246,7 @@ function run_task() {
   local ruby_cmd="${1}"
   local task_runner_pod=$(get_pod "task-runner")
 
-  kubectl exec -it --namespace "${namespace}" "${task_runner_pod}" -- gitlab-rails runner "${ruby_cmd}"
+  kubectl exec -i --namespace "${namespace}" "${task_runner_pod}" -- gitlab-rails runner "${ruby_cmd}"
 }
 
 function disable_sign_ups() {
