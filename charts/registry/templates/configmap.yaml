@@ -58,7 +58,9 @@ data:
         {{- if .Values.profiling.stackdriver.projectid }}
         projectid: {{ .Values.profiling.stackdriver.projectid }}
         {{- end }}
+        {{- if .Values.profiling.stackdriver.credentials.secret }}
         keyfile: /etc/docker/registry/profiling-key.json
+        {{- end }}
       {{- end }}
     storage:
       maintenance:

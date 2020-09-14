@@ -43,10 +43,13 @@ This chart makes use of two required secrets and one optional:
 ### Optional
 
 - `profiling.stackdriver.credentials.secret`: If stackdriver profiling is enabled and
-  you need to provide service account credentials, then the value in this secret
+  you need to provide explicit service account credentials, then the value in this secret
   (in the `credentials` key by default) is the GCP service account JSON credentials.
-  The service account requires the role `roles/cloudprofiler.agent` or equivalent
-  [manual permissions](https://cloud.google.com/profiler/docs/iam#roles)
+  If you are using GKE and are providing service accounts to your workloads using
+  [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
+  (or node service accounts, although this is not recommended), then this secret is not required
+  and should not be supplied.  In either case, the service account requires the role
+  `roles/cloudprofiler.agent` or equivalent [manual permissions](https://cloud.google.com/profiler/docs/iam#roles)
 
 ## Configuration
 
