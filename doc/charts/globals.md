@@ -154,6 +154,7 @@ global:
     database: gitlabhq_production
     username: gitlab
     preparedStatements: false
+    connectTimeout:
     pool: 1
     password:
       useSecret: true
@@ -162,19 +163,20 @@ global:
       file:
 ```
 
-| Name              | Type    | Default               | Description |
-|:----------------- |:-------:|:--------------------- |:----------- |
-| `host`            | String  |                       | The hostname of the PostgreSQL server with the database to use. This can be omitted if using PostgreSQL deployed by this chart. |
-| `serviceName`     | String  |                       | The name of the `service` which is operating the PostgreSQL database. If this is present, and `host` is not, the chart will template the hostname of the service in place of the `host` value. |
-| `database`        | String  | `gitlabhq_production` | The name of the database to use on the PostgreSQL server. |
-| `password.useSecret`| Bool  | `true`                | Controls whether the password for PostgreSQL is read from a secret or file. |
-| `password.file`   | String  |                       | Defines the path to the file that contains the password for PostgreSQL. Ignored if `password.useSecret` is true |
-| `password.key`    | String  |                       | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. Ignored if `password.useSecret` is false. |
-| `password.secret` | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from. Ignored if `password.useSecret` is false. |
-| `pool`            | Integer | `1`                   | How many connections are made to the database. |
-| `port`            | Integer | `5432`                | The port on which to connect to the PostgreSQL server. |
-| `username`        | String  | `gitlab`              | The username with which to authenticate to the database. |
-| `preparedStatements`| Bool  | `false`               | If prepared statements should be used when communicating with the PostgreSQL server. |
+| Name                 | Type      | Default                | Description                                                                                                                                                                                    |
+| :-----------------   | :-------: | :--------------------- | :-----------                                                                                                                                                                                   |
+| `host`               | String    |                        | The hostname of the PostgreSQL server with the database to use. This can be omitted if using PostgreSQL deployed by this chart.                                                                |
+| `serviceName`        | String    |                        | The name of the `service` which is operating the PostgreSQL database. If this is present, and `host` is not, the chart will template the hostname of the service in place of the `host` value. |
+| `database`           | String    | `gitlabhq_production`  | The name of the database to use on the PostgreSQL server.                                                                                                                                      |
+| `password.useSecret` | Bool      | `true`                 | Controls whether the password for PostgreSQL is read from a secret or file.                                                                                                                    |
+| `password.file`      | String    |                        | Defines the path to the file that contains the password for PostgreSQL. Ignored if `password.useSecret` is true                                                                                |
+| `password.key`       | String    |                        | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. Ignored if `password.useSecret` is false.                            |
+| `password.secret`    | String    |                        | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from. Ignored if `password.useSecret` is false.                                             |
+| `pool`               | Integer   | `1`                    | How many connections are made to the database.                                                                                                                                                 |
+| `port`               | Integer   | `5432`                 | The port on which to connect to the PostgreSQL server.                                                                                                                                         |
+| `username`           | String    | `gitlab`               | The username with which to authenticate to the database.                                                                                                                                       |
+| `preparedStatements` | Bool      | `false`                | If prepared statements should be used when communicating with the PostgreSQL server.                                                                                                           |
+| `connectTimeout`     | Integer   |                        | The number of seconds to wait for a database connection.                                                                                                                                       |
 
 ### PostgreSQL per chart
 
