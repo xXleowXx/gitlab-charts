@@ -650,6 +650,10 @@ with the `global.appConfig` key.
 ```yaml
 global:
   appConfig:
+    contentSecurityPolicy:
+      enabled: false
+      report_only: true
+      # directives: {}
     enableUsagePing: true
     enableSeatLink: true
     enableImpersonation: true
@@ -762,6 +766,7 @@ application are described below:
 
 | Name                                | Type    | Default | Description |
 |:----------------------------------- |:-------:|:------- |:----------- |
+| `contentSecurityPolicy`             | Struct  |         | [See below](#content-security-policy). |
 | `enableUsagePing`                   | Boolean | `true`  | A flag to disable the [usage ping support](https://docs.gitlab.com/ee/user/admin_area/settings/usage_statistics.html). |
 | `enableSeatLink`                    | Boolean | `true`  | A flag to disable the [seat link support](https://docs.gitlab.com/ee/subscriptions/#seat-link). |
 | `enableImpersonation`               |         | `nil`   | A flag to disable [user impersonation by Administrators](https://docs.gitlab.com/ee/api/README.html#disable-impersonation). |
@@ -771,6 +776,33 @@ application are described below:
 | `defaultTheme`                      | Integer |         | [Numeric ID of the default theme for the GitLab instance](https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/themes.rb#L17-27). It takes a number, denoting the ID of the theme. |
 | `defaultProjectsFeatures.*feature*` | Boolean | `true`  | [See below](#defaultprojectsfeatures). |
 | `webHookTimeout`                    | Integer |         | Waiting time in seconds before a [hook is deemed to have failed](https://docs.gitlab.com/ce/user/project/integrations/webhooks.html#receiving-duplicate-or-multiple-web-hook-requests-triggered-by-one-event). |
+
+#### Content Security Policy
+
+Setting a Content Security Policy (CSP) can help thwart JavaScript cross-site
+scripting (XSS) attacks. See GitLab documentation for configuration details. [Content Security Policy Documentation](h1ttps://docs.gitlab.com/omnibus/settings/configuration.html#content-security-policy)
+
+Note that when enabled, the `directives` MUST be configured. Sane example
+configuration below:
+
+```yaml
+global:
+  appConfig:
+    contentSecurityPolicy:
+      enabled: true
+      report_only: false
+      directives:
+        default_src: "'self'"
+        script_src: "'self' 'unsafe-inline' 'unsafe-eval' https://www.recaptcha.net https://apis.google.com"
+        frame_ancestor: "'self'"
+        frame_src: "'self' https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com"
+        img_src: "* data: blob:"
+        style_src: "'self' 'unsafe-inline'"
+```
+
+Improperly configuring the CSP rules could prevent GitLab from working properly.
+Before rolling out a policy, you may also want to change report_only to true to
+test the configuration.
 
 #### defaultProjectsFeatures
 
