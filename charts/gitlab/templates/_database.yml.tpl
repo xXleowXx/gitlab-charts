@@ -12,6 +12,7 @@ production:
   host: {{ include "gitlab.psql.host" . | quote }}
   port: {{ template "gitlab.psql.port" . }}
   pool: {{ template "gitlab.psql.pool" . }}
+  connect_timeout: {{ template "gitlab.psql.connectTimeout" . }}
   prepared_statements: {{ template "gitlab.psql.preparedStatements" . }}
   {{- include "gitlab.database.loadBalancing" . | nindent 2 }}
   {{- include "gitlab.psql.ssl.config" . | nindent 2 }}

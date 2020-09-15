@@ -251,6 +251,14 @@ Defaults to false
 {{- eq true (default false (pluck "preparedStatements" $local .Values.global.psql | first)) -}}
 {{- end -}}
 
+{{/*
+Return connect_timeout value
+Defaults to nil
+*/}}
+{{- define "gitlab.psql.connectTimeout" -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{ pluck "connectTimeout" $local .Values.global.psql | first -}}
+{{- end -}}
 {{/* ######### ingress templates */}}
 
 {{/*

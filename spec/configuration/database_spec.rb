@@ -21,7 +21,8 @@ describe 'Database configuration' do
           'database' => '',
           'preparedStatements' => '',
           'password' => { 'secret' => '', 'key' => '' },
-          'load_balancing' => {}
+          'load_balancing' => {},
+          'connectTimeout' => nil
         }
       },
       'postgresql' => { 'install' => true }
@@ -169,7 +170,8 @@ describe 'Database configuration' do
                 'database' => 'sidekiq',
                 'username' => 'sidekiq',
                 'pool' => 5,
-                'preparedStatements' => true
+                'preparedStatements' => true,
+                'connectTimeout' => 55,
               },
             },
           },
@@ -181,6 +183,7 @@ describe 'Database configuration' do
         expect(t.exit_code).to eq(0)
         # webservice gets "global"
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('host: "psql.global"')
+          .and match(/connect_timeout: $/)
         # sidekiq gets "other", with non-defaults
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('host: "psql.other"')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('port: 5431')
@@ -188,6 +191,7 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('username: sidekiq')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('pool: 5')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('prepared_statements: true')
+        expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('connect_timeout: 55')
       end
     end
 
@@ -213,6 +217,7 @@ describe 'Database configuration' do
                   'secret' => 'other-postgresql-password',
                   'key' => 'other-password',
                 },
+                'connectTimeout' => 55
               },
             },
           },
@@ -224,6 +229,7 @@ describe 'Database configuration' do
         expect(t.exit_code).to eq(0)
         # sidekiq gets "global"
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('host: "psql.global"')
+          .and match(/connect_timeout: $/)
         sidekiq_secret_mounts =  t.projected_volume_sources('Deployment/test-sidekiq-all-in-1-v1','init-sidekiq-secrets').select { |item|
           item['secret']['name'] == 'test-postgresql-password'
         }
@@ -235,6 +241,7 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('username: webservice')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('pool: 5')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('prepared_statements: true')
+        expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('connect_timeout: 55')
         webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice','init-webservice-secrets').select { |item|
           item['secret']['name'] == 'other-postgresql-password' && item['secret']['items'][0]['key'] == 'other-password'
         }
@@ -271,6 +278,7 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('username: gitlab')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('pool: 1')
         expect(t.dig('ConfigMap/test-sidekiq','data','database.yml.erb')).to include('prepared_statements: false')
+          .and match(/connect_timeout: $/)
         sidekiq_secret_mounts =  t.projected_volume_sources('Deployment/test-sidekiq-all-in-1-v1','init-sidekiq-secrets').select { |item|
           item['secret']['name'] == 'test-postgresql-password' && item['secret']['items'][0]['key'] == 'postgresql-password'
         }
@@ -282,6 +290,7 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('username: gitlab')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('pool: 1')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('prepared_statements: false')
+          .and match(/connect_timeout: $/)
         webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice','init-webservice-secrets').select { |item|
           item['secret']['name'] == 'test-postgresql-password' && item['secret']['items'][0]['key'] == 'postgresql-password'
         }
