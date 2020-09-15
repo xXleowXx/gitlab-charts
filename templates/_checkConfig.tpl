@@ -24,6 +24,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- define "gitlab.checkConfig" -}}
 {{- $messages := list -}}
 {{/* add templates here */}}
+{{- $messages := append $messages (include "gitlab.checkConfig.contentSecurityPolicy" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queues.cluster" .) -}}
@@ -51,6 +52,21 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{-   printf "\nCONFIGURATION CHECKS:\n%s" $message | fail -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Ensure that content_security_policy.directives is not empty
+*/}}
+{{- define "gitlab.checkConfig.contentSecurityPolicy" -}}
+{{-   if eq true $.Values.global.appConfig.contentSecurityPolicy.enabled }}
+{{-     if not (hasKey $.Values.global.appConfig.contentSecurityPolicy "directives") }}
+contentSecurityPolicy:
+    When configuring Content Security Policy, you must also configure its Directives.
+    set `global.appConfig.contentSecurityPolicy.directives`
+    See https://docs.gitlab.com/charts/charts/globals#content-security-policy
+{{-   end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.contentSecurityPolicy */}}
 
 {{/*
 Ensure a certificate is provided when Gitaly is enabled and is instructed to

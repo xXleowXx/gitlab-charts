@@ -205,7 +205,11 @@ global:
       # historical_data_worker:
       #   cron: "0 12 * * *"
 
-
+    ## doc/charts/globals.md#content-security-policy
+    contentSecurityPolicy:
+      enabled: false
+      report_only: true
+      # directives: {}
 
     ## doc/charts/globals.md#gravatarlibravatar-settings
     gravatar:
