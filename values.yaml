@@ -116,6 +116,14 @@ global:
     internal:
       names: ['default']
     external: []
+    service:
+      name: gitaly
+      type: ClusterIP
+      externalPort: 8075
+      internalPort: 8075
+      tls:
+        externalPort: 8076
+        internalPort: 8076
     tls:
       enabled: false
       # secretName:
