@@ -42,10 +42,7 @@ can be installed separately.
 
 ## Limitations
 
-Some features of GitLab are not currently available using the Helm chart:
-
-- [GitLab Pages](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/37) as part of the chart or in a hybrid environment
-- [Smartcard authentication](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/988)
+GitLab Pages [cannot be deployed](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/37) using the Helm chart. Hybrid environments that deploy Pages using the Omnibus installer and deploy other GitLab services using the Helm chart are not supported. 
 
 Database limitations:
 
