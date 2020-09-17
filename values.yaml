@@ -342,7 +342,7 @@ global:
       blockAutoCreatedUsers: true
       autoLinkLdapUser: false
       autoLinkSamlUser: false
-      autoLinkUser: ['saml']
+      autoLinkUser: false
       externalProviders: []
       allowBypassTwoFactor: []
       providers: []
