@@ -20,6 +20,7 @@ for more information on how the global variables work.
 - [Grafana](#configure-grafana-integration)
 - [Registry](#configure-registry-settings)
 - [Gitaly](#configure-gitaly-settings)
+- [Praefect](#configure-praefect-settings)
 - [MinIO](#configure-minio-settings)
 - [appConfig](#configure-appconfig-settings)
 - [Rails](#configure-rails-settings)
@@ -630,6 +631,40 @@ All Gitaly nodes **must** share the same authentication token.
 ### TLS settings
 
 Configuring Gitaly to serve via TLS is detailed [in the Gitaly chart's documentation](gitlab/gitaly#running-gitaly-over-tls).
+
+## Configure Praefect settings
+
+The global Praefect settings are located under the `global.praefect` key.
+
+Praefect is disabled by default. When enabled with no extra settings, 3 Gitaly replicas will be created, and the Praefect database will be created on the default PostgreSQL instance.
+
+### Enable Praefect
+
+To enable Praefect with default settings, set `global.praefect.enabled=true`.
+
+See the [Praefect documentation](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) for details on how to operate a Gitaly cluster using Praefect.
+
+### Global settings for Praefect
+
+```yaml
+global:
+  praefect:
+    enabled: false
+    gitalyReplicas: 3
+    dbSecret: {}
+    psql: {}
+```
+
+| Name            | Type    | Default     | Description                                                        |
+| ----            | ----    | -------     | -----------                                                        |
+| enabled         | Bool    | false       | Whether or not to enable Praefect                                  |
+| gitalyReplicas  | Integer | 3           | The number of Gitaly replicas that should be created               |
+| dbSecret.secret | String  |             | The name of the secret to use for authenticating with the database |
+| dbSecret.key    | String  |             | The name of the key in `dbSecret.secret` to use                    |
+| psql.host       | String  |             | The hostname of the database server to use (when using an external database) |
+| psql.port       | String  |             | The port number of the database server (when using an external database) |
+| psql.user       | String  | `praefect` | The database user to use                                           |
+| psql.dbName | String | `praefect` | The name of the database to use
 
 ## Configure MinIO settings
 

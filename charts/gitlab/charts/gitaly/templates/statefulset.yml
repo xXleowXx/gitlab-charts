@@ -111,10 +111,6 @@ spec:
             - name: GITALY_PROMETHEUS_LISTEN_ADDR
               value: ':{{ .Values.metrics.metricsPort }}'
             {{- end }}
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
             {{- include "gitlab.tracing.env" . | nindent 12 }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
           volumeMounts:

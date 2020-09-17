@@ -64,5 +64,30 @@ default:
 Return the number of replicas set for Gitaly statefulset
 */}}
 {{- define "gitlab.gitaly.replicas" -}}
-{{-   if .Values.global.gitaly.host }} 0 {{- else }} {{ len .Values.global.gitaly.internal.names }} {{- end }}
+{{-   if .Values.global.gitaly.host }} 0 {{- else if .Values.global.praefect.enabled }}{{ .Values.global.praefect.gitalyReplicas }}{{- else }} {{ len .Values.global.gitaly.internal.names }} {{- end }}
+{{- end -}}
+
+
+{{- define "gitlab.gitaly.storageNames" -}}
+{{- if $.Values.global.praefect.enabled -}}
+{{ range until ($.Values.global.praefect.gitalyReplicas | int) }} {{ printf "%s-gitaly-%d" $.Release.Name . | quote }}, {{- end }}
+{{- else -}}
+{{- range (coalesce $.Values.internal.names $.Values.global.gitaly.internal.names) }} {{ . | quote }}, {{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/* 
+Return the appropriate block for the Gitaly client secret.
+This differs depending on whether or not Praefect is enabled
+*/}}
+{{- define "gitlab.gitaly.clientSecret" -}}
+{{- $secret := include "gitlab.gitaly.authToken.secret" . }}
+{{- $key := include "gitlab.gitaly.authToken.key" . }}
+{{- if $.Values.global.praefect.enabled -}}
+{{- $secret = include "gitlab.praefect.authToken.secret" . }}
+{{- $key = include "gitlab.praefect.authToken.key" . }}
+{{- end -}}
+name: {{ $secret }}
+items:
+  - key: {{ $key }}
 {{- end -}}

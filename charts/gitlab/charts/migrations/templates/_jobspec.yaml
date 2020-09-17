@@ -128,9 +128,7 @@ spec:
                 - key: secrets.yml
                   path: rails-secrets/secrets.yml
           - secret:
-              name: {{ template "gitlab.gitaly.authToken.secret" . }}
-              items:
-                - key: {{ template "gitlab.gitaly.authToken.key" . }}
+              {{ include "gitlab.gitaly.clientSecret" . | nindent 14 }}
                   path: gitaly/gitaly_token
           {{- include "gitlab.redis.secrets" . | nindent 10 }}
           {{- include "gitlab.psql.secret" . | nindent 10 }}

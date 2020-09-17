@@ -128,6 +128,15 @@ global:
       enabled: false
       # secretName:
 
+  praefect:
+    enabled: false
+    authToken: {}
+    autoMigrate: true
+    gitalyReplicas: 3
+    dbSecret: {}
+    psql:
+      sslMode: 'disable'
+
   ## doc/charts/globals.md#configure-minio-settings
   minio:
     enabled: true
