@@ -228,10 +228,15 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab-runner.resources.limits.memory`                      | runner resources                               |                                                                  |
 | `gitlab-runner.resources.requests.cpu`                       | runner resources                               |                                                                  |
 | `gitlab-runner.resources.requests.memory`                    | runner resources                               |                                                                  |
-| `gitlab-runner.runners.build.cpuRequests`                    | build container limit                          |                                                                  |
-| `gitlab-runner.runners.build.memoryLimit`                    | build container limit                          |                                                                  |
-| `gitlab-runner.runners.build.memoryRequests`                 | build container limit                          |                                                                  |
-| `gitlab-runner.runners.builds.cpuLimit`                      | build container limit                          |                                                                  |
+| `gitlab-runner.runners.builds.cpuRequests`                    | build container limit                          |                                                                  |
+| `gitlab-runner.runners.builds.memoryLimit`                    | build container limit                          |                                                                  |
+| `gitlab-runner.runners.builds.memoryRequests`                 | build container limit                          |                                                                  |
+| `gitlab-runner.runners.builds.cpuLimit`                      | build container limit                          
+| `gitlab-runner.runners.helpers.cpuRequests`                    | helper container limit                          |                                                                  |
+| `gitlab-runner.runners.helpers.memoryLimit`                    | helper container limit                          |                                                                  |
+| `gitlab-runner.runners.helpers.memoryRequests`                 | helper container limit                          |                                                                  |
+| `gitlab-runner.runners.helpers.cpuLimit`                      | helper container limit    
+|                                                                  |
 | `gitlab-runner.runners.cache.cacheShared`                    | share the cache between runners                | true                                                             |
 | `gitlab-runner.runners.cache.cacheType`                      | cache type                                     | `s3`                                                             |
 | `gitlab-runner.runners.cache.s3BucketLocation`               | bucket region                                  | `us-east-1`                                                      |
@@ -243,10 +248,10 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab-runner.runners.imagePullSecrets`                     | imagePullSecrets                               | `[]`                                                             |
 | `gitlab-runner.runners.namespace`                            | namespace to run jobs in                       | `default`                                                        |
 | `gitlab-runner.runners.privileged`                           | run in privieleged mode,needed for `dind`      | false                                                            |
-| `gitlab-runner.runners.service.cpuLimit`                     | service container limit                        |                                                                  |
-| `gitlab-runner.runners.service.cpuRequests`                  | service container limit                        |                                                                  |
-| `gitlab-runner.runners.service.memoryLimit`                  | service container limit                        |                                                                  |
-| `gitlab-runner.runners.service.memoryRequests`               | service container limit                        |                                                                  |
+| `gitlab-runner.runners.services.cpuLimit`                     | service container limit                        |                                                                  |
+| `gitlab-runner.runners.services.cpuRequests`                  | service container limit                        |                                                                  |
+| `gitlab-runner.runners.services.memoryLimit`                  | service container limit                        |                                                                  |
+| `gitlab-runner.runners.services.memoryRequests`               | service container limit                        |                                                                  |
 | `gitlab-runner.unregisterRunners`                            | unregister all runners before termination      | true                                                             |
 | `gitlab.geo-logcursor.securityContext.fsGroup`               | Group ID under which the pod should be started | `1000`                                                           |
 | `gitlab.geo-logcursor.securityContext.runAsUser`             | User ID under which the pod should be started  | `1000`                                                           |
