@@ -13,6 +13,10 @@
 {{- $minioSecret := include "gitlab.minio.credentials.secret" . -}}
 {{- $gitalySecret := include "gitlab.gitaly.authToken.secret" . -}}
 {{- $gitalyKey := include "gitlab.gitaly.authToken.key" . -}}
+{{- if $.Values.global.praefect.enabled -}}
+{{- $gitalySecret = include "gitlab.praefect.authToken.secret" . -}}
+{{- $gitalyKey = include "gitlab.praefect.authToken.key" . -}}
+{{- end -}}
 {{- $railsSecretName := include "gitlab.rails-secrets.secret" . -}}
 {{- $metricsEnabled := .Values.metrics.enabled -}}
 {{- $metricsPort := .Values.metrics.port -}}

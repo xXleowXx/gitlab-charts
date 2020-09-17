@@ -41,7 +41,7 @@ data:
     key_path = '/etc/gitlab-secrets/gitaly/gitaly.key'
     {{- end }}
 
-    <% @storages = [ {{- range (coalesce .Values.internal.names .Values.global.gitaly.internal.names) }} {{ . | quote }}, {{- end }} ] %>
+    <% @storages = [ {{ include "gitlab.gitaly.storageNames" . }}  ] %>
     <% @index=`echo ${HOSTNAME##*-}`.to_i %>
     <% if @storages.length > @index %>
     [[storage]]

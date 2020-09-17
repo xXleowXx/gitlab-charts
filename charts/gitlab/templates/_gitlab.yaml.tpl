@@ -7,7 +7,11 @@ gitaly:
 {{- define "gitlab.appConfig.repositories" -}}
 repositories:
   storages: # You must have at least a `default` storage path.
+    {{- if $.Values.global.praefect.enabled }}
+    {{- include "gitlab.praefect.storages" . | nindent 4 }}
+    {{- else }}
     {{- include "gitlab.gitaly.storages" . | nindent 4 }}
+    {{- end }}
 {{- end -}}
 
 

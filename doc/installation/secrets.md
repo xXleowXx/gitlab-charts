@@ -44,10 +44,12 @@ documentation.
   - [Redis password](#redis-password)
   - [GitLab Shell secret](#gitlab-shell-secret)
   - [Gitaly secret](#gitaly-secret)
+  - [Praefect secret](#praefect-secret)
   - [GitLab Rails secret](#gitlab-rails-secret)
   - [GitLab Workhorse secret](#gitlab-workhorse-secret)
   - [GitLab Runner secret](#gitlab-runner-secret)
   - [PostgreSQL password](#postgresql-password)
+  - [Praefect DB password](#praefect-db-password) 
   - [MinIO secret](#minio-secret)
   - [Registry HTTP secret](#registry-http-secret)
   - [Grafana password](#grafana-password)
@@ -186,6 +188,17 @@ kubectl create secret generic <name>-gitaly-secret --from-literal=token=$(head -
 
 This secret is referenced by the `global.gitaly.authToken.secret` setting.
 
+### Praefect secret
+
+Generate a random 64 character alpha-numeric token for Praefect. Replace `<name>`
+with the name of the release:
+
+```shell
+kubectl create secret generic <name>-praefect-secret --from-literal=token=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
+```
+
+This secret is referenced by the `global.praefect.authToken.secret` setting.
+
 ### GitLab Rails secret
 
 Replace `<name>` with the name of the release.
@@ -274,6 +287,18 @@ Replace `<name>` with the name of the release.
 ```shell
 kubectl create secret generic <name>-registry-httpsecret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64 | base64)
 ```
+
+### Praefect DB password
+
+Generate a random 64 character alpha-numeric password. Replace `<name>` with
+the name of the release:
+
+```shell
+kubectl create secret generic <name>-praefect-dbsecret \
+    --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64) \
+```
+
+This secret is referenced by the `global.praefect.dbSecret` setting.
 
 ## External services
 

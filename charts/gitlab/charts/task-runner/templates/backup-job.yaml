@@ -154,9 +154,7 @@ spec:
                       - key: {{ template "gitlab.gitlab-shell.authToken.key" . }}
                         path: shell/.gitlab_shell_secret
                 - secret:
-                    name: {{ template "gitlab.gitaly.authToken.secret" . }}
-                    items:
-                      - key: {{ template "gitlab.gitaly.authToken.key" . }}
+                    {{ include "gitlab.gitaly.clientSecret" . | nindent 20 }}
                         path: gitaly/gitaly_token
                 {{- include "gitlab.redis.secrets" . | nindent 16 }}
                 {{- include "gitlab.psql.secret" . | nindent 16 }}

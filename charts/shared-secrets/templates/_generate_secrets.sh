@@ -137,3 +137,11 @@ generate_secret_if_needed {{ template "gitlab.registry.httpSecret.secret" . }} -
 # Grafana password
 generate_secret_if_needed "gitlab-grafana-initial-password" --from-literal=password=$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
+
+{{ if .Values.global.praefect.enabled }}
+# Praefect DB password
+generate_secret_if_needed {{ template "gitlab.praefect.dbSecret.secret" . }} --from-literal={{ template "gitlab.praefect.dbSecret.key" . }}=$(gen_random 'a-zA-Z0-9', 32)
+
+# Gitaly secret
+generate_secret_if_needed {{ template "gitlab.praefect.authToken.secret" . }} --from-literal={{ template "gitlab.praefect.authToken.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
+{{ end }}
