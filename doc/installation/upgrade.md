@@ -68,6 +68,20 @@ NOTE: **Note:**
 During a major database upgrade, we ask you to set `gitlab.migrations.enabled` set to `false`. You will want to
 ensure that you explicitly set it back to `true` for future updates.
 
+## Upgrade the bundled PostgreSQL to version 12 (optional)
+
+NOTE: **Note:**
+If you are not using the bundled PostgreSQL chart (`postgresql.install` is false), you do not need to perform this step.
+
+Upgrading to PostgreSQL 12 for GitLab 13.x is optional. PostgreSQL 12 is supported by GitLab 13.4 and later. PostgreSQL 12 will become the minimum required PostgreSQL version in [GitLab 14.0, scheduled for April 2021](https://gitlab.com/groups/gitlab-org/-/epics/2374#phased-plan). [PostgreSQL 12 brings significant performance improvements](https://www.postgresql.org/about/news/1976/).
+
+To upgrade the bundled PostgreSQL to version 12, the following steps are required:
+
+1. [Prepare the existing database](#prepare-the-existing-database).
+1. [Delete existing PostgreSQL data](#delete-existing-postgresql-data).
+1. Update the `postgresql.image.tag` value to `12.4.0` and [reinstall the chart](#upgrade-gitlab) to create a new PostgreSQL 12 database.
+1. [Restore the database](#restore-the-database).
+
 ## Upgrade the bundled PostgreSQL chart
 
 As part of the `4.0.0` release of this chart, we upgraded the bundled [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) from `7.7.0` to `8.9.4`. This is not a drop in replacement. Manual steps need to be performed to upgrade the database.
