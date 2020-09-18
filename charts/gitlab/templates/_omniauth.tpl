@@ -11,7 +11,7 @@ omniauth:
   block_auto_created_users: {{ .omniauth.blockAutoCreatedUsers }}
   auto_link_ldap_user: {{ .omniauth.autoLinkLdapUser }}
   auto_link_saml_user: {{ .omniauth.autoLinkSamlUser }}
-  auto_link_user: {{ .omniauth.autoLinkUser }}
+  auto_link_user: {{ toJson .omniauth.autoLinkUser }}
   external_providers: {{ .omniauth.externalProviders }}
   {{- if .omniauth.allowBypassTwoFactor }}
   allow_bypass_two_factor: {{ toJson .omniauth.allowBypassTwoFactor }}
