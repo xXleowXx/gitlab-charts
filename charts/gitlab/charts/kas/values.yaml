@@ -11,7 +11,7 @@ hpa:
   targetAverageValue: 100m
 image:
   repository: registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/kas
-  tag: "v0.0.2"
+  tag: "v0.0.5"
 ingress:
   annotations: {}
   tls: {}
