@@ -156,12 +156,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Return the sub-chart serviceAccount name
+If that is not present it will use the global chart serviceAccount name
+Failing that a serviceAccount will be generated automatically
 */}}
-{{- define "registry.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "registry.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
+{{- define "registry.serviceAccount.name" -}}
+{{- coalesce .Values.serviceAccount.name .Values.global.serviceAccount.name ( include "registry.fullname" . ) -}}
 {{- end -}}

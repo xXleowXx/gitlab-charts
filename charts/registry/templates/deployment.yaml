@@ -70,7 +70,9 @@ spec:
                   app: {{ template "name" . }}
                   release: {{ .Release.Name }}
       {{- end }}
-      serviceAccountName: {{ template "registry.serviceAccountName" . }}
+      {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
+      serviceAccountName: {{ include "registry.serviceAccount.name" $ }}
+      {{- end }}
       initContainers:
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
         - name: configure
