@@ -235,14 +235,6 @@ Uses `postgresql-password` to match upstream postgresql chart when not using an
 {{- end -}}
 
 {{/*
-Return if pool should be used by PostgreSQL.
-Defaults to 1
-*/}}
-{{- define "gitlab.psql.pool" -}}
-{{- default 1 (pluck "pool" .Values.psql .Values.global.psql | first) | int -}}
-{{- end -}}
-
-{{/*
 Return if prepared statements should be used by PostgreSQL.
 Defaults to false
 */}}
