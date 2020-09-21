@@ -356,7 +356,7 @@ gitlab.gitaly.serviceName:
 
 {{- define "gitlab.deprecate.global.psql.pool" -}}
 {{-   if hasKey $.Values.global "psql" -}}
-{{-     if hasKey $.Values.global.psql "pool" -}}
+{{-     if hasKey $.Values.global.psql "pool" }}
 global.psql.pool:
       Manually configuring the database connection pool has been removed. The application now manages the connection pool size.
 {{-     end -}}
@@ -366,7 +366,7 @@ global.psql.pool:
 {{-     if index $.Values.gitlab $chart -}}
 {{-       if hasKey (index $.Values.gitlab $chart) "psql" -}}
 {{-         with $localConfig := index $.Values.gitlab $chart "psql" -}}
-{{-           if hasKey $localConfig "pool" -}}
+{{-           if hasKey $localConfig "pool" }}
 gitlab.{{ $chart }}.psql.pool:
       Manually configuring the database connection pool has been removed. The application now manages the connection pool size.
 {{-           end -}}
