@@ -13,7 +13,7 @@ omniauth:
   auto_link_saml_user: {{ .omniauth.autoLinkSamlUser }}
   {{- if .omniauth.autoLinkUser }}
   auto_link_user: {{ toJson .omniauth.autoLinkUser }}
-  {{- end -}}
+  {{- end }}
   external_providers: {{ .omniauth.externalProviders }}
   {{- if .omniauth.allowBypassTwoFactor }}
   allow_bypass_two_factor: {{ toJson .omniauth.allowBypassTwoFactor }}
