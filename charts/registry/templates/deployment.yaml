@@ -157,7 +157,7 @@ spec:
                   path: storage/{{ .Values.storage.extraKey }}
                 {{- end }}
           {{- end }}
-          {{- if .Values.profiling.stackdriver.credentials.secret}}
+          {{- if .Values.profiling.stackdriver.credentials.secret }}
           - secret:
               name: {{ .Values.profiling.stackdriver.credentials.secret }}
               items:
