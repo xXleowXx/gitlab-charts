@@ -1,5 +1,0 @@
----
-title: Add PG connect_timeout setting
-merge_request: 1552
-author:
-type: changed
