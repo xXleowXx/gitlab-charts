@@ -70,6 +70,9 @@ spec:
                   app: {{ template "name" . }}
                   release: {{ .Release.Name }}
       {{- end }}
+      {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
+      serviceAccountName: {{ include "registry.serviceAccount.name" $ }}
+      {{- end }}
       initContainers:
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
         - name: configure
@@ -154,9 +157,9 @@ spec:
                   path: storage/{{ .Values.storage.extraKey }}
                 {{- end }}
           {{- end }}
-          {{- if .Values.profiling.stackdriver.enabled }}
+          {{- if .Values.profiling.stackdriver.credentials.secret }}
           - secret:
-              name: {{ required "A value is required for (registry).profiling.stackdriver.credentials.secret" .Values.profiling.stackdriver.credentials.secret }}
+              name: {{ .Values.profiling.stackdriver.credentials.secret }}
               items:
                 - key: {{ template "gitlab.registry.profiling.stackdriver.credentials.key" . }}
                   path: profiling-key.json
