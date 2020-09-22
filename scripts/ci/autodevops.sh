@@ -278,6 +278,13 @@ function run_task() {
   kubectl exec -i --namespace "${namespace}" "${task_runner_pod}" -- gitlab-rails runner "${ruby_cmd}"
 }
 
+function wait_for_dependencies() {
+  local namespace="${KUBE_NAMESPACE}"
+  local task_runner_pod=$(get_pod "task-runner")
+
+  kubectl exec -i --namespace "${namespace}" "${task_runner_pod}" -- /scripts/wait-for-deps
+}
+
 function disable_sign_ups() {
   if [ -z ${REVIEW_APPS_ROOT_TOKEN+x} ]; then
     echoerr "In order to protect Review Apps, REVIEW_APPS_ROOT_TOKEN variable must be set"
@@ -285,6 +292,8 @@ function disable_sign_ups() {
   else
     true
   fi
+
+  wait_for_dependencies
 
   # Create the root token
   local ruby_cmd="token = User.find_by_username('root').personal_access_tokens.create(scopes: [:api], name: 'Token to disable sign-ups'); token.set_token('${REVIEW_APPS_ROOT_TOKEN}'); begin; token.save!; rescue(ActiveRecord::RecordNotUnique); end"
