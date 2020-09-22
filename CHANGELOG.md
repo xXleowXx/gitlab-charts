@@ -2,6 +2,42 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.4.0 (2020-09-22)
+
+### Fixed (1 change)
+
+- Moves GITLAB_WORKHORSE_SENTRY_DSN to the workhorse container. !1543
+
+### Changed (7 changes, 1 of them is from the community)
+
+- Disable MIME type guessing in s3cmd. !1512
+- Disable workhorse archive cache by default. !1520
+- Removing dots from job names. !1540
+- Upgrade default PostgreSQL version to 11.9. !1550
+- Add PG connect_timeout setting. !1552
+- Update container-registry to 2.11.0-gitlab. !1553
+- Make Gitaly service values global options. !1559
+
+### Added (11 changes, 1 of them is from the community)
+
+- Add support for Praefect. !1493
+- Support Stackdriver Profiling for registry. !1494
+- Add support for configuring smartcard authentication. !1510
+- Support UBI certificates container. !1511
+- Exposes the workhorse prometheus port. !1514
+- Adds Content Security Policy (CSP) configuration. !1534
+- Allow for additional labels for services. !1537
+- Add danger job for validating the extension of changelog entries. !1542 (Matthias van de Meent)
+- Document upgrade steps for PostgreSQL 11 -> 12. !1545
+- Add Azure Blob storage configuration options. !1546
+- Add S3 server side encryption settings. !1549
+
+### Other (2 changes)
+
+- Adds capability to specify memoryKiller per Pod. !1536
+- Update GitLab Version to 13.4.0.
+
+
 ## 4.3.6 (2020-09-14)
 
 ### Changed (1 change)

@@ -1,5 +1,0 @@
----
-title: Document upgrade steps for PostgreSQL 11 -> 12
-merge_request: 1545
-author:
-type: added
