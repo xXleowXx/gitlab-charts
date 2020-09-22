@@ -113,6 +113,7 @@ global:
       blockAutoCreatedUsers: true
       autoLinkLdapUser: false
       autoLinkSamlUser: false
+      autoLinkUser: []
       externalProviders: []
       allowBypassTwoFactor: []
       providers: []
