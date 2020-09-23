@@ -33,7 +33,7 @@ to the `helm install` command using the `--set` flags.
 | -------------------------------- | --------------------- | ---------------------------------------------- |
 | `annotations`                    |                       | Pod annotations                                |
 | `podLabels`                      |                       | Supplemental Pod labels. Will not be used for selectors. |
-| `deployment.terminationGracePeriodSeconds`      | 30     | Seconds that Kubernetes will wait for a pod to exit, note this must be longer than shutdown.blackoutSeconds |
+| `deployment.terminationGracePeriodSeconds`      | 30     | Seconds that Kubernetes will wait for a pod to exit, note this must be longer than `shutdown.blackoutSeconds` |
 | `deployment.livenessProbe.initialDelaySeconds`  | 20     | Delay before liveness probe is initiated       |
 | `deployment.livenessProbe.periodSeconds`        | 60     | How often to perform the liveness probe        |
 | `deployment.livenessProbe.timeoutSeconds`       | 30     | When the liveness probe times out              |
