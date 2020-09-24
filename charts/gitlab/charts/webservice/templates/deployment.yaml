@@ -319,7 +319,7 @@ spec:
           resources:
             {{- toYaml .Values.workhorse.resources | nindent 12 }}
       {{- if .Values.deployment.terminationGracePeriodSeconds }}
-      terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds | int }}
       {{- end }}
       volumes:
       {{- include "gitlab.extraVolumes" . | nindent 6 }}
