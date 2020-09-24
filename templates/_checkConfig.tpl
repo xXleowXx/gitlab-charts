@@ -43,6 +43,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
+{{- $messages := append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- /* prepare output */}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -363,3 +364,15 @@ You must be using the Puma webservice in order to use Dependency Proxy. Set `git
 {{  end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.dependencyProxy.puma */}}
+
+{{/*
+Ensure terminationGracePeriodSeconds is longer than blackoutSeconds
+*/}}
+{{- define "gitlab.checkConfig.webservice.gracePeriod" -}}
+{{-   $terminationGracePeriodSeconds := default 30 .Values.gitlab.webservice.deployment.terminationGracePeriodSeconds | int -}}
+{{-   $blackoutSeconds := .Values.gitlab.webservice.shutdown.blackoutSeconds | int -}}
+{{- if lt $terminationGracePeriodSeconds $blackoutSeconds }}
+You must set terminationGracePeriodSeconds longer than blackoutSeconds
+{{  end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.webservice.gracePeriod */}}
