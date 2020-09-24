@@ -43,6 +43,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
+{{- $messages := append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- /* prepare output */}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
