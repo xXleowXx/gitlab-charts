@@ -363,3 +363,13 @@ You must be using the Puma webservice in order to use Dependency Proxy. Set `git
 {{  end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.dependencyProxy.puma */}}
+
+{{/*
+Ensure terminationGracePeriodSeconds is longer than blackoutSeconds
+*/}}
+{{- define "gitlab.checkConfig.webservice.gracePeriod" -}}
+{{- if lt ((default .Values.gitlab.webservice.deployment.terminationGracePeriodSeconds 30) .Values.gitlab.webservice.shutdown.blackoutSeconds) }}
+You must set terminationGracePeriodSeconds longer than blackoutSeconds
+{{  end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.webservice.gracePeriod */}}
