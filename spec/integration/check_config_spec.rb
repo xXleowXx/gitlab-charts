@@ -515,7 +515,7 @@ describe 'checkConfig template' do
   describe 'webserviceTermination', :focus => true do
     let(:success_values) do
       {
-        'global' => {
+        'gitlab' => {
           'webservice' => {
             'deployment' => {
               'terminationGracePeriodSeconds' => 50
@@ -530,7 +530,7 @@ describe 'checkConfig template' do
 
     let(:error_values) do
       {
-        'global' => {
+        'gitlab' => {
           'webservice' => {
             'deployment' => {
               'terminationGracePeriodSeconds' => 5
