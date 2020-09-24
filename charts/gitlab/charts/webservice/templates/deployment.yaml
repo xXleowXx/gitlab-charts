@@ -318,7 +318,9 @@ spec:
             failureThreshold: {{ .Values.workhorse.readinessProbe.failureThreshold }}
           resources:
             {{- toYaml .Values.workhorse.resources | nindent 12 }}
+      {{- if .Values.deployment.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.deployment.terminationGracePeriodSeconds }}
+      {{- end }}
       volumes:
       {{- include "gitlab.extraVolumes" . | nindent 6 }}
       {{- include "gitlab.psql.ssl.volume" . | nindent 6 }}
