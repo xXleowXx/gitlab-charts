@@ -34,7 +34,7 @@ the `helm install` command using the `--set` flags.
 | `annotations`               | `{}`           | Pod annotations                  |
 | `extraContainers`           |                | List of extra containers to include      |
 | `image.repository`          | `registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/kas` | image repository |
-| `image.tag`                 | `latest-race`  | Image tag                        |
+| `image.tag`                 | `v0.05`        | Image tag                        |
 | `hpa.targetAverageValue`    | `100m`         | Set the autoscaling target value (cpu) |
 | `ingress.annotations`       | `{}`           | Ingress annotations              |
 | `ingress.tls`               | `{}`           | Ingress tls configuration        |
