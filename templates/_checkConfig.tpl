@@ -372,7 +372,7 @@ Ensure terminationGracePeriodSeconds is longer than blackoutSeconds
 {{-   $terminationGracePeriodSeconds := default 30 .Values.gitlab.webservice.deployment.terminationGracePeriodSeconds | int -}}
 {{-   $blackoutSeconds := .Values.gitlab.webservice.shutdown.blackoutSeconds | int -}}
 {{- if lt $terminationGracePeriodSeconds $blackoutSeconds }}
-You must set terminationGracePeriodSeconds longer than blackoutSeconds
+You must set terminationGracePeriodSeconds ({{ $terminationGracePeriodSeconds }}) longer than blackoutSeconds ({{ $blackoutSeconds }})
 {{  end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.webservice.gracePeriod */}}
