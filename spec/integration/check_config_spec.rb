@@ -512,7 +512,7 @@ describe 'checkConfig template' do
                      error_description: 'when dependencyProxy is enabled with the unicorn webservice'
   end
 
-  describe 'webserviceTermination', :focus => true do
+  describe 'webserviceTermination' do
     let(:success_values) do
       {
         'gitlab' => {
