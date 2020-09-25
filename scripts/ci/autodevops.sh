@@ -130,6 +130,7 @@ CIYAML
     --set global.ingress.annotations."external-dns\.alpha\.kubernetes\.io/ttl"="10" \
     --set global.ingress.tls.secretName=helm-charts-win-tls \
     --set global.ingress.configureCertmanager=false \
+    --set global.appConfig.initialDefaults.signupEnabled=false \
     --set certmanager.install=false \
     --set prometheus.install=$PROMETHEUS_INSTALL \
     --set gitlab.webservice.maxReplicas=3 \

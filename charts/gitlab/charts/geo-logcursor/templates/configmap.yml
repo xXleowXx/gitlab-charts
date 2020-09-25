@@ -38,6 +38,9 @@ data:
         issue_closing_pattern: {{ .issueClosingPattern | quote }}
         default_theme: {{ .defaultTheme }}
         {{- include "gitlab.appConfig.defaultProjectsFeatures.configuration" $ | nindent 8 }}
+        {{- if hasKey .Values.global.appConfig.initialDefault "signupEnabled" }}
+        signup_enabled: {{ .Values.global.appConfig.initialDefaults.signupEnabled }}
+        {{ end -}}
         webhook_timeout: {{ .webhookTimeout }}
         {{- end }}
         trusted_proxies:
