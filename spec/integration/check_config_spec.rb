@@ -511,4 +511,42 @@ describe 'checkConfig template' do
                      success_description: 'when dependencyProxy is enabled with a default install',
                      error_description: 'when dependencyProxy is enabled with the unicorn webservice'
   end
+
+  describe 'webserviceTermination', :focus => true do
+    let(:success_values) do
+      {
+        'gitlab' => {
+          'webservice' => {
+            'deployment' => {
+              'terminationGracePeriodSeconds' => 50
+            },
+            'shutdown' => {
+              'blackoutSeconds' => 10
+            }
+          }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_values) do
+      {
+        'gitlab' => {
+          'webservice' => {
+            'deployment' => {
+              'terminationGracePeriodSeconds' => 5
+            },
+            'shutdown' => {
+              'blackoutSeconds' => 20
+            }
+          }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_output) { 'fail' }
+
+    include_examples 'config validation',
+                     success_description: 'when terminationGracePeriodSeconds is >= blackoutSeconds',
+                     error_description: 'when terminationGracePeriodSeconds is < blackoutSeconds'
+  end
 end
