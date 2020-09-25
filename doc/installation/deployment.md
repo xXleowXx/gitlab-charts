@@ -208,16 +208,6 @@ described in the [secrets guide](secrets.md#imap-password-for-service-desk-email
 NOTE: **Note:**
 Service desk email _requires_ that [Incoming email](#incoming-email) be configured.
 
-### Deploy the Community Edition
-
-By default, the Helm charts use the Enterprise Edition of GitLab. If desired, you can instead use the Community Edition. Learn more about the [difference between the two](https://about.gitlab.com/install/ce-or-ee/).
-
-*To deploy the Community Edition, include this option in your Helm install command:*
-
-```shell
---set global.edition=ce
-```
-
 ### RBAC
 
 This chart defaults to creating and using RBAC. If your cluster does not have RBAC enabled, you will need to disable these settings:
@@ -304,4 +294,14 @@ if you used the command above).
 
 ```shell
 kubectl get secret <name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
+```
+
+## Deploy the Community Edition
+
+By default, the Helm charts use the Enterprise Edition of GitLab. The Enterprise Edition is a free, open core version of GitLab with the option of upgrading to a paid tier to unlock additional features. If desired, you can instead use the Community Edition which is licensed under the MIT Expat license. Learn more about the [difference between the two](https://about.gitlab.com/install/ce-or-ee/).
+
+*To deploy the Community Edition, include this option in your Helm install command:*
+
+```shell
+--set global.edition=ce
 ```

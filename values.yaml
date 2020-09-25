@@ -415,11 +415,9 @@ global:
         # clientCertificate:
         # serverCA:
 
-  ## doc/installation/secrets.md#gitlab-kas-secret
+  ## doc/charts/gitlab/kas/index.md
   kas:
     enabled: false
-    # secret:
-    # key:
 
   ## doc/charts/globals.md#configure-gitlab-shell-settings
   shell:
