@@ -24,7 +24,7 @@ data:
     production: &base
       gitlab:
         host: {{ template "gitlab.gitlab.hostname" . }}
-        {{- if hasKey .Values.global.appConfig.initialDefault "signupEnabled" }}
+        {{- if hasKey .Values.global.appConfig.initialDefaults "signupEnabled" }}
         signup_enabled: {{ .Values.global.appConfig.initialDefaults.signupEnabled }}
         {{ end -}}
       {{- include "gitlab.appConfig.gitaly" . | nindent 6 }}
