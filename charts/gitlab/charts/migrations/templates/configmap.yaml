@@ -26,7 +26,7 @@ data:
         host: {{ template "gitlab.gitlab.hostname" . }}
         {{- if hasKey .Values.global.appConfig.initialDefaults "signupEnabled" }}
         signup_enabled: {{ .Values.global.appConfig.initialDefaults.signupEnabled }}
-        {{ end -}}
+        {{- end }}
       {{- include "gitlab.appConfig.gitaly" . | nindent 6 }}
       {{- include "gitlab.appConfig.repositories" . | nindent 6 }}
       {{- include "gitlab.geo.config" $ | nindent 6 }}

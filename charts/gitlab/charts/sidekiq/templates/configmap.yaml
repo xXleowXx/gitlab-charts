@@ -42,7 +42,7 @@ data:
         {{- include "gitlab.appConfig.defaultProjectsFeatures.configuration" $ | nindent 8 }}
         {{- if hasKey .initialDefaults "signupEnabled" }}
         signup_enabled: {{ .initialDefaults.signupEnabled }}
-        {{ end -}}
+        {{- end }}
         webhook_timeout: {{ .webhookTimeout }}
         {{- end }}
         trusted_proxies:
