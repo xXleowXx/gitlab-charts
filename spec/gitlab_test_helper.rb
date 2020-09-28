@@ -103,8 +103,8 @@ module Gitlab
       return [stdout, status]
     end
 
-    def restart_unicorn
-      filters = 'app=unicorn'
+    def restart_webservice
+      filters = 'app=webservice'
 
       if ENV['RELEASE_NAME']
         filters="#{filters},release=#{ENV['RELEASE_NAME']}"
