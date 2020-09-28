@@ -6,6 +6,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Deploy Development Branch
 
+First ensure that your development environment is set up for charts development.
+See the [Development environment setup](environment_setup.md) page for instructions.
+
 Clone the repository, and checkout the branch you want to deploy:
 
 ```shell
