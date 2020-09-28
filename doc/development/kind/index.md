@@ -32,7 +32,7 @@ It is considered best practice to install applications in namespaces other than 
 
 ### Installing dependencies
 
-You can use `asdf` ([more info](../index.md#common-developer-tools)) to install the following tools:
+You can use `asdf` ([more info](../environment_setup.md#additional-developer-tools)) to install the following tools:
 
 - `kubectl`
 - `helm`
