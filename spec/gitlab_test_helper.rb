@@ -115,7 +115,7 @@ module Gitlab
 
     def restart_gitlab_runner
       release = ENV['RELEASE_NAME'] || 'gitlab'
-      filters = 'app=#{release}-gitlab-runner'
+      filters = "app=#{release}-gitlab-runner"
 
       if ENV['RELEASE_NAME']
         filters="#{filters},release=#{ENV['RELEASE_NAME']}"
