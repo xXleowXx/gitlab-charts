@@ -40,6 +40,9 @@ data:
         issue_closing_pattern: {{ .issueClosingPattern | quote }}
         default_theme: {{ .defaultTheme }}
         {{- include "gitlab.appConfig.defaultProjectsFeatures.configuration" $ | nindent 8 }}
+        {{- if hasKey .initialDefaults "signupEnabled" }}
+        signup_enabled: {{ .initialDefaults.signupEnabled }}
+        {{- end }}
         webhook_timeout: {{ .webhookTimeout }}
         {{- end }}
         trusted_proxies:
