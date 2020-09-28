@@ -28,6 +28,9 @@ describe "Restoring a backup" do
 
     # Wait for the site to come up after the restore/migrations
     wait_until_app_ready
+
+    # Have the gitlab-runner re-register after the restore
+    restart_gitlab_runner
   end
 
   describe 'Restored gitlab instance' do

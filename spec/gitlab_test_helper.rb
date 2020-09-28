@@ -113,6 +113,18 @@ module Gitlab
       return [stdout, status]
     end
 
+    def restart_gitlab_runner
+      release = ENV['RELEASE_NAME'] || 'gitlab'
+      filters = 'app=#{release}-gitlab-runner'
+
+      if ENV['RELEASE_NAME']
+        filters="#{filters},release=#{ENV['RELEASE_NAME']}"
+      end
+
+      stdout, status = Open3.capture2e("kubectl delete pods -l #{filters} --wait=true")
+      return [stdout, status]
+    end
+
     def set_runner_token
       rails_dir = ENV['RAILS_DIR'] || '/srv/gitlab'
       cmd = full_command("#{rails_dir}/bin/rails runner \"settings = ApplicationSetting.current_without_cache; settings.set_runners_registration_token('#{runner_registration_token}'); settings.save!; Ci::Runner.delete_all\"")
