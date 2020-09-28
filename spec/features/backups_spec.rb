@@ -85,7 +85,7 @@ describe "Restoring a backup" do
       object_storage.get_object(
         response_target: '/tmp/original_backup.tar',
         bucket: 'gitlab-backups',
-        key: '0_13.0.14_gitlab_backup.tar'
+        key: 'original_gitlab_backup.tar'
       )
 
       cmd = 'mkdir -p /tmp/original_backup && tar -xf /tmp/original_backup.tar -C /tmp/original_backup'

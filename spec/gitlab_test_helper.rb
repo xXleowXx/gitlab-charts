@@ -82,8 +82,7 @@ module Gitlab
     end
 
     def restore_from_backup
-      backup = ENV['BACKUP_TIMESTAMP'] || '0_13.0.14'
-      cmd = full_command("backup-utility --restore -t #{backup}")
+      cmd = full_command("backup-utility --restore -t original")
       stdout, status = Open3.capture2e(cmd)
 
       return [stdout, status]
@@ -169,12 +168,12 @@ module Gitlab
 
     def ensure_backups_on_object_storage
       storage_url = 'https://storage.googleapis.com/gitlab-charts-ci/test-backups'
-      backup_file_names = ['13.0.14_gitlab_backup.tar']
+      backup_file_names = ["#{TEST_BACKUP_PREFIX}_gitlab_backup.tar"]
       backup_file_names.each do |file_name|
         file = open("#{storage_url}/#{file_name}").read
         object_storage.put_object(
           bucket: 'gitlab-backups',
-          key: "0_#{file_name}",
+          key: 'original_gitlab_backup.tar',
           body: file
         )
         puts "Uploaded #{file_name}"
