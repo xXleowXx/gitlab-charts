@@ -23,11 +23,14 @@ describe "Restoring a backup" do
     stdout, status = enforce_root_password(ENV['GITLAB_PASSWORD']) if ENV['GITLAB_PASSWORD']
     fail stdout unless status.success?
 
-    stdout, status = restart_unicorn
+    stdout, status = restart_webservice
     fail stdout unless status.success?
 
     # Wait for the site to come up after the restore/migrations
     wait_until_app_ready
+
+    # Have the gitlab-runner re-register after the restore
+    restart_gitlab_runner
   end
 
   describe 'Restored gitlab instance' do
@@ -85,7 +88,7 @@ describe "Restoring a backup" do
       object_storage.get_object(
         response_target: '/tmp/original_backup.tar',
         bucket: 'gitlab-backups',
-        key: '0_13.0.14_gitlab_backup.tar'
+        key: 'original_gitlab_backup.tar'
       )
 
       cmd = 'mkdir -p /tmp/original_backup && tar -xf /tmp/original_backup.tar -C /tmp/original_backup'
