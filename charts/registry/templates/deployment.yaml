@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "registry.fullname" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
@@ -131,7 +131,7 @@ spec:
         projected:
           sources:
           - configMap:
-              name: {{ template "fullname" . }}
+              name: {{ template "registry.fullname" . }}
           - secret:
               name: {{ template "gitlab.registry.certificate.secret" . }}
               items:
