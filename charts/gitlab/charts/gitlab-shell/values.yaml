@@ -68,6 +68,10 @@ deployment:
     successThreshold: 1
     failureThreshold: 3
 
+
+logging:
+  format: "text"
+
 config:
   loginGraceTime: 120
   maxStartups:

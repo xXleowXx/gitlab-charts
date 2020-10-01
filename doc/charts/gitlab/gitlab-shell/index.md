@@ -56,6 +56,7 @@ controlled by `global.shell.port`.
 | `image.tag`              | `master`       | Shell image tag                          |
 | `init.image.repository`  |                | initContainer image                      |
 | `init.image.tag`         |                | initContainer image tag                  |
+| `logging.format`         | `text`      | Set to `json` for JSON-structured logs   |
 | `replicaCount`           | `1`            | Shell replicas                           |
 | `serviceLabels`          | `{}`           | Supplemental service labels |
 | `service.externalTrafficPolicy` | `Cluster` | Shell service external traffic policy (Cluster or Local)  |
