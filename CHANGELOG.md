@@ -2,6 +2,18 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.4.2 (2020-10-01)
+
+### Changed (1 change)
+
+- GitLab Runner chart to 0.21.1. !1573
+
+### Other (2 changes)
+
+- Bump default gitlab-kas image tag to v0.0.5. !1565
+- Update GitLab Version to 13.4.2.
+
+
 ## 4.4.1 (2020-09-24)
 
 ### Other (1 change)
