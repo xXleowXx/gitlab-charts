@@ -50,7 +50,7 @@ controlled by `global.shell.port`.
 | `extraVolumes`           |                | List of extra volumes to create          |
 | `extraEnv`               |                | List of extra environment variables to expose |
 | `hpa.targetAverageValue` | `100m`         | Set the autoscaling target value         |
-| `image.pullPolicy`       | `Always`       | Shell image pull policy                  |
+| `image.pullPolicy`       | `IfNotPresent` | Shell image pull policy                  |
 | `image.pullSecrets`      |                | Secrets for the image repository         |
 | `image.repository`       | `registry.com/gitlab-org/build/cng/gitlab-shell` | Shell image repository |
 | `image.tag`              | `master`       | Shell image tag                          |
@@ -203,4 +203,59 @@ service:
   loadBalancerSourceRanges:
   - 5.6.7.8/32
   - 10.0.0.0/8
+```
+
+### Configuring the `networkpolicy`
+
+This section controls the
+[NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/).
+This configuration is optional and is used to limit Egress and Ingress of the
+Pods to specific endpoints.
+
+| Name              | Type    | Default | Description |
+|:----------------- |:-------:|:------- |:----------- |
+| `enabled`         | Boolean | `false` | This setting enables the networkpolicy |
+| `ingress.enabled` | Boolean | `false` | When set to `true`, the `Ingress` network policy will be activated. This will block all Ingress connections unless rules are specified. |
+| `ingress.rules`   | Array   | `[]`    | Rules for the Ingress policy, for details see <https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource> and the example below |
+| `egress.enabled`  | Boolean | `false` | When set to `true`, the `Egress` network policy will be activated. This will block all egress connections unless rules are specified. |
+| `egress.rules`    | Array   | `[]`    | Rules for the egress policy, these for details see <https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource> and the example below |
+
+### Example Network Policy
+
+The `gitlab-shell` service requires Ingress connections for port 22 and Egress
+connections to various to default workhorse port 8181. This examples adds the
+following network policy:
+
+- All Ingress requests from the network on TCP `0.0.0.0/0` port 2222 are allowed
+- All Egress requests to the network on UDP `10.0.0.0/8` port 53 are allowed for DNS
+- All Egress requests to the network on TCP `10.0.0.0/8` port 8181 are allowed for Workhorse
+- All Egress requests to the network on TCP `10.0.0.0/8` port 8075 are allowed for Gitaly
+
+_Note the example provided is only an example and may not be complete_
+
+```yaml
+networkpolicy:
+  enabled: true
+  ingress:
+    enabled: true
+    rules:
+      - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+        ports:
+          - port: 2222
+            protocol: TCP
+  egress:
+    enabled: true
+    rules:
+      - to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+        ports:
+          - port: 8181
+            protocol: TCP
+          - port: 8075
+            protocol: TCP
+          - port: 53
+            protocol: UDP
 ```
