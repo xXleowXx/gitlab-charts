@@ -234,6 +234,7 @@ See the [backup/restore object storage documentation](../../backup-restore/index
      access_key = BOGUS_ACCESS_KEY
      secret_key = BOGUS_SECRET_KEY
      bucket_location = us-east-1
+     multipart_chunk_size_mb = 128 # default is 15 (MB)
      ```
 
    - On Google Cloud Storage, you can create the file by creating a service account
@@ -258,6 +259,7 @@ See the [backup/restore object storage documentation](../../backup-restore/index
      # Leave as default
      bucket_location = us-west-1
      use_https = True
+     multipart_chunk_size_mb = 128 # default is 15 (MB)
 
      # Setup access keys
      # Access Key = Azure Storage Account name
