@@ -46,8 +46,8 @@ the `helm install` command using the `--set` flags.
 | `podLabels`                 | `{}`           | Supplemental Pod labels. Will not be used for selectors. |
 | `resources.requests.cpu`    | `75m`                 | GitLab Exporter minimum cpu                    |
 | `resources.requests.memory` | `100M`                | GitLab Exporter minimum memory                 |
-| `service.externalPort`      | `5005`         | External port                    |
-| `service.internalPort`      | `5005`         | Internal port                    |
+| `service.externalPort`      | `8150`         | External port                    |
+| `service.internalPort`      | `8150`         | Internal port                    |
 | `service.type`              | `ClusterIP`    | Service type                     |
 | `tolerations`               | `[]`           | Toleration labels for pod assignment     |
 

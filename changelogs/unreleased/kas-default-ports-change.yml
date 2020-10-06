@@ -1,0 +1,5 @@
+---
+title: Update default service ports for GitLab Kubernetes Agent Server (kas)
+merge_request: 1587
+author:
+type: changed
