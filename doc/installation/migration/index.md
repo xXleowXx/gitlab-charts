@@ -35,9 +35,10 @@ by the `gitlab:artifacts:migrate` script below.
    installation to object storage.
 
    1. Modify `/etc/gitlab/gitlab.rb` file and configure object storage for
-      [uploads](https://docs.gitlab.com/ee/administration/uploads.html#s3-compatible-connection-settings),
-      [artifacts](https://docs.gitlab.com/ee/administration/job_artifacts.html#s3-compatible-connection-settings)
-      and [LFS](https://docs.gitlab.com/ee/workflow/lfs/lfs_administration.html#s3-for-omnibus-installations).
+      - [Uploads](https://docs.gitlab.com/ee/administration/uploads.html#s3-compatible-connection-settings)
+      - [Artifacts](https://docs.gitlab.com/ee/administration/job_artifacts.html#s3-compatible-connection-settings)
+      - [LFS](https://docs.gitlab.com/ee/workflow/lfs/lfs_administration.html#s3-for-omnibus-installations)
+      - [Packages](https://docs.gitlab.com/ee/administration/packages/#using-object-storage)
 
       NOTE: **Note:**
       This **must** be the same object storage service that the Helm charts based deployment is
@@ -59,6 +60,12 @@ by the `gitlab:artifacts:migrate` script below.
 
       ```shell
       sudo gitlab-rake gitlab:lfs:migrate
+      ```
+
+   1. Migrate existing Packages to object storage:
+
+      ```shell
+      gitlab-rake gitlab:packages:migrate
       ```
 
    1. Migrate existing uploads to object storage
