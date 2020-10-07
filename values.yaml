@@ -242,7 +242,7 @@ global:
 
     ## doc/charts/globals.md#lfs-artifacts-uploads-packages-external-mr-diffs
     object_store:
-      enabled: true
+      enabled: false
       proxy_download: true
       storage_options: {}
         # server_side_encryption:
@@ -277,6 +277,7 @@ global:
       bucket: gitlab-packages
       connection: {}
     externalDiffs:
+      enabled: false
       when:
       proxy_download: true
       bucket: gitlab-mr-diffs
@@ -481,6 +482,7 @@ global:
     objectStore:
       enabled: false
       bucket: gitlab-pages
+      # proxy_download: true
       connection: {}
         # secret:
         # key:
