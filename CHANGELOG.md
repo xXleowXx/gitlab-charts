@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.4.3 (2020-10-07)
+
+### Added (1 change)
+
+- Adds NetworkPolicy for gitlab-shell. !1580
+
+
 ## 4.4.2 (2020-10-01)
 
 ### Changed (1 change)
