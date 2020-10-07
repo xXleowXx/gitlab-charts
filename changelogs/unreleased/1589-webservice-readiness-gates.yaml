@@ -1,0 +1,5 @@
+---
+title: Support pod readiness gates for webservice
+merge_request: 1589
+author:
+type: added
