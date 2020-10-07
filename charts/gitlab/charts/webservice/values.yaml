@@ -17,6 +17,9 @@ init:
 # Tolerations for pod scheduling
 tolerations: []
 
+# Pod readiness gates
+readinessGates: []
+
 monitoring:
   # Monitoring IP whitelist
   ipWhitelist:
