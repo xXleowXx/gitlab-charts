@@ -126,7 +126,7 @@ Unavailable:
 
 ### Gotcha: Persistent Volumes
 
-Minikube supports [PersistenVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
+Minikube supports [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
 of the `hostPath` type, which are mapped to directories inside the VM. As Minikube
 boots into a `tmpfs`, most directories will not persist across reboots via `minikube stop`.
 
