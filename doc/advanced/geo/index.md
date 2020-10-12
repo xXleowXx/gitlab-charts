@@ -181,7 +181,7 @@ Once the configuration above is prepared:
 
 1. Place the content into `/etc/gitlab/gitlab.rb`
 1. Run `gitlab-ctl reconfigure`. If you experience any issues in regards to the
-service not listening on TCP, try directly restarting it with 
+service not listening on TCP, try directly restarting it with
 `gitlab-ctl restart postgresql`.
 1. Run `gitlab-ctl set-replication-password` in order to set the password for
 the `gitlab_replicator` user.
@@ -402,7 +402,7 @@ Once the configuration above is prepared:
 
 1. Place the content into `/etc/gitlab/gitlab.rb`
 1. Run `gitlab-ctl reconfigure`. If you experience any issues in regards to the
-service not listening on TCP, try directly restarting it with 
+service not listening on TCP, try directly restarting it with
 `gitlab-ctl restart postgresql`.
 1. Place the Primary database's certificate content from above into `primary.crt`
 1. Set up PostgreSQL TLS verification on the **secondary** node:

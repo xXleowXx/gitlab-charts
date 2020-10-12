@@ -231,12 +231,11 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab-runner.runners.builds.cpuRequests`                    | build container limit                          |                                                                  |
 | `gitlab-runner.runners.builds.memoryLimit`                    | build container limit                          |                                                                  |
 | `gitlab-runner.runners.builds.memoryRequests`                 | build container limit                          |                                                                  |
-| `gitlab-runner.runners.builds.cpuLimit`                      | build container limit                          
+| `gitlab-runner.runners.builds.cpuLimit`                      | build container limit                          | |
 | `gitlab-runner.runners.helpers.cpuRequests`                    | helper container limit                          |                                                                  |
 | `gitlab-runner.runners.helpers.memoryLimit`                    | helper container limit                          |                                                                  |
 | `gitlab-runner.runners.helpers.memoryRequests`                 | helper container limit                          |                                                                  |
-| `gitlab-runner.runners.helpers.cpuLimit`                      | helper container limit    
-|                                                                  |
+| `gitlab-runner.runners.helpers.cpuLimit`                     | helper container limit                         |                                                                  |
 | `gitlab-runner.runners.cache.cacheShared`                    | share the cache between runners                | true                                                             |
 | `gitlab-runner.runners.cache.cacheType`                      | cache type                                     | `s3`                                                             |
 | `gitlab-runner.runners.cache.s3BucketLocation`               | bucket region                                  | `us-east-1`                                                      |

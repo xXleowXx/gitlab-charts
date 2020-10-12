@@ -53,7 +53,7 @@ there will be some variation in how you connect.
    1. Fetch the password:
 
       ```shell
-      kubectl get secret RELEASE_NAME-praefect-dbsecret -o jsonpath="{.data.secret}" | base64 --decode 
+      kubectl get secret RELEASE_NAME-praefect-dbsecret -o jsonpath="{.data.secret}" | base64 --decode
       ```
 
    1. Set the password in the `psql` prompt:
