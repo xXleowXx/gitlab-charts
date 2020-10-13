@@ -49,7 +49,7 @@ documentation.
   - [GitLab Workhorse secret](#gitlab-workhorse-secret)
   - [GitLab Runner secret](#gitlab-runner-secret)
   - [PostgreSQL password](#postgresql-password)
-  - [Praefect DB password](#praefect-db-password) 
+  - [Praefect DB password](#praefect-db-password)
   - [MinIO secret](#minio-secret)
   - [Registry HTTP secret](#registry-http-secret)
   - [Grafana password](#grafana-password)
