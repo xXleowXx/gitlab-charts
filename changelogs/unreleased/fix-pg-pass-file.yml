@@ -1,5 +1,5 @@
 ---
 title: Fix PG password error during when enabling extensions
-merge_request:
+merge_request: 1593
 author:
 type: fixed
