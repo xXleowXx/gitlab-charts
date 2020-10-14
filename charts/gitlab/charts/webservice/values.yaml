@@ -137,6 +137,9 @@ workhorse:
     exporter:
       enabled: false
       port: 9229
+  imageScaler:
+    maxProcs: 2 # aim for max(2, requested_cpus / 2)
+    maxFileSizeBytes: 250000
 
 psql: {}
   # port: 5432
