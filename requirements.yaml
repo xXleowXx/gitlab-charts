@@ -18,7 +18,7 @@ dependencies:
   condition: gitlab-runner.install
 - name: grafana
   version: 4.0.1
-  repository: https://kubernetes-charts.storage.googleapis.com/
+  repository: https://grafana.github.io/helm-charts
   condition: global.grafana.enabled
 - name: redis
   version: 10.3.4
