@@ -129,7 +129,7 @@ You can read more about setting up your production-ready object storage in the [
 
 ### Prometheus
 
-We use the [upstream Prometheus chart](https://github.com/helm/charts/tree/master/stable/prometheus#configuration),
+We use the [upstream Prometheus chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus#configuration),
 and do not override values from our own defaults other than a customized
 `prometheus.yml` file to limit collection of metrics to the Kubernetes API
 and the objects created by the GitLab chart. We do, however, default disable
@@ -148,7 +148,7 @@ continuity of metrics collection for existing users and provides the ability
 to use the default Prometheus configuration to capture both the GitLab
 application metrics and other applications running in a Kubernetes cluster.
 
-Refer to the [Prometheus chart documentation](https://github.com/helm/charts/tree/master/stable/prometheus#configuration) for the
+Refer to the [Prometheus chart documentation](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus#configuration) for the
 exhaustive list of configuration options and ensure they are sub-keys to
 `prometheus`, as we use this as requirement chart.
 

@@ -453,7 +453,7 @@ global:
 
 The GitLab global Grafana settings are located under `global.grafana`. At this time, the only setting available is `global.grafana.enabled`.
 
-When set to `true`, the GitLab chart will deploy the [Grafana chart](https://github.com/helm/charts/tree/master/stable/grafana), expose it under `/-/grafana` of the GitLab Ingress, and pre-configure it with a secure random password. The generated password can be found in the Secret named `gitlab-grafana-initial-root-password`.
+When set to `true`, the GitLab chart will deploy the [grafana/grafana chart](https://artifacthub.io/packages/helm/grafana/grafana), expose it under `/-/grafana` of the GitLab Ingress, and pre-configure it with a secure random password. The generated password can be found in the Secret named `gitlab-grafana-initial-root-password`.
 
 The GitLab chart connects to the deployed Prometheus instance.
 
