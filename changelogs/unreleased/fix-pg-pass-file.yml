@@ -1,5 +1,5 @@
 ---
-title: Fix PG password error during when enabling extensions
+title: Fix PG password error when enabling extensions during DB init
 merge_request: 1593
 author:
 type: fixed
