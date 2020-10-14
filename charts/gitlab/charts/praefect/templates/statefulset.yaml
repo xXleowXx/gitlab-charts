@@ -154,6 +154,5 @@ spec:
               - key: {{ template "gitlab.praefect.dbSecret.key" . }}
                 path: db_password
               name: {{ template "gitlab.praefect.dbSecret.secret"  . }}
-      - emptyDir:
-          medium: Memory
-        name: etc-ssl-certs
+      {{- include "gitlab.certificates.volumes" . | nindent 6 }}
+
