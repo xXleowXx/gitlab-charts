@@ -46,14 +46,14 @@ describe 'Certificates configuration' do
         present.resources_by_kind('Deployment').each do |resource|
           next if skip_items.any? { |i| resource[0].include? i }
           sources = present.projected_volume_sources(resource[0],'custom-ca-certificates')
-          expect(sources).to be, "unable to locate 'custom-ca-certificates' volume for #{resource[0]}"
+          expect(sources).to be_truthy, "unable to locate 'custom-ca-certificates' volume for #{resource[0]}"
           expect(sources[0]['secret']['name']).to eq('rspec-custom-ca')
         end
 
         present.resources_by_kind('StatefulSet').each do |resource|
           next if skip_items.any? { |i| resource[0].include? i }
           sources = present.projected_volume_sources(resource[0],'custom-ca-certificates')
-          expect(sources).to be, "unable to locate 'custom-ca-certificates' volume for #{resource[0]}"
+          expect(sources).to be_truthy, "unable to locate 'custom-ca-certificates' volume for #{resource[0]}"
           expect(sources[0]['secret']['name']).to eq('rspec-custom-ca')
         end
       end
@@ -62,13 +62,13 @@ describe 'Certificates configuration' do
         present.resources_by_kind('Deployment').each do |resource|
           next if skip_items.any? { |i| resource[0].include? i }
           volume_mount = present.find_volume_mount(resource[0],'certificates', 'custom-ca-certificates', true)
-          expect(volume_mount).to be, "unable to locate 'custom-ca-certificates' mount in 'certificates' container of #{resource[0]}"
+          expect(volume_mount).to be_truthy, "unable to locate 'custom-ca-certificates' mount in 'certificates' container of #{resource[0]}"
         end
 
         present.resources_by_kind('StatefulSet').each do |resource|
           next if skip_items.any? { |i| resource[0].include? i }
           volume_mount = present.find_volume_mount(resource[0],'certificates', 'custom-ca-certificates', true)
-          expect(volume_mount).to be, "unable to locate 'custom-ca-certificates' mount in 'certificates' container of #{resource[0]}"
+          expect(volume_mount).to be_truthy, "unable to locate 'custom-ca-certificates' mount in 'certificates' container of #{resource[0]}"
         end
       end
     end
