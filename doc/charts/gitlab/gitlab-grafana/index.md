@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Using the GitLab-Grafana chart
 
-The `gitlab-grafana` subchart adapts the [grafana/grafana](https://artifacthub.io/packages/helm/grafana/grafana)
+The `gitlab-grafana` subchart adapts the [`grafana/grafana`](https://artifacthub.io/packages/helm/grafana/grafana)
 chart to operate correctly with the same level of configuration as the Omnibus
 GitLab install. In addition, the installation of Grafana allows additional
 dashboards to be installed by the end user and be incorporated with the
