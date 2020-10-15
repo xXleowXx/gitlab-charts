@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.4.4 (2020-10-15)
+
+### Fixed (1 change)
+
+- Praefect: fixup certificates mounts #2341. !1590
+
+
 ## 4.4.3 (2020-10-07)
 
 ### Added (1 change)
