@@ -142,6 +142,7 @@ gitlab_rails['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
 unicorn['enable']=false
+puma['enable']=false
 gitlab_workhorse['enable']=false
 nginx['enable']=false
 geo_logcursor['enable']=false
@@ -196,30 +197,6 @@ _This section will be performed on the Primary Kubernetes cluster._
 
 In order to deploy this chart as a Geo Primary, we'll start [from this example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/primary.yaml).
 
-```yaml
-### Geo Primary
-global:
-  # See docs.gitlab.com/charts/charts/globals
-  # Configure host & domain
-  hosts:
-    domain: example.com
-  # configure DB connection
-  psql:
-    host: geo-1.db.example.com
-    port: 5432
-    password:
-      secret: geo
-      key: postgresql-password
-  # configure geo (primary)
-  geo:
-    nodeName: primary.example.com
-    enabled: true
-    role: primary
-# External DB, disable
-postgresql:
-  install: false
-```
-
 1. We'll need to create a secret containing the database password, for the
    chart to consume. Replace `PASSWORD` below with the password for the `gitlab`
    database user.
@@ -228,7 +205,32 @@ postgresql:
    kubectl create secret generic geo --from-literal=postgresql-password=PASSWORD
    ```
 
-1. Update the configuration to reflect the correct values for:
+1. Create a `primary.yaml` file based on the [example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/primary.yaml)
+  and update the configuration to reflect the correct values:
+
+   ```yaml
+   ### Geo Primary
+   global:
+     # See docs.gitlab.com/charts/charts/globals
+     # Configure host & domain
+     hosts:
+       domain: example.com
+     # configure DB connection
+     psql:
+       host: geo-1.db.example.com
+       port: 5432
+       password:
+         secret: geo
+         key: postgresql-password
+     # configure geo (primary)
+     geo:
+       nodeName: primary.example.com
+       enabled: true
+       role: primary
+   # External DB, disable
+   postgresql:
+     install: false
+   ```
 
    - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
    - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
@@ -240,7 +242,7 @@ postgresql:
 1. Deploy the chart using this configuration
 
    ```shell
-   helm upgrade --install gitlab-geo gitlab/gitlab -f primary.yaml
+   helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f primary.yaml
    ```
 
    NOTE: **Note:**
@@ -329,6 +331,7 @@ geo_secondary['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
 unicorn['enable']=false
+puma['enable']=false
 gitlab_workhorse['enable']=false
 nginx['enable']=false
 geo_logcursor['enable']=false
@@ -496,38 +499,39 @@ _This section will be performed on the Secondary Kubernetes cluster._
 
 In order to deploy this chart as a Geo Secondary, we'll start [from this example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/secondary.yaml).
 
-```yaml
-## Geo Secondary
-global:
-  # See docs.gitlab.com/charts/charts/globals
-  # Configure host & domain
-  hosts:
-    hostSuffix: secondary
-    domain: example.com
-  # configure DB connection
-  psql:
-    host: geo-2.db.example.com
-    port: 5432
-    password:
-      secret: geo
-      key: postgresql-password
-  # configure geo (secondary)
-  geo:
-    enabled: true
-    role: secondary
-    nodeName: secondary.example.com
-    psql:
-      host: geo-2.db.example.com
-      port: 5431
-      password:
-        secret: geo
-        key: geo-postgresql-password
-# External DB, disable
-postgresql:
-  install: false
-```
+1. Create a `secondary.yaml` file based on the [example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/secondary.yaml)
+  and update the configuration to reflect the correct values:
 
-1. Update the configuration to reflect the correct values for:
+   ```yaml
+   ## Geo Secondary
+   global:
+     # See docs.gitlab.com/charts/charts/globals
+     # Configure host & domain
+     hosts:
+       hostSuffix: secondary
+       domain: example.com
+     # configure DB connection
+     psql:
+       host: geo-2.db.example.com
+       port: 5432
+       password:
+         secret: geo
+         key: postgresql-password
+     # configure geo (secondary)
+     geo:
+       enabled: true
+       role: secondary
+       nodeName: secondary.example.com
+       psql:
+         host: geo-2.db.example.com
+         port: 5431
+         password:
+           secret: geo
+           key: geo-postgresql-password
+   # External DB, disable
+   postgresql:
+     install: false
+   ```
 
    - [`global.hosts.domain`](../../charts/globals.md#configure-host-settings)
    - [`global.psql.host`](../../charts/globals.md#configure-postgresql-settings)
@@ -536,11 +540,12 @@ postgresql:
      - [Configuring SSL/TLS](../../installation/deployment.md#tls-certificates)
      - [Using external Redis](../external-redis/index.md)
      - [using external Object Storage](../external-object-storage/index.md)
+   - For external databases, `global.psql.host` is the secondary, read-only database, while `global.geo.psql.host` is the tracking database
 
 1. Deploy the chart using this configuration
 
    ```shell
-   helm upgrade --install gitlab-geo gitlab/gitlab -f secondary.yaml
+   helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
    ```
 
    NOTE: **Note:**
