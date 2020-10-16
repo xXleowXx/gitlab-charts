@@ -15,6 +15,8 @@ helm 2to3 convert YOUR-GITLAB-RELEASE
 
 ## Known Issues
 
+### "UPGRADE FAILED: cannot patch" error is shown after the migration
+
 After migration the **subsequent upgrades may fail** with an error similar to the following:
 
 ```shell
@@ -65,3 +67,20 @@ kubectl label pvc -l app=redis --overwrite heritage=Helm
 ```shell
 kubectl get statefulsets.apps -l app=redis -o yaml | sed "s/Tiller/Helm/g" | kubectl replace --force=true --cascade=false -f -
 ```
+
+### RBAC issues after the migration when running Helm upgrade 
+
+You may face the following error when running Helm upgrade after the conversion has been completed:
+
+```shell
+Error: UPGRADE FAILED: pre-upgrade hooks failed: warning: Hook pre-upgrade gitlab/charts/shared-secrets/templates/rbac-config.yaml failed: roles.rbac.authorization.k8s.io "gitlab-shared-secrets" is forbidden: user "your-user-name@domain.tld" (groups=["system:authenticated"]) is attempting to grant RBAC permissions not currently held:
+{APIGroups:[""], Resources:["secrets"], Verbs:["get" "list" "create" "patch"]}
+```
+
+Helm2 used the Tiller service account to perform such operations. Helm3 does not use Tiller anymore, and your user account should have proper RBAC permissions to run the command even if you are running `helm upgrade` as a cluster admin. To grant full RBAC permissions to yourself, run:
+
+```shell
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=your-user-name@domain.tld
+```
+
+After that, `helm upgrade` should work fine.
