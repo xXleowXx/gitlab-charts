@@ -406,7 +406,7 @@ Ensure that any properties you wish to configure are provided as `chart-name.pro
 Prefix Prometheus values with `prometheus`. For example, set the persistence
 storage value using `prometheus.server.persistentVolume.size`.
 
-Refer to the [Prometheus chart documentation](https://github.com/helm/charts/tree/master/stable/prometheus#configuration)
+Refer to the [Prometheus chart documentation](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus)
 for the exhaustive list of configuration options.
 
 ## Bringing your own images

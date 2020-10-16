@@ -35,8 +35,8 @@ can be installed separately.
   - [Redis](https://hub.helm.sh/charts/bitnami/redis)
   - [MinIO](charts/minio/index.md)
 - Optional additions:
-  - [Prometheus](https://hub.helm.sh/charts/stable/prometheus)
-  - [Grafana](https://hub.helm.sh/charts/stable/grafana)
+  - [Prometheus](https://artifacthub.io/packages/helm/prometheus-community/prometheus)
+  - [Grafana](https://artifacthub.io/packages/helm/grafana/grafana)
   - [_Unprivileged_](https://docs.gitlab.com/runner/install/kubernetes.html#running-docker-in-docker-containers-with-gitlab-runners) [GitLab Runner](https://docs.gitlab.com/runner/) using the Kubernetes executor
   - Automatically provisioned SSL via [Let's Encrypt](https://letsencrypt.org/), using [Jetstack](https://www.jetstack.io/)'s [cert-manager](https://cert-manager.io/docs/)
 
