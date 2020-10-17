@@ -1299,7 +1299,7 @@ sample [`gitlab.yml`](https://gitlab.com/gitlab-org/gitlab/blob/master/config/gi
 for more job examples.
 
 These settings are shared between Sidekiq, Webservice (for showing tooltips in UI)
-and task-runner (for debugging purposes) pods.
+and Task Runner (for debugging purposes) pods.
 
 ```yaml
 global:

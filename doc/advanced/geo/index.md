@@ -256,9 +256,9 @@ the application is reachable, login.
 ## Set the Geo Primary instance
 
 Now that the chart has been deployed, and a license uploaded, we can configure
-this as the Primary instance. We will do this via the `task-runner` Pod.
+this as the Primary instance. We will do this via the Task Runner Pod.
 
-1. Find the `task-runner` Pod
+1. Find the Task Runner Pod
 
    ```shell
    kubectl get pods -lapp=task-runner --namespace gitlab
@@ -572,9 +572,9 @@ that the **secondary** instance can act on those notifications immediately.
 ## Confirm Operational Status
 
 The final step is to verify the Geo replication status on the secondary instance once fully
-configured, via the `task-runner` Pod.
+configured, via the Task Runner Pod.
 
-1. Find the `task-runner` Pod
+1. Find the Task Runner Pod
 
    ```shell
    kubectl get pods -lapp=task-runner --namespace gitlab
