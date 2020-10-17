@@ -16,4 +16,5 @@ The following is the documentation list for the GitLab component service subchar
 - GitLab/[KAS](kas/index.md)
 - GitLab/[Migrations](migrations/index.md)
 - GitLab/[Sidekiq](sidekiq/index.md)
+- GitLab/[Task Runner](task-runner/index.md)
 - GitLab/[Webservice](webservice/index.md)

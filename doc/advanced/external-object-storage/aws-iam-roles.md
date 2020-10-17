@@ -56,7 +56,7 @@ region: us-east-1
 
 ### Backups
 
-The `task-runner` configuration allows for annotations to be set to upload backups to S3:
+The Task Runner configuration allows for annotations to be set to upload backups to S3:
 
 ```shell
 --set gitlab.task-runner.annotations."iam\.amazonaws\.com/role"=<role name>

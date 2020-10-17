@@ -14,7 +14,7 @@ The [task runner chart](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/
 
 Using this pod user can run commands using `kubectl exec -it <pod name> -- <arbitrary command>`
 
-The task runner runs a container from the [task-runner image](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-task-runner).
+The Task Runner runs a container from the [Task Runner image](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-task-runner).
 
 The image contains some custom scripts that are to be called as commands by the user, these scripts can be found [here](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-task-runner/scripts). These scripts are for running Rake tasks, backup, restore, and some helper scripts for interacting with object storage.
 
