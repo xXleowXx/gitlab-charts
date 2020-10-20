@@ -399,6 +399,12 @@ global:
       providers: []
       # - secret: gitlab-google-oauth2
       #   key: provider
+    fortiAuthenticator:
+      enabled: false
+      # access_token:
+      #   secret:
+      #   key:
+
     ## doc/charts/globals.md#configure-appconfig-settings
     sentry:
       enabled: false

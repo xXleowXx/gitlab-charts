@@ -99,6 +99,7 @@ data:
       gitlab_ci:
       {{- include "gitlab.appConfig.ldap.configuration" $ | nindent 6 }}
       {{- include "gitlab.appConfig.omniauth.configuration" $ | nindent 6 }}
+      {{- include "gitlab.appConfig.fortiAuthenticator.configuration" $ | nindent 6 }}
       kerberos:
         enabled: false
       shared:
