@@ -1,0 +1,5 @@
+---
+title: 'custom ca: Loosen the mount permissions to 0440'
+merge_request: 1605
+author:
+type: changed
