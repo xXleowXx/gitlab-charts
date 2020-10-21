@@ -67,6 +67,7 @@ exceptions:
   - PUT
   - RAM
   - RBAC
+  - REST
   - RPC
   - RSA
   - RSS
