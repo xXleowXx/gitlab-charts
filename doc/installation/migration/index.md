@@ -37,7 +37,7 @@ by the `gitlab:artifacts:migrate` script below.
    1. Modify `/etc/gitlab/gitlab.rb` file and configure object storage for
       - [Uploads](https://docs.gitlab.com/ee/administration/uploads.html#s3-compatible-connection-settings)
       - [Artifacts](https://docs.gitlab.com/ee/administration/job_artifacts.html#s3-compatible-connection-settings)
-      - [LFS](https://docs.gitlab.com/ee/workflow/lfs/lfs_administration.html#s3-for-omnibus-installations)
+      - [LFS](https://docs.gitlab.com/ee/administration/lfs/index.html#s3-for-omnibus-installations)
       - [Packages](https://docs.gitlab.com/ee/administration/packages/#using-object-storage)
 
       NOTE: **Note:**

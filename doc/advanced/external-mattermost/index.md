@@ -40,7 +40,7 @@ the [Mattermost Forum](https://forum.mattermost.org/search?q=helm).
 
 ## Deploy GitLab Helm Chart
 
-To deploy the GitLab Helm Chart, follow the instructions described [here](https://docs.gitlab.com/ee/install/kubernetes/gitlab_chart.html).
+To deploy the GitLab Helm Chart, follow the instructions described [here](../../index.md).
 
 Here's a light way to install it:
 
