@@ -2,6 +2,31 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.5.0 (2020-10-22)
+
+### Fixed (1 change)
+
+- Fix PG password error when enabling extensions during DB init. !1593
+
+### Changed (3 changes)
+
+- Make stackdriver profiling credentials optional. !1558
+- Updated location for Grafana chart. !1594
+- Update Prometheus chart location. !1596
+
+### Added (3 changes)
+
+- Add auto_link_user setting. !1555
+- Adds configurable termination grace period for webservice. !1569
+- Adds log format configuration for gitlab-shell chart. !1581
+
+### Other (3 changes)
+
+- Remove db-pool configuration. !1551
+- cleanup registry.fullname templates. !1568
+- Bump default gitlab-kas image tag to v0.0.6. !1582
+
+
 ## 4.4.4 (2020-10-15)
 
 ### Fixed (1 change)
