@@ -4,7 +4,22 @@ Return the default praefect storage line for gitlab.yml
 {{- define "gitlab.praefect.storages" -}}
 default:
   path: /var/opt/gitlab/repo
-  gitaly_address: tcp://{{ template "gitlab.praefect.serviceName" . }}:{{ .Values.global.gitaly.service.externalPort }}
+  gitaly_address: {{ template "gitlab.praefect.gitalyAddress" . }}
+{{- end -}}
+
+
+{{/*
+Return the gitaly address in the context of praefect being enabled.
+If an address for praefect is not provided, either to a load balancer
+or directly to a praefect node, then return the service name for the
+praefect statefulset to be generated.
+*/}}
+{{- define "gitlab.praefect.gitalyAddress" -}}
+{{- if $.Values.global.praefect.address }}
+{{- $.Values.global.praefect.address }}
+{{- else -}}
+tcp://{{ template "gitlab.praefect.serviceName" . }}:{{ $.Values.global.gitaly.service.externalPort }}
+{{- end }}
 {{- end -}}
 
 

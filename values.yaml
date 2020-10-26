@@ -129,6 +129,7 @@ global:
 
   praefect:
     enabled: false
+    # address: mypraefect.com
     authToken: {}
     autoMigrate: true
     gitalyReplicas: 3
