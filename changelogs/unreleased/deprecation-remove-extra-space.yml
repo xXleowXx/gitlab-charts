@@ -1,0 +1,5 @@
+---
+title: Remove trailing space causing errors in the deprecation template
+merge_request: 1615
+author:
+type: fixed
