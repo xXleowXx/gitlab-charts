@@ -24,8 +24,8 @@ resources:
     cpu: 100m
     memory: 100M
 service:
-  externalPort: 5005
-  internalPort: 5005
+  externalPort: 8150
+  internalPort: 8150
   type: ClusterIP
 serviceAccount:
   enabled: false
