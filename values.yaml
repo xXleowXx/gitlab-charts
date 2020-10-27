@@ -131,8 +131,10 @@ global:
     enabled: false
     authToken: {}
     autoMigrate: true
-    gitalyReplicas: 3
     dbSecret: {}
+    virtualStorages:
+      - name: default
+        gitalyReplicas: 3
     psql:
       sslMode: 'disable'
 

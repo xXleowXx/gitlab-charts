@@ -52,15 +52,16 @@ data:
     {{- end }}
     {{- end }}
 
+    {{ range $.Values.global.praefect.virtualStorages }}
     [[virtual_storage]]
-    name = 'default'
-    {{- range compact (include "gitlab.praefect.gitalyPodNames" . | splitList "," ) }}
+    name = '{{ .name }}'
+    {{- range until (.gitalyReplicas | int) }}
     [[virtual_storage.node]]
-    storage = '{{ . }}'
-    address = 'tcp://{{ . }}.{{ $.Release.Name }}-gitaly:{{ $.Values.global.gitaly.service.externalPort }}'
+    storage = '{{ $.Release.Name }}-gitaly-{{ . }}'
+    address = 'tcp://{{ $.Release.Name }}-gitaly-{{ . }}.{{ $.Release.Name }}-gitaly:{{ $.Values.global.gitaly.service.externalPort }}'
     token = "<%= gitaly_token %>"
-
     {{- end }}
+    {{ end }}
 
     [database]
     host = '{{ template "gitlab.praefect.psql.host" . }}'
