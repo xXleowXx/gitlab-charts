@@ -142,6 +142,7 @@ gitlab_rails['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
 unicorn['enable']=false
+puma['enable']=false
 gitlab_workhorse['enable']=false
 nginx['enable']=false
 geo_logcursor['enable']=false
@@ -196,39 +197,40 @@ _This section will be performed on the Primary Kubernetes cluster._
 
 In order to deploy this chart as a Geo Primary, we'll start [from this example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/primary.yaml).
 
-```yaml
-### Geo Primary
-global:
-  # See docs.gitlab.com/charts/charts/globals
-  # Configure host & domain
-  hosts:
-    domain: example.com
-  # configure DB connection
-  psql:
-    host: geo-1.db.example.com
-    port: 5432
-    password:
-      secret: geo
-      key: postgresql-password
-  # configure geo (primary)
-  geo:
-    nodeName: primary.example.com
-    enabled: true
-    role: primary
-# External DB, disable
-postgresql:
-  install: false
-```
-
 1. We'll need to create a secret containing the database password, for the
    chart to consume. Replace `PASSWORD` below with the password for the `gitlab`
    database user.
 
    ```shell
-   kubectl create secret generic geo --from-literal=postgresql-password=PASSWORD
+   kubectl --namespace gitlab create secret generic geo --from-literal=postgresql-password=PASSWORD
    ```
 
-1. Update the configuration to reflect the correct values for:
+1. Create a `primary.yaml` file based on the [example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/primary.yaml)
+  and update the configuration to reflect the correct values:
+
+   ```yaml
+   ### Geo Primary
+   global:
+     # See docs.gitlab.com/charts/charts/globals
+     # Configure host & domain
+     hosts:
+       domain: example.com
+     # configure DB connection
+     psql:
+       host: geo-1.db.example.com
+       port: 5432
+       password:
+         secret: geo
+         key: postgresql-password
+     # configure geo (primary)
+     geo:
+       nodeName: primary.example.com
+       enabled: true
+       role: primary
+   # External DB, disable
+   postgresql:
+     install: false
+   ```
 
    - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
    - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
@@ -240,12 +242,12 @@ postgresql:
 1. Deploy the chart using this configuration
 
    ```shell
-   helm upgrade --install gitlab-geo gitlab/gitlab -f primary.yaml
+   helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f primary.yaml
    ```
 
    NOTE: **Note:**
-   With Helm v2, one may need to specify the namespace that the release was
-   deployed to with the `--namespace <namespace>` option.
+   This assumes you are using the `gitlab` namespace, if you want to use a different namespace,
+   you should also replace it in `--namespace gitlab` throughout the rest of this document.
 
 1. Wait for the deployment to complete, and the application to come online. Once
 the application is reachable, login.
@@ -261,19 +263,19 @@ this as the Primary instance. We will do this via the Task Runner Pod.
 1. Find the Task Runner Pod
 
    ```shell
-   kubectl get pods -lapp=task-runner --namespace gitlab
+   kubectl --namespace gitlab get pods -lapp=task-runner
    ```
 
 1. Run `gitlab-rake geo:set_primary_node` with `kubectl exec`
 
    ```shell
-   kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
+   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
    ```
 
 1. Check the status of Geo configuration
 
    ```shell
-   kubectl exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
+   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
    ```
 
    You should see output similar to below:
@@ -329,6 +331,7 @@ geo_secondary['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
 unicorn['enable']=false
+puma['enable']=false
 gitlab_workhorse['enable']=false
 nginx['enable']=false
 geo_logcursor['enable']=false
@@ -469,23 +472,23 @@ Secondary Kubernetes deployment.
 1. Collect these secrets from the Primary deployment
 
   ```shell
-  kubectl get -n gitlab -o yaml secret gitlab-geo-gitlab-shell-host-keys > ssh-host-keys.yaml
-  kubectl get -n gitlab -o yaml secret gitlab-geo-rails-secret > rails-secrets.yaml
+  kubectl get --namespace gitlab -o yaml secret gitlab-geo-gitlab-shell-host-keys > ssh-host-keys.yaml
+  kubectl get --namespace gitlab -o yaml secret gitlab-geo-rails-secret > rails-secrets.yaml
   ```
 
 1. Change your `kubectl` context to that of your Secondary.
 1. Apply these secrets
 
    ```shell
-   kubectl apply -f ssh-host-keys.yaml
-   kubectl apply -f rails-secrets.yaml
+   kubectl --namespace gitlab apply -f ssh-host-keys.yaml
+   kubectl --namespace gitlab apply -f rails-secrets.yaml
    ```
 
 We'll now need to create a secret containing the database passwords. Replace the
 passwords below with the appropriate values.
 
 ```shell
-kubectl create secret generic geo \
+kubectl --namespace gitlab create secret generic geo \
    --from-literal=postgresql-password=gitlab_user_password \
    --from-literal=geo-postgresql-password=gitlab_geo_user_password
 ```
@@ -496,38 +499,39 @@ _This section will be performed on the Secondary Kubernetes cluster._
 
 In order to deploy this chart as a Geo Secondary, we'll start [from this example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/secondary.yaml).
 
-```yaml
-## Geo Secondary
-global:
-  # See docs.gitlab.com/charts/charts/globals
-  # Configure host & domain
-  hosts:
-    hostSuffix: secondary
-    domain: example.com
-  # configure DB connection
-  psql:
-    host: geo-2.db.example.com
-    port: 5432
-    password:
-      secret: geo
-      key: postgresql-password
-  # configure geo (secondary)
-  geo:
-    enabled: true
-    role: secondary
-    nodeName: secondary.example.com
-    psql:
-      host: geo-2.db.example.com
-      port: 5431
-      password:
-        secret: geo
-        key: geo-postgresql-password
-# External DB, disable
-postgresql:
-  install: false
-```
+1. Create a `secondary.yaml` file based on the [example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/secondary.yaml)
+  and update the configuration to reflect the correct values:
 
-1. Update the configuration to reflect the correct values for:
+   ```yaml
+   ## Geo Secondary
+   global:
+     # See docs.gitlab.com/charts/charts/globals
+     # Configure host & domain
+     hosts:
+       hostSuffix: secondary
+       domain: example.com
+     # configure DB connection
+     psql:
+       host: geo-2.db.example.com
+       port: 5432
+       password:
+         secret: geo
+         key: postgresql-password
+     # configure geo (secondary)
+     geo:
+       enabled: true
+       role: secondary
+       nodeName: secondary.example.com
+       psql:
+         host: geo-2.db.example.com
+         port: 5431
+         password:
+           secret: geo
+           key: geo-postgresql-password
+   # External DB, disable
+   postgresql:
+     install: false
+   ```
 
    - [`global.hosts.domain`](../../charts/globals.md#configure-host-settings)
    - [`global.psql.host`](../../charts/globals.md#configure-postgresql-settings)
@@ -536,11 +540,12 @@ postgresql:
      - [Configuring SSL/TLS](../../installation/deployment.md#tls-certificates)
      - [Using external Redis](../external-redis/index.md)
      - [using external Object Storage](../external-object-storage/index.md)
+   - For external databases, `global.psql.host` is the secondary, read-only database, while `global.geo.psql.host` is the tracking database
 
 1. Deploy the chart using this configuration
 
    ```shell
-   helm upgrade --install gitlab-geo gitlab/gitlab -f secondary.yaml
+   helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
    ```
 
    NOTE: **Note:**
@@ -577,13 +582,13 @@ configured, via the Task Runner Pod.
 1. Find the Task Runner Pod
 
    ```shell
-   kubectl get pods -lapp=task-runner --namespace gitlab
+   kubectl --namespace gitlab get pods -lapp=task-runner
    ```
 
 1. Attach to the Pod with `kubectl exec`
 
    ```shell
-   kubectl exec -ti gitlab-geo-task-runner-XXX -- bash -l
+   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- bash -l
    ```
 
 1. Check the status of Geo configuration
