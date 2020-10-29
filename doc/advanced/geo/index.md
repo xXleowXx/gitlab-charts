@@ -202,7 +202,7 @@ In order to deploy this chart as a Geo Primary, we'll start [from this example c
    database user.
 
    ```shell
-   kubectl -n gitlab create secret generic geo --from-literal=postgresql-password=PASSWORD
+   kubectl --namespace gitlab create secret generic geo --from-literal=postgresql-password=PASSWORD
    ```
 
 1. Create a `primary.yaml` file based on the [example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/primary.yaml)
@@ -247,7 +247,7 @@ In order to deploy this chart as a Geo Primary, we'll start [from this example c
 
    NOTE: **Note:**
    This assumes you are using the `gitlab` namespace, if you want to use a different namespace,
-   you should also replace it in `-n gitlab` throughout the rest of this document.
+   you should also replace it in `--namespace gitlab` throughout the rest of this document.
 
 1. Wait for the deployment to complete, and the application to come online. Once
 the application is reachable, login.
@@ -263,19 +263,19 @@ this as the Primary instance. We will do this via the `task-runner` Pod.
 1. Find the `task-runner` Pod
 
    ```shell
-   kubectl -n gitlab get pods -lapp=task-runner
+   kubectl --namespace gitlab get pods -lapp=task-runner
    ```
 
 1. Run `gitlab-rake geo:set_primary_node` with `kubectl exec`
 
    ```shell
-   kubectl -n gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
+   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
    ```
 
 1. Check the status of Geo configuration
 
    ```shell
-   kubectl -n gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
+   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
    ```
 
    You should see output similar to below:
@@ -472,23 +472,23 @@ Secondary Kubernetes deployment.
 1. Collect these secrets from the Primary deployment
 
   ```shell
-  kubectl get -n gitlab -o yaml secret gitlab-geo-gitlab-shell-host-keys > ssh-host-keys.yaml
-  kubectl get -n gitlab -o yaml secret gitlab-geo-rails-secret > rails-secrets.yaml
+  kubectl get --namespace gitlab -o yaml secret gitlab-geo-gitlab-shell-host-keys > ssh-host-keys.yaml
+  kubectl get --namespace gitlab -o yaml secret gitlab-geo-rails-secret > rails-secrets.yaml
   ```
 
 1. Change your `kubectl` context to that of your Secondary.
 1. Apply these secrets
 
    ```shell
-   kubectl -n gitlab apply -f ssh-host-keys.yaml
-   kubectl -n gitlab apply -f rails-secrets.yaml
+   kubectl --namespace gitlab apply -f ssh-host-keys.yaml
+   kubectl --namespace gitlab apply -f rails-secrets.yaml
    ```
 
 We'll now need to create a secret containing the database passwords. Replace the
 passwords below with the appropriate values.
 
 ```shell
-kubectl -n gitlab create secret generic geo \
+kubectl --namespace gitlab create secret generic geo \
    --from-literal=postgresql-password=gitlab_user_password \
    --from-literal=geo-postgresql-password=gitlab_geo_user_password
 ```
@@ -582,13 +582,13 @@ configured, via the `task-runner` Pod.
 1. Find the `task-runner` Pod
 
    ```shell
-   kubectl -n gitlab get pods -lapp=task-runner
+   kubectl --namespace gitlab get pods -lapp=task-runner
    ```
 
 1. Attach to the Pod with `kubectl exec`
 
    ```shell
-   kubectl -n gitlab exec -ti gitlab-geo-task-runner-XXX -- bash -l
+   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- bash -l
    ```
 
 1. Check the status of Geo configuration
