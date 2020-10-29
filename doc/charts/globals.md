@@ -114,7 +114,7 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 | `enabled`                      | Boolean | `true`         | Global setting that controls whether to create Ingress objects for services that support them. |
 | `tls.enabled`                  | Boolean | `true`         | When set to `false`, this disables TLS in GitLab. This is useful for cases in which you cannot use TLS termination of Ingresses, such as when you have a TLS-terminating proxy before the Ingress Controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#configure-host-settings). |
 | `tls.secretName`               | String  |                | The name of the [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) that contains a **wildcard** certificate and key for the domain used in `global.hosts.domain`. |
-| `overrideHostname`             | String  | `false`        | Override the hostname used in Ingress configuration of the Webservice. Useful if GitLab has to be reachable behind a WAF that rewrites the Hostname to an internal hostname (e.g.: gitlab.example.com --> gitlab.cluster.local). |
+| `overrideHostname`             | String  | `false`        | Override the hostname used in Ingress configuration of the Webservice. Useful if GitLab has to be reachable behind a WAF that rewrites the Hostname to an internal hostname (e.g.: `gitlab.example.com` --> `gitlab.cluster.local`). |
 
 ### `global.ingress.configureCertmanager`
 
