@@ -32,7 +32,7 @@
 {{- if or $customCAsEnabled (or $certmanagerDisabled $internalGitalyTLSEnabled) }}
 - name: custom-ca-certificates
   projected:
-    defaultMode: 0400
+    defaultMode: 0440
     sources:
     {{- range $index, $customCA := .Values.global.certificates.customCAs }}
     - secret:
