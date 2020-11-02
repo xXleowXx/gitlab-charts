@@ -100,6 +100,10 @@ entry.
 - Update GitLab Version to 13.4.0.
 
 
+## 4.3.9 (2020-11-02)
+
+- No changes.
+
 ## 4.3.8 (2020-10-23)
 
 - No changes.
