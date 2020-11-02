@@ -2,6 +2,14 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.5.2 (2020-11-02)
+
+### Fixed (2 changes)
+
+- geo-logcursor: move redis secrets to optional. !1614
+- Remove trailing space causing errors in the deprecation template. !1615
+
+
 ## 4.5.1 (2020-10-22)
 
 - No changes.
