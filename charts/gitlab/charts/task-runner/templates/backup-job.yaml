@@ -21,6 +21,9 @@ spec:
           annotations:
             checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
             cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+          {{- if .Values.global.istio.enabled }}
+            sidecar.istio.io/inject: "false"
+          {{- end }}
           {{- range $key, $value := .Values.annotations }}
             {{ $key }}: {{ $value | quote }}
           {{- end }}
