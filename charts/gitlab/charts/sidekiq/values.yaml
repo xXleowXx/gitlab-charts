@@ -20,7 +20,7 @@ tolerations: []
 
 enabled: true
 cluster: true
-experimentalQueueSelector: false
+queueSelector: false
 
 annotations: {}
 podLabels: {}

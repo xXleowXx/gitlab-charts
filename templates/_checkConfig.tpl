@@ -28,7 +28,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queues.cluster" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.experimentalQueueSelector" .) -}}
+{{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queueSelector" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.appConfig.maxRequestDurationSeconds" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.gitaly.extern.repos" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.geo.database" .) -}}
@@ -110,20 +110,23 @@ sidekiq: cluster
 {{- end -}}
 {{/* END gitlab.checkConfig.sidekiq.queues.cluster */}}
 
-{{/* Check configuration of Sidekiq - cluster must be enabled for experimentalQueueSelector to be valid */}}
-{{- define "gitlab.checkConfig.sidekiq.experimentalQueueSelector" -}}
+{{/* Check configuration of Sidekiq - cluster must be enabled for queueSelector to be valid */}}
+{{/* Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646 */}}
+{{- define "gitlab.checkConfig.sidekiq.queueSelector" -}}
 {{- if .Values.gitlab.sidekiq.pods -}}
 {{-   range $pod := .Values.gitlab.sidekiq.pods -}}
 {{-     $cluster := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.cluster "local" $pod.cluster "default" true) }}
+{{-     $queueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.queueSelector "local" $pod.queueSelector "default" false) }}
 {{-     $experimentalQueueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.experimentalQueueSelector "local" $pod.experimentalQueueSelector "default" false) }}
-{{-     if and $experimentalQueueSelector (not $cluster) }}
-sidekiq: experimentalQueueSelector
-    The pod definition `{{ $pod.name }}` has `experimentalQueueSelector` enabled, but does not have `cluster` enabled. `experimentalQueueSelector` only works when `cluster` is enabled.
+{{-     $selectorField := ternary "queueSelector" "experimentalQueueSelector" (eq $queueSelector "true") -}}
+{{-     if and (or $queueSelector $experimentalQueueSelector) (not $cluster) }}
+sidekiq: queueSelector
+    The pod definition `{{ $pod.name }}` has `{{ $selectorField }}` enabled, but does not have `cluster` enabled. `{{ $selectorField }}` only works when `cluster` is enabled.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.sidekiq.experimentalQueueSelector */}}
+{{/* END gitlab.checkConfig.sidekiq.queueSelector */}}
 
 {{/*
 Ensure a database is configured when using Geo
