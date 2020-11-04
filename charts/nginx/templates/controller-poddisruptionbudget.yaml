@@ -2,7 +2,7 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ printf "%s-%s" (include "nginx-ingress.controller.fullname" . | trunc 60) (.Values.controller.minAvailable | quote) }}
+  name: {{ printf "%s-%d" (include "nginx-ingress.controller.fullname" . | trunc 60) (.Values.controller.minAvailable) }}
   namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
