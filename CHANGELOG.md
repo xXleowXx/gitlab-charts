@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.5.3 (2020-11-04)
+
+- No changes.
+
 ## 4.5.2 (2020-11-02)
 
 ### Fixed (2 changes)
