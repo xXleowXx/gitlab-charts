@@ -2,6 +2,14 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.4.5 (2020-11-04)
+
+### Fixed (2 changes)
+
+- Fix PG password error when enabling extensions during DB init. !1593
+- geo-logcursor: move redis secrets to optional. !1614
+
+
 ## 4.4.4 (2020-10-15)
 
 ### Fixed (1 change)
