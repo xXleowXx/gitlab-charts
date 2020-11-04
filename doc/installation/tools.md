@@ -63,7 +63,7 @@ Ensure you have `kubectl` installed and it's up to date. Older versions do not
 have support for RBAC and will generate errors.
 
 Helm v3.0 does not install Tiller in the cluster and as such uses the user's
-RBAC permissions to peform the deployment of the chart.
+RBAC permissions to perform the deployment of the chart.
 
 Prior versions of Helm do install Tiller on the cluster and will need to be granted
 permissions to perform operations. These instructions grant cluster wide permissions,
@@ -190,7 +190,7 @@ Some information on how all the inner workings behave:
 
 ### Tips and tricks
 
-Helm repository has some additional information on developing with Helm in it's
+Helm repository has some additional information on developing with Helm in its
 [tips and tricks section](https://helm.sh/docs/howto/charts_tips_and_tricks/).
 
 ### Local Tiller

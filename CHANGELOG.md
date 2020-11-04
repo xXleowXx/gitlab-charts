@@ -2,6 +2,18 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.5.3 (2020-11-04)
+
+- No changes.
+
+## 4.5.2 (2020-11-02)
+
+### Fixed (2 changes)
+
+- geo-logcursor: move redis secrets to optional. !1614
+- Remove trailing space causing errors in the deprecation template. !1615
+
+
 ## 4.5.1 (2020-10-22)
 
 - No changes.
@@ -29,6 +41,14 @@ entry.
 - Remove db-pool configuration. !1551
 - cleanup registry.fullname templates. !1568
 - Bump default gitlab-kas image tag to v0.0.6. !1582
+
+
+## 4.4.5 (2020-11-04)
+
+### Fixed (2 changes)
+
+- Fix PG password error when enabling extensions during DB init. !1593
+- geo-logcursor: move redis secrets to optional. !1614
 
 
 ## 4.4.4 (2020-10-15)
@@ -99,6 +119,10 @@ entry.
 - Adds capability to specify memoryKiller per Pod. !1536
 - Update GitLab Version to 13.4.0.
 
+
+## 4.3.9 (2020-11-02)
+
+- No changes.
 
 ## 4.3.8 (2020-10-23)
 
