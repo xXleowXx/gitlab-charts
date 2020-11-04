@@ -54,6 +54,7 @@ global:
     registry: {}
     tls: {}
     smartcard: {}
+    kas: {}
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:

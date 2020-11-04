@@ -56,6 +56,8 @@ global:
       https: false
     smartcard:
       name: smartcard.example.com
+    kas:
+      name: kas.example.com
 ```
 
 | Name                   | Type    | Default       | Description |
@@ -77,6 +79,7 @@ global:
 | `registry.serviceName` | String  | `registry`    | The name of the `service` which is operating the Registry server. The chart will template the hostname of the service (and current `.Release.Name`) to create the proper internal serviceName. |
 | `registry.servicePort` | String  | `registry`    | The named port of the `service` where the Registry server can be reached. |
 | `smartcard.name`       | String  |               | The hostname for smartcard authentication. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
+| `kas.name`       | String  |               | The hostname for the KAS. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 
 ### hostSuffix
 
@@ -109,7 +112,7 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 
 ### `global.ingress.configureCertmanager`
 
-Global setting that controls the automatic configuration of [cert-manager](https://hub.helm.sh/charts/jetstack/cert-manager)
+Global setting that controls the automatic configuration of [cert-manager](https://artifacthub.io/packages/helm/jetstack/cert-manager)
 for Ingress objects. If `true`, relies on `certmanager-issuer.email` being set.
 
 If `false` and `global.ingress.tls.secretName` is not set, this will activate automatic

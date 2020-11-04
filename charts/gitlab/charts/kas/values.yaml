@@ -6,6 +6,9 @@ annotations: {}
 global:
   kas:
     enabled: false
+  # hosts:
+    # kas:
+      # name: kas.example.com
   # imagePullPolicy: IfNotPresent
 hpa:
   targetAverageValue: 100m
