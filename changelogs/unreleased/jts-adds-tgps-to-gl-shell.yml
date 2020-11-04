@@ -1,0 +1,5 @@
+---
+title: Adds configurability of terminationGracePeriod for GitLab-Shell
+merge_request: 1610
+author:
+type: added
