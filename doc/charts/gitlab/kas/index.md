@@ -16,13 +16,21 @@ This chart depends on access to the GitLab API and the Gitaly Servers. An Ingres
 
 The `kas` container used in this chart use a distroless image for minimal resource consumption. The deployed services are exposed by an Ingress which uses [WebSocket proxying](https://nginx.org/en/docs/http/websocket.html) to permit communication in long lived connections with the external component [`agentk`](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent#gitlab-kubernetes-agent-agentk), which is its Kubernetes cluster-side agent counterpart.
 
-Furthermore, `kas` expects the external requests from `agentk` to come through `{GITLAB_HOST/-/kubernetes-agent}`. If you want to use your own LB infrastructure instead of this chart's Ingress, make sure to provide the same kind of proxy path that `kas` is expecting. See [`kas` chart Ingress template](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/charts/gitlab/charts) for reference.
+The route to access the service will depend on your [Ingress configuration](#ingress).
 
 Follow the link for further information about the [GitLab Kubernetes Agent architecture](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/architecture.md).
 
 ## Configuration
 
-`kas` is deployed turned off by default. To enable it on your GitLab server, use the Helm flag, like: `helm install --set global.kas.enabled=true`.
+### Enable
+
+`kas` is deployed turned off by default. To enable it on your GitLab server, use the Helm property `global.kas.enabled`, like: `helm install --set global.kas.enabled=true`.
+
+### Ingress
+
+When using the chart's Ingress with default configuration, the KAS service will be reachable via a subdomain. For example, if you have `global.hosts.domain: example.com`, then by default KAS will be reachable at `kas.example.com`.
+
+The [KAS Ingress](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/charts/gitlab/charts/kas/templates/ingress.yaml) can use a different domain than what is used globally under `global.hosts.domain` by setting `global.hosts.kas.name`. For example, setting `global.hosts.kas.name=kas.my-other-domain.com` will set `kas.my-other-domain.com` as the host for the KAS Ingress alone, while the rest of the services (including GitLab, Registry, MinIO, etc.) will use the domain specified in `global.hosts.domain`.
 
 ### Installation command line options
 
