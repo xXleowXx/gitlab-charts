@@ -340,3 +340,19 @@ serviceAccount:
 ## Allow configuring pods' priorityClassName. This is used to control pod priority in case of eviction:
 #  https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 priorityClassName: ""
+
+## deployments:
+#    Allows for splitting of service classes across multiple deployments
+#  This map will be range-walked, and each entry will create discrete
+#  Kubernetes resources.
+#    The name of the key (for example, `web`) will be appended to the
+#  end of each resource `.metadata.name`, and added as a label to each
+#  resource for tracking.
+#    Any deployment with an `ingress.path: /` will also receive traffic
+#  on the `/admin/sidekiq` path.
+deployments:
+  # There must always be at least one, with `xyz.ingress.path: /`
+  # web:
+  #   ingress:
+  #     path: /
+

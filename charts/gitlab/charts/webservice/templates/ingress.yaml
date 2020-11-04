@@ -1,3 +1,7 @@
+{{/*
+TODO: generate one Ingress resource per `deployment` so that
+each ingress can have independent annotations.
+*/}}
 {{- if .Values.enabled -}}
 {{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
 {{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
@@ -5,10 +9,11 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "webservice.fullname" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.standardLabels" $ | nindent 4 }}
+    {{- include "webservice.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
     kubernetes.io/ingress.provider: nginx
@@ -16,7 +21,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.proxyReadTimeout | quote }}
     nginx.ingress.kubernetes.io/proxy-connect-timeout: {{ .Values.ingress.proxyConnectTimeout | quote }}
     {{ include "gitlab.certmanager_annotations" . }}
-  {{- range $key, $value := merge .Values.ingress.annotations .Values.global.ingress.annotations }}
+  {{- range $key, $value := merge $.Values.ingress.annotations $.Values.global.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
