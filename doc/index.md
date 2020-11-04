@@ -31,8 +31,8 @@ can be installed separately.
   - GitLab/[Sidekiq](charts/gitlab/sidekiq/index.md)
   - GitLab/[Webservice](charts/gitlab/webservice/index.md)
 - Optional dependencies:
-  - [PostgreSQL](https://hub.helm.sh/charts/bitnami/postgresql)
-  - [Redis](https://hub.helm.sh/charts/bitnami/redis)
+  - [PostgreSQL](https://artifacthub.io/packages/helm/bitnami/postgresql)
+  - [Redis](https://artifacthub.io/packages/helm/bitnami/redis)
   - [MinIO](charts/minio/index.md)
 - Optional additions:
   - [Prometheus](https://artifacthub.io/packages/helm/prometheus-community/prometheus)
