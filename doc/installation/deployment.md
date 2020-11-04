@@ -88,7 +88,7 @@ purposes only.
 
 > **NOTE: This configuration is not recommended for use in production.**
 >
-> - A single StatefulSet is provided by [bitnami/PostgreSQL](https://hub.helm.sh/charts/bitnami/postgresql) by default.
+> - A single StatefulSet is provided by [bitnami/PostgreSQL](https://artifacthub.io/packages/helm/bitnami/postgresql) by default.
 > - As of 4.0.0 of these charts, replication is available internally, but _not enabled by default_. Such functionality has not been load tested by GitLab.
 
 You can read more about setting up your production-ready database in the [advanced database docs](../advanced/external-db/index.md).
@@ -112,7 +112,7 @@ All Redis configuration settings have been moved and consolidated on the
 
 > **NOTE: This configuration is not recommended for use in production.**
 >
-> - A single StatefulSet is provided by [bitnami/Redis](https://hub.helm.sh/charts/bitnami/redis) by default.
+> - A single StatefulSet is provided by [bitnami/Redis](https://artifacthub.io/packages/helm/bitnami/redis) by default.
 > - As of 4.0.0 of these charts, replication is available internally, but _not enabled by default_. Such functionality has not been load tested by GitLab.
 
 You can read more about setting up a production-ready Redis instance in the [advanced Redis docs](../advanced/external-redis/index.md).
