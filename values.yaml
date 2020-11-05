@@ -468,6 +468,26 @@ global:
       #         key: password
       # events: {}
 
+  pages:
+    enabled: false
+    accessControl: false
+    path:
+    host:
+    port:
+    https: false
+    externalHttp: false
+    externalHttps: false
+    artifactsServer: false
+    objectStore:
+      enabled: false
+      bucket: 'pages'
+      connection: {}
+        # secret:
+        # key:
+    apiSecret: {}
+      # secret:
+      # key:
+
   ## GitLab Runner
   ## Secret created according to doc/installation/secrets.md#gitlab-runner-secret
   ## If allowing shared-secrets generation, this is OPTIONAL.
