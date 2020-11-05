@@ -49,6 +49,15 @@ data:
     validation:
       disabled: {{ eq true .Values.validation.disabled }}
     {{- include "registry.notifications.config" $ | nindent 4 }}
+    reporting:
+      {{- if .Values.reporting.sentry.enabled }}
+      sentry:
+        enabled: true
+        dsn: {{ .Values.reporting.sentry.dsn }}
+        {{- if .Values.reporting.sentry.environment }}
+        environment: {{ .Values.reporting.sentry.environment }}
+        {{- end }}
+      {{- end }}
     profiling:
       {{- if .Values.profiling.stackdriver.enabled }}
       stackdriver:
