@@ -52,13 +52,15 @@ data:
     {{- end }}
     {{- end }}
 
+    {{ $context := $ }}
     {{ range $.Values.global.praefect.virtualStorages }}
+    {{- $vsName := .name }}
     [[virtual_storage]]
-    name = '{{ .name }}'
+    name = '{{ $vsName }}'
     {{- range until (.gitalyReplicas | int) }}
     [[virtual_storage.node]]
-    storage = '{{ $.Release.Name }}-gitaly-{{ . }}'
-    address = 'tcp://{{ $.Release.Name }}-gitaly-{{ . }}.{{ $.Release.Name }}-gitaly:{{ $.Values.global.gitaly.service.externalPort }}'
+    storage = '{{ $.Release.Name }}-gitaly-{{ $vsName }}-{{ . }}'
+    address = 'tcp://{{ $.Release.Name }}-gitaly-{{ $vsName }}-{{ . }}.{{ $.Release.Name }}-gitaly-{{ $vsName }}:{{ $.Values.global.gitaly.service.externalPort }}'
     token = "<%= gitaly_token %>"
     {{- end }}
     {{ end }}
