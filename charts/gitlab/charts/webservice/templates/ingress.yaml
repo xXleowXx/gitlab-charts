@@ -1,27 +1,34 @@
+{{- if .Values.enabled -}}{{/* ENABLED */}}
+{{- if eq (include "gitlab.ingress.enabled" $) "true" -}}{{/* INGRESS ENABLED */}}
+{{- $gitlabHostname := include "gitlab.gitlab.hostname" $ -}}
+{{- $tlsSecret := include "webservice.tlsSecret" $ -}}
+{{- include "webservice.datamodel.prepare" $ -}}
+{{/* BEGIN range deployments */}}
+{{- range $.Values.deployments -}}
+{{- $_ := set . "Values" $.Values -}}
 {{/*
-TODO: generate one Ingress resource per `deployment` so that
-each ingress can have independent annotations.
+From here on:
+- `.` is `.deployments.xyz` value
+- `.name` is the key (xyz)
+- `.Values` is `$.Values`
 */}}
-{{- if .Values.enabled -}}
-{{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
-{{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
-{{- $tlsSecret := include "webservice.tlsSecret" . -}}
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "webservice.fullname" . }}
+  name: {{ template "webservice.fullname.suffix" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "webservice.labels" . | nindent 4 }}
   annotations:
-    kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
+    kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" $ }}"
     kubernetes.io/ingress.provider: nginx
-    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.proxyBodySize | quote }}
-    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.proxyReadTimeout | quote }}
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: {{ .Values.ingress.proxyConnectTimeout | quote }}
-    {{ include "gitlab.certmanager_annotations" . }}
-  {{- range $key, $value := merge $.Values.ingress.annotations $.Values.global.ingress.annotations }}
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .ingress.proxyBodySize | quote }}
+    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .ingress.proxyReadTimeout | quote }}
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: {{ .ingress.proxyConnectTimeout | quote }}
+    {{ include "gitlab.certmanager_annotations" $ }}
+  {{- range $key, $value := merge .ingress.annotations $.Values.global.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
@@ -29,14 +36,16 @@ spec:
     - host: {{ $gitlabHostname }}
       http:
         paths:
-          - path: /
+          - path: {{ .ingress.path }}
             backend:
-              serviceName: {{ template "fullname" . }}
-              servicePort: {{ .Values.service.workhorseExternalPort }}
+              serviceName: {{ template "webservice.fullname.suffix" . }}
+              servicePort: {{ $.Values.service.workhorseExternalPort }}
+          {{- if eq ( .ingress.path | toString ) "/" }}
           - path: /admin/sidekiq
             backend:
-              serviceName: {{ template "fullname" . }}
-              servicePort: {{ .Values.service.externalPort }}
+              serviceName: {{ template "webservice.fullname.suffix" . }}
+              servicePort: {{ $.Values.service.externalPort }}
+          {{- end }}
   {{- if (and $tlsSecret (eq (include "gitlab.ingress.tls.enabled" $) "true" )) }}
   tls:
     - hosts:
@@ -46,4 +55,5 @@ spec:
   tls: []
   {{- end }}
 {{- end -}}
-{{- end -}}
+{{- end -}}{{/* INGRESS ENABLED */}}
+{{- end -}}{{/* ENABLED */}}

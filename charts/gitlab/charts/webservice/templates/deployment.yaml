@@ -1,14 +1,12 @@
 {{- if $.Values.enabled }}
-{{- $fullname := include "webservice.fullname" $ -}}
+{{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
-{{- range $deployment_key, $values := $.Values.deployments -}}
-{{- $_ := set . "name" $deployment_key -}}
-{{- $_ := set . "fullname" $fullname -}}
+{{- range $.Values.deployments -}}
 {{- $_ := set . "Values" $.Values -}}
 {{/*
 From here on:
-- `.` is `$values`
-- `.name` is `$deployment_key`
+- `.` is `.deployments.xyz` value
+- `.name` is the key (xyz)
 - `.Values` is `$.Values`
 */}}
 ---
@@ -20,8 +18,10 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "webservice.labels" . | nindent 4}}
+    {{- toYaml .deployment.labels | nindent 4 }}
   annotations:
     {{- include "gitlab.deploymentAnnotations" $ | nindent 4 }}
+    {{- toYaml .deployment.annotations | nindent 4 }}
 spec:
   {{- if .Values.global.operator.enabled }}
   paused: true
@@ -42,10 +42,11 @@ spec:
         release: {{ $.Release.Name }}
         {{- include "gitlab.podLabels" $ | nindent 8 }}
         {{- include "webservice.labels" . | nindent 8 }}
+        {{- toYaml .pod.labels | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-      {{- range $key, $value := .Values.annotations }}
+      {{- range $key, $value := .pod.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
       {{- if .Values.metrics.enabled }}

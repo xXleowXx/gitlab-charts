@@ -344,12 +344,11 @@ priorityClassName: ""
 ## deployments:
 #    Allows for splitting of service classes across multiple deployments
 #  This map will be range-walked, and each entry will create discrete
-#  Kubernetes resources.
+#  Kubernetes resources: Deployment, HPA, PDB, Service, Ingress
 #    The name of the key (for example, `web`) will be appended to the
 #  end of each resource `.metadata.name`, and added as a label to each
 #  resource for tracking.
-#    Any deployment with an `ingress.path: /` will also receive traffic
-#  on the `/admin/sidekiq` path.
+#  https://docs.gitlab.com/charts/charts/gitlab/webservice/#deployments
 deployments:
   # There must always be at least one, with `xyz.ingress.path: /`
   # web:
