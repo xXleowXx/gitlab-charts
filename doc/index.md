@@ -30,6 +30,7 @@ can be installed separately.
   - GitLab/[Migrations](charts/gitlab/migrations/index.md)
   - GitLab/[Sidekiq](charts/gitlab/sidekiq/index.md)
   - GitLab/[Webservice](charts/gitlab/webservice/index.md)
+  - GitLab/[Mailroom](charts/gitlab/mailroom/index.md)
 - Optional dependencies:
   - [PostgreSQL](https://artifacthub.io/packages/helm/bitnami/postgresql)
   - [Redis](https://artifacthub.io/packages/helm/bitnami/redis)

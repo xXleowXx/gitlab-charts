@@ -77,6 +77,7 @@ data:
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "external_diffs" "config" $.Values.global.appConfig.externalDiffs) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "terraform_state" "config" $.Values.global.appConfig.terraformState) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "dependency_proxy" "config" $.Values.global.appConfig.dependencyProxy) | nindent 10 -}}
+          {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "pages" "config" $.Values.global.pages.objectStore) | nindent 10 -}}
       {{- end }}
       # Individual object storage backed feature properties configuration
       {{- include "gitlab.appConfig.artifacts.configuration" (dict "config" $.Values.global.appConfig.artifacts "context" $) | nindent 6 }}
@@ -89,8 +90,7 @@ data:
       {{- include "gitlab.appConfig.pseudonymizer.configuration" $ | nindent 6 }}
       {{- include "gitlab.geo.config" $ | nindent 6 }}
       {{- include "gitlab.appConfig.sentry.configuration" $ | nindent 6 }}
-      pages:
-        enabled: false
+      {{- include "gitlab.pages.config" $ | nindent 6 }}
       mattermost:
         enabled: false
       ## Registry Integration

@@ -15,9 +15,11 @@ object_store:
   {{- if ne .name "object_store" }}
   remote_directory: {{ .config.bucket }}
   {{- end }}
+  {{- if ne .name "pages" }}
   direct_upload: true
   background_upload: false
   proxy_download: {{ or (not (kindIs "bool" .config.proxy_download)) .config.proxy_download }}
+  {{- end }}
   {{- if and .config.enabled .config.storage_options }}
   storage_options:
     server_side_encryption: {{ .config.storage_options.server_side_encryption }}
@@ -26,7 +28,9 @@ object_store:
   {{- if and .config.enabled .config.connection }}
   connection: <%= YAML.load_file("/etc/gitlab/objectstorage/{{ .name }}").to_json() %>
   {{- else if .context.Values.global.minio.enabled }}
+  {{- if ne .name "pages" }} {{/* To be removed when we have ability to deploy GitLab Pages using these Charts */}}
   {{-   include "gitlab.appConfig.objectStorage.connection.minio" . | nindent 2 }}
+  {{- end -}}
   {{- end -}}
 {{- end -}}{{/* "gitlab.appConfig.objectStorage.configuration" */}}
 
