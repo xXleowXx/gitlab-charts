@@ -1,0 +1,5 @@
+---
+title: Configures gitlab-kas ingress with its own TLS certificate
+merge_request: 1644
+author:
+type: fixed
