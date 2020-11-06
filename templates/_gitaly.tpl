@@ -38,7 +38,7 @@ name: {{ include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }}
 ```
 */}}
 {{- define "gitlab.gitaly.serviceName" -}}
-{{- coalesce .context.Values.gitaly.serviceName .context.Values.global.gitaly.serviceName (printf "%s-gitaly-%s" .context.Release.Name .name) -}}
+{{- coalesce .context.Values.serviceName .context.Values.global.gitaly.serviceName (printf "%s-gitaly-%s" .context.Release.Name .name) -}}
 {{- end -}}
 
 {{/*
