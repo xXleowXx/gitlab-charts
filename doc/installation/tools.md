@@ -63,7 +63,7 @@ Ensure you have `kubectl` installed and it's up to date. Older versions do not
 have support for RBAC and will generate errors.
 
 Helm v3.0 does not install Tiller in the cluster and as such uses the user's
-RBAC permissions to peform the deployment of the chart.
+RBAC permissions to perform the deployment of the chart.
 
 Prior versions of Helm do install Tiller on the cluster and will need to be granted
 permissions to perform operations. These instructions grant cluster wide permissions,
@@ -126,16 +126,16 @@ cluster, use `kubectl config set-cluster minikube` to set the active cluster.
 
 #### Upload the RBAC config in GKE
 
-For GKE, you need to grab the admin credentials:
+For GKE, you need to grab the administrator credentials:
 
 ```shell
 gcloud container clusters describe <cluster-name> --zone <zone> --project <project-id> --format='value(masterAuth.password)'
 ```
 
-This command will output the admin password. We need the password to authenticate
+This command will output the administrator password. We need the password to authenticate
 with `kubectl` and create the role.
 
-We will also create an admin user for this cluster. Use a name you prefer but
+We will also create an administrator user for this cluster. Use a name you prefer but
 for this example we will include the cluster's name in it:
 
 ```shell
@@ -190,7 +190,7 @@ Some information on how all the inner workings behave:
 
 ### Tips and tricks
 
-Helm repository has some additional information on developing with Helm in it's
+Helm repository has some additional information on developing with Helm in its
 [tips and tricks section](https://helm.sh/docs/howto/charts_tips_and_tricks/).
 
 ### Local Tiller

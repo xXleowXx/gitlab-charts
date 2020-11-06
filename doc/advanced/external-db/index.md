@@ -45,7 +45,7 @@ You need to set the following parameters:
 - `postgresql.install`: Set to `false` to disable the embedded database.
 - `global.psql.host`: Set to the hostname of the external database, can be a domain or an IP address.
 - `global.psql.password.secret`: The name of the [secret which contains the database password for the `gitlab` user](../../installation/secrets.md#postgresql-password).
-- `global.psql.password.key`: The key within the secret, which contains the password. The password should be *unencoded* value.
+- `global.psql.password.key`: The key within the secret, which contains the password.
 
 Items below can be further customized if you are not using the defaults:
 

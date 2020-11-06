@@ -61,6 +61,7 @@ hpa:
   targetAverageValue: 100m
 
 deployment:
+  # terminationGracePeriodSeconds: 30
   livenessProbe:
     initialDelaySeconds: 10
     periodSeconds: 10

@@ -79,6 +79,7 @@ data:
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "external_diffs" "config" $.Values.global.appConfig.externalDiffs) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "terraform_state" "config" $.Values.global.appConfig.terraformState) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "dependency_proxy" "config" $.Values.global.appConfig.dependencyProxy) | nindent 10 -}}
+          {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "pages" "config" $.Values.global.pages.objectStore) | nindent 10 -}}
       {{- end }}
       # Individual object storage backed feature properties configuration
       {{- include "gitlab.appConfig.artifacts.configuration" (dict "config" $.Values.global.appConfig.artifacts "context" $) | nindent 6 }}
@@ -90,8 +91,7 @@ data:
       {{- include "gitlab.appConfig.dependencyProxy.configuration" (dict "config" $.Values.global.appConfig.dependencyProxy "context" $) | nindent 6 }}
       {{- include "gitlab.geo.config" $ | nindent 6 }}
       {{- include "gitlab.appConfig.sentry.configuration" $ | nindent 6 }}
-      pages:
-        enabled: false
+      {{- include "gitlab.pages.config" $ | nindent 6 }}
       mattermost:
         enabled: false
       gitlab_ci:
@@ -156,6 +156,9 @@ data:
     Password = "<%= File.read("/etc/gitlab/redis/redis-password").strip.dump[1..-2] %>"
     {{- end }}
     {{- include "workhorse.object_storage.config" $ | nindent 4 }}
+    [image_resizer]
+    max_scaler_procs = {{ .Values.workhorse.imageScaler.maxProcs | int }}
+    max_filesize = {{ .Values.workhorse.imageScaler.maxFileSizeBytes | int }}
   configure: |
       set -e
       mkdir -p /init-secrets-workhorse/gitlab-workhorse

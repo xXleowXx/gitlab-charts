@@ -41,6 +41,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := append $messages (include "gitlab.checkConfig.database.externalLoadBalancing" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.serviceDesk" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sentry" .) -}}
+{{- $messages := append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
@@ -344,6 +345,20 @@ sentry:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.sentry */}}
+
+{{/*
+Ensure that registry's sentry has a DSN configured if enabled
+*/}}
+{{- define "gitlab.checkConfig.registry.sentry.dsn" -}}
+{{-   if $.Values.registry.reporting.sentry.enabled }}
+{{-     if not $.Values.registry.reporting.sentry.dsn }}
+registry:
+    When enabling sentry, you must configure at least one DSN.
+    See https://docs.gitlab.com/charts/charts/registry#reporting
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.sentry.dsn */}}
 
 {{/*
 Ensure Registry notifications settings are in global scope

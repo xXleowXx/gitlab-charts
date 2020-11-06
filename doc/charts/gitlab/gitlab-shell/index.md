@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Using the GitLab-Shell chart
+# Using the GitLab Shell chart
 
 The `gitlab-shell` sub-chart provides an SSH server configured for Git SSH access to GitLab.
 
@@ -43,6 +43,7 @@ controlled by `global.shell.port`.
 | `deployment.livenessProbe.timeoutSeconds` | 3 | When the liveness probe times out |
 | `deployment.livenessProbe.successThreshold` | 1 | Minimum consecutive successes for the liveness probe to be considered successful after having failed |
 | `deployment.livenessProbe.failureThreshold` | 3 | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded |
+| `deployment.terminationGracePeriodSeconds`  | 30 | Seconds that Kubernetes will wait for a pod to forcibly exit |
 | `enabled`                | `true`         | Shell enable flag                        |
 | `extraContainers`        |                | List of extra containers to include      |
 | `extraInitContainers`    |                | List of extra init containers to include |

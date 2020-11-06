@@ -54,6 +54,7 @@ global:
     registry: {}
     tls: {}
     smartcard: {}
+    kas: {}
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:
@@ -469,6 +470,26 @@ global:
       #         key: password
       # events: {}
 
+  pages:
+    enabled: false
+    accessControl: false
+    path:
+    host:
+    port:
+    https: false
+    externalHttp: false
+    externalHttps: false
+    artifactsServer: false
+    objectStore:
+      enabled: false
+      bucket: 'pages'
+      connection: {}
+        # secret:
+        # key:
+    apiSecret: {}
+      # secret:
+      # key:
+
   ## GitLab Runner
   ## Secret created according to doc/installation/secrets.md#gitlab-runner-secret
   ## If allowing shared-secrets generation, this is OPTIONAL.
@@ -533,7 +554,7 @@ global:
   certificates:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/alpine-certificates
-      tag: 20171114-r3
+      tag: 20191127-r2
     customCAs: []
     # - secret: custom-CA
     # - secret: more-custom-CAs
@@ -634,8 +655,8 @@ nginx-ingress:
         memory: 100Mi
     publishService:
       enabled: true
-    replicaCount: 3
-    minAvailable: 2
+    replicaCount: 2
+    minAvailable: 1
     scope:
       enabled: true
     stats:
@@ -650,7 +671,7 @@ nginx-ingress:
           prometheus.io/port: "10254"
   defaultBackend:
     minAvailable: 1
-    replicaCount: 2
+    replicaCount: 1
     resources:
       requests:
         cpu: 5m

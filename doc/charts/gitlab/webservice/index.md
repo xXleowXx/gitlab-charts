@@ -115,6 +115,8 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.readinessProbe.timeoutSeconds`      | 2       | When the readiness probe times out             |
 | `workhorse.readinessProbe.successThreshold`    | 1       | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
 | `workhorse.readinessProbe.failureThreshold`    | 3       | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded |
+| `workhorse.imageScaler.maxProcs`               | 2       | The maximum number of image scaling processes that may run concurrently |
+| `workhorse.imageScaler.maxFileSizeBytes`       | 250000  | The maximum file size in bytes for images to be processed by the scaler |
 | `webServer` | `puma` | Selects web server (Webservice/Puma) that would be used for request handling |
 | `priorityClassName`                            | `""`    | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction |
 

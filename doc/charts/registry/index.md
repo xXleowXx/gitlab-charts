@@ -146,6 +146,9 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `log`                                      | `{level: warn, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
 | `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
+| `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
+| `reporting.sentry.dsn`                     |                                              | The Sentry DSN (Data Source Name)                                                                    |
+| `reporting.sentry.environment`             |                                              | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/environments/)                 |
 | `profiling.stackdriver.enabled`            | `false`                                      | Enable continuous profiling using stackdriver                                                        |
 | `profiling.stackdriver.credentials.secret` | `gitlab-registry-profiling-creds`            | Name of the secret containing creds                                                                  |
 | `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the creds are stored                                                             |
@@ -520,6 +523,18 @@ health:
     enabled: false
     interval: 10s
     threshold: 3
+```
+
+### reporting
+
+The `reporting` property is optional and enables [reporting](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#reporting)
+
+```yaml
+reporting:
+  sentry:
+    enabled: true
+    dsn: 'https://<key>@sentry.io/<project>'
+    environment: 'production'
 ```
 
 ### profiling

@@ -410,6 +410,39 @@ describe 'checkConfig template' do
                      error_description: 'when maxRequestDurationSeconds is greater than or equal to workerTimeout'
   end
 
+  describe 'appConfig.sentry.dsn' do
+    let(:success_values) do
+      {
+        'registry' => {
+          'reporting' => {
+            'sentry' => {
+              'enabled' => true,
+              'dsn' => 'somedsn'
+            }
+          }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_values) do
+      {
+        'registry' => {
+          'reporting' => {
+            'sentry' => {
+              'enabled' => true
+            }
+          }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_output) { 'When enabling sentry, you must configure at least one DSN.' }
+
+    include_examples 'config validation',
+                     success_description: 'when Sentry is enabled and DSN is defined',
+                     error_description: 'when Sentry is enabled but DSN is undefined'
+  end
+
   describe 'gitaly.extern.repos' do
     let(:success_values) do
       {

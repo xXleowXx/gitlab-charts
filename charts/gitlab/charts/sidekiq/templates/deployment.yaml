@@ -332,6 +332,7 @@ spec:
               items:
                 - key: registry-auth.key
                   path: registry/gitlab-registry.key
+          {{- include "gitlab.pages.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.kas.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.minio.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "object_store" "config" $.Values.global.appConfig.object_store) | nindent 10 }}

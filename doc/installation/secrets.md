@@ -53,6 +53,7 @@ documentation.
   - [MinIO secret](#minio-secret)
   - [Registry HTTP secret](#registry-http-secret)
   - [Grafana password](#grafana-password)
+  - [GitLab Pages secret](#gitlab-pages-secret)
 - [External Services](#external-services)
   - [OmniAuth](#omniauth)
   - [LDAP Password](#ldap-password)
@@ -281,6 +282,17 @@ If configuring [Grafana integration](../charts/globals.md#configure-grafana-inte
 ```shell
 generate_secret_if_needed "gitlab-grafana-initial-password" --from-literal=password=$(gen_random 'a-zA-Z0-9' 64)
 ```
+
+### GitLab Pages secret
+
+Generate the GitLab Pages secret. This must have a length of 32 characters and
+base64-encoded. Replace `<name>` with the name of the release.
+
+```shell
+kubectl create secret generic <name>-gitlab-pages-secret --from-literal=shared_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
+```
+
+This secret is referenced by the `global.pages.apiSecret.secret` setting.
 
 ### Registry HTTP secret
 
