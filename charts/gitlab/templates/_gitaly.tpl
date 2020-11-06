@@ -70,7 +70,9 @@ Return the number of replicas set for Gitaly statefulset
 
 {{- define "gitlab.gitaly.storageNames" -}}
 {{- if $.Values.global.praefect.enabled -}}
-{{ range until ($.Values.global.praefect.gitalyReplicas | int) }} {{ printf "%s-gitaly-%d" $.Release.Name . | quote }}, {{- end }}
+{{- range $_, $storage := $.Values.global.praefect.virtualStorages -}}
+{{ range until ($storage.gitalyReplicas | int) }} {{ printf "%s-gitaly-%s-%d" $.Release.Name $storage.name . | quote }}, {{- end }}
+{{- end -}}
 {{- else -}}
 {{- range (coalesce $.Values.internal.names $.Values.global.gitaly.internal.names) }} {{ . | quote }}, {{- end }}
 {{- end -}}
