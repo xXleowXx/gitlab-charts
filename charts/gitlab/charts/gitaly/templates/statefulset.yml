@@ -1,54 +1,56 @@
-{{- if .Values.global.gitaly.enabled -}}
+{{- if and .Values.global.gitaly.enabled (not .Values.global.gitaly.host) -}}
+{{- $defaultStorages := (dict "name" (.Values.global.gitaly.internal.names | first)) | list }}
+{{- range default $defaultStorages .Values.global.praefect.virtualStorages }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ printf "%s-gitaly-%s" $.Release.Name .name }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "gitlab.immutableLabels" . | nindent 4 }}
+    {{- include "gitlab.immutableLabels" $ | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: {{ template "name" . }}
-      release: {{ .Release.Name }}
-  serviceName: {{ template "gitlab.gitaly.serviceName" . }}
-  replicas: {{template "gitlab.gitaly.replicas" . }}
+      app: {{ printf "%s-%s" ( include "name" $ ) .name }}
+      release: {{ $.Release.Name }}
+  serviceName: {{ printf "%s-gitaly-%s" $.Release.Name .name }}
+  replicas: {{ default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}
   podManagementPolicy: Parallel
-  {{- if .Values.global.operator.enabled }}
+  {{- if $.Values.global.operator.enabled }}
   updateStrategy:
     rollingUpdate:
-      partition: {{template "gitlab.gitaly.replicas" . }}
+      partition: {{ default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}
   {{- end }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
-        release: {{ .Release.Name }}
-        {{- include "gitlab.podLabels" . | nindent 8 }}
+        app: {{ template "name" $ }}-{{ .name }}
+        release: {{ $.Release.Name }}
+        {{- include "gitlab.podLabels" $ | nindent 8 }}
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") . | sha256sum }}
-      {{- range $key, $value := .Values.annotations }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
+      {{- range $key, $value := $.Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
-      {{- if .Values.tolerations }}
+      {{- if $.Values.tolerations }}
       tolerations:
-        {{- toYaml .Values.tolerations | nindent 8 }}
+        {{- toYaml $.Values.tolerations | nindent 8 }}
       {{- end }}
-      {{- if .Values.priorityClassName }}
-      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- if $.Values.priorityClassName }}
+      priorityClassName: "{{ $.Values.priorityClassName }}"
       {{- end }}
       terminationGracePeriodSeconds: 30
       initContainers:
-        {{- include "gitlab.extraInitContainers" . | nindent 8 }}
-        {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
+        {{- include "gitlab.extraInitContainers" $ | nindent 8 }}
+        {{- include "gitlab.certificates.initContainer" $ | nindent 8 }}
         - name: configure
           command: ['sh', '/config/configure']
-          image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
+          image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global.busybox) | quote }}
           env:
-          {{- include "gitlab.extraEnv" . | nindent 10 }}
+          {{- include "gitlab.extraEnv" $ | nindent 10 }}
           volumeMounts:
-          {{- include "gitlab.extraVolumeMounts" . | nindent 10 }}
+          {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
           - name: gitaly-config
             mountPath: /config
             readOnly: true
@@ -59,21 +61,21 @@ spec:
             mountPath: /init-secrets
             readOnly: false
           resources:
-            {{- toYaml .Values.init.resources | nindent 12 }}
+            {{- toYaml $.Values.init.resources | nindent 12 }}
       securityContext:
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-{{- include "pullsecrets" .Values.image | indent 6 }}
-      {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
+        runAsUser: {{ $.Values.securityContext.runAsUser }}
+        fsGroup: {{ $.Values.securityContext.fsGroup }}
+{{- include "pullsecrets" $.Values.image | indent 6 }}
+      {{- if eq (default $.Values.global.antiAffinity $.Values.antiAffinity) "hard" }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
-      {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
+                  app: {{ template "name" $ }}-{{ .name }}
+                  release: {{ $.Release.Name }}
+      {{- else if eq (default $.Values.global.antiAffinity $.Values.antiAffinity) "soft" }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -82,21 +84,21 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
+                  app: {{ template "name" $ }}-{{ .name }}
+                  release: {{ $.Release.Name }}
       {{- end }}
-      {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
-      serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
+      {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
+      serviceAccountName: {{ include "gitlab.serviceAccount.name" $ }}
       {{- end }}
       containers:
-        {{- include "gitlab.extraContainers" . | nindent 8 }}
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" .Chart.AppVersion "prepend" "true")) }}"
-          {{ template "gitlab.imagePullPolicy" . }}
+        {{- include "gitlab.extraContainers" $ | nindent 8 }}
+        - name: {{ $.Chart.Name }}
+          image: "{{ $.Values.image.repository }}:{{ coalesce $.Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" $.Chart.AppVersion "prepend" "true")) }}"
+          {{ template "gitlab.imagePullPolicy" $ }}
           ports:
-            - containerPort: {{ coalesce .Values.service.internalPort .Values.global.gitaly.service.internalPort }}
-           {{- if .Values.metrics.enabled }}
-            - containerPort: {{ .Values.metrics.metricsPort }}
+            - containerPort: {{ coalesce $.Values.service.internalPort $.Values.global.gitaly.service.internalPort }}
+           {{- if $.Values.metrics.enabled }}
+            - containerPort: {{ $.Values.metrics.metricsPort }}
            {{- end }}
           env:
             - name: CONFIG_TEMPLATE_DIRECTORY
@@ -107,15 +109,15 @@ spec:
               value: '/etc/gitaly/config.toml'
             - name: SSL_CERT_DIR
               value: '/etc/ssl/certs'
-            {{- if .Values.metrics.enabled }}
+            {{- if $.Values.metrics.enabled }}
             - name: GITALY_PROMETHEUS_LISTEN_ADDR
-              value: ':{{ .Values.metrics.metricsPort }}'
+              value: ':{{ $.Values.metrics.metricsPort }}'
             {{- end }}
-            {{- include "gitlab.tracing.env" . | nindent 12 }}
-            {{- include "gitlab.extraEnv" . | nindent 12 }}
+            {{- include "gitlab.tracing.env" $ | nindent 12 }}
+            {{- include "gitlab.extraEnv" $ | nindent 12 }}
           volumeMounts:
-            {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
-            {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
+            {{- include "gitlab.extraVolumeMounts" $ | nindent 12 }}
+            {{- include "gitlab.certificates.volumeMount" $ | nindent 12 }}
             - name: gitaly-config
               mountPath: '/etc/gitaly/templates'
             - name: gitaly-secrets
@@ -123,8 +125,8 @@ spec:
               readOnly: true
             - name: repo-data
               mountPath: '/home/git/repositories'
-              {{- if and .Values.persistence.enabled .Values.persistence.subPath }}
-              subPath: "{{ .Values.persistence.subPath }}"
+              {{- if and $.Values.persistence.enabled $.Values.persistence.subPath }}
+              subPath: "{{ $.Values.persistence.subPath }}"
               {{- end }}
           livenessProbe:
             exec:
@@ -141,13 +143,13 @@ spec:
             timeoutSeconds: 3
             periodSeconds: 10
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml $.Values.resources | nindent 12 }}
       volumes:
-      {{- include "gitlab.extraVolumes" . | nindent 6 }}
+      {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       - name: gitaly-config
         configMap:
-          name: {{ template "fullname" . }}
-      {{- if not .Values.persistence.enabled }}
+          name: {{ template "fullname" $ }}
+      {{- if not $.Values.persistence.enabled }}
       - name: repo-data
         emptyDir: {}
       {{- end }}
@@ -159,61 +161,63 @@ spec:
           defaultMode: 0440
           sources:
           - secret:
-              name: {{ template "gitlab.gitaly.authToken.secret" . }}
+              name: {{ template "gitlab.gitaly.authToken.secret" $ }}
               items:
-                - key: {{ template "gitlab.gitaly.authToken.key" . }}
+                - key: {{ template "gitlab.gitaly.authToken.key" $ }}
                   path: "gitaly_token"
           - secret:
-              name: {{ template "gitlab.gitlab-shell.authToken.secret" . }}
+              name: {{ template "gitlab.gitlab-shell.authToken.secret" $ }}
               items:
-                - key: {{ template "gitlab.gitlab-shell.authToken.key" . }}
+                - key: {{ template "gitlab.gitlab-shell.authToken.key" $ }}
                   path: ".gitlab_shell_secret"
-          {{- if .Values.global.gitaly.tls.enabled }}
+          {{- if $.Values.global.gitaly.tls.enabled }}
           - secret:
-              name: {{ template "gitlab.gitaly.tls.secret" . }}
+              name: {{ template "gitlab.gitaly.tls.secret" $ }}
               items:
                 - key: "tls.crt"
                   path: "gitaly.crt"
                 - key: "tls.key"
                   path: "gitaly.key"
           {{- end }}
-      {{- include "gitlab.certificates.volumes" . | nindent 6 }}
-    {{- if .Values.nodeSelector }}
+      {{- include "gitlab.certificates.volumes" $ | nindent 6 }}
+    {{- if $.Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
+        {{- toYaml $.Values.nodeSelector | nindent 8 }}
     {{- end -}}
-  {{- if .Values.persistence.enabled }}
+  {{- if $.Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: repo-data
         labels:
-          app: {{ template "name" . }}
-          release: {{ .Release.Name }}
+          app: {{ template "name" $ }}-{{ .name }}
+          release: {{ $.Release.Name }}
         annotations:
-        {{- range $key, $value := .Values.persistence.annotations }}
+        {{- range $key, $value := $.Values.persistence.annotations }}
           {{ $key }}: {{ $value | quote }}
         {{- end }}
       spec:
         accessModes:
-          - {{ .Values.persistence.accessMode | quote }}
+          - {{ $.Values.persistence.accessMode | quote }}
         resources:
           requests:
-            storage: {{ .Values.persistence.size | quote }}
-      {{- if .Values.persistence.storageClass }}
-      {{- if (eq "-" .Values.persistence.storageClass) }}
+            storage: {{ $.Values.persistence.size | quote }}
+      {{- if $.Values.persistence.storageClass }}
+      {{- if (eq "-" $.Values.persistence.storageClass) }}
         storageClassName: ""
       {{- else }}
-        storageClassName: "{{ .Values.persistence.storageClass }}"
+        storageClassName: "{{ $.Values.persistence.storageClass }}"
       {{- end -}}
       {{- end }}
         selector:
-      {{- if .Values.persistence.matchLabels }}
+      {{- if $.Values.persistence.matchLabels }}
           matchLabels:
-      {{- toYaml .Values.persistence.matchLabels | nindent 12 }}
+      {{- toYaml $.Values.persistence.matchLabels | nindent 12 }}
       {{- end -}}
-      {{- if .Values.persistence.matchExpressions }}
+      {{- if $.Values.persistence.matchExpressions }}
           matchExpressions:
-      {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
+      {{- toYaml $.Values.persistence.matchExpressions | nindent 12 }}
       {{- end -}}
   {{- end }}
+---
+{{- end }}
 {{- end }}
