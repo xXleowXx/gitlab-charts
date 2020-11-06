@@ -8,6 +8,7 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "gitlab.serviceLabels" $ | nindent 4 }}
+    storage: {{ .name }}
   annotations:
   {{- if $.Values.metrics.enabled }}
     gitlab.com/prometheus_scrape: "true"
@@ -33,8 +34,9 @@ spec:
       targetPort: {{ coalesce $.Values.service.tls.internalPort $.Values.global.gitaly.service.tls.internalPort }}
    {{- end }}
   selector:
-    app: {{ template "name" $ }}-{{ .name }}
+    app: {{ template "name" $ }}
     release: {{ $.Release.Name }}
+    storage: {{ .name }}
 ---
 {{- end }}
 {{- end }}

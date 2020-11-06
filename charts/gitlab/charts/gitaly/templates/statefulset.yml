@@ -11,11 +11,13 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.immutableLabels" $ | nindent 4 }}
+    storage: {{ .name }}
 spec:
   selector:
     matchLabels:
-      app: {{ printf "%s-%s" ( include "name" $ ) .name }}
+      app: {{ template "name" $ }}
       release: {{ $.Release.Name }}
+      storage: {{ .name }}
   serviceName: {{ printf "%s-gitaly-%s" $.Release.Name .name }}
   replicas: {{ default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}
   podManagementPolicy: Parallel
@@ -27,8 +29,9 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "name" $ }}-{{ .name }}
+        app: {{ template "name" $ }}
         release: {{ $.Release.Name }}
+        storage: {{ .name }}
         {{- include "gitlab.podLabels" $ | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
@@ -76,8 +79,9 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" $ }}-{{ .name }}
+                  app: {{ template "name" $ }}
                   release: {{ $.Release.Name }}
+                  storage: {{ .name }}
       {{- else if eq (default $.Values.global.antiAffinity $.Values.antiAffinity) "soft" }}
       affinity:
         podAntiAffinity:
@@ -87,8 +91,9 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" $ }}-{{ .name }}
+                  app: {{ template "name" $ }}
                   release: {{ $.Release.Name }}
+                  storage: {{ .name }}
       {{- end }}
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" $ }}
@@ -192,8 +197,9 @@ spec:
     - metadata:
         name: repo-data
         labels:
-          app: {{ template "name" $ }}-{{ .name }}
+          app: {{ template "name" $ }}
           release: {{ $.Release.Name }}
+          storage: {{ .name }}
         annotations:
         {{- range $key, $value := $.Values.persistence.annotations }}
           {{ $key }}: {{ $value | quote }}
