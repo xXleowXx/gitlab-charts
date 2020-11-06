@@ -52,7 +52,6 @@ data:
     {{- end }}
     {{- end }}
 
-    {{ $context := $ }}
     {{ range $_, $storage := $.Values.global.praefect.virtualStorages }}
     [[virtual_storage]]
     name = '{{ $storage.name }}'
