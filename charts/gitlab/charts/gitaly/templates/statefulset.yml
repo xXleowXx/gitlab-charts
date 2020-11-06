@@ -1,6 +1,9 @@
 {{- if and .Values.global.gitaly.enabled (not .Values.global.gitaly.host) -}}
-{{- $defaultStorages := (dict "name" (.Values.global.gitaly.internal.names | first)) | list }}
-{{- range default $defaultStorages .Values.global.praefect.virtualStorages }}
+{{- $storages := (dict "name" (.Values.global.gitaly.internal.names | first)) | list -}}
+{{ if .Values.global.praefect.enabled }}
+{{ $storages = .Values.global.praefect.virtualStorages }}
+{{- end }}
+{{ range $storages }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
