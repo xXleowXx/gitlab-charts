@@ -53,5 +53,5 @@ Call:
 {{- define "gitlab.gitaly.qualifiedServiceName" -}}
 {{- $storageName := default (.context.Values.global.gitaly.internal.names | first) .context.name -}}
 {{- $name := include "gitlab.gitaly.serviceName" (dict "context" .context "name" $storageName) -}}
-{{ include "gitlab.other.fullname" (dict "context" .context "chartName" "gitaly" ) }}-{{ .index }}.{{ $name }}
+{{ printf "%s-%d.%s" $name .index $name }}
 {{- end -}}
