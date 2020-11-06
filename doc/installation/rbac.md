@@ -36,7 +36,7 @@ The service accounts are described in the following table. For each service acco
 - Associated roles and what level of access it has on which resources. Access level is either read-only (R),
   write-only (W), or read-write (RW). Note that group name of resources are omitted.
 - The scope of the roles, which is either the cluster (C) or the namespace (NS). In some instances the scope
-  of the roles can be configured with values (indicated by NS/C)
+  of the roles can be configured with either values (indicated by NS/C)
 
 | Name suffix | Description | Roles | Scope
 | ---         | ---         | ---   | ---
