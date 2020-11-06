@@ -18,13 +18,14 @@ item, ensuring presence of all keys.
 {{-   $_ := set $.Values "deployments" (dict "default" (dict)) -}}
 {{-   $_ := set $.Values.deployments "default" $blank -}}
 {{- end -}}
-{{/* walk all entries, do ensure default properties populated */}}
+{{/* walk all entries, ensure default properties populated */}}
 {{- $checks := dict "hasBasePath" false -}}
 {{- range $deployment, $values := $.Values.deployments -}}
 {{-   $blank := fromYaml (include "webservice.datamodel.blank" $) -}}
-{{-   $_ := set $values "name" $deployment -}}
-{{-   $_ := set $values "fullname" $fullname -}}
-{{-   $_ := set $.Values.deployments $deployment (merge $values $blank) -}}
+{{-   $filledValues := merge $values $blank -}}
+{{-   $_ := set $filledValues "name" $deployment -}}
+{{-   $_ := set $filledValues "fullname" $fullname -}}
+{{-   $_ := set $.Values.deployments $deployment $filledValues -}}
 {{-   if eq ($values.ingress.path | toString ) "/" -}}
 {{-     $_ := set $checks "hasBasePath" true -}}
 {{-   end -}}
@@ -77,16 +78,14 @@ pdb:
 resources: # resources for `webservice` container
   {{- .Values.resources | toYaml | nindent 2 }}
 workhorse:
-  resources:
-    {{- .Values.workhorse.resources | toYaml | nindent 4 }}
-  livenessProbe:
-    {{- .Values.workhorse.livenessProbe | toYaml | nindent 4 }}
-  readinessProbe:
-    {{- .Values.workhorse.readinessProbe | toYaml | nindent 4 }}
+  {{- .Values.workhorse | toYaml | nindent 2 }}
+unicorn:
+  {{- .Values.unicorn | toYaml | nindent 2 }}
 extraEnv:
   {{- .Values.extraEnv | toYaml | nindent 2 }}
 puma:
   {{- .Values.puma | toYaml | nindent 2 }}
+workerProcesses: {{ .Values.workerProcesses | int }}
 shutdown:
   {{- .Values.shutdown | toYaml | nindent 2 }}
 nodeSelector: # map

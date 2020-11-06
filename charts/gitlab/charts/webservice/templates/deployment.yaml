@@ -30,15 +30,15 @@ spec:
   {{- if .Values.global.operator.enabled }}
   paused: true
   {{- end }}
-  replicas: {{ .Values.minReplicas }}
+  replicas: {{ .hpa.minReplicas }}
   selector:
     matchLabels:
       app: {{ template "name" $ }}
       release: {{ $.Release.Name }}
       {{ include "webservice.labels" . | nindent 6 }}
-  {{- if .Values.deployment.strategy }}
+  {{- if .deployment.strategy }}
   strategy:
-    {{- .Values.deployment.strategy | toYaml | nindent 4 }}
+    {{- .deployment.strategy | toYaml | nindent 4 }}
   {{- end }}
   template:
     metadata:
@@ -60,9 +60,9 @@ spec:
         {{- toYaml .Values.metrics.annotations | nindent 8 }}
       {{- end }}
     spec:
-      {{- if .Values.tolerations }}
+      {{- if .tolerations }}
       tolerations:
-        {{- toYaml .Values.tolerations | nindent 8 }}
+        {{- toYaml .tolerations | nindent 8 }}
       {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
@@ -192,25 +192,25 @@ spec:
               value: "1"
             {{- end }}
             - name: WORKER_PROCESSES
-              value: "{{ .Values.workerProcesses }}"
+              value: "{{ .workerProcesses }}"
             - name: WORKER_TIMEOUT
               value: "{{ .Values.global.webservice.workerTimeout }}"
             - name: INTERNAL_PORT
               value: "{{ .Values.service.internalPort }}"
             {{- if eq .Values.webServer "puma" }}
             - name: PUMA_THREADS_MIN
-              value: "{{ .Values.puma.threads.min }}"
+              value: "{{ .puma.threads.min }}"
             - name: PUMA_THREADS_MAX
-              value: "{{ .Values.puma.threads.max }}"
+              value: "{{ .puma.threads.max }}"
             - name: PUMA_WORKER_MAX_MEMORY
-              value: "{{ .Values.puma.workerMaxMemory }}"
+              value: "{{ .puma.workerMaxMemory }}"
             - name: DISABLE_PUMA_WORKER_KILLER
-              value: "{{ .Values.puma.disableWorkerKiller }}"
+              value: "{{ .puma.disableWorkerKiller }}"
             {{- else }}
             - name: UNICORN_MEMORY_MIN
-              value: "{{ .Values.unicorn.memory.min }}"
+              value: "{{ .unicorn.memory.min }}"
             - name: UNICORN_MEMORY_MAX
-              value: "{{ .Values.unicorn.memory.max }}"
+              value: "{{ .unicorn.memory.max }}"
             {{- end }}
             {{- include "gitlab.tracing.env" $ | nindent 12 }}
             - name: GITLAB_TRACING_URL
@@ -254,20 +254,20 @@ spec:
             httpGet:
               path: /-/liveness
               port: {{ .Values.service.internalPort }}
-            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .deployment.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .deployment.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .deployment.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: /-/readiness
               port: {{ .Values.service.internalPort }}
-            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .deployment.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .deployment.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .deployment.readinessProbe.failureThreshold }}
           lifecycle:
             preStop:
               exec:
@@ -277,7 +277,7 @@ spec:
                 command: ["/bin/bash", "-c", "pkill -SIGINT -o ruby"]
                 {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .resources | nindent 12 }}
         - name: gitlab-workhorse
           image: "{{ coalesce .Values.workhorse.image (include "workhorse.repository" $) }}:{{ coalesce .Values.workhorse.tag (include "gitlab.versionTag" $ ) }}"
           {{ template "gitlab.imagePullPolicy" $ }}
@@ -288,22 +288,22 @@ spec:
             - name: TMPDIR
               value: "/tmp/gitlab"
             - name: GITLAB_WORKHORSE_EXTRA_ARGS
-              value: {{ .Values.workhorse.extraArgs | quote }}
+              value: {{ .workhorse.extraArgs | quote }}
             - name: GITLAB_WORKHORSE_LISTEN_PORT
               value: {{ default 8181 .Values.service.workhorseInternalPort | int | quote }}
             - name: GITLAB_WORKHORSE_LOG_FORMAT
-              value: {{ .Values.workhorse.logFormat | quote }}
+              value: {{ .workhorse.logFormat | quote }}
             - name: CONFIG_TEMPLATE_DIRECTORY
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
-            {{- if .Values.workhorse.monitoring.exporter.enabled }}
+            {{- if .workhorse.monitoring.exporter.enabled }}
             - name: GITLAB_WORKHORSE_PROM_LISTEN_ADDR
               value: "0.0.0.0:{{ .Values.workhorse.monitoring.exporter.port }}"
             {{- end }}
-            {{- if .Values.workhorse.sentryDSN }}
+            {{- if .workhorse.sentryDSN }}
             - name: GITLAB_WORKHORSE_SENTRY_DSN
-              value: {{ .Values.workhorse.sentryDSN }}
+              value: {{ .workhorse.sentryDSN }}
             {{- end }}
             {{- include "gitlab.tracing.env" $ | nindent 12 }}
             {{- include "gitlab.extraEnv" $ | nindent 12 }}
@@ -325,22 +325,22 @@ spec:
             exec:
               command:
               - /scripts/healthcheck
-            initialDelaySeconds: {{ .Values.workhorse.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.workhorse.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.workhorse.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.workhorse.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.workhorse.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .workhorse.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .workhorse.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .workhorse.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .workhorse.livenessProbe.successThreshold }}
+            failureThreshold: {{ .workhorse.livenessProbe.failureThreshold }}
           readinessProbe:
             exec:
               command:
               - /scripts/healthcheck
-            initialDelaySeconds: {{ .Values.workhorse.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.workhorse.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.workhorse.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.workhorse.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.workhorse.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .workhorse.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .workhorse.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .workhorse.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .workhorse.readinessProbe.successThreshold }}
+            failureThreshold: {{ .workhorse.readinessProbe.failureThreshold }}
           resources:
-            {{- toYaml .Values.workhorse.resources | nindent 12 }}
+            {{- toYaml .workhorse.resources | nindent 12 }}
       {{- if .deployment.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .deployment.terminationGracePeriodSeconds | int }}
       {{- end }}
