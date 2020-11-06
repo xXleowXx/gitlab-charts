@@ -7,7 +7,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ printf "%s-gitaly-%s" $.Release.Name .name }}
+  name: {{ include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.immutableLabels" $ | nindent 4 }}
@@ -18,7 +18,7 @@ spec:
       app: {{ template "name" $ }}
       release: {{ $.Release.Name }}
       storage: {{ .name }}
-  serviceName: {{ printf "%s-gitaly-%s" $.Release.Name .name }}
+  serviceName: {{ include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }}
   replicas: {{ default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}
   podManagementPolicy: Parallel
   {{- if $.Values.global.operator.enabled }}

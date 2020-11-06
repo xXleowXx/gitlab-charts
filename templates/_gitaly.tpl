@@ -30,9 +30,15 @@ Order of operations:
 - chart-local gitaly service name override
 - global gitaly service name override
 - derived from chart name
+
+Call:
+
+```
+name: {{ include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }}
+```
 */}}
 {{- define "gitlab.gitaly.serviceName" -}}
-{{- coalesce ( .Values.gitaly.serviceName ) .Values.global.gitaly.serviceName (include "gitlab.other.fullname" (dict "context" . "chartName" "gitaly" )) -}}
+{{- coalesce .context.Values.gitaly.serviceName .context.Values.global.gitaly.serviceName (printf "%s-gitaly-%s" .context.Release.Name .name) -}}
 {{- end -}}
 
 {{/*
@@ -45,6 +51,7 @@ Call:
 ```
 */}}
 {{- define "gitlab.gitaly.qualifiedServiceName" -}}
-{{- $name := include "gitlab.gitaly.serviceName" .context -}}
+{{- $storageName := default (.context.Values.global.gitaly.internal.names | first) .context.name -}}
+{{- $name := include "gitlab.gitaly.serviceName" (dict "context" .context "name" $storageName) -}}
 {{ include "gitlab.other.fullname" (dict "context" .context "chartName" "gitaly" ) }}-{{ .index }}.{{ $name }}
 {{- end -}}
