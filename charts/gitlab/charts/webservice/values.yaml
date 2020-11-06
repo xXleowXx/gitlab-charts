@@ -74,6 +74,8 @@ ingress:
     # smartcardSecretName:
     # enabled: true
   annotations: {}
+  # Use this in combination of .deployments below
+  requireBasePath: true
 workerProcesses: 2
 
 unicorn:
@@ -349,9 +351,11 @@ priorityClassName: ""
 #  end of each resource `.metadata.name`, and added as a label to each
 #  resource for tracking.
 #  https://docs.gitlab.com/charts/charts/gitlab/webservice/#deployments
-deployments:
+deployments: {}
   # There must always be at least one, with `xyz.ingress.path: /`
-  # web:
+  # unless `ingress.requireBasePath: false`
+  #
+  # default:
   #   ingress:
   #     path: /
 

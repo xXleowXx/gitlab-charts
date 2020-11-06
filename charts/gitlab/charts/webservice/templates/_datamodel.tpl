@@ -15,8 +15,8 @@ item, ensuring presence of all keys.
 {{- if not $.Values.deployments -}}
 {{-   $blank := fromYaml (include "webservice.datamodel.blank" $) -}}
 {{-   $_ := set $blank.ingress "path" "/" -}}
-{{-   $_ := set $.Values "deployments" (dict) -}}
-{{-   $_ := set $.Values.deployments "web" $blank -}}
+{{-   $_ := set $.Values "deployments" (dict "default" (dict)) -}}
+{{-   $_ := set $.Values.deployments "default" $blank -}}
 {{- end -}}
 {{/* walk all entries, do ensure default properties populated */}}
 {{- $checks := dict "hasBasePath" false -}}
@@ -29,7 +29,7 @@ item, ensuring presence of all keys.
 {{-     $_ := set $checks "hasBasePath" true -}}
 {{-   end -}}
 {{- end -}}
-{{- if not $checks.hasBasePath -}}
+{{- if and (not $.Values.ingress.requireBaseBath) (not $checks.hasBasePath) -}}
 {{-   fail "FATAL: Webservice: no deployment with ingress.path '/' specified." -}}
 {{- end -}}
 {{- end -}}
@@ -52,20 +52,25 @@ ingress:
   proxyReadTimeout: {{ .Values.ingress.proxyReadTimeout }}
   proxyBodySize: {{ .Values.ingress.proxyBodySize | quote }}
 deployment:
-  annotations: {}
-  labels: {}
+  annotations:
+  labels:
   {{- .Values.deployment | toYaml | nindent 2 }}
 pod:
-  labels: {} # additional labels to .podLabels
+  labels: # additional labels to .podLabels
   annotations: # inherit from .Values.annotations
+    {{- if .Values.annotations }}
     {{ toYaml .Values.annotations | nindent 4 }}
+    {{- end }}
 service:
-  labels: {} # additional labels to .serviceLabels
-  annotations: {} # additional annotations to .service.annotations
+  labels: # additional labels to .serviceLabels
+  annotations: # additional annotations to .service.annotations
+    {{- if .Values.service.annotations }}
+    {{ toYaml .Values.service.annotations | nindent 4 }}
+    {{- end }}
 hpa:
   minReplicas: {{ .Values.minReplicas }} # defaults to .minReplicas
   maxReplicas: {{ .Values.minReplicas }} # defaults to .maxReplicas
-  metrics: {} # optional replacement of HPA metrics definition
+  metrics: # optional replacement of HPA metrics definition
   {{- .Values.hpa | toYaml | nindent 2 }}
 pdb:
   maxUnavailable: {{ .Values.maxUnavailable }} # defaults to .maxUnavailable
@@ -84,4 +89,8 @@ puma:
   {{- .Values.puma | toYaml | nindent 2 }}
 shutdown:
   {{- .Values.shutdown | toYaml | nindent 2 }}
+nodeSelector: # map
+  {{- .Values.nodeSelector | toYaml | indent 2 -}}
+tolerations: # array
+  {{- .Values.tolerations | toYaml | indent 2 -}}
 {{- end -}}

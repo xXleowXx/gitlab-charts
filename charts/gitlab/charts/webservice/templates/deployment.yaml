@@ -18,10 +18,14 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "webservice.labels" . | nindent 4}}
-    {{- toYaml .deployment.labels | nindent 4 }}
+    {{- if .deployment.labels -}}
+    {{-   toYaml .deployment.labels | nindent 4 }}
+    {{- end }}
   annotations:
     {{- include "gitlab.deploymentAnnotations" $ | nindent 4 }}
-    {{- toYaml .deployment.annotations | nindent 4 }}
+    {{- if .deployment.annotations -}}
+    {{-   toYaml .deployment.annotations | nindent 4 }}
+    {{- end }}
 spec:
   {{- if .Values.global.operator.enabled }}
   paused: true
@@ -42,7 +46,9 @@ spec:
         release: {{ $.Release.Name }}
         {{- include "gitlab.podLabels" $ | nindent 8 }}
         {{- include "webservice.labels" . | nindent 8 }}
-        {{- toYaml .pod.labels | nindent 8 }}
+        {{- if .pod.labels -}}
+        {{-   toYaml .pod.labels | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
@@ -334,8 +340,8 @@ spec:
             failureThreshold: {{ .Values.workhorse.readinessProbe.failureThreshold }}
           resources:
             {{- toYaml .Values.workhorse.resources | nindent 12 }}
-      {{- if (coalesce .deployment.terminationGracePeriodSeconds .Values.deployment.terminationGracePeriodSeconds) }}
-      terminationGracePeriodSeconds: {{ (coalesce .deployment.terminationGracePeriodSeconds .Values.deployment.terminationGracePeriodSeconds) | int }}
+      {{- if .deployment.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .deployment.terminationGracePeriodSeconds | int }}
       {{- end }}
       volumes:
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
@@ -436,9 +442,9 @@ spec:
       - name: shared-upload-directory
         emptyDir: {}
       {{- include "gitlab.certificates.volumes" $ | nindent 6 }}
-    {{- if (coalesce .nodeSelector .Values.nodeSelector) }}
+    {{- if .nodeSelector }}
       nodeSelector:
-        {{- toYaml (coalesce .nodeSelector .Values.nodeSelector) | nindent 8 }}
+        {{- toYaml .nodeSelector | nindent 8 }}
     {{- end }}
 {{- end }}{{/* END range deployments */}}
 {{- end }}
