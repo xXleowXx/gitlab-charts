@@ -32,9 +32,10 @@ spec:
   {{- end }}
   replicas: {{ .Values.minReplicas }}
   selector:
-    app: {{ template "name" $ }}
-    release: {{ $.Release.Name }}
-    {{ include "webservice.labels" . | nindent 4 }}
+    matchLabels:
+      app: {{ template "name" $ }}
+      release: {{ $.Release.Name }}
+      {{ include "webservice.labels" . | nindent 6 }}
   {{- if .Values.deployment.strategy }}
   strategy:
     {{- .Values.deployment.strategy | toYaml | nindent 4 }}
