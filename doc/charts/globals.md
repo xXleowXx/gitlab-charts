@@ -1297,7 +1297,7 @@ global:
       pipeline_schedule_worker:
         cron: "19 * * * *"
       expire_build_artifacts_worker:
-        cron: "50 * * * *"
+        cron: "*/7 * * * *"
 ```
 
 ### Sentry settings
