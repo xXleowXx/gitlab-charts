@@ -24,7 +24,9 @@
 # `.buildpacks` that contains the URLs, one on each line, in order.
 # Note: Auto CI does not work with multiple buildpacks yet
 
-image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base
+# image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base
+# Temporary change to test https://gitlab.com/gitlab-org/gitlab-build-images/-/merge_requests/336
+image: registry.gitlab.com/mnielsen/tmp-registry/gitlab-build-images:gitlab-charts-build-base
 
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
