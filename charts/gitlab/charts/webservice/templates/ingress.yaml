@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {{- if .Values.enabled -}}{{/* ENABLED */}}
 {{- if eq (include "gitlab.ingress.enabled" $) "true" -}}{{/* INGRESS ENABLED */}}
 {{- $gitlabHostname := include "gitlab.gitlab.hostname" $ -}}
@@ -13,15 +12,6 @@ From here on:
 - `.name` is the key (xyz)
 */}}
 ---
-=======
-{{- if .Values.enabled -}}
-{{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
-{{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
-{{- if .Values.global.hosts.gitlab.hostnameOverride -}}
-{{-   $gitlabHostname = .Values.global.hosts.gitlab.hostnameOverride -}}
-{{- end -}}
-{{- $tlsSecret := include "webservice.tlsSecret" . -}}
->>>>>>> Update values.yaml, charts/gitlab/charts/webservice/templates/ingress.yaml files
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
