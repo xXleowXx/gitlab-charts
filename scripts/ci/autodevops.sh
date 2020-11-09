@@ -214,7 +214,6 @@ function download_chart() {
     auto_chart_name="chart"
   fi
 
-  helm init --client-only
   helm repo add gitlab https://charts.gitlab.io
   helm repo add jetstack https://charts.jetstack.io
   if [[ ! -d "$auto_chart" ]]; then
@@ -283,7 +282,7 @@ function install_external_dns() {
     helm repo add bitnami https://charts.bitnami.com/bitnami
 
     helm install bitnami/external-dns \
-      -n "${release_name}" \
+      "${release_name}" \
       --namespace "${NAMESPACE}" \
       --set provider="${provider}" \
       --set domainFilters[0]="${domain_filter}" \
@@ -311,7 +310,7 @@ function delete() {
   if [[ "$track" != "stable" ]]; then
     name="$name-$track"
   fi
-  helm delete --purge "$name" || true
+  helm uninstall "$name" || true
 }
 
 function cleanup() {

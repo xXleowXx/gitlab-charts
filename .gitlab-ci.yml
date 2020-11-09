@@ -92,7 +92,6 @@ lint_package:
   stage: package
   when: always
   script:
-    - helm init --client-only
     - helm repo add gitlab https://charts.gitlab.io
     - helm repo add jetstack https://charts.jetstack.io
     - helm dependencies update
@@ -115,7 +114,6 @@ lint_package:
   stage: package
   when: always
   script:
-    - helm init --client-only
     - helm repo add gitlab https://charts.gitlab.io
     - helm repo add jetstack https://charts.jetstack.io
     - helm dependencies update
