@@ -261,17 +261,6 @@ function check_domain_ip() {
   fi
 }
 
-function install_tiller() {
-  echo "Checking Tiller..."
-  helm init --upgrade --service-account tiller --history-max=${TILLER_HISTORY_MAX}
-  kubectl rollout status -n "$TILLER_NAMESPACE" -w "deployment/tiller-deploy"
-  if ! helm version --debug; then
-    echo "Failed to init Tiller."
-    return 1
-  fi
-  echo ""
-}
-
 function install_external_dns() {
   local provider="${1}"
   local domain_filter="${2}"

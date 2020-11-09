@@ -38,7 +38,6 @@ variables:
   POSTGRES_ENABLED: "false"
   POSTGRES_DB: $CI_ENVIRONMENT_SLUG
   GIT_CLONE_PATH: $CI_BUILDS_DIR/gitlab
-  TILLER_HISTORY_MAX: 20
   TEST_BACKUP_PREFIX: 13.5.0-pre
 
 stages:
@@ -144,7 +143,6 @@ lint_package:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
     - ensure_namespace
-    - install_tiller
     - create_secret
     - install_external_dns "${DNS_PROVIDER}" "${KUBE_INGRESS_BASE_DOMAIN}"
     - deploy
@@ -276,7 +274,6 @@ stop_review_eks:
     - check_domain_ip
 #    - download_chart
     - ensure_namespace
-    - install_tiller
     - create_secret
     - deploy
     - wait_for_deploy
@@ -303,7 +300,6 @@ stop_review_eks:
     - check_domain_ip
 #    - download_chart
     - ensure_namespace
-    - install_tiller
     - create_secret
     - deploy canary
   environment:
@@ -332,7 +328,6 @@ stop_review_eks:
     - check_domain_ip
     - download_chart
     - ensure_namespace
-    - install_tiller
     - create_secret
     - deploy
     - wait_for_deploy
