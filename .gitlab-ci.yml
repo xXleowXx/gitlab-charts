@@ -42,6 +42,8 @@ variables:
   GIT_CLONE_PATH: $CI_BUILDS_DIR/gitlab
   HELM_MAX_HISTORY: 20
   TEST_BACKUP_PREFIX: 13.5.0-pre
+  NAMESPACE: $KUBE_NAMESPACE
+  HELM_NAMESPACE: $NAMESPACE
 
 stages:
   - prepare
@@ -376,7 +378,6 @@ review_helm_test:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
   script:
-    - export HELM_NAMESPACE=$KUBE_NAMESPACE
     - helm test --cleanup "$CI_ENVIRONMENT_SLUG"
   only:
     refs:
@@ -397,7 +398,6 @@ production_helm_test:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   script:
-    - export HELM_NAMESPACE=$KUBE_NAMESPACE
     - helm test --cleanup "$CI_ENVIRONMENT_SLUG"
   <<: *except_deps_update
   only:
@@ -411,8 +411,8 @@ debug_review:
   stage: qa
   when: on_failure
   script:
-    - kubectl -n "$KUBE_NAMESPACE" describe pod
-    - kubectl -n "$KUBE_NAMESPACE" get pod,jobs,secret,ing,cm,sa,svc,role,rolebinding,pvc
+    - kubectl -n "$NAMESPACE" describe pod
+    - kubectl -n "$NAMESPACE" get pod,jobs,secret,ing,cm,sa,svc,role,rolebinding,pvc
   artifacts:
     paths:
     - variables
