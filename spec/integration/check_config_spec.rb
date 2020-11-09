@@ -149,36 +149,39 @@ describe 'checkConfig template' do
                      error_description: 'when Sidekiq pods use cluster with array queues'
   end
 
-  describe 'sidekiq.queues.experimentalQueueSelector' do
-    let(:success_values) do
-      {
-        'gitlab' => {
-          'sidekiq' => {
-            'pods' => [
-              { 'name' => 'valid-1', 'cluster' => true, 'experimentalQueueSelector' => true },
-            ]
+  describe 'sidekiq.queues.queueSelector' do
+    # Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
+    ['queueSelector', 'experimentalQueueSelector'].each do |config|
+      let(:success_values) do
+        {
+          'gitlab' => {
+            'sidekiq' => {
+              'pods' => [
+                { 'name' => 'valid-1', 'cluster' => true, config => true },
+              ]
+            }
           }
-        }
-      }.merge(default_required_values)
-    end
+        }.merge(default_required_values)
+      end
 
-    let(:error_values) do
-      {
-        'gitlab' => {
-          'sidekiq' => {
-            'pods' => [
-              { 'name' => 'valid-1', 'cluster' => false, 'experimentalQueueSelector' => true },
-            ]
+      let(:error_values) do
+        {
+          'gitlab' => {
+            'sidekiq' => {
+              'pods' => [
+                { 'name' => 'valid-1', 'cluster' => false, config => true },
+              ]
+            }
           }
-        }
-      }.merge(default_required_values)
+        }.merge(default_required_values)
+      end
+
+      let(:error_output) { "`#{config}` only works when `cluster` is enabled" }
+
+      include_examples 'config validation',
+                       success_description: "when Sidekiq pods use #{config} with cluster enabled",
+                       error_description: "when Sidekiq pods use #{config} without cluster enabled"
     end
-
-    let(:error_output) { '`experimentalQueueSelector` only works when `cluster` is enabled' }
-
-    include_examples 'config validation',
-                     success_description: 'when Sidekiq pods use experimentalQueueSelector with cluster enabled',
-                     error_description: 'when Sidekiq pods use experimentalQueueSelector without cluster enabled'
   end
 
   describe 'database.externaLoadBalancing' do

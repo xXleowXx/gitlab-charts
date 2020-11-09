@@ -194,6 +194,9 @@ spec:
               value: '/srv/gitlab/config'
             - name: SIDEKIQ_CLUSTER
               value: {{ include "gitlab.boolean.local" (dict "global" $.Values.cluster "local" .cluster "default" true) | quote }}
+            - name: SIDEKIQ_QUEUE_SELECTOR
+              value: {{ include "gitlab.boolean.local" (dict "global" $.Values.queueSelector "local" .queueSelector "default" false) | quote }}
+{{/* Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646 */}}
             - name: SIDEKIQ_EXPERIMENTAL_QUEUE_SELECTOR
               value: {{ include "gitlab.boolean.local" (dict "global" $.Values.experimentalQueueSelector "local" .experimentalQueueSelector "default" false) | quote }}
             - name: SIDEKIQ_CONCURRENCY
