@@ -25,7 +25,7 @@ Unless `ingress.path: /` or `name: default`
 !! to be called from scope of a `deployment.xyz` entry.
 */}}
 {{- define "webservice.fullname.suffix" -}}
-{{- if or (eq .name "default") (eq .ingress.path "/") -}}
+{{- if or (eq .name "default") (eq (default "" .ingress.path) "/") -}}
 {{- .fullname -}}
 {{- else -}}
 {{- printf "%s-%s" .fullname .name | trunc 63 | trimSuffix "-" }}

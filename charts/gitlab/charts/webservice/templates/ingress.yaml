@@ -5,7 +5,8 @@
 {{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
 {{- range $.Values.deployments -}}
-{{- $_ := set . "Values" $.Values -}}
+{{-   if .ingress.path -}}{{/* SET .ingress.path */}}
+{{-   $_ := set . "Values" $.Values -}}
 {{/*
 From here on:
 - `.` is `.deployments.xyz` value
@@ -55,5 +56,6 @@ spec:
   tls: []
   {{- end }}
 {{- end -}}
+{{- end -}}{{/* SET .ingress.path */}}
 {{- end -}}{{/* INGRESS ENABLED */}}
 {{- end -}}{{/* ENABLED */}}
