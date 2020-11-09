@@ -7,7 +7,7 @@ export DATABASE_URL=${DATABASE_URL-$auto_database_url}
 export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
 export CI_APPLICATION_TAG=$CI_COMMIT_SHA
 export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
-export TILLER_NAMESPACE=$KUBE_NAMESPACE
+export HELM_NAMESPACE=$KUBE_NAMESPACE
 
 function previousDeployFailed() {
   set +e
@@ -268,7 +268,7 @@ function install_external_dns() {
 
   echo "Checking External DNS..."
   release_name="gitlab-external-dns"
-  if ! helm status --tiller-namespace "${TILLER_NAMESPACE}" "${release_name}" > /dev/null 2>&1 ; then
+  if ! helm status --namespace "${NAMESPACE}" "${release_name}" > /dev/null 2>&1 ; then
     case "${provider}" in
       google)
         # We need to store the credentials in a secret
@@ -285,10 +285,10 @@ function install_external_dns() {
 
     helm install bitnami/external-dns \
       -n "${release_name}" \
-      --namespace "${TILLER_NAMESPACE}" \
+      --namespace "${NAMESPACE}" \
       --set provider="${provider}" \
       --set domainFilters[0]="${domain_filter}" \
-      --set txtOwnerId="${TILLER_NAMESPACE}" \
+      --set txtOwnerId="${NAMESPACE}" \
       --set rbac.create="true" \
       --set policy='sync' \
       ${helm_args}

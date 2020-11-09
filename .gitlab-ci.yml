@@ -373,7 +373,7 @@ review_helm_test:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
   script:
-    - export TILLER_NAMESPACE=$KUBE_NAMESPACE
+    - export HELM_NAMESPACE=$KUBE_NAMESPACE
     - helm test --cleanup "$CI_ENVIRONMENT_SLUG"
   only:
     refs:
@@ -394,7 +394,7 @@ production_helm_test:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   script:
-    - export TILLER_NAMESPACE=$KUBE_NAMESPACE
+    - export HELM_NAMESPACE=$KUBE_NAMESPACE
     - helm test --cleanup "$CI_ENVIRONMENT_SLUG"
   <<: *except_deps_update
   only:
