@@ -143,7 +143,7 @@ CIYAML
     --set gitlab.operator.crdPrefix="$CI_ENVIRONMENT_SLUG" \
     --set global.gitlab.license.secret="$CI_ENVIRONMENT_SLUG-gitlab-license" \
     "${enable_kas[@]}" \
-    --namespace="$KUBE_NAMESPACE" \
+    --namespace="$HELM_NAMESPACE" \
     --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
     $HELM_EXTRA_ARGS \
     "$name" \
@@ -163,7 +163,7 @@ function check_kas_status() {
     fi
 
     iteration=$((iteration+1))
-    kasState=($(kubectl get pods -n "$KUBE_NAMESPACE" | grep "\-kas" | awk '{print $3}'))
+    kasState=($(kubectl get pods -n "$HELM_NAMESPACE" | grep "\-kas" | awk '{print $3}'))
     sleep 5;
   done
 }
@@ -174,7 +174,7 @@ function wait_for_deploy {
   iteration=0
   while [ "$observedRevision" != "$revision" ]; do
     IFS=$','
-    status=($(kubectl get gitlabs.${CI_ENVIRONMENT_SLUG}.gitlab.com "${CI_ENVIRONMENT_SLUG}-operator" -n ${KUBE_NAMESPACE} -o jsonpath='{.status.deployedRevision}{","}{.spec.revision}'))
+    status=($(kubectl get gitlabs.${CI_ENVIRONMENT_SLUG}.gitlab.com "${CI_ENVIRONMENT_SLUG}-operator" -n ${HELM_NAMESPACE} -o jsonpath='{.status.deployedRevision}{","}{.spec.revision}'))
     unset IFS
     observedRevision=${status[0]}
     revision=${status[1]}
@@ -200,7 +200,7 @@ function restart_task_runner() {
   # this ensure we run up-to-date on tags like `master` when there
   # have been no changes to the configuration to warrant a restart
   # via metadata checksum annotations
-  kubectl -n ${KUBE_NAMESPACE} delete pods -lapp=task-runner,release=${CI_ENVIRONMENT_SLUG}
+  kubectl -n ${HELM_NAMESPACE} delete pods -lapp=task-runner,release=${CI_ENVIRONMENT_SLUG}
   # always "succeed" so not to block.
   return 0
 }
@@ -230,7 +230,7 @@ function download_chart() {
 }
 
 function ensure_namespace() {
-  kubectl describe namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
+  kubectl describe namespace "$HELM_NAMESPACE" || kubectl create namespace "$HELM_NAMESPACE"
 }
 
 function check_kube_domain() {
@@ -285,7 +285,7 @@ function install_external_dns() {
 
     helm install bitnami/external-dns \
       -n "${release_name}" \
-      --namespace "${NAMESPACE}" \
+      --namespace "${HELM_NAMESPACE}" \
       --set provider="${provider}" \
       --set domainFilters[0]="${domain_filter}" \
       --set txtOwnerId="${NAMESPACE}" \
@@ -296,13 +296,13 @@ function install_external_dns() {
 }
 
 function create_secret() {
-  kubectl create secret -n "$KUBE_NAMESPACE" \
+  kubectl create secret -n "$HELM_NAMESPACE" \
     docker-registry gitlab-registry-docker \
     --docker-server="$CI_REGISTRY" \
     --docker-username="$CI_REGISTRY_USER" \
     --docker-password="$CI_REGISTRY_PASSWORD" \
     --docker-email="$GITLAB_USER_EMAIL" \
-    -o yaml --dry-run | kubectl replace -n "$KUBE_NAMESPACE" --force -f -
+    -o yaml --dry-run | kubectl replace -n "$HELM_NAMESPACE" --force -f -
 }
 
 function delete() {
@@ -321,9 +321,9 @@ function cleanup() {
     gitlabs=',gitlabs'
   fi
 
-  kubectl -n "$KUBE_NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,job,pod,secret,configmap,pvc,secret,clusterrole,clusterrolebinding,role,rolebinding,sa,crd${gitlabs} 2>&1 \
+  kubectl -n "$HELM_NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,job,pod,secret,configmap,pvc,secret,clusterrole,clusterrolebinding,role,rolebinding,sa,crd${gitlabs} 2>&1 \
     | grep "$CI_ENVIRONMENT_SLUG" \
     | awk '{print $1}' \
-    | xargs kubectl -n "$KUBE_NAMESPACE" delete \
+    | xargs kubectl -n "$HELM_NAMESPACE" delete \
     || true
 }
