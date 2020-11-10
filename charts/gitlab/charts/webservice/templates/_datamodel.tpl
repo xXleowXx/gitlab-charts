@@ -89,7 +89,7 @@ workerProcesses: {{ .Values.workerProcesses | int }}
 shutdown:
   {{- .Values.shutdown | toYaml | nindent 2 }}
 nodeSelector: # map
-  {{- .Values.nodeSelector | toYaml | indent 2 -}}
+  {{- .Values.nodeSelector | toYaml | indent 2 }}
 tolerations: # array
-  {{- .Values.tolerations | toYaml | indent 2 -}}
+  {{- .Values.tolerations | toYaml | indent 2 }}
 {{- end -}}
