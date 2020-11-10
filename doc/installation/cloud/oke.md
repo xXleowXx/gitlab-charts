@@ -53,12 +53,12 @@
 
 8.  Update your DNS records to point to the IP address displayed from the above command.
     - The runner pod requires the DNS to be configured so this pod will enter a CrashLoopBackOff until DNS is configured. You will not be able to proceed without this piece running.
-    - Navigating to the webpage will result in a: “default backend - 404” error.<br><br>
+    - Navigating to the Gitlab webpage will result in a: `“default backend - 404” error.`<br><br>
 
 9. After the DNS zone record has been created, use the following command to get the base64 root password, which you need to connect in the dashboard
     
       `kubectl get secret &lt;name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo`
-    - Copy the output to enter into the Gitlab configuration screen later.
+    - Copy the output to enter into the Gitlab configuration screen later. <br><br>
 
 10. Ensure all pods are running before proceeding by running:
       
@@ -131,10 +131,8 @@ We will now do a basic configuration of Gitlab to include setting up some users,
 
         - You should receive the following output:
 
-                ```
                     serviceaccount "gitlab-admin" created
                     clusterrolebinding "gitlab-admin" created
-                ```
 
 
     - Retrieve the token for the gitlab-admin service account:
@@ -163,7 +161,7 @@ We will now do a basic configuration of Gitlab to include setting up some users,
         - Cert-Manager
         - Prometheus<br><br>
 - Upload Gitlab License Key
-    - [https://gitlabtest.onsg.us/admin/license](https://gitlabtest.onsg.us/admin/license)
+    - https://*YOUR-GITLAB-FQDN*/admin/license
     - Note you will need Gitlab Ultimate to have the security scans working.<br><br>
 - Run your CI pipeline
     - Navigate to your project -> **CI/CD**
