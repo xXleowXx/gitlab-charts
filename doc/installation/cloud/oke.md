@@ -15,7 +15,8 @@
    - Follow this Quickstart Guide:
    - [https://docs.cloud.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm](https://docs.cloud.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm)
    - Ensure to upload your public API key
-      - Typically found in /Users/&lt;username>/.oci/oci_api_key_public.pem <br><br>
+      - Default location:  
+          `/Users/<username>/.oci/oci_api_key_public.pem` <br><br>
 
 3. Return to OKE and navigate to the cluster page.
    - Click on **Access Cluster** at the top of the page
@@ -66,8 +67,8 @@
 11. Login to Gitlab
     - Within a Web Browser navigate to the DNS address of the Gitlab Instance (configured above)
     - Enter the follow credentials:
-        - Username=root
-        - Password that was copied from above command. (base64 string)<br><br>
+        - Username= `root`
+        - Password= Password that was copied from above command. (base64 string)<br><br>
 
 12. You will be forced to update the root password.
     - Please record this for future reference.
@@ -98,7 +99,7 @@ We will now do a basic configuration of Gitlab to include setting up some users,
         `kubectl get secrets`
 
         - One of the secrets listed should be named similar to default-token-xxxxx. Copy that token name and use it in the following command. 
-          - Example: default-token-l5x6k <br><br>
+          - Example: `default-token-l5x6k` <br><br>
 
     - Token: GitLab authenticates against Kubernetes by using service tokens, which are scoped to a particular namespace. The token used should belong to a service account with cluster-admin privileges. Follow these steps to create this service account:
         - Create a file called gitlab-admin-service-account.yaml on your local machine with the following contents:
@@ -126,11 +127,14 @@ We will now do a basic configuration of Gitlab to include setting up some users,
 
 
     - Run the following command to apply the service account and cluster role binding to your cluster:
-        9. kubectl apply -f gitlab-admin-service-account.yaml
-        10. You should receive the following output:
+        `kubectl apply -f gitlab-admin-service-account.yaml`
 
-                serviceaccount "gitlab-admin" created
-                clusterrolebinding "gitlab-admin" created
+        - You should receive the following output:
+
+                ```
+                    serviceaccount "gitlab-admin" created
+                    clusterrolebinding "gitlab-admin" created
+                ```
 
 
     - Retrieve the token for the gitlab-admin service account:
