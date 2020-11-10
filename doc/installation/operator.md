@@ -30,7 +30,7 @@ kubectl apply -f https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_CHART_
 
 NOTE: **Note:**
 This needs to done only for the first time before installing the Operator or _when the CRD is changed_.
-Further upgrades will follow the normal [upgrade procedures](./upgrade.md).
+Further upgrades will follow the normal [upgrade procedures](upgrade.md).
 
 ### Enabling the Operator
 
