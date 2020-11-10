@@ -58,9 +58,10 @@ data:
     [[virtual_storage]]
     name = '{{ $storage.name }}'
     {{- range until (.gitalyReplicas | int) }}
+    {{- $url := include "gitlab.gitaly.qualifiedServiceName" (dict "index" . "context" $) }}
     [[virtual_storage.node]]
     storage = '{{ printf "%s-%d" $serviceName . }}'
-    address = '{{ printf "%s-%d.%s:%g" $serviceName . $serviceName $port }}'
+    address = '{{ printf "%s:%g" $url $port }}'
     token = "<%= gitaly_token %>"
     {{- end }}
     {{ end }}
