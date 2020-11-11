@@ -34,7 +34,7 @@ Order of operations:
 Call:
 
 ```
-name: {{ include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }}
+{{- include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) -}}
 ```
 */}}
 {{- define "gitlab.gitaly.serviceName" -}}
@@ -49,7 +49,7 @@ Return a qualified gitaly service name, for direct access to the gitaly headless
 Call:
 
 ```
-{{- include "gitlab.gitaly.qualifiedServiceName" (dict "context" . "index" $i "name" .name)-}}
+{{- include "gitlab.gitaly.qualifiedServiceName" (dict "context" . "index" $i "name" .name) -}}
 ```
 */}}
 {{- define "gitlab.gitaly.qualifiedServiceName" -}}
