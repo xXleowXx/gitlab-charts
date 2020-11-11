@@ -1,5 +1,9 @@
 {{- if .Values.global.gitaly.enabled -}}
-{{- range default ((dict "name" "default") | list) .Values.global.praefect.virtualStorages }}
+{{- $storages := (dict "name" "default") | list -}}
+{{- if .Values.global.praefect.enabled -}}
+{{-   $storages = .Values.global.praefect.virtualStorages -}}
+{{- end -}}
+{{ range $storages }}
 apiVersion: v1
 kind: Service
 metadata:
