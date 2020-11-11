@@ -100,3 +100,24 @@ If your backups are being run as part of the included backup cron job, then you 
 ```
 
 For other providers, you may need to create a persistent volume. See our [Storage documentation](../installation/storage.md) for possible examples on how to do this.
+
+### "Bucket not found" errors
+
+If you see `Bucket not found` errors during backups, check the
+credentials are configured for your bucket.
+
+The command depends on the cloud service provider:
+
+- For AWS S3, the credentials are stored on the task runner pod in `~/.s3cfg`. Run:
+
+  ```shell
+  s3cmd ls
+  ```
+
+- For GCP GCS, run:
+
+  ```shell
+  gsutil ls
+  ```
+
+You should see a list of available buckets.
