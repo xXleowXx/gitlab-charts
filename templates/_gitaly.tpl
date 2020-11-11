@@ -38,7 +38,9 @@ name: {{ include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }}
 ```
 */}}
 {{- define "gitlab.gitaly.serviceName" -}}
-{{- coalesce .context.Values.serviceName .context.Values.global.gitaly.serviceName (printf "%s-gitaly-%s" .context.Release.Name .name) -}}
+{{- $baseName := coalesce .context.Values.serviceName .context.Values.global.gitaly.serviceName (include "gitlab.other.fullname" (dict "context" .context "chartName" "gitaly" )) -}}
+{{- $suffix := default "default" .name -}}
+{{ printf "%s-%s" $baseName $suffix }}
 {{- end -}}
 
 {{/*
@@ -47,11 +49,10 @@ Return a qualified gitaly service name, for direct access to the gitaly headless
 Call:
 
 ```
-{{- include "gitlab.gitaly.qualifiedServiceName" (dict "context" . "index" $i)-}}
+{{- include "gitlab.gitaly.qualifiedServiceName" (dict "context" . "index" $i "name" .name)-}}
 ```
 */}}
 {{- define "gitlab.gitaly.qualifiedServiceName" -}}
-{{- $storageName := default (.context.Values.global.gitaly.internal.names | first) .context.name -}}
-{{- $name := include "gitlab.gitaly.serviceName" (dict "context" .context "name" $storageName) -}}
+{{- $name := include "gitlab.gitaly.serviceName" (dict "context" .context "name" .name) -}}
 {{ printf "%s-%d.%s" $name .index $name }}
 {{- end -}}

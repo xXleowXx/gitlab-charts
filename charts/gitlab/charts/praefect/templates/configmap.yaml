@@ -52,16 +52,18 @@ data:
     {{- end }}
     {{- end }}
 
-    {{ range $_, $storage := $.Values.global.praefect.virtualStorages }}
-    {{- $serviceName := include "gitlab.gitaly.serviceName" (dict "context" $ "name" $storage.name) }}
+    {{- $context := $ }}
+    {{ range $.Values.global.praefect.virtualStorages }}
+    {{- $storageName := .name }}
     {{- $port := $.Values.global.gitaly.service.externalPort }}
     [[virtual_storage]]
-    name = '{{ $storage.name }}'
+    name = '{{ $storageName }}'
     {{- range until (.gitalyReplicas | int) }}
-    {{- $url := include "gitlab.gitaly.qualifiedServiceName" (dict "index" . "context" $) }}
     [[virtual_storage.node]]
-    storage = '{{ printf "%s-%d" $serviceName . }}'
-    address = '{{ printf "%s:%g" $url $port }}'
+    {{- $podName := include "gitlab.gitaly.serviceName" (dict "context" $context "name" $storageName) -}}
+    {{- $podAddress := include "gitlab.gitaly.qualifiedServiceName" (dict "context" $context "index" . "name" $storageName) }}
+    storage = '{{ $podName }}-{{ . }}'
+    address = '{{ printf "tcp://%s.%s:%g" $podAddress $context.Release.Name $port }}'
     token = "<%= gitaly_token %>"
     {{- end }}
     {{ end }}
