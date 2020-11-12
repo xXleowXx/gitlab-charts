@@ -53,7 +53,7 @@
 
       `kubectl get ingress -lrelease=gitlab`
 
-2. Update your DNS records to point to the IP address displayed from the above command.
+1. Update your DNS records to point to the IP address displayed from the above command.
     - The runner pod requires the DNS to be configured so this pod will enter a CrashLoopBackOff until DNS is configured. You will not be able to proceed without this piece running.
     - Navigating to the GitLab webpage will result in a: `“default backend - 404” error.`<br><br>
 
@@ -136,12 +136,12 @@ We will now do a basic configuration of GitLab to include setting up some users,
                 clusterrolebinding "gitlab-admin" created
             ```
 
-    - Retrieve the token for the "gitlab-admin" service account:
+    - Retrieve the token for the **gitlab-admin** service account:
 
         `kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep gitlab-admin | awk '{print $1}')`
         - Record this for later<br><br>
 
-- Add the Kubernetes Cluster in GitLab.
+1. Add the Kubernetes Cluster in GitLab.
     - From your project navigate to **Operations -> Kubernetes -> Connect existing cluster**
     - From here enter in the recorded information
         - Kubernetes cluster name
@@ -151,21 +151,20 @@ We will now do a basic configuration of GitLab to include setting up some users,
         - CA Certificate
             - Previously recorded
         - Service Token
-            - Previously recorded<br><br>
-
-   - Click **Add Kubernetes cluster** when finished
-- Install Applications within the GitLab connected Kubernetes cluster
+            - Previously recorded
+    - Click **Add Kubernetes cluster** when finished<br><br>
+1. Install Applications within the GitLab connected Kubernetes cluster
     - From your project navigate to **Operations -> Kubernetes ->Click on the newly created cluster -> Applications**
     - Install the following components:
         - Ingress - Disable WAF
             - Endpoint should be the IP address
         - Cert-Manager
         - Prometheus<br><br>
-- Upload GitLab License Key
+1. Upload GitLab License Key
     - "https://*YOUR-GITLAB-FQDN*/admin/license"
     - Note you will need GitLab Ultimate to have the security scans working.<br><br>
-- Run your CI pipeline
+1. Run your CI pipeline
     - Navigate to your project -> **CI/CD**
     - Click on **Run Pipeline**
     - You should have successfully completed a pipeline<br><br>
-- Success!
+1. Success!
