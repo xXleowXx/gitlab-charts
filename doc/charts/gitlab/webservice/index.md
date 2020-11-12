@@ -228,7 +228,8 @@ for common configuration options, such as GitLab and Registry hostnames.
 ## Deployments settings
 
 This chart has the ability to deploy more than one Deployment (and related resources)
-in order to allow multiple sets of Pods to handle different divisions of traffic.
+in order to allow multiple sets of Pods to handle different divisions of traffic using
+path based routing.
 
 The keys of this Map (`default` in this example) are the "name" for each. `default`
 will have a Deployment, Service, HorizontalPodAutoscaler, PodDisruptionBudget, and
