@@ -161,7 +161,7 @@ We will now do a basic configuration of GitLab to include setting up some users,
         - Cert-Manager
         - Prometheus<br><br>
 1. Upload GitLab License Key
-    - Navigate to the licence page: `https://*YOUR-GITLAB-FQDN*/admin/license`
+    - Navigate to the license page: `https://*YOUR-GITLAB-FQDN*/admin/license`
     - Note you will need GitLab Ultimate to have the security scans working.<br><br>
 1. Run your CI pipeline
     - Navigate to your project -> **CI/CD**
