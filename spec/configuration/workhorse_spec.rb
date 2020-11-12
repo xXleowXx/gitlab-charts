@@ -19,7 +19,7 @@ describe 'Workhorse configuration' do
     # env var. This is set on webserver and workhorse retrives the setting
     # from internal API. Also note that the value is irrevelent as the rails
     # code only checks for the existance of the variable not the value.
-    containers = t.dig('Deployment/test-webservice', 'spec', 'template', 'spec', 'containers')
+    containers = t.dig('Deployment/test-webservice-default', 'spec', 'template', 'spec', 'containers')
     found = false
     containers.each do |c|
       if c['name'] == 'webservice'
