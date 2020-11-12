@@ -25,7 +25,7 @@
    - Ensure correct versions are installed and update using brew (on Mac) if necessary.<br><br>
 
 1. Ensure the requirements are meet by checking here:
-   - [https://docs.gitlab.com/charts/quickstart/index.html#requirements](../quickstart/index.md#requirements)
+   - [https://docs.gitlab.com/charts/quickstart/index.html#requirements](../../quickstart/index.md#requirements)
    - Note: Requirements will change overtime as the Helm chart is updated.<br><br>
 
 1. From your local CLI - Type the following commands:
