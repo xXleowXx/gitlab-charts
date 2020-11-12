@@ -24,7 +24,7 @@
    - Ensure correct versions are installed and update using brew (on Mac) if necessary.<br><br>
 
 4. Ensure the requirements are meet by checking here:
-   - [https://docs.gitlab.com/charts/quickstart/index.html#requirements](https://docs.gitlab.com/charts/quickstart/index.html#requirements)
+   - [https://docs.gitlab.com/charts/quickstart/index.html#requirements](../quickstart/index.md#requirements)
    - Note: Requirements will change overtime as the Helm chart is updated.<br><br>
 
 5. From your local CLI - Type the following commands:
@@ -52,7 +52,7 @@
       `kubectl get ingress -lrelease=gitlab`
 
 8.  Update your DNS records to point to the IP address displayed from the above command.
-    - The runner pod requires the DNS to be configured so this pod will enter a CrashLoopBackOff until DNS is configured. You will not be able to proceed without this piece running.
+    - The runner pod requires the DNS to be configured so this pod will enter a CrashLoopBackOff until DNS is configured.  You will not be able to proceed without this piece running.
     - Navigating to the Gitlab webpage will result in a: `“default backend - 404” error.`<br><br>
 
 9. After the DNS zone record has been created, use the following command to get the base64 root password, which you need to connect in the dashboard
@@ -102,7 +102,7 @@ We will now do a basic configuration of Gitlab to include setting up some users,
           - Example: `default-token-l5x6k` <br><br>
 
     - Token: GitLab authenticates against Kubernetes by using service tokens, which are scoped to a particular namespace. The token used should belong to a service account with cluster-admin privileges. Follow these steps to create this service account:
-        - Create a file called gitlab-admin-service-account.yaml on your local machine with the following contents:
+        - Create a file called `gitlab-admin-service-account.yaml` on your local machine with the following contents:
 
             ```
                 apiVersion: v1
