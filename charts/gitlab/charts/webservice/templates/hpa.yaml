@@ -26,10 +26,14 @@ spec:
   minReplicas: {{ .hpa.minReplicas }}
   maxReplicas: {{ .hpa.maxReplicas }}
   metrics:
+  {{- if not .hpa.customMetrics }}
   - type: Resource
     resource:
       name: cpu
       targetAverageValue: {{ .hpa.targetAverageValue }}
+  {{- else }}
+    {{- toYaml .hpa.customMetrics | nindent 4 -}}
+  {{- end }}
 {{- end }}
 {{/* END range deployments */}}
 {{- end }}

@@ -71,7 +71,6 @@ service:
 hpa:
   minReplicas: {{ .Values.minReplicas }} # defaults to .minReplicas
   maxReplicas: {{ .Values.minReplicas }} # defaults to .maxReplicas
-  metrics: # optional replacement of HPA metrics definition
   {{- .Values.hpa | toYaml | nindent 2 }}
 pdb:
   maxUnavailable: {{ .Values.maxUnavailable }} # defaults to .maxUnavailable
