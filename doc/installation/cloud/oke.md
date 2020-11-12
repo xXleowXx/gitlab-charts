@@ -52,7 +52,7 @@
       `kubectl get ingress -lrelease=gitlab`
 
 8.  Update your DNS records to point to the IP address displayed from the above command.
-    - The runner pod requires the DNS to be configured so this pod will enter a CrashLoopBackOff until DNS is configured.  You will not be able to proceed without this piece running.
+    - The runner pod requires the DNS to be configured so this pod will enter a CrashLoopBackOff until DNS is configured. You will not be able to proceed without this piece running.
     - Navigating to the Gitlab webpage will result in a: `“default backend - 404” error.`<br><br>
 
 9. After the DNS zone record has been created, use the following command to get the base64 root password, which you need to connect in the dashboard
@@ -88,7 +88,7 @@ We will now do a basic configuration of Gitlab to include setting up some users,
     - Enable AutoDevOps on your project
         - In the project Navigate to **Settings -> CI/CD -> Auto DevOps** and enable **Default to Auto DevOps pipeline** <br><br>
 
-3. Setup project level Kubernetes with existing Gitlab.  You will need several pieces configuration details. Obtain the necessary information:
+3. Setup project level Kubernetes with existing Gitlab. You will need several pieces configuration details. Obtain the necessary information:
     - Get the API URL by running this command:
 
         `kubectl cluster-info | grep 'Kubernetes master' | awk '/http/ {print $NF}'`
