@@ -136,7 +136,7 @@ We will now do a basic configuration of GitLab to include setting up some users,
                 clusterrolebinding "gitlab-admin" created
             ```
 
-    - Retrieve the token for the **gitlab-admin** service account:
+    - Retrieve the token for the `gitlab-admin` service account:
 
         `kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep gitlab-admin | awk '{print $1}')`
         - Record this for later<br><br>
@@ -161,7 +161,7 @@ We will now do a basic configuration of GitLab to include setting up some users,
         - Cert-Manager
         - Prometheus<br><br>
 1. Upload GitLab License Key
-    - "https://*YOUR-GITLAB-FQDN*/admin/license"
+    - Navigate to the licence page: `https://*YOUR-GITLAB-FQDN*/admin/license`
     - Note you will need GitLab Ultimate to have the security scans working.<br><br>
 1. Run your CI pipeline
     - Navigate to your project -> **CI/CD**
