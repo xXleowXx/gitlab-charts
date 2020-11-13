@@ -10,7 +10,6 @@ The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/
 
 ## Known Limitations
 
-1. Only a managed, `default` [virtual storage](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2307) is supported.
 1. [TLS is not supported](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2306).
 1. The database has to be [manually created](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2310).
 1. [Migrating from an existing Gitaly setup](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2311) to Praefect is not supported.
