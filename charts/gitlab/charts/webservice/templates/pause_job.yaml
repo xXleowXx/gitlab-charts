@@ -80,7 +80,6 @@ spec:
           - "-c"
           - |
           {{- include "webservice.datamodel.prepare" $ -}}
-          {{- $_ := set . "Values" $.Values -}}
           {{- range $.Values.deployments }}
             /usr/local/bin/kubectl -n {{ $.Release.Namespace }} rollout pause deployment {{ include "webservice.fullname.suffix" . }} || true ;
           {{- end }}

@@ -21,12 +21,12 @@ item, ensuring presence of all keys.
 {{/* walk all entries, ensure default properties populated */}}
 {{- $checks := dict "hasBasePath" false -}}
 {{- range $deployment, $values := $.Values.deployments -}}
-{{-   $blank := fromYaml (include "webservice.datamodel.blank" $) -}}
-{{-   $filledValues := merge $values $blank -}}
+{{-   $filledValues := fromYaml (include "webservice.datamodel.blank" $) -}}
+{{    $_ := include "gitlab.merge.overwriteEmpty" (dict "dst" $filledValues "src" $values) -}}
 {{-   $_ := set $filledValues "name" $deployment -}}
 {{-   $_ := set $filledValues "fullname" $fullname -}}
 {{-   $_ := set $.Values.deployments $deployment $filledValues -}}
-{{-   if eq ($values.ingress.path | toString ) "/" -}}
+{{-   if eq ($filledValues.ingress.path | toString ) "/" -}}
 {{-     $_ := set $checks "hasBasePath" true -}}
 {{-   end -}}
 {{- end -}}
@@ -36,7 +36,7 @@ item, ensuring presence of all keys.
 {{- end -}}
 
 {{/*
-webservice.datamodel.prepare
+webservice.datamodel.blank
 
 !! To be run against $
 
@@ -91,4 +91,33 @@ nodeSelector: # map
   {{- .Values.nodeSelector | toYaml | indent 2 }}
 tolerations: # array
   {{- .Values.tolerations | toYaml | indent 2 }}
+{{- end -}}
+
+{{/*
+gitlab.merge.overwriteEmpty
+
+Call: include "gitlab.merge.overwriteEmpty" (dict "dst" .model "src" .values)
+Input: (dict "dst" (&dict) "src" (&dict))
+
+Operate on two dictionary, performing effectively "merge", but always
+take the value of src if present, even if empty.
+
+- `dst` should be a complete model map
+- `src` should have keys on which to overwrite
+
+Intended to be recursion capable
+*/}}
+{{- define "gitlab.merge.overwriteEmpty" -}}
+{{- if kindIs "map" $.dst -}}
+{{-   range $k, $v := .dst -}}
+{{-     if hasKey $.src $k -}}
+{{-       if and (kindIs "map" $v) (kindIs "map" (index $.src $k)) -}}
+{{-         include "gitlab.merge.overwriteEmpty" (dict "dst" $v "src" (index $.src $k)) -}}
+{{-       else -}}
+{{-         $_ := set $.dst $k (index $.src $k) -}}
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{- else -}}
+{{- end -}}
 {{- end -}}
