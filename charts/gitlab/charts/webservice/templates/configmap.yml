@@ -7,6 +7,11 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
 data:
+  # DEBUG to show generated map
+  {{- include "webservice.datamodel.prepare" $ -}}
+  # REMOVE BEFORE MERGE
+  deployments: |
+    {{- toYaml .Values.deployments | nindent 4 }}
   installation_type: |
     gitlab-helm-chart
   database.yml.erb: |
