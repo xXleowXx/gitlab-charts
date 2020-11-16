@@ -260,8 +260,8 @@ deployments:
       annotations: # additional annotations to .service.annotations
         # inherits `service.annotations`
     hpa:
-      minReplicas: {{ .Values.minReplicas }} # defaults to .minReplicas
-      maxReplicas: {{ .Values.minReplicas }} # defaults to .maxReplicas
+      minReplicas: # defaults to .minReplicas
+      maxReplicas: # defaults to .maxReplicas
       metrics: # optional replacement of HPA metrics definition
       # inherits `hpa`
     pdb:
