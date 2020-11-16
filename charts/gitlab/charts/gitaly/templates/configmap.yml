@@ -51,7 +51,7 @@ data:
     name = "<%= @hostname %>"
     path = "/home/git/repositories"
     <% else %>
-    <% raise Exception, "Storage for node #{@hostname} is not present in the storageNames array. Did you use kubectl to scale up ? You need to solely use helm for this purpose" %>
+    <% raise Exception, "Storage for node #{@hostname} is not present in the storageNames array. Did you use kubectl to scale up? You need to solely use helm for this purpose." %>
     <% end %>
 
     {{- else }}
@@ -62,7 +62,7 @@ data:
     name = "<%= @storages[@index] %>"
     path = "/home/git/repositories"
     <% else %>
-    <% raise Exception, "Storage for node #{@index} is not present in the storageNames array. Did you use kubectl to scale up ? You need to solely use helm for this purpose" %>
+    <% raise Exception, "Storage for node #{@index} is not present in the storageNames array. Did you use kubectl to scale up? You need to solely use helm for this purpose." %>
     <% end %>
 
     {{- end }}
