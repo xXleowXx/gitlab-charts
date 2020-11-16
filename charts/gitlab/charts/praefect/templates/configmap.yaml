@@ -63,7 +63,7 @@ data:
     {{- $podName := include "gitlab.gitaly.serviceName" (dict "context" $globalContext "name" $storageName) -}}
     {{- $podAddress := include "gitlab.gitaly.qualifiedServiceName" (dict "context" $globalContext "index" . "name" $storageName) }}
     storage = '{{ $podName }}-{{ . }}'
-    address = '{{ printf "tcp://%s.%s:%g" $podAddress $globalContext.Release.Name $port }}'
+    address = '{{ printf "tcp://%s.%s:%g" $podAddress $globalContext.Release.Namespace $port }}'
     token = "<%= gitaly_token %>"
     {{- end }}
     {{ end }}
