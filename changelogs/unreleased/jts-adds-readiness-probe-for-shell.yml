@@ -1,0 +1,5 @@
+---
+title: Adds readiness probe for gitlab-shell
+merge_request: 1649
+author:
+type: added
