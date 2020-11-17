@@ -10,6 +10,17 @@ Return the minio service endpoint
 {{- end -}}
 
 {{/*
+Return the minio public endpoint
+*/}}
+{{- define "gitlab.minio.publicEndpoint" -}}
+{{-   if or .Values.global.hosts.https .Values.global.hosts.minio.https -}}
+{{-     printf "https://%s" (include "gitlab.minio.hostname" .) -}}
+{{-   else -}}
+{{-     printf "http://%s" (include "gitlab.minio.hostname" .) -}}
+{{-   end -}}
+{{- end -}}
+
+{{/*
 Minio has it's own secret mounting procedure, so it receives more special attention compared to normal objectStorage secret mounting.
 */}}
 {{- define "gitlab.minio.mountSecrets" -}}

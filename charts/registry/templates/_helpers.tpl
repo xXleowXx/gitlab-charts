@@ -49,11 +49,7 @@ hostname part of the url.
 */}}
 {{- define "registry.minio.url" -}}
 {{- if .Values.minio.redirect -}}
-  {{- if or .Values.global.hosts.https .Values.global.hosts.minio.https -}}
-  {{-   printf "https://%s" (include "gitlab.minio.hostname" .) -}}
-  {{- else -}}
-  {{-   printf "http://%s" (include "gitlab.minio.hostname" .) -}}
-  {{- end -}}
+  {{- include "gitlab.minio.publicEndpoint" . -}}
 {{- else -}}
   {{- include "gitlab.minio.endpoint" . -}}
 {{- end -}}

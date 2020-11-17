@@ -49,7 +49,7 @@ connection:
   provider: AWS
   region: us-east-1
   host: {{ template "gitlab.minio.hostname" .context }}
-  endpoint: {{ template "gitlab.minio.endpoint" .context }}
+  endpoint: {{ template "gitlab.minio.publicEndpoint" .context }}
   path_style: true
   aws_access_key_id: "<%= File.read('/etc/gitlab/minio/accesskey').strip.dump[1..-2] %>"
   aws_secret_access_key: "<%= File.read('/etc/gitlab/minio/secretkey').strip.dump[1..-2] %>"
