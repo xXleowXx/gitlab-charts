@@ -57,7 +57,6 @@ This will create two sets of resources for Gitaly. This includes two Gitaly Stat
 `admin/application_settings/repository` > `Repository storage`, weights can be assigned to each virtual storage. Click the question mark (?) icon in the
 `Storage nodes for new repositories` section for more information.
 
-
 ### Creating the database
 
 Praefect uses its own database to track its state. This has to be manually created in order for Praefect to be functional.
