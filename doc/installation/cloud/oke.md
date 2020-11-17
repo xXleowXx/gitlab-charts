@@ -1,4 +1,4 @@
-# GitLab on Oracle Kubernetes Engine (OKE) - Quick Install and Config Guide
+# Preparing OKE resources
 
 ## Assumptions
 
@@ -6,7 +6,8 @@
 1. Builtin Runner
 1. Domain name and ability to update DNS records
 1. OKE Cluster has access to the internet
-1. Access to OCI and necissary resources to provision OKE Environment.
+1. Access to OCI and necissary resources to provision OKE Environment
+1. Setting the GitLab runner to privlidged mode
 
 ## Install
 
@@ -39,7 +40,6 @@
             helm install gitlab gitlab/gitlab \
             --timeout 600s \
             --set global.hosts.domain=%DOMAIN_NAME% \
-            --set global.hosts.https=true \
             --set global.hosts.gitlab.name=%GITLAB_HOSTNAME%.%DOMAIN_NAME% \
             --set certmanager-issuer.email=%EMAIL_ADDRESS% \
             --set gitlab-runner.runners.privileged=true
