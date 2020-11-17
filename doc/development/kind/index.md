@@ -28,7 +28,13 @@ Most MacOS systems use `en0` as the primary interface. If using a system with a 
 
 ### Using namespaces
 
-It is considered best practice to install applications in namespaces other than `default`. You can create a namespace using `kubectl create namespace (some name)`, and then add on `--namespace (some name)` to future `kubectl` commands. If you don't want to type that repeatedly, check out `kubens` from the [kubectx](https://github.com/ahmetb/kubectx) project.
+It is considered best practice to install applications in namespaces other than `default`. Create a namespace **prior** to running `helm install` with **kubectl**:
+
+```shell
+kubectl create namespace YOUR_NAMESPACE
+```
+
+Add `--namespace YOUR_NAMESPACE` to all future **kubectl** commands to use the namespace. Alternatively, use `kubens` from the [kubectx project](https://github.com/ahmetb/kubectx) to contextually switch into the namespace and skip the extra typing.
 
 ### Installing dependencies
 
@@ -42,7 +48,7 @@ Note that `kind` uses Docker to run local Kubernetes clusters, so be sure to [in
 
 ### Obtaining configuration examples
 
-Clone the GitLab Chart repository for local copies of the configuration example files referenced in the next steps:
+The GitLab Charts repository contains every example referenced in the following steps. Clone the repository or update an existing checkout to get the latest versions:
 
 ```shell
 git clone https://gitlab.com/gitlab-org/charts/gitlab.git
@@ -57,17 +63,18 @@ helm repo add gitlab https://charts.gitlab.io/
 helm repo update
 ```
 
-### Clone the GitLab chart repository
-
-The following instructions use files in the [GitLab Chart repository](https://gitlab.com/gitlab-org/charts/gitlab). Be sure to have it cloned locally and navigate to the repository root in your shell.
-
-### Enter your host domain
-
-With the GitLab chart repository cloned, open `examples/kind/values-base.yaml` and replace `(your host IP)` with the value obtained [above](#required-information) under `global.hosts.domain`.
-
 ## Deployment options
 
 Select from one of the following deployment options based on your needs.
+
+NOTE: **Note:**
+The first full deployment process may take around 10 minutes depending on network and system resources while the Cloud Native GitLab images are downloaded. Confirm GitLab is running with the following command:
+
+```shell
+kubectl --namespace YOUR_NAMESPACE get pods
+```
+
+GitLab is fully deployed when the `webservice` pod shows a `READY` state with `2/2` containers.
 
 ### NGINX Ingress NodePort with SSL
 
@@ -75,7 +82,10 @@ In this method, we will use `kind` to expose the NGINX controller service's Node
 
 ```shell
 kind create cluster --config examples/kind/kind-ssl.yaml
-helm upgrade --install gitlab gitlab/gitlab -f examples/kind/values-base.yaml -f examples/kind/values-ssl.yaml
+helm upgrade --install gitlab gitlab/gitlab \
+  --set global.hosts.domain=(your host IP).nip.io \
+  -f examples/kind/values-base.yaml \
+  -f examples/kind/values-ssl.yaml
 ```
 
 You can then access GitLab at `https://gitlab.(your host IP).nip.io`.
@@ -99,7 +109,10 @@ In this method, we will use `kind` to expose the NGINX controller service's Node
 
 ```shell
 kind create cluster --config examples/kind/kind-no-ssl.yaml
-helm upgrade --install gitlab gitlab/gitlab -f examples/kind/values-base.yaml -f examples/kind/values-no-ssl.yaml
+helm upgrade --install gitlab gitlab/gitlab \
+  --set global.hosts.domain=(your host IP).nip.io \
+  -f examples/kind/values-base.yaml \
+  -f examples/kind/values-no-ssl.yaml
 ```
 
 Access GitLab at `http://gitlab.(your host IP).nip.io`.
