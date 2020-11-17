@@ -642,7 +642,7 @@ global:
     virtualStorages:
     - name: default
       gitalyReplicas: 3
-      maxUnavailable: 2
+      maxUnavailable: 1
     dbSecret: {}
     psql: {}
 ```
