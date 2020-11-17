@@ -136,6 +136,7 @@ global:
     virtualStorages:
       - name: default
         gitalyReplicas: 3
+        maxUnavailable: 1
     psql:
       sslMode: 'disable'
 
