@@ -150,7 +150,7 @@ use the name of the service the upstream chart creates
 */}}
 {{- define "gitlab.psql.host" -}}
 {{- $local := pluck "psql" $.Values | first -}}
-{{- coalesce (pluck "host" $local .Values.global.psql | first) (pluck "serviceName" $local .Values.global.psql | first) (printf "%s-%s" $.Release.Name "postgresql") -}}
+{{- coalesce (pluck "host" $local .Values.global.psql | first) (printf "%s.%s.svc" (include "postgresql.fullname" .) $.Release.Namespace) -}}
 {{- end -}}
 
 {{/*
@@ -171,10 +171,11 @@ Alias of gitlab.psql.initdbscripts
 {{- end -}}
 
 {{/*
-Alias of gitlab.psql.host
+Overrides the full name of PostegreSQL in the upstream chart.
 */}}
 {{- define "postgresql.fullname" -}}
-{{- template "gitlab.psql.host" . -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{- coalesce (pluck "serviceName" $local .Values.global.psql | first) (printf "%s-%s" $.Release.Name "postgresql") -}}
 {{- end -}}
 
 {{/*
