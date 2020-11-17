@@ -2,9 +2,8 @@
 # Disable certmanager.
 # Configure global shell port for correct clone URL in UI.
 global:
-  hosts:
+  # hosts:
     # domain: (your host IP).nip.io
-    domain: 192.168.4.28.nip.io
   ingress:
     configureCertmanager: false
   shell:
@@ -33,3 +32,20 @@ gitlab-runner:
   runners:
     privileged: true
 
+# Disable services that are not likely needed for local testing.
+# Feel free to adjust these lines if services are indeed needed.
+prometheus:
+  install: false
+registry:
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+gitlab:
+  gitlab-shell:
+    minReplicas: 1
+    maxReplicas: 1
+  gitlab-exporter:
+    enabled: false
+  webservice:
+    minReplicas: 1
+    maxReplicas: 1
