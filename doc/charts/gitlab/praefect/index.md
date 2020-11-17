@@ -22,7 +22,41 @@ This chart depends on the resources in the Gitaly chart. By default, it will spi
 
 The chart is disabled by default. To enable it as part of a chart deploy set `global.praefect.enabled=true`.
 
-The default number of replicas to deploy is 3. This can be changed by setting `global.praefect.gitalyReplicas` to the desired number of replicas.
+### Replicas
+
+The default number of replicas to deploy is 3. This can be changed by setting `global.praefect.virtualStorages` with the desired number of replicas. For example:
+
+```yaml
+global:
+  praefect:
+    enabled: true
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 4
+      maxUnavailable: 1
+```
+
+### Virtual storages
+
+Multiple virtual storages can be configured (see [Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) documentation). For example:
+
+```yaml
+global:
+  praefect:
+    enabled: true
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 4
+      maxUnavailable: 1
+    - name: vs2
+      gitalyReplicas: 5
+      maxUnavailable: 2
+```
+
+This will create two sets of resources for Gitaly. This includes two Gitaly StatefulSets (one per virtual storage). In the Admin UI, under
+`admin/application_settings/repository` > `Repository storage`, weights can be assigned to each virtual storage. Click the question mark (?) icon icon in the
+`Storage nodes for new repositories` section for more information.
+
 
 ### Creating the database
 

@@ -625,7 +625,7 @@ Configuring Gitaly to serve via TLS is detailed [in the Gitaly chart's documenta
 
 The global Praefect settings are located under the `global.praefect` key.
 
-Praefect is disabled by default. When enabled with no extra settings, 3 Gitaly replicas will be created, and the Praefect database will be created on the default PostgreSQL instance.
+Praefect is disabled by default. When enabled with no extra settings, 3 Gitaly replicas will be created, and the Praefect database will need to be manually created on the default PostgreSQL instance.
 
 ### Enable Praefect
 
@@ -639,7 +639,10 @@ See the [Praefect documentation](https://docs.gitlab.com/ee/administration/gital
 global:
   praefect:
     enabled: false
-    gitalyReplicas: 3
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 3
+      maxUnavailable: 2
     dbSecret: {}
     psql: {}
 ```
@@ -647,7 +650,7 @@ global:
 | Name            | Type    | Default     | Description                                                        |
 | ----            | ----    | -------     | -----------                                                        |
 | enabled         | Bool    | false       | Whether or not to enable Praefect                                  |
-| gitalyReplicas  | Integer | 3           | The number of Gitaly replicas that should be created               |
+| virtualStorages | List    | See [docs](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#virtual-storages)  | The list of desired virtual storages (each backed by a Gitaly StatefulSet) |
 | dbSecret.secret | String  |             | The name of the secret to use for authenticating with the database |
 | dbSecret.key    | String  |             | The name of the key in `dbSecret.secret` to use                    |
 | psql.host       | String  |             | The hostname of the database server to use (when using an external database) |
