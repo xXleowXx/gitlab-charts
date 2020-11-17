@@ -64,7 +64,7 @@ default:
 Return the number of replicas set for Gitaly statefulset
 */}}
 {{- define "gitlab.gitaly.replicas" -}}
-{{-   if .Values.global.gitaly.host }} 0 {{- else if .Values.global.praefect.enabled }}{{ .Values.global.praefect.gitalyReplicas }}{{- else }} {{ len .Values.global.gitaly.internal.names }} {{- end }}
+{{-   if .Values.global.gitaly.host }}0{{- else }}{{ len .Values.global.gitaly.internal.names }}{{- end }}
 {{- end -}}
 
 
