@@ -54,7 +54,7 @@ global:
 ```
 
 This will create two sets of resources for Gitaly. This includes two Gitaly StatefulSets (one per virtual storage). In the Admin UI, under
-`admin/application_settings/repository` > `Repository storage`, weights can be assigned to each virtual storage. Click the question mark (?) icon icon in the
+`admin/application_settings/repository` > `Repository storage`, weights can be assigned to each virtual storage. Click the question mark (?) icon in the
 `Storage nodes for new repositories` section for more information.
 
 
