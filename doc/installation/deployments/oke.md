@@ -1,4 +1,4 @@
-# Preparing OKE resources
+# Deploying GitLab on OKE
 
 ## Assumptions
 

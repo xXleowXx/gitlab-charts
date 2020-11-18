@@ -48,7 +48,7 @@ choice:
 - [Google Kubernetes Engine](cloud/gke.md)
 - [Amazon EKS](cloud/eks.md)
 - [OpenShift Origin](cloud/openshift.md)
-- [Oracle Kubernetes Engine](cloud/oke.md)
+- Oracle Kubernetes Engine - Documentation to be added.
 - Azure Container Service - Documentation to be added.
 - VMware Tanzu - Documentation to be added.
 - On-Premises solutions - Documentation to be added.
@@ -57,6 +57,8 @@ choice:
 
 With the environment set up and configuration generated, you can now proceed to
 the [deployment of GitLab](deployment.md).
+
+- [Oracle Kubernetes Engine](../deployments/oke.md)
 
 ## Upgrading GitLab
 
