@@ -180,7 +180,7 @@ global:
       #   cron: "19 * * * *"
       ## Remove expired build artifacts
       # expire_build_artifacts_worker:
-      #   cron: "50 * * * *"
+      #   cron: "*/7 * * * *"
       ## Periodically run 'git fsck' on all repositories.
       # repository_check_worker:
       #   cron: "20 * * * *"

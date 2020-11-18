@@ -68,8 +68,6 @@ global:
 | `hostSuffix`           | String  |               | [See Below](#hostsuffix). |
 | `gitlab.https`         | Boolean | `false`       | If `hosts.https` or `gitlab.https` are `true`, the GitLab external URL will use `https://` instead of `http://`. |
 | `gitlab.name`          | String  |               | The hostname for GitLab. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
-| `gitlab.serviceName`   | String  | `webservice`     | The name of the `service` which is operating the GitLab server. The chart will template the hostname of the service (and current `.Release.Name`) to create the proper internal serviceName. |
-| `gitlab.servicePort`   | String  | `workhorse`   | The named port of the `service` where the GitLab server can be reached. |
 | `minio.https`          | Boolean | `false`       | If `hosts.https` or `minio.https` are `true`, the MinIO external URL will use `https://` instead of `http://`. |
 | `minio.name`           | String  |               | The hostname for MinIO. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `minio.serviceName`    | String  | `minio`       | The name of the `service` which is operating the MinIO server. The chart will template the hostname of the service (and current `.Release.Name`) to create the proper internal serviceName. |
@@ -1146,7 +1144,7 @@ omniauth:
 
 | Name                      | Type    | Default     | Description |
 |:------------------------- |:-------:|:----------- |:----------- |
-| `allowBypassTwoFactor`    |         |             | Allows users to login with the specified providers without two factor authentication. Can be set to `true`, `false`, or an array of providers. See [Bypassing two factor authentication](https://docs.gitlab.com/ee/integration/omniauth.html#bypassing-two-factor-authentication). |
+| `allowBypassTwoFactor`    |         |             | Allows users to log in with the specified providers without two factor authentication. Can be set to `true`, `false`, or an array of providers. See [Bypassing two factor authentication](https://docs.gitlab.com/ee/integration/omniauth.html#bypassing-two-factor-authentication). |
 | `allowSingleSignOn`       | Boolean | `false`     | Enable the automatic creation of accounts when signing in with OmniAuth. |
 | `autoLinkLdapUser`        | Boolean | `false`     | Can be used if you have LDAP / ActiveDirectory integration enabled. When enabled, users automatically created through OmniAuth will be linked to their LDAP entry as well. |
 | `autoLinkSamlUser`        | Boolean | `false`     | Can be used if you have SAML integration enabled. When enabled, users automatically created through OmniAuth will be linked to their SAML entry as well. |
@@ -1300,7 +1298,7 @@ global:
       pipeline_schedule_worker:
         cron: "19 * * * *"
       expire_build_artifacts_worker:
-        cron: "50 * * * *"
+        cron: "*/7 * * * *"
 ```
 
 ### Sentry settings

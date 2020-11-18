@@ -10,9 +10,9 @@ Return gitaly host for internal statefulsets
 {{-     printf "%s:\n" $storage -}}
 {{-     printf  "path: /var/opt/gitlab/repo\n" | indent 2 -}}
 {{-     if $.Values.global.gitaly.tls.enabled }}
-{{-       printf "gitaly_address: tls://%s.%s:%d\n" $qualServiceName $.Release.Namespace 8076 -}}
+{{-       printf "gitaly_address: tls://%s.%s.svc:%d\n" $qualServiceName $.Release.Namespace 8076 -}}
 {{-     else }}
-{{-       printf "gitaly_address: tcp://%s.%s:%d\n" $qualServiceName $.Release.Namespace 8075 -}}
+{{-       printf "gitaly_address: tcp://%s.%s.svc:%d\n" $qualServiceName $.Release.Namespace 8075 -}}
 {{-     end -}}
 {{-   end -}}
 {{- end }}

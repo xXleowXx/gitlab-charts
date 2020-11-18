@@ -348,7 +348,8 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `name`         | String  |         | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries. |
 | `queues`       | String / Array |         | [See below](#queues). |
 | `negateQueues` | String / Array |         | [See below](#negatequeues). |
-| `experimentalQueueSelector` | Bool | `false` | Use the [experimental queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector-experimental). Only valid when `cluster` is enabled. |
+| `queueSelector` | Bool | `false` | Use the [queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector). Only valid when `cluster` is enabled. |
+| `experimentalQueueSelector` | Bool | `false` | Deprecated version of `queueSelector`. If either this or `queueSelector` is set, the queue selector will be enabled. Only valid when `cluster` is enabled. |
 | `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. |
 | `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation. |
 | `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.|

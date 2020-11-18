@@ -36,7 +36,7 @@ The service accounts are described in the following table. For each service acco
 - Associated roles and what level of access it has on which resources. Access level is either read-only (R),
   write-only (W), or read-write (RW). Note that group name of resources are omitted.
 - The scope of the roles, which is either the cluster (C) or the namespace (NS). In some instances the scope
-  of the roles can be configured with values (indicated by NS/C)
+  of the roles can be configured with either value (indicated by NS/C)
 
 | Name suffix | Description | Roles | Scope
 | ---         | ---         | ---   | ---
@@ -54,4 +54,4 @@ GitLab chart depends on other charts that they also use RBAC and create their ow
 
 NOTE: **Note:**
 Please keep in mind that for OpenShift deployment you need to assign `anyuid` SCC to `default` and `gitlab-runner`
-service account of your project. For more details see [OpenShift installation](./cloud/openshift.md).
+service account of your project. For more details see [OpenShift installation](cloud/openshift.md).

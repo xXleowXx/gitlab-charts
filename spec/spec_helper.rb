@@ -10,13 +10,25 @@ require 'gitlab_test_helper'
 include Gitlab::TestHelper
 
 Capybara.register_driver :headless_chrome do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: %w(headless disable-gpu no-sandbox disable-dev-shm-usage) }
-  )
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome()
+  options = Selenium::WebDriver::Chrome::Options.new
+
+  # Chrome won't work properly in a Docker container in sandbox mode
+  options.add_argument("no-sandbox")
+
+  # Run headless by default unless CHROME_HEADLESS specified
+  options.add_argument("headless") unless ENV['CHROME_HEADLESS'] =~ /^(false|no|0)$/i
+
+  # Disable /dev/shm use in CI. See https://gitlab.com/gitlab-org/gitlab/issues/4252
+  options.add_argument("disable-dev-shm-usage") if ENV['CI'] || ENV['CI_SERVER']
+
+  # Explicitly set user-data-dir to prevent crashes. See https://gitlab.com/gitlab-org/gitlab-foss/issues/58882#note_179811508
+  options.add_argument("user-data-dir=/tmp/chrome") if ENV['CI'] || ENV['CI_SERVER']
 
   Capybara::Selenium::Driver.new app,
     browser: :chrome,
-    desired_capabilities: capabilities
+    desired_capabilities: capabilities,
+    options: options
 end
 
 # Keep only the screenshots generated from the last failing test suite

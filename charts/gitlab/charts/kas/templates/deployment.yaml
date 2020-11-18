@@ -46,6 +46,8 @@ spec:
           ports:
             - containerPort: {{ .Values.service.internalPort }}
               name: {{ template "name" . }}
+            - containerPort: {{ .Values.service.internalObservabilityPort }}
+              name: {{ template "name" . }}-metrics
           readinessProbe:
             tcpSocket:
               port: {{ .Values.service.internalPort }}
