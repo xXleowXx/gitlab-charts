@@ -11,6 +11,8 @@ data:
   {{- include "webservice.datamodel.prepare" $ -}}
   # REMOVE BEFORE MERGE
   deployments: |
+    blank:
+      {{- include "webservice.datamodel.blank" $ | nindent 6 }}
     {{- toYaml .Values.deployments | nindent 4 }}
   installation_type: |
     gitlab-helm-chart
