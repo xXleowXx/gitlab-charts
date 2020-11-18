@@ -85,6 +85,6 @@ spec:
           {{- end -}}
           {{ range $storages }}
           echo Number of Gitaly replicas for storage {{ .name }} is {{ default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }};
-          kubectl patch statefulset {{include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }} -p '{\"spec\": {\"updateStrategy\": {\"rollingUpdate\": {\"partition\": {{default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}} } } }'"
+          kubectl patch statefulset {{include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }} -p '{\"spec\": {\"updateStrategy\": {\"rollingUpdate\": {\"partition\": {{default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}} } } }';"
           {{- end }}
 {{- end }}
