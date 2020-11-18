@@ -85,6 +85,10 @@ describe 'Webservice Deployments configuration' do
   end
 
   context 'deployments datamodel' do
+    def env_value(name,value)
+      { 'name' => name , 'value' => "#{value}" }
+    end
+
     let(:test_values) do
       YAML.load(%[
       gitlab:
@@ -137,6 +141,13 @@ describe 'Webservice Deployments configuration' do
             ingress:
               annotations:
                 some: "thing"
+            nodeSelector:
+              workload: "webservice"
+            tolerations:
+              - key: "node_label"
+                operator: "Equal"
+                value: "true"
+                effect: "NoSchedule"
             # individual configurations
             deployments:
               a:
@@ -145,6 +156,8 @@ describe 'Webservice Deployments configuration' do
                 deployment:
                   annotations:
                     thing: "one"
+                nodeSelector: # disable nodeSelector
+                tolerations: # disable tolerations
               b:
                 puma:
                   threads:
@@ -152,6 +165,13 @@ describe 'Webservice Deployments configuration' do
                 hpa:
                   minReplicas: 10
                   maxReplicas: 20
+                nodeSelector: # replace nodeSelector
+                  section: "b"
+                tolerations: # specify tolerations
+                  - key: "node_label"
+                    operator: "Equal"
+                    value: "true"
+                    effect: "NoExecute"
               c:
                 puma:
                   threads:
@@ -167,10 +187,6 @@ describe 'Webservice Deployments configuration' do
       end
 
       context 'Puma settings' do
-        def env_value(name,value)
-          { 'name' => name , 'value' => "#{value}" }
-        end
-
         it 'override only those set' do
           env_1 = datamodel.env(item_key('Deployment','a'),'webservice')
           env_2 = datamodel.env(item_key('Deployment','b'),'webservice')
@@ -192,6 +208,29 @@ describe 'Webservice Deployments configuration' do
           expect(env_2).to include(env_value('DISABLE_PUMA_WORKER_KILLER',true))
           expect(env_3).to include(env_value('DISABLE_PUMA_WORKER_KILLER',false))
         end
+      end
+
+      context 'nodeSelector settings' do
+        # deployment(X)/spec/template/spec/nodeSelector
+        it 'removes when nil' do
+          pod_template_spec = datamodel.dig(item_key('Deployment','a'),'spec','template','spec')
+          expect(pod_template_spec['nodeSelector']).to be_falsey
+        end
+
+        it 'overrides when present' do
+          pod_template_spec = datamodel.dig(item_key('Deployment','b'),'spec','template','spec')
+          expect(pod_template_spec['nodeSelector']).to be_truthy
+          expect(pod_template_spec['nodeSelector']).to eql({'section' => 'b'})
+        end
+
+        it 'inherits when not present' do
+          expect(datamodel.exit_code).to eq(0)
+          pod_template_spec = datamodel.dig(item_key('Deployment','c'),'spec','template','spec')
+
+          expect(pod_template_spec['nodeSelector']).to be_truthy
+          expect(pod_template_spec['nodeSelector']).to eql({'workload' => 'webservice'})
+        end
+
       end
     end
   end
