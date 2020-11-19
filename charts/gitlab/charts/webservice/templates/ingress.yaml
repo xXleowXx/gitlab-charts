@@ -6,12 +6,10 @@
 {{/* BEGIN range deployments */}}
 {{- range $.Values.deployments -}}
 {{-   if .ingress.path -}}{{/* SET .ingress.path */}}
-{{-   $_ := set . "Values" $.Values -}}
 {{/*
 From here on:
 - `.` is `.deployments.xyz` value
 - `.name` is the key (xyz)
-- `.Values` is `$.Values`
 */}}
 ---
 apiVersion: extensions/v1beta1

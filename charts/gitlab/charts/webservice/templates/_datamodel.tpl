@@ -22,7 +22,9 @@ item, ensuring presence of all keys.
 {{- $checks := dict "hasBasePath" false -}}
 {{- range $deployment, $values := $.Values.deployments -}}
 {{-   $filledValues := fromYaml (include "webservice.datamodel.blank" $) -}}
-{{    $_ := include "gitlab.merge.overwriteEmpty" (dict "dst" $filledValues "src" $values) -}}
+{{-   $_ := include "gitlab.merge.overwriteEmpty" (dict "dst" $filledValues "src" $values) -}}
+{{/* mergeOverwrite does not support overlaying empty values */}}
+{{/* -   $_ := mergeOverwrite $filledValues $values - */}}
 {{-   $_ := set $filledValues "name" $deployment -}}
 {{-   $_ := set $filledValues "fullname" $fullname -}}
 {{-   $_ := set $.Values.deployments $deployment $filledValues -}}
@@ -54,6 +56,9 @@ ingress:
   proxyBodySize: {{ .Values.ingress.proxyBodySize | quote }}
 deployment:
   annotations:
+    {{- if .Values.deployment.annotations }}
+    {{- toYaml .Values.deployment.annotations | nindent 4 }}
+    {{- end }}
   labels:
   {{- .Values.deployment | toYaml | nindent 2 }}
 pod:
@@ -108,20 +113,31 @@ take the value of src if present, even if empty.
 
 - `dst` should be a complete model map
 - `src` should have keys on which to overwrite
+- A given Map can be emptied by supplying `item: null`, but will otherwise be merged (inherit).
 
-Intended to be recursion capable
+Intended to be recursion capable, implementing deepMerge WithOverwriteWithEmptyValue.
+`mergeOverwrite` uses deepMerge WithOverwrite.
+
+See: https://godoc.org/github.com/imdario/mergo#WithOverwriteWithEmptyValue
 */}}
 {{- define "gitlab.merge.overwriteEmpty" -}}
-{{- if kindIs "map" $.dst -}}
-{{-   range $k, $v := .dst -}}
-{{-     if hasKey $.src $k -}}
-{{-       if and (kindIs "map" $v) (kindIs "map" (index $.src $k)) -}}
-{{-         include "gitlab.merge.overwriteEmpty" (dict "dst" $v "src" (index $.src $k)) -}}
-{{-       else -}}
-{{-         $_ := set $.dst $k (index $.src $k) -}}
-{{-       end -}}
+{{/* Get a unique list of all keys in both maps */}}
+{{- $cache_keys := keys $.src -}}
+{{/* Walk all keys in both maps */}}
+{{- range $key := $cache_keys -}}
+{{/*  If dst and src both have this key, walk */}}
+{{-   if and (hasKey $.dst $key) (hasKey $.src $key) -}}
+{{/*    If both values are maps, go deeper */}}
+{{-     if and (kindIs "map" (index $.src $key)) (kindIs "map" (index $.dst $key)) -}}
+{{-       include "gitlab.merge.overwriteEmpty" (dict "dst" (index $.dst $key) "src" (index $.src $key)) -}}
+{{-     else -}}
+{{/*      If values are not both maps, overwrite with src's value */}}
+{{-       $_ := set $.dst $key (index $.src $key) -}}
 {{-     end -}}
 {{-   end -}}
-{{- else -}}
+{{/*  If dst does not have the key in src, add it to dst */}}
+{{-   if not (hasKey $.dst $key) -}}
+{{-     $_ := set $.dst $key (index $.src $key) -}}
+{{-   end -}}
 {{- end -}}
 {{- end -}}

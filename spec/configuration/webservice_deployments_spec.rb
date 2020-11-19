@@ -217,10 +217,10 @@ describe 'Webservice Deployments configuration' do
           expect(pod_template_spec['nodeSelector']).to be_falsey
         end
 
-        it 'overrides when present' do
+        it 'merges when present' do
           pod_template_spec = datamodel.dig(item_key('Deployment','b'),'spec','template','spec')
           expect(pod_template_spec['nodeSelector']).to be_truthy
-          expect(pod_template_spec['nodeSelector']).to eql({'section' => 'b'})
+          expect(pod_template_spec['nodeSelector']).to eql({'section' => 'b', 'workload' => 'webservice'})
         end
 
         it 'inherits when not present' do
