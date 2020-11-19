@@ -106,3 +106,14 @@ Please keep in mind that Registry uses the external domain name of MinIO service
 encounter an error when using internal domain names, e.g. with custom TLDs for development environment. The common symptom
 is that you can log in to the Registry but you can't push or pull images. This is generally because the Registry container(s)
 can not resolve the MinIO domain name and find the correct endpoint (you can see the errors in container logs).
+
+## Troubleshooting a development environment
+
+Developers may encounter unique issues while working on new chart features.
+[Refer to the troubleshooting guide](troubleshooting.md) for
+information if your **_development_** cluster seems to have strange issues.
+
+NOTE: **Note:**
+The troubleshooting steps outlined in the link above are for development
+clusters only. Do not use these procedures in a production environment or
+data will be lost.
