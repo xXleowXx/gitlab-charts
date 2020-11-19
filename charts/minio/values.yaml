@@ -23,6 +23,9 @@ ingress:
 ## Support for tolerations for pod scheduling
 tolerations: []
 
+## Pod readiness gates
+readinessGates: []
+
 global:
   ingress:
     enabled:

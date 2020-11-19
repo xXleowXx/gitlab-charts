@@ -52,6 +52,7 @@ the `helm install` command using the `--set` flags.
 | `minReplicas`               | `2`            | HPA `maxReplicas`                |
 | `serviceAccount.annotations`| `{}`       | Service account annotations      |
 | `podLabels`                 | `{}`           | Supplemental Pod labels. Not used for selectors. |
+| `readinessGates`            | `[]`           | Pod readiness gates, see https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-readiness-gate |
 | `resources.requests.cpu`    | `75m`                 | GitLab Exporter minimum CPU                    |
 | `resources.requests.memory` | `100M`                | GitLab Exporter minimum memory                 |
 | `service.externalPort`      | `8150`         | External port                    |

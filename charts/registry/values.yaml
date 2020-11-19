@@ -40,6 +40,9 @@ service:
 ## Support for tolerations for pod scheduling
 tolerations: []
 
+## Pod readiness gates
+readinessGates: []
+
 ## Enable/Disable Chart
 enabled: true
 

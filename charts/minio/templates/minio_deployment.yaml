@@ -35,6 +35,10 @@ spec:
 {{ toYaml .Values.podAnnotations | trimSuffix "\n" | indent 8 }}
 {{- end }}
     spec:
+      {{- if .Values.readinessGates }}
+      readinessGates:
+        {{- toYaml .Values.readinessGates | nindent 8}}
+      {{- end }}
       {{- if .Values.tolerations }}
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}

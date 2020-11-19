@@ -25,6 +25,10 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+      {{- if .Values.readinessGates }}
+      readinessGates:
+        {{- toYaml .Values.readinessGates | nindent 8}}
+      {{- end }}
       {{- if .Values.tolerations }}
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}

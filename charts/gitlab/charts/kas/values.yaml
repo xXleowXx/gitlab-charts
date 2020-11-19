@@ -38,6 +38,8 @@ serviceAccount:
   annotations: {}
 # Tolerations for pod scheduling
 tolerations: []
+# Pod readiness gates
+readinessGates: []
 workhorse: {}
   # by default, Workhorse is a part of the Webservice Pods / Service
   # host: '0.0.0.0'
