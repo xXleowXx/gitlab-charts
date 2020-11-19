@@ -58,7 +58,7 @@ choice:
 With the environment set up and configuration generated, you can now proceed to
 the [deployment of GitLab](deployment.md).
 
-- [Oracle Kubernetes Engine](../deployments/oke.md)
+- [Oracle Kubernetes Engine](deployments/oke.md)
 
 ## Upgrading GitLab
 
