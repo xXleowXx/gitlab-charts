@@ -119,7 +119,7 @@ describe 'Webservice Deployments configuration' do
       end
     end
 
-    context 'value inheritance' do
+    context 'value inheritance and merging' do
       let(:test_values) do
         YAML.load(%[
         gitlab:
@@ -157,7 +157,7 @@ describe 'Webservice Deployments configuration' do
                   annotations:
                     thing: "one"
                 nodeSelector: # disable nodeSelector
-                tolerations: # disable tolerations
+                tolerations: null # disable tolerations
               b:
                 puma:
                   threads:
@@ -187,7 +187,7 @@ describe 'Webservice Deployments configuration' do
       end
 
       context 'Puma settings' do
-        it 'override only those set' do
+        it 'override only those set (int, string, bool)' do
           env_1 = datamodel.env(item_key('Deployment','a'),'webservice')
           env_2 = datamodel.env(item_key('Deployment','b'),'webservice')
           env_3 = datamodel.env(item_key('Deployment','c'),'webservice')
@@ -210,7 +210,7 @@ describe 'Webservice Deployments configuration' do
         end
       end
 
-      context 'nodeSelector settings' do
+      context 'nodeSelector settings (map)' do
         # deployment(X)/spec/template/spec/nodeSelector
         it 'removes when nil' do
           pod_template_spec = datamodel.dig(item_key('Deployment','a'),'spec','template','spec')
@@ -230,7 +230,28 @@ describe 'Webservice Deployments configuration' do
           expect(pod_template_spec['nodeSelector']).to be_truthy
           expect(pod_template_spec['nodeSelector']).to eql({'workload' => 'webservice'})
         end
+      end
 
+      context 'toleration settings (array)' do
+        # deployment(X)/spec/template/spec/tolerations
+        it 'removes when nil' do
+          pod_template_spec = datamodel.dig(item_key('Deployment','a'),'spec','template','spec')
+          expect(pod_template_spec['tolerations']).to be_falsey
+        end
+
+        it 'overwrites when present' do
+          pod_template_spec = datamodel.dig(item_key('Deployment','b'),'spec','template','spec')
+          expect(pod_template_spec['tolerations']).to be_truthy
+          expect(pod_template_spec['tolerations'][0]['effect']).to eql("NoExecute")
+        end
+
+        it 'inherits when not present' do
+          expect(datamodel.exit_code).to eq(0)
+          pod_template_spec = datamodel.dig(item_key('Deployment','c'),'spec','template','spec')
+
+          expect(pod_template_spec['tolerations']).to be_truthy
+          expect(pod_template_spec['tolerations'][0]['effect']).to eql("NoSchedule")
+        end
       end
     end
   end
