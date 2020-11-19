@@ -6,6 +6,7 @@ require 'capybara-screenshot/rspec'
 require 'selenium-webdriver'
 require 'rspec/retry'
 require 'gitlab_test_helper'
+require 'rspec-parameterized'
 
 include Gitlab::TestHelper
 
