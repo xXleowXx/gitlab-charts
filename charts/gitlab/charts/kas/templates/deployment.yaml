@@ -39,10 +39,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           {{ template "gitlab.imagePullPolicy" . }}
           args:
-            - "--gitlab-address=http://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}"
-            - "--listen-address=:{{ .Values.service.internalPort }}"
-            - "--listen-websocket=true"
-            - "--authentication-secret-file=/etc/kas/.gitlab_kas_secret"
+            - "--configuration-file=/etc/kas/config.yaml"
           ports:
             - containerPort: {{ .Values.service.internalPort }}
               name: {{ template "name" . }}
@@ -61,16 +58,18 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: init-kas-secrets
+            - name: init-etc-kas
               mountPath: /etc/kas
               readOnly: true
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
       volumes:
       {{- include "gitlab.extraVolumes" . | nindent 6 }}
-      - name: init-kas-secrets
+      - name: init-etc-kas
         projected:
           defaultMode: 0440
           sources:
+            - configMap:
+                name: {{ template "fullname" . }}
             - secret:
                 name: {{ template "gitlab.kas.secret" . }}
                 items:
