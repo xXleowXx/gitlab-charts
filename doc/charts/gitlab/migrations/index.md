@@ -57,7 +57,7 @@ Table below contains all the possible charts configurations that can be supplied
 | `extraInitContainers`       | List of extra init containers to include |                   |
 | `extraContainers`           | List of extra containers to include      |                   |
 | `extraVolumes`              | List of extra volumes to create          |                   |
-| `extraVolumeMounts`         | List of extra volumes mountes to do      |                   |
+| `extraVolumeMounts`         | List of extra volumes mounts to do      |                   |
 | `extraEnv`                  | List of extra environment variables to expose |              |
 | `bootsnap.enabled`          | Enable the Bootsnap cache for Rails      | `true`            |
 
@@ -75,7 +75,7 @@ extraEnv:
   SOME_OTHER_KEY: some_other_value
 ```
 
-When the container is started, you can confirm that the enviornment variables are exposed:
+When the container is started, you can confirm that the environment variables are exposed:
 
 ```shell
 env | grep SOME
