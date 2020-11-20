@@ -17,7 +17,7 @@
    - Follow this Quickstart Guide:
    - [https://docs.cloud.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm](https://docs.cloud.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm)
    - Ensure to upload your public API key
-      - Default location:  
+      - Default location (on Linux a Mac):  
           `/Users/<username>/.oci/oci_api_key_public.pem` <br><br>
 
 1. Return to OKE and navigate to the cluster page.
