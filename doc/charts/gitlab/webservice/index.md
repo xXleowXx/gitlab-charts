@@ -229,12 +229,31 @@ for common configuration options, such as GitLab and Registry hostnames.
 
 | Name                                   | Type    | Default | Description |
 |:-------------------------------------- |:-------:|:------- |:----------- |
-| `ingress.annotations.*annotation-key*` | String  | (empty) | `annotation-key` is a string that will be used with the value as an annotation on every Ingress. For example: `ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. |
+| `ingress.annotations` | Map  |  See [below](#annotations) | These annotations will be used for every Ingress. For example: `ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. |
 | `ingress.enabled`                      | Boolean | `false` | Setting that controls whether to create Ingress objects for services that support them. When `false`, the `global.ingress.enabled` setting value is used. |
 | `ingress.proxyBodySize`                | String  | `512m`  | [See Below](#proxybodysize). |
 | `ingress.tls.enabled`                  | Boolean | `true`  | When set to `false`, you disable TLS for GitLab Webservice. This is mainly useful for cases in which you cannot use TLS termination at Ingress-level, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `ingress.tls.secretName`               | String  | (empty) | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the GitLab URL. When not set, the `global.ingress.tls.secretName` value is used instead. |
 | `ingress.tls.smardcardSecretName`      | String  | (empty) | The name of the Kubernetes TLS SEcret that contains a valid certificate and key for the GitLab smartcard URL if enabled. When not set, the `global.ingress.tls.secretName` value is used instead. |
+
+### annotations
+
+`annotations` is used to set annotations on the Webservice Ingress.
+
+We set one annotation by default: `nginx.ingress.kubernetes.io/service-upstream: "true"`.
+This helps balance traffic to the Webservice pods more evenly by telling NGINX to directly
+contact the Service itself as the upstream. For more information, see the
+[NGINX docs](https://github.com/kubernetes/ingress-nginx/blob/nginx-0.21.0/docs/user-guide/nginx-configuration/annotations.md#service-upstream).
+
+To override this, set:
+
+```yaml
+gitlab:
+  webservice:
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/service-upstream: "false"
+```
 
 ### proxyBodySize
 
