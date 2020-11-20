@@ -7,7 +7,7 @@
 1. Domain name and ability to update DNS records
 1. OKE Cluster has access to the internet
 1. Access to OCI and necessary resources to provision OKE Environment
-1. Setting the GitLab Runner to privlidged mode
+1. Setting the GitLab Runner to privileged mode
 
 ## Install
 
