@@ -58,6 +58,7 @@ the `helm install` command using the `--set` flags.
 | `service.internalPort`      | `8150`         | Internal port                    |
 | `service.type`              | `ClusterIP`    | Service type                     |
 | `tolerations`               | `[]`           | Toleration labels for pod assignment     |
+| `customConfig`              | `{}`           | When given, fully overwrites the `kas` configuration with these values. |
 
 ## Development (how to manual QA)
 
