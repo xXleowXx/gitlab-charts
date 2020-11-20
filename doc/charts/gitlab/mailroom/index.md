@@ -75,7 +75,7 @@ serviceAccount:
 
 | Parameter                            | Description                                      | Default                     |
 |--------------------------------------|--------------------------------------------------|-----------------------------|
-| `enabled`                            | Mailroom enablement flag                         | true                        |
+| `enabled`                            | Mailroom enablement flag                         | `true`                        |
 | `hpa.minReplicas`                    | Minimum number of replicas                       | `1`                         |
 | `hpa.maxReplicas`                    | Maximum number of replicas                       | `2`                         |
 | `hpa.cpu.targetAverageUtilization`   | Target value of the average of the resource metric | `75`                      |
