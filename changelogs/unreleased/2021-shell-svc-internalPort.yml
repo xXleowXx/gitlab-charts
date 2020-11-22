@@ -1,5 +1,0 @@
----
-title: 'GitLab Shell: sshd_config observe internalPort'
-merge_request: 1663
-author:
-type: fixed
