@@ -1,5 +1,0 @@
----
-title: Change KAS service route to be subdomain by default, instead of a fixed path.
-merge_request: 1623
-author:
-type: changed

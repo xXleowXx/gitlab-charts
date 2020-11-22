@@ -2,6 +2,41 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.6.0 (2020-11-22)
+
+### Fixed (2 changes)
+
+- Configures gitlab-kas ingress with its own TLS certificate. !1644
+- GitLab Shell: sshd_config observe internalPort. !1663
+
+### Changed (10 changes)
+
+- Update default service ports for GitLab Kubernetes Agent Server (kas). !1587
+- custom ca: Loosen the mount permissions to 0440. !1605
+- Populate three dots of DNS for internal Services. !1606
+- Change KAS service route to be subdomain by default, instead of a fixed path. !1623
+- Upgraded Ruby bundler gem to 2.1.4. !1624
+- Certificates: update to 20191127-r2 tag. !1625
+- Mark Sidekiq queue selector as no longer experimental. !1631
+- NGINX: reduce controller to 2 replicas by default. !1635
+- Use config file instead of command line arguments for kas. !1655
+- Set default annotation to help balance webservice traffic. !1661
+
+### Added (5 changes)
+
+- Export GitLab Pages settings in Rails pods. !1598
+- Support Sentry for container registry. !1609
+- Adds configurability of terminationGracePeriod for GitLab-Shell. !1610
+- Expose observability port for gitlab-kas. !1646
+- Adds readiness probe for gitlab-shell. !1649
+
+### Other (3 changes)
+
+- Add Image Resizer config defaults. !1595
+- Update resource specifications for Webservice and Sidekiq. !1634
+- Set release_package to run manually. !1641
+
+
 ## 4.5.4 (2020-11-13)
 
 - No changes.
