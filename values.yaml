@@ -480,7 +480,7 @@ global:
     artifactsServer: false
     objectStore:
       enabled: false
-      bucket: 'pages'
+      bucket: gitlab-pages
       connection: {}
         # secret:
         # key:

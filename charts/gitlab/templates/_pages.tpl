@@ -12,7 +12,9 @@ pages:
   secret_file: /etc/gitlab/pages/secret
   external_http: {{ eq $.Values.global.pages.externalHttp true }}
   external_https: {{ eq $.Values.global.pages.externalHttps true }}
+  {{- if $.Values.global.pages.objectStore.connection }}
   {{-   include "gitlab.appConfig.objectStorage.configuration" (dict "name" "pages" "config" $.Values.global.pages.objectStore "context" $ ) | nindent 2 }}
+  {{- end -}}
 {{- end -}}
 
 {{- define "gitlab.pages.mountSecrets" }}

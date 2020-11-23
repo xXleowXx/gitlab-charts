@@ -28,9 +28,7 @@ object_store:
   {{- if and .config.enabled .config.connection }}
   connection: <%= YAML.load_file("/etc/gitlab/objectstorage/{{ .name }}").to_json() %>
   {{- else if .context.Values.global.minio.enabled }}
-  {{- if ne .name "pages" }} {{/* To be removed when we have ability to deploy GitLab Pages using these Charts */}}
   {{-   include "gitlab.appConfig.objectStorage.connection.minio" . | nindent 2 }}
-  {{- end -}}
   {{- end -}}
 {{- end -}}{{/* "gitlab.appConfig.objectStorage.configuration" */}}
 
