@@ -701,7 +701,7 @@ global:
       piwikUrl:
       piwikSiteId:
     object_store:
-      enabled: true
+      enabled: false
       proxy_download: true
       storage_options: {}
       connection: {}
@@ -866,7 +866,7 @@ under the `extra` key below `appConfig`:
 
 ### Consolidated object storage
 
-In addition to the following section that describes how to configured individual settings
+In addition to the following section that describes how to configure individual settings
 for object storage, we've added a consolidated object storage configuration to ease the use
 of shared configuration for these items. Making use of `object_store`, you can configure a
 `connection` once, and it will be used for any and all object storage backed features that
@@ -883,7 +883,7 @@ are not individually configured with a `connection` property.
 
 | Name             | Type    | Default | Description |
 |:---------------- |:-------:|:------- |:----------- |
-| `enabled`        | Boolean | `true`  | Enable the use of consolidated object storage. |
+| `enabled`        | Boolean | `false`  | Enable the use of consolidated object storage. |
 | `proxy_download` | Boolean | `true`  | Enable proxy of all downloads via GitLab, in place of direct downloads from the `bucket`. |
 | `storage_options`| String  | `{}`    | [See below](#storage_options). |
 | `connection`     | String  | `{}`    | [See below](#connection). |
@@ -891,7 +891,7 @@ are not individually configured with a `connection` property.
 The property structure is shared, and all properties here can be overriden by the individual
 items below. The `connection` property structure is identical.
 
-**Notice:** The `bucket` and `enabled` properties are the only properties that must be
+**Notice:** The `bucket`, `enabled`, and `proxy_download` properties are the only properties that must be
 configured on a per-item level (`global.appConfig.artifacts.bucket`, ...) if you wish to
 deviate from the default values.
 
@@ -952,7 +952,7 @@ Example:
   proxy_download: true
   connection:
     secret: gitlab-rails-storage
-    key:connection
+    key: connection
   storage_options:
     server_side_encryption: aws:kms
     server_side_encryption_kms_key_id: arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
