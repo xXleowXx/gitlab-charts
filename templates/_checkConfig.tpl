@@ -28,7 +28,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queues.cluster" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.experimentalQueueSelector" .) -}}
+{{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queueSelector" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.appConfig.maxRequestDurationSeconds" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.gitaly.extern.repos" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.geo.database" .) -}}
@@ -41,6 +41,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := append $messages (include "gitlab.checkConfig.database.externalLoadBalancing" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.serviceDesk" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.sentry" .) -}}
+{{- $messages := append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
 {{- $messages := append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
@@ -110,20 +111,23 @@ sidekiq: cluster
 {{- end -}}
 {{/* END gitlab.checkConfig.sidekiq.queues.cluster */}}
 
-{{/* Check configuration of Sidekiq - cluster must be enabled for experimentalQueueSelector to be valid */}}
-{{- define "gitlab.checkConfig.sidekiq.experimentalQueueSelector" -}}
+{{/* Check configuration of Sidekiq - cluster must be enabled for queueSelector to be valid */}}
+{{/* Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646 */}}
+{{- define "gitlab.checkConfig.sidekiq.queueSelector" -}}
 {{- if .Values.gitlab.sidekiq.pods -}}
 {{-   range $pod := .Values.gitlab.sidekiq.pods -}}
 {{-     $cluster := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.cluster "local" $pod.cluster "default" true) }}
+{{-     $queueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.queueSelector "local" $pod.queueSelector "default" false) }}
 {{-     $experimentalQueueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.experimentalQueueSelector "local" $pod.experimentalQueueSelector "default" false) }}
-{{-     if and $experimentalQueueSelector (not $cluster) }}
-sidekiq: experimentalQueueSelector
-    The pod definition `{{ $pod.name }}` has `experimentalQueueSelector` enabled, but does not have `cluster` enabled. `experimentalQueueSelector` only works when `cluster` is enabled.
+{{-     $selectorField := ternary "queueSelector" "experimentalQueueSelector" (eq $queueSelector "true") -}}
+{{-     if and (or $queueSelector $experimentalQueueSelector) (not $cluster) }}
+sidekiq: queueSelector
+    The pod definition `{{ $pod.name }}` has `{{ $selectorField }}` enabled, but does not have `cluster` enabled. `{{ $selectorField }}` only works when `cluster` is enabled.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.sidekiq.experimentalQueueSelector */}}
+{{/* END gitlab.checkConfig.sidekiq.queueSelector */}}
 
 {{/*
 Ensure a database is configured when using Geo
@@ -344,6 +348,20 @@ sentry:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.sentry */}}
+
+{{/*
+Ensure that registry's sentry has a DSN configured if enabled
+*/}}
+{{- define "gitlab.checkConfig.registry.sentry.dsn" -}}
+{{-   if $.Values.registry.reporting.sentry.enabled }}
+{{-     if not $.Values.registry.reporting.sentry.dsn }}
+registry:
+    When enabling sentry, you must configure at least one DSN.
+    See https://docs.gitlab.com/charts/charts/registry#reporting
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.sentry.dsn */}}
 
 {{/*
 Ensure Registry notifications settings are in global scope

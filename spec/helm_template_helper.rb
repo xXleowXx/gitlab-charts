@@ -22,6 +22,14 @@ class HelmTemplate
     template(values)
   end
 
+  def namespace
+    stdout, stderr, exit_code = Open3.capture3("kubectl config view --minify --output 'jsonpath={..namespace}'")
+
+    return 'default' unless exit_code != 0
+
+    stdout.strip
+  end
+
   def template(values)
     @values  = values
     result = Open3.capture3(self.class.helm_template_call,

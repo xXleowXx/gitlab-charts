@@ -15,9 +15,11 @@ object_store:
   {{- if ne .name "object_store" }}
   remote_directory: {{ .config.bucket }}
   {{- end }}
+  {{- if ne .name "pages" }}
   direct_upload: true
   background_upload: false
   proxy_download: {{ or (not (kindIs "bool" .config.proxy_download)) .config.proxy_download }}
+  {{- end }}
   {{- if and .config.enabled .config.storage_options }}
   storage_options:
     server_side_encryption: {{ .config.storage_options.server_side_encryption }}

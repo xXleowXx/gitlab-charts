@@ -239,6 +239,14 @@ securityContext:
   runAsUser: 1000
   fsGroup: 1000
 
+# Disable reporting by default
+# https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#reporting
+reporting:
+  sentry:
+    enabled: false
+    # dsn:
+    # environment:
+
 # Disable continuous profiling by default
 # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#profiling
 # keyfile is provided via secrets, and serviceversion will be image.tag

@@ -372,7 +372,7 @@ gitlab.{{ $chart }}.psql.pool:
 {{-           end -}}
 {{-         end -}}
 {{-       end -}}
-{{-     end  -}}
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.global.psql.pool */}}

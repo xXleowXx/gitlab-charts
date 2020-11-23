@@ -274,3 +274,19 @@ SAN attributes.
    ```
 
 1. Redeploy the Helm chart by passing the arguments `--set global.gitaly.tls.enabled=true --set global.gitaly.tls.secretName=<secret name>`
+
+### Global server hooks
+
+The Gitaly StatefulSet has support for [Global server hooks](https://docs.gitlab.com/ee/administration/server_hooks.html#create-a-global-server-hook-for-all-repositories). The hook scripts run on the Gitaly pod, and are therefore limited to the tools available in the [Gitaly container](https://gitlab.com/gitlab-org/build/CNG/-/blob/master/gitaly/Dockerfile).
+
+The hooks are populated using [ConfigMaps](https://kubernetes.io/docs/concepts/configuration/configmap/), and can be used by setting the following values as appropriate:
+
+1. `global.gitaly.hooks.preReceive.configmap`
+1. `global.gitaly.hooks.postReceive.configmap`
+1. `global.gitaly.hooks.update.configmap`
+
+To populate the ConfigMap, you can point `kubectl` to a directory of scripts:
+
+```shell
+kubectl create configmap MAP_NAME --from-file /PATH/TO/SCRIPT/DIR
+```

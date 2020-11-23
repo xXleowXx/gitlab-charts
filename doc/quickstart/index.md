@@ -34,7 +34,7 @@ services can be used, but are not covered here.
 ### Getting a Kubernetes cluster
 
 This guide is not intended to cover how to create or obtain a Kubernetes cluster.
-We'll instead refer to Google's own [GKE cluster creation guide](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster).
+We'll instead refer to Google's own [GKE cluster creation guide](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster).
 
 NOTE: **Note:**
 A cluster with a total of 8vCPU and 30GB of RAM, or more is recommended.

@@ -6,12 +6,15 @@ annotations: {}
 global:
   kas:
     enabled: false
+  # hosts:
+    # kas:
+      # name: kas.example.com
   # imagePullPolicy: IfNotPresent
 hpa:
   targetAverageValue: 100m
 image:
   repository: registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/kas
-  tag: "v0.0.6"
+  tag: "v13.6.1"
 ingress:
   annotations: {}
   tls: {}
@@ -24,8 +27,10 @@ resources:
     cpu: 100m
     memory: 100M
 service:
-  externalPort: 5005
-  internalPort: 5005
+  externalPort: 8150
+  internalPort: 8150
+  externalObservabilityPort: 8151
+  internalObservabilityPort: 8151
   type: ClusterIP
 serviceAccount:
   enabled: false
@@ -38,3 +43,5 @@ workhorse: {}
   # host: '0.0.0.0'
   # serviceName: 'webservice'
   # port: 8181
+# overwrites the default kas config
+customConfig: {}

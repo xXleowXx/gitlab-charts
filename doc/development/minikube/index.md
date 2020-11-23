@@ -59,9 +59,9 @@ the GitLab chart. The key configuration items can be found with
 change according to the pieces being tested, and the requirements as listed:
 
 - `--cpus int`: Number of CPUs allocated to the Minikube VM (default `2`).
-  The absolute minimum necessary CPU is `2`. Deploying the _complete_ chart requires `3`.
+  The absolute minimum necessary CPU is `3`. Deploying the _complete_ chart requires `4`.
 - `--memory int`: Amount of RAM allocated to the Minikube VM (default `2048`).
-  The absolute same minimum is `5120` (5 GB). Recommendation is `8192` (8 GB).
+  The absolute same minimum is `6144` (6 GB). Recommendation is `10240` (10 GB).
 - `--disk-size string`: Disk size allocated to the Minikube VM (format: `<number>[<unit>]`,
   where unit = `b`, `k`, `m` or `g`) (default `20g`). See GitLab's
   [storage](https://docs.gitlab.com/ce/install/requirements.html#storage) and
@@ -83,7 +83,7 @@ Once you have all the tools installed and configured, starting at stopping Minik
 can be done with:
 
 ```shell
-minikube start --cpus 3 --memory 8192
+minikube start --cpus 4 --memory 10240
 ```
 
 This command should output something similar to:
@@ -186,7 +186,7 @@ that checkout.
 
 ### Deploying GitLab with recommended settings
 
-When using the recommended 3 CPU and 8 GB of RAM, use
+When using the recommended 4 CPU and 10 GB of RAM, use
 [`values-minikube.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/values-minikube.yaml)
 as a base.
 
@@ -204,7 +204,7 @@ in the [Deployment documentation](../../installation/deployment.md#deploy-using-
 
 ### Deploying GitLab with minimal settings
 
-If using _absolute minimum_ resources, 2 CPU and 4GB of RAM, you must reduce all replicas
+If using _absolute minimum_ resources, 3 CPU and 6GB of RAM, you must reduce all replicas
 and disable unneeded services. See [`values-minikube-minimum.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/values-minikube-minimum.yaml)
 as a reasonable base.
 

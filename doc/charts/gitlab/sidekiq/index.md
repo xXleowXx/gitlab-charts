@@ -66,8 +66,9 @@ to the `helm install` command using the `--set` flags:
 | `psql.password.secret`               | `gitlab-postgres` | psql password secret                     |
 | `psql.port`                          |                   | Set PostgreSQL server port. Takes precedence over `global.psql.port` |
 | `redis.serviceName`                  | `redis`           | Redis service name                       |
-| `resources.requests.cpu`             | `100m`            | Sidekiq minimum needed cpu               |
-| `resources.requests.memory`          | `600M`            | Sidekiq minimum needed memory            |
+| `resources.requests.cpu`             | `900m`            | Sidekiq minimum needed cpu               |
+| `resources.requests.memory`          | `2G`              | Sidekiq minimum needed memory            |
+| `resources.limits.memory`            |                   | Sidekiq maximum allowed memory           |
 | `timeout`                            | `5`               | Sidekiq job timeout                      |
 | `tolerations`                        | `[]`              | Toleration labels for pod assignment     |
 | `memoryKiller.daemonMode`            | `true`            | If `false`, uses the legacy memory killer mode |
@@ -92,6 +93,26 @@ to the `helm install` command using the `--set` flags:
 | `priorityClassName`                  | `""`              | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction |
 
 ## Chart configuration examples
+
+### resources
+
+`resources` allows you to configure the minimum and maximum amount of resources (memory and CPU) a Sidekiq
+pod can consume.
+
+Sidekiq pod workloads vary greatly between deployments. Generally speaking, it is understood that each Sidekiq
+process consumes approximately 1 vCPU and 2 GB of memory. Vertical scaling should generally align to this `1:2`
+ratio of `vCPU:Memory`.
+
+Below is an example use of `resources`:
+
+```yaml
+resources:
+  limits:
+    memory: 5G
+  requests:
+    memory: 2G
+    cpu: 900m
+```
 
 ### extraEnv
 
@@ -348,7 +369,8 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `name`         | String  |         | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries. |
 | `queues`       | String / Array |         | [See below](#queues). |
 | `negateQueues` | String / Array |         | [See below](#negatequeues). |
-| `experimentalQueueSelector` | Bool | `false` | Use the [experimental queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector-experimental). Only valid when `cluster` is enabled. |
+| `queueSelector` | Bool | `false` | Use the [queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector). Only valid when `cluster` is enabled. |
+| `experimentalQueueSelector` | Bool | `false` | Deprecated version of `queueSelector`. If either this or `queueSelector` is set, the queue selector will be enabled. Only valid when `cluster` is enabled. |
 | `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. |
 | `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation. |
 | `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.|

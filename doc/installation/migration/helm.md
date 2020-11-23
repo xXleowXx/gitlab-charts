@@ -68,7 +68,7 @@ kubectl label pvc -l app=redis --overwrite heritage=Helm
 kubectl get statefulsets.apps -l app=redis -o yaml | sed "s/Tiller/Helm/g" | kubectl replace --force=true --cascade=false -f -
 ```
 
-### RBAC issues after the migration when running Helm upgrade 
+### RBAC issues after the migration when running Helm upgrade
 
 You may face the following error when running Helm upgrade after the conversion has been completed:
 

@@ -43,6 +43,12 @@ controlled by `global.shell.port`.
 | `deployment.livenessProbe.timeoutSeconds` | 3 | When the liveness probe times out |
 | `deployment.livenessProbe.successThreshold` | 1 | Minimum consecutive successes for the liveness probe to be considered successful after having failed |
 | `deployment.livenessProbe.failureThreshold` | 3 | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded |
+| `deployment.readinessProbe.initialDelaySeconds` | 10 | Delay before readiness probe is initiated      |
+| `deployment.readinessProbe.periodSeconds`       | 5  | How often to perform the readiness probe       |
+| `deployment.readinessProbe.timeoutSeconds`      | 3  | When the readiness probe times out             |
+| `deployment.readinessProbe.successThreshold`    | 1  | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
+| `deployment.readinessProbe.failureThreshold`    | 2  | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded |
+| `deployment.terminationGracePeriodSeconds`  | 30 | Seconds that Kubernetes will wait for a pod to forcibly exit |
 | `enabled`                | `true`         | Shell enable flag                        |
 | `extraContainers`        |                | List of extra containers to include      |
 | `extraInitContainers`    |                | List of extra init containers to include |
@@ -111,6 +117,40 @@ image:
   - name: my-secret-name
   - name: my-secondary-secret-name
 ```
+
+### livenessProbe/readinessProbe
+
+`deployment.livenessProbe` and `deployment.readinessProbe` provide a mechanism
+to help control the termination of Pods under some scenarios.
+
+Larger repositories benefit from tuning liveness and readiness probe
+times to match their typical long-running connections. Set readiness
+probe duration shorter than liveness probe duration to minimize
+potential interruptions during `clone` and `push` operations. Increase
+`terminationGracePeriodSeconds` and give these operations more time before
+the scheduler terminates the pod. Consider the example below as a starting
+point to tune GitLab Shell pods for increased stability and efficiency
+with larger repository workloads.
+
+```yaml
+deployment:
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 20
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 10
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 2
+    successThreshold: 1
+    failureThreshold: 3
+  terminationGracePeriodSeconds: 300
+```
+
+Reference the official [Kubernetes Documentation](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+for additional details regarding this configuration.
 
 ### tolerations
 
