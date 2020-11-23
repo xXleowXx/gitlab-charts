@@ -225,7 +225,6 @@ kubectl create secret generic <name>-rails-secret --from-file=secrets.yml
 
 This secret is referenced by the `global.railsSecrets.secret` setting.
 
-
 NOTE: **Note:**
 The `enc_settings_key_base` was added in GitLab `13.7`, and will be required for GitLab `14.0`.
 
