@@ -40,7 +40,7 @@ Call:
 {{- define "gitlab.gitaly.serviceName" -}}
 {{- $baseName := coalesce .context.Values.serviceName .context.Values.global.gitaly.serviceName (include "gitlab.other.fullname" (dict "context" .context "chartName" "gitaly" )) -}}
 {{- $suffix := default "default" .name -}}
-{{ printf "%s-%s" $baseName $suffix }}
+{{ printf "%s-%s" $baseName $suffix | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*
@@ -54,5 +54,5 @@ Call:
 */}}
 {{- define "gitlab.gitaly.qualifiedServiceName" -}}
 {{- $name := include "gitlab.gitaly.serviceName" (dict "context" .context "name" .name) -}}
-{{ printf "%s-%d.%s" $name .index $name }}
+{{ printf "%s-%d.%s" $name .index $name | trunc 63 | trimSuffix "-" }}
 {{- end -}}
