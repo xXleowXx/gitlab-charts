@@ -1,5 +1,5 @@
 {{- if .Values.global.gitaly.enabled -}}
-{{- $storages := (dict "name" "default") | list -}}
+{{- $storages := (dict "name" (.Values.global.gitaly.internal.names | first)) | list -}}
 {{- if .Values.global.praefect.enabled -}}
 {{-   $storages = .Values.global.praefect.virtualStorages -}}
 {{- end -}}
