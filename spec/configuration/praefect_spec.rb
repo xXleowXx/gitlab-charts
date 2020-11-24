@@ -53,7 +53,7 @@ describe 'Praefect configuration' do
       }.deep_merge(default_values)
     end
 
-    let(:gitaly_resources_default) do
+    let(:gitaly_resources) do
       [
         'PodDisruptionBudget/test-gitaly-default',
         'ConfigMap/test-gitaly',
@@ -75,7 +75,7 @@ describe 'Praefect configuration' do
     end
 
     it 'renders one set of Gitaly resources' do
-      gitaly_resources_default.each do |r|
+      gitaly_resources.each do |r|
         expect(template.dig(r)).to be_truthy
       end
     end
@@ -100,13 +100,12 @@ describe 'Praefect configuration' do
         }.deep_merge(values_praefect_enabled)
       end
 
-      let(:gitaly_resources_multiple) do
+      let(:gitaly_resources_with_multiple_storages) do
         [
           'PodDisruptionBudget/test-gitaly-vs2',
-          'ConfigMap/test-gitaly',
           'Service/test-gitaly-vs2',
           'StatefulSet/test-gitaly-vs2',
-        ].concat(gitaly_resources_default)
+        ].concat(gitaly_resources)
       end
 
       let(:template) { HelmTemplate.new(values_multiple_virtual_storages) }
@@ -116,7 +115,7 @@ describe 'Praefect configuration' do
       end
 
       it 'generates Gitaly resources per virtual storage' do
-        gitaly_resources_multiple.each do |r|
+        gitaly_resources_with_multiple_storages.each do |r|
           expect(template.dig(r)).to be_truthy
         end
       end
