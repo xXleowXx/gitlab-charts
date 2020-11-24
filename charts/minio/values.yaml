@@ -140,8 +140,7 @@ defaultBuckets:
   - name: gitlab-mr-diffs
   - name: gitlab-terraform-state
   - name: gitlab-dependency-proxy
-  # To be uncommented when we have the ability to deploy GitLab Pages using these charts
-  # - name: gitlab-pages
+  - name: gitlab-pages
   #
   ## If enabled, must be a string with length > 0
   # - name: example

@@ -53,10 +53,10 @@ data:
       {{-   include "gitlab.appConfig.cronJobs" . | nindent 6 }}
       {{- end }}
 
+      {{- if $.Values.global.appConfig.object_store.enabled }}
       # Consolidated object storage configuration
       ## property local configuration will override object_store
-      {{- if or $.Values.global.appConfig.object_store.enabled $.Values.global.minio.enabled }}
-      {{-   include "gitlab.appConfig.objectStorage.configuration" (dict "name" "object_store" "config" $.Values.global.appConfig.object_store "context" $) | nindent 6 }}
+      {{- include "gitlab.appConfig.objectStorage.configuration" (dict "name" "object_store" "config" $.Values.global.appConfig.object_store "context" $) | nindent 6 }}
         objects:
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "artifacts" "config" $.Values.global.appConfig.artifacts) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "lfs" "config" $.Values.global.appConfig.lfs) | nindent 10 -}}
@@ -67,7 +67,6 @@ data:
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "dependency_proxy" "config" $.Values.global.appConfig.dependencyProxy) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "pages" "config" $.Values.global.pages.objectStore) | nindent 10 -}}
       {{- end }}
-      # Individual object storage backed feature properties configuration
       {{- include "gitlab.appConfig.artifacts.configuration" (dict "config" $.Values.global.appConfig.artifacts "context" $) | nindent 6 }}
       {{- include "gitlab.appConfig.lfs.configuration" (dict "config" $.Values.global.appConfig.lfs "context" $) | nindent 6 }}
       {{- include "gitlab.appConfig.uploads.configuration" (dict "config" $.Values.global.appConfig.uploads "context" $) | nindent 6 }}

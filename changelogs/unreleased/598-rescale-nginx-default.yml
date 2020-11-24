@@ -1,5 +1,0 @@
----
-title: 'NGINX: reduce controller to 2 replicas by default'
-merge_request: 1635
-author:
-type: changed

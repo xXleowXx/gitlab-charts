@@ -9,6 +9,7 @@ global:
       names: ["default"]
     external: []
     authToken: {}
+    hooks: {}
   # serviceName:
   # imagePullPolicy: IfNotPresent
   redis:

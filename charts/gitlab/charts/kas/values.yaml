@@ -43,3 +43,5 @@ workhorse: {}
   # host: '0.0.0.0'
   # serviceName: 'webservice'
   # port: 8181
+# overwrites the default kas config
+customConfig: {}

@@ -136,6 +136,20 @@ spec:
               {{- if and $.Values.persistence.enabled $.Values.persistence.subPath }}
               subPath: "{{ $.Values.persistence.subPath }}"
               {{- end }}
+            {{- with $.Values.global.gitaly.hooks }}
+            {{- if .preReceive }}
+            - name: gitaly-hooks-pre-recieve
+              mountPath: "/home/git/custom_hooks/pre-receive.d"
+            {{- end }}
+            {{- if .postReceive }}
+            - name: gitaly-hooks-post-recieve
+              mountPath: "/home/git/custom_hooks/post-receive.d"
+            {{- end }}
+            {{- if .update }}
+            - name: gitaly-hooks-update
+              mountPath: "/home/git/custom_hooks/update.d"
+            {{- end }}
+            {{- end }}
           livenessProbe:
             exec:
               command:
@@ -187,6 +201,26 @@ spec:
                 - key: "tls.key"
                   path: "gitaly.key"
           {{- end }}
+      {{- with $.Values.global.gitaly.hooks }}
+      {{- if and .preReceive (has .preReceive .configmap) }}
+      - name: gitaly-hooks-preReceive
+        configMap:
+          name: {{ .preReceive.configmap }}
+          defaultMode: 0555
+      {{- end }}
+      {{- if and .postReceive (has .postReceive .configmap) }}
+      - name: gitaly-hooks-postReceive
+        configMap:
+          name: {{ .postReceive.configmap }}
+          defaultMode: 0555
+      {{- end }}
+      {{- if and .update (hasKey .update "configmap") }}
+      - name: gitaly-hooks-update
+        configMap:
+          name: {{ .update.configmap }}
+          defaultMode: 0555
+      {{- end }}
+      {{- end }}
       {{- include "gitlab.certificates.volumes" $ | nindent 6 }}
     {{- if $.Values.nodeSelector }}
       nodeSelector:
