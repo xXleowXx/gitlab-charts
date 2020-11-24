@@ -35,7 +35,7 @@ global:
   edition: ee
 
   ## doc/charts/globals.md#gitlab-version
-  # gitlabVersion: master
+  gitlabVersion: shell-buster-backport
 
   ## doc/charts/globals.md#application-resource
   application:
