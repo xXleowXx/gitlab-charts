@@ -31,16 +31,9 @@ Order of operations:
 - global gitaly service name override
 - derived from chart name
 
-Call:
-
-```
-{{- include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) -}}
-```
 */}}
 {{- define "gitlab.gitaly.serviceName" -}}
-{{- $baseName := coalesce .context.Values.serviceName .context.Values.global.gitaly.serviceName (include "gitlab.other.fullname" (dict "context" .context "chartName" "gitaly" )) -}}
-{{- $suffix := default "default" .name -}}
-{{ printf "%s-%s" $baseName $suffix | trunc 63 | trimSuffix "-" }}
+{{- coalesce ( .Values.serviceName ) .Values.global.gitaly.serviceName (include "gitlab.other.fullname" (dict "context" . "chartName" "gitaly" )) -}}
 {{- end -}}
 
 {{/*
@@ -49,10 +42,10 @@ Return a qualified gitaly service name, for direct access to the gitaly headless
 Call:
 
 ```
-{{- include "gitlab.gitaly.qualifiedServiceName" (dict "context" . "index" $i "name" .name) -}}
+{{- include "gitlab.gitaly.qualifiedServiceName" (dict "context" . "index" $i) -}}
 ```
 */}}
 {{- define "gitlab.gitaly.qualifiedServiceName" -}}
-{{- $name := include "gitlab.gitaly.serviceName" (dict "context" .context "name" .name) -}}
-{{ printf "%s-%d.%s" $name .index $name | trunc 63 | trimSuffix "-" }}
+{{- $name := include "gitlab.gitaly.serviceName" .context -}}
+{{ include "gitlab.other.fullname" (dict "context" .context "chartName" "gitaly" ) }}-{{ .index }}.{{ $name }}
 {{- end -}}

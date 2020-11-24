@@ -1,50 +1,37 @@
-{{- if .Values.global.gitaly.enabled -}}
-{{- $storages := (dict "name" (.Values.global.gitaly.internal.names | first)) | list -}}
-{{- if .Values.global.praefect.enabled -}}
-{{-   $storages = .Values.global.praefect.virtualStorages -}}
-{{- end -}}
-{{ range $storages }}
+{{- if and .Values.global.gitaly.enabled (not .Values.global.praefect.enabled) -}}
 apiVersion: v1
 kind: Service
 metadata:
-  {{- if $.Values.global.praefect.enabled }}
-  name: {{ include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }}
-  {{- else }}
-  name: {{ include "gitlab.gitaly.serviceName" (dict "context" $) }}
-  {{- end }}
+  name: {{ include "gitlab.gitaly.serviceName" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "gitlab.standardLabels" $ | nindent 4 }}
-    {{- include "gitlab.serviceLabels" $ | nindent 4 }}
-    storage: {{ .name }}
+    {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.serviceLabels" . | nindent 4 }}
   annotations:
-  {{- if $.Values.metrics.enabled }}
+  {{- if .Values.metrics.enabled }}
     gitlab.com/prometheus_scrape: "true"
-    gitlab.com/prometheus_port: "{{ $.Values.metrics.metricsPort }}"
+    gitlab.com/prometheus_port: "{{ .Values.metrics.metricsPort }}"
     prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ $.Values.metrics.metricsPort }}"
+    prometheus.io/port: "{{ .Values.metrics.metricsPort }}"
   {{- end }}
-    {{- include "gitlab.serviceAnnotations" $ | nindent 4 }}
+    {{- include "gitlab.serviceAnnotations" . | nindent 4 }}
 spec:
-  type: {{ coalesce $.Values.service.type $.Values.global.gitaly.service.type }}
+  type: {{ coalesce .Values.service.type .Values.global.gitaly.service.type }}
   clusterIP: "None"
   ports:
-    - port: {{ coalesce $.Values.service.externalPort $.Values.global.gitaly.service.externalPort }}
-      name: {{ coalesce $.Values.service.name $.Values.global.gitaly.service.name }}
-      targetPort: {{ coalesce $.Values.service.internalPort $.Values.global.gitaly.service.internalPort }}
-   {{- if $.Values.metrics.enabled }}
-    - port: {{ $.Values.metrics.metricsPort }}
-      name: {{ coalesce $.Values.service.name $.Values.global.gitaly.service.name }}-metrics
+    - port: {{ coalesce .Values.service.externalPort .Values.global.gitaly.service.externalPort }}
+      name: {{ coalesce .Values.service.name .Values.global.gitaly.service.name }}
+      targetPort: {{ coalesce .Values.service.internalPort .Values.global.gitaly.service.internalPort }}
+   {{- if .Values.metrics.enabled }}
+    - port: {{ .Values.metrics.metricsPort }}
+      name: {{ coalesce .Values.service.name .Values.global.gitaly.service.name }}-metrics
    {{- end }}
-   {{- if $.Values.global.gitaly.tls.enabled }}
-    - port: {{ coalesce $.Values.service.tls.externalPort $.Values.global.gitaly.service.tls.externalPort }}
-      name: {{coalesce  $.Values.service.name $.Values.global.gitaly.service.name }}-tls
-      targetPort: {{ coalesce $.Values.service.tls.internalPort $.Values.global.gitaly.service.tls.internalPort }}
+   {{- if .Values.global.gitaly.tls.enabled }}
+    - port: {{ coalesce .Values.service.tls.externalPort .Values.global.gitaly.service.tls.externalPort }}
+      name: {{coalesce  .Values.service.name .Values.global.gitaly.service.name }}-tls
+      targetPort: {{ coalesce .Values.service.tls.internalPort .Values.global.gitaly.service.tls.internalPort }}
    {{- end }}
   selector:
-    app: {{ template "name" $ }}
-    release: {{ $.Release.Name }}
-    storage: {{ .name }}
----
-{{- end }}
+    app: {{ template "name" . }}
+    release: {{ .Release.Name }}
 {{- end }}
