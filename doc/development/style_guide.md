@@ -289,10 +289,10 @@ template would try to output the result of `set` (which returns the Map it modif
 
 ### Passing variables between control structures
 
-The go templating syntax only gives us one way to assign variables, and that is by using [shorthand assignment](https://golang.org/pkg/text/template/#hdr-Variables).
+The go templating syntax [strongly differentiates between initialization (`:=`) and assignment (`=`)](https://golang.org/pkg/text/template/#hdr-Variables), and this is impacted by scope.
 
-As a result you cannot reassign a variable that existed outside your control structure (if/with/range), and variables declared
-within your control structure are not available outside.
+As a result you can re-initialize a variable that existed outside your control structure (if/with/range), but know that
+variables declared within your control structure are not available outside.
 
 For example:
 
@@ -309,7 +309,8 @@ For example:
 In the above example, calling `exampleTemplate` will always return `default` because the variable that contained `desired` was
 only accessible within the `if` control structure.
 
-To work around this issue, we either avoid the problem, or use a Dictionary to hold the values we want to change.
+To work around this issue, we attempt to avoid the problem by using a Dictionary to hold the values we want to change in multiple scopes,
+or explicitly use the _assignment operator_ (`=` vs `:=`).
 
 Example of avoiding the issue:
 
@@ -331,5 +332,17 @@ Example of using a Dictionary:
 {{-   $_ := set $result "value" "desired" -}}
 {{- end -}}
 {{- $result.value -}}
+{{- end -}}
+```
+
+Example of assignment versus initialization (look close!)
+
+```plaintext
+{{- define "exampleTemplate" -}}
+{{- $someVar := "default" -}}
+{{- if true -}}
+{{-   $someVar = "desired" -}}
+{{- end -}}
+{{- $someVar -}}
 {{- end -}}
 ```
