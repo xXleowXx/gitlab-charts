@@ -7,7 +7,11 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  {{- if $.Values.global.praefect.enabled }}
   name: {{ include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }}
+  {{- else }}
+  name: {{ include "gitlab.gitaly.serviceName" (dict "context" $) }}
+  {{- end }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.immutableLabels" $ | nindent 4 }}
