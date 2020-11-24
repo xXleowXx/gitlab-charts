@@ -11,13 +11,17 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.immutableLabels" $ | nindent 4 }}
+    {{- if $.Values.global.praefect.enabled }}
     storage: {{ .name }}
+    {{- end }}
 spec:
   selector:
     matchLabels:
       app: {{ template "name" $ }}
       release: {{ $.Release.Name }}
+      {{- if $.Values.global.praefect.enabled }}
       storage: {{ .name }}
+      {{- end }}
   serviceName: {{ include "gitlab.gitaly.serviceName" (dict "context" $ "name" .name) }}
   replicas: {{ default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}
   podManagementPolicy: Parallel
@@ -31,7 +35,9 @@ spec:
       labels:
         app: {{ template "name" $ }}
         release: {{ $.Release.Name }}
+        {{- if $.Values.global.praefect.enabled }}
         storage: {{ .name }}
+        {{- end }}
         {{- include "gitlab.podLabels" $ | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
@@ -81,7 +87,9 @@ spec:
                 matchLabels:
                   app: {{ template "name" $ }}
                   release: {{ $.Release.Name }}
+                  {{- if $.Values.global.praefect.enabled }}
                   storage: {{ .name }}
+                  {{- end }}
       {{- else if eq (default $.Values.global.antiAffinity $.Values.antiAffinity) "soft" }}
       affinity:
         podAntiAffinity:
@@ -93,7 +101,9 @@ spec:
                 matchLabels:
                   app: {{ template "name" $ }}
                   release: {{ $.Release.Name }}
+                  {{- if $.Values.global.praefect.enabled }}
                   storage: {{ .name }}
+                  {{- end }}
       {{- end }}
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" $ }}
@@ -233,7 +243,9 @@ spec:
         labels:
           app: {{ template "name" $ }}
           release: {{ $.Release.Name }}
+          {{- if $.Values.global.praefect.enabled }}
           storage: {{ .name }}
+          {{- end }}
         annotations:
         {{- range $key, $value := $.Values.persistence.annotations }}
           {{ $key }}: {{ $value | quote }}
