@@ -5,7 +5,7 @@ image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-shell
   pullSecrets: []
   # pullPolicy: IfNotPresent
-  # tag: master
+  tag: shell-buster-backport
 service:
   name: gitlab-shell
   type: ClusterIP
