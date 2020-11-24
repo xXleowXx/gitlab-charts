@@ -167,6 +167,26 @@ Below is an example use of `priorityClassName`:
 priorityClassName: persistence-enabled
 ```
 
+### Altering security contexts
+
+Gitaly `StatefulSet` performance may suffer when repositories have large
+amounts of files due to a [known issue with `fsGroup` in upstream Kubernetes](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods).
+Mitigate the issue by changing or fully deleting the settings for the
+`securityContext`.
+
+```yaml
+gitlab:
+  gitaly:
+    securityContext:
+      fsGroup: ""
+      runAsUser: ""
+```
+
+NOTE: **Note:**
+The example syntax eliminates the `securityContext` setting entirely.
+Setting `securityContext: {}` or `securityContext:` does not work due
+to the way Helm merges default values with user provided configuration.
+
 ## External Services
 
 This chart should be attached the Workhorse service.

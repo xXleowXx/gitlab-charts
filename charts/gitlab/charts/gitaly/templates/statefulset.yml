@@ -60,9 +60,15 @@ spec:
             readOnly: false
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
+      {{- if .Values.securityContext }}
       securityContext:
+        {{- if not (empty .Values.securityContext.runAsUser) }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- end }}
+        {{- if not (empty .Values.securityContext.fsGroup) }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
+        {{- end }}
+      {{- end }}
 {{- include "pullsecrets" .Values.image | indent 6 }}
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
