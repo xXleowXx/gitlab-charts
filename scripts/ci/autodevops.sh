@@ -77,6 +77,18 @@ function deploy() {
     replicas="$new_replicas"
   fi
 
+  # Use stable images when on the stable branch
+  version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
+  version_args=()
+  if [[ $CI_COMMIT_BRANCH =~ -stable$ ]] && [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    stableBranch=$(echo $version | awk -F "." '{print $1"-"$2"-stable"}')
+    version_args=(
+      "--set" "global.gitlabVersion=${stableBranch}"
+      "--set" "gitlab.gitaly.image.tag=${stableBranch}"
+      "--set" "gitlab.gitlab-shell.image.tag=${stableBranch}"
+    )
+  fi
+
   # Cleanup and previous installs, as FAILED and PENDING_UPGRADE will cause errors with `upgrade`
   if [ "$CI_ENVIRONMENT_SLUG" != "production" ] && previousDeployFailed ; then
     echo "Deployment in bad state, cleaning up $CI_ENVIRONMENT_SLUG"
@@ -143,6 +155,7 @@ CIYAML
     --set gitlab.operator.crdPrefix="$CI_ENVIRONMENT_SLUG" \
     --set global.gitlab.license.secret="$CI_ENVIRONMENT_SLUG-gitlab-license" \
     "${enable_kas[@]}" \
+    "${version_args[@]}" \
     --namespace="$KUBE_NAMESPACE" \
     --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
     $HELM_EXTRA_ARGS \
