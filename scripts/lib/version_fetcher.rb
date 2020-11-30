@@ -72,7 +72,7 @@ class VersionFetcher
     # Return the fetch result for the chart if it's defined
     # Otherwise return the parent chart's version
     if respond_to?(chart_name)
-      send(chart_name)
+      send(chart_name) # rubocop:disable GitlabSecurity/PublicSend
     else
       @version
     end
