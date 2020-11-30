@@ -132,7 +132,7 @@ The GitLab Cloud Native Chart determines the `statefulset-name` using:
 <chart-release-name>-<service-name>
 ```
 
-The correct name for the Gitaly PersistentVolumeClaim is: `repo-data-gitlab-gitaly-default-0`.
+The correct name for the Gitaly PersistentVolumeClaim is: `repo-data-gitlab-gitaly-0`.
 
 > **Note**: If using Praefect with multiple Virtual Storages, you will need one PersistentVolumeClaim
 > per Gitaly replica per Virtual Storage defined. For example, if you have `default` and `vs2` Virtual
