@@ -36,7 +36,7 @@ Return the qualified service name for a given Gitaly pod.
 Call:
 
 ```
-include "gitlab.praefect.gitaly.serviceName" (dict "context" $ "index" $i "name" .name)
+include "gitlab.praefect.gitaly.qualifiedServiceName" (dict "context" $ "index" $i "name" .name)
 ```
 */}}
 {{- define "gitlab.praefect.gitaly.qualifiedServiceName" -}}
