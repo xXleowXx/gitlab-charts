@@ -53,30 +53,30 @@ describe 'Webservice Deployments configuration' do
       expect(items.dig(item_key('Deployment','default'))).to be_truthy
       expect(items.dig(item_key('Deployment','api'))).to be_truthy
       expect(items.dig(item_key('Deployment','internal'))).to be_truthy
-      
+
       items = chart_deployments.resources_by_kind('PodDisruptionBudget').select{ |key, _| key.start_with? "PodDisruptionBudget/test-webservice-" }
       expect(items.length).to eq(3)
       expect(items.dig(item_key('PodDisruptionBudget','default'))).to be_truthy
       expect(items.dig(item_key('PodDisruptionBudget','api'))).to be_truthy
       expect(items.dig(item_key('PodDisruptionBudget','internal'))).to be_truthy
-    
+
       items = chart_deployments.resources_by_kind('HorizontalPodAutoscaler').select{ |key, _| key.start_with? "HorizontalPodAutoscaler/test-webservice-" }
       expect(items.length).to eq(3)
       expect(items.dig(item_key('HorizontalPodAutoscaler','default'))).to be_truthy
       expect(items.dig(item_key('HorizontalPodAutoscaler','api'))).to be_truthy
       expect(items.dig(item_key('HorizontalPodAutoscaler','internal'))).to be_truthy
-    
+
       items = chart_deployments.resources_by_kind('Service').select{ |key, _| key.start_with? "Service/test-webservice-" }
       expect(items.length).to eq(3)
       expect(items.dig(item_key('Service','default'))).to be_truthy
       expect(items.dig(item_key('Service','api'))).to be_truthy
       expect(items.dig(item_key('Service','internal'))).to be_truthy
-    
+
       items = chart_deployments.resources_by_kind('Ingress').select{ |key, _| key.start_with? "Ingress/test-webservice-" }
       expect(items.length).to eq(2)
       expect(items.dig(item_key('Ingress','default'))).to be_truthy
       expect(items.dig(item_key('Ingress','api'))).to be_truthy
-    
+
       items = chart_deployments.resources_by_kind('ConfigMap').select{ |key, _| key.start_with? "ConfigMap/test-webservice" }
       expect(items.length).to eq(2)
       expect(items.dig('ConfigMap/test-webservice')).to be_truthy
@@ -110,7 +110,7 @@ describe 'Webservice Deployments configuration' do
             deployments:
               test:
                 ingress:
-                  path: 
+                  path:
         ]).deep_merge(default_values)
       end
 
@@ -191,7 +191,7 @@ describe 'Webservice Deployments configuration' do
           env_1 = datamodel.env(item_key('Deployment','a'),'webservice')
           env_2 = datamodel.env(item_key('Deployment','b'),'webservice')
           env_3 = datamodel.env(item_key('Deployment','c'),'webservice')
-          
+
           expect(env_1).to include(env_value('PUMA_THREADS_MIN',4))
           expect(env_2).to include(env_value('PUMA_THREADS_MIN',3))
           expect(env_3).to include(env_value('PUMA_THREADS_MIN',2))
@@ -203,7 +203,7 @@ describe 'Webservice Deployments configuration' do
           expect(env_1).to include(env_value('PUMA_WORKER_MAX_MEMORY',1024))
           expect(env_2).to include(env_value('PUMA_WORKER_MAX_MEMORY',1024))
           expect(env_3).to include(env_value('PUMA_WORKER_MAX_MEMORY',2048))
-          
+
           expect(env_1).to include(env_value('DISABLE_PUMA_WORKER_KILLER',true))
           expect(env_2).to include(env_value('DISABLE_PUMA_WORKER_KILLER',true))
           expect(env_3).to include(env_value('DISABLE_PUMA_WORKER_KILLER',false))

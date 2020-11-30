@@ -49,7 +49,7 @@ spec:
         {{-   toYaml .pod.labels | nindent 8 }}
         {{- end }}
       annotations:
-        checksum/config: {{/* include (print $.Template.BasePath "/configmap.yml") $ | sha256sum */}}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
       {{- range $key, $value := .pod.annotations }}
         {{ $key }}: {{ $value | quote }}
