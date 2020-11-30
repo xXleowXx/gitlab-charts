@@ -47,6 +47,9 @@ the `helm install` command using the `--set` flags.
 | `ingress.enabled`           |  `true` if `global.kas.enabled=true` | You can use `kas.ingress.enabled` to explicitly turn it on or off. If not set, you can optionally use `global.ingress.enabled` for the same purpose. |
 | `ingress.annotations`       | `{}`           | Ingress annotations              |
 | `ingress.tls`               | `{}`           | Ingress TLS configuration        |
+| `metrics.enabled`           | `true`         | Toggle Prometheus metrics exporter |
+| `metrics.port`              | `8151`         | Port number to use for the metrics exporter |
+| `metrics.path`              | `/metrics`     | Path to use for the metrics exporter |
 | `maxReplicas`               | `10`           | HPA `maxReplicas`                |
 | `maxUnavailable`            | `1`            | HPA `maxUnavailable`             |
 | `minReplicas`               | `2`            | HPA `maxReplicas`                |
