@@ -78,7 +78,7 @@ to the `helm install` command using the `--set` flags:
 | `persistence.subPath`          |                               | MinIO persistence volume mount path     |
 | `persistence.volumeName`       |                               | MinIO existing persistent volume name   |
 | `pullSecrets`                  |                               | Secrets for the image repository        |
-| `readinessGates`               | []                            | Pod readiness gates, see https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-readiness-gate |
+| `readinessGates`               | []                            | Pod readiness gates, see [Kubernetes documentation](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-readiness-gate] |
 | `replicas`                     | `4`                           | MinIO number of replicas                |
 | `resources.requests.cpu`       | `250m`                        | MinIO minimum cpu requested             |
 | `resources.requests.memory`    | `256Mi`                       | MinIO minimum memory requested          |
