@@ -78,7 +78,7 @@ to the `helm install` command using the `--set` flags.
 | `puma.threads.min`               | `4`                   | The minimum amount of Puma threads |
 | `puma.threads.max`               | `4`                   | The maximum amount of Puma threads |
 | `rack_attack.git_basic_auth`     | `{}`                  | See [GitLab documentation](https://docs.gitlab.com/ee/security/rack_attack.html) for details |
-| `readinessGates`                 | `[]`                  | Pod readiness gates, see https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-readiness-gate |
+| `readinessGates`                 | `[]`                  | Pod readiness gates, see [Kubernetes documentation](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-readiness-gate] |
 | `redis.serviceName`              | `redis`               | Redis service name                             |
 | `registry.api.port`              | `5000`                | Registry port                                  |
 | `registry.api.protocol`          | `http`                | Registry protocol                              |
