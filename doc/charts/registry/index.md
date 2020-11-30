@@ -154,7 +154,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the creds are stored                                                             |
 | `profiling.stackdriver.service`            | `RELEASE-registry` (templated Service name)| Name of the stackdriver service to record profiles under                                             |
 | `profiling.stackdriver.projectid`          | GCP project where running                    | GCP project to report profiles to                                                                    |
-+| `readinessGates`                          | `[]`                                         | Pod readiness gates, see https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-readiness-gate |
++| `readinessGates`                          | `[]`                                         | Pod readiness gates, see [Kubernetes documentation](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-readiness-gate] |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
 | `tokenService`                             | `container_registry`                         | JWT token service                                                                                    |
