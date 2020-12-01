@@ -33,7 +33,7 @@ Order of operations:
 
 */}}
 {{- define "gitlab.gitaly.serviceName" -}}
-{{- coalesce ( .Values.serviceName ) .Values.global.gitaly.serviceName (include "gitlab.other.fullname" (dict "context" . "chartName" "gitaly" )) -}}
+{{- coalesce ( .Values.gitaly.serviceName ) .Values.global.gitaly.serviceName (include "gitlab.other.fullname" (dict "context" . "chartName" "gitaly" )) -}}
 {{- end -}}
 
 {{/*
