@@ -234,7 +234,7 @@ The keys of this Map (`default` in this example) are the "name" for each. `defau
 will have a Deployment, Service, HorizontalPodAutoscaler, PodDisruptionBudget, and
 optional Ingress created with `RELEASE-webservice-default`.
 
-Any property not provided will inherit from the defaults of the larger chart.
+Any property not provided will inherit from the `gitlab-webservice` chart defaults.
 
 ```yaml
 deployments:
