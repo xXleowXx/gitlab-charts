@@ -139,6 +139,8 @@ controller:
 
   replicaCount: 1
 
+  terminationGracePeriodSeconds: 60
+
   minAvailable: 1
 
   resources: {}
