@@ -122,6 +122,9 @@ describe 'Webservice Deployments configuration' do
     context 'value inheritance and merging' do
       let(:test_values) do
         YAML.load(%[
+        global:
+          extraEnv:
+            GLOBAL: present
         gitlab:
           webservice:
             # "base" configuration
@@ -148,6 +151,8 @@ describe 'Webservice Deployments configuration' do
                 operator: "Equal"
                 value: "true"
                 effect: "NoSchedule"
+            extraEnv:
+              CHART: "present"
             # individual configurations
             deployments:
               a:
@@ -172,6 +177,8 @@ describe 'Webservice Deployments configuration' do
                     operator: "Equal"
                     value: "true"
                     effect: "NoExecute"
+                extraEnv:
+                  DEPLOYMENT: "b"
               c:
                 puma:
                   threads:
@@ -179,6 +186,9 @@ describe 'Webservice Deployments configuration' do
                     max: 8
                   workerMaxMemory: 2048
                   disableWorkerKiller: false
+                extraEnv:
+                  DEPLOYMENT: "c"
+                  CHART: "overridden"
         ]).deep_merge(default_values)
       end
 
@@ -207,6 +217,30 @@ describe 'Webservice Deployments configuration' do
           expect(env_1).to include(env_value('DISABLE_PUMA_WORKER_KILLER',true))
           expect(env_2).to include(env_value('DISABLE_PUMA_WORKER_KILLER',true))
           expect(env_3).to include(env_value('DISABLE_PUMA_WORKER_KILLER',false))
+        end
+      end
+
+      context 'extraEnv settings (map)' do
+        # deployment(X)/spec/template/spec/nodeSelector
+        it 'inherits when not present' do
+          env_1 = datamodel.env(item_key('Deployment','a'),'webservice')
+          expect(env_1).to include(env_value('GLOBAL','present'))
+          expect(env_1).to include(env_value('CHART','present'))
+          expect(env_1).not_to include(env_value('DEPLOYMENT','a'))
+        end
+
+        it 'merges when present' do
+          env_1 = datamodel.env(item_key('Deployment','b'),'webservice')
+          expect(env_1).to include(env_value('GLOBAL','present'))
+          expect(env_1).to include(env_value('CHART','present'))
+          expect(env_1).to include(env_value('DEPLOYMENT','b'))
+        end
+
+        it 'override when present' do
+          env_1 = datamodel.env(item_key('Deployment','c'),'webservice')
+          expect(env_1).to include(env_value('GLOBAL','present'))
+          expect(env_1).to include(env_value('CHART','overridden'))
+          expect(env_1).to include(env_value('DEPLOYMENT','c'))
         end
       end
 

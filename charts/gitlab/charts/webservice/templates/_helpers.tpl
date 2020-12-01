@@ -181,3 +181,16 @@ Output labels specifically for webservice
 {{- define "webservice.labels" -}}
 gitlab.com/webservice-name: {{ .name }}
 {{- end -}}
+
+{{/*
+Returns the extraEnv keys and values to inject into containers.
+
+Global values will override any chart-specific values.
+*/}}
+{{- define "webservice.extraEnv" -}}
+{{- $allExtraEnv := merge (default (dict) .local.extraEnv) .global.extraEnv -}}
+{{- range $key, $value := $allExtraEnv }}
+- name: {{ $key }}
+  value: {{ $value | quote }}
+{{- end -}}
+{{- end -}}
