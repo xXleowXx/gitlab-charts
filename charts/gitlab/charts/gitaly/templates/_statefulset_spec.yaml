@@ -242,6 +242,9 @@ spec:
         labels:
           app: {{ template "name" . }}
           release: {{ .Release.Name }}
+          {{- if $praefect }}
+          storage: {{ .storage.name }}
+          {{- end }}
         annotations:
         {{- range $key, $value := .Values.persistence.annotations }}
           {{ $key }}: {{ $value | quote }}
