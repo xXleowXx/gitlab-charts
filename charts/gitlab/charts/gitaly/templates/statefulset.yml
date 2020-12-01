@@ -6,5 +6,5 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.immutableLabels" . | nindent 4 }}
-{{ include (print $.Template.BasePath "/_statefulset_spec.yaml") (dict "context" .) }}
+{{ include (print $.Template.BasePath "/_statefulset_spec.yaml") . }}
 {{- end }}

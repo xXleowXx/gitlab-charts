@@ -8,7 +8,7 @@ metadata:
   labels:
     {{- include "gitlab.immutableLabels" $ | nindent 4 }}
     storage: {{ .name }}
-{{ include (print $.Template.BasePath "/_statefulset_spec.yaml") (dict "context" $ "storage" .) }}
+{{ include (print $.Template.BasePath "/_statefulset_spec.yaml") (merge (dict) $ (dict "storage" .)) }}
 ---
 {{- end }}
 {{- end }}
