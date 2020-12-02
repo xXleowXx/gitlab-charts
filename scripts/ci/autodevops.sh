@@ -78,14 +78,18 @@ function deploy() {
   fi
 
   # Use stable images when on the stable branch
-  version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
-  version_args=()
-  if [[ $CI_COMMIT_BRANCH =~ -stable$ ]] && [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    stableBranch=$(echo $version | awk -F "." '{print $1"-"$2"-stable"}')
-    version_args=(
-      "--set" "global.gitlabVersion=${stableBranch}"
-      "--set" "gitlab.gitaly.image.tag=${stableBranch}"
-      "--set" "gitlab.gitlab-shell.image.tag=${stableBranch}"
+  gitlab_version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
+  gitlab_version_args=()
+  if [[ $CI_COMMIT_BRANCH =~ -stable$ ]] && [[ $gitlab_version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    stable_branch=$(echo $gitlab_version | awk -F "." '{print $1"-"$2"-stable"}')
+    gitlab_version_args=(
+      "--set" "global.gitlabVersion=${stable_branch}"
+      "--set" "global.certificates.image.tag=${stable_branch}"
+      "--set" "global.kubectl.image.tag=${stable_branch}"
+      "--set" "gitlab.gitaly.image.tag=${stable_branch}"
+      "--set" "gitlab.gitlab-shell.image.tag=${stable_branch}"
+      "--set" "gitlab.gitlab-exporter.image.tag=${stable_branch}"
+      "--set" "registry.image.tag=${stable_branch}"
     )
   fi
 
@@ -155,7 +159,7 @@ CIYAML
     --set gitlab.operator.crdPrefix="$CI_ENVIRONMENT_SLUG" \
     --set global.gitlab.license.secret="$CI_ENVIRONMENT_SLUG-gitlab-license" \
     "${enable_kas[@]}" \
-    "${version_args[@]}" \
+    "${gitlab_version_args[@]}" \
     --namespace="$KUBE_NAMESPACE" \
     --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
     $HELM_EXTRA_ARGS \
