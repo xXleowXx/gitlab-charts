@@ -81,7 +81,7 @@ function deploy() {
   gitlab_version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
   gitlab_version_args=()
   if [[ $CI_COMMIT_BRANCH =~ -stable$ ]] && [[ $gitlab_version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    stable_branch=$(echo $gitlab_version | awk -F "." '{print $1"-"$2"-stable"}')
+    stable_branch=$(echo "${version%.*}-stable" | tr '.' '-')
     gitlab_version_args=(
       "--set" "global.gitlabVersion=${stable_branch}"
       "--set" "global.certificates.image.tag=${stable_branch}"
