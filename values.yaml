@@ -818,7 +818,7 @@ redis:
   metrics:
     enabled: true
 
-## Instllation & configuration of stable/prostgresql
+## Installation & configuration of stable/prostgresql
 ## See requirements.yaml for current version
 postgresql:
   postgresqlUsername: gitlab
