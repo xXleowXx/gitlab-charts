@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 {{- if or (eq .Values.controller.kind "Deployment") (eq .Values.controller.kind "Both") -}}
 {{- include  "isControllerTagValid" . -}}
 apiVersion: apps/v1
@@ -256,4 +257,5 @@ spec:
         {{ toYaml .Values.controller.extraVolumes | nindent 8 }}
       {{- end }}
     {{- end }}
+{{- end }}
 {{- end }}

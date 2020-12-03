@@ -1,3 +1,4 @@
+{{- if .Values.enabled -}}
 {{- if .Values.tcp -}}
 apiVersion: v1
 kind: ConfigMap
@@ -10,4 +11,5 @@ metadata:
 {{- end }}
   name: {{ include "ingress-nginx.fullname" . }}-tcp
 data: {{ tpl (toYaml .Values.tcp) . | nindent 2 }}
+{{- end }}
 {{- end }}

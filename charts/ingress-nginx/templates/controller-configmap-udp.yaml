@@ -1,3 +1,4 @@
+{{- if .Values.enabled -}}
 {{- if .Values.udp -}}
 apiVersion: v1
 kind: ConfigMap
@@ -10,4 +11,5 @@ metadata:
 {{- end }}
   name: {{ include "ingress-nginx.fullname" . }}-udp
 data: {{ tpl (toYaml .Values.udp) . | nindent 2 }}
+{{- end }}
 {{- end }}

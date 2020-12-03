@@ -1,3 +1,4 @@
+{{- if .Values.enabled -}}
 {{- if and .Values.podSecurityPolicy.enabled .Values.defaultBackend.enabled -}}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
@@ -30,4 +31,5 @@ spec:
   - projected
   - secret
   - downwardAPI
+{{- end }}
 {{- end }}

@@ -1,3 +1,4 @@
+{{- if .Values.enabled -}}
 {{- if .Values.podSecurityPolicy.enabled -}}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
@@ -83,4 +84,5 @@ spec:
   readOnlyRootFilesystem: false
   seLinux:
     rule: 'RunAsAny'
+{{- end }}
 {{- end }}

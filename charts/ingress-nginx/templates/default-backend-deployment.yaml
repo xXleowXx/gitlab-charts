@@ -1,3 +1,4 @@
+{{- if .Values.enabled -}}
 {{- if .Values.defaultBackend.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -102,4 +103,5 @@ spec:
       affinity: {{ toYaml .Values.defaultBackend.affinity | nindent 8 }}
     {{- end }}
       terminationGracePeriodSeconds: 60
+{{- end }}
 {{- end }}

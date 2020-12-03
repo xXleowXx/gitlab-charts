@@ -1,3 +1,4 @@
+{{- if .Values.enabled -}}
 {{- if .Values.controller.admissionWebhooks.enabled -}}
 apiVersion: v1
 kind: Service
@@ -30,4 +31,5 @@ spec:
   selector:
     {{- include "ingress-nginx.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: controller
+{{- end }}
 {{- end }}
