@@ -659,8 +659,6 @@ ingress-nginx:
     minAvailable: 1
     scope:
       enabled: true
-    stats:
-      enabled: true
     metrics:
       enabled: true
       service:
