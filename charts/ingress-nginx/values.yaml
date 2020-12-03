@@ -716,3 +716,15 @@ tcp: {}
 ##
 udp: {}
 #  53: "kube-system/kube-dns:53"
+
+
+## GitLab-provided values starting below
+
+# Use an external configmap instead of generating the configmap from this chart.
+# Contents must match spec format for nginx-ingress and tcp ports must still be specified
+# using `tcp` setting above (although service name is meaningless with an external config)
+# e.g
+# --set tcp.22=ssh --set tcpExternalConfig=mynamespace/customconfigmap
+# Ref: https://github.com/kubernetes/contrib/tree/master/ingress/controllers/nginx/examples/tcp
+##
+tcpExternalConfig: ""
