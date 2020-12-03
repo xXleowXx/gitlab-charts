@@ -122,3 +122,17 @@ Check the ingress controller version tag is at most three versions behind the la
 {{- fail "Controller container image tag should be 0.27.0 or higher" -}}
 {{- end -}}
 {{- end -}}
+
+{{/* GitLab-provided partials starting below */}}
+
+{{- define "nginx-ingress.tcp-configmap" -}}
+{{ default (printf "%s-%s" (include "nginx-ingress.fullname" .) "tcp") .Values.tcpExternalConfig }}
+{{- end -}}
+
+{{- define "nginx-ingress.controller.ingress-class" -}}
+{{- if not .Values.controller.ingressClass -}}
+{{ .Release.Name }}-nginx
+{{- else -}}
+nginx
+{{- end -}}
+{{- end -}}
