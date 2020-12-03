@@ -1,5 +1,5 @@
 {{- if .Values.enabled -}}
-{{- if .Values.tcp -}}
+{{- if and .Values.tcp (not .Values.tcpExternalConfig) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,7 +9,8 @@ metadata:
 {{- if .Values.controller.tcp.annotations }}
   annotations: {{ toYaml .Values.controller.tcp.annotations | nindent 4 }}
 {{- end }}
-  name: {{ include "ingress-nginx.fullname" . }}-tcp
+  name: {{ template "nginx-ingress.tcp-configmap" . }}
+  namespace: {{ $.Release.Namespace }}
 data: {{ tpl (toYaml .Values.tcp) . | nindent 2 }}
 {{- end }}
 {{- end }}
