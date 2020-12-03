@@ -153,7 +153,7 @@ must be `+%{key}`.
 
 Prefix NGINX Ingress values with `ingress-nginx`. For example, set the controller image tag using `ingress-nginx.controller.image.tag`.
 
-See [`ingress-nginx` chart](../charts/ingress-nginx/index.md).
+See [`ingress-nginx` chart](../charts/nginx/index.md).
 
 ## Advanced in-cluster Redis configuration
 
