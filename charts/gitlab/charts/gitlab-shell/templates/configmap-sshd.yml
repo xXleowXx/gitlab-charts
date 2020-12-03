@@ -98,7 +98,6 @@ data:
     #ClientAliveInterval 0
     #ClientAliveCountMax 3
     #UseDNS no
-    UsePrivilegeSeparation no
     PidFile /srv/sshd/sshd.pid
     #PermitTunnel no
     #ChrootDirectory none

@@ -39,9 +39,7 @@ class HelmTemplate
     # handle common failures when helm or chart not setup properly
     case @exit_code
     when 256
-      if @stderr.include? 'found in Chart.yaml, but missing in charts/ directory'
-        fail "Chart dependencies not installed, run 'helm dependency update'"
-      end
+      fail "Chart dependencies not installed, run 'helm dependency update'" if @stderr.include? 'found in Chart.yaml, but missing in charts/ directory'
     end
     # load the complete output's YAML documents into an array
     yaml = YAML.load_stream(@stdout)

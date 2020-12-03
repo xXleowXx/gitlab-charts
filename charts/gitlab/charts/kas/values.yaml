@@ -32,6 +32,10 @@ service:
   externalObservabilityPort: 8151
   internalObservabilityPort: 8151
   type: ClusterIP
+metrics:
+  enabled: true
+  port: 8151
+  path: /metrics
 serviceAccount:
   enabled: false
   create: false

@@ -77,6 +77,22 @@ function deploy() {
     replicas="$new_replicas"
   fi
 
+  # Use stable images when on the stable branch
+  gitlab_version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
+  gitlab_version_args=()
+  if [[ $CI_COMMIT_BRANCH =~ -stable$ ]] && [[ $gitlab_version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    stable_branch=$(echo "${gitlab_version%.*}-stable" | tr '.' '-')
+    gitlab_version_args=(
+      "--set" "global.gitlabVersion=${stable_branch}"
+      "--set" "global.certificates.image.tag=${stable_branch}"
+      "--set" "global.kubectl.image.tag=${stable_branch}"
+      "--set" "gitlab.gitaly.image.tag=${stable_branch}"
+      "--set" "gitlab.gitlab-shell.image.tag=${stable_branch}"
+      "--set" "gitlab.gitlab-exporter.image.tag=${stable_branch}"
+      "--set" "registry.image.tag=${stable_branch}"
+    )
+  fi
+
   # Cleanup and previous installs, as FAILED and PENDING_UPGRADE will cause errors with `upgrade`
   if [ "$CI_ENVIRONMENT_SLUG" != "production" ] && previousDeployFailed ; then
     echo "Deployment in bad state, cleaning up $CI_ENVIRONMENT_SLUG"
@@ -143,6 +159,7 @@ CIYAML
     --set gitlab.operator.crdPrefix="$CI_ENVIRONMENT_SLUG" \
     --set global.gitlab.license.secret="$CI_ENVIRONMENT_SLUG-gitlab-license" \
     "${enable_kas[@]}" \
+    "${gitlab_version_args[@]}" \
     --namespace="$KUBE_NAMESPACE" \
     --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
     $HELM_EXTRA_ARGS \
