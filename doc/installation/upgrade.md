@@ -43,7 +43,7 @@ If you're upgrading to the `3.0` version of the chart, follow the [manual upgrad
 The following are the steps to upgrade GitLab to a newer version:
 
 1. Check the [change log](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/CHANGELOG.md) for the specific version you would like to upgrade to
-1. Go through [deployment documentation](./deployment.md) step by step
+1. Go through [deployment documentation](deployment.md) step by step
 1. Extract your previous `--set` arguments with
 
    ```shell
@@ -51,7 +51,7 @@ The following are the steps to upgrade GitLab to a newer version:
    ```
 
 1. Decide on all the values you need to set
-1. If you would like to use the GitLab Operator go through the steps outlined in [Operator installation](./operator.md)
+1. If you would like to use the GitLab Operator go through the steps outlined in [Operator installation](operator.md)
 1. Perform the upgrade, with all `--set` arguments extracted in step 4
 
    ```shell

@@ -1,6 +1,6 @@
 # values-minikube.yaml
 # This example intended as baseline to use Minikube for the deployment of GitLab
-# - Minimized CPU/Memory load, can fit into 2 CPU, 4 GB of RAM (barely)
+# - Minimized CPU/Memory load, can fit into 3 CPU, 6 GB of RAM (barely)
 # - Services that are not compatible with how Minikube runs are disabled
 # - Some services entirely removed, or scaled down to 1 replica.
 # - Configured to use 192.168.99.100, and nip.io for the domain
@@ -27,7 +27,7 @@ certmanager:
 # Use the `ingress` addon, not our Ingress (can't map 22/80/443)
 nginx-ingress:
   enabled: false
-# Save resources, only 2 CPU
+# Save resources, only 3 CPU
 prometheus:
   install: false
 gitlab-runner:

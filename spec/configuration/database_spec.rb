@@ -28,6 +28,34 @@ describe 'Database configuration' do
     }
   end
 
+  describe 'in-chart postgresql' do
+    it 'uses the in-chart postgresql service' do
+      t = HelmTemplate.new(default_values)
+      expect(t.exit_code).to eq(0)
+      expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include("host: \"test-postgresql.default.svc\"")
+    end
+
+    context 'custom serviceName' do
+      let(:global_values) do
+        default_values.deep_merge({
+          'global' => {
+            'psql' => {
+              'serviceName' => 'my-postgresql'
+            }
+          }
+        })
+      end
+
+      it 'uses the in-chart postgresql service' do
+        t = HelmTemplate.new(global_values)
+        expect(t.exit_code).to eq(0)
+        expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include("host: \"my-postgresql.default.svc\"")
+      end  
+    end
+  end
+
+  context
+
   describe 'global.psql settings' do
     context 'when psql.database set globally' do
       let(:global_values) do

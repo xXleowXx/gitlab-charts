@@ -15,6 +15,10 @@ spec:
       targetPort: {{ .Values.service.internalPort }}
       protocol: TCP
       name: tcp-{{ template "name" . }}
+    - port: {{ .Values.service.externalObservabilityPort }}
+      targetPort: {{ .Values.service.internalObservabilityPort }}
+      protocol: TCP
+      name: tcp-{{ template "name" . }}-metrics
   selector:
     app: {{ template "name" . }}
     release: {{ .Release.Name }}

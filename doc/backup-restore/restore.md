@@ -122,9 +122,9 @@ If the restored backup was not from an existing installation of the chart, you w
 
 1. Run the instance setup script to enable the necessary features
 
-  ```shell
-  kubectl exec <Task Runner pod name> -it -- /scripts/custom-instance-setup
-  ```
+   ```shell
+   kubectl exec <Task Runner pod name> -it -- /scripts/custom-instance-setup
+   ```
 
 ## Restart the pods
 

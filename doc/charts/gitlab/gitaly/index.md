@@ -167,6 +167,26 @@ Below is an example use of `priorityClassName`:
 priorityClassName: persistence-enabled
 ```
 
+### Altering security contexts
+
+Gitaly `StatefulSet` performance may suffer when repositories have large
+amounts of files due to a [known issue with `fsGroup` in upstream Kubernetes](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods).
+Mitigate the issue by changing or fully deleting the settings for the
+`securityContext`.
+
+```yaml
+gitlab:
+  gitaly:
+    securityContext:
+      fsGroup: ""
+      runAsUser: ""
+```
+
+NOTE: **Note:**
+The example syntax eliminates the `securityContext` setting entirely.
+Setting `securityContext: {}` or `securityContext:` does not work due
+to the way Helm merges default values with user provided configuration.
+
 ## External Services
 
 This chart should be attached the Workhorse service.
@@ -274,3 +294,19 @@ SAN attributes.
    ```
 
 1. Redeploy the Helm chart by passing the arguments `--set global.gitaly.tls.enabled=true --set global.gitaly.tls.secretName=<secret name>`
+
+### Global server hooks
+
+The Gitaly StatefulSet has support for [Global server hooks](https://docs.gitlab.com/ee/administration/server_hooks.html#create-a-global-server-hook-for-all-repositories). The hook scripts run on the Gitaly pod, and are therefore limited to the tools available in the [Gitaly container](https://gitlab.com/gitlab-org/build/CNG/-/blob/master/gitaly/Dockerfile).
+
+The hooks are populated using [ConfigMaps](https://kubernetes.io/docs/concepts/configuration/configmap/), and can be used by setting the following values as appropriate:
+
+1. `global.gitaly.hooks.preReceive.configmap`
+1. `global.gitaly.hooks.postReceive.configmap`
+1. `global.gitaly.hooks.update.configmap`
+
+To populate the ConfigMap, you can point `kubectl` to a directory of scripts:
+
+```shell
+kubectl create configmap MAP_NAME --from-file /PATH/TO/SCRIPT/DIR
+```

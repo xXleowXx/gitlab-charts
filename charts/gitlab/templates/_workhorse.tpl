@@ -10,7 +10,7 @@ to the service name
 {{- .Values.workhorse.host -}}
 {{- else -}}
 {{- $name := default "webservice" .Values.workhorse.serviceName -}}
-{{- printf "%s-%s" .Release.Name $name -}}
+{{- printf "%s-%s.%s.svc" .Release.Name $name .Release.Namespace -}}
 {{- end -}}
 {{- end -}}
 
