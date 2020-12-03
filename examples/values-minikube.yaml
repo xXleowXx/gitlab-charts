@@ -19,7 +19,7 @@ global:
 certmanager:
   install: false
 # Use the `ingress` addon, not our Ingress (can't map 22/80/443)
-nginx-ingress:
+ingress-nginx:
   enabled: false
 # Map gitlab-shell to a high-numbered NodePort cloning over SSH since
 # Minikube takes port 22.

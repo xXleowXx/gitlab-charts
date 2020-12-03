@@ -144,16 +144,16 @@ must be `+%{key}`.
 |----------------------------------------|---------------------------------------|---------|
 | `certmanager.rbac.create`              | Create and use RBAC resources         | true    |
 | `gitlab-runner.rbac.create`            | Create and use RBAC resources         | true    |
-| `nginx-ingress.rbac.create`            | Create and use default RBAC resources | false   |
-| `nginx-ingress.rbac.createClusterRole` | Create and use Cluster role           | false   |
-| `nginx-ingress.rbac.createRole`        | Create and use namespaced role        | true    |
+| `ingress-nginx.rbac.create`            | Create and use default RBAC resources | false   |
+| `ingress-nginx.rbac.createClusterRole` | Create and use Cluster role           | false   |
+| `ingress-nginx.rbac.createRole`        | Create and use namespaced role        | true    |
 | `prometheus.rbac.create`               | Create and use RBAC resources         | true    |
 
 ## Advanced NGINX Ingress configuration
 
-Prefix NGINX Ingress values with `nginx-ingress`. For example, set the controller image tag using `nginx-ingress.controller.image.tag`.
+Prefix NGINX Ingress values with `ingress-nginx`. For example, set the controller image tag using `ingress-nginx.controller.image.tag`.
 
-See [`nginx-ingress` chart](../charts/nginx/index.md).
+See [`ingress-nginx` chart](../charts/ingress-nginx/index.md).
 
 ## Advanced in-cluster Redis configuration
 

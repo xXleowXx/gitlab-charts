@@ -65,7 +65,7 @@ minio:
     image: custom-repository
     tag: custom-tag
 
-nginx-ingress:
+ingress-nginx:
   controller: *custom
   defaultBackend: *custom
 

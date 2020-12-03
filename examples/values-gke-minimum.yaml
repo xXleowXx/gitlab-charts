@@ -9,7 +9,7 @@ prometheus:
   install: false
 gitlab-runner:
   install: false
-nginx-ingress:
+ingress-nginx:
   controller:
     replicaCount: 1
     minAvailable: 0

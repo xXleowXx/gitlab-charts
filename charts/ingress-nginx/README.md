@@ -1,12 +1,12 @@
 Forked from https://github.com/kubernetes/ingress-nginx
 * tcp-configmap.yaml: is optional depending on new `tcpExternalConfig` setting
 * Ability to use a templated tcp configmap name from another chart
-  * controller-configmap-tcp.yaml: `.metadata.name` is a template `nginx-ingress.tcp-configmap`
-  * controller-deployment.yaml: `.spec.template.spec.containers[0].args` uses `nginx-ingress.tcp-configmap` template for configmap name
-  * gitlab chart overrides `nginx-ingress.tcp-configmap` so that gitlab/gitlab-org/charts/gitlab-shell can configure its tcp service
+  * controller-configmap-tcp.yaml: `.metadata.name` is a template `ingress-nginx.tcp-configmap`
+  * controller-deployment.yaml: `.spec.template.spec.containers[0].args` uses `ingress-nginx.tcp-configmap` template for configmap name
+  * gitlab chart overrides `ingress-nginx.tcp-configmap` so that gitlab/gitlab-org/charts/gitlab-shell can configure its tcp service
 * Ability to use a templated ingress name based on the release name
-  * controller-deployment.yaml: `.spec.template.spec.containers[0].args` uses `nginx-ingress.controller.ingress-class`
-  * role.yaml: rule for editing leader configmap uses `nginx-ingress.controller.ingress-class`
+  * controller-deployment.yaml: `.spec.template.spec.containers[0].args` uses `ingress-nginx.controller.ingress-class`
+  * role.yaml: rule for editing leader configmap uses `ingress-nginx.controller.ingress-class`
 * Replace `controller.service.loadBalancerIP` with `global.hosts.externalIP`
 
 # ingress-nginx

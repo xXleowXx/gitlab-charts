@@ -1,5 +1,5 @@
 # Specify NodePort for HTTPS on NGINX
-nginx-ingress:
+ingress-nginx:
   controller:
     service:
       nodePorts:

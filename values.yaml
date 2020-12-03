@@ -632,8 +632,8 @@ certmanager:
 
 ## doc/charts/nginx/index.md
 ## doc/architecture/decisions.md#nginx-ingress
-## Installation & configuration of charts/nginx
-nginx-ingress:
+## Installation & configuration of charts/ingress-nginx:
+ingress-nginx:
   enabled: true
   tcpExternalConfig: "true"
   controller:

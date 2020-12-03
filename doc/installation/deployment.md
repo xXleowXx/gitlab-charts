@@ -199,7 +199,7 @@ This chart defaults to creating and using RBAC. If your cluster does not have RB
 
 ```shell
 --set certmanager.rbac.create=false
---set nginx-ingress.rbac.createRole=false
+--set ingress-nginx.rbac.createRole=false
 --set prometheus.rbac.create=false
 --set gitlab-runner.rbac.create=false
 ```

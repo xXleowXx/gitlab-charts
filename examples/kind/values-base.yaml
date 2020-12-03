@@ -14,7 +14,7 @@ certmanager:
   install: false
 
 # Specify NodePorts for NGINX and reduce replicas to 1
-nginx-ingress:
+ingress-nginx:
   defaultBackend:
     replicaCount: 1
   controller:

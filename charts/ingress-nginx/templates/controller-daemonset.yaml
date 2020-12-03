@@ -80,10 +80,10 @@ spec:
             - --publish-service={{ template "ingress-nginx.controller.publishServicePath" . }}
           {{- end }}
             - --election-id={{ .Values.controller.electionID }}
-            - --ingress-class={{ template "nginx-ingress.controller.ingress-class" . }}
+            - --ingress-class={{ template "ingress-nginx.controller.ingress-class" . }}
             - --configmap={{ .Release.Namespace }}/{{ include "ingress-nginx.controller.fullname" . }}
           {{- if or .Values.tcp (include "gitlab.shell.port" $ ) }}
-            - --tcp-services-configmap={{ .Release.Namespace }}/{{ template "nginx-ingress.fullname" . }}-tcp
+            - --tcp-services-configmap={{ .Release.Namespace }}/{{ template "ingress-nginx.fullname" . }}-tcp
           {{- end }}
           {{- if .Values.udp }}
             - --udp-services-configmap={{ .Release.Namespace }}/{{ include "ingress-nginx.fullname" . }}-udp

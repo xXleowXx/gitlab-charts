@@ -24,7 +24,7 @@ gitlab-runner:
     requests:
       cpu: 10m
 # Reduce replica counts, resource requests reducing CPU & memory requirements
-nginx-ingress:
+ingress-nginx:
   controller:
     replicaCount: 1
     minAvailable: 1

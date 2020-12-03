@@ -7,7 +7,7 @@ global:
       enabled: false
 
 # Specify NodePort for HTTP on NGINX
-nginx-ingress:
+ingress-nginx:
   controller:
     service:
       nodePorts:

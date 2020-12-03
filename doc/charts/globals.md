@@ -1392,9 +1392,9 @@ global:
     port: 32022
 ```
 
-You can combine `global.shell.port` and `nginx-ingress.controller.service.type=NodePort`
+You can combine `global.shell.port` and `ingress-nginx.controller.service.type=NodePort`
 to set a NodePort for the NGINX controller Service object. Note that if
-`nginx-ingress.controller.service.nodePorts.gitlab-shell` is set, it will
+`ingress-nginx.controller.service.nodePorts.gitlab-shell` is set, it will
 override `global.shell.port` when setting the NodePort for NGINX.
 
 ```yaml
@@ -1402,7 +1402,7 @@ global:
   shell:
     port: 32022
 
-nginx-ingress:
+ingress-nginx:
   controller:
     service:
       type: NodePort

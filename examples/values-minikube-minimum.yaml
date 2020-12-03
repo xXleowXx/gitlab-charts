@@ -25,7 +25,7 @@ global:
 certmanager:
   install: false
 # Use the `ingress` addon, not our Ingress (can't map 22/80/443)
-nginx-ingress:
+ingress-nginx:
   enabled: false
 # Save resources, only 3 CPU
 prometheus:

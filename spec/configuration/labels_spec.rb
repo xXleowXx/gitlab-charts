@@ -18,8 +18,8 @@ describe 'Labels configuration' do
       'Deployment/test-gitlab-runner',
       'Deployment/test-prometheus-server',
       'Deployment/test-minio',
-      'Deployment/test-nginx-ingress-controller',
-      'Deployment/test-nginx-ingress-default-backend',
+      'Deployment/test-ingress-nginx-controller',
+      'Deployment/test-ingress-nginx-default-backend',
       # not included, StatefulSet: postgresql, redis, gitlab/gitaly
     ]
   end

@@ -19,7 +19,7 @@ postgresql:
 redis:
   install: false
 
-nginx-ingress:
+ingress-nginx:
   enabled: false
 
 prometheus:
@@ -51,7 +51,7 @@ global:
     tls:
       secretName: my-wildcard-cert-secret  # Your wildcard certificate.
 
-  # `global.hosts.ssh` is needed for `gitlab-shell` because `nginx-ingress` is disabled, 
+  # `global.hosts.ssh` is needed for `gitlab-shell` because `ingress-nginx` is disabled,
   # and it needs to be exposed separately.
   hosts:
     ssh: ssh.gitlab.example.com
@@ -121,7 +121,7 @@ gitlab:
     image:
       tag: master-ubi8
 
-    # This is needed for `gitlab-shell` because `nginx-ingress` is disabled.
+    # This is needed for `gitlab-shell` because `ingress-nginx` is disabled.
     service:
       externalIPs:
         - x.x.x.x # Your IP address for `gitlab-shell`.

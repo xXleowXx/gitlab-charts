@@ -137,7 +137,7 @@ global:
 grafana:
   nodeSelector:
     workload: ""
-nginx-ingress:
+ingress-nginx:
   controller:
     nodeSelector:
       workload: ""

@@ -9,7 +9,7 @@ metadata:
 {{- if .Values.controller.tcp.annotations }}
   annotations: {{ toYaml .Values.controller.tcp.annotations | nindent 4 }}
 {{- end }}
-  name: {{ template "nginx-ingress.tcp-configmap" . }}
+  name: {{ template "ingress-nginx.tcp-configmap" . }}
   namespace: {{ $.Release.Namespace }}
 data: {{ tpl (toYaml .Values.tcp) . | nindent 2 }}
 {{- end }}

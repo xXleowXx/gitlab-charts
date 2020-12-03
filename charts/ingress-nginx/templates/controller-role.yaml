@@ -63,7 +63,7 @@ rules:
     resources:
       - configmaps
     resourceNames:
-      - {{ .Values.controller.electionID }}-{{ template "nginx-ingress.controller.ingress-class" . }}
+      - {{ .Values.controller.electionID }}-{{ template "ingress-nginx.controller.ingress-class" . }}
     verbs:
       - get
       - update

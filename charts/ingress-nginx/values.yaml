@@ -113,7 +113,7 @@ controller:
     ## Annotations to be added to the udp config configmap
     annotations: {}
 
-  ## Additional command line arguments to pass to nginx-ingress-controller
+  ## Additional command line arguments to pass to ingress-nginx-controller
   ## E.g. to specify the default SSL certificate you can use
   ## extraArgs:
   ##   default-ssl-certificate: "<namespace>/<secret_name>"
@@ -721,7 +721,7 @@ udp: {}
 ## GitLab-provided values starting below
 
 # Use an external configmap instead of generating the configmap from this chart.
-# Contents must match spec format for nginx-ingress and tcp ports must still be specified
+# Contents must match spec format for ingress-nginx and tcp ports must still be specified
 # using `tcp` setting above (although service name is meaningless with an external config)
 # e.g
 # --set tcp.22=ssh --set tcpExternalConfig=mynamespace/customconfigmap

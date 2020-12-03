@@ -125,11 +125,11 @@ Check the ingress controller version tag is at most three versions behind the la
 
 {{/* GitLab-provided partials starting below */}}
 
-{{- define "nginx-ingress.tcp-configmap" -}}
-{{ default (printf "%s-%s" (include "nginx-ingress.fullname" .) "tcp") .Values.tcpExternalConfig }}
+{{- define "ingress-nginx.tcp-configmap" -}}
+{{ default (printf "%s-%s" (include "ingress-nginx.fullname" .) "tcp") .Values.tcpExternalConfig }}
 {{- end -}}
 
-{{- define "nginx-ingress.controller.ingress-class" -}}
+{{- define "ingress-nginx.controller.ingress-class" -}}
 {{- if not .Values.controller.ingressClass -}}
 {{ .Release.Name }}-nginx
 {{- else -}}
