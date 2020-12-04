@@ -95,6 +95,7 @@ if [ -n "$env" ]; then
     db_key_base=$(fetch_rails_value secrets.yml "${env}.db_key_base")
     openid_connect_signing_key=$(fetch_rails_value secrets.yml "${env}.openid_connect_signing_key")
     ci_jwt_signing_key=$(fetch_rails_value secrets.yml "${env}.ci_jwt_signing_key")
+    encrypted_settings_key_base=$(fetch_rails_value secrets.yml "${env}.encrypted_settings_key_base")
   fi;
 
   # Generate defaults for any unset secrets
@@ -103,6 +104,7 @@ if [ -n "$env" ]; then
   db_key_base="${db_key_base:-$(gen_random 'a-f0-9' 128)}" # equavilent to secureRandom.hex(64)
   openid_connect_signing_key="${openid_connect_signing_key:-$(openssl genrsa 2048)}"
   ci_jwt_signing_key="${ci_jwt_signing_key:-$(openssl genrsa 2048)}"
+  encrypted_settings_key_base="${encrypted_settings_key_base:-$(gen_random 'a-f0-9' 128)}" # equavilent to secureRandom.hex(64)
 
   # Update the existing secret
   cat << EOF > rails-secrets.yml
@@ -117,6 +119,7 @@ stringData:
       secret_key_base: $secret_key_base
       otp_key_base: $otp_key_base
       db_key_base: $db_key_base
+      encrypted_settings_key_base: $encrypted_settings_key_base
       openid_connect_signing_key: |
 $(echo "${openid_connect_signing_key}" | awk '{print "        " $0}')
       ci_jwt_signing_key: |
