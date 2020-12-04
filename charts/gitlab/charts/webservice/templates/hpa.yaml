@@ -11,7 +11,7 @@ From here on:
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "webservice.fullname.suffix" . }}
+  name: {{ template "webservice.fullname.withSuffix" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
@@ -20,7 +20,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "webservice.fullname.suffix" . }}
+    name: {{ template "webservice.fullname.withSuffix" . }}
   minReplicas: {{ .hpa.minReplicas }}
   maxReplicas: {{ .hpa.maxReplicas }}
   metrics:
