@@ -193,6 +193,10 @@ hpa:
   customMetrics: []
 
 storage: {}
+  # secret:
+  # redirect:
+  #   disable:
+  #   exceptions: []
 minio:
   redirect: false
 
