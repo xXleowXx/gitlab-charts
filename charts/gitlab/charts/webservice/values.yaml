@@ -75,6 +75,9 @@ ingress:
     # enabled: true
   annotations:
     nginx.ingress.kubernetes.io/service-upstream: "true"
+  # Use this in combination of .deployments below
+  requireBasePath: true
+
 workerProcesses: 2
 
 unicorn:
@@ -91,6 +94,7 @@ puma:
 
 hpa:
   targetAverageValue: 1
+  customMetrics: # optional replacement of HPA metrics definition
 
 deployment:
   # terminationGracePeriodSeconds: 30
@@ -341,3 +345,19 @@ serviceAccount:
 ## Allow configuring pods' priorityClassName. This is used to control pod priority in case of eviction:
 #  https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 priorityClassName: ""
+
+## deployments:
+#    Allows for splitting of service classes across multiple deployments
+#  This map will be range-walked, and each entry will create discrete
+#  Kubernetes resources: Deployment, HPA, PDB, Service, Ingress
+#    The name of the key (for example, `web`) will be appended to the
+#  end of each resource `.metadata.name`, and added as a label to each
+#  resource for tracking.
+#  https://docs.gitlab.com/charts/charts/gitlab/webservice/#deployments
+deployments: {}
+  # There must always be at least one, with `xyz.ingress.path: /`
+  # unless `ingress.requireBasePath: false`
+  #
+  # default:
+  #   ingress:
+  #     path: /

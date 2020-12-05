@@ -25,7 +25,7 @@ describe 'Labels configuration' do
   end
 
   let(:target_chart) do
-    'Deployment/test-webservice'
+    'Deployment/test-webservice-default'
   end
 
   let(:chart_values) do

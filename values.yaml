@@ -540,8 +540,13 @@ global:
 
   antiAffinity: soft
 
-  ## doc/installation/secrets.md#gitlab-workhorse-secret
-  workhorse: {}
+  ## doc/charts/globals.md#workhorse
+  ## Global settings related to Workhorse
+  workhorse:
+    serviceName: webservice-default
+    # host:
+    # port:
+    ## doc/installation/secrets.md#gitlab-workhorse-secret
     # secret:
     # key:
 

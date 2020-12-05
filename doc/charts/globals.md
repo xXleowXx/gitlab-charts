@@ -24,6 +24,7 @@ for more information on how the global variables work.
 - [MinIO](#configure-minio-settings)
 - [appConfig](#configure-appconfig-settings)
 - [Rails](#configure-rails-settings)
+- [Workhorse](#configure-workhorse-settings)
 - [GitLab Shell](#configure-gitlab-shell)
 - [Webservice](#configure-webservice)
 - [Custom Certificate Authorities](#custom-certificate-authorities)
@@ -1350,6 +1351,24 @@ global:
     bootsnap:
       enabled: true
 ```
+
+## Configure Workhorse settings
+
+Several components of the GitLab suite speak to the APIs via GitLab Workhorse. This is currently a part of the Webservice chart. These settings are consumed by all charts that need to contact GitLab Workhorse, providing an easy access to set them globaly vs individually.
+
+```yaml
+global:
+  workhorse:
+    serviceName: webservice-default
+    host: api.example.com
+    port: 8181
+```
+
+| Name | Type | | Default | Description |
+| :-- | :-- | :-- | :-- |
+| serviceName | String | `webservice-default` | Name of service to direct internal API traffic to. Do not include the Release name, as it will be templated in. Should match an entry in `gitlab.webservice.deployments`. See [`gitlab/webservice` chart](gitlab/webservice/index.md#deployments-settings) |
+| host | String | | Fully qualified hostname or IP address of an API endpoint. Overrides the presence of `serviceName`. |
+| port | Integer | `8181` | Port number of associated API server. |
 
 ### Bootsnap Cache
 
