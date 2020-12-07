@@ -213,6 +213,7 @@ production:
   secret_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
   otp_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
   db_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
+  encrypted_settings_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
   openid_connect_signing_key: |
 $(openssl genrsa 2048 | awk '{print "    " $0}')
   ci_jwt_signing_key: |
@@ -223,6 +224,9 @@ kubectl create secret generic <name>-rails-secret --from-file=secrets.yml
 ```
 
 This secret is referenced by the `global.railsSecrets.secret` setting.
+
+NOTE: **Note:**
+The `encrypted_settings_key_base` was added in GitLab `13.7`, and will be required for GitLab `14.0`.
 
 ### GitLab Workhorse secret
 

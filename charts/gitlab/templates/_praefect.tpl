@@ -2,19 +2,24 @@
 Return the default praefect storage line for gitlab.yml
 */}}
 {{- define "gitlab.praefect.storages" -}}
+{{- $scheme := "tcp" -}}
+{{- $port := include "gitlab.praefect.externalPort" $ -}}
+{{- if $.Values.global.praefect.tls.enabled -}}
+{{- $scheme = "tls" -}}
+{{- $port = include "gitlab.praefect.tls.externalPort" $ -}}
+{{- end }}
 {{- range $.Values.global.praefect.virtualStorages }}
 {{ .name }}:
   path: /var/opt/gitlab/repo
-  gitaly_address: tcp://{{ template "gitlab.praefect.serviceName" $ }}:{{ $.Values.global.gitaly.service.externalPort }}
+  gitaly_address: {{ printf "%s" $scheme }}://{{ template "gitlab.praefect.serviceName" $ }}.{{$.Release.Namespace}}.svc:{{ $port }}
 {{- end }}
 {{- end -}}
-
 
 {{/*
 Return the resolvable name of the praefect service
 */}}
 {{- define "gitlab.praefect.serviceName" -}}
-{{ $.Release.Name }}-praefect
+{{- coalesce .Values.serviceName .Values.global.praefect.serviceName (printf "%s-praefect" $.Release.Name) -}}
 {{- end -}}
 
 {{/*

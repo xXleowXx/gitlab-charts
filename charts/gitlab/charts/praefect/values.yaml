@@ -10,11 +10,9 @@ electionStrategy: sql
 
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitaly
+
 service:
-  name: praefect
-  type: ClusterIP
-  internalPort: 8075
-  externalPort: 8075
+  tls: {}
 
 init:
   resources: {}
@@ -50,5 +48,7 @@ tolerations: []
 ## The Gitaly StatefulSet's priorityClassName
 # priorityClassName:
 
-gitaly: {}
+gitaly:
+  service:
+    tls: {}
   # serviceName:

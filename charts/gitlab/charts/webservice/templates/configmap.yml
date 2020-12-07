@@ -7,6 +7,14 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
 data:
+  {{- if $.Values.debugDeploymentsConfig }}
+  # DEBUG to show generated map
+  {{- include "webservice.datamodel.prepare" $ -}}
+  deployments: |
+    blank:
+      {{- include "webservice.datamodel.blank" $ | nindent 6 }}
+    {{- toYaml .Values.deployments | nindent 4 }}
+  {{- end }}
   installation_type: |
     gitlab-helm-chart
   database.yml.erb: |

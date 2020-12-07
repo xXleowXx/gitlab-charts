@@ -83,6 +83,17 @@ gitaly: server enabled with TLS, no TLS certificate provided
 {{- end -}}
 {{/* END gitlab.checkConfig.gitaly.tls */}}
 
+{{/*
+Ensure a certificate is provided when Praefect is enabled and is instructed to listen over TLS 
+*/}}
+{{- define "gitlab.checkConfig.praefect.tls" -}}
+{{- if and (and $.Values.global.praefect.enabled $.Values.global.praefect.tls.enabled) (not $.Values.global.praefect.tls.secretName) }}
+praefect: server enabled with TLS, no TLS certificate provided
+    It appears Praefect is specified to listen over TLS, but no certificate was specified.
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.praefect.tls */}}
+
 {{/* Check configuration of Sidekiq - don't supply queues and negateQueues */}}
 {{- define "gitlab.checkConfig.sidekiq.queues.mixed" -}}
 {{- if .Values.gitlab.sidekiq.pods -}}

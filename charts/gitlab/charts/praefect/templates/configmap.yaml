@@ -13,14 +13,28 @@ data:
     do
       cp -v -r -L /init-config/${f}  /init-secrets/praefect/${f}
     done
+    {{- if $.Values.global.praefect.tls.enabled }}
+    cp -v -L /init-config/praefect.crt /init-secrets/praefect/praefect.crt
+    cp -v -L /init-config/praefect.key /init-secrets/praefect/praefect.key
+    {{- end }}
   config.toml.erb: |
     <% gitaly_token = File.read('/etc/gitlab-secrets/praefect/gitaly_token').strip.dump[1..-2] %>
     <% praefect_token = File.read('/etc/gitlab-secrets/praefect/praefect_token').strip.dump[1..-2] %>
     # TCP address to listen on
-    listen_addr = '0.0.0.0:{{ .Values.service.internalPort }}'
+    listen_addr = '0.0.0.0:{{ include "gitlab.praefect.internalPort" . }}'
+
+    {{- if $.Values.global.praefect.tls.enabled }}
+    tls_listen_addr = '0.0.0.0:{{ include "gitlab.praefect.tls.internalPort" . }}'
+    {{- end }}
 
     {{- if .Values.metrics.enabled }}
     prometheus_listen_addr = 'localhost:{{ .Values.metrics.port  }}'
+    {{- end }}
+
+    {{- if $.Values.global.praefect.tls.enabled }}
+    [tls]
+    certificate_path = '/etc/gitlab-secrets/praefect/praefect.crt'
+    key_path = '/etc/gitlab-secrets/praefect/praefect.key'
     {{- end }}
 
     [failover]
@@ -52,18 +66,23 @@ data:
     {{- end }}
     {{- end }}
 
+    {{- $scheme := "tcp" -}}
+    {{- $port := include "gitlab.gitaly.internalPort" $ -}}
+    {{- if $.Values.global.gitaly.tls.enabled -}}
+    {{-   $scheme = "tls" -}}
+    {{-   $port = include "gitlab.gitaly.tls.internalPort" $ -}}
+    {{- end -}}
     {{- $globalContext := $ }}
     {{ range $.Values.global.praefect.virtualStorages }}
     {{- $storageName := .name }}
-    {{- $port := $.Values.global.gitaly.service.externalPort }}
     [[virtual_storage]]
     name = '{{ $storageName }}'
     {{- range until (.gitalyReplicas | int) }}
     [[virtual_storage.node]]
-    {{- $podName := include "gitlab.praefect.gitaly.serviceName" (dict "context" $globalContext "name" $storageName) -}}
+    {{- $serviceName := include "gitlab.praefect.gitaly.serviceName" (dict "context" $globalContext "name" $storageName) -}}
     {{- $podAddress := include "gitlab.praefect.gitaly.qualifiedServiceName" (dict "context" $globalContext "index" . "name" $storageName) }}
-    storage = '{{ $podName }}-{{ . }}'
-    address = '{{ printf "tcp://%s.%s:%g" $podAddress $globalContext.Release.Namespace $port }}'
+    storage = '{{ $serviceName }}-{{ . }}'
+    address = '{{ printf "%s://%s.%s.svc:%s" $scheme $podAddress $globalContext.Release.Namespace $port }}'
     token = "<%= gitaly_token %>"
     {{- end }}
     {{ end }}

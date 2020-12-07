@@ -47,6 +47,9 @@ the `helm install` command using the `--set` flags.
 | `ingress.enabled`           |  `true` if `global.kas.enabled=true` | You can use `kas.ingress.enabled` to explicitly turn it on or off. If not set, you can optionally use `global.ingress.enabled` for the same purpose. |
 | `ingress.annotations`       | `{}`           | Ingress annotations              |
 | `ingress.tls`               | `{}`           | Ingress TLS configuration        |
+| `metrics.enabled`           | `true`         | Toggle Prometheus metrics exporter |
+| `metrics.port`              | `8151`         | Port number to use for the metrics exporter |
+| `metrics.path`              | `/metrics`     | Path to use for the metrics exporter |
 | `maxReplicas`               | `10`           | HPA `maxReplicas`                |
 | `maxUnavailable`            | `1`            | HPA `maxUnavailable`             |
 | `minReplicas`               | `2`            | HPA `maxReplicas`                |
@@ -137,4 +140,4 @@ the `helm install` command using the `--set` flags.
 
 1. Follow these instructions on installing the [GitLab Kubernetes Agent](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/tree/master/build/deployment/gitlab-agent) with the token generated on the previous step.
 
-1. Login with the root user, edit the `manifest.yaml` ConfigMap in the root of your project. If you're using `gitlab-paas`, here is your [`manifest.yaml`](https://gitlab.joaocunha.eu/root/kas-test/-/blob/master/manifest.yaml). Change one of the configurations to whatever value you like, for instance increment the `data.game.properties.lives` attribute. Wait 30 seconds and check if this configuration map was correctly updated on your cluster: `kubectl get cm -n agentk game-config -oyaml`
+1. Login with the root user, edit the `manifest.yaml` ConfigMap in the root of your project. If you're using `gitlab-paas`, here is your [`manifest.yaml`](https://gitlab.qa.joaocunha.eu/root/kas-qa/-/blob/master/manifest.yaml). Change one of the configurations to whatever value you like, for instance increment the `data.game.properties.lives` attribute. Wait 30 seconds and check if this configuration map was correctly updated on your cluster: `kubectl get cm -n agentk game-config -oyaml`

@@ -10,13 +10,16 @@ The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/
 
 ## Known Limitations
 
-1. [TLS is not supported](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2306).
 1. The database has to be [manually created](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2310).
 1. [Migrating from an existing Gitaly setup](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2311) to Praefect is not supported.
 
 ## Requirements
 
-This chart depends on the resources in the Gitaly chart. By default, it will spin up 3 Gitaly Replicas.
+This chart consumes the Gitaly chart. Settings from `global.gitaly` are used to configure the instances created by this chart. Documentation of these settings can be found in [Gitaly chart documentation](../gitaly/index.md).
+
+*Important*: `global.gitaly.tls` is independent of `global.praefect.tls`. They are configured separately.
+
+By default, this chart will create 3 Gitaly Replicas.
 
 ## Configuration
 
@@ -101,6 +104,38 @@ there will be some variation in how you connect.
    ```sql
    CREATE DATABASE praefect WITH OWNER praefect;
    ```
+
+### Running Praefect over TLS
+
+Praefect supports communicating with client and Gitaly nodes over TLS. This is
+controlled by the settings `global.praefect.tls.enabled` and `global.praefect.tls.secretName`.
+To run Praefect over TLS follow these steps:
+
+1. The Helm chart expects a certificate to be provided for communicating over
+   TLS with Praefect. This certificate should apply to all the Praefect nodes that
+   are present. Hence all hostnames of each of these nodes should be added as a
+   Subject Alternate Name (SAN) to the certificate or alternatively, you can use wildcards.
+
+   To know the hostnames to use, check the file `/srv/gitlab/config/gitlab.yml`
+   file in the Task Runner Pod and check the various `gitaly_address` fields specified
+   under `repositories.storages` key within it.
+
+   ```shell
+   kubectl exec -it <Task Runner Pod> -- grep gitaly_address /srv/gitlab/config/gitlab.yml
+   ```
+
+NOTE: **Note:**
+A basic script for generating custom signed certificates for internal Praefect Pods
+[can be found in this repo](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/generate_certificates.sh).
+Users can use or refer that script to generate certificates with proper SAN attributes.
+
+1. Create a TLS Secret using the certificate created.
+
+   ```shell
+   kubectl create secret tls <secret name> --cert=praefect.crt --key=praefect.key
+   ```
+
+1. Redeploy the Helm chart by passing the additional arguments `--set global.praefect.tls.enabled=true --set global.praefect.tls.secretName=<secret name>`
 
 ### Installation command line options
 
