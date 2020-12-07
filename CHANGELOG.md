@@ -97,6 +97,13 @@ entry.
 - Bump default gitlab-kas image tag to v0.0.6. !1582
 
 
+## 4.4.6 (2020-12-07)
+
+### Other (1 change)
+
+- Set release_package to run manually. !1641
+
+
 ## 4.4.5 (2020-11-04)
 
 ### Fixed (2 changes)
