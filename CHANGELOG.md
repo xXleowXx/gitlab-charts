@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.5.5 (2020-12-07)
+
+### Other (1 change)
+
+- Set release_package to run manually. !1641
+
+
 ## 4.5.4 (2020-11-13)
 
 - No changes.
