@@ -4,17 +4,21 @@ Return the default praefect storage line for gitlab.yml
 {{- define "gitlab.praefect.storages" -}}
 default:
   path: /var/opt/gitlab/repo
-  gitaly_address: tcp://{{ template "gitlab.praefect.serviceName" . }}:{{ .Values.global.gitaly.service.externalPort }}
+{{- $scheme := "tcp" -}}
+{{- $port := include "gitlab.praefect.externalPort" $ -}}
+{{- if $.Values.global.praefect.tls.enabled -}}
+{{- $scheme = "tls" -}}
+{{- $port = include "gitlab.praefect.tls.externalPort" $ -}}
+{{- end }}
+  gitaly_address: {{ printf "%s" $scheme }}://{{ template "gitlab.praefect.serviceName" $ }}.{{.Release.Namespace}}.svc:{{ $port }}
 {{- end -}}
-
 
 {{/*
 Return the resolvable name of the praefect service
 */}}
 {{- define "gitlab.praefect.serviceName" -}}
-{{ $.Release.Name }}-praefect
+{{- coalesce .Values.serviceName .Values.global.praefect.serviceName (printf "%s-praefect" $.Release.Name) -}}
 {{- end -}}
-
 
 {{/*
 Return a list of Gitaly pod names

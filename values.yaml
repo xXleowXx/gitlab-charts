@@ -136,6 +136,18 @@ global:
     dbSecret: {}
     psql:
       sslMode: 'disable'
+    # serviceName:
+    service:
+      name: praefect
+      type: ClusterIP
+      externalPort: 8075
+      internalPort: 8075
+      tls:
+        externalPort: 8076
+        internalPort: 8076
+    tls:
+      enabled: false
+      # secretName:
 
   ## doc/charts/globals.md#configure-minio-settings
   minio:
