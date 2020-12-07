@@ -459,11 +459,7 @@ danger-review:
     - danger --fail-on-errors=true
 
 check_docs_lint:
-<<<<<<< HEAD
   image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:ruby-2.7.2-alpine-3.12-vale-2.4.3-markdownlint-0.24.0"
-=======
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs:lint"
->>>>>>> 63ff10c4... update to working version
   stage: prepare
   cache: {}
   dependencies: []
