@@ -283,7 +283,7 @@ Follow the steps to run Gitaly over TLS:
 
 NOTE: **Note:**
 A basic script for generating custom signed certificates for
-internal Gitaly pods [can be found in this repo](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/gitaly_statefulset_certificates.sh).
+internal Gitaly pods [can be found in this repo](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/generate_certificates.sh).
 Users can use or refer that script to generate certificates with proper
 SAN attributes.
 
@@ -293,7 +293,7 @@ SAN attributes.
    kubectl create secret tls gitaly-server-tls --cert=gitaly.crt --key=gitaly.key
    ```
 
-1. Redeploy the Helm chart by passing the arguments `--set global.gitaly.tls.enabled=true --set global.gitaly.tls.secretName=<secret name>`
+1. Redeploy the Helm chart by passing the additional arguments `--set global.gitaly.tls.enabled=true --set global.gitaly.tls.secretName=<secret name>`
 
 ### Global server hooks
 
