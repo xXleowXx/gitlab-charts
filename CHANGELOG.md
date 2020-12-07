@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.6.2 (2020-12-07)
+
+- No changes.
+
 ## 4.6.1 (2020-11-23)
 
 - No changes.
@@ -38,6 +42,13 @@ entry.
 
 - Add Image Resizer config defaults. !1595
 - Update resource specifications for Webservice and Sidekiq. !1634
+- Set release_package to run manually. !1641
+
+
+## 4.5.5 (2020-12-07)
+
+### Other (1 change)
+
 - Set release_package to run manually. !1641
 
 
@@ -84,6 +95,13 @@ entry.
 - Remove db-pool configuration. !1551
 - cleanup registry.fullname templates. !1568
 - Bump default gitlab-kas image tag to v0.0.6. !1582
+
+
+## 4.4.6 (2020-12-07)
+
+### Other (1 change)
+
+- Set release_package to run manually. !1641
 
 
 ## 4.4.5 (2020-11-04)
