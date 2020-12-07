@@ -6,16 +6,16 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
-  annotations:
 data:
-  # See https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/kas_config_example.yaml
+  # See https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/pkg/kascfg/config_example.yaml
   config.yaml: |
 {{- if .Values.customConfig }}
     {{- .Values.customConfig | toYaml | nindent 4 }}
 {{- else }}
-    listen_agent:
-      address: ":{{ .Values.service.internalPort }}"
-      websocket: true
+    agent:
+      listen:
+        address: ":{{ .Values.service.internalPort }}"
+        websocket: true
     gitlab:
       address: http://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}
       authentication_secret_file: "/etc/kas/.gitlab_kas_secret"
