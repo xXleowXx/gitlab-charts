@@ -979,7 +979,8 @@ gitlab:
 ## doc/charts/gitlab/gitaly
 #   gitaly:
 ## doc/charts/gitlab/gitlab-shell
-#   gitlab-shell:
-#     enabled: false
+  gitlab-shell:
+    annotations:
+      traffic.sidecar.istio.io/excludeOutboundPorts: "2222"
 ## doc/charts/gitlab/gitlab-grafana
 #   gitlab-grafana:
