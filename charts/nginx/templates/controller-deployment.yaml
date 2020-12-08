@@ -203,7 +203,7 @@ spec:
       {{- end }}
     {{- end }}
       serviceAccountName: {{ template "nginx-ingress.serviceAccountName" . }}
-      terminationGracePeriodSeconds: 60
+      terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
 {{- if (or .Values.controller.customTemplate.configMapName .Values.controller.extraVolumes) }}
       volumes:
 {{- end }}

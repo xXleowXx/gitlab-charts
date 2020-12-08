@@ -21,7 +21,7 @@ the Kubernetes cluster this chart is deployed onto.
 ## Configuration
 
 The `webservice` chart is configured as follows: [Global Settings](#global-settings),
-[Ingress Settings](#ingress-settings), [External Services](#external-services), and
+[Deployments settings](#deployments-settings), [Ingress Settings](#ingress-settings), [External Services](#external-services), and
 [Chart Settings](#chart-settings).
 
 ## Installation command line options
@@ -224,6 +224,99 @@ to `registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce`.
 
 We share some common global settings among our charts. See the [Globals Documentation](../../globals.md)
 for common configuration options, such as GitLab and Registry hostnames.
+
+## Deployments settings
+
+This chart has the ability to create multiple Deployment objects and their related
+resources. This feature allows requests to the GitLab application to be distributed between multiple sets of Pods using path based routing.
+
+The keys of this Map (`default` in this example) are the "name" for each. `default`
+will have a Deployment, Service, HorizontalPodAutoscaler, PodDisruptionBudget, and
+optional Ingress created with `RELEASE-webservice-default`.
+
+Any property not provided will inherit from the `gitlab-webservice` chart defaults.
+
+```yaml
+deployments:
+  default:
+    ingress:
+      path: # Does not inherit or default. Leave blank to disable Ingress.
+      annotations:
+        # inherits `ingress.anntoations`
+      proxyConnectTimeout: # inherits `ingress.proxyConnectTimeout`
+      proxyReadTimeout:    # inherits `ingress.proxyReadTimeout`
+      proxyBodySize:       # inherits `ingress.proxyBodySize`
+    deployment:
+      annotations: # map
+      labels: # map
+      # inherits `deployment`
+    pod:
+      labels: # additional labels to .podLabels
+      annotations: # map
+        # inherit from .Values.annotations
+    service:
+      labels: # additional labels to .serviceLabels
+      annotations: # additional annotations to .service.annotations
+        # inherits `service.annotations`
+    hpa:
+      minReplicas: # defaults to .minReplicas
+      maxReplicas: # defaults to .maxReplicas
+      metrics: # optional replacement of HPA metrics definition
+      # inherits `hpa`
+    pdb:
+      maxUnavailable: # inherits `maxUnavailable`
+    resources: # `resources` for `webservice` container
+      # inherits `resources`
+    workhorse: # map
+      # inherits `workhorse`
+    unicorn: # map
+      # inherits `unicorn`
+    extraEnv: #
+      # inherits `extraEnv`
+    puma: # map
+      # inherits `puma`
+    workerProcesses: # inherits `workerProcesses`
+    shutdown:
+      # inherits `shutdown`
+    nodeSelector: # map
+      # inherits `nodeSelector`
+    tolerations: # array
+      # inherits `tolerations`
+```
+
+### Deployments Ingress
+
+Each `deployments` entry will inherit from chart-wide [Ingress settings](#ingress-settings). Any value presented here will override those provided there. Outside of `path`, all settings are identical to those.
+
+```yaml
+webservice:
+  deployments:
+    default:
+      ingress:
+        path: /
+   api:
+     ingress:
+       path: /api
+```
+
+The `path` property is directly populated into the Ingress's `path` property, and allows one to control URI paths which are directed to each service. In the example above,
+`default` acts as the catch-all path, and `api` recevied all traffic under `/api`
+
+You can disable a given Deployment from having an associated Ingress resource created by setting `path` to empty. See below, where `internal-api` will never recieve external traffic.
+
+```yaml
+webservice:
+  deployments:
+    default:
+      ingress:
+        path: /
+   api:
+     ingress:
+       path: /api
+   internal-api:
+     ingress:
+       path:
+```
 
 ## Ingress Settings
 

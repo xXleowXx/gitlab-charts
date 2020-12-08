@@ -21,6 +21,6 @@ data:
       authentication_secret_file: "/etc/kas/.gitlab_kas_secret"
     observability:
       listen:
-        address: ":{{ .Values.service.internalObservabilityPort }}"
+        address: ":{{ .Values.metrics.port }}"
 {{- end }}
 {{- end }}

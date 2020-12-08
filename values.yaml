@@ -136,6 +136,18 @@ global:
     dbSecret: {}
     psql:
       sslMode: 'disable'
+    # serviceName:
+    service:
+      name: praefect
+      type: ClusterIP
+      externalPort: 8075
+      internalPort: 8075
+      tls:
+        externalPort: 8076
+        internalPort: 8076
+    tls:
+      enabled: false
+      # secretName:
 
   ## doc/charts/globals.md#configure-minio-settings
   minio:
@@ -540,8 +552,13 @@ global:
 
   antiAffinity: soft
 
-  ## doc/installation/secrets.md#gitlab-workhorse-secret
-  workhorse: {}
+  ## doc/charts/globals.md#workhorse
+  ## Global settings related to Workhorse
+  workhorse:
+    serviceName: webservice-default
+    # host:
+    # port:
+    ## doc/installation/secrets.md#gitlab-workhorse-secret
     # secret:
     # key:
 
@@ -818,7 +835,7 @@ redis:
   metrics:
     enabled: true
 
-## Instllation & configuration of stable/prostgresql
+## Installation & configuration of stable/prostgresql
 ## See requirements.yaml for current version
 postgresql:
   postgresqlUsername: gitlab

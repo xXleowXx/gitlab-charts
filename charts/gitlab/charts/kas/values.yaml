@@ -29,8 +29,6 @@ resources:
 service:
   externalPort: 8150
   internalPort: 8150
-  externalObservabilityPort: 8151
-  internalObservabilityPort: 8151
   type: ClusterIP
 metrics:
   enabled: true

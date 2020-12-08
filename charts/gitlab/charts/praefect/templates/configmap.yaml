@@ -13,14 +13,28 @@ data:
     do
       cp -v -r -L /init-config/${f}  /init-secrets/praefect/${f}
     done
+    {{- if $.Values.global.praefect.tls.enabled }}
+    cp -v -L /init-config/praefect.crt /init-secrets/praefect/praefect.crt
+    cp -v -L /init-config/praefect.key /init-secrets/praefect/praefect.key
+    {{- end }}
   config.toml.erb: |
     <% gitaly_token = File.read('/etc/gitlab-secrets/praefect/gitaly_token').strip.dump[1..-2] %>
     <% praefect_token = File.read('/etc/gitlab-secrets/praefect/praefect_token').strip.dump[1..-2] %>
     # TCP address to listen on
-    listen_addr = '0.0.0.0:{{ .Values.service.internalPort }}'
+    listen_addr = '0.0.0.0:{{ include "gitlab.praefect.internalPort" . }}'
+
+    {{- if $.Values.global.praefect.tls.enabled }}
+    tls_listen_addr = '0.0.0.0:{{ include "gitlab.praefect.tls.internalPort" . }}'
+    {{- end }}
 
     {{- if .Values.metrics.enabled }}
     prometheus_listen_addr = 'localhost:{{ .Values.metrics.port  }}'
+    {{- end }}
+
+    {{- if $.Values.global.praefect.tls.enabled }}
+    [tls]
+    certificate_path = '/etc/gitlab-secrets/praefect/praefect.crt'
+    key_path = '/etc/gitlab-secrets/praefect/praefect.key'
     {{- end }}
 
     [failover]
@@ -54,10 +68,17 @@ data:
 
     [[virtual_storage]]
     name = 'default'
+    {{- $serviceName := include "gitlab.gitaly.serviceName" . -}}
+    {{- $scheme := "tcp" -}}
+    {{- $port := include "gitlab.gitaly.internalPort" . -}}
+    {{- if $.Values.global.gitaly.tls.enabled -}}
+    {{-   $scheme = "tls" -}}
+    {{-   $port = include "gitlab.gitaly.tls.internalPort" . -}}
+    {{- end -}}
     {{- range compact (include "gitlab.praefect.gitalyPodNames" . | splitList "," ) }}
     [[virtual_storage.node]]
     storage = '{{ . }}'
-    address = 'tcp://{{ . }}.{{ $.Release.Name }}-gitaly:{{ $.Values.global.gitaly.service.externalPort }}'
+    address = '{{ $scheme }}://{{ . }}.{{ $serviceName }}.{{ $.Release.Namespace }}.svc:{{ $port }}'
     token = "<%= gitaly_token %>"
 
     {{- end }}

@@ -27,17 +27,9 @@ Rails:
 RSpec:
   Enabled: false
 
-# We use git repos in our gemfile, but only our own repos
-# TODO: Update the cop to allow us to enable it and allow our groups
-Cop/GemFetcher:
-  Enabled: false
-
 # We are not concerned with the security of using public in charts but we want to ensure
-# Any webserver script we might ship in the future is tested for it
 GitlabSecurity/PublicSend:
-  Enabled: true
-  Exclude:
-    - 'spec/**/*'
+  Enabled: false
 
 # Do not introduce global variables.
 Style/GlobalVars:
