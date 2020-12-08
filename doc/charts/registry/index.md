@@ -100,7 +100,7 @@ registry:
     enabled: false
     tls:
       enabled: true
-      serviceName: redis
+      secretName: redis
     annotations:
     proxyReadTimeout:
     proxyBodySize:
