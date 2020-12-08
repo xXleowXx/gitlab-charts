@@ -78,8 +78,12 @@ listen over TLS */}}
 {{- define "gitlab.checkConfig.gitaly.tls" -}}
 {{- $gitalyVirtualStorageTLS := true -}}
 {{- range $vs := $.Values.global.praefect.virtualStorages -}}
-{{-   if not (hasKey $vs "tls.secretName") -}}
+{{-   if and (hasKey $vs "tls") (kindIs "map" $vs.tls) -}}
+{{-     if not (hasKey $vs.tls "secretName") }}
 {{-       $gitalyVirtualStorageTLS = false -}}
+{{-      end }}
+{{-   else }}
+{{-     $gitalyVirtualStorageTLS = false -}}
 {{-   end }}
 {{- end }}
 {{- if and (and $.Values.global.gitaly.enabled $.Values.global.gitaly.tls.enabled) (not (or $.Values.global.gitaly.tls.secretName $gitalyVirtualStorageTLS)) }}
