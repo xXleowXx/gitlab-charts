@@ -204,7 +204,7 @@ spec:
           {{- if .Values.global.gitaly.tls.enabled }}
           {{- $secretName := include "gitlab.gitaly.tls.secret" . -}}
           {{- if $praefect }}
-          {{-   $secretName = .storage.tls.secretName -}}
+          {{-   $secretName = .storage.tlsSecretName -}}
           {{- end }}
           - secret:
               name: {{ $secretName }}
