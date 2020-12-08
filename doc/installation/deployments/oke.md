@@ -12,6 +12,7 @@
 ## Install
 
 1. Setup OKE Cluster with necessary resources
+   - [https://docs.gitlab.com/charts/installation/#cloud-cluster-preparation](../index.md#cloud-cluster-preparation)
 1. Configure Local Shell to access OKE Cluster<br>
    - NOTE: Cloud Shell had an old version of Helm installed that was below the minimum version that GitLab documentation says to use.
    - Follow this Quickstart Guide:
