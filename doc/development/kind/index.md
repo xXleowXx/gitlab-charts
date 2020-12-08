@@ -11,7 +11,7 @@ In this guide, we'll be using [KinD](https://kind.sigs.k8s.io). It creates a Kub
 
 We will also make use of [nip.io](https://nip.io), which lets us map any IP address to a hostname using a format like this: `192.168.1.250.nip.io`, which maps to `192.168.1.250`. No installation is required.
 
-NOTE: **Note:**
+NOTE:
 With the SSL-enabled installation options below, if you want to clone repositories and push changes, you will have to do so over HTTPS instead of SSH. We are planning to address this with an update to GitLab Shell's service exposure via NodePorts.
 
 ## Preparation
@@ -23,7 +23,7 @@ All of the following installation options require knowing your host IP. Here are
 - Linux: `hostname -i`
 - MacOS: `ipconfig getifaddr en0`
 
-NOTE: **Note:**
+NOTE:
 Most MacOS systems use `en0` as the primary interface. If using a system with a different primary interface, please substitute that interface name for `en0`.
 
 ### Using namespaces
@@ -67,7 +67,7 @@ helm repo update
 
 Select from one of the following deployment options based on your needs.
 
-NOTE: **Note:**
+NOTE:
 The first full deployment process may take around 10 minutes depending on network and system resources while the Cloud Native GitLab images are downloaded. Confirm GitLab is running with the following command:
 
 ```shell
@@ -100,7 +100,7 @@ kubectl get secret gitlab-wildcard-tls-ca -ojsonpath='{.data.cfssl_ca}' | base64
 
 Now that the root CA is downloaded, you can add it to your local chain (instructions vary per platform and are readily available online).
 
-NOTE: **Note:**
+NOTE:
 If you need to log into the registry with `docker login`, you will need to take additional steps to configure the registry to work with your self-signed certificates. More instructions can be found [here](https://docs.docker.com/registry/deploying/#run-an-externally-accessible-registry) and [here](https://blog.container-solutions.com/adding-self-signed-registry-certs-docker-mac).
 
 ### NGINX Ingress NodePort without SSL
@@ -117,7 +117,7 @@ helm upgrade --install gitlab gitlab/gitlab \
 
 Access GitLab at `http://gitlab.(your host IP).nip.io`.
 
-NOTE: **Note:**
+NOTE:
 If you need to log into the registry with `docker login`, you will need to tell Docker to [trust your insecure registry](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry).
 
 ### Handling DNS
@@ -135,5 +135,5 @@ When you're ready to clean up your local system, run this command:
 kind delete cluster
 ```
 
-NOTE: **Note:**
+NOTE:
 If you named your cluster upon creation, or if you are running multiple clusters, you can delete specific ones with the `--name` flag.
