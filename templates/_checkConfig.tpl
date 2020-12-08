@@ -76,19 +76,28 @@ contentSecurityPolicy:
 Ensure a certificate is provided when Gitaly is enabled and is instructed to
 listen over TLS */}}
 {{- define "gitlab.checkConfig.gitaly.tls" -}}
-{{- $gitalyVirtualStorageTLS := true -}}
-{{- range $vs := $.Values.global.praefect.virtualStorages -}}
-{{-   if and (hasKey $vs "tls") (kindIs "map" $vs.tls) -}}
-{{-     if not (hasKey $vs.tls "secretName") }}
-{{-       $gitalyVirtualStorageTLS = false -}}
-{{-      end }}
-{{-   else }}
-{{-     $gitalyVirtualStorageTLS = false -}}
+{{- $msg := "" -}}
+{{- $tlsProvided := true -}}
+{{- if $.Values.global.praefect.enabled -}}
+{{-   range $i, $vs := $.Values.global.praefect.virtualStorages -}}
+{{-     if not $vs.tlsSecretName }}
+{{-       $tlsProvided = false -}}
+{{-       $msg = printf "global.praefect.virtualStorages[%d].tlsSecretName not provided ('%s')" $i $vs.name -}}
+{{-     end }}
+{{-   end }}
+{{- else }}
+{{-   if not $.Values.global.gitaly.tls.secretName -}}
+{{-     $tlsProvided = false -}}
+{{-     $msg = "global.gitaly.tls.secretName not defined" -}}
 {{-   end }}
 {{- end }}
-{{- if and (and $.Values.global.gitaly.enabled $.Values.global.gitaly.tls.enabled) (not (or $.Values.global.gitaly.tls.secretName $gitalyVirtualStorageTLS)) }}
-gitaly: server enabled with TLS, no TLS certificate provided
-    It appears Gitaly is specified to listen over TLS, but no certificate was specified.
+{{- $tlsEnabled := false -}}
+{{- if and $.Values.global.gitaly.enabled $.Values.global.gitaly.tls.enabled -}}
+{{-   $tlsEnabled = true -}}
+{{- end }}
+{{- if and $tlsEnabled (not $tlsProvided) -}}
+gitaly: TLS enabled, but TLS certificate not provided
+  {{ $msg }}
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.gitaly.tls */}}
