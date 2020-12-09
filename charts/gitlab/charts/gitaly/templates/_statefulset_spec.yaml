@@ -202,8 +202,12 @@ spec:
                 - key: {{ template "gitlab.gitlab-shell.authToken.key" . }}
                   path: ".gitlab_shell_secret"
           {{- if .Values.global.gitaly.tls.enabled }}
+          {{- $secretName := include "gitlab.gitaly.tls.secret" . -}}
+          {{- if $praefect }}
+          {{-   $secretName = .storage.tlsSecretName -}}
+          {{- end }}
           - secret:
-              name: {{ template "gitlab.gitaly.tls.secret" . }}
+              name: {{ $secretName }}
               items:
                 - key: "tls.crt"
                   path: "gitaly.crt"
