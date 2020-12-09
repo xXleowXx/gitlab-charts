@@ -491,7 +491,7 @@ If you chose to use the `filesystem` driver:
 For the sake of resiliency and simplicity, it is recommended to make use of an
 external service, such as `s3`, `gcs`, `azure` or other compatible Object Storage.
 
-NOTE: **Note:**
+NOTE:
 The chart will populate `delete.enabled: true` into this configuration
 by default if not specified by the user. This keeps expected behavior in line with
 the default use of MinIO, as well as the Omnibus GitLab. Any user provided value
