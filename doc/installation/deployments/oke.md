@@ -144,24 +144,24 @@ enabling Auto DevOps and starting your pipeline:
            namespace: kube-system
          ```
 
-    1. Apply the service account and cluster role binding to your cluster:
+      1. Apply the service account and cluster role binding to your cluster:
 
-       ```shell
-       kubectl apply -f gitlab-admin-service-account.yaml
-       ```
+         ```shell
+         kubectl apply -f gitlab-admin-service-account.yaml
+         ```
 
-       You should receive the following output:
+         You should receive the following output:
 
-       ```plaintext
-       serviceaccount "gitlab-admin" created
-       clusterrolebinding "gitlab-admin" created
-       ```
+         ```plaintext
+         serviceaccount "gitlab-admin" created
+         clusterrolebinding "gitlab-admin" created
+         ```
 
-    1. Retrieve the token for the `gitlab-admin` service account:
+      1. Retrieve the token for the `gitlab-admin` service account:
 
-       ```shell
-       kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep gitlab-admin | awk '{print $1}')
-       ```
+         ```shell
+         kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep gitlab-admin | awk '{print $1}')
+         ```
 
 1. Add the Kubernetes Cluster in GitLab:
    1. From your project navigate to **Operations -> Kubernetes -> Connect existing cluster**
