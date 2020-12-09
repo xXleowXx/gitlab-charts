@@ -82,13 +82,13 @@ listen over TLS */}}
 {{-   range $i, $vs := $.Values.global.praefect.virtualStorages -}}
 {{-     if not $vs.tlsSecretName }}
 {{-       $tlsProvided = false -}}
-{{-       $msg = printf "global.praefect.virtualStorages[%d].tlsSecretName not provided ('%s')" $i $vs.name -}}
+{{-       $msg = printf "global.praefect.virtualStorages[%d].tlsSecretName not specified ('%s')" $i $vs.name -}}
 {{-     end }}
 {{-   end }}
 {{- else }}
 {{-   if not $.Values.global.gitaly.tls.secretName -}}
 {{-     $tlsProvided = false -}}
-{{-     $msg = "global.gitaly.tls.secretName not defined" -}}
+{{-     $msg = "global.gitaly.tls.secretName not specified" -}}
 {{-   end }}
 {{- end }}
 {{- $tlsEnabled := false -}}
@@ -96,7 +96,7 @@ listen over TLS */}}
 {{-   $tlsEnabled = true -}}
 {{- end }}
 {{- if and $tlsEnabled (not $tlsProvided) -}}
-gitaly: TLS enabled, but TLS certificate not provided
+gitaly: TLS enabled, but TLS certificate not specified
   {{ $msg }}
 {{- end -}}
 {{- end -}}
