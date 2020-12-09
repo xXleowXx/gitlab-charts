@@ -1,6 +1,6 @@
 # Deploy GitLab on OKE
 
-This guide will help you deploy GitLab in
+This is a quickstart guide that will help you deploy GitLab in
 [Oracle Kubernetes Engine (OKE)](https://www.oracle.com/cloud-native/container-engine-kubernetes/)
 hosted on Oracle Cloud Infrastructure (OCI).
 
@@ -8,16 +8,16 @@ hosted on Oracle Cloud Infrastructure (OCI).
 
 The following are assumed:
 
-1. Builtin Container Registry
-1. Builtin Runner
-1. Domain name and ability to update DNS records
-1. OKE Cluster has access to the internet
-1. Access to OCI and necessary resources to provision OKE Environment
-1. Setting the GitLab Runner to privileged mode
+- A builtin Container Registry will be used.
+- A builtin Runner will be used.
+- You have a domain name to be used with GitLab and you are able to update DNS records.
+- The OKE cluster has access to the internet.
+- You have access to OCI and any necessary resources to provision the OKE environment.
+- The GitLab Runner will be set to [privileged mode](https://docs.gitlab.com/runner/executors/docker.html#the-privileged-mode).
 
-## Set up the OKE cluster
+## Set up and configure the OKE cluster
 
-1. Setup OKE Cluster with the [necessary resources](../index.md#cloud-cluster-preparation).
+1. Set up the OKE cluster.
 1. Follow Oracle's [quickstart guide](https://docs.cloud.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm)
    to configure your local shell to access the OKE cluster.
 1. Ensure to [upload your public API key](https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#three).
