@@ -86,12 +86,10 @@ The following are assumed:
 
 ## Configure GitLab
 
-We will now do a basic configuration of GitLab to include setting up some users,
+We will now do a basic configuration of GitLab to include
 importing a sample project, configure an Operations Kubernetes integration,
-enabling Auto DevOps and starting your pipeline:
+enabling Auto DevOps, and starting your pipeline:
 
-1. Create new admin users - Login to GitLab using the root account.
-    - Admin Area (wrench at the top) -> **Users** <br><br>
 
 1. Import an example project and configure Auto DevOps:
    1. From the welcome page, select **Create Project > Import Project > Repo by URL**.

@@ -50,7 +50,6 @@ choice:
 - [Amazon EKS](cloud/eks.md)
 - [OpenShift Origin](cloud/openshift.md)
 - Oracle Kubernetes Engine - Documentation to be added.
-- Azure Container Service - Documentation to be added.
 - VMware Tanzu - Documentation to be added.
 - On-Premises solutions - Documentation to be added.
 
