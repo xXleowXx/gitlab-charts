@@ -15,7 +15,7 @@
 # - external Object Storage providers
 
 ## The global properties are used to configure multiple charts at once.
-## Extended documenation at doc/charts/globals.md
+## Extended documentation at doc/charts/globals.md
 global:
   ## GitLab operator is Alpha. Not for production use.
   operator:
