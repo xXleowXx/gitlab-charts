@@ -10,7 +10,7 @@ For a fully functional GitLab instance, you will need a few resources before
 deploying the `gitlab` chart. The following is how these charts are deployed
 and tested within GitLab.
 
-NOTE: **Note:**
+NOTE:
 Google provides a whitepaper for [deploying production-ready GitLab on
 Google Kubernetes Engine](https://cloud.google.com/solutions/deploying-production-ready-gitlab-on-gke), including all steps and external
 resource configuration. These are alternative to this document, and the
@@ -81,7 +81,7 @@ Two resources need to be created in GCP, a Kubernetes cluster and an external IP
 #### Creating the Kubernetes cluster
 
 To provision the Kubernetes cluster manually, follow the
-[GKE instructions](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster).
+[GKE instructions](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster).
 
 - We recommend a cluster with 8vCPU and 30GB of RAM.
 - Make a note of the cluster's region, it will be needed in the following step.

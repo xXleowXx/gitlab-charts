@@ -11,7 +11,7 @@ Usage:
 {{- define "gitlab.appConfig.lfs.configuration" -}}
 lfs:
   enabled: {{ if kindIs "bool" .config.enabled }}{{ eq .config.enabled true }}{{ end }}
-  {{- if .config.connection }}
+  {{- if not .context.Values.global.appConfig.object_store.enabled }}
   {{-   include "gitlab.appConfig.objectStorage.configuration" (dict "name" "lfs" "config" .config "context" .context) | nindent 2 }}
-  {{- end -}}
+  {{- end }}
 {{- end -}}{{/* "gitlab.appConfig.lfs.configuration" */}}

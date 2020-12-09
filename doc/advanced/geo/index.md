@@ -245,7 +245,7 @@ In order to deploy this chart as a Geo Primary, we'll start [from this example c
    helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f primary.yaml
    ```
 
-   NOTE: **Note:**
+   NOTE:
    This assumes you are using the `gitlab` namespace, if you want to use a different namespace,
    you should also replace it in `--namespace gitlab` throughout the rest of this document.
 
@@ -396,7 +396,7 @@ Once the configuration above is prepared:
    write:errno=0
    ```
 
-   NOTE: **Note:**
+   NOTE:
    If this step fails, you may be using the wrong IP address, or a firewall may
    be preventing access to the server. Check the IP address, paying close
    attention to the difference between public and private addresses and ensure
@@ -548,7 +548,7 @@ In order to deploy this chart as a Geo Secondary, we'll start [from this example
    helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
    ```
 
-   NOTE: **Note:**
+   NOTE:
    With Helm v2, one may need to specify the namespace that the release was
    deployed to with the `--namespace <namespace>` option.
 

@@ -12,12 +12,12 @@ corresponding to the specific release you want to upgrade to and look for any
 [release notes](../releases/index.md) that might pertain to the new GitLab chart
 version.
 
-CAUTION: **Caution:**
+WARNING:
 If you are upgrading from the `3.x` version of the chart to the latest `4.0` release, you need
 to first update to the latest `3.3.x` patch release in order for the upgrade to work.
 The [4.0 release notes](../releases/4_0.md) describe the supported upgrade path.
 
-CAUTION: **Caution:**
+WARNING:
 If you are upgrading from the `2.x` version of the chart to the latest 3.0 release, you need
 to first update to the latest `2.6.x` patch release in order for the upgrade to work.
 The [3.0 release notes](../releases/3_0.md) describe the supported upgrade path.
@@ -36,14 +36,14 @@ Mappings between chart versioning and GitLab versioning can be found [here](../i
 
 ## Steps
 
-NOTE: **Note:**
+NOTE:
 If you're upgrading to the `4.0` version of the chart, follow the [manual upgrade steps for 4.0](#upgrade-steps-for-40-release).
 If you're upgrading to the `3.0` version of the chart, follow the [manual upgrade steps for 3.0](#upgrade-steps-for-30-release).
 
 The following are the steps to upgrade GitLab to a newer version:
 
 1. Check the [change log](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/CHANGELOG.md) for the specific version you would like to upgrade to
-1. Go through [deployment documentation](./deployment.md) step by step
+1. Go through [deployment documentation](deployment.md) step by step
 1. Extract your previous `--set` arguments with
 
    ```shell
@@ -51,7 +51,7 @@ The following are the steps to upgrade GitLab to a newer version:
    ```
 
 1. Decide on all the values you need to set
-1. If you would like to use the GitLab Operator go through the steps outlined in [Operator installation](./operator.md)
+1. If you would like to use the GitLab Operator go through the steps outlined in [Operator installation](operator.md)
 1. Perform the upgrade, with all `--set` arguments extracted in step 4
 
    ```shell
@@ -67,11 +67,11 @@ Ensure that you explicitly set it back to `true` for future updates.
 
 ## Upgrade the bundled PostgreSQL to version 12 (optional)
 
-NOTE: **Note:**
+NOTE:
 If you aren't using the bundled PostgreSQL chart (`postgresql.install` is false), you do not need to
 perform this step.
 
-Upgrading to PostgreSQL 12 for GitLab 13.x is optional. PostgreSQL 12 is supported by GitLab 13.4 and later. PostgreSQL 12 will become the minimum required PostgreSQL version in [GitLab 14.0, scheduled for April 2021](https://gitlab.com/groups/gitlab-org/-/epics/2374#phased-plan). [PostgreSQL 12 brings significant performance improvements](https://www.postgresql.org/about/news/1976/).
+Upgrading to PostgreSQL 12 for GitLab 13.x is optional. PostgreSQL 12 is supported by GitLab 13.4 and later. PostgreSQL 12 will become the minimum required PostgreSQL version in [GitLab 14.0, scheduled for April 2021](https://gitlab.com/groups/gitlab-org/-/epics/2374#phased-plan). [PostgreSQL 12 brings significant performance improvements](https://www.postgresql.org/about/news/postgresql-12-released-1976/).
 
 To upgrade the bundled PostgreSQL to version 12, the following steps are required:
 
@@ -94,7 +94,7 @@ The `4.0.0` release requires manual steps in order to perform the upgrade. If yo
 bundled PostgreSQL, the best way to perform this upgrade is to back up your old database, and
 restore into a new database instance.
 
-CAUTION: **Caution:**
+WARNING:
 Remember to make a [backup](../backup-restore/index.md)
 before proceeding with the upgrade. Failure to perform these steps as documented **may** result in
 the loss of your database. Ensure you have a separate backup.
@@ -124,11 +124,11 @@ curl -s https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/script
 
 ### Delete existing PostgreSQL data
 
-NOTE: **Note:**
+NOTE:
 If you are not using the bundled PostgreSQL chart (`postgresql.install` is false), you do not need
 to perform this step.
 
-CAUTION: **Caution:**
+WARNING:
 Ensure that you have created a database backup in the previous step. Without a backup, GitLab data
 will be lost.
 
@@ -193,7 +193,7 @@ Note the following:
 
 The `3.0.0` release requires manual steps in order to perform the upgrade.
 
-CAUTION: **Caution:**
+WARNING:
 Remember to make a [backup](../backup-restore/index.md)
 before proceeding with the upgrade. Failure to perform these steps as documented **may** result in
 the loss of your database. Ensure you have a separate backup.
@@ -263,7 +263,7 @@ before upgrading. You can see more details in our troubleshooting documentation,
    kubectl delete services -lrelease=RELEASE_NAME
    ```
 
-CAUTION: **Caution:**
+WARNING:
 This will change any dynamic value for the `LoadBalancer` for NGINX Ingress from this chart, if in use. See
 [global Ingress settings documentation](../charts/globals.md#configure-ingress-settings) for more details regarding
 `externalIP`. You may be required to update DNS records!

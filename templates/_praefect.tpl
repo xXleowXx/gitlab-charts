@@ -55,3 +55,54 @@ Preference is local, global, default (`token`)
 {{- define "gitlab.praefect.authToken.key" -}}
 {{- coalesce .Values.global.praefect.authToken.key "token" | quote -}}
 {{- end -}}
+
+{{/*
+Return the praefect internal port
+*/}}
+{{- define "gitlab.praefect.internalPort" -}}
+{{- $internalPort := 0 -}}
+{{- if hasKey .Values "praefect" -}}
+{{-   $internalPort = .Values.praefect.service.internalPort -}}
+{{- end -}}
+{{- coalesce $internalPort .Values.global.praefect.service.internalPort -}}
+{{- end -}}
+
+{{/*
+Return the praefect TLS internal port
+*/}}
+{{- define "gitlab.praefect.tls.internalPort" -}}
+{{- $internalPort := 0 -}}
+{{- if hasKey .Values "praefect" -}}
+{{-   $internalPort = .Values.praefect.service.tls.internalPort -}}
+{{- end -}}
+{{- coalesce $internalPort .Values.global.praefect.service.tls.internalPort -}}
+{{- end -}}
+
+{{/*
+Return the praefect external port
+*/}}
+{{- define "gitlab.praefect.externalPort" -}}
+{{- $externalPort := 0 -}}
+{{- if hasKey .Values "praefect" -}}
+{{-   $externalPort = .Values.praefect.service.externalPort -}}
+{{- end -}}
+{{- coalesce $externalPort .Values.global.praefect.service.externalPort -}}
+{{- end -}}
+
+{{/*
+Return the praefect TLS external port
+*/}}
+{{- define "gitlab.praefect.tls.externalPort" -}}
+{{- $externalPort := 0 -}}
+{{- if hasKey .Values "praefect" -}}
+{{-   $externalPort = .Values.praefect.service.tls.externalPort -}}
+{{- end -}}
+{{- coalesce $externalPort .Values.global.praefect.service.tls.externalPort -}}
+{{- end -}}
+
+{{/*
+Return the praefect TLS secret name
+*/}}
+{{- define "gitlab.praefect.tls.secret" -}}
+{{-   default (printf "%s-praefect-tls" .Release.Name) .Values.global.praefect.tls.secretName | quote -}}
+{{- end -}}

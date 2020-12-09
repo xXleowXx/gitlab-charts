@@ -4,3 +4,6 @@ charts/*.tgz
 tags
 requirements.lock
 .markdownlintrc
+gems
+.bundle
+build

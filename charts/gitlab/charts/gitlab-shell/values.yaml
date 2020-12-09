@@ -37,9 +37,8 @@ enabled: true
 annotations: {}
 podLabels: {}
 serviceLabels: {}
-workhorse:
+workhorse: {}
   # by default, Workhorse is a part of the webservice Pods / Service
-  serviceName: webservice
   # host: '0.0.0.0'
   # serviceName: 'webservice'
   # port: 8181
@@ -68,7 +67,12 @@ deployment:
     timeoutSeconds: 3
     successThreshold: 1
     failureThreshold: 3
-
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    successThreshold: 1
+    failureThreshold: 2
 
 logging:
   format: "text"

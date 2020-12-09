@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This is the official, recommended, and supported method to install GitLab on a cloud native environment.
 
-NOTE: **Note:**
+NOTE:
 It is not necessary to have GitLab installed on Kubernetes in order to use
 the [GitLab Kubernetes integration](https://docs.gitlab.com/ee/user/project/clusters/).
 
@@ -30,9 +30,10 @@ can be installed separately.
   - GitLab/[Migrations](charts/gitlab/migrations/index.md)
   - GitLab/[Sidekiq](charts/gitlab/sidekiq/index.md)
   - GitLab/[Webservice](charts/gitlab/webservice/index.md)
+  - GitLab/[Mailroom](charts/gitlab/mailroom/index.md)
 - Optional dependencies:
-  - [PostgreSQL](https://hub.helm.sh/charts/bitnami/postgresql)
-  - [Redis](https://hub.helm.sh/charts/bitnami/redis)
+  - [PostgreSQL](https://artifacthub.io/packages/helm/bitnami/postgresql)
+  - [Redis](https://artifacthub.io/packages/helm/bitnami/redis)
   - [MinIO](charts/minio/index.md)
 - Optional additions:
   - [Prometheus](https://artifacthub.io/packages/helm/prometheus-community/prometheus)
@@ -117,7 +118,7 @@ To uninstall the GitLab Chart, run the following:
 helm uninstall gitlab
 ```
 
-NOTE: **Note:**
+NOTE:
 With Helm v2, you need to use the command `helm delete --purge gitlab`.
 
 For the purposes of continuity, these charts have some Kubernetes objects that
@@ -198,7 +199,7 @@ helm repo add gitlab https://charts.gitlab.io/
 helm search repo -l gitlab/gitlab
 ```
 
-NOTE: **Note:**
+NOTE:
 With Helm v2, the search command would be `helm search -l gitlab/gitlab`
 
 For more information, visit the [version mappings docs](installation/version_mappings.md).

@@ -121,7 +121,7 @@ gitlab.task-runner:
 {{/* Migration of Registry `storage` dict to a secret */}}
 {{- define "gitlab.deprecate.registryStorage" -}}
 {{- if .Values.registry.storage -}}
-{{-   $keys := without (keys .Values.registry.storage) "secret" "key" "extraKey" -}}
+{{-   $keys := without (keys .Values.registry.storage) "secret" "key" "extraKey" "redirect" -}}
 {{-   if len $keys | ne 0 }}
 registry:
     The `storage` property has been moved into a secret. Please create a secret with these contents, and set `storage.secret`.

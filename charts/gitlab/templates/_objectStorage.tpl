@@ -11,13 +11,17 @@ Usage:
 */}}
 {{- define "gitlab.appConfig.objectStorage.configuration" -}}
 object_store:
+  {{- if eq .name "object_store" }}
   enabled: {{ ne (default false .config.enabled) false }}
-  {{- if ne .name "object_store" }}
+  {{- else }}
+  enabled: {{ if kindIs "bool" .config.enabled }}{{ eq .config.enabled true }}{{ end }}
   remote_directory: {{ .config.bucket }}
   {{- end }}
+  {{- if ne .name "pages" }}
   direct_upload: true
   background_upload: false
   proxy_download: {{ or (not (kindIs "bool" .config.proxy_download)) .config.proxy_download }}
+  {{- end }}
   {{- if and .config.enabled .config.storage_options }}
   storage_options:
     server_side_encryption: {{ .config.storage_options.server_side_encryption }}
@@ -25,7 +29,7 @@ object_store:
   {{- end -}}
   {{- if and .config.enabled .config.connection }}
   connection: <%= YAML.load_file("/etc/gitlab/objectstorage/{{ .name }}").to_json() %>
-  {{- else if .context.Values.global.minio.enabled }}
+  {{- else if and .config.enabled .context.Values.global.minio.enabled }}
   {{-   include "gitlab.appConfig.objectStorage.connection.minio" . | nindent 2 }}
   {{- end -}}
 {{- end -}}{{/* "gitlab.appConfig.objectStorage.configuration" */}}
@@ -85,6 +89,8 @@ Usage:
      ) }}
 */}}
 {{- define "gitlab.appConfig.objectStorage.object" -}}
+{{-   if default false .config.enabled -}}
 {{ .name }}:
   bucket: {{ .config.bucket }}
+{{-   end -}}
 {{- end }}

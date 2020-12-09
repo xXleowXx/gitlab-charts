@@ -54,6 +54,7 @@ global:
     registry: {}
     tls: {}
     smartcard: {}
+    kas: {}
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:
@@ -135,6 +136,18 @@ global:
     dbSecret: {}
     psql:
       sslMode: 'disable'
+    # serviceName:
+    service:
+      name: praefect
+      type: ClusterIP
+      externalPort: 8075
+      internalPort: 8075
+      tls:
+        externalPort: 8076
+        internalPort: 8076
+    tls:
+      enabled: false
+      # secretName:
 
   ## doc/charts/globals.md#configure-minio-settings
   minio:
@@ -176,7 +189,7 @@ global:
       #   cron: "19 * * * *"
       ## Remove expired build artifacts
       # expire_build_artifacts_worker:
-      #   cron: "50 * * * *"
+      #   cron: "*/7 * * * *"
       ## Periodically run 'git fsck' on all repositories.
       # repository_check_worker:
       #   cron: "20 * * * *"
@@ -241,7 +254,7 @@ global:
 
     ## doc/charts/globals.md#lfs-artifacts-uploads-packages-external-mr-diffs
     object_store:
-      enabled: true
+      enabled: false
       proxy_download: true
       storage_options: {}
         # server_side_encryption:
@@ -276,6 +289,7 @@ global:
       bucket: gitlab-packages
       connection: {}
     externalDiffs:
+      enabled: false
       when:
       proxy_download: true
       bucket: gitlab-mr-diffs
@@ -467,6 +481,27 @@ global:
       #         key: password
       # events: {}
 
+  pages:
+    enabled: false
+    accessControl: false
+    path:
+    host:
+    port:
+    https: false
+    externalHttp: false
+    externalHttps: false
+    artifactsServer: false
+    objectStore:
+      enabled: false
+      bucket: gitlab-pages
+      # proxy_download: true
+      connection: {}
+        # secret:
+        # key:
+    apiSecret: {}
+      # secret:
+      # key:
+
   ## GitLab Runner
   ## Secret created according to doc/installation/secrets.md#gitlab-runner-secret
   ## If allowing shared-secrets generation, this is OPTIONAL.
@@ -517,8 +552,13 @@ global:
 
   antiAffinity: soft
 
-  ## doc/installation/secrets.md#gitlab-workhorse-secret
-  workhorse: {}
+  ## doc/charts/globals.md#workhorse
+  ## Global settings related to Workhorse
+  workhorse:
+    serviceName: webservice-default
+    # host:
+    # port:
+    ## doc/installation/secrets.md#gitlab-workhorse-secret
     # secret:
     # key:
 
@@ -531,7 +571,7 @@ global:
   certificates:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/alpine-certificates
-      tag: 20171114-r3
+      tag: 20191127-r2
     customCAs: []
     # - secret: custom-CA
     # - secret: more-custom-CAs
@@ -632,8 +672,8 @@ nginx-ingress:
         memory: 100Mi
     publishService:
       enabled: true
-    replicaCount: 3
-    minAvailable: 2
+    replicaCount: 2
+    minAvailable: 1
     scope:
       enabled: true
     stats:
@@ -648,7 +688,7 @@ nginx-ingress:
           prometheus.io/port: "10254"
   defaultBackend:
     minAvailable: 1
-    replicaCount: 2
+    replicaCount: 1
     resources:
       requests:
         cpu: 5m
@@ -795,7 +835,7 @@ redis:
   metrics:
     enabled: true
 
-## Instllation & configuration of stable/prostgresql
+## Installation & configuration of stable/prostgresql
 ## See requirements.yaml for current version
 postgresql:
   postgresqlUsername: gitlab

@@ -1,0 +1,5 @@
+---
+title: Allow toggling redirects to storage backends on a per-repository basis
+merge_request: 1667
+author:
+type: changed

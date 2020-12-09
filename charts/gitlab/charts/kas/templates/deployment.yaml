@@ -21,6 +21,14 @@ spec:
         {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+        {{- if .Values.metrics.enabled }}
+        gitlab.com/prometheus_scrape: "true"
+        gitlab.com/prometheus_path: {{ .Values.metrics.path | quote }}
+        gitlab.com/prometheus_port: {{ .Values.metrics.port | quote }}
+        prometheus.io/scrape: "true"
+        prometheus.io/path: {{ .Values.metrics.path | quote }}
+        prometheus.io/port: {{ .Values.metrics.port | quote }}
+        {{- end }}
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -36,16 +44,15 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ template "name" . }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" .Chart.AppVersion "prepend" "true")) }}"
           {{ template "gitlab.imagePullPolicy" . }}
           args:
-            - "--gitlab-address=http://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}"
-            - "--listen-address=:{{ .Values.service.internalPort }}"
-            - "--listen-websocket=true"
-            - "--authentication-secret-file=/etc/kas/.gitlab_kas_secret"
+            - "--configuration-file=/etc/kas/config.yaml"
           ports:
             - containerPort: {{ .Values.service.internalPort }}
               name: {{ template "name" . }}
+            - containerPort: {{ .Values.metrics.port }}
+              name: {{ template "name" . }}-metrics
           readinessProbe:
             tcpSocket:
               port: {{ .Values.service.internalPort }}
@@ -59,16 +66,18 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: init-kas-secrets
+            - name: init-etc-kas
               mountPath: /etc/kas
               readOnly: true
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
       volumes:
       {{- include "gitlab.extraVolumes" . | nindent 6 }}
-      - name: init-kas-secrets
+      - name: init-etc-kas
         projected:
           defaultMode: 0440
           sources:
+            - configMap:
+                name: {{ template "fullname" . }}
             - secret:
                 name: {{ template "gitlab.kas.secret" . }}
                 items:

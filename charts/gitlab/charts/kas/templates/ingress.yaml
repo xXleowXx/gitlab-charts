@@ -1,7 +1,7 @@
 {{- if .Values.global.kas.enabled -}}
 {{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
-{{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
-{{- $tlsSecret := include "webservice.tlsSecret" . -}}
+{{- $hostname := include "gitlab.kas.hostname" . -}}
+{{- $tlsSecret := include "kas.tlsSecret" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -12,24 +12,23 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
     kubernetes.io/ingress.provider: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /
     {{ include "gitlab.certmanager_annotations" . }}
   {{- range $key, $value := merge .Values.ingress.annotations .Values.global.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
   rules:
-    - host: {{ $gitlabHostname }}
+    - host: {{ $hostname }}
       http:
         paths:
-          - path: /-/kubernetes-agent
+          - path: /
             backend:
               serviceName: {{ .Release.Name }}-{{ template "name" . }}
               servicePort: {{ .Values.service.externalPort }}
   {{- if (and $tlsSecret (eq (include "gitlab.ingress.tls.enabled" $) "true" )) }}
   tls:
     - hosts:
-      - {{ $gitlabHostname }}
+      - {{ $hostname }}
       secretName: {{ $tlsSecret }}
   {{- else }}
   tls: []

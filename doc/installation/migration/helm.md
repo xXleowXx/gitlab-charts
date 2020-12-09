@@ -38,7 +38,7 @@ on some Deployments and StatefulSets are immutable and can not be changed from `
 
 To work around this use the following instructions:
 
-NOTE: **Note:**
+NOTE:
 These instructions _forcefully replace resources_, notably Redis StatefulSet.
 You need to ensure that the attached data volume to this StatefulSet is safe and remains intact.
 
@@ -68,7 +68,7 @@ kubectl label pvc -l app=redis --overwrite heritage=Helm
 kubectl get statefulsets.apps -l app=redis -o yaml | sed "s/Tiller/Helm/g" | kubectl replace --force=true --cascade=false -f -
 ```
 
-### RBAC issues after the migration when running Helm upgrade 
+### RBAC issues after the migration when running Helm upgrade
 
 You may face the following error when running Helm upgrade after the conversion has been completed:
 
