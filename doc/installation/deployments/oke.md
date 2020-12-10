@@ -105,7 +105,8 @@ enabling Auto DevOps, and starting your pipeline:
       kubectl cluster-info | grep 'Kubernetes master' | awk '/http/ {print $NF}'
       ```
 
-   1. Obtain the CA Certificate:
+   1. CA Certificate:
+      1.  List the Secrets:
 
       ```shell
       kubectl get secrets
@@ -113,6 +114,14 @@ enabling Auto DevOps, and starting your pipeline:
 
       One of the secrets listed should be named similar to `default-token-xxxxx`.
       Copy that token name and use it in the following command.
+
+      1. Obtain the CA Certificate:
+
+      ```shell
+      kubectl get secret <secret name> -o jsonpath="{['data']['ca\.crt']}" | base64 --decode
+      ```
+
+      If the command returns the entire certificate chain, you must copy the Root CA certificate and any intermediate certificates at the bottom of the chain.
 
    1. GitLab authenticates against Kubernetes by using service tokens, which are
       scoped to a particular namespace. The token used should belong to a service
