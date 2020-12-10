@@ -90,7 +90,6 @@ We will now do a basic configuration of GitLab to include
 importing a sample project, configure an Operations Kubernetes integration,
 enabling Auto DevOps, and starting your pipeline:
 
-
 1. Import an example project and configure Auto DevOps:
    1. From the welcome page, select **Create Project > Import Project > Repo by URL**.
       For the project to import use the Express example: `https://gitlab.com/gitlab-org/express-example.git`.
