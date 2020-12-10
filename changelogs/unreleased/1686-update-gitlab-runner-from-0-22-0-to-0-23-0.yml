@@ -1,5 +1,0 @@
----
-title: "Update gitlab-runner from 0.22.0 to 0.23.0"
-merge_request: 1686
-author: Jan Brummelte
-type: changed
