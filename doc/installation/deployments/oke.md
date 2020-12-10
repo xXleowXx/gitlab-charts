@@ -105,7 +105,7 @@ enabling Auto DevOps, and starting your pipeline:
       ```
 
    1. CA Certificate:
-      1.  List the Secrets:
+      1. List the Secrets:
 
       ```shell
       kubectl get secrets
