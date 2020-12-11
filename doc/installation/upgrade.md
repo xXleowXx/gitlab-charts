@@ -119,7 +119,7 @@ The `pre` stage will create a backup of your database using the backup-utility s
 
 ```shell
 # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v4.0.0
-curl -s https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/scripts/database-upgrade | bash -s pre
+curl -s "https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/scripts/database-upgrade" | bash -s pre
 ```
 
 ### Delete existing PostgreSQL data
@@ -177,7 +177,7 @@ Note the following:
 
    ```shell
    # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v4.0.0
-   curl -s https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/scripts/database-upgrade | bash -s post
+   curl -s "https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_RELEASE}/scripts/database-upgrade" | bash -s post
    ```
 
 ### Troubleshooting 4.0 release upgrade process
@@ -222,7 +222,7 @@ The `pre` stage will create a backup of your database using the backup-utility s
 
 ```shell
 # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v3.0.0
-curl -s https://gitlab.com/gitlab-org/charts/gitlab/-/raw/${GITLAB_RELEASE}/scripts/database-upgrade  | bash -s pre
+curl -s "https://gitlab.com/gitlab-org/charts/gitlab/-/raw/${GITLAB_RELEASE}/scripts/database-upgrade" | bash -s pre
 ```
 
 ### Prepare the cluster database secrets
@@ -304,7 +304,7 @@ Note the following:
 
    ```shell
    # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v3.0.0
-   curl -s https://gitlab.com/gitlab-org/charts/gitlab/-/raw/${GITLAB_RELEASE}/scripts/database-upgrade | bash -s post
+   curl -s "https://gitlab.com/gitlab-org/charts/gitlab/-/raw/${GITLAB_RELEASE}/scripts/database-upgrade" | bash -s post
    ```
 
 ### Troubleshooting 3.0 release upgrade process
