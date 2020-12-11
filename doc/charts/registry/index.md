@@ -143,7 +143,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.tag`                                | `v2.12.0-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
-| `log`                                      | `{level: warn, fields: {service: registry}}` | Configure the logging options                                                                        |
+| `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
 | `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
 | `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
