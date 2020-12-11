@@ -27,7 +27,7 @@ The chart is disabled by default. To enable it as part of a chart deploy set `gl
 
 ### Replicas
 
-The default number of replicas to deploy is 3. This can be changed by setting `global.praefect.virtualStorages` with the desired number of replicas. For example:
+The default number of replicas to deploy is 3. This can be changed by setting `global.praefect.virtualStorages[].gitalyReplicas` with the desired number of replicas. For example:
 
 ```yaml
 global:
