@@ -412,7 +412,7 @@ You must set terminationGracePeriodSeconds ({{ $terminationGracePeriodSeconds }}
 Ensure consolidate and type-specific object store configuration are not mixed.
 */}}
 {{- define "gitlab.checkConfig.objectStorage.consolidatedConfig" -}}
-{{-   if $.Values.global.appConfig.object_store.enabled  -}}
+{{-   if $.Values.global.appConfig.object_store.enabled -}}
 {{-     $problematicTypes := list -}}
 {{-     range $objectTypes := list "artifacts" "lfs" "uploads" "packages" "externalDiffs" "terraformState" "pseudonymizer" "dependencyProxy" -}}
 {{-       if hasKey $.Values.global.appConfig . -}}
@@ -430,7 +430,7 @@ When consolidated object storage is enabled, for each item `bucket` must be spec
 {{/* END gitlab.checkConfig.objectStorage.consolidatedConfig */}}
 
 {{- define "gitlab.checkConfig.objectStorage.typeSpecificConfig" -}}
-{{-   if and (not $.Values.global.minio.enabled) (not $.Values.global.appConfig.object_store.enabled)  -}}
+{{-   if and (not $.Values.global.minio.enabled) (not $.Values.global.appConfig.object_store.enabled) -}}
 {{-     $problematicTypes := list -}}
 {{-     range $objectTypes := list "artifacts" "lfs" "uploads" "packages" "externalDiffs" "terraformState" "pseudonymizer" "dependencyProxy" -}}
 {{-       if hasKey $.Values.global.appConfig . -}}
