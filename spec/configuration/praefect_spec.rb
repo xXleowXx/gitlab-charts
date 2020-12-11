@@ -74,7 +74,7 @@ describe 'Praefect configuration' do
       end
     end
 
-    it 'renders one set of Gitaly resources' do
+    it 'renders Gitaly resources' do
       gitaly_resources.each do |r|
         expect(template.dig(r)).to be_truthy
       end
@@ -144,7 +144,7 @@ describe 'Praefect configuration' do
           expect(template.exit_code).to eq(0)
         end
 
-        it 'generates one set of operator-related resources' do
+        it 'generates operator-related resources' do
           operator_resources.each do |r|
             expect(template.dig(r)).to be_truthy
           end
