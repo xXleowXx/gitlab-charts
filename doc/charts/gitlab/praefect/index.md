@@ -56,9 +56,9 @@ global:
       maxUnavailable: 2
 ```
 
-This will create two sets of resources for Gitaly. This includes two Gitaly StatefulSets (one per virtual storage). In the Admin UI, under
-`admin/application_settings/repository` > `Repository storage`, weights can be assigned to each virtual storage. Click the question mark (?) icon in the
-`Storage nodes for new repositories` section for more information.
+This will create two sets of resources for Gitaly. This includes two Gitaly StatefulSets (one per virtual storage).
+
+Admins can then [choose where new repositories are stored](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#choose-where-new-repositories-are-stored).
 
 ### Creating the database
 
