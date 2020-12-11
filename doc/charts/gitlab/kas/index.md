@@ -42,7 +42,7 @@ the `helm install` command using the `--set` flags.
 | `annotations`               | `{}`           | Pod annotations                  |
 | `extraContainers`           |                | List of extra containers to include      |
 | `image.repository`          | `registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/kas` | image repository |
-| `image.tag`                 | `v0.0.6`       | Image tag                        |
+| `image.tag`                 | `v13.7.0`      | Image tag                        |
 | `hpa.targetAverageValue`    | `100m`         | Set the autoscaling target value (CPU) |
 | `ingress.enabled`           |  `true` if `global.kas.enabled=true` | You can use `kas.ingress.enabled` to explicitly turn it on or off. If not set, you can optionally use `global.ingress.enabled` for the same purpose. |
 | `ingress.annotations`       | `{}`           | Ingress annotations              |
