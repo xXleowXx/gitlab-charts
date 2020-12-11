@@ -25,7 +25,7 @@
 
 {{- define "gitlab.certificates.volumes" -}}
 {{- $customCAsEnabled := .Values.global.certificates.customCAs }}
-{{- $internalGitalyTLSEnabled := and $.Values.global.gitaly.tls.enabled }}
+{{- $internalGitalyTLSEnabled := $.Values.global.gitaly.tls.enabled }}
 {{- $internalPraefectTLSEnabled := and $.Values.global.praefect.tls.enabled $.Values.global.praefect.tls.secretName }}
 {{- $certmanagerDisabled := not (or $.Values.global.ingress.configureCertmanager $.Values.global.ingress.tls) }}
 - name: etc-ssl-certs
