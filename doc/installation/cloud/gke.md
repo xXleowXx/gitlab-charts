@@ -10,7 +10,7 @@ For a fully functional GitLab instance, you will need a few resources before
 deploying the `gitlab` chart. The following is how these charts are deployed
 and tested within GitLab.
 
-NOTE: **Note:**
+NOTE:
 Google provides a whitepaper for [deploying production-ready GitLab on
 Google Kubernetes Engine](https://cloud.google.com/solutions/deploying-production-ready-gitlab-on-gke), including all steps and external
 resource configuration. These are alternative to this document, and the

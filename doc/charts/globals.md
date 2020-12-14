@@ -127,7 +127,7 @@ If you wish to use an external `cert-manager`, you must provide the following:
 
 ## GitLab Version
 
-NOTE: **Note:**
+NOTE:
 This value should only used for development purposes, or by explicit request of GitLab support. Please avoid using this value
 on production environments and set the version as described
 in [Deploy using Helm](../installation/deployment.md#deploy-using-helm)
@@ -192,7 +192,7 @@ from the global, by design.
 
 ### PostgreSQL SSL
 
-NOTE: **Note:**
+NOTE:
 SSL support is mutual TLS only.
 See [issue #2034](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2034)
 and [issue #1817](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1817).
@@ -247,7 +247,7 @@ global:
 Configuration of service discovery can be more complex. For a complete
 details of this configuration, the parameters and their associated
 behaviors, see [Service Discovery](https://docs.gitlab.com/ee/administration/database_load_balancing.html#service-discovery)
-in the [GitLab Administration documenation](https://docs.gitlab.com/ee/administration/index.html).
+in the [GitLab Administration documentation](https://docs.gitlab.com/ee/administration/index.html).
 
 ```yaml
 global:
@@ -1087,7 +1087,7 @@ Example `--set` configuration items, when using the global chart:
 --set global.appConfig.ldap.servers.main.password.key='the-key-containing-the-password'
 ```
 
-NOTE: **Note:**
+NOTE:
 Commas are considered [special characters](https://helm.sh/docs/intro/using_helm/#the-format-and-limitations-of---set)
 within Helm `--set` items. Be sure to escape commas in values such as `bind_dn`:
 `--set global.appConfig.ldap.servers.main.bind_dn='cn=administrator\,cn=Users\,dc=domain\,dc=net'`.
@@ -1448,7 +1448,7 @@ is killed by the Webservice master process. The default value is 60 seconds.
 
 ## Custom Certificate Authorities
 
-NOTE: **Note:**
+NOTE:
 These settings do not affect charts from outside of this repository, via `requirements.yaml`.
 
 Some users may need to add custom certificate authorities, such as when using internally

@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.6.3 (2020-12-10)
+
+### Changed (1 change, 1 of them is from the community)
+
+- Update gitlab-runner from 0.22.0 to 0.23.0. !1686 (Jan Brummelte)
+
+
 ## 4.6.2 (2020-12-07)
 
 - No changes.

@@ -28,7 +28,7 @@ GITLAB_CHART_VERSION=v3.0.0
 kubectl apply -f https://gitlab.com/gitlab-org/charts/gitlab/raw/${GITLAB_CHART_VERSION}/support/crd.yaml
 ```
 
-NOTE: **Note:**
+NOTE:
 This needs to done only for the first time before installing the Operator or _when the CRD is changed_.
 Further upgrades will follow the normal [upgrade procedures](upgrade.md).
 

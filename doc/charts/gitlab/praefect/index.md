@@ -64,7 +64,7 @@ Admins can then [choose where new repositories are stored](https://docs.gitlab.c
 
 Praefect uses its own database to track its state. This has to be manually created in order for Praefect to be functional.
 
-NOTE: **Note:**
+NOTE:
 These instructions assume you are using the bundled PostgreSQL server. If you are using your own server,
 there will be some variation in how you connect.
 
@@ -124,7 +124,7 @@ To run Praefect over TLS follow these steps:
    kubectl exec -it <Task Runner Pod> -- grep gitaly_address /srv/gitlab/config/gitlab.yml
    ```
 
-NOTE: **Note:**
+NOTE:
 A basic script for generating custom signed certificates for internal Praefect Pods
 [can be found in this repo](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/generate_certificates.sh).
 Users can use or refer that script to generate certificates with proper SAN attributes.

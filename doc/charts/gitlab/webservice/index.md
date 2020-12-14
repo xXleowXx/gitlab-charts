@@ -366,7 +366,7 @@ can be customized using the `unicorn.memory.min` and `unicorn.memory.max` chart 
 default values are sane, you can increase (or lower) these values to fine-tune
 them for your environment or troubleshoot performance issues.
 
-NOTE: **Note:**
+NOTE:
 These settings are effective on a _per process basis_, not for an entire Pod.
 
 ### Memory requests/limits
