@@ -28,6 +28,34 @@ describe 'Database configuration' do
     }
   end
 
+  describe 'in-chart postgresql' do
+    it 'uses the in-chart postgresql service' do
+      t = HelmTemplate.new(default_values)
+      expect(t.exit_code).to eq(0)
+      expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include("host: \"test-postgresql.default.svc\"")
+    end
+
+    context 'custom serviceName' do
+      let(:global_values) do
+        default_values.deep_merge({
+          'global' => {
+            'psql' => {
+              'serviceName' => 'my-postgresql'
+            }
+          }
+        })
+      end
+
+      it 'uses the in-chart postgresql service' do
+        t = HelmTemplate.new(global_values)
+        expect(t.exit_code).to eq(0)
+        expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include("host: \"my-postgresql.default.svc\"")
+      end  
+    end
+  end
+
+  context
+
   describe 'global.psql settings' do
     context 'when psql.database set globally' do
       let(:global_values) do
@@ -237,7 +265,7 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('username: webservice')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('prepared_statements: true')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('connect_timeout: 55')
-        webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice','init-webservice-secrets').select { |item|
+        webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice-default','init-webservice-secrets').select { |item|
           item['secret']['name'] == 'other-postgresql-password' && item['secret']['items'][0]['key'] == 'other-password'
         }
         expect(webservice_secret_mounts.length).to eq(1)
@@ -284,7 +312,7 @@ describe 'Database configuration' do
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('username: gitlab')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('prepared_statements: false')
           .and match(/connect_timeout: $/)
-        webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice','init-webservice-secrets').select { |item|
+        webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice-default','init-webservice-secrets').select { |item|
           item['secret']['name'] == 'test-postgresql-password' && item['secret']['items'][0]['key'] == 'postgresql-password'
         }
         expect(webservice_secret_mounts.length).to eq(1)
@@ -325,7 +353,7 @@ describe 'Database configuration' do
         expect(sidekiq_secret_mounts.length).to eq(1)
         # webservice gets "other", with non-defaults
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('host: "psql.other"')
-        webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice','init-webservice-secrets').select { |item|
+        webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice-default','init-webservice-secrets').select { |item|
           item['secret']['name'] == 'global-postgresql-password' && item['secret']['items'][0]['key'] == 'global-password'
         }
         expect(webservice_secret_mounts.length).to eq(1)

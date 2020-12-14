@@ -21,7 +21,7 @@ the Kubernetes cluster this chart is deployed onto.
 ## Configuration
 
 The `webservice` chart is configured as follows: [Global Settings](#global-settings),
-[Ingress Settings](#ingress-settings), [External Services](#external-services), and
+[Deployments settings](#deployments-settings), [Ingress Settings](#ingress-settings), [External Services](#external-services), and
 [Chart Settings](#chart-settings).
 
 ## Installation command line options
@@ -115,6 +115,8 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.readinessProbe.timeoutSeconds`      | 2       | When the readiness probe times out             |
 | `workhorse.readinessProbe.successThreshold`    | 1       | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
 | `workhorse.readinessProbe.failureThreshold`    | 3       | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded |
+| `workhorse.imageScaler.maxProcs`               | 2       | The maximum number of image scaling processes that may run concurrently |
+| `workhorse.imageScaler.maxFileSizeBytes`       | 250000  | The maximum file size in bytes for images to be processed by the scaler |
 | `webServer` | `puma` | Selects web server (Webservice/Puma) that would be used for request handling |
 | `priorityClassName`                            | `""`    | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction |
 
@@ -223,16 +225,128 @@ to `registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce`.
 We share some common global settings among our charts. See the [Globals Documentation](../../globals.md)
 for common configuration options, such as GitLab and Registry hostnames.
 
+## Deployments settings
+
+This chart has the ability to create multiple Deployment objects and their related
+resources. This feature allows requests to the GitLab application to be distributed between multiple sets of Pods using path based routing.
+
+The keys of this Map (`default` in this example) are the "name" for each. `default`
+will have a Deployment, Service, HorizontalPodAutoscaler, PodDisruptionBudget, and
+optional Ingress created with `RELEASE-webservice-default`.
+
+Any property not provided will inherit from the `gitlab-webservice` chart defaults.
+
+```yaml
+deployments:
+  default:
+    ingress:
+      path: # Does not inherit or default. Leave blank to disable Ingress.
+      annotations:
+        # inherits `ingress.anntoations`
+      proxyConnectTimeout: # inherits `ingress.proxyConnectTimeout`
+      proxyReadTimeout:    # inherits `ingress.proxyReadTimeout`
+      proxyBodySize:       # inherits `ingress.proxyBodySize`
+    deployment:
+      annotations: # map
+      labels: # map
+      # inherits `deployment`
+    pod:
+      labels: # additional labels to .podLabels
+      annotations: # map
+        # inherit from .Values.annotations
+    service:
+      labels: # additional labels to .serviceLabels
+      annotations: # additional annotations to .service.annotations
+        # inherits `service.annotations`
+    hpa:
+      minReplicas: # defaults to .minReplicas
+      maxReplicas: # defaults to .maxReplicas
+      metrics: # optional replacement of HPA metrics definition
+      # inherits `hpa`
+    pdb:
+      maxUnavailable: # inherits `maxUnavailable`
+    resources: # `resources` for `webservice` container
+      # inherits `resources`
+    workhorse: # map
+      # inherits `workhorse`
+    unicorn: # map
+      # inherits `unicorn`
+    extraEnv: #
+      # inherits `extraEnv`
+    puma: # map
+      # inherits `puma`
+    workerProcesses: # inherits `workerProcesses`
+    shutdown:
+      # inherits `shutdown`
+    nodeSelector: # map
+      # inherits `nodeSelector`
+    tolerations: # array
+      # inherits `tolerations`
+```
+
+### Deployments Ingress
+
+Each `deployments` entry will inherit from chart-wide [Ingress settings](#ingress-settings). Any value presented here will override those provided there. Outside of `path`, all settings are identical to those.
+
+```yaml
+webservice:
+  deployments:
+    default:
+      ingress:
+        path: /
+   api:
+     ingress:
+       path: /api
+```
+
+The `path` property is directly populated into the Ingress's `path` property, and allows one to control URI paths which are directed to each service. In the example above,
+`default` acts as the catch-all path, and `api` recevied all traffic under `/api`
+
+You can disable a given Deployment from having an associated Ingress resource created by setting `path` to empty. See below, where `internal-api` will never recieve external traffic.
+
+```yaml
+webservice:
+  deployments:
+    default:
+      ingress:
+        path: /
+   api:
+     ingress:
+       path: /api
+   internal-api:
+     ingress:
+       path:
+```
+
 ## Ingress Settings
 
 | Name                                   | Type    | Default | Description |
 |:-------------------------------------- |:-------:|:------- |:----------- |
-| `ingress.annotations.*annotation-key*` | String  | (empty) | `annotation-key` is a string that will be used with the value as an annotation on every Ingress. For example: `ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. |
+| `ingress.annotations` | Map  |  See [below](#annotations) | These annotations will be used for every Ingress. For example: `ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. |
 | `ingress.enabled`                      | Boolean | `false` | Setting that controls whether to create Ingress objects for services that support them. When `false`, the `global.ingress.enabled` setting value is used. |
 | `ingress.proxyBodySize`                | String  | `512m`  | [See Below](#proxybodysize). |
 | `ingress.tls.enabled`                  | Boolean | `true`  | When set to `false`, you disable TLS for GitLab Webservice. This is mainly useful for cases in which you cannot use TLS termination at Ingress-level, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `ingress.tls.secretName`               | String  | (empty) | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the GitLab URL. When not set, the `global.ingress.tls.secretName` value is used instead. |
 | `ingress.tls.smardcardSecretName`      | String  | (empty) | The name of the Kubernetes TLS SEcret that contains a valid certificate and key for the GitLab smartcard URL if enabled. When not set, the `global.ingress.tls.secretName` value is used instead. |
+
+### annotations
+
+`annotations` is used to set annotations on the Webservice Ingress.
+
+We set one annotation by default: `nginx.ingress.kubernetes.io/service-upstream: "true"`.
+This helps balance traffic to the Webservice pods more evenly by telling NGINX to directly
+contact the Service itself as the upstream. For more information, see the
+[NGINX docs](https://github.com/kubernetes/ingress-nginx/blob/nginx-0.21.0/docs/user-guide/nginx-configuration/annotations.md#service-upstream).
+
+To override this, set:
+
+```yaml
+gitlab:
+  webservice:
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/service-upstream: "false"
+```
 
 ### proxyBodySize
 
@@ -252,18 +366,19 @@ can be customized using the `unicorn.memory.min` and `unicorn.memory.max` chart 
 default values are sane, you can increase (or lower) these values to fine-tune
 them for your environment or troubleshoot performance issues.
 
-NOTE: **Note:**
+NOTE:
 These settings are effective on a _per process basis_, not for an entire Pod.
 
 ### Memory requests/limits
 
 Each pod spawns an amount of workers equal to `workerProcesses`, who each use
-some baseline amount of memory. The default memory requests and limits are based
-on two workers at the [measured usage](https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/3853)
-of 750MB /worker, and a maximum usage of about 1G /worker. Thus, if you update
-`workerProcesses`, you should update `requests.memory` and `limits.memory`
-(if configured) accordingly. Note though, that as GitLab and usage changes, the
-required resources will change as well.
+some baseline amount of memory. We recommend:
+
+- A minimum of 1.25GB per worker (`requests.memory`)
+- A maximum of 1.5GB per worker (`limits.memory`)
+
+Note that required resources are dependent on the workload generated by users
+and may change in the future based on changes or upgrades in the GitLab application.
 
 Default:
 
@@ -271,9 +386,9 @@ Default:
 workerProcesses: 2
 resources:
   requests:
-    memory: 1.5G # = 2 * 750M
+    memory: 2.5G # = 2 * 1.25G
 # limits:
-#   memory: 2G   # = 2 * 1G
+#   memory: 3G   # = 2 * 1.5G
 ```
 
 With 4 workers configured:
@@ -282,9 +397,9 @@ With 4 workers configured:
 workerProcesses: 4
 resources:
   requests:
-    memory: 3G   # = 4 * 750M
+    memory: 5G   # = 4 * 1.25G
 # limits:
-#   memory: 4G   # = 4 * 1G
+#   memory: 6G   # = 4 * 1.5G
 ```
 
 ## External Services

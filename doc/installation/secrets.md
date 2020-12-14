@@ -49,10 +49,11 @@ documentation.
   - [GitLab Workhorse secret](#gitlab-workhorse-secret)
   - [GitLab Runner secret](#gitlab-runner-secret)
   - [PostgreSQL password](#postgresql-password)
-  - [Praefect DB password](#praefect-db-password) 
+  - [Praefect DB password](#praefect-db-password)
   - [MinIO secret](#minio-secret)
   - [Registry HTTP secret](#registry-http-secret)
   - [Grafana password](#grafana-password)
+  - [GitLab Pages secret](#gitlab-pages-secret)
 - [External Services](#external-services)
   - [OmniAuth](#omniauth)
   - [LDAP Password](#ldap-password)
@@ -130,7 +131,7 @@ This secret is referenced by the `global.shell.hostKeys.secret` setting.
 
 ### Initial Enterprise license
 
-CAUTION: **Caution:**
+WARNING:
 This method will only add a license at the time of installation. Use the Admin Area in the web user interface to renew or upgrade licenses.
 
 Create a Kubernetes secret for storing the Enterprise license for the GitLab instance.
@@ -212,6 +213,7 @@ production:
   secret_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
   otp_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
   db_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
+  encrypted_settings_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
   openid_connect_signing_key: |
 $(openssl genrsa 2048 | awk '{print "    " $0}')
   ci_jwt_signing_key: |
@@ -222,6 +224,9 @@ kubectl create secret generic <name>-rails-secret --from-file=secrets.yml
 ```
 
 This secret is referenced by the `global.railsSecrets.secret` setting.
+
+NOTE:
+The `encrypted_settings_key_base` was added in GitLab `13.7`, and will be required for GitLab `14.0`.
 
 ### GitLab Workhorse secret
 
@@ -282,6 +287,17 @@ If configuring [Grafana integration](../charts/globals.md#configure-grafana-inte
 generate_secret_if_needed "gitlab-grafana-initial-password" --from-literal=password=$(gen_random 'a-zA-Z0-9' 64)
 ```
 
+### GitLab Pages secret
+
+Generate the GitLab Pages secret. This must have a length of 32 characters and
+base64-encoded. Replace `<name>` with the name of the release.
+
+```shell
+kubectl create secret generic <name>-gitlab-pages-secret --from-literal=shared_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
+```
+
+This secret is referenced by the `global.pages.apiSecret.secret` setting.
+
 ### Registry HTTP secret
 
 Generate a random 64 character alpha-numeric key shared by all registry pods.
@@ -322,7 +338,7 @@ kubectl create secret generic ldap-main-password --from-literal=password=yourpas
 Then use `--set global.appConfig.ldap.servers.main.password.secret=ldap-main-password` to
 inject the password into your configuration.
 
-NOTE: **Note:**
+NOTE:
 Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### SMTP password
@@ -336,7 +352,7 @@ kubectl create secret generic smtp-password --from-literal=password=yourpassword
 
 Then use `--set global.smtp.password.secret=smtp-password` in your Helm command.
 
-NOTE: **Note:**
+NOTE:
 Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### IMAP password for incoming emails
@@ -351,7 +367,7 @@ kubectl create secret generic incoming-email-password --from-literal=password=yo
 Then use `--set global.appConfig.incomingEmail.password.secret=incoming-email-password`
 in your Helm command along with other required settings as specified [in the docs](command-line-options.md#incoming-email-configuration).
 
-NOTE: **Note:**
+NOTE:
 Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### IMAP password for service desk emails
@@ -366,7 +382,7 @@ kubectl create secret generic service-desk-email-password --from-literal=passwor
 Then use `--set global.appConfig.serviceDeskEmail.password.secret=service-desk-email-password`
 in your Helm command along with other required settings as specified [in the docs](command-line-options.md#service-desk-email-configuration).
 
-NOTE: **Note:**
+NOTE:
 Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### S/MIME Certificate

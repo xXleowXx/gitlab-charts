@@ -11,7 +11,7 @@ spec:
     matchLabels:
       app: {{ template "name" . }}
       release: {{ $.Release.Name }}
-  serviceName: {{ template "gitlab.praefect.serviceName" . }}
+  serviceName: {{ template "gitlab.praefect.serviceName" $ }}
   replicas: {{ $.Values.replicas }}
   podManagementPolicy: Parallel
   template:
@@ -88,10 +88,13 @@ spec:
         image: "{{ $.Values.image.repository }}:{{ coalesce $.Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" $.Chart.AppVersion "prepend" "true")) }}"
         {{ template "gitlab.imagePullPolicy" . }}
         ports:
-          - containerPort: {{ $.Values.service.internalPort }}
-         {{- if .Values.metrics.enabled }}
+          - containerPort: {{ include "gitlab.praefect.internalPort" $ }}
+        {{- if $.Values.global.praefect.tls.enabled }}
+          - containerPort: {{ include "gitlab.praefect.tls.internalPort" $ }}
+        {{- end }}
+        {{- if .Values.metrics.enabled }}
           - containerPort: {{ .Values.metrics.port }}
-         {{- end }}
+        {{- end }}
         env:
         - name: CONFIG_TEMPLATE_DIRECTORY
           value: '/etc/gitaly/templates'
@@ -154,6 +157,14 @@ spec:
               - key: {{ template "gitlab.praefect.dbSecret.key" . }}
                 path: db_password
               name: {{ template "gitlab.praefect.dbSecret.secret"  . }}
-      - emptyDir:
-          medium: Memory
-        name: etc-ssl-certs
+          {{- if $.Values.global.praefect.tls.enabled }}
+          - secret:
+              name: {{ template "gitlab.praefect.tls.secret" $ }}
+              items:
+                - key: "tls.crt"
+                  path: "praefect.crt"
+                - key: "tls.key"
+                  path: "praefect.key"
+          {{- end }}
+      {{- include "gitlab.certificates.volumes" . | nindent 6 }}
+

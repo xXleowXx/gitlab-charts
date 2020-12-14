@@ -140,6 +140,7 @@ Parameter | Description | Default
 `controller.stats.service.loadBalancerIP` | IP address to assign to load balancer (if supported) | `""`
 `controller.stats.service.loadBalancerSourceRanges` | list of IP CIDRs allowed access to load balancer (if supported) | `[]`
 `controller.stats.service.type` | type of controller stats service to create | `ClusterIP`
+`controller.terminationGracePeriodSeconds` | Seconds that Kubernetes will wait for a pod to forcibly exit | `60`
 `controller.metrics.enabled` | if `true`, enable Prometheus metrics (`controller.stats.enabled` must be `true` as well) | `false`
 `controller.metrics.service.annotations` | annotations for Prometheus metrics service | `{}`
 `controller.metrics.service.clusterIP` | cluster IP address to assign to service | `""`

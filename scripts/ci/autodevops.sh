@@ -9,41 +9,6 @@ export CI_APPLICATION_TAG=$CI_COMMIT_SHA
 export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
 export TILLER_NAMESPACE=$KUBE_NAMESPACE
 
-function retry() {
-  if eval "$@"; then
-    return 0
-  fi
-
-  for i in 2 1; do
-    sleep 3s
-    echo "Retrying $i..."
-    if eval "$@"; then
-      return 0
-    fi
-  done
-  return 1
-}
-
-function echoerr() {
-  local header="${2}"
-
-  if [ -n "${header}" ]; then
-    printf "\n\033[0;31m** %s **\n\033[0m" "${1}" >&2;
-  else
-    printf "\033[0;31m%s\n\033[0m" "${1}" >&2;
-  fi
-}
-
-function echoinfo() {
-  local header="${2}"
-
-  if [ -n "${header}" ]; then
-    printf "\n\033[0;33m** %s **\n\033[0m" "${1}" >&2;
-  else
-    printf "\033[0;33m%s\n\033[0m" "${1}" >&2;
-  fi
-}
-
 function previousDeployFailed() {
   set +e
   echo "Checking for previous deployment of $CI_ENVIRONMENT_SLUG"
@@ -112,6 +77,22 @@ function deploy() {
     replicas="$new_replicas"
   fi
 
+  # Use stable images when on the stable branch
+  gitlab_version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
+  gitlab_version_args=()
+  if [[ $CI_COMMIT_BRANCH =~ -stable$ ]] && [[ $gitlab_version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    stable_branch=$(echo "${gitlab_version%.*}-stable" | tr '.' '-')
+    gitlab_version_args=(
+      "--set" "global.gitlabVersion=${stable_branch}"
+      "--set" "global.certificates.image.tag=${stable_branch}"
+      "--set" "global.kubectl.image.tag=${stable_branch}"
+      "--set" "gitlab.gitaly.image.tag=${stable_branch}"
+      "--set" "gitlab.gitlab-shell.image.tag=${stable_branch}"
+      "--set" "gitlab.gitlab-exporter.image.tag=${stable_branch}"
+      "--set" "registry.image.tag=${stable_branch}"
+    )
+  fi
+
   # Cleanup and previous installs, as FAILED and PENDING_UPGRADE will cause errors with `upgrade`
   if [ "$CI_ENVIRONMENT_SLUG" != "production" ] && previousDeployFailed ; then
     echo "Deployment in bad state, cleaning up $CI_ENVIRONMENT_SLUG"
@@ -165,6 +146,7 @@ CIYAML
     --set global.ingress.annotations."external-dns\.alpha\.kubernetes\.io/ttl"="10" \
     --set global.ingress.tls.secretName=helm-charts-win-tls \
     --set global.ingress.configureCertmanager=false \
+    --set global.appConfig.initialDefaults.signupEnabled=false \
     --set certmanager.install=false \
     --set prometheus.install=$PROMETHEUS_INSTALL \
     --set gitlab.webservice.maxReplicas=3 \
@@ -177,6 +159,7 @@ CIYAML
     --set gitlab.operator.crdPrefix="$CI_ENVIRONMENT_SLUG" \
     --set global.gitlab.license.secret="$CI_ENVIRONMENT_SLUG-gitlab-license" \
     "${enable_kas[@]}" \
+    "${gitlab_version_args[@]}" \
     --namespace="$KUBE_NAMESPACE" \
     --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
     $HELM_EXTRA_ARGS \
@@ -237,68 +220,6 @@ function restart_task_runner() {
   kubectl -n ${KUBE_NAMESPACE} delete pods -lapp=task-runner,release=${CI_ENVIRONMENT_SLUG}
   # always "succeed" so not to block.
   return 0
-}
-
-function get_pod() {
-  local namespace="${KUBE_NAMESPACE}"
-  local release="${CI_ENVIRONMENT_SLUG}"
-  local app_name="${1}"
-  local status="${2-Running}"
-
-  get_pod_cmd="kubectl get pods --namespace ${namespace} --field-selector=status.phase=${status} -lapp=${app_name},release=${release} --no-headers -o=custom-columns=NAME:.metadata.name | tail -n 1"
-  echoinfo "Waiting till '${app_name}' pod is ready" true
-  echoinfo "Running '${get_pod_cmd}'"
-
-  local interval=5
-  local elapsed_seconds=0
-  local max_seconds=$((2 * 60))
-  while true; do
-    local pod_name
-    pod_name="$(eval "${get_pod_cmd}")"
-    [[ "${pod_name}" == "" ]] || break
-
-    if [[ "${elapsed_seconds}" -gt "${max_seconds}" ]]; then
-      echoerr "The pod name couldn't be found after ${elapsed_seconds} seconds, aborting."
-      break
-    fi
-
-    let "elapsed_seconds+=interval"
-    sleep ${interval}
-  done
-
-  echoinfo "The pod name is '${pod_name}'."
-  echo "${pod_name}"
-}
-
-function run_task() {
-  local namespace="${KUBE_NAMESPACE}"
-  local ruby_cmd="${1}"
-  local task_runner_pod=$(get_pod "task-runner")
-
-  kubectl exec -i --namespace "${namespace}" "${task_runner_pod}" -- gitlab-rails runner "${ruby_cmd}"
-}
-
-function disable_sign_ups() {
-  if [ -z ${REVIEW_APPS_ROOT_TOKEN+x} ]; then
-    echoerr "In order to protect Review Apps, REVIEW_APPS_ROOT_TOKEN variable must be set"
-    false
-  else
-    true
-  fi
-
-  # Create the root token
-  local ruby_cmd="token = User.find_by_username('root').personal_access_tokens.create(scopes: [:api], name: 'Token to disable sign-ups'); token.set_token('${REVIEW_APPS_ROOT_TOKEN}'); begin; token.save!; rescue(ActiveRecord::RecordNotUnique); end"
-  run_task "${ruby_cmd}"
-
-  # Disable sign-ups
-  local signup_enabled=$(retry 'curl --silent --show-error --request PUT --header "PRIVATE-TOKEN: ${REVIEW_APPS_ROOT_TOKEN}" "${CI_ENVIRONMENT_URL}/api/v4/application/settings?signup_enabled=false"')
-
-  if [[ "${signup_enabled}" =~ "\"signup_enabled\":false" ]]; then
-    echoinfo "Sign-ups have been disabled successfully."
-  else
-    echoerr "Sign-ups are still enabled!"
-    false
-  fi
 }
 
 function download_chart() {

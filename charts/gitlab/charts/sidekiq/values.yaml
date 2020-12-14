@@ -20,7 +20,7 @@ tolerations: []
 
 enabled: true
 cluster: true
-experimentalQueueSelector: false
+queueSelector: false
 
 annotations: {}
 podLabels: {}
@@ -249,11 +249,10 @@ hpa:
 timeout: 5
 resources:
   # limits:
-  #  cpu: 500m
-  #  memory: 1G
+  #  memory: 5G
   requests:
-    cpu: 50m
-    memory: 650M
+    cpu: 900m
+    memory: 2G
 maxUnavailable: 1
 
 # Define queue groups into Pods

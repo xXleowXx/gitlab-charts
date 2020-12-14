@@ -24,27 +24,31 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- define "gitlab.checkConfig" -}}
 {{- $messages := list -}}
 {{/* add templates here */}}
-{{- $messages := append $messages (include "gitlab.checkConfig.contentSecurityPolicy" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.queues.cluster" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.sidekiq.experimentalQueueSelector" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.appConfig.maxRequestDurationSeconds" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.gitaly.extern.repos" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.geo.database" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.geo.secondary.database" .) -}}
-{{- $messages := append $messages (include "gitlab.task-runner.replicas" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.multipleRedis" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.hostWhenNoInstall" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.postgresql.deprecatedVersion" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.postgresql.noPasswordFile" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.database.externalLoadBalancing" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.serviceDesk" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.sentry" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
-{{- $messages := append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.contentSecurityPolicy" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.cluster" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queueSelector" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.appConfig.maxRequestDurationSeconds" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.gitaly.extern.repos" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.geo.database" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.geo.secondary.database" .) -}}
+{{- $messages = append $messages (include "gitlab.task-runner.replicas" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.multipleRedis" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.hostWhenNoInstall" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.postgresql.deprecatedVersion" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.postgresql.noPasswordFile" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.database.externalLoadBalancing" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.serviceDesk" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sentry" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
 {{- /* prepare output */}}
-{{- $messages := without $messages "" -}}
+{{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- /* print output */}}
@@ -79,6 +83,17 @@ gitaly: server enabled with TLS, no TLS certificate provided
 {{- end -}}
 {{/* END gitlab.checkConfig.gitaly.tls */}}
 
+{{/*
+Ensure a certificate is provided when Praefect is enabled and is instructed to listen over TLS 
+*/}}
+{{- define "gitlab.checkConfig.praefect.tls" -}}
+{{- if and (and $.Values.global.praefect.enabled $.Values.global.praefect.tls.enabled) (not $.Values.global.praefect.tls.secretName) }}
+praefect: server enabled with TLS, no TLS certificate provided
+    It appears Praefect is specified to listen over TLS, but no certificate was specified.
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.praefect.tls */}}
+
 {{/* Check configuration of Sidekiq - don't supply queues and negateQueues */}}
 {{- define "gitlab.checkConfig.sidekiq.queues.mixed" -}}
 {{- if .Values.gitlab.sidekiq.pods -}}
@@ -109,20 +124,23 @@ sidekiq: cluster
 {{- end -}}
 {{/* END gitlab.checkConfig.sidekiq.queues.cluster */}}
 
-{{/* Check configuration of Sidekiq - cluster must be enabled for experimentalQueueSelector to be valid */}}
-{{- define "gitlab.checkConfig.sidekiq.experimentalQueueSelector" -}}
+{{/* Check configuration of Sidekiq - cluster must be enabled for queueSelector to be valid */}}
+{{/* Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646 */}}
+{{- define "gitlab.checkConfig.sidekiq.queueSelector" -}}
 {{- if .Values.gitlab.sidekiq.pods -}}
 {{-   range $pod := .Values.gitlab.sidekiq.pods -}}
 {{-     $cluster := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.cluster "local" $pod.cluster "default" true) }}
+{{-     $queueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.queueSelector "local" $pod.queueSelector "default" false) }}
 {{-     $experimentalQueueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.experimentalQueueSelector "local" $pod.experimentalQueueSelector "default" false) }}
-{{-     if and $experimentalQueueSelector (not $cluster) }}
-sidekiq: experimentalQueueSelector
-    The pod definition `{{ $pod.name }}` has `experimentalQueueSelector` enabled, but does not have `cluster` enabled. `experimentalQueueSelector` only works when `cluster` is enabled.
+{{-     $selectorField := ternary "queueSelector" "experimentalQueueSelector" (eq $queueSelector "true") -}}
+{{-     if and (or $queueSelector $experimentalQueueSelector) (not $cluster) }}
+sidekiq: queueSelector
+    The pod definition `{{ $pod.name }}` has `{{ $selectorField }}` enabled, but does not have `cluster` enabled. `{{ $selectorField }}` only works when `cluster` is enabled.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.sidekiq.experimentalQueueSelector */}}
+{{/* END gitlab.checkConfig.sidekiq.queueSelector */}}
 
 {{/*
 Ensure a database is configured when using Geo
@@ -345,6 +363,20 @@ sentry:
 {{/* END gitlab.checkConfig.sentry */}}
 
 {{/*
+Ensure that registry's sentry has a DSN configured if enabled
+*/}}
+{{- define "gitlab.checkConfig.registry.sentry.dsn" -}}
+{{-   if $.Values.registry.reporting.sentry.enabled }}
+{{-     if not $.Values.registry.reporting.sentry.dsn }}
+registry:
+    When enabling sentry, you must configure at least one DSN.
+    See https://docs.gitlab.com/charts/charts/registry#reporting
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.sentry.dsn */}}
+
+{{/*
 Ensure Registry notifications settings are in global scope
 */}}
 {{- define "gitlab.checkConfig.registry.notifications" }}
@@ -363,3 +395,54 @@ You must be using the Puma webservice in order to use Dependency Proxy. Set `git
 {{  end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.dependencyProxy.puma */}}
+
+{{/*
+Ensure terminationGracePeriodSeconds is longer than blackoutSeconds
+*/}}
+{{- define "gitlab.checkConfig.webservice.gracePeriod" -}}
+{{-   $terminationGracePeriodSeconds := default 30 .Values.gitlab.webservice.deployment.terminationGracePeriodSeconds | int -}}
+{{-   $blackoutSeconds := .Values.gitlab.webservice.shutdown.blackoutSeconds | int -}}
+{{- if lt $terminationGracePeriodSeconds $blackoutSeconds }}
+You must set terminationGracePeriodSeconds ({{ $terminationGracePeriodSeconds }}) longer than blackoutSeconds ({{ $blackoutSeconds }})
+{{  end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.webservice.gracePeriod */}}
+
+{{/*
+Ensure consolidate and type-specific object store configuration are not mixed.
+*/}}
+{{- define "gitlab.checkConfig.objectStorage.consolidatedConfig" -}}
+{{-   if $.Values.global.appConfig.object_store.enabled  -}}
+{{-     $problematicTypes := list -}}
+{{-     range $objectTypes := list "artifacts" "lfs" "uploads" "packages" "externalDiffs" "terraformState" "pseudonymizer" "dependencyProxy" -}}
+{{-       if hasKey $.Values.global.appConfig . -}}
+{{-         $objectProps := index $.Values.global.appConfig . -}}
+{{-         if (and (index $objectProps "enabled") (or (not (empty (index $objectProps "connection"))) (empty (index $objectProps "bucket")))) -}}
+{{-           $problematicTypes = append $problematicTypes . -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-     if not (empty $problematicTypes) -}}
+When consolidated object storage is enabled, for each item `bucket` must be specified and the `connection` must be empty. Check the following object storeage configuration(s): {{ join "," $problematicTypes }}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.objectStorage.consolidatedConfig */}}
+
+{{- define "gitlab.checkConfig.objectStorage.typeSpecificConfig" -}}
+{{-   if and (not $.Values.global.minio.enabled) (not $.Values.global.appConfig.object_store.enabled)  -}}
+{{-     $problematicTypes := list -}}
+{{-     range $objectTypes := list "artifacts" "lfs" "uploads" "packages" "externalDiffs" "terraformState" "pseudonymizer" "dependencyProxy" -}}
+{{-       if hasKey $.Values.global.appConfig . -}}
+{{-         $objectProps := index $.Values.global.appConfig . -}}
+{{-         if and (index $objectProps "enabled") (empty (index $objectProps "connection")) -}}
+{{-           $problematicTypes = append $problematicTypes . -}}
+{{-         end -}}
+{{-       end -}}
+{{-     end -}}
+{{-     if not (empty $problematicTypes) -}}
+When type-specific object storage is enabled the `connection` property can not be empty. Check the following object storeage configuration(s): {{ join "," $problematicTypes }}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.objectStorage.typeSpecificConfig */}}

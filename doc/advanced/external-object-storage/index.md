@@ -50,7 +50,7 @@ Direct support for Azure Blob storage is available for
 The Azure MinIO gateway is still needed for backups. Follow [this issue](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2298)
 for more details.
 
-NOTE: **Note:**
+NOTE:
 GitLab [does not support](https://github.com/minio/minio/issues/9978) the Azure MinIO gateway as the storage for the Docker Registry.
 Please refer to the [corresponding Azure example](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.azure.yaml) when [setting up the Docker Registry](#docker-registry-images).
 
@@ -154,18 +154,15 @@ diffs, and pseudonymizer is done via the `global.appConfig.lfs`,
 --set global.appConfig.dependencyProxy.connection.key=connection
 ```
 
-NOTE: **Note:**
-Currently a different bucket is needed for each, otherwise performing a restore from backup will not properly function.
+Notes:
 
-NOTE: **Note:**
-Storing MR diffs on external storage is not enabled by default. So,
-for the object storage settings for `externalDiffs` to take effect,
-`global.appConfig.externalDiffs.enabled` key should have a `true` value.
-
-NOTE: **Note:**
-The dependency proxy feature is not enabled by default. So,
-for the object storage settings for `dependencyProxy` to take effect,
-`global.appConfig.dependencyProxy.enabled` key should have a `true` value.
+- Currently a different bucket is needed for each, otherwise performing a restore from backup will not properly function.
+- Storing MR diffs on external storage is not enabled by default. So,
+  for the object storage settings for `externalDiffs` to take effect,
+  `global.appConfig.externalDiffs.enabled` key should have a `true` value.
+- The dependency proxy feature is not enabled by default. So,
+  for the object storage settings for `dependencyProxy` to take effect,
+  `global.appConfig.dependencyProxy.enabled` key should have a `true` value.
 
 See the [charts/globals documentation on appConfig](../../charts/globals.md#configure-appconfig-settings) for full details.
 
@@ -234,6 +231,7 @@ See the [backup/restore object storage documentation](../../backup-restore/index
      access_key = BOGUS_ACCESS_KEY
      secret_key = BOGUS_SECRET_KEY
      bucket_location = us-east-1
+     multipart_chunk_size_mb = 128 # default is 15 (MB)
      ```
 
    - On Google Cloud Storage, you can create the file by creating a service account
@@ -258,6 +256,7 @@ See the [backup/restore object storage documentation](../../backup-restore/index
      # Leave as default
      bucket_location = us-west-1
      use_https = True
+     multipart_chunk_size_mb = 128 # default is 15 (MB)
 
      # Setup access keys
      # Access Key = Azure Storage Account name

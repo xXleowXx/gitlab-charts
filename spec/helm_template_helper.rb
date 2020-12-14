@@ -22,6 +22,14 @@ class HelmTemplate
     template(values)
   end
 
+  def namespace
+    stdout, stderr, exit_code = Open3.capture3("kubectl config view --minify --output 'jsonpath={..namespace}'")
+
+    return 'default' unless exit_code != 0
+
+    stdout.strip
+  end
+
   def template(values)
     @values  = values
     result = Open3.capture3(self.class.helm_template_call,
@@ -31,9 +39,7 @@ class HelmTemplate
     # handle common failures when helm or chart not setup properly
     case @exit_code
     when 256
-      if @stderr.include? 'found in Chart.yaml, but missing in charts/ directory'
-        fail "Chart dependencies not installed, run 'helm dependency update'"
-      end
+      fail "Chart dependencies not installed, run 'helm dependency update'" if @stderr.include? 'found in Chart.yaml, but missing in charts/ directory'
     end
     # load the complete output's YAML documents into an array
     yaml = YAML.load_stream(@stdout)
@@ -59,17 +65,27 @@ class HelmTemplate
     volumes[0]
   end
 
-  def env(item, container_name, init: false)
+  def find_volume_mount(item, container_name, volume_name, init = false)
+    find_container(item, container_name, init)
+      &.dig('volumeMounts')
+      &.find { |volume| volume['name'] = volume_name }
+  end
+
+  def find_container(item, container_name, init = false)
     containers = init ? 'initContainers' : 'containers'
 
     dig(item, 'spec', 'template', 'spec', containers)
       &.find { |container| container['name'] == container_name }
+  end
+
+  def env(item, container_name, init = false)
+    find_container(item, container_name, init)
       &.dig('env')
   end
 
   def projected_volume_sources(item,volume_name)
-    volume = find_volume(item,volume_name)
-    volume['projected']['sources']
+    find_volume(item,volume_name)
+      &.dig('projected','sources')
   end
 
   def resources_by_kind(kind)

@@ -63,7 +63,7 @@ registry:
     readOnly:
       enabled: false
   image:
-    tag: 'v2.11.0-gitlab'
+    tag: 'v2.12.0-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -100,7 +100,7 @@ registry:
     enabled: false
     tls:
       enabled: true
-      serviceName: redis
+      secretName: redis
     annotations:
     proxyReadTimeout:
     proxyBodySize:
@@ -140,12 +140,15 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
 | `image.repository`                         | `registry`                                   | Registry image                                                                                       |
-| `image.tag`                                | `v2.11.0-gitlab`                              | Version of the image to use                                                                          |
+| `image.tag`                                | `v2.12.0-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
 | `log`                                      | `{level: warn, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
 | `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
+| `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
+| `reporting.sentry.dsn`                     |                                              | The Sentry DSN (Data Source Name)                                                                    |
+| `reporting.sentry.environment`             |                                              | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/environments/)                 |
 | `profiling.stackdriver.enabled`            | `false`                                      | Enable continuous profiling using stackdriver                                                        |
 | `profiling.stackdriver.credentials.secret` | `gitlab-registry-profiling-creds`            | Name of the secret containing creds                                                                  |
 | `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the creds are stored                                                             |
@@ -224,7 +227,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v2.11.0-gitlab'`
+- `tag: 'v2.12.0-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
@@ -488,7 +491,7 @@ If you chose to use the `filesystem` driver:
 For the sake of resiliency and simplicity, it is recommended to make use of an
 external service, such as `s3`, `gcs`, `azure` or other compatible Object Storage.
 
-NOTE: **Note:**
+NOTE:
 The chart will populate `delete.enabled: true` into this configuration
 by default if not specified by the user. This keeps expected behavior in line with
 the default use of MinIO, as well as the Omnibus GitLab. Any user provided value
@@ -520,6 +523,18 @@ health:
     enabled: false
     interval: 10s
     threshold: 3
+```
+
+### reporting
+
+The `reporting` property is optional and enables [reporting](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#reporting)
+
+```yaml
+reporting:
+  sentry:
+    enabled: true
+    dsn: 'https://<key>@sentry.io/<project>'
+    environment: 'production'
 ```
 
 ### profiling

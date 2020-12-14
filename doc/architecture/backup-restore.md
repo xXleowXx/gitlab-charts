@@ -14,7 +14,7 @@ The [task runner chart](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/
 
 Using this pod user can run commands using `kubectl exec -it <pod name> -- <arbitrary command>`
 
-The task runner runs a container from the [task-runner image](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-task-runner).
+The Task Runner runs a container from the [Task Runner image](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-task-runner).
 
 The image contains some custom scripts that are to be called as commands by the user, these scripts can be found [here](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-task-runner/scripts). These scripts are for running Rake tasks, backup, restore, and some helper scripts for interacting with object storage.
 
@@ -59,7 +59,7 @@ Backups are made using the following steps, in order:
 
   It is also possible to specify the storage class in which the backup is stored using `--storage-class <storage-class-name>`, allowing you to save on backup storage costs. If unspecified, this will use the default of the storage backend.
 
-  NOTE: **Note:**
+  NOTE:
   This storage class name is passed through as-is to the storage class argument of your specified backend.
 
 #### GitLab backup bucket
@@ -92,5 +92,5 @@ After fetching the backup tar the sequence of execution is:
    - clean up the corresponding bucket
    - restore the backup content into the corresponding bucket
 
-NOTE: **Note:**
+NOTE:
 If the restore fails, the user will need to revert to previous backup using data in `tmp` directory of the backup bucket. This is currently a manual process.

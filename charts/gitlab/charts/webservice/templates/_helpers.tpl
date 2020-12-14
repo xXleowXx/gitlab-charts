@@ -1,18 +1,46 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "webservice.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{-   .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{-   $name := default .Chart.Name .Values.nameOverride }}
+{{-   if contains $name .Release.Name }}
+{{-     .Release.Name | trunc 63 | trimSuffix "-" }}
+{{-   else }}
+{{-     printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{-   end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the fullname, with suffix of deployment.name
+Unless `ingress.path: /` or `name: default`
+
+!! to be called from scope of a `deployment.xyz` entry.
+*/}}
+{{- define "webservice.fullname.withSuffix" -}}
+{{- printf "%s-%s" .fullname .name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Returns the secret name for the Secret containing the TLS certificate and key.
 Uses `ingress.tls.secretName` first and falls back to `global.ingress.tls.secretName`
 if there is a shared tls secret for all ingresses.
 */}}
 {{- define "webservice.tlsSecret" -}}
 {{- $defaultName := (dict "secretName" "") -}}
-{{- if .Values.global.ingress.configureCertmanager -}}
-{{- $_ := set $defaultName "secretName" (printf "%s-gitlab-tls" .Release.Name) -}}
+{{- if $.Values.global.ingress.configureCertmanager -}}
+{{- $_ := set $defaultName "secretName" (printf "%s-gitlab-tls" $.Release.Name) -}}
 {{- else -}}
 {{- $_ := set $defaultName "secretName" (include "gitlab.wildcard-self-signed-cert-name" .) -}}
 {{- end -}}
-{{- pluck "secretName" .Values.ingress.tls .Values.global.ingress.tls $defaultName | first -}}
+{{- pluck "secretName" $.Values.ingress.tls $.Values.global.ingress.tls $defaultName | first -}}
 {{- end -}}
 
 {{/*
@@ -23,12 +51,12 @@ if there is a shared tls secret for all ingresses.
 */}}
 {{- define "smartcard.tlsSecret" -}}
 {{- $defaultName := (dict "secretName" "") -}}
-{{- if .Values.global.ingress.configureCertmanager -}}
-{{- $_ := set $defaultName "secretName" (printf "%s-gitlab-tls-smartcard" .Release.Name) -}}
+{{- if $.Values.global.ingress.configureCertmanager -}}
+{{- $_ := set $defaultName "secretName" (printf "%s-gitlab-tls-smartcard" $.Release.Name) -}}
 {{- else -}}
 {{- $_ := set $defaultName "secretName" (include "gitlab.wildcard-self-signed-cert-name" .) -}}
 {{- end -}}
-{{- coalesce .Values.ingress.tls.smartcardSecretName (pluck "secretName" .Values.global.ingress.tls $defaultName | first) -}}
+{{- coalesce $.Values.ingress.tls.smartcardSecretName (pluck "secretName" $.Values.global.ingress.tls $defaultName | first) -}}
 {{- end -}}
 
 {{/*
@@ -40,10 +68,10 @@ set in the Gitlab values.yaml, otherwise returns the Enterprise Edition
 image repository.
 */}}
 {{- define "workhorse.repository" -}}
-{{- if eq "ce" .Values.global.edition -}}
-{{ index .Values "global" "communityImages" "workhorse" "repository" }}
+{{- if eq "ce" $.Values.global.edition -}}
+{{ index $.Values "global" "communityImages" "workhorse" "repository" }}
 {{- else -}}
-{{ index .Values "global" "enterpriseImages" "workhorse" "repository" }}
+{{ index $.Values "global" "enterpriseImages" "workhorse" "repository" }}
 {{- end -}}
 {{- end -}}
 
@@ -56,7 +84,7 @@ set in the Gitlab values.yaml, otherwise returns the Enterprise Edition
 image repository.
 */}}
 {{- define "webservice.image" -}}
-{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}
+{{ coalesce $.Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}
 {{- end -}}
 
 {{/*
@@ -115,4 +143,54 @@ azure_storage_access_key = "<%= azure_storage_access_key %>"
     end
   end
 %>
+{{- end -}}
+
+{{/*
+Returns the extraEnv keys and values to inject into containers. Allows
+pod-level values for extraEnv.
+
+Takes a dict with `local` being the pod-level configuration and `parent`
+being the chart-level configuration.
+
+Pod values take precedence, then chart values, and finally global
+values.
+*/}}
+{{- define "webservice.podExtraEnv" -}}
+{{- $allExtraEnv := merge (default (dict) .local.extraEnv) (default (dict) .parent.Values.extraEnv) .parent.Values.global.extraEnv -}}
+{{- range $key, $value := $allExtraEnv }}
+- name: {{ $key }}
+  value: {{ $value | quote }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Output a .spec.selector YAML section
+
+To be consumed by: Deployment and PodDisruptionBudget
+*/}}
+{{- define "webservice.spec.selector" -}}
+matchLabels:
+  app: {{ template "name" $ }}
+  release: {{ $.Release.Name }}
+  {{ template "webservice.labels" . | nindent 2 }}
+{{- end -}}
+
+{{/*
+Output labels specifically for webservice
+*/}}
+{{- define "webservice.labels" -}}
+gitlab.com/webservice-name: {{ .name }}
+{{- end -}}
+
+{{/*
+Returns the extraEnv keys and values to inject into containers.
+
+Global values will override any chart-specific values.
+*/}}
+{{- define "webservice.extraEnv" -}}
+{{- $allExtraEnv := merge (default (dict) .local.extraEnv) .global.extraEnv -}}
+{{- range $key, $value := $allExtraEnv }}
+- name: {{ $key }}
+  value: {{ $value | quote }}
+{{- end -}}
 {{- end -}}
