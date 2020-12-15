@@ -48,6 +48,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.webservice.service.configuration" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.gitaly.serviceName" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.psql.pool" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.global.appConfig.extra.piwik" .) -}}
 
 {{- /* prepare output */}}
 {{- $deprecated := without $deprecated "" -}}
@@ -376,3 +377,15 @@ gitlab.{{ $chart }}.psql.pool:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.global.psql.pool */}}
+
+{{- define "gitlab.deprecate.global.appConfig.extra.piwik" -}}
+{{- if .Values.global.appConfig.extra.piwikSiteId }}
+global.appConfig.extra.piwikSiteId:
+      Piwik config keys have been renamed to reflect the rebranding to Matomo. Please rename `piwikSiteId` to `matomoSiteId`.
+{{- end -}}
+{{- if .Values.global.appConfig.extra.piwikUrl }}
+global.appConfig.extra.piwikUrl:
+      Piwik config keys have been renamed to reflect the rebranding to Matomo. Please rename `piwikUrl` to `matomoUrl`
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.global.appConfig.extra.piwik */}}

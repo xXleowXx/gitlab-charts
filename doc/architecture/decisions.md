@@ -134,7 +134,7 @@ Our [registry chart](../charts/registry/index.md) was altered from the upstream 
 
 ### NGINX Ingress
 
-Our [NGINX Ingress chart](../charts/nginx/index.md) was altered from the upstream [NGINX Ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress).
+Our [NGINX Ingress chart](../charts/nginx/index.md) was altered from the upstream [NGINX Ingress](https://github.com/kubernetes/ingress-nginx).
 
 - Add feature to allow for the tcp configmap to be external to the chart
 - Add feature to allow Ingress class to be templated based on release name

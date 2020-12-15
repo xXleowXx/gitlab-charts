@@ -47,6 +47,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -429,7 +430,7 @@ You must set terminationGracePeriodSeconds ({{ $terminationGracePeriodSeconds }}
 Ensure consolidate and type-specific object store configuration are not mixed.
 */}}
 {{- define "gitlab.checkConfig.objectStorage.consolidatedConfig" -}}
-{{-   if $.Values.global.appConfig.object_store.enabled  -}}
+{{-   if $.Values.global.appConfig.object_store.enabled -}}
 {{-     $problematicTypes := list -}}
 {{-     range $objectTypes := list "artifacts" "lfs" "uploads" "packages" "externalDiffs" "terraformState" "pseudonymizer" "dependencyProxy" -}}
 {{-       if hasKey $.Values.global.appConfig . -}}
@@ -447,7 +448,7 @@ When consolidated object storage is enabled, for each item `bucket` must be spec
 {{/* END gitlab.checkConfig.objectStorage.consolidatedConfig */}}
 
 {{- define "gitlab.checkConfig.objectStorage.typeSpecificConfig" -}}
-{{-   if and (not $.Values.global.minio.enabled) (not $.Values.global.appConfig.object_store.enabled)  -}}
+{{-   if and (not $.Values.global.minio.enabled) (not $.Values.global.appConfig.object_store.enabled) -}}
 {{-     $problematicTypes := list -}}
 {{-     range $objectTypes := list "artifacts" "lfs" "uploads" "packages" "externalDiffs" "terraformState" "pseudonymizer" "dependencyProxy" -}}
 {{-       if hasKey $.Values.global.appConfig . -}}
@@ -463,3 +464,13 @@ When type-specific object storage is enabled the `connection` property can not b
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.objectStorage.typeSpecificConfig */}}
+
+{{- define "gitlab.checkConfig.nginx.controller.extraArgs" -}}
+{{-   if hasKey (index $.Values "nginx-ingress").controller.extraArgs "force-namespace-isolation" -}}
+nginx-ingress:
+  `nginx-ingress.controller.extraArgs.force-namespace-isolation` was previously set by default in the GitLab chart's values.yaml file,
+  but has since been deprecated upon the upgrade to NGINX 0.41.2 (upstream chart version 3.11.1).
+  Please remove the `force-namespace-isolation` key.
+{{-   end -}}
+{{- end -}}
+{{/* END "gitlab.checkConfig.nginx.controller" */}}
