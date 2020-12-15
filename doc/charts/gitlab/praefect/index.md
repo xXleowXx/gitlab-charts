@@ -60,6 +60,46 @@ This will create two sets of resources for Gitaly. This includes two Gitaly Stat
 
 Admins can then [choose where new repositories are stored](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#choose-where-new-repositories-are-stored).
 
+When running Gitaly over TLS, a secret name must be provided for each virtual storage.
+
+```yaml
+global:
+  praefect:
+    enabled: true
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 4
+      maxUnavailable: 1
+      tlsSecretName: default-tls
+    - name: vs2
+      gitalyReplicas: 5
+      maxUnavailable: 2
+      tlsSecretName: vs2-tls
+```
+
+It is also possible to provide persistence configuration per virtual storage.
+
+```yaml
+global:
+  gitaly:
+    tls:
+      enabled: true
+  praefect:
+    enabled: true
+    tls:
+      enabled: true
+      secretName: praefect-tls
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 4
+      maxUnavailable: 1
+      tlsSecretName: gitaly-default-tls
+    - name: vs2
+      gitalyReplicas: 5
+      maxUnavailable: 2
+      tlsSecretName: gitaly-vs2-tls
+```
+
 ### Creating the database
 
 Praefect uses its own database to track its state. This has to be manually created in order for Praefect to be functional.
