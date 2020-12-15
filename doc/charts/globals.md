@@ -699,8 +699,8 @@ global:
       sslUrl:
     extra:
       googleAnalyticsId:
-      piwikUrl:
-      piwikSiteId:
+      matomoUrl:
+      matomoSiteId:
     object_store:
       enabled: false
       proxy_download: true
@@ -856,14 +856,14 @@ However, a custom Libravatar service can also be used if needed:
 
 ### Hooking Analytics services to the GitLab instance
 
-Settings to configure Analytics services like Google Analytics and Piwik are defined
+Settings to configure Analytics services like Google Analytics and Matomo are defined
 under the `extra` key below `appConfig`:
 
 | Name                      | Type   | Default | Description |
 |:------------------------- |:------:|:------- |:----------- |
 | `extra.googleAnalyticsId` | String | (empty) | Tracking ID for Google Analytics. |
-| `extra.piwikSiteId`       | String | (empty) | Piwik Site ID. |
-| `extra.piwikUrl`          | String | (empty) | Piwik URL. |
+| `extra.matomoSiteId`       | String | (empty) | Matomo Site ID. |
+| `extra.matomoUrl`          | String | (empty) | Matomo URL. |
 
 ### Consolidated object storage
 

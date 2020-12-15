@@ -55,11 +55,11 @@ extra:
   {{ if .extra.googleAnalyticsId }}
   google_analytics_id: {{ .extra.googleAnalyticsId | quote }}
   {{- end }}
-  {{ if .extra.piwikUrl }}
-  piwik_url: {{ .extra.piwikUrl | quote }}
+  {{ if .extra.matomoUrl }}
+  matomo_url: {{ .extra.matomoUrl | quote }}
   {{- end }}
-  {{ if .extra.piwikSiteId }}
-  piwik_site_id: {{ .extra.piwikSiteId | quote }}
+  {{ if .extra.matomoSiteId }}
+  matomo_site_id: {{ .extra.matomoSiteId | quote }}
   {{- end }}
 {{- end -}}
 
