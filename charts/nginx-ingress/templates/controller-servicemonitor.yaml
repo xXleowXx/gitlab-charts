@@ -39,7 +39,7 @@ spec:
 {{- end }}
   selector:
     matchLabels:
-      app: {{ template "nginx-ingress.name" . }}
+      app: {{ template "ingress-nginx.name" . }}
       component: "{{ .Values.controller.name }}"
       release: {{ .Release.Name }}
 {{- end }}
