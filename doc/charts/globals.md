@@ -224,7 +224,7 @@ This feature requires the use of an
 [external PostgreSQL](../advanced/external-db/), as this chart does not
 deploy PostgreSQL in an HA fashion.
 
-GitLab's Rails components have the ability to [make use of PostgreSQL
+The Rails components in GitLab have the ability to [make use of PostgreSQL
 clusters to load balance read-only queries](https://docs.gitlab.com/ee/administration/database_load_balancing.html).
 
 This feature can be configured in two fashions:
@@ -1050,7 +1050,7 @@ user authentication. It is presented as a map, which will be translated into the
 LDAP servers configuration in `gitlab.yml`, as with an installation from source.
 
 Configuring passwords can be done by supplying a `secret` which holds the password.
-This password will then be injected into GitLab's configuration at runtime.
+This password will then be injected into the GitLab configuration at runtime.
 
 An example configuration snippet:
 
