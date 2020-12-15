@@ -262,16 +262,16 @@ Returns the nginx ingress class
 {{- end -}}
 
 {{/*
-Overrides the nginx-ingress template to make sure gitlab-shell name matches
+Overrides the ingress-nginx template to make sure gitlab-shell name matches
 */}}
-{{- define "nginx-ingress.tcp-configmap" -}}
-{{ .Release.Name}}-nginx-ingress-tcp
+{{- define "ingress-nginx.tcp-configmap" -}}
+{{ .Release.Name}}-ingress-nginx-tcp
 {{- end -}}
 
 {{/*
-Overrides the nginx-ingress template to make sure our ingresses match
+Overrides the ingress-nginx template to make sure our ingresses match
 */}}
-{{- define "nginx-ingress.controller.ingress-class" -}}
+{{- define "ingress-nginx.controller.ingress-class" -}}
 {{ template "gitlab.ingressclass" . }}
 {{- end -}}
 

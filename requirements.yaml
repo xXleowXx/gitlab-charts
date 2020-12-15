@@ -24,3 +24,6 @@ dependencies:
   version: 10.3.4
   repository: https://charts.bitnami.com/bitnami
   condition: redis.install
+- name: nginx-ingress
+  condition: nginx-ingress.enabled
+  version: 3.11.1
