@@ -18,7 +18,7 @@ cluster this chart is deployed onto.
 
 In order to easily support SSH replicas, and avoid using shared storage for the SSH
 authorized keys, we are using the SSH [AuthorizedKeysCommand](https://man.openbsd.org/sshd_config#AuthorizedKeysCommand)
-to authenticate against GitLab's authorized keys endpoint. As a result, we don't persist
+to authenticate against the GitLab authorized keys endpoint. As a result, we don't persist
 or update the AuthorizedKeys file within these pods.
 
 ## Configuration

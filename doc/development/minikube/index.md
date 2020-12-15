@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This guide is meant to serve as a cross-plaform resource for setting up a local
 Kubernetes development environment. In this guide, we'll be using
-[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) as it is the defacto standard.
+[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) as it is the de facto standard.
 
 ## Getting Started with Minikube
 
@@ -63,7 +63,7 @@ change according to the pieces being tested, and the requirements as listed:
 - `--memory int`: Amount of RAM allocated to the Minikube VM (default `2048`).
   The absolute same minimum is `6144` (6 GB). Recommendation is `10240` (10 GB).
 - `--disk-size string`: Disk size allocated to the Minikube VM (format: `<number>[<unit>]`,
-  where unit = `b`, `k`, `m` or `g`) (default `20g`). See GitLab's
+  where unit = `b`, `k`, `m` or `g`) (default `20g`). See the GitLab
   [storage](https://docs.gitlab.com/ce/install/requirements.html#storage) and
   [database](https://docs.gitlab.com/ce/install/requirements.html#database)
   requirements.
