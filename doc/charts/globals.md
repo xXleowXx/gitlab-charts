@@ -155,6 +155,7 @@ global:
     port: 5432
     database: gitlabhq_production
     username: gitlab
+    applicationName:
     preparedStatements: false
     connectTimeout:
     password:
@@ -177,6 +178,7 @@ global:
 | `username`           | String    | `gitlab`               | The username with which to authenticate to the database.                                                                                                                                       |
 | `preparedStatements` | Bool      | `false`                | If prepared statements should be used when communicating with the PostgreSQL server.                                                                                                           |
 | `connectTimeout`     | Integer   |                        | The number of seconds to wait for a database connection.                                                                                                                                       |
+| `applicationName`    | String    |                        | The name of the application connecting to the database. Set to a blank string (`""`) to disable. By default, this will be set to the name of the running process (e.g. `sidekiq`, `puma`).     |
 
 ### PostgreSQL per chart
 
