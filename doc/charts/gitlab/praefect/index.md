@@ -64,8 +64,14 @@ When running Gitaly over TLS, a secret name must be provided for each virtual st
 
 ```yaml
 global:
+  gitaly:
+    tls:
+      enabled: true
   praefect:
     enabled: true
+    tls:
+      enabled: true
+      secretName: praefect-tls
     virtualStorages:
     - name: default
       gitalyReplicas: 4
@@ -81,23 +87,25 @@ It is also possible to provide persistence configuration per virtual storage.
 
 ```yaml
 global:
-  gitaly:
-    tls:
-      enabled: true
   praefect:
     enabled: true
-    tls:
-      enabled: true
-      secretName: praefect-tls
     virtualStorages:
     - name: default
       gitalyReplicas: 4
       maxUnavailable: 1
-      tlsSecretName: gitaly-default-tls
+      persistence:
+        enabled: true
+        size: 50Gi
+        accessMode: ReadWriteOnce
+        storageClass: storageclass1
     - name: vs2
       gitalyReplicas: 5
       maxUnavailable: 2
-      tlsSecretName: gitaly-vs2-tls
+      persistence:
+        enabled: true
+        size: 100Gi
+        accessMode: ReadWriteOnce
+        storageClass: storageclass2
 ```
 
 ### Creating the database
