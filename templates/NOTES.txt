@@ -64,7 +64,7 @@ NOTICE: The GitLab task-runner is scaled to 0.
 {{ include "gitlab.deprecations" . }}
 {{/* run checkConfig */}}
 {{ include "gitlab.checkConfig" . }}
-{{-* print install survey link */}}
+{{/* print install survey link */}}
 {{- $appVersion := coalesce .Values.global.gitlabVersion .Chart.AppVersion -}}
 {{- if and .Release.IsInstall (regexMatch "^\\d+\\.\\d+\\.\\d+(-rc\\d+)?(-pre)?$" $appVersion) }}
 Help us improve the installation experience, let us know how we did with a 1 minute survey:
