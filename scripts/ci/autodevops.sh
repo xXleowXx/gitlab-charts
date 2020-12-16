@@ -223,24 +223,11 @@ function restart_task_runner() {
 }
 
 function download_chart() {
-  if [[ ! -d chart ]]; then
-    auto_chart=${AUTO_DEVOPS_CHART:-gitlab/auto-deploy-app}
-    auto_chart_name=$(basename $auto_chart)
-    auto_chart_name=${auto_chart_name%.tgz}
-  else
-    auto_chart="chart"
-    auto_chart_name="chart"
-  fi
+  mkdir -p chart/
 
   helm init --client-only
   helm repo add gitlab https://charts.gitlab.io
   helm repo add jetstack https://charts.jetstack.io
-  if [[ ! -d "$auto_chart" ]]; then
-    helm fetch ${auto_chart} --untar
-  fi
-  if [ "$auto_chart_name" != "chart" ]; then
-    mv ${auto_chart_name} chart
-  fi
 
   helm dependency update chart/
   helm dependency build chart/
