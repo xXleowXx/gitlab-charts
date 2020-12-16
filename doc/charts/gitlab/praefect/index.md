@@ -39,7 +39,7 @@ global:
       maxUnavailable: 1
 ```
 
-### Virtual storages
+### Multiple virtual storages
 
 Multiple virtual storages can be configured (see [Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) documentation). For example:
 
@@ -60,7 +60,9 @@ This will create two sets of resources for Gitaly. This includes two Gitaly Stat
 
 Admins can then [choose where new repositories are stored](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#choose-where-new-repositories-are-stored).
 
-It is also possible to provide persistence configuration per virtual storage.
+### Persistence
+
+It is possible to provide persistence configuration per virtual storage.
 
 ```yaml
 global:
