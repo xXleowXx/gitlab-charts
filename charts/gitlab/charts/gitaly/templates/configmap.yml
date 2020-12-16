@@ -113,7 +113,7 @@ data:
     # location of shared secret for GitLab Shell / API interaction
     secret_file = "/etc/gitlab-secrets/shell/.gitlab_shell_secret"
     # URL of API
-    url = "http://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}/"
+    url = "{{ template "gitlab.workhorse.scheme" . }}://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}/"
 
     [gitlab.http-settings]
     # read_timeout = 300

@@ -17,7 +17,7 @@ data:
         address: ":{{ .Values.service.internalPort }}"
         websocket: true
     gitlab:
-      address: http://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}
+      address: "{{ template "gitlab.workhorse.scheme" . }}://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}"
       authentication_secret_file: "/etc/kas/.gitlab_kas_secret"
     observability:
       listen:
