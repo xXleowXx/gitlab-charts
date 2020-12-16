@@ -43,7 +43,7 @@ can be installed separately.
 
 ## Limitations
 
-GitLab Pages [cannot be deployed](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/37) using the Helm chart. Hybrid environments that deploy Pages using the Omnibus installer and deploy other GitLab services using the Helm chart are not supported.
+GitLab Pages [cannot be deployed](https://gitlab.com/groups/gitlab-org/-/epics/4283) using the Helm chart. Hybrid environments that deploy Pages using the Omnibus installer and deploy other GitLab services using the Helm chart are not supported.
 
 Database limitations:
 
