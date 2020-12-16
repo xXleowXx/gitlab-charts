@@ -60,29 +60,6 @@ This will create two sets of resources for Gitaly. This includes two Gitaly Stat
 
 Admins can then [choose where new repositories are stored](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#choose-where-new-repositories-are-stored).
 
-When running Gitaly over TLS, a secret name must be provided for each virtual storage.
-
-```yaml
-global:
-  gitaly:
-    tls:
-      enabled: true
-  praefect:
-    enabled: true
-    tls:
-      enabled: true
-      secretName: praefect-tls
-    virtualStorages:
-    - name: default
-      gitalyReplicas: 4
-      maxUnavailable: 1
-      tlsSecretName: default-tls
-    - name: vs2
-      gitalyReplicas: 5
-      maxUnavailable: 2
-      tlsSecretName: vs2-tls
-```
-
 It is also possible to provide persistence configuration per virtual storage.
 
 ```yaml
@@ -184,6 +161,29 @@ Users can use or refer that script to generate certificates with proper SAN attr
    ```
 
 1. Redeploy the Helm chart by passing the additional arguments `--set global.praefect.tls.enabled=true --set global.praefect.tls.secretName=<secret name>`
+
+When running Gitaly over TLS, a secret name must be provided for each virtual storage.
+
+```yaml
+global:
+  gitaly:
+    tls:
+      enabled: true
+  praefect:
+    enabled: true
+    tls:
+      enabled: true
+      secretName: praefect-tls
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 4
+      maxUnavailable: 1
+      tlsSecretName: default-tls
+    - name: vs2
+      gitalyReplicas: 5
+      maxUnavailable: 2
+      tlsSecretName: vs2-tls
+```
 
 ### Installation command line options
 
