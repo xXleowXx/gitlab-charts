@@ -17,6 +17,7 @@ spec:
   template:
     metadata:
       labels:
+        {{- include "gitlab.standardLabels" . | nindent 8 }}
         {{- include "gitlab-shell.labels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
