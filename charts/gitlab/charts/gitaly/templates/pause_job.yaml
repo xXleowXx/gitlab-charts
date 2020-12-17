@@ -82,10 +82,10 @@ spec:
           {{- if .Values.global.praefect.enabled -}}
           {{ range .Values.global.praefect.virtualStorages }}
           echo Number of Gitaly replicas for storage {{ .name }} is {{ default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }};
-          kubectl patch statefulset {{include "gitlab.praefect.gitaly.serviceName" (dict "context" $ "name" .name) }} -p '{\"spec\": {\"updateStrategy\": {\"rollingUpdate\": {\"partition\": {{default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}} } } }';
+          kubectl patch statefulset {{include "gitlab.praefect.gitaly.serviceName" (dict "context" $ "name" .name) }} -p '{"spec": {"updateStrategy": {"rollingUpdate": {"partition": {{default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}} } } }';
           {{- end }}
           {{- else }}
           echo Number of Gitaly replicas is {{include "gitlab.gitaly.replicas" . }};
-          kubectl patch statefulset {{include "fullname" . }} -p '{\"spec\": {\"updateStrategy\": {\"rollingUpdate\": {\"partition\": {{include "gitlab.gitaly.replicas" . }}} } } }'
+          kubectl patch statefulset {{include "fullname" . }} -p '{"spec": {"updateStrategy": {"rollingUpdate": {"partition": {{include "gitlab.gitaly.replicas" . }}} } } }'
           {{- end }}
 {{- end }}
