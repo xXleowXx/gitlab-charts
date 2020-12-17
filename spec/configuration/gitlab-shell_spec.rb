@@ -1,0 +1,72 @@
+require 'spec_helper'
+require 'helm_template_helper'
+require 'yaml'
+require 'hash_deep_merge'
+
+describe 'gitlab-shell configuration' do
+  let(:default_values) do
+    {
+      # provide required setting
+      'certmanager-issuer' => { 'email' => 'test@example.com' },
+      'global' => {}
+    }
+  end
+
+  context 'When customer provides additional labels' do
+    let(:values) do
+      {
+        'global' => {
+          'common' => {
+            'labels' => {
+              'global' => "global"
+            }
+          },
+          'pod' => {
+            'labels' => {
+              'global_pod' => true
+            }
+          },
+          'service' => {
+            'labels' => {
+              'global_service' => true
+            }
+          }
+        },
+        'gitlab' => {
+          'gitlab-shell' => {
+            'common' => {
+              'labels' => {
+                'global' => 'shell'
+              }
+            },
+            'podLabels' => {
+              'pod' => true,
+              'global' => 'pod'
+            },
+            'serviceLabels' => {
+              'service' => true,
+              'global' => 'service'
+            }
+          }
+        }
+      }.deep_merge(default_values)
+    end
+    it 'Populates the additional labels in the expected manner' do
+      t = HelmTemplate.new(values)
+      expect(t.exit_code).to eq(0)
+      expect(t.dig('ConfigMap/test-gitlab-shell', 'metadata', 'labels')).to include("global" => "shell")
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).not_to include("global" => "global")
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include("global" => "service")
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include("service" => true)
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).not_to include("global" => "global")
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include("global_service" => true)
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).to include("global" => "shell")
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include("global" => "pod")
+      expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include("pod" => true)
+      expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include("global" => "pod")
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include(global: "global")
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include(global_pod: true)
+      expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+    end
+  end
+end
