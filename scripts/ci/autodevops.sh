@@ -288,7 +288,7 @@ function install_external_dns() {
       google)
         # We need to store the credentials in a secret
         kubectl create secret generic "${release_name}-secret" --from-literal="credentials.json=${GOOGLE_CLOUD_KEYFILE_JSON}"
-        helm_args=" --set google.project='${GOOGLE_PROJECT_ID}' --set google.serviceAccountSecret='${release_name}-secret'"
+        helm_args=" --set google.project=${GOOGLE_PROJECT_ID} --set google.serviceAccountSecret=${release_name}-secret"
         ;;
       aws)
         echo "Installing external-dns, ensure the NodeGroup has the permissions specified in"
@@ -298,8 +298,7 @@ function install_external_dns() {
 
     helm repo add bitnami https://charts.bitnami.com/bitnami
 
-    helm install bitnami/external-dns \
-      "${release_name}" \
+    helm install "${release_name}" bitnami/external-dns \
       --namespace "${NAMESPACE}" \
       --set provider="${provider}" \
       --set domainFilters[0]="${domain_filter}" \
