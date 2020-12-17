@@ -649,7 +649,7 @@ global:
 | Name            | Type    | Default     | Description                                                        |
 | ----            | ----    | -------     | -----------                                                        |
 | enabled         | Bool    | false       | Whether or not to enable Praefect                                  |
-| virtualStorages | List    | See [docs](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#virtual-storages)  | The list of desired virtual storages (each backed by a Gitaly StatefulSet) |
+| virtualStorages | List    | See [docs](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#multiple-virtual-storages)  | The list of desired virtual storages (each backed by a Gitaly StatefulSet) |
 | dbSecret.secret | String  |             | The name of the secret to use for authenticating with the database |
 | dbSecret.key    | String  |             | The name of the key in `dbSecret.secret` to use                    |
 | psql.host       | String  |             | The hostname of the database server to use (when using an external database) |
