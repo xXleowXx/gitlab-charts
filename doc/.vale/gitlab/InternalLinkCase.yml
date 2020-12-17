@@ -1,13 +1,13 @@
 ---
-# Error: gitlab.RelativeLinks
+# Error: gitlab.InternalLinkCase
 #
-# Checks for the presence of absolute hyperlinks that should be relative.
+# Checks that anchor fragments on internal links are in lower-case.
 #
 # For a list of all options, see https://errata-ai.gitbook.io/vale/getting-started/styles
 extends: existence
-message: 'Link "%s" must be a relative link with a .md extension.'
+message: 'Links to subheadings in GitLab docs must be in lower-case: "%s"'
 link: https://docs.gitlab.com/ee/development/documentation/styleguide/index.html#links-to-internal-documentation
 level: error
 scope: raw
 raw:
-  - '\[.+\]\(https?:\/\/docs\.gitlab\.com\/charts.*\)'
+  - '[^\`]\[[^\[\]]+\]\((https?:){0}[\w\/\.]*?#[^\s]*?[A-Z][^\) ]*\)[^\`]'
