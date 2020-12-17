@@ -332,7 +332,7 @@ stop_review_eks:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
     - check_domain_ip
-    - download_chart
+#    - download_chart
     - ensure_namespace
     - install_tiller
     - create_secret
