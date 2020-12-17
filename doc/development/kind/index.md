@@ -124,7 +124,7 @@ If you need to log into the registry with `docker login`, you will need to tell 
 
 This guide assumes you have network access to [nip.io](https://nip.io). If this is not available to you, please refer to the [handling DNS](../minikube/index.md#handling-dns) section in the Minikube documentation which will also work for KinD.
 
-NOTE: Note:
+NOTE:
 When editing **/etc/hosts**, remember to use the [host computer's IP address](#required-information) rather than the output of `$(minikube ip)`.
 
 ## Cleaning up
