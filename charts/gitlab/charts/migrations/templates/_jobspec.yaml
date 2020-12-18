@@ -4,8 +4,15 @@ kind: Job
 metadata:
   name: {{ template "migrations.jobname" . }}
   namespace: {{ .Release.Namespace }}
+  {{- if .Values.jobAnnotations }}
+  annotations:
+  {{- range $key, $value := .Values.jobAnnotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+
 spec:
   activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
   backoffLimit: {{ .Values.backoffLimit }}
