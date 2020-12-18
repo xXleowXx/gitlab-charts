@@ -118,7 +118,6 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 | `tls.enabled`                  | Boolean | `true`         | When set to `false`, this disables TLS in GitLab. This is useful for cases in which you cannot use TLS termination of Ingresses, such as when you have a TLS-terminating proxy before the Ingress Controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#configure-host-settings). |
 | `tls.secretName`               | String  |                | The name of the [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) that contains a **wildcard** certificate and key for the domain used in `global.hosts.domain`. |
 
-
 ### `global.ingress.configureCertmanager`
 
 Global setting that controls the automatic configuration of [cert-manager](https://artifacthub.io/packages/helm/jetstack/cert-manager)
