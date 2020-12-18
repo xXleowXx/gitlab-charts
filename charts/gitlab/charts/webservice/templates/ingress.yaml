@@ -17,8 +17,8 @@ From here on:
 {{- if .Values.enabled -}}
 {{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
 {{- $gitlabHostname := include "gitlab.gitlab.hostname" . -}}
-{{- if .Values.global.ingress.hostnameOverride -}}
-{{ $gitlabHostname = .Values.global.ingress.hostnameOverride -}}
+{{- if .Values.global.hosts.gitlab.hostnameOverride -}}
+{{ $gitlabHostname = .Values.global.hosts.gitlab.hostnameOverride -}}
 {{- end -}}
 {{- $tlsSecret := include "webservice.tlsSecret" . -}}
 >>>>>>> Update values.yaml, charts/gitlab/charts/webservice/templates/ingress.yaml files
