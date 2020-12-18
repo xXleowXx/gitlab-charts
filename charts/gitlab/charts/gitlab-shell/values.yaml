@@ -39,6 +39,7 @@ podLabels: {}
 serviceLabels: {}
 workhorse: {}
   # by default, Workhorse is a part of the webservice Pods / Service
+  # scheme: 'http'
   # host: '0.0.0.0'
   # serviceName: 'webservice'
   # port: 8181

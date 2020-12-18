@@ -557,6 +557,7 @@ global:
   ## Global settings related to Workhorse
   workhorse:
     serviceName: webservice-default
+    # scheme:
     # host:
     # port:
     ## doc/installation/secrets.md#gitlab-workhorse-secret
