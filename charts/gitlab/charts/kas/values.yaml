@@ -14,7 +14,7 @@ hpa:
   targetAverageValue: 100m
 image:
   repository: registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/kas
-  tag: "v13.6.1"
+  tag: "v13.7.0"
 ingress:
   annotations: {}
   tls: {}
@@ -29,8 +29,6 @@ resources:
 service:
   externalPort: 8150
   internalPort: 8150
-  externalObservabilityPort: 8151
-  internalObservabilityPort: 8151
   type: ClusterIP
 metrics:
   enabled: true
@@ -44,8 +42,15 @@ serviceAccount:
 tolerations: []
 workhorse: {}
   # by default, Workhorse is a part of the Webservice Pods / Service
+  # scheme: 'http'
   # host: '0.0.0.0'
   # serviceName: 'webservice'
   # port: 8181
 # overwrites the default kas config
 customConfig: {}
+
+## Allow to overwrite under which User and Group we're running.
+securityContext:
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532

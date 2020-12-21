@@ -76,6 +76,14 @@ data:
         readonly:
           enabled: {{ .Values.maintenance.readOnly.enabled }}
       {{- if .Values.storage }}
+      {{- with .Values.storage.redirect }}
+      redirect:
+        disable: {{ default false .disable }}
+        exceptions:
+        {{- range .exceptions }}
+          - {{ . }}
+        {{- end }}
+      {{- end }}
       {{- else if .Values.global.minio.enabled }}
       s3:
         accesskey: "ACCESS_KEY"

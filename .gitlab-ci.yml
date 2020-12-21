@@ -29,6 +29,7 @@ image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-ba
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
   KUBECTL_VERSION: "v1.14.10"
+  STABLE_REPO_URL: "https://charts.helm.sh/stable"
   GOOGLE_APPLICATION_CREDENTIALS: ${CI_PROJECT_DIR}/.google_keyfile.json
   # AUTO_DEVOPS_DOMAIN is the application deployment domain and should be set as a variable at the group or project level.
   # AUTO_DEVOPS_DOMAIN: domain.example.com
@@ -181,22 +182,23 @@ review_gke:
     auto_stop_in: 4 days
   resource_group: "gke-review-app-${CI_COMMIT_REF_NAME}"
 
-review_gke_dev:
-  variables:
-    DNS_PROVIDER: "google"
-    HELM_EXTRA_ARGS: "-f scripts/ci/values-dev-images.yaml"
-  extends: .review_template
-  environment:
-    name: dev_gke_review/$CI_COMMIT_REF_NAME
-    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
-    on_stop: stop_review_gke_dev
-    auto_stop_in: 4 days
-  resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
-  only:
-    refs:
-      - /.*-stable/@gitlab/charts/gitlab
-    variables:
-      - $KUBECONFIG
+# Bring back when https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2457 is fixed
+# review_gke_dev:
+#   variables:
+#     DNS_PROVIDER: "google"
+#     HELM_EXTRA_ARGS: "-f scripts/ci/values-dev-images.yaml"
+#   extends: .review_template
+#   environment:
+#     name: dev_gke_review/$CI_COMMIT_REF_NAME
+#     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+#     on_stop: stop_review_gke_dev
+#     auto_stop_in: 4 days
+#   resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
+#   only:
+#     refs:
+#       - /.*-stable/@gitlab/charts/gitlab
+#     variables:
+#       - $KUBECONFIG
 
 review_eks:
   variables:
@@ -240,16 +242,17 @@ stop_review_gke:
     name: gke_review/$CI_COMMIT_REF_NAME
     action: stop
 
-stop_review_gke_dev:
-  extends: .stop_review_template
-  environment:
-    name: dev_gke_review/$CI_COMMIT_REF_NAME
-    action: stop
-  only:
-    refs:
-      - /.*-stable/@gitlab/charts/gitlab
-    variables:
-      - $KUBECONFIG
+# Bring back when https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2457 is fixed
+# stop_review_gke_dev:
+#   extends: .stop_review_template
+#   environment:
+#     name: dev_gke_review/$CI_COMMIT_REF_NAME
+#     action: stop
+#   only:
+#     refs:
+#       - /.*-stable/@gitlab/charts/gitlab
+#     variables:
+#       - $KUBECONFIG
 
 stop_review_eks:
   extends: .stop_review_template
@@ -327,7 +330,7 @@ stop_review_eks:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
     - check_domain_ip
-    - download_chart
+#    - download_chart
     - ensure_namespace
     - create_secret
     - deploy
@@ -570,21 +573,22 @@ review_specs_gke:
       - /(^docs[\/-].+|.+-docs$)/
       - *com_auto_deploy_branch_ref
 
-review_specs_gke_dev:
-  extends: .specs
-  variables:
-    VARIABLES_FILE: "variables/review_gke_dev"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: dev_gke_review/$CI_COMMIT_REF_NAME
-    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
-    on_stop: stop_review_gke_dev
-  resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
-  only:
-    refs:
-      - /.*-stable/@gitlab/charts/gitlab
-    variables:
-      - $KUBECONFIG
+# Bring back when https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2457 is fixed
+# review_specs_gke_dev:
+#   extends: .specs
+#   variables:
+#     VARIABLES_FILE: "variables/review_gke_dev"
+#     RSPEC_TAGS: type:feature
+#   environment:
+#     name: dev_gke_review/$CI_COMMIT_REF_NAME
+#     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+#     on_stop: stop_review_gke_dev
+#   resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
+#   only:
+#     refs:
+#       - /.*-stable/@gitlab/charts/gitlab
+#     variables:
+#       - $KUBECONFIG
 
 review_specs_eks:
   extends: .specs
@@ -687,26 +691,10 @@ production_specs_eks:
   retry: 1
   allow_failure: true
 
-wait_for_images:
-  # Remove after https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2370 is complete
-  timeout: 2h
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
-  stage: prepare
-  services:
-  - docker:dind
-  before_script: []
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://docker:2375
-  script:
-    - bash scripts/wait_for_images.sh
-  only:
-    - tags@gitlab/charts/gitlab
-    - tags@charts/gitlab
-    - /.*-stable/
-
 release_package:
   stage: package
+  timeout: 2h
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
   script:
     - |
       if [[ $CI_COMMIT_REF_NAME =~ $AUTO_DEPLOY_TAG_REGEX ]]; then
@@ -714,6 +702,7 @@ release_package:
       else
         UNSTABLE="false"
       fi
+    - bash scripts/wait_for_images.sh
     - curl -fS --request POST --form "token=${COM_CHARTS_TRIGGER_TOKEN}" --form ref=master
         --form "variables[CHART_NAME]=$CI_PROJECT_NAME"
         --form "variables[RELEASE_REF]=$CI_COMMIT_REF_NAME"
@@ -722,8 +711,6 @@ release_package:
   only:
     - tags@gitlab/charts/gitlab
   when: manual
-  dependencies:
-    - wait_for_images
 
 .qa_branch:
   extends: .qa

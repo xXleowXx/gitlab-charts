@@ -1,5 +1,0 @@
----
-title: Add support for /database_bloat endpoint in gitlab-exporter
-merge_request: 1673
-author:
-type: added

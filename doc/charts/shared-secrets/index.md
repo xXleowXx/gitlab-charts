@@ -15,6 +15,7 @@ used across the installation, unless otherwise manually specified. This includes
 1. MinIO, Registry, GitLab Shell, and Gitaly secrets
 1. Redis and PostgreSQL passwords
 1. SSH host keys
+1. GitLab Rails secret for [encrypted credentials](https://docs.gitlab.com/ee/administration/encrypted_configuration.html)
 
 ## Installation command line options
 
@@ -74,7 +75,7 @@ shared-secrets:
   enabled: false
 ```
 
-NOTE: **Note:**
+NOTE:
 If you disable this sub-chart, you **must** manually create all secrets,
 and provide all necessary secret content. See [installation/secrets](../../installation/secrets.md#manual-secret-creation-optional)
 for further details.

@@ -29,7 +29,7 @@ and [chart settings](#chart-settings).
 Gitaly is by default deployed as a component when deploying the GitLab
 chart. If deploying Gitaly separately, `global.gitaly.enabled` needs to
 be set to `false` and additional configuration will need to be performed
-as described in the [external Gitaly documenation](../../../advanced/external-gitaly/).
+as described in the [external Gitaly documentation](../../../advanced/external-gitaly/).
 
 ### Installation command line options
 
@@ -182,7 +182,7 @@ gitlab:
       runAsUser: ""
 ```
 
-NOTE: **Note:**
+NOTE:
 The example syntax eliminates the `securityContext` setting entirely.
 Setting `securityContext: {}` or `securityContext:` does not work due
 to the way Helm merges default values with user provided configuration.
@@ -210,7 +210,7 @@ workhorse:
 
 The following values are used to configure the Gitaly Pods.
 
-NOTE: **Note:**
+NOTE:
 Gitaly uses an Auth Token to authenticate with the Workhorse and Sidekiq
 services. The Auth Token secret and key are sourced from the `global.gitaly.authToken`
 value. Additionally, the Gitaly container has a copy of GitLab Shell, which has some configuration
@@ -224,13 +224,13 @@ volume for the Git repository data. You'll need physical storage available in th
 Kubernetes cluster for this to work. If you'd rather use emptyDir, disable PersistentVolumeClaim
 with: `persistence.enabled: false`.
 
-NOTE: **Note:**
+NOTE:
 The persistence settings for Gitaly are used in a volumeClaimTemplate
 that should be valid for all your Gitaly pods. You should *not* include settings
 that are meant to reference a single specific volume (ie volumeName). If you want
 to reference a specific volume, you need to manually create the PersistentVolumeClaim.
 
-NOTE: **Note:**
+NOTE:
 You can't change these through our settings once you've deployed. In [StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)
 the `VolumeClaimTemplate` is immutable.
 
@@ -259,7 +259,7 @@ persistence:
 
 ### Running Gitaly over TLS
 
-NOTE: **Note:**
+NOTE:
 This section refers to Gitaly being run inside the cluster using
 the Helm charts. If you are using an external Gitaly instance and want to use
 TLS for communicating with it, refer [the external Gitaly documentation](../../../advanced/external-gitaly/index.md#connecting-to-external-gitaly-over-tls)
@@ -281,9 +281,9 @@ Follow the steps to run Gitaly over TLS:
    kubectl exec -it <Task Runner pod> -- grep gitaly_address /srv/gitlab/config/gitlab.yml
    ```
 
-NOTE: **Note:**
+NOTE:
 A basic script for generating custom signed certificates for
-internal Gitaly pods [can be found in this repo](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/gitaly_statefulset_certificates.sh).
+internal Gitaly pods [can be found in this repo](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/generate_certificates.sh).
 Users can use or refer that script to generate certificates with proper
 SAN attributes.
 
@@ -293,7 +293,7 @@ SAN attributes.
    kubectl create secret tls gitaly-server-tls --cert=gitaly.crt --key=gitaly.key
    ```
 
-1. Redeploy the Helm chart by passing the arguments `--set global.gitaly.tls.enabled=true --set global.gitaly.tls.secretName=<secret name>`
+1. Redeploy the Helm chart by passing the additional arguments `--set global.gitaly.tls.enabled=true --set global.gitaly.tls.secretName=<secret name>`
 
 ### Global server hooks
 

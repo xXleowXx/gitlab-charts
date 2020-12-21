@@ -24,6 +24,7 @@ for more information on how the global variables work.
 - [MinIO](#configure-minio-settings)
 - [appConfig](#configure-appconfig-settings)
 - [Rails](#configure-rails-settings)
+- [Workhorse](#configure-workhorse-settings)
 - [GitLab Shell](#configure-gitlab-shell)
 - [Webservice](#configure-webservice)
 - [Custom Certificate Authorities](#custom-certificate-authorities)
@@ -126,7 +127,7 @@ If you wish to use an external `cert-manager`, you must provide the following:
 
 ## GitLab Version
 
-NOTE: **Note:**
+NOTE:
 This value should only used for development purposes, or by explicit request of GitLab support. Please avoid using this value
 on production environments and set the version as described
 in [Deploy using Helm](../installation/deployment.md#deploy-using-helm)
@@ -154,6 +155,7 @@ global:
     port: 5432
     database: gitlabhq_production
     username: gitlab
+    applicationName:
     preparedStatements: false
     connectTimeout:
     password:
@@ -176,6 +178,7 @@ global:
 | `username`           | String    | `gitlab`               | The username with which to authenticate to the database.                                                                                                                                       |
 | `preparedStatements` | Bool      | `false`                | If prepared statements should be used when communicating with the PostgreSQL server.                                                                                                           |
 | `connectTimeout`     | Integer   |                        | The number of seconds to wait for a database connection.                                                                                                                                       |
+| `applicationName`    | String    |                        | The name of the application connecting to the database. Set to a blank string (`""`) to disable. By default, this will be set to the name of the running process (e.g. `sidekiq`, `puma`).     |
 
 ### PostgreSQL per chart
 
@@ -191,7 +194,7 @@ from the global, by design.
 
 ### PostgreSQL SSL
 
-NOTE: **Note:**
+NOTE:
 SSL support is mutual TLS only.
 See [issue #2034](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2034)
 and [issue #1817](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1817).
@@ -223,7 +226,7 @@ This feature requires the use of an
 [external PostgreSQL](../advanced/external-db/), as this chart does not
 deploy PostgreSQL in an HA fashion.
 
-GitLab's Rails components have the ability to [make use of PostgreSQL
+The Rails components in GitLab have the ability to [make use of PostgreSQL
 clusters to load balance read-only queries](https://docs.gitlab.com/ee/administration/database_load_balancing.html).
 
 This feature can be configured in two fashions:
@@ -246,7 +249,7 @@ global:
 Configuration of service discovery can be more complex. For a complete
 details of this configuration, the parameters and their associated
 behaviors, see [Service Discovery](https://docs.gitlab.com/ee/administration/database_load_balancing.html#service-discovery)
-in the [GitLab Administration documenation](https://docs.gitlab.com/ee/administration/index.html).
+in the [GitLab Administration documentation](https://docs.gitlab.com/ee/administration/index.html).
 
 ```yaml
 global:
@@ -623,7 +626,7 @@ Configuring Gitaly to serve via TLS is detailed [in the Gitaly chart's documenta
 
 The global Praefect settings are located under the `global.praefect` key.
 
-Praefect is disabled by default. When enabled with no extra settings, 3 Gitaly replicas will be created, and the Praefect database will be created on the default PostgreSQL instance.
+Praefect is disabled by default. When enabled with no extra settings, 3 Gitaly replicas will be created, and the Praefect database will need to be manually created on the default PostgreSQL instance.
 
 ### Enable Praefect
 
@@ -637,7 +640,10 @@ See the [Praefect documentation](https://docs.gitlab.com/ee/administration/gital
 global:
   praefect:
     enabled: false
-    gitalyReplicas: 3
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 3
+      maxUnavailable: 1
     dbSecret: {}
     psql: {}
 ```
@@ -645,7 +651,7 @@ global:
 | Name            | Type    | Default     | Description                                                        |
 | ----            | ----    | -------     | -----------                                                        |
 | enabled         | Bool    | false       | Whether or not to enable Praefect                                  |
-| gitalyReplicas  | Integer | 3           | The number of Gitaly replicas that should be created               |
+| virtualStorages | List    | See [multiple virtual storages](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#multiple-virtual-storages) above.  | The list of desired virtual storages (each backed by a Gitaly StatefulSet) |
 | dbSecret.secret | String  |             | The name of the secret to use for authenticating with the database |
 | dbSecret.key    | String  |             | The name of the key in `dbSecret.secret` to use                    |
 | psql.host       | String  |             | The hostname of the database server to use (when using an external database) |
@@ -698,8 +704,8 @@ global:
       sslUrl:
     extra:
       googleAnalyticsId:
-      piwikUrl:
-      piwikSiteId:
+      matomoUrl:
+      matomoSiteId:
     object_store:
       enabled: false
       proxy_download: true
@@ -855,14 +861,14 @@ However, a custom Libravatar service can also be used if needed:
 
 ### Hooking Analytics services to the GitLab instance
 
-Settings to configure Analytics services like Google Analytics and Piwik are defined
+Settings to configure Analytics services like Google Analytics and Matomo are defined
 under the `extra` key below `appConfig`:
 
 | Name                      | Type   | Default | Description |
 |:------------------------- |:------:|:------- |:----------- |
 | `extra.googleAnalyticsId` | String | (empty) | Tracking ID for Google Analytics. |
-| `extra.piwikSiteId`       | String | (empty) | Piwik Site ID. |
-| `extra.piwikUrl`          | String | (empty) | Piwik URL. |
+| `extra.matomoSiteId`       | String | (empty) | Matomo Site ID. |
+| `extra.matomoUrl`          | String | (empty) | Matomo URL. |
 
 ### Consolidated object storage
 
@@ -1049,7 +1055,7 @@ user authentication. It is presented as a map, which will be translated into the
 LDAP servers configuration in `gitlab.yml`, as with an installation from source.
 
 Configuring passwords can be done by supplying a `secret` which holds the password.
-This password will then be injected into GitLab's configuration at runtime.
+This password will then be injected into the GitLab configuration at runtime.
 
 An example configuration snippet:
 
@@ -1083,7 +1089,7 @@ Example `--set` configuration items, when using the global chart:
 --set global.appConfig.ldap.servers.main.password.key='the-key-containing-the-password'
 ```
 
-NOTE: **Note:**
+NOTE:
 Commas are considered [special characters](https://helm.sh/docs/intro/using_helm/#the-format-and-limitations-of---set)
 within Helm `--set` items. Be sure to escape commas in values such as `bind_dn`:
 `--set global.appConfig.ldap.servers.main.bind_dn='cn=administrator\,cn=Users\,dc=domain\,dc=net'`.
@@ -1351,6 +1357,25 @@ global:
       enabled: true
 ```
 
+## Configure Workhorse settings
+
+Several components of the GitLab suite speak to the APIs via GitLab Workhorse. This is currently a part of the Webservice chart. These settings are consumed by all charts that need to contact GitLab Workhorse, providing an easy access to set them globaly vs individually.
+
+```yaml
+global:
+  workhorse:
+    serviceName: webservice-default
+    host: api.example.com
+    port: 8181
+```
+
+| Name | Type | | Default | Description |
+| :-- | :-- | :-- | :-- |
+| serviceName | String | `webservice-default` | Name of service to direct internal API traffic to. Do not include the Release name, as it will be templated in. Should match an entry in `gitlab.webservice.deployments`. See [`gitlab/webservice` chart](gitlab/webservice/index.md#deployments-settings) |
+| scheme | String | `http` | Scheme of the API endpoint |
+| host | String | | Fully qualified hostname or IP address of an API endpoint. Overrides the presence of `serviceName`. |
+| port | Integer | `8181` | Port number of associated API server. |
+
 ### Bootsnap Cache
 
 Our Rails codebase makes use of [Shopify's Bootsnap](https://github.com/Shopify/bootsnap) Gem. Settings here are used to configure that behavior.
@@ -1426,7 +1451,7 @@ is killed by the Webservice master process. The default value is 60 seconds.
 
 ## Custom Certificate Authorities
 
-NOTE: **Note:**
+NOTE:
 These settings do not affect charts from outside of this repository, via `requirements.yaml`.
 
 Some users may need to add custom certificate authorities, such as when using internally

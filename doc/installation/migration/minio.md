@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ## Using built-in MinIO service for object storage
 
-NOTE: **Note:**
+NOTE:
 Users are advised to setup an [external object storage](../../advanced/external-object-storage/index.md)
 service for production use.
 
@@ -53,7 +53,7 @@ Task Runner pods. Follow the steps to grab it from the Sidekiq pod
 1. Use this information to configure object storage in `/etc/gitlab/gitlab.rb`
    file of Omnibus GitLab package-based deployment, as detailed in the [docs](https://docs.gitlab.com/ee/administration/uploads.html#s3-compatible-connection-settings).
 
-   NOTE: **Note:**
+   NOTE:
    For connecting to the MinIO service from outside the cluster, the
    MinIO host URL alone is enough. Helm charts based installations are
    configured to redirect requests coming to that URL automatically to the

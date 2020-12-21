@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This guide is meant to serve as a cross-plaform resource for setting up a local
 Kubernetes development environment. In this guide, we'll be using
-[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) as it is the defacto standard.
+[Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) as it is the de facto standard.
 
 ## Getting Started with Minikube
 
@@ -63,18 +63,18 @@ change according to the pieces being tested, and the requirements as listed:
 - `--memory int`: Amount of RAM allocated to the Minikube VM (default `2048`).
   The absolute same minimum is `6144` (6 GB). Recommendation is `10240` (10 GB).
 - `--disk-size string`: Disk size allocated to the Minikube VM (format: `<number>[<unit>]`,
-  where unit = `b`, `k`, `m` or `g`) (default `20g`). See GitLab's
+  where unit = `b`, `k`, `m` or `g`) (default `20g`). See the GitLab
   [storage](https://docs.gitlab.com/ce/install/requirements.html#storage) and
   [database](https://docs.gitlab.com/ce/install/requirements.html#database)
   requirements.
 
-  NOTE: **Note:**
+  NOTE:
   This is created in your home directory under `~/.minikube/machines/minikube/`.
 
 - `--kubernetes-version string`: The Kubernetes version that the Minikube VM will use (e.g., `v1.2.3`).
 - `--registry-mirror stringSlice`: Registry mirrors to pass to the Docker daemon.
 
-NOTE: **Note:**
+NOTE:
 Changing these values in a second `start` command, requires to first delete
 the existing instance with `minikube delete`, or manually you can alter the
 properties with VirtualBox Manager.
@@ -198,7 +198,7 @@ helm upgrade --install gitlab . \
   -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube.yaml
 ```
 
-NOTE: **Note:**
+NOTE:
 If using Helm v2, please see notes about the `--timeout` option
 in the [Deployment documentation](../../installation/deployment.md#deploy-using-helm).
 
@@ -216,7 +216,7 @@ helm upgrade --install gitlab . \
   -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml
 ```
 
-NOTE: **Note:**
+NOTE:
 If using Helm v2, please see notes about the `--timeout` option
 in the [Deployment documentation](../../installation/deployment.md#deploy-using-helm).
 

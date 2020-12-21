@@ -40,6 +40,7 @@ global:
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
+    # applicationName:
     # preparedStatements: false
     # ssl:
     #   secret: gitlab-ssl-secret

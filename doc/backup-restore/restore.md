@@ -99,7 +99,7 @@ The steps for restoring a GitLab installation are
 1. This process will take time depending on the size of the tarball.
 1. The restoration process will erase the existing contents of database, move existing repositories to temporary locations and extract the contents of the tarball. Repositories will be moved to their corresponding locations on the disk and other data, like artifacts, uploads, LFS etc. will be uploaded to corresponding buckets in Object Storage.
 
-NOTE: **Note:**
+NOTE:
 During restoration, the backup tarball needs to be extracted to disk.
 This means the Task Runner pod should have disk of necessary size available.
 For more details and configuration please see the [Task Runner documentation](../charts/gitlab/task-runner/index.md#persistence-configuration).

@@ -236,6 +236,21 @@ Uses `postgresql-password` to match upstream postgresql chart when not using an
 {{- end -}}
 
 {{/*
+Return the application name that should be presented to PostgreSQL.
+A blank string tells the client NOT to send an application name.
+A nil value will use the process name by default.
+See https://github.com/Masterminds/sprig/issues/53 for how we distinguish these.
+Defaults to nil.
+*/}}
+{{- define "gitlab.psql.applicationName" -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{- $appname := pluck "applicationName" $local .Values.global.psql | first -}}
+{{- if not ( kindIs "invalid" $appname ) -}}
+{{- $appname | quote -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return if prepared statements should be used by PostgreSQL.
 Defaults to false
 */}}
@@ -262,16 +277,16 @@ Returns the nginx ingress class
 {{- end -}}
 
 {{/*
-Overrides the nginx-ingress template to make sure gitlab-shell name matches
+Overrides the ingress-nginx template to make sure gitlab-shell name matches
 */}}
-{{- define "nginx-ingress.tcp-configmap" -}}
-{{ .Release.Name}}-nginx-ingress-tcp
+{{- define "ingress-nginx.tcp-configmap" -}}
+{{ .Release.Name}}-ingress-nginx-tcp
 {{- end -}}
 
 {{/*
-Overrides the nginx-ingress template to make sure our ingresses match
+Overrides the ingress-nginx template to make sure our ingresses match
 */}}
-{{- define "nginx-ingress.controller.ingress-class" -}}
+{{- define "ingress-nginx.controller.ingress-class" -}}
 {{ template "gitlab.ingressclass" . }}
 {{- end -}}
 

@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This is the official, recommended, and supported method to install GitLab on a cloud native environment.
 
-NOTE: **Note:**
+NOTE:
 It is not necessary to have GitLab installed on Kubernetes in order to use
 the [GitLab Kubernetes integration](https://docs.gitlab.com/ee/user/project/clusters/).
 
@@ -43,7 +43,7 @@ can be installed separately.
 
 ## Limitations
 
-GitLab Pages [cannot be deployed](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/37) using the Helm chart. Hybrid environments that deploy Pages using the Omnibus installer and deploy other GitLab services using the Helm chart are not supported.
+GitLab Pages [cannot be deployed](https://gitlab.com/groups/gitlab-org/-/epics/4283) using the Helm chart. Hybrid environments that deploy Pages using the Omnibus installer and deploy other GitLab services using the Helm chart are not supported.
 
 Database limitations:
 
@@ -118,7 +118,7 @@ To uninstall the GitLab Chart, run the following:
 helm uninstall gitlab
 ```
 
-NOTE: **Note:**
+NOTE:
 With Helm v2, you need to use the command `helm delete --purge gitlab`.
 
 For the purposes of continuity, these charts have some Kubernetes objects that
@@ -199,7 +199,7 @@ helm repo add gitlab https://charts.gitlab.io/
 helm search repo -l gitlab/gitlab
 ```
 
-NOTE: **Note:**
+NOTE:
 With Helm v2, the search command would be `helm search -l gitlab/gitlab`
 
 For more information, visit the [version mappings docs](installation/version_mappings.md).

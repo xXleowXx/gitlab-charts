@@ -59,7 +59,7 @@ Backups are made using the following steps, in order:
 
   It is also possible to specify the storage class in which the backup is stored using `--storage-class <storage-class-name>`, allowing you to save on backup storage costs. If unspecified, this will use the default of the storage backend.
 
-  NOTE: **Note:**
+  NOTE:
   This storage class name is passed through as-is to the storage class argument of your specified backend.
 
 #### GitLab backup bucket
@@ -92,5 +92,5 @@ After fetching the backup tar the sequence of execution is:
    - clean up the corresponding bucket
    - restore the backup content into the corresponding bucket
 
-NOTE: **Note:**
+NOTE:
 If the restore fails, the user will need to revert to previous backup using data in `tmp` directory of the backup bucket. This is currently a manual process.
