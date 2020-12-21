@@ -8,6 +8,7 @@ export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
 export CI_APPLICATION_TAG=$CI_COMMIT_SHA
 export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
 export TILLER_NAMESPACE=$KUBE_NAMESPACE
+export STABLE_REPO_URL=${STABLE_REPO_URL-https://charts.helm.sh/stable}
 
 function previousDeployFailed() {
   set +e
@@ -225,7 +226,7 @@ function restart_task_runner() {
 function download_chart() {
   mkdir -p chart/
 
-  helm init --client-only
+  helm init --client-only --stable-repo-url=${STABLE_REPO_URL}
   helm repo add gitlab https://charts.gitlab.io
   helm repo add jetstack https://charts.jetstack.io
 
@@ -267,7 +268,7 @@ function check_domain_ip() {
 
 function install_tiller() {
   echo "Checking Tiller..."
-  helm init --upgrade --service-account tiller --history-max=${TILLER_HISTORY_MAX}
+  helm init --upgrade --service-account tiller --history-max=${TILLER_HISTORY_MAX} --stable-repo-url=${STABLE_REPO_URL}
   kubectl rollout status -n "$TILLER_NAMESPACE" -w "deployment/tiller-deploy"
   if ! helm version --debug; then
     echo "Failed to init Tiller."
