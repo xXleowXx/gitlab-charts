@@ -77,9 +77,26 @@ contentSecurityPolicy:
 Ensure a certificate is provided when Gitaly is enabled and is instructed to
 listen over TLS */}}
 {{- define "gitlab.checkConfig.gitaly.tls" -}}
-{{- if and (and $.Values.global.gitaly.enabled $.Values.global.gitaly.tls.enabled) (not $.Values.global.gitaly.tls.secretName) }}
-gitaly: server enabled with TLS, no TLS certificate provided
-    It appears Gitaly is specified to listen over TLS, but no certificate was specified.
+{{- $errorMsg := list -}}
+{{- if and $.Values.global.gitaly.enabled $.Values.global.gitaly.tls.enabled -}}
+{{-   if $.Values.global.praefect.enabled -}}
+{{-     range $i, $vs := $.Values.global.praefect.virtualStorages -}}
+{{-       if not $vs.tlsSecretName }}
+{{-         $errorMsg = append $errorMsg (printf "global.praefect.virtualStorages[%d].tlsSecretName not specified ('%s')" $i $vs.name) -}}
+{{-       end }}
+{{-     end }}
+{{-   else }}
+{{-     if not $.Values.global.gitaly.tls.secretName -}}
+{{-       $errorMsg = append $errorMsg ("global.gitaly.tls.secretName not specified") -}}
+{{-     end }}
+{{-   end }}
+{{- end }}
+{{- if not (empty $errorMsg) }}
+gitaly:
+{{- range $msg := $errorMsg }}
+    {{ $msg }}
+{{- end }}
+    This configuration is not supported.
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.gitaly.tls */}}
