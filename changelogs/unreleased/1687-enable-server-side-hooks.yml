@@ -1,5 +1,0 @@
----
-title: Add server-side global hook support through configmaps
-merge_request: 1653
-author:
-type: added
