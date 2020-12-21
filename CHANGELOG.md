@@ -2,6 +2,43 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.7.0 (2020-12-22)
+
+### Fixed (3 changes)
+
+- Make consolidated object store config a non-default option. !1588
+- Support using dedicated bucket for Minio. !1652
+- Add extraEnv to task-runner backup job. !1721
+
+### Changed (10 changes, 1 of them is from the community)
+
+- Rename and deprecate configuration keys because Piwik rebranded as Matomo. !1602 (Katrin Leinweber @katrinleinweber)
+- Remove Service port from gitlab-kas. !1659
+- Add prometheus annotations for kas. !1660
+- Allow toggling redirects to storage backends on a per-repository basis. !1667
+- Use gitlab-exporter v7.1.2. !1675
+- Registry: update to v2.12.0-gitlab. !1683
+- Update gitlab-kas to v13.7.0. !1694
+- Add install survey link to helm install notes. !1711
+- Add ability to customize workhorse scheme. !1714
+- Webservice: convert to generator pattern, allow splitting traffic groups.
+
+### Added (7 changes)
+
+- Add TLS support to Praefect. !1613
+- Add encrypted_settings_key_base rails secret. !1617
+- Add server-side global hook support through configmaps. !1653
+- Allow change or deletion of settings in Gitaly StatefulSet securityContexts. !1665
+- Add support for /database_bloat endpoint in gitlab-exporter. !1673
+- Configurable termination graceperiod for NGINX. !1685
+- Support setting of application_name in database.yml. !1712
+
+### Other (2 changes)
+
+- Update NGINX from v0.20.0 to 0.41.2. !1690
+- Changes the default loglevel for registry to info. !1703
+
+
 ## 4.6.3 (2020-12-10)
 
 ### Changed (1 change, 1 of them is from the community)
