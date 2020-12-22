@@ -48,6 +48,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -476,3 +477,18 @@ nginx-ingress:
 {{-   end -}}
 {{- end -}}
 {{/* END "gitlab.checkConfig.nginx.controller" */}}
+
+{{/*
+Ensure that when type is set to LoadBalancer that loadBalancerSourceRanges are set
+*/}}
+{{- define "gitlab.checkConfig.webservice.loadBalancer" -}}
+{{-   range $name, $deployment := .Values.gitlab.webservice.deployments -}}
+{{-   $serviceType := $deployment.service.type -}}
+{{-   $loadBalancerSourceRanges := $deployment.service.loadBalancerSourceRanges }}
+{{-     if (and (eq $serviceType "LoadBalancer") (empty ($loadBalancerSourceRanges))) }}
+webservice:
+    It is not currently recommended to set a service type of `{{ $serviceType }}` on a public exposed network without restrictions, please add `service.loadBalancerSourceRanges` to limit access to the service of the `{{ $name }}` deployment.
+{{      end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.webservice.loadBalancer */}}
