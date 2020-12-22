@@ -69,6 +69,8 @@ pod:
     {{- end }}
 service:
   labels: # additional labels to .serviceLabels
+  type: {{ .Values.service.type }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   annotations: # additional annotations to .service.annotations
     {{- if .Values.service.annotations }}
     {{ toYaml .Values.service.annotations | nindent 4 }}
