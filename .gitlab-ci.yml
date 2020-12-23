@@ -664,6 +664,12 @@ production_specs_eks:
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "eks-production"
 
+.knapsack-variables:
+  variables:
+    KNAPSACK_REPORT_PATH: "knapsack/master_report.json"
+    KNAPSACK_TEST_FILE_PATTERN: "qa/specs/features/**/*_spec.rb"
+    KNAPSACK_GENERATE_REPORT: "true"
+
 .qa:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
   stage: qa
@@ -727,7 +733,10 @@ release_package:
       - *com_auto_deploy_branch_ref
 
 .qa_production:
-  extends: .qa
+  extends: 
+    - .qa
+    - .knapsack-variables
+  parallel: 3
   only:
     refs:
       - master
