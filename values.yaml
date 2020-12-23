@@ -17,9 +17,6 @@
 ## The global properties are used to configure multiple charts at once.
 ## Extended documentation at doc/charts/globals.md
 global:
-  # Customer provided labels that are can be added to all objects created
-  # by our helm chart.  Note that this is in addition to labels created by
-  # the helm release itself.
   common:
     labels: {}
   ## GitLab operator is Alpha. Not for production use.
