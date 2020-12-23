@@ -55,6 +55,7 @@ global:
     tls: {}
     smartcard: {}
     kas: {}
+    pages: {}
 
   ## doc/charts/globals.md#configure-ingress-settings
   ingress:
@@ -491,12 +492,12 @@ global:
     path:
     host:
     port:
-    https: false
+    https: # default true
     externalHttp: false
     externalHttps: false
-    artifactsServer: false
+    artifactsServer: true
     objectStore:
-      enabled: false
+      enabled: true
       bucket: gitlab-pages
       # proxy_download: true
       connection: {}
