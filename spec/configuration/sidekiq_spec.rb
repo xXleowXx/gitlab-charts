@@ -299,4 +299,142 @@ describe 'Sidekiq configuration' do
       end
     end
   end
+
+  context 'When customer provides additional labels' do
+    context 'using the all-in-one' do
+      let(:default_values) do
+        {
+          'certmanager-issuer' => { 'email' => 'test@example.com' },
+        }
+      end
+
+      let(:values) do
+        {
+          'global' => {
+            'common' => {
+              'labels' => {
+                'common' => 'global'
+              }
+            },
+            'pod' => {
+              'labels' => {
+                'global_pod' => true
+              }
+            }
+          },
+          'gitlab' => {
+            'sidekiq' => {
+              'common' => {
+                'labels' => {
+                  'common' => 'sidekiq'
+                }
+              },
+              'podLabels' => {
+                'pod' => true,
+                'global' => 'pod'
+              },
+              'networkpolicy' => {
+                'enabled' => true
+              },
+              'serviceAccount' => {
+                'create' => true,
+                'enabled' => true
+              }
+            }
+          }
+        }.deep_merge(default_values)
+      end
+      it 'Populates the additional labels in the expected manner' do
+        t = HelmTemplate.new(values)
+        expect(t.exit_code).to eq(0)
+        expect(t.dig('ConfigMap/test-sidekiq', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('ConfigMap/test-sidekiq-all-in-1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).not_to include('common' => 'global')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).not_to include(common: 'global')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).not_to include(global_pod: true)
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+
+        # Quickly test all other objects that we touch
+        expect(t.dig('ServiceAccount/test-sidekiq', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('NetworkPolicy/test-sidekiq-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('PodDisruptionBudget/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+      end
+    end
+
+    context 'using the multiple deployments' do
+      let(:default_values) do
+        {
+          'certmanager-issuer' => { 'email' => 'test@example.com' },
+          'gitlab' => {
+            'sidekiq' => {
+              'pods' => [
+                { 'name' => 'pod-1', 'queues' => 'merge' },
+                { 'name' => 'pod-2', 'negateQueues' => 'merge' },
+              ]
+            }
+          }
+        }
+      end
+
+      let(:values) do
+        {
+          'global' => {
+            'common' => {
+              'labels' => {
+                'common' => 'global'
+              }
+            },
+            'pod' => {
+              'labels' => {
+                'global_pod' => true
+              }
+            }
+          },
+          'gitlab' => {
+            'sidekiq' => {
+              'common' => {
+                'labels' => {
+                  'common' => 'sidekiq'
+                }
+              },
+              'podLabels' => {
+                'pod' => true,
+                'global' => 'pod'
+              },
+              'networkpolicy' => {
+                'enabled' => true
+              },
+              'serviceAccount' => {
+                'create' => true,
+                'enabled' => true
+              }
+            }
+          }
+        }.deep_merge(default_values)
+      end
+      it 'Populates the additional labels in the expected manner' do
+        t = HelmTemplate.new(values)
+        expect(t.exit_code).to eq(0)
+        expect(t.dig('ConfigMap/test-sidekiq', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('ConfigMap/test-sidekiq-pod-1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).not_to include('common' => 'global')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).not_to include(common: 'global')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).not_to include(global_pod: true)
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+
+        # Quickly test all other objects that we touch
+        expect(t.dig('ServiceAccount/test-sidekiq', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('NetworkPolicy/test-sidekiq-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('PodDisruptionBudget/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+      end
+    end
+  end
 end

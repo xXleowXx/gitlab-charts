@@ -1,3 +1,5 @@
+{{/* vim: set filetype=mustache: */}}
+
 {{/*
 Returns the extraEnv keys and values to inject into containers. Allows
 pod-level values for extraEnv.
@@ -13,5 +15,17 @@ values.
 {{- range $key, $value := $allExtraEnv }}
 - name: {{ $key }}
   value: {{ $value | quote }}
+{{- end -}}
+{{- end -}}
+
+{{- define "sidekiq.labels" -}}
+{{- range $key, $value := (merge .Values.common.labels .Values.global.common.labels) }}
+{{ $key }}: {{ $value }}
+{{- end -}}
+{{- end -}}
+
+{{- define "sidekiq.podLabels" -}}
+{{- range $key, $value := (merge .Values.podLabels .Values.common.labels .Values.global.pod.labels .Values.global.common.labels) }}
+{{ $key }}: {{ $value }}
 {{- end -}}
 {{- end -}}

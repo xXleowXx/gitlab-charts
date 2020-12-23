@@ -41,6 +41,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
+    {{- include "sidekiq.labels" $ | nindent 4 }}
     queue-pod-name: {{ .name }}
   annotations:
     {{- include "gitlab.deploymentAnnotations" $ | nindent 4 }}
@@ -62,10 +63,7 @@ spec:
         app: {{ $name }}
         release: {{ $releaseName }}
         queue-pod-name: {{ .name }}
-        {{- include "gitlab.podLabels" $ | nindent 8 -}}
-      {{- range $key, $value := .podLabels }}
-        {{ $key }}: {{ $value }}
-      {{- end }}
+        {{- include "sidekiq.podLabels" $ | nindent 8 }}
       annotations:
         checksum/configmap: {{ $configMapChecksum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
