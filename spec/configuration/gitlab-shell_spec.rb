@@ -8,7 +8,18 @@ describe 'gitlab-shell configuration' do
     {
       # provide required setting
       'certmanager-issuer' => { 'email' => 'test@example.com' },
-      'global' => {}
+      'global' => {},
+      'gitlab' => {
+        'gitlab-shell' => {
+          'networkpolicy' => {
+            'enabled' => true
+          },
+          'serviceAccount' => {
+            'enabled' => true,
+            'create' => true
+          }
+        }
+      }
     }
   end
 
@@ -67,6 +78,12 @@ describe 'gitlab-shell configuration' do
       expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include(global: "global")
       expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include(global_pod: true)
       expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+
+      # Quickly test all other objects that we touch
+      expect(t.dig('ServiceAccount/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'shell')
+      expect(t.dig('NetworkPolicy/test-gitlab-shell-v1', 'metadata', 'labels')).to include('global' => 'shell')
+      expect(t.dig('PodDisruptionBudget/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'shell')
+      expect(t.dig('HorizontalPodAutoscaler/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'shell')
     end
   end
 end

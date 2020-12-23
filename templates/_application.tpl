@@ -1,3 +1,5 @@
+{{/* vim: set filetype=mustache: */}}
+
 {{- define "gitlab.application.labels" -}}
 app.kubernetes.io/name: {{ .Release.Name }}
 {{- end -}}
@@ -19,5 +21,23 @@ release: {{ .Release.Name }}
 heritage: {{ .Release.Service }}
 {{ if .Values.global.application.create -}}
 {{ include "gitlab.application.labels" . }}
+{{- end -}}
+{{- end -}}
+
+{{- define "gitlab.commonLabels" -}}
+{{- range $key, $value := .Values.global.common.labels }}
+{{ $key }}: {{ $value }}
+{{- end -}}
+{{- end -}}
+
+{{- define "gitlab.commonPodLabels" -}}
+{{- range $key, $value := (merge .Values.global.pod.labels .Values.global.common.labels) }}
+{{ $key }}: {{ $value }}
+{{- end -}}
+{{- end -}}
+
+{{- define "gitlab.commonServiceLabels" -}}
+{{ range $key, $value := (merge .Values.common.labels .Values.global.service.labels .Values.global.common.labels) }}
+{{ $key }}: {{ $value }}
 {{- end -}}
 {{- end -}}

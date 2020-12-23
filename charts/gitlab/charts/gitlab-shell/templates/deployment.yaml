@@ -6,6 +6,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.commonLabels" . | nindent 4 }}
     {{- include "gitlab-shell.labels" . | nindent 4 }}
   annotations:
     {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
@@ -18,6 +19,7 @@ spec:
     metadata:
       labels:
         {{- include "gitlab.standardLabels" . | nindent 8 }}
+        {{- include "gitlab.commonPodLabels" . | nindent 8 }}
         {{- include "gitlab-shell.podLabels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") . | sha256sum }}
