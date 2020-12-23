@@ -728,7 +728,7 @@ release_package:
   extends: 
     - .qa
     - .knapsack-variables
-  parallel: 4
+  parallel: 5
   except:
     refs:
       - master
@@ -739,7 +739,7 @@ release_package:
   extends: 
     - .qa
     - .knapsack-variables
-  parallel: 4
+  parallel: 5
   only:
     refs:
       - master
