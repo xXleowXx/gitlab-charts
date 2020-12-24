@@ -20,9 +20,12 @@ image:
   # tag: master
 
 service:
+  type: ClusterIP
   externalPort: 8090
   internalPort: 8090
-  type: ClusterIP
+  customDomains:
+    type: LoadBalancer
+    internalHttpsPort: 8091
 
 init:
   image: {}

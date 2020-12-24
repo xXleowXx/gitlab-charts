@@ -495,8 +495,8 @@ global:
     host:
     port:
     https: # default true
-    externalHttp: false
-    externalHttps: false
+    externalHttp: []
+    externalHttps: []
     artifactsServer: true
     objectStore:
       enabled: true
