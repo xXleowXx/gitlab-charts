@@ -8,11 +8,18 @@ metadata:
   annotations:
 data:
   config.erb: |
+    {{- $externalAddresses := concat $.Values.global.pages.externalHttp $.Values.global.pages.externalHttps | uniq }}
+    {{- if (empty ($externalAddresses)) }}
     listen-proxy=0.0.0.0:{{ .Values.service.internalPort }}
-    {{- if not (empty $.Values.global.pages.externalHttps) }}
+    {{- else }}
+      {{- if not (empty $.Values.global.pages.externalHttp) }}
+    listen-http=0.0.0.0:{{ .Values.service.internalPort }}
+      {{- end }}
+      {{- if not (empty $.Values.global.pages.externalHttps) }}
     listen-https=0.0.0.0:{{ .Values.service.customDomains.internalHttpsPort }}
     root-cert=/etc/gitlab-secrets/pages/{{ template "gitlab.pages.hostname" $ }}.crt
     root-key=/etc/gitlab-secrets/pages/{{ template "gitlab.pages.hostname" $ }}.key
+      {{- end }}
     {{- end }}
     pages-domain={{ template "gitlab.pages.hostname" . }}
     pages-root=/srv/gitlab-pages

@@ -1,5 +1,5 @@
-{{- if or (not (empty $.Values.global.pages.externalHttp)) (not (empty $.Values.global.pages.externalHttps)) -}}
 {{- $externalAddresses := concat $.Values.global.pages.externalHttp $.Values.global.pages.externalHttps | uniq }}
+{{- if not (empty ($externalAddresses)) -}}
 apiVersion: v1
 kind: Service
 metadata:
