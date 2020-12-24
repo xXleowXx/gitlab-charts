@@ -24,12 +24,18 @@ spec:
       targetPort: {{ .Values.service.internalPort | int }}
       protocol: TCP
       name: http-{{ template "name" . }}
+      {{- if and (eq .Values.service.customDomains.type "NodePort") .Values.service.customDomains.nodePort.http }}
+      nodePort: {{ .Values.service.customDomains.nodePort.http | int }}
+      {{- end }}
     {{- end -}}
     {{- if not (empty $.Values.global.pages.externalHttps) }}
     - port: 443
       targetPort: {{ .Values.service.customDomains.internalHttpsPort | int }}
       protocol: TCP
       name: https-{{ template "name" . }}
+      {{- if and (eq .Values.service.customDomains.type "NodePort") .Values.service.customDomains.nodePort.https }}
+      nodePort: {{ .Values.service.customDomains.nodePort.https | int }}
+      {{- end }}
     {{- end }}
   selector:
     app: {{ template "name" . }}

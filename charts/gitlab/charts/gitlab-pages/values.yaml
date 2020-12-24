@@ -26,6 +26,9 @@ service:
   customDomains:
     type: LoadBalancer
     internalHttpsPort: 8091
+    nodePort: {}
+      # http
+      # https
 
 init:
   image: {}
