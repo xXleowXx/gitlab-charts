@@ -13,8 +13,8 @@ pages:
   port: {{ default ( eq "true" (include "gitlab.pages.https" $) | ternary 443 80 ) $.Values.global.pages.port | int }}
   https: {{ eq "true" (include "gitlab.pages.https" $) }}
   secret_file: /etc/gitlab/pages/secret
-  external_http: {{ eq $.Values.global.pages.externalHttp true }}
-  external_https: {{ eq $.Values.global.pages.externalHttps true }}
+  external_http: {{ not (empty $.Values.global.pages.externalHttp) }}
+  external_https: {{ not (empty $.Values.global.pages.externalHttps) }}
   {{- if not $.Values.global.appConfig.object_store.enabled }}
   {{-   include "gitlab.appConfig.objectStorage.configuration" (dict "name" "pages" "config" $.Values.global.pages.objectStore "context" $ ) | nindent 2 }}
   {{- end }}
