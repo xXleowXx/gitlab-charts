@@ -1477,8 +1477,8 @@ global:
 | `host`                          | String    |                            | Pages root domain. |
 | `port`                          | String    |                            | Port to be used to construct Pages URLs in UI. If left unset, default value of 80 or 443 is set based on HTTPS situation of Pages. |
 | `https`                         | Boolean   | True                       | Whether GitLab UI should show HTTPS URLs for Pages or not. Has precedence over `global.hosts.pages.https` and `global.hosts.https`. Set to True by default. |
-| `externalHttp`                  | Boolean   | False                      | Whether Pages is configured to support custom domains via HTTP  |
-| `externalHttps`                 | Boolean   | False                      | Whether Pages is configured to support custom domains via HTTPS |
+| `externalHttp`                  | List      | `[]`                       | List of IP addresses through which HTTP requests reach Pages daemon. For supporting custom domains. |
+| `externalHttps`                 | List      | `[]`                       | List of IP addresses through which HTTPS requests reach Pages daemon. For supporting custom domains. |
 | `artifactsServer`               | Boolean   | True                       | Enable viewing artifacts in GitLab Pages.|
 | `objectStore.enabled`           | Boolean   | True                       | Enable using object storage for Pages. |
 | `objectStore.bucket`            | String    | `gitlab-pages`             | Bucket to be used to store content related to Pages |
