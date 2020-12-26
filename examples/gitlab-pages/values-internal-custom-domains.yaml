@@ -1,6 +1,14 @@
 global:
   pages:
     enabled: true
+    # DNS configuration must be made so that `*.<pages root domain>` points towards
+    # any of the external IPs.
+    # Custom domains should have a CNAME record pointing towards respective
+    # `<namespace>.<pages root domain>` domains.
+    externalHttp:
+      - 1.2.3.4
+    externalHttps:
+      - 1.2.3.4
 gitlab:
   gitlab-pages:
     ingress:
