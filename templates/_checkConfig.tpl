@@ -85,7 +85,7 @@ gitaly: server enabled with TLS, no TLS certificate provided
 {{/* END gitlab.checkConfig.gitaly.tls */}}
 
 {{/*
-Ensure a certificate is provided when Praefect is enabled and is instructed to listen over TLS 
+Ensure a certificate is provided when Praefect is enabled and is instructed to listen over TLS
 */}}
 {{- define "gitlab.checkConfig.praefect.tls" -}}
 {{- if and (and $.Values.global.praefect.enabled $.Values.global.praefect.tls.enabled) (not $.Values.global.praefect.tls.secretName) }}
@@ -449,11 +449,13 @@ When type-specific object storage is enabled the `connection` property can not b
 {{/* END gitlab.checkConfig.objectStorage.typeSpecificConfig */}}
 
 {{- define "gitlab.checkConfig.nginx.controller.extraArgs" -}}
-{{-   if hasKey (index $.Values "nginx-ingress").controller.extraArgs "force-namespace-isolation" -}}
+{{-   if (index $.Values "nginx-ingress").enabled -}}
+{{-     if hasKey (index $.Values "nginx-ingress").controller.extraArgs "force-namespace-isolation" -}}
 nginx-ingress:
   `nginx-ingress.controller.extraArgs.force-namespace-isolation` was previously set by default in the GitLab chart's values.yaml file,
   but has since been deprecated upon the upgrade to NGINX 0.41.2 (upstream chart version 3.11.1).
   Please remove the `force-namespace-isolation` key.
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{/* END "gitlab.checkConfig.nginx.controller" */}}
