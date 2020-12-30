@@ -459,6 +459,24 @@ danger-review:
     - git version
     - danger --fail-on-errors=true
 
+rubocop:
+  image: ruby:2.7-alpine
+  stage: prepare
+  except:
+    <<: *deps_pipeline
+    refs:
+      - master
+      - tags
+      - triggers
+      - *com_auto_deploy_branch_ref
+  script:
+    - bundle install -j $(nproc) --path gems
+    - bundle exec rubocop --parallel
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+    - gems
+
 check_docs_lint:
   image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:ruby-2.7.2-alpine-3.12-vale-2.4.3-markdownlint-0.24.0"
   stage: prepare
