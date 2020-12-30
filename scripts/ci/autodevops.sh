@@ -114,7 +114,7 @@ function deploy() {
   helm repo add jetstack https://charts.jetstack.io
   helm dep update .
 
-  WAIT="--wait --timeout 900"
+  WAIT="--wait --timeout 900s"
 
   # Only enable Prometheus on `master`
   PROMETHEUS_INSTALL="false"
@@ -270,7 +270,7 @@ function install_external_dns() {
 
   echo "Checking External DNS..."
   release_name="gitlab-external-dns"
-  if ! helm status "${release_name}" > /dev/null 2>&1 ; then
+  if ! helm status --namespace "${NAMESPACE}"  "${release_name}" > /dev/null 2>&1 ; then
     case "${provider}" in
       google)
         # We need to store the credentials in a secret
