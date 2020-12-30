@@ -462,6 +462,8 @@ danger-review:
 rubocop:
   image: ruby:2.7-alpine
   stage: prepare
+  dependencies: []
+  before_script: []
   except:
     <<: *deps_pipeline
     refs:
