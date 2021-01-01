@@ -4,9 +4,9 @@ kind: Job
 metadata:
   name: {{ template "migrations.jobname" . }}
   namespace: {{ .Release.Namespace }}
-  {{- if .Values.jobAnnotations }}
+  {{- if .Values.job.annotations }}
   annotations:
-  {{- range $key, $value := .Values.jobAnnotations }}
+  {{- range $key, $value := .Values.job.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
   {{- end }}
