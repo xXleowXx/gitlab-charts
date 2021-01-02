@@ -13,6 +13,7 @@ MACHINE_TYPE=${MACHINE_TYPE-n1-standard-4}
 RBAC_ENABLED=${RBAC_ENABLED-true}
 NUM_NODES=${NUM_NODES-2}
 INT_NETWORK=${INT_NETWORK-default}
+SINT_NETWORK=${SINT_NETWORK-default}
 PREEMPTIBLE=${PREEMPTIBLE-false}
 EXTRA_CREATE_ARGS=${EXTRA_CREATE_ARGS-""}
 USE_STATIC_IP=${USE_STATIC_IP-false};
@@ -49,6 +50,7 @@ function bootstrap(){
     --node-version $CLUSTER_VERSION --num-nodes $NUM_NODES \
     --enable-ip-alias \
     --network $INT_NETWORK \
+    --subnetwork $SINT_NETWORK \
     --project $PROJECT --enable-basic-auth $EXTRA_CREATE_ARGS;
 
   if ${USE_STATIC_IP}; then
