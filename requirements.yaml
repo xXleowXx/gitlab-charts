@@ -1,4 +1,14 @@
 dependencies:
+- name: gitlab
+  version: '*.*.*'
+- name: shared-secrets
+  version: '*.*.*'
+- name: certmanager-issuer
+  version: '*.*.*'
+- name: minio
+  version: '*.*.*'
+- name: registry
+  version: '*.*.*'
 - name: cert-manager
   version: 0.10.1
   repository: https://charts.jetstack.io/
@@ -26,4 +36,4 @@ dependencies:
   condition: redis.install
 - name: nginx-ingress
   condition: nginx-ingress.enabled
-  version: 3.11.1
+  version: '*.*.*'
