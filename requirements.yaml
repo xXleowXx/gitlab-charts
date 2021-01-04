@@ -36,4 +36,4 @@ dependencies:
   condition: redis.install
 - name: nginx-ingress
   condition: nginx-ingress.enabled
-  version: 3.11.1
+  version: '*.*.*'
