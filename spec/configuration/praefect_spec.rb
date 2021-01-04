@@ -14,7 +14,7 @@ describe 'Praefect configuration' do
       'ConfigMap/test-praefect',
       'ConfigMap/test-praefect-scripts',
       'PodDisruptionBudget/test-praefect',
-      'StatefulSet/test-praefect',
+      'StatefulSet/test-praefect'
     ]
   end
 
@@ -58,7 +58,7 @@ describe 'Praefect configuration' do
         'PodDisruptionBudget/test-gitaly-default',
         'ConfigMap/test-gitaly',
         'Service/test-gitaly-default',
-        'StatefulSet/test-gitaly-default',
+        'StatefulSet/test-gitaly-default'
       ]
     end
 
@@ -93,7 +93,7 @@ describe 'Praefect configuration' do
                 {
                   'name' => 'vs2',
                   'gitalyReplicas' => 3
-                },
+                }
               ]
             }
           }
@@ -104,7 +104,7 @@ describe 'Praefect configuration' do
         [
           'PodDisruptionBudget/test-gitaly-vs2',
           'Service/test-gitaly-vs2',
-          'StatefulSet/test-gitaly-vs2',
+          'StatefulSet/test-gitaly-vs2'
         ].concat(gitaly_resources)
       end
 
@@ -124,7 +124,7 @@ describe 'Praefect configuration' do
         let(:values_operator_enabled) do
           {
             'global' => {
-              'operator' => { 'enabled' => true },
+              'operator' => { 'enabled' => true }
             }
           }.deep_merge(values_multiple_virtual_storages)
         end
@@ -134,7 +134,7 @@ describe 'Praefect configuration' do
             'ServiceAccount/test-gitaly-pause',
             'Role/test-gitaly-pause',
             'RoleBinding/test-gitaly-pause',
-            'Job/test-gitaly-pause',
+            'Job/test-gitaly-pause'
           ]
         end
 
