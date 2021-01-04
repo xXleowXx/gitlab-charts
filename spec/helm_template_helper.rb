@@ -6,12 +6,13 @@ class HelmTemplate
     `helm version -c`.match('Ver(sion)?:"v(\d)\.')[2]
   end
 
-  def self.helm_template_call(name: 'test', path: '-')
+  def self.helm_template_call(name: 'test', path: '-', namespace: nil)
+    namespace_arg = namespace.nil? ? '' : "--namespace #{namespace}"
     case helm_version
     when "2" then
-      "helm template -n #{name} -f #{path} ."
+      "helm template -n #{name} -f #{path} #{namespace_arg} ."
     when "3" then
-      "helm template #{name} . -f #{path}"
+      "helm template #{name} . -f #{path} #{namespace_arg}"
     else
       # If we don't know the version of Helm, use `false` command
       "false"
@@ -32,7 +33,7 @@ class HelmTemplate
 
   def template(values)
     @values  = values
-    result = Open3.capture3(self.class.helm_template_call,
+    result = Open3.capture3(self.class.helm_template_call(namespace: 'default'),
                             chdir: File.join(__dir__,  '..'),
                             stdin_data: YAML.dump(values))
     @stdout, @stderr, @exit_code = result
