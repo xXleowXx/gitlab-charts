@@ -29,7 +29,8 @@ describe 'gitlab-shell configuration' do
         'global' => {
           'common' => {
             'labels' => {
-              'global' => "global"
+              'global' => "global",
+              'foo' => "global"
             }
           },
           'pod' => {
@@ -47,7 +48,8 @@ describe 'gitlab-shell configuration' do
           'gitlab-shell' => {
             'common' => {
               'labels' => {
-                'global' => 'shell'
+                'global' => 'shell',
+                'shell' => 'shell'
               }
             },
             'podLabels' => {
@@ -64,14 +66,16 @@ describe 'gitlab-shell configuration' do
     end
     it 'Populates the additional labels in the expected manner' do
       t = HelmTemplate.new(values)
-      expect(t.exit_code).to eq(0)
+      expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
       expect(t.dig('ConfigMap/test-gitlab-shell', 'metadata', 'labels')).to include("global" => "shell")
       expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).not_to include("global" => "global")
       expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include("global" => "service")
       expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include("service" => true)
       expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).not_to include("global" => "global")
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).not_to include("global" => "gitlab")
       expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include("global_service" => true)
       expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).to include("global" => "shell")
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).to include("foo" => "global")
       expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include("global" => "pod")
       expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include("pod" => true)
       expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include("global" => "pod")
