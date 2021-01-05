@@ -25,19 +25,28 @@ heritage: {{ .Release.Service }}
 {{- end -}}
 
 {{- define "gitlab.commonLabels" -}}
-{{- range $key, $value := (merge .Values.common.labels .Values.global.common.labels) }}
+{{- $commonLabels := (merge .Values.common.labels .Values.global.common.labels) }}
+{{- if $commonLabels }}
+{{-   range $key, $value := $commonLabels }}
 {{ $key }}: {{ $value }}
+{{-   end }}
 {{- end -}}
 {{- end -}}
 
 {{- define "gitlab.commonPodLabels" -}}
-{{- range $key, $value := (merge .Values.podLabels .Values.common.labels .Values.global.pod.labels .Values.global.common.labels) }}
+{{- $commonPodLabels := (merge .Values.podLabels .Values.common.labels .Values.global.pod.labels .Values.global.common.labels) }}
+{{- if $commonPodLabels }}
+{{-   range $key, $value := $commonPodLabels }}
 {{ $key }}: {{ $value }}
+{{-   end }}
 {{- end -}}
 {{- end -}}
 
 {{- define "gitlab.commonServiceLabels" -}}
-{{ range $key, $value := (merge .Values.serviceLabels .Values.common.labels .Values.global.service.labels .Values.global.common.labels) }}
+{{ $commonServiceLabels := (merge .Values.serviceLabels .Values.common.labels .Values.global.service.labels .Values.global.common.labels) }}
+{{- if $commonServiceLabels }}
+{{   range $key, $value := $commonServiceLabels }}
 {{ $key }}: {{ $value }}
+{{-   end }}
 {{- end -}}
 {{- end -}}
