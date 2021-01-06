@@ -271,7 +271,9 @@ the deployment is taking place if you run the command in another terminal.
 ## Initial login
 
 You can access the GitLab instance by visiting the domain specified during
-installation. If you manually created the secret for initial root password, you
+installation. Unless the [global host settings](../charts/globals.html#configure-host-settings)
+were changed, the domain for the GitLab instance would be `gitlab.<domain>`. If you
+manually created the secret for initial root password, you
 can use that to sign in as `root` user. If not, GitLab would've automatically
 created a random password for `root` user. This can be extracted by the
 following command (replace `<name>` by name of the release - which is `gitlab`
