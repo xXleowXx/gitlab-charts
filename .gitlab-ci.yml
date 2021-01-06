@@ -459,6 +459,27 @@ danger-review:
     - git version
     - danger --fail-on-errors=true
 
+rubocop:
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images:ruby-2.7.2-git-2.29-chrome-85-node-12.18-yarn-1.22-docker-19.03.1
+  stage: prepare
+  dependencies: []
+  before_script: []
+  except:
+    <<: *deps_pipeline
+    refs:
+      - master
+      - tags
+      - triggers
+      - *com_auto_deploy_branch_ref
+  script:
+    - bundle config set path 'gems'
+    - bundle install -j $(nproc)
+    - bundle exec rubocop --parallel
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+    - gems
+
 check_docs_lint:
   image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:ruby-2.7.2-alpine-3.12-vale-2.4.3-markdownlint-0.24.0"
   stage: prepare
@@ -545,7 +566,8 @@ review-docs-cleanup:
     S3_CONFIG_PATH: /etc/gitlab/minio
   script:
     - if [[ -n "${VARIABLES_FILE}" ]]; then source "${VARIABLES_FILE}"; ./scripts/ci/feature_spec_setup; else ./scripts/ci/integration_spec_setup; fi
-    - bundle install -j $(nproc) --without non_test --path gems
+    - bundle config set path 'gems'
+    - bundle install -j $(nproc) --without non_test
     - bundle exec rspec -c -f d spec -t "${RSPEC_TAGS}"
   artifacts:
     when: on_failure
