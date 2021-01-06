@@ -1,0 +1,5 @@
+---
+title: Support exposed endpoints of GitLab for grafana and webservice Ingress
+merge_request: 1621
+author: Louis Baumann
+type: added
