@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.7.2 (2021-01-07)
+
+### Fixed (1 change)
+
+- Fix nginx-ingress checkConfig error. !1730
+
+
 ## 4.7.1 (2020-12-23)
 
 ### Changed (1 change)
