@@ -453,8 +453,9 @@ Ensure that when type is set to LoadBalancer that loadBalancerSourceRanges are s
 */}}
 {{- define "gitlab.checkConfig.webservice.loadBalancer" -}}
 {{-   $serviceType := .Values.gitlab.webservice.service.type -}}
-{{-   $numDeployments := len(.Values.gitlab.webservice.deployments) -}}
+{{-   $numDeployments := len .Values.gitlab.webservice.deployments -}}
 {{-   if (and (eq $serviceType "LoadBalancer") (gt $numDeployments 1)) }}
+webservice:
     It is not currently recommended to set a service type of `LoadBalancer` with multiple deployments defined.
     Instead, use a global `service.type` of `ClusterIP` and override `service.type` in each deployment.
 {{-   end -}}
