@@ -482,6 +482,12 @@ nginx-ingress:
 Ensure that when type is set to LoadBalancer that loadBalancerSourceRanges are set
 */}}
 {{- define "gitlab.checkConfig.webservice.loadBalancer" -}}
+{{-   $serviceType := .Values.gitlab.webservice.service.type -}}
+{{-   $numDeployments := len(.Values.gitlab.webservice.deployments) -}}
+{{-   if (and (eq $serviceType "LoadBalancer") (gt $numDeployments 1)) }}
+    It is not currently recommended to set a service type of `LoadBalancer` with multiple deployments defined.
+    Instead, use a global `service.type` of `ClusterIP` and override `service.type` in each deployment.
+{{-   end -}}
 {{-   range $name, $deployment := .Values.gitlab.webservice.deployments -}}
 {{-   $serviceType := $deployment.service.type -}}
 {{-   $loadBalancerSourceRanges := $deployment.service.loadBalancerSourceRanges }}
