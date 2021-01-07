@@ -107,6 +107,10 @@ entry.
 - Set release_package to run manually. !1641
 
 
+## 4.5.6 (2021-01-07)
+
+- No changes.
+
 ## 4.5.5 (2020-12-07)
 
 ### Other (1 change)
