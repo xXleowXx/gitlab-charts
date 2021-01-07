@@ -32,21 +32,3 @@ heritage: {{ .Release.Service }}
 {{-   end }}
 {{- end -}}
 {{- end -}}
-
-{{- define "gitlab.commonPodLabels" -}}
-{{- $commonPodLabels := (merge .Values.podLabels .Values.common.labels .Values.global.pod.labels .Values.global.common.labels) }}
-{{- if $commonPodLabels }}
-{{-   range $key, $value := $commonPodLabels }}
-{{ $key }}: {{ $value }}
-{{-   end }}
-{{- end -}}
-{{- end -}}
-
-{{- define "gitlab.commonServiceLabels" -}}
-{{ $commonServiceLabels := (merge .Values.serviceLabels .Values.common.labels .Values.global.service.labels .Values.global.common.labels) }}
-{{- if $commonServiceLabels }}
-{{   range $key, $value := $commonServiceLabels }}
-{{ $key }}: {{ $value }}
-{{-   end }}
-{{- end -}}
-{{- end -}}
