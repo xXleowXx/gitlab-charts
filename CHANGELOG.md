@@ -53,6 +53,10 @@ entry.
 - Changes the default loglevel for registry to info. !1703
 
 
+## 4.6.4 (2021-01-07)
+
+- No changes.
+
 ## 4.6.3 (2020-12-10)
 
 ### Changed (1 change, 1 of them is from the community)
