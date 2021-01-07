@@ -18,6 +18,7 @@ The table below maps some of the key previous chart versions and GitLab versions
 | 4.6.2 | 13.6.2 |
 | 4.6.1 | 13.6.1 |
 | 4.6.0 | 13.6.0 |
+| 4.5.6 | 13.5.6 |
 | 4.5.5 | 13.5.5 |
 | 4.5.4 | 13.5.4 |
 | 4.5.3 | 13.5.3 |
