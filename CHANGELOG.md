@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.7.2 (2021-01-07)
+
+### Fixed (1 change)
+
+- Fix nginx-ingress checkConfig error. !1730
+
+
 ## 4.7.1 (2020-12-23)
 
 ### Changed (1 change)
@@ -45,6 +52,10 @@ entry.
 - Update NGINX from v0.20.0 to 0.41.2. !1690
 - Changes the default loglevel for registry to info. !1703
 
+
+## 4.6.4 (2021-01-07)
+
+- No changes.
 
 ## 4.6.3 (2020-12-10)
 
@@ -95,6 +106,10 @@ entry.
 - Update resource specifications for Webservice and Sidekiq. !1634
 - Set release_package to run manually. !1641
 
+
+## 4.5.6 (2021-01-07)
+
+- No changes.
 
 ## 4.5.5 (2020-12-07)
 
