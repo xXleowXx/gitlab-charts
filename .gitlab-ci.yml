@@ -452,6 +452,27 @@ danger-review:
     - git version
     - danger --fail-on-errors=true
 
+rubocop:
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images:ruby-2.7.2-git-2.29-chrome-85-node-12.18-yarn-1.22-docker-19.03.1
+  stage: prepare
+  dependencies: []
+  before_script: []
+  except:
+    <<: *deps_pipeline
+    refs:
+      - master
+      - tags
+      - triggers
+      - *com_auto_deploy_branch_ref
+  script:
+    - bundle config set path 'gems'
+    - bundle install -j $(nproc)
+    - bundle exec rubocop --parallel
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+    - gems
+
 check_docs_lint:
   image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:ruby-2.7.2-alpine-3.12-vale-2.4.3-markdownlint-0.24.0"
   stage: prepare
@@ -538,7 +559,8 @@ review-docs-cleanup:
     S3_CONFIG_PATH: /etc/gitlab/minio
   script:
     - if [[ -n "${VARIABLES_FILE}" ]]; then source "${VARIABLES_FILE}"; ./scripts/ci/feature_spec_setup; else ./scripts/ci/integration_spec_setup; fi
-    - bundle install -j $(nproc) --without non_test --path gems
+    - bundle config set path 'gems'
+    - bundle install -j $(nproc) --without non_test
     - bundle exec rspec -c -f d spec -t "${RSPEC_TAGS}"
   artifacts:
     when: on_failure
@@ -657,6 +679,12 @@ production_specs_eks:
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "eks-production"
 
+.knapsack-variables:
+  variables:
+    KNAPSACK_REPORT_PATH: "knapsack/master_report.json"
+    KNAPSACK_TEST_FILE_PATTERN: "qa/specs/features/**/*_spec.rb"
+    KNAPSACK_GENERATE_REPORT: "true"
+
 .qa:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
   stage: qa
@@ -675,7 +703,7 @@ production_specs_eks:
     - if [ "$app_version" != "master"  ]; then
     -   qa_version="${app_version}-ee"
     - fi
-    - GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD GITLAB_ADMIN_USERNAME=root GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD EE_LICENSE=$REVIEW_APPS_EE_LICENSE gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL
+    - SIGNUP_DISABLED=true QA_DEBUG=true GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD GITLAB_ADMIN_USERNAME=root GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD EE_LICENSE=$REVIEW_APPS_EE_LICENSE gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL -- --tag smoke --tag reliable
   artifacts:
     when: on_failure
     expire_in: 7d
@@ -712,7 +740,10 @@ release_package:
   when: manual
 
 .qa_branch:
-  extends: .qa
+  extends: 
+    - .qa
+    - .knapsack-variables
+  parallel: 4
   except:
     refs:
       - master
@@ -720,7 +751,10 @@ release_package:
       - *com_auto_deploy_branch_ref
 
 .qa_production:
-  extends: .qa
+  extends: 
+    - .qa
+    - .knapsack-variables
+  parallel: 4
   only:
     refs:
       - master
