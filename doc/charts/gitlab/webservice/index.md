@@ -134,7 +134,7 @@ extraEnv:
   SOME_OTHER_KEY: some_other_value
 ```
 
-When the container is started, you can confirm that the enviornment variables are exposed:
+When the container is started, you can confirm that the environment variables are exposed:
 
 ```shell
 env | grep SOME
