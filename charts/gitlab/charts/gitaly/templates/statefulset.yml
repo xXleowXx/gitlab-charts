@@ -134,11 +134,11 @@ spec:
               {{- end }}
             {{- with .Values.global.gitaly.hooks }}
             {{- if .preReceive }}
-            - name: gitaly-hooks-pre-recieve
+            - name: gitaly-hooks-pre-receive
               mountPath: "/home/git/custom_hooks/pre-receive.d"
             {{- end }}
             {{- if .postReceive }}
-            - name: gitaly-hooks-post-recieve
+            - name: gitaly-hooks-post-receive
               mountPath: "/home/git/custom_hooks/post-receive.d"
             {{- end }}
             {{- if .update }}
@@ -199,13 +199,13 @@ spec:
           {{- end }}
       {{- with .Values.global.gitaly.hooks }}
       {{- if and .preReceive (has .preReceive .configmap) }}
-      - name: gitaly-hooks-preReceive
+      - name: gitaly-hooks-pre-receive
         configMap:
           name: {{ .preReceive.configmap }}
           defaultMode: 0555
       {{- end }}
       {{- if and .postReceive (has .postReceive .configmap) }}
-      - name: gitaly-hooks-postReceive
+      - name: gitaly-hooks-post-receive
         configMap:
           name: {{ .postReceive.configmap }}
           defaultMode: 0555
