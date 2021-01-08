@@ -9,6 +9,8 @@ dependencies:
   version: '*.*.*'
 - name: registry
   version: '*.*.*'
+- name: nginx-ingress
+  version: '*.*.*'
 - name: cert-manager
   version: 0.10.1
   repository: https://charts.jetstack.io/
