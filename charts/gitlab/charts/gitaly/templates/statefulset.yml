@@ -210,7 +210,7 @@ spec:
           name: {{ .postReceive.configmap }}
           defaultMode: 0555
       {{- end }}
-      {{- if and .update (hasKey .update "configmap") }}
+      {{- if and .update (has .update .configmap) }}
       - name: gitaly-hooks-update
         configMap:
           name: {{ .update.configmap }}
