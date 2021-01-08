@@ -376,7 +376,7 @@ review_helm_test:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
   script:
-    - helm test --cleanup "$CI_ENVIRONMENT_SLUG"
+    - helm test "$CI_ENVIRONMENT_SLUG"
   only:
     refs:
       - branches
@@ -396,7 +396,7 @@ production_helm_test:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   script:
-    - helm test --cleanup "$CI_ENVIRONMENT_SLUG"
+    - helm test "$CI_ENVIRONMENT_SLUG"
   <<: *except_deps_update
   only:
     refs:
@@ -740,7 +740,7 @@ release_package:
   when: manual
 
 .qa_branch:
-  extends: 
+  extends:
     - .qa
     - .knapsack-variables
   parallel: 4
@@ -751,7 +751,7 @@ release_package:
       - *com_auto_deploy_branch_ref
 
 .qa_production:
-  extends: 
+  extends:
     - .qa
     - .knapsack-variables
   parallel: 4
