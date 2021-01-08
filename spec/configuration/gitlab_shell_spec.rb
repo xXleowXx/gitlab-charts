@@ -29,8 +29,8 @@ describe 'gitlab-shell configuration' do
         'global' => {
           'common' => {
             'labels' => {
-              'global' => "global",
-              'foo' => "global"
+              'global' => 'global',
+              'foo' => 'global'
             }
           },
           'pod' => {
@@ -67,25 +67,23 @@ describe 'gitlab-shell configuration' do
     it 'Populates the additional labels in the expected manner' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-      expect(t.dig('ConfigMap/test-gitlab-shell', 'metadata', 'labels')).to include("global" => "shell")
-      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).not_to include("global" => "global")
-      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include("global" => "service")
-      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include("service" => true)
-      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include("global_service" => true)
-      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).to include("global" => "pod")
-      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).to include("foo" => "global")
-      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include("global" => "shell")
-      expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include("pod" => true)
-      expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include("global" => "pod")
-      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include(global: "global")
-      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include(global_pod: true)
+      expect(t.dig('ConfigMap/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'shell')
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).to include('foo' => 'global')
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'pod')
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).to include('global_pod' => true)
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include('global' => 'shell')
+      expect(t.dig('Deployment/test-gitlab-shell', 'metadata', 'labels')).not_to include('global' => 'global')
+      expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+      expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
       expect(t.dig('Deployment/test-gitlab-shell', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
-
-      # Quickly test all other objects that we touch
-      expect(t.dig('ServiceAccount/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'shell')
+      expect(t.dig('HorizontalPodAutoscaler/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'shell')
       expect(t.dig('NetworkPolicy/test-gitlab-shell-v1', 'metadata', 'labels')).to include('global' => 'shell')
       expect(t.dig('PodDisruptionBudget/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'shell')
-      expect(t.dig('HorizontalPodAutoscaler/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'shell')
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'service')
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include('global_service' => true)
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).to include('service' => true)
+      expect(t.dig('Service/test-gitlab-shell', 'metadata', 'labels')).not_to include('global' => 'global')
+      expect(t.dig('ServiceAccount/test-gitlab-shell', 'metadata', 'labels')).to include('global' => 'shell')
     end
   end
 end
