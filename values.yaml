@@ -17,6 +17,8 @@
 ## The global properties are used to configure multiple charts at once.
 ## Extended documentation at doc/charts/globals.md
 global:
+  common:
+    labels: {}
   ## GitLab operator is Alpha. Not for production use.
   operator:
     enabled: false
