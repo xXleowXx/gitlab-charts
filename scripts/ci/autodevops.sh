@@ -7,8 +7,6 @@ export DATABASE_URL=${DATABASE_URL-$auto_database_url}
 export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
 export CI_APPLICATION_TAG=$CI_COMMIT_SHA
 export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
-export TILLER_NAMESPACE=$KUBE_NAMESPACE
-export STABLE_REPO_URL=${STABLE_REPO_URL-https://charts.helm.sh/stable}
 
 function previousDeployFailed() {
   set +e
@@ -100,7 +98,7 @@ function deploy() {
   helm repo add jetstack https://charts.jetstack.io
   helm dep update .
 
-  WAIT="--wait --timeout 900"
+  WAIT="--wait --timeout 900s"
 
   # Only enable Prometheus on `master`
   PROMETHEUS_INSTALL="false"
@@ -144,7 +142,7 @@ CIYAML
     --set gitlab.operator.crdPrefix="$CI_ENVIRONMENT_SLUG" \
     --set global.gitlab.license.secret="$CI_ENVIRONMENT_SLUG-gitlab-license" \
     "${enable_kas[@]}" \
-    --namespace="$KUBE_NAMESPACE" \
+    --namespace="$NAMESPACE" \
     --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
     $HELM_EXTRA_ARGS \
     "$name" \
@@ -164,7 +162,7 @@ function check_kas_status() {
     fi
 
     iteration=$((iteration+1))
-    kasState=($(kubectl get pods -n "$KUBE_NAMESPACE" | grep "\-kas" | awk '{print $3}'))
+    kasState=($(kubectl get pods -n "$NAMESPACE" | grep "\-kas" | awk '{print $3}'))
     sleep 5;
   done
 }
@@ -175,7 +173,7 @@ function wait_for_deploy {
   iteration=0
   while [ "$observedRevision" != "$revision" ]; do
     IFS=$','
-    status=($(kubectl get gitlabs.${CI_ENVIRONMENT_SLUG}.gitlab.com "${CI_ENVIRONMENT_SLUG}-operator" -n ${KUBE_NAMESPACE} -o jsonpath='{.status.deployedRevision}{","}{.spec.revision}'))
+    status=($(kubectl get gitlabs.${CI_ENVIRONMENT_SLUG}.gitlab.com "${CI_ENVIRONMENT_SLUG}-operator" -n ${NAMESPACE} -o jsonpath='{.status.deployedRevision}{","}{.spec.revision}'))
     unset IFS
     observedRevision=${status[0]}
     revision=${status[1]}
@@ -201,7 +199,7 @@ function restart_task_runner() {
   # this ensure we run up-to-date on tags like `master` when there
   # have been no changes to the configuration to warrant a restart
   # via metadata checksum annotations
-  kubectl -n ${KUBE_NAMESPACE} delete pods -lapp=task-runner,release=${CI_ENVIRONMENT_SLUG}
+  kubectl -n ${NAMESPACE} delete pods -lapp=task-runner,release=${CI_ENVIRONMENT_SLUG}
   # always "succeed" so not to block.
   return 0
 }
@@ -216,7 +214,6 @@ function download_chart() {
     auto_chart_name="chart"
   fi
 
-  helm init --client-only --stable-repo-url=${STABLE_REPO_URL}
   helm repo add gitlab https://charts.gitlab.io
   helm repo add jetstack https://charts.jetstack.io
   if [[ ! -d "$auto_chart" ]]; then
@@ -231,7 +228,7 @@ function download_chart() {
 }
 
 function ensure_namespace() {
-  kubectl describe namespace "$KUBE_NAMESPACE" || kubectl create namespace "$KUBE_NAMESPACE"
+  kubectl describe namespace "$NAMESPACE" || kubectl create namespace "$NAMESPACE"
 }
 
 function check_kube_domain() {
@@ -262,17 +259,6 @@ function check_domain_ip() {
   fi
 }
 
-function install_tiller() {
-  echo "Checking Tiller..."
-  helm init --upgrade --service-account tiller --history-max=${TILLER_HISTORY_MAX} --stable-repo-url=${STABLE_REPO_URL}
-  kubectl rollout status -n "$TILLER_NAMESPACE" -w "deployment/tiller-deploy"
-  if ! helm version --debug; then
-    echo "Failed to init Tiller."
-    return 1
-  fi
-  echo ""
-}
-
 function install_external_dns() {
   local provider="${1}"
   local domain_filter="${2}"
@@ -280,12 +266,12 @@ function install_external_dns() {
 
   echo "Checking External DNS..."
   release_name="gitlab-external-dns"
-  if ! helm status --tiller-namespace "${TILLER_NAMESPACE}" "${release_name}" > /dev/null 2>&1 ; then
+  if ! helm status --namespace "${NAMESPACE}"  "${release_name}" > /dev/null 2>&1 ; then
     case "${provider}" in
       google)
         # We need to store the credentials in a secret
         kubectl create secret generic "${release_name}-secret" --from-literal="credentials.json=${GOOGLE_CLOUD_KEYFILE_JSON}"
-        helm_args=" --set google.project='${GOOGLE_PROJECT_ID}' --set google.serviceAccountSecret='${release_name}-secret'"
+        helm_args=" --set google.project=${GOOGLE_PROJECT_ID} --set google.serviceAccountSecret=${release_name}-secret"
         ;;
       aws)
         echo "Installing external-dns, ensure the NodeGroup has the permissions specified in"
@@ -295,12 +281,11 @@ function install_external_dns() {
 
     helm repo add bitnami https://charts.bitnami.com/bitnami
 
-    helm install bitnami/external-dns \
-      -n "${release_name}" \
-      --namespace "${TILLER_NAMESPACE}" \
+    helm install "${release_name}" bitnami/external-dns \
+      --namespace "${NAMESPACE}" \
       --set provider="${provider}" \
       --set domainFilters[0]="${domain_filter}" \
-      --set txtOwnerId="${TILLER_NAMESPACE}" \
+      --set txtOwnerId="${NAMESPACE}" \
       --set rbac.create="true" \
       --set policy='sync' \
       ${helm_args}
@@ -308,13 +293,13 @@ function install_external_dns() {
 }
 
 function create_secret() {
-  kubectl create secret -n "$KUBE_NAMESPACE" \
+  kubectl create secret -n "$NAMESPACE" \
     docker-registry gitlab-registry-docker \
     --docker-server="$CI_REGISTRY" \
     --docker-username="$CI_REGISTRY_USER" \
     --docker-password="$CI_REGISTRY_PASSWORD" \
     --docker-email="$GITLAB_USER_EMAIL" \
-    -o yaml --dry-run | kubectl replace -n "$KUBE_NAMESPACE" --force -f -
+    -o yaml --dry-run | kubectl replace -n "$NAMESPACE" --force -f -
 }
 
 function delete() {
@@ -324,7 +309,7 @@ function delete() {
   if [[ "$track" != "stable" ]]; then
     name="$name-$track"
   fi
-  helm delete --purge "$name" || true
+  helm uninstall "$name" || true
 }
 
 function cleanup() {
@@ -333,9 +318,9 @@ function cleanup() {
     gitlabs=',gitlabs'
   fi
 
-  kubectl -n "$KUBE_NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,job,pod,secret,configmap,pvc,secret,clusterrole,clusterrolebinding,role,rolebinding,sa,crd${gitlabs} 2>&1 \
+  kubectl -n "$NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,job,pod,secret,configmap,pvc,secret,clusterrole,clusterrolebinding,role,rolebinding,sa,crd${gitlabs} 2>&1 \
     | grep "$CI_ENVIRONMENT_SLUG" \
     | awk '{print $1}' \
-    | xargs kubectl -n "$KUBE_NAMESPACE" delete \
+    | xargs kubectl -n "$NAMESPACE" delete \
     || true
 }
