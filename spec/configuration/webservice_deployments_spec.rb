@@ -84,7 +84,6 @@ describe 'Webservice Deployments configuration' do
       it 'Populates the additional labels in the expected manner' do
         t = HelmTemplate.new(default_values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-        binding.pry
         expect(t.dig('ConfigMap/test-webservice', 'metadata', 'labels')).to include('global' => 'webservice')
         expect(t.dig('Deployment/test-webservice-default', 'metadata', 'labels')).to include('global' => 'pod')
         expect(t.dig('Deployment/test-webservice-default', 'metadata', 'labels')).to include('global_pod' => true)
