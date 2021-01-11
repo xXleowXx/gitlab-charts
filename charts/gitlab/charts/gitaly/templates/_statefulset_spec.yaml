@@ -215,14 +215,14 @@ spec:
                   path: "gitaly.key"
           {{- end }}
       {{- with .Values.global.gitaly.hooks }}
-      {{- if and .preReceive (has .preReceive .configmap) }}
-      - name: gitaly-hooks-preReceive
+      {{- if and .preReceive (hasKey .preReceive "configmap") }}
+      - name: gitaly-hooks-pre-receive
         configMap:
           name: {{ .preReceive.configmap }}
           defaultMode: 0555
       {{- end }}
-      {{- if and .postReceive (has .postReceive .configmap) }}
-      - name: gitaly-hooks-postReceive
+      {{- if and .postReceive (hasKey .postReceive "configmap") }}
+      - name: gitaly-hooks-post-receive
         configMap:
           name: {{ .postReceive.configmap }}
           defaultMode: 0555
