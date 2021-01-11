@@ -332,7 +332,8 @@ describe 'GitLab Pages' do
             insecure-ciphers=false
             artifacts-server=http://test-webservice-default.default.svc:8181/api/v4
             artifacts-server-timeout=10
-            gitlab-server=http://test-webservice-default.default.svc:8181
+            gitlab-server=https://gitlab.example.com
+            internal-gitlab-server=http://test-webservice-default.default.svc:8181
             api-secret-key=/etc/gitlab-secrets/pages/secret
             domain-config-source=gitlab
             metrics-address=:9235
@@ -397,13 +398,13 @@ describe 'GitLab Pages' do
             artifacts-server=https://randomwebsite.com
             artifacts-server-timeout=50
             gitlab-server=https://randomgitlabserver.com
+            internal-gitlab-server=https://int.randomgitlabserver.com
             api-secret-key=/etc/gitlab-secrets/pages/secret
             domain-config-source=disk
             metrics-address=:9999
             max-conns=45
             gitlab-client-http-timeout=25
             gitlab-client-jwt-expiry=35
-            internal-gitlab-server=https://int.randomgitlabserver.com
             sentry-dsn=foobar
             sentry-environment=qwerty
             tls-min-version=tls1.0

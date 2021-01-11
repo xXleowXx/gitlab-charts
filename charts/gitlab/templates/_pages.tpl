@@ -64,19 +64,32 @@ otherwise it will fallback to the API v4 endpoint of GitLab domain.
 {{- if .Values.artifactsServerUrl -}}
 {{ .Values.artifactsServerUrl }}
 {{- else -}}
-{{ template "gitlab.pages.gitlabServer" . }}/api/v4
+{{ template "gitlab.pages.internalGitlabServer" . }}/api/v4
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the GitLab server URL Pages should contact.
 If the chart Pages GitLab server URL is provided, it will use that,
-otherwise it will fallback to the Service of the GitLab Workhorse deployed in the
-cluster.
+otherwise it will fallback to the public GitLab URL of GitLab.
 */}}
 {{- define "gitlab.pages.gitlabServer" -}}
 {{- if .Values.gitlabServer -}}
 {{ .Values.gitlabServer }}
+{{- else -}}
+{{- template "gitlab.gitlab.url" . }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Internal GitLab server URL Pages should contact.
+If the chart Pages GitLab server URL is provided, it will use that,
+otherwise it will fallback to the Service of the GitLab Workhorse deployed in the
+cluster.
+*/}}
+{{- define "gitlab.pages.internalGitlabServer" -}}
+{{- if .Values.internalGitlabServer -}}
+{{ .Values.internalGitlabServer }}
 {{- else -}}
 http://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}
 {{- end -}}

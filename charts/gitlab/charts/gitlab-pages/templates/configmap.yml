@@ -31,6 +31,7 @@ data:
     artifacts-server={{ template "gitlab.pages.artifactsServer" . }}
     artifacts-server-timeout={{ default 10 .Values.artifactsServerTimeout }}
     gitlab-server={{ template "gitlab.pages.gitlabServer" . }}
+    internal-gitlab-server={{ template "gitlab.pages.internalGitlabServer" . }}
     api-secret-key=/etc/gitlab-secrets/pages/secret
     domain-config-source={{ default "gitlab" .Values.domainConfigSource }}
     {{- if and .Values.metrics.enabled .Values.metrics.port }}
@@ -44,9 +45,6 @@ data:
     {{- end }}
     {{- if .Values.gitlabClientJwtExpiry }}
     gitlab-client-jwt-expiry={{ .Values.gitlabClientJwtExpiry }}
-    {{- end }}
-    {{- if .Values.internalGitlabServer }}
-    internal-gitlab-server={{ .Values.internalGitlabServer }}
     {{- end }}
     {{- if .Values.sentry.enabled }}
     {{-   if .Values.sentry.dsn }}
