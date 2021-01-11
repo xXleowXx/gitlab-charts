@@ -1,0 +1,5 @@
+---
+title: Update gitlab-container-registry to v2.13.0-gitlab
+merge_request: 1723
+author:
+type: changed
