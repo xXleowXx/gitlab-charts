@@ -495,7 +495,7 @@ webservice:
 {{-     if (and (eq $serviceType "LoadBalancer") (empty ($loadBalancerSourceRanges))) }}
 webservice:
     It is not currently recommended to set a service type of `{{ $serviceType }}` on a public exposed network without restrictions, please add `service.loadBalancerSourceRanges` to limit access to the service of the `{{ $name }}` deployment.
-{{      end -}}
+{{-      end -}}
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.webservice.loadBalancer */}}
