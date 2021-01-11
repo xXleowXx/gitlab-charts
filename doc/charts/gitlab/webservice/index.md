@@ -302,7 +302,7 @@ webservice:
 The `path` property is directly populated into the Ingress's `path` property, and allows one to control URI paths which are directed to each service. In the example above,
 `default` acts as the catch-all path, and `api` recevied all traffic under `/api`
 
-You can disable a given Deployment from having an associated Ingress resource created by setting `path` to empty. See below, where `internal-api` will never recieve external traffic.
+You can disable a given Deployment from having an associated Ingress resource created by setting `path` to empty. See below, where `internal-api` will never receive external traffic.
 
 ```yaml
 webservice:
