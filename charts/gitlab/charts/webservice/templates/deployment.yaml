@@ -16,6 +16,7 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "gitlab.commonLabels" $ | nindent 4 }}
+    {{- include "gitlab.podLabels" $ | nindent 4 }}
     {{- include "webservice.labels" . | nindent 4}}
     {{- if .deployment.labels -}}
     {{-   toYaml .deployment.labels | nindent 4 }}
