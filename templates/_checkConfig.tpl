@@ -491,7 +491,7 @@ webservice:
 {{-   end -}}
 {{-   range $name, $deployment := .Values.gitlab.webservice.deployments -}}
 {{-   $serviceType := $deployment.service.type -}}
-{{-   $loadBalancerSourceRanges := $deployment.service.loadBalancerSourceRanges }}
+{{-   $loadBalancerSourceRanges := $deployment.service.loadBalancerSourceRanges -}}
 {{-     if (and (eq $serviceType "LoadBalancer") (empty ($loadBalancerSourceRanges))) }}
 webservice:
     It is not currently recommended to set a service type of `{{ $serviceType }}` on a public exposed network without restrictions, please add `service.loadBalancerSourceRanges` to limit access to the service of the `{{ $name }}` deployment.
