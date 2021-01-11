@@ -301,67 +301,80 @@ describe 'Sidekiq configuration' do
   end
 
   context 'When customer provides additional labels' do
+    let(:labels) do
+      {
+        'global' => {
+          'common' => {
+            'labels' => {
+              'global' => 'global',
+              'foo' => 'global'
+            }
+          },
+          'pod' => {
+            'labels' => {
+              'global_pod' => true
+            }
+          }
+        },
+        'gitlab' => {
+          'sidekiq' => {
+            'common' => {
+              'labels' => {
+                'global' => 'sidekiq',
+                'sidekiq' => 'sidekiq'
+              }
+            },
+            'networkpolicy' => {
+              'enabled' => true
+            },
+            'podLabels' => {
+              'pod' => true,
+              'global' => 'pod'
+            },
+            'serviceAccount' => {
+              'create' => true,
+              'enabled' => true
+            }
+          }
+        }
+      }
+    end
+
     context 'using the all-in-one' do
       let(:default_values) do
         {
           'certmanager-issuer' => { 'email' => 'test@example.com' },
-        }
-      end
-
-      let(:values) do
-        {
           'global' => {
-            'common' => {
-              'labels' => {
-                'common' => 'global'
-              }
-            },
-            'pod' => {
-              'labels' => {
-                'global_pod' => true
-              }
-            }
-          },
-          'gitlab' => {
-            'sidekiq' => {
-              'common' => {
-                'labels' => {
-                  'common' => 'sidekiq'
-                }
-              },
-              'podLabels' => {
-                'pod' => true,
-                'global' => 'pod'
-              },
-              'networkpolicy' => {
-                'enabled' => true
-              },
-              'serviceAccount' => {
-                'create' => true,
-                'enabled' => true
+            'operator' => {
+              'enabled' => true,
+              'rollout' => {
+                'autoPause' => true
               }
             }
           }
-        }.deep_merge(default_values)
+        }.deep_merge(labels)
       end
-      it 'Populates the additional labels in the expected manner' do
-        t = HelmTemplate.new(values)
-        expect(t.exit_code).to eq(0)
-        expect(t.dig('ConfigMap/test-sidekiq', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('ConfigMap/test-sidekiq-all-in-1', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).not_to include('common' => 'global')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).not_to include(common: 'global')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).not_to include(global_pod: true)
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
 
-        # Quickly test all other objects that we touch
-        expect(t.dig('ServiceAccount/test-sidekiq', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('NetworkPolicy/test-sidekiq-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('PodDisruptionBudget/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+      it 'Populates the additional labels in the expected manner' do
+        t = HelmTemplate.new(default_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+        expect(t.dig('ConfigMap/test-sidekiq', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('ConfigMap/test-sidekiq-all-in-1', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('global_pod' => true)
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).not_to include('global' => 'global')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).not_to include('global' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('NetworkPolicy/test-sidekiq-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('PodDisruptionBudget/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('ServiceAccount/test-sidekiq', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('ServiceAccount/test-sidekiq-pause', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('Role/test-sidekiq-pause', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('RoleBinding/test-sidekiq-pause', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('Job/test-sidekiq-pause', 'metadata', 'labels')).to include('global' => 'sidekiq')
       end
     end
 
@@ -369,6 +382,14 @@ describe 'Sidekiq configuration' do
       let(:default_values) do
         {
           'certmanager-issuer' => { 'email' => 'test@example.com' },
+          'global' => {
+            'operator' => {
+              'enabled' => true,
+              'rollout' => {
+                'autoPause' => true
+              }
+            }
+          },
           'gitlab' => {
             'sidekiq' => {
               'pods' => [
@@ -377,63 +398,31 @@ describe 'Sidekiq configuration' do
               ]
             }
           }
-        }
+        }.deep_merge(labels)
       end
 
-      let(:values) do
-        {
-          'global' => {
-            'common' => {
-              'labels' => {
-                'common' => 'global'
-              }
-            },
-            'pod' => {
-              'labels' => {
-                'global_pod' => true
-              }
-            }
-          },
-          'gitlab' => {
-            'sidekiq' => {
-              'common' => {
-                'labels' => {
-                  'common' => 'sidekiq'
-                }
-              },
-              'podLabels' => {
-                'pod' => true,
-                'global' => 'pod'
-              },
-              'networkpolicy' => {
-                'enabled' => true
-              },
-              'serviceAccount' => {
-                'create' => true,
-                'enabled' => true
-              }
-            }
-          }
-        }.deep_merge(default_values)
-      end
       it 'Populates the additional labels in the expected manner' do
-        t = HelmTemplate.new(values)
-        expect(t.exit_code).to eq(0)
-        expect(t.dig('ConfigMap/test-sidekiq', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('ConfigMap/test-sidekiq-pod-1', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).not_to include('common' => 'global')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+        t = HelmTemplate.new(default_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+        expect(t.dig('ConfigMap/test-sidekiq', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('ConfigMap/test-sidekiq-pod-1', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global_pod' => true)
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('foo' => 'global')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('sidekiq' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).not_to include('global' => 'global')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).not_to include('global' => 'sideiq')
         expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).not_to include(common: 'global')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).not_to include(global_pod: true)
         expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
-
-        # Quickly test all other objects that we touch
-        expect(t.dig('ServiceAccount/test-sidekiq', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('NetworkPolicy/test-sidekiq-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('PodDisruptionBudget/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
-        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('common' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('NetworkPolicy/test-sidekiq-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('PodDisruptionBudget/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('ServiceAccount/test-sidekiq', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('ServiceAccount/test-sidekiq-pause', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('Role/test-sidekiq-pause', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('RoleBinding/test-sidekiq-pause', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('Job/test-sidekiq-pause', 'metadata', 'labels')).to include('global' => 'sidekiq')
       end
     end
   end

@@ -17,15 +17,3 @@ values.
   value: {{ $value | quote }}
 {{- end -}}
 {{- end -}}
-
-{{- define "sidekiq.labels" -}}
-{{- range $key, $value := (merge .Values.common.labels .Values.global.common.labels) }}
-{{ $key }}: {{ $value }}
-{{- end -}}
-{{- end -}}
-
-{{- define "sidekiq.podLabels" -}}
-{{- range $key, $value := (merge .Values.podLabels .Values.common.labels .Values.global.pod.labels .Values.global.common.labels) }}
-{{ $key }}: {{ $value }}
-{{- end -}}
-{{- end -}}
