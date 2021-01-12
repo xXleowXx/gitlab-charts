@@ -1,3 +1,5 @@
+{{- $externalAddresses := concat $.Values.global.pages.externalHttp $.Values.global.pages.externalHttps | uniq }}
+{{- if empty ($externalAddresses) -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -10,7 +12,6 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-
     - port: {{ .Values.service.externalPort | int }}
       targetPort: {{ .Values.service.internalPort | int }}
       protocol: TCP
@@ -18,3 +19,4 @@ spec:
   selector:
     app: {{ template "name" . }}
     release: {{ .Release.Name }}
+{{- end }}
