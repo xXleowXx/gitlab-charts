@@ -13,8 +13,8 @@ pages:
   port: {{ default ( eq "true" (include "gitlab.pages.https" $) | ternary 443 80 ) $.Values.global.pages.port | int }}
   https: {{ eq "true" (include "gitlab.pages.https" $) }}
   secret_file: /etc/gitlab/pages/secret
-  external_http: {{ eq $.Values.global.pages.externalHttp true }}
-  external_https: {{ eq $.Values.global.pages.externalHttps true }}
+  external_http: {{ not (empty $.Values.global.pages.externalHttp) }}
+  external_https: {{ not (empty $.Values.global.pages.externalHttps) }}
   {{- if not $.Values.global.appConfig.object_store.enabled }}
   {{-   include "gitlab.appConfig.objectStorage.configuration" (dict "name" "pages" "config" $.Values.global.pages.objectStore "context" $ ) | nindent 2 }}
   {{- end }}
@@ -64,19 +64,32 @@ otherwise it will fallback to the API v4 endpoint of GitLab domain.
 {{- if .Values.artifactsServerUrl -}}
 {{ .Values.artifactsServerUrl }}
 {{- else -}}
-{{ template "gitlab.pages.gitlabServer" . }}/api/v4
+{{ template "gitlab.pages.internalGitlabServer" . }}/api/v4
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the GitLab server URL Pages should contact.
 If the chart Pages GitLab server URL is provided, it will use that,
-otherwise it will fallback to the Service of the GitLab Workhorse deployed in the
-cluster.
+otherwise it will fallback to the public GitLab URL of GitLab.
 */}}
 {{- define "gitlab.pages.gitlabServer" -}}
 {{- if .Values.gitlabServer -}}
 {{ .Values.gitlabServer }}
+{{- else -}}
+{{- template "gitlab.gitlab.url" . }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Internal GitLab server URL Pages should contact.
+If the chart Pages GitLab server URL is provided, it will use that,
+otherwise it will fallback to the Service of the GitLab Workhorse deployed in the
+cluster.
+*/}}
+{{- define "gitlab.pages.internalGitlabServer" -}}
+{{- if .Values.internalGitlabServer -}}
+{{ .Values.internalGitlabServer }}
 {{- else -}}
 http://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}
 {{- end -}}
