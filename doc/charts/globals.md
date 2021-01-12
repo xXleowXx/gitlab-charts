@@ -309,6 +309,7 @@ global:
       enabled: true
       secret: gitlab-redis
       key: redis-password
+    scheme:
 ```
 
 | Name               | Type    | Default | Description |
@@ -319,6 +320,7 @@ global:
 | `password.enabled` | Bool    | true    | The `password.enabled` provides a toggle for using a password with the Redis instance. |
 | `password.key`     | String  |         | The `password.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
 | `password.secret`  | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
+| `scheme`           | String  | `redis` | The URI scheme to be used to generate Redis URLs. Valid values are `redis`, `rediss`, and `tcp`. If using `rediss` (SSL encrypted connection) scheme, the certificate used by the server should be a part of the system's trusted chains. This can be done by addinng them to the [custom certificate authorities](#custom-certificate-authorities) list. |
 
 ### Redis Sentinel support
 
