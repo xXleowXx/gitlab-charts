@@ -1,0 +1,6 @@
+---
+title: Fix hook volume in gitaly
+merge_request: 1752
+author: David ALEXANDRE
+type: fixed
+
