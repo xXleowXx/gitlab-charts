@@ -47,6 +47,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -84,7 +85,7 @@ gitaly: server enabled with TLS, no TLS certificate provided
 {{/* END gitlab.checkConfig.gitaly.tls */}}
 
 {{/*
-Ensure a certificate is provided when Praefect is enabled and is instructed to listen over TLS 
+Ensure a certificate is provided when Praefect is enabled and is instructed to listen over TLS
 */}}
 {{- define "gitlab.checkConfig.praefect.tls" -}}
 {{- if and (and $.Values.global.praefect.enabled $.Values.global.praefect.tls.enabled) (not $.Values.global.praefect.tls.secretName) }}
@@ -446,3 +447,25 @@ When type-specific object storage is enabled the `connection` property can not b
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.objectStorage.typeSpecificConfig */}}
+
+{{/*
+Ensure that when type is set to LoadBalancer that loadBalancerSourceRanges are set
+*/}}
+{{- define "gitlab.checkConfig.webservice.loadBalancer" -}}
+{{-   $serviceType := .Values.gitlab.webservice.service.type -}}
+{{-   $numDeployments := len .Values.gitlab.webservice.deployments -}}
+{{-   if (and (eq $serviceType "LoadBalancer") (gt $numDeployments 1)) }}
+webservice:
+    It is not currently recommended to set a service type of `LoadBalancer` with multiple deployments defined.
+    Instead, use a global `service.type` of `ClusterIP` and override `service.type` in each deployment.
+{{-   end -}}
+{{-   range $name, $deployment := .Values.gitlab.webservice.deployments -}}
+{{-   $serviceType := $deployment.service.type -}}
+{{-   $loadBalancerSourceRanges := $deployment.service.loadBalancerSourceRanges -}}
+{{-     if (and (eq $serviceType "LoadBalancer") (empty ($loadBalancerSourceRanges))) }}
+webservice:
+    It is not currently recommended to set a service type of `{{ $serviceType }}` on a public exposed network without restrictions, please add `service.loadBalancerSourceRanges` to limit access to the service of the `{{ $name }}` deployment.
+{{-      end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.webservice.loadBalancer */}}
