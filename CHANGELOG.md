@@ -220,6 +220,7 @@ entry.
 ### Fixed (1 change)
 
 - Moves GITLAB_WORKHORSE_SENTRY_DSN to the workhorse container. !1543
+- Fix dependency proxy object storage config. !1531 (Maikel Vlasman)
 
 ### Changed (7 changes, 1 of them is from the community)
 
@@ -349,6 +350,7 @@ entry.
 - Support consolidated object storage configuration. !1479
 - Adds NetworkPolicy object for the Webservice. !1491
 - Workhorse: support configuring logFormat, default JSON. !1497
+- Support custom labels for Pods of GitLab components !1457 (Maxence Laude)
 
 ### Other (1 change)
 
@@ -848,6 +850,7 @@ entry.
 - Add option for using Sidekiq Cluster to start Sidekiq. !1247
 - Add optional `priorityClassName` configuration value to Gitaly chart. !1282 (Theo Meneau)
 - Support configuration of multiple Redis instances. !1287
+- Minio: Adds podLabels and podAnnotations to chart. !1264 (Kavanaugh Latiolais)
 
 ### Other (1 change)
 
