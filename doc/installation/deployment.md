@@ -32,10 +32,25 @@ objects. You'll need to specify a domain which will contain records to resolve
 --set global.hosts.domain=example.com
 ```
 
+NOTE:
+If you enable custom domain support for GitLab Pages, `*.<pages domain>`
+sub-domains (by default, `<pages domain>` will be `pages.<global.hosts.domain>`)
+should be resolving to any of the external IP that is dedicated to Pages (set
+via `global.pages.externalHttp` or `global.pages.externalHttps`). This way,
+users who want to use custom domains for their GitLab Pages can add a CNAME
+record pointing their custom domain to corresponding `<namespace>.<pages domain>`
+domain.
+
 #### Dynamic IPs with external-dns
 
 If you plan to use an automatic DNS registration service like [external-dns](https://github.com/kubernetes-sigs/external-dns),
 you won't need any additional configuration for GitLab, but you will need to deploy it to your cluster. If external-dns is your choice, the project page [has a comprehensive guide](https://github.com/kubernetes-sigs/external-dns#deploying-to-a-cluster) for each supported provider.
+
+NOTE:
+If you enable custom domain support for GitLab Pages, external-dns will no
+longer work for the Pages domain (`pages.<global.hosts.domain>` by default), and
+you will have to manually configure DNS entry to point the domain to the
+external IP dedicated to Pages.
 
 If you provisioned a GKE cluster using the scripts in this repo, [external-dns](https://github.com/kubernetes-sigs/external-dns)
 is already installed in your cluster.

@@ -33,29 +33,32 @@ configurations that can be supplied to the `helm install` command using the
 
 ### General settings
 
-| Parameter                        | Default               | Description                                    |
-| -------------------------------- | --------------------- | ---------------------------------------------- |
-| `annotations`                    |                       | Pod annotations                                |
-| `extraEnv`                       |                       | List of extra environment variables to expose  |
-| `image.pullPolicy`               | `IfNotPresent`        | GitLab image pull policy                       |
-| `image.pullSecrets`              |                       | Secrets for the image repository               |
-| `image.repository`               | `registry.gitlab.com/gitlab-org/build/cng/gitlab-exporter` | GitLab Exporter image repository |
-| `image.tag`                      |                       | image tag                                      |
-| `init.image.repository`          |                       | initContainer image                            |
-| `init.image.tag`                 |                       | initContainer image tag                        |
-| `metrics.enabled`                | `true`                | Toggle Prometheus metrics exporter             |
-| `metrics.port`                   | `9235`                | Listen port for the Prometheus metrics exporter |
-| `podLabels`                      |                       | Supplemental Pod labels. Will not be used for selectors. |
-| `resources.requests.cpu`         | `75m`                 | GitLab Pages minimum cpu                       |
-| `resources.requests.memory`      | `100M`                | GitLab Pages minimum memory                    |
-| `securityContext.fsGroup`        | `1000`                | Group ID under which the pod should be started |
-| `securityContext.runAsUser`      | `1000`                | User ID under which the pod should be started  |
-| `service.externalPort`           | `8090`                | GitLab Pages exposed port                      |
-| `service.internalPort`           | `8090`                | GitLab Pages internal port                     |
-| `service.name`                   | `gitlab-pages`        | GitLab Pages service name                      |
-| `service.type`                   | `ClusterIP`           | GitLab Pages service type                      |
-| `serviceLabels`                  | `{}`                  | Supplemental service labels                    |
-| `tolerations`                    | `[]`                  | Toleration labels for pod assignment           |
+| Parameter                                 | Default           | Description                                              |
+| ----------------------------------------- | ----------------- | -------------------------------------------------------- |
+| `annotations`                             |                   | Pod annotations                                          |
+| `extraEnv`                                |                   | List of extra environment variables to expose            |
+| `image.pullPolicy`                        | `IfNotPresent`    | GitLab image pull policy                                 |
+| `image.pullSecrets`                       |                   | Secrets for the image repository                         |
+| `image.repository`                        | `registry.gitlab.com/gitlab-org/build/cng/gitlab-exporter` | GitLab Exporter image repository |
+| `image.tag`                               |                   | image tag                                                |
+| `init.image.repository`                   |                   | initContainer image                                      |
+| `init.image.tag`                          |                   | initContainer image tag                                  |
+| `metrics.enabled`                         | `true`            | Toggle Prometheus metrics exporter                       |
+| `metrics.port`                            | `9235`            | Listen port for the Prometheus metrics exporter          |
+| `podLabels`                               |                   | Supplemental Pod labels. Will not be used for selectors. |
+| `resources.requests.cpu`                  | `75m`             | GitLab Pages minimum cpu                                 |
+| `resources.requests.memory`               | `100M`            | GitLab Pages minimum memory                              |
+| `securityContext.fsGroup`                 | `1000`            | Group ID under which the pod should be started           |
+| `securityContext.runAsUser`               | `1000`            | User ID under which the pod should be started            |
+| `service.externalPort`                    | `8090`            | GitLab Pages exposed port                                |
+| `service.internalPort`                    | `8090`            | GitLab Pages internal port                               |
+| `service.name`                            | `gitlab-pages`    | GitLab Pages service name                                |
+| `service.customDomains.type`              | `LoadBalancer`    | Type of service created for handling custom domains      |
+| `service.customDomains.internalHTTPSPort` | `8091`            | Port where Pages daemon listsns for HTTPS requests       |
+| `service.customDomains.nodePort.http`     |                   | Node Port to be opened for HTTP connections. Valid only if `service.customDomains.type` is `NodePort` |
+| `service.customDomains.nodePort.https`    |                   | Node Port to be opened for HTTPS connections. Valid only if `service.customDomains.type` is `NodePort` |
+| `serviceLabels`                           | `{}`              | Supplemental service labels                              |
+| `tolerations`                             | `[]`              | Toleration labels for pod assignment                     |
 
 ### Pages specific settings
 
