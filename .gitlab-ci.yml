@@ -184,23 +184,22 @@ review_gke:
     auto_stop_in: 4 days
   resource_group: "gke-review-app-${CI_COMMIT_REF_NAME}"
 
-# Bring back when https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2457 is fixed
-# review_gke_dev:
-#   variables:
-#     DNS_PROVIDER: "google"
-#     HELM_EXTRA_ARGS: "-f scripts/ci/values-dev-images.yaml"
-#   extends: .review_template
-#   environment:
-#     name: dev_gke_review/$CI_COMMIT_REF_NAME
-#     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
-#     on_stop: stop_review_gke_dev
-#     auto_stop_in: 4 days
-#   resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
-#   only:
-#     refs:
-#       - /.*-stable/@gitlab/charts/gitlab
-#     variables:
-#       - $KUBECONFIG
+review_gke_dev:
+  variables:
+    DNS_PROVIDER: "google"
+    HELM_EXTRA_ARGS: "-f scripts/ci/values-dev-images.yaml"
+  extends: .review_template
+  environment:
+    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke_dev
+    auto_stop_in: 4 days
+  resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
+  only:
+    refs:
+      - /.*-stable/@gitlab/charts/gitlab
+    variables:
+      - $KUBECONFIG
 
 review_eks:
   variables:
@@ -244,17 +243,16 @@ stop_review_gke:
     name: gke_review/$CI_COMMIT_REF_NAME
     action: stop
 
-# Bring back when https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2457 is fixed
-# stop_review_gke_dev:
-#   extends: .stop_review_template
-#   environment:
-#     name: dev_gke_review/$CI_COMMIT_REF_NAME
-#     action: stop
-#   only:
-#     refs:
-#       - /.*-stable/@gitlab/charts/gitlab
-#     variables:
-#       - $KUBECONFIG
+stop_review_gke_dev:
+  extends: .stop_review_template
+  environment:
+    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    action: stop
+  only:
+    refs:
+      - /.*-stable/@gitlab/charts/gitlab
+    variables:
+      - $KUBECONFIG
 
 stop_review_eks:
   extends: .stop_review_template
@@ -721,6 +719,24 @@ production_specs_eks:
       - $KUBECONFIG
   retry: 1
   allow_failure: true
+
+wait_for_dev_images:
+  # Remove after https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2370 is complete
+  timeout: 2h
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
+  stage: prepare
+  services:
+  - docker:dind
+  before_script: []
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2375
+    CNG_REGISTRY: dev.gitlab.org:5005/gitlab/charts/components/images
+  script:
+    - bash scripts/wait_for_images.sh
+  only:
+    refs:
+      - /.*-stable/@gitlab/charts/gitlab
 
 release_package:
   stage: package
