@@ -20,7 +20,6 @@ spec:
   {{- if $.Values.global.operator.enabled }}
   updateStrategy:
     rollingUpdate:
-      # TODO: check this, was this the same as spec.replicas before?
       partition: {{ default (include "gitlab.gitaly.replicas" $) .gitalyReplicas }}
   {{- end }}
   template:
