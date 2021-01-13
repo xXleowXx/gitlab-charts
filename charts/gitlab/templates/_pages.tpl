@@ -6,7 +6,7 @@ Returns the pages entry for gitlab.yml of Rails-based containers.
 {{- define "gitlab.pages.config" -}}
 pages:
   enabled: {{ or (eq $.Values.global.pages.enabled true) (not (empty $.Values.global.pages.host)) }}
-  access_control: {{ eq $.Values.global.pages.accessControl true }}
+  access_control: {{ eq $.Values.global.pages.accessControl.enabled true }}
   artifacts_server: {{ eq $.Values.global.pages.artifactsServer true }}
   path: {{ default "/srv/gitlab/shared/pages" $.Values.global.pages.path }}
   host: {{ template "gitlab.pages.hostname" $ }}

@@ -490,7 +490,8 @@ global:
 
   pages:
     enabled: false
-    accessControl: false
+    accessControl:
+      enabled: false
     path:
     host:
     port:
