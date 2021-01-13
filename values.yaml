@@ -490,7 +490,16 @@ global:
 
   pages:
     enabled: false
-    accessControl: false
+    accessControl:
+      enabled: false
+      gitlabAuth: {}
+        # secret
+        # appIdKey
+        # appSecretKey
+        # redirectUri
+      authSecret: {}
+        # secret:
+        # key
     path:
     host:
     port:

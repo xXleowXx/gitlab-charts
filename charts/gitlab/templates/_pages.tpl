@@ -6,7 +6,7 @@ Returns the pages entry for gitlab.yml of Rails-based containers.
 {{- define "gitlab.pages.config" -}}
 pages:
   enabled: {{ or (eq $.Values.global.pages.enabled true) (not (empty $.Values.global.pages.host)) }}
-  access_control: {{ eq $.Values.global.pages.accessControl true }}
+  access_control: {{ eq $.Values.global.pages.accessControl.enabled true }}
   artifacts_server: {{ eq $.Values.global.pages.artifactsServer true }}
   path: {{ default "/srv/gitlab/shared/pages" $.Values.global.pages.path }}
   host: {{ template "gitlab.pages.hostname" $ }}
@@ -108,5 +108,17 @@ gitlab.com/prometheus_path: "/metrics"
 prometheus.io/scrape: "true"
 prometheus.io/port: {{ .Values.metrics.port | quote }}
 prometheus.io/path: "/metrics"
+{{- end -}}
+{{- end -}}
+
+{{- define "gitlab.pages.authRedirectUri" -}}
+{{- if $.Values.global.pages.accessControl.gitlabAuth.redirectUri -}}
+{{   $.Values.global.pages.accessControl.gitabAuth.redirectUri }}
+{{- else -}}
+{{-   if eq "true" (include "gitlab.pages.https" $) -}}
+https://projects.{{ template "gitlab.pages.hostname" . }}/auth
+{{-   else -}}
+http://projects.{{ template "gitlab.pages.hostname" . }}/auth
+{{-   end -}}
 {{- end -}}
 {{- end -}}
