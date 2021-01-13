@@ -441,6 +441,7 @@ danger-review:
   only:
     variables:
       - $DANGER_GITLAB_API_TOKEN
+      - $CI_MERGE_REQUEST_IID
   except:
     <<: *deps_pipeline
     refs:
