@@ -452,20 +452,22 @@ When type-specific object storage is enabled the `connection` property can not b
 Ensure that when type is set to LoadBalancer that loadBalancerSourceRanges are set
 */}}
 {{- define "gitlab.checkConfig.webservice.loadBalancer" -}}
-{{-   $serviceType := .Values.gitlab.webservice.service.type -}}
-{{-   $numDeployments := len .Values.gitlab.webservice.deployments -}}
-{{-   if (and (eq $serviceType "LoadBalancer") (gt $numDeployments 1)) }}
+{{-   if .Values.gitlab.webservice.enabled -}}
+{{-     $serviceType := .Values.gitlab.webservice.service.type -}}
+{{-     $numDeployments := len .Values.gitlab.webservice.deployments -}}
+{{-     if (and (eq $serviceType "LoadBalancer") (gt $numDeployments 1)) }}
 webservice:
     It is not currently recommended to set a service type of `LoadBalancer` with multiple deployments defined.
     Instead, use a global `service.type` of `ClusterIP` and override `service.type` in each deployment.
-{{-   end -}}
-{{-   range $name, $deployment := .Values.gitlab.webservice.deployments -}}
-{{-   $serviceType := $deployment.service.type -}}
-{{-   $loadBalancerSourceRanges := $deployment.service.loadBalancerSourceRanges -}}
-{{-     if (and (eq $serviceType "LoadBalancer") (empty ($loadBalancerSourceRanges))) }}
+{{-     end -}}
+{{-     range $name, $deployment := .Values.gitlab.webservice.deployments -}}
+{{-     $serviceType := $deployment.service.type -}}
+{{-     $loadBalancerSourceRanges := $deployment.service.loadBalancerSourceRanges -}}
+{{-       if (and (eq $serviceType "LoadBalancer") (empty ($loadBalancerSourceRanges))) }}
 webservice:
     It is not currently recommended to set a service type of `{{ $serviceType }}` on a public exposed network without restrictions, please add `service.loadBalancerSourceRanges` to limit access to the service of the `{{ $name }}` deployment.
-{{-      end -}}
+{{-       end -}}
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.webservice.loadBalancer */}}
