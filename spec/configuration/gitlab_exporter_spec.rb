@@ -66,8 +66,6 @@ describe 'gitlab-exporter configuration' do
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
       expect(t.dig('ConfigMap/test-gitlab-exporter', 'metadata', 'labels')).to include('global' => 'exporter')
       expect(t.dig('Deployment/test-gitlab-exporter', 'metadata', 'labels')).to include('foo' => 'global')
-      expect(t.dig('Deployment/test-gitlab-exporter', 'metadata', 'labels')).to include('global' => 'pod')
-      expect(t.dig('Deployment/test-gitlab-exporter', 'metadata', 'labels')).to include('global_pod' => true)
       expect(t.dig('Deployment/test-gitlab-exporter', 'metadata', 'labels')).not_to include('global' => 'exporter')
       expect(t.dig('Deployment/test-gitlab-exporter', 'metadata', 'labels')).not_to include('global' => 'global')
       expect(t.dig('Deployment/test-gitlab-exporter', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
