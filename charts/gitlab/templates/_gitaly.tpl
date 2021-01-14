@@ -71,14 +71,21 @@ Return the number of replicas set for Gitaly statefulset
 Return the appropriate block for the Gitaly client secret.
 This differs depending on whether or not Praefect is enabled
 */}}
-{{- define "gitlab.gitaly.clientSecret" -}}
-{{- $secret := include "gitlab.gitaly.authToken.secret" . }}
-{{- $key := include "gitlab.gitaly.authToken.key" . }}
-{{- if and $.Values.global.praefect.enabled $.Values.global.praefect.replaceInternalGitaly -}}
-{{- $secret = include "gitlab.praefect.authToken.secret" . }}
-{{- $key = include "gitlab.praefect.authToken.key" . }}
+{{- define "gitlab.gitaly.clientSecrets" -}}
+{{- /* Inject non-Praefect configuration if Praefect is disabled or if we're not replacing internal Gitaly. */ -}}
+{{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.replaceInternalGitaly) (not .Values.global.praefect.enabled)) -}}
+- secret:
+    name: {{ include "gitlab.gitaly.authToken.secret" . }}
+    items:
+      - key: {{ include "gitlab.gitaly.authToken.key" . }}
+        path: gitaly/gitaly_token
+{{- end }}
+{{- /* Inject Praefect configuration if Praefect is enabled */ -}}
+{{- if and .Values.global.gitaly.enabled .Values.global.praefect.enabled }}
+- secret:
+    name: {{ include "gitlab.praefect.authToken.secret" . }}
+    items:
+      - key: {{ include "gitlab.praefect.authToken.key" . }}
+        path: gitaly/gitaly_token_praefect
 {{- end -}}
-name: {{ $secret }}
-items:
-  - key: {{ $key }}
 {{- end -}}

@@ -11,12 +11,6 @@
 {{- $nodeSelector := .Values.nodeSelector -}}
 {{- $minioEnabled := .Values.global.minio.enabled -}}
 {{- $minioSecret := include "gitlab.minio.credentials.secret" . -}}
-{{- $gitalySecret := include "gitlab.gitaly.authToken.secret" . -}}
-{{- $gitalyKey := include "gitlab.gitaly.authToken.key" . -}}
-{{- if $.Values.global.praefect.enabled -}}
-{{- $gitalySecret = include "gitlab.praefect.authToken.secret" . -}}
-{{- $gitalyKey = include "gitlab.praefect.authToken.key" . -}}
-{{- end -}}
 {{- $railsSecretName := include "gitlab.rails-secrets.secret" . -}}
 {{- $metricsEnabled := .Values.metrics.enabled -}}
 {{- $metricsPort := .Values.metrics.port -}}
@@ -316,11 +310,7 @@ spec:
               items:
                 - key: secrets.yml
                   path: rails-secrets/secrets.yml
-          - secret:
-              name: {{ $gitalySecret }}
-              items:
-                - key: {{ $gitalyKey }}
-                  path: gitaly/gitaly_token
+          {{- include "gitlab.gitaly.clientSecrets" $ | nindent 10 }}
           {{- include "gitlab.redis.secrets" $ | nindent 10 }}
           {{- include "gitlab.psql.secret" $ | nindent 10 }}
           {{- if include "gitlab.geo.secondary" $ }}
