@@ -134,11 +134,11 @@ spec:
               {{- end }}
             {{- with .Values.global.gitaly.hooks }}
             {{- if .preReceive }}
-            - name: gitaly-hooks-pre-recieve
+            - name: gitaly-hooks-pre-receive
               mountPath: "/home/git/custom_hooks/pre-receive.d"
             {{- end }}
             {{- if .postReceive }}
-            - name: gitaly-hooks-post-recieve
+            - name: gitaly-hooks-post-receive
               mountPath: "/home/git/custom_hooks/post-receive.d"
             {{- end }}
             {{- if .update }}
@@ -198,23 +198,29 @@ spec:
                   path: "gitaly.key"
           {{- end }}
       {{- with .Values.global.gitaly.hooks }}
-      {{- if and .preReceive (has .preReceive .configmap) }}
-      - name: gitaly-hooks-preReceive
+      {{- if .preReceive }}
+      {{-   if .preReceive.configmap }}
+      - name: gitaly-hooks-pre-receive
         configMap:
           name: {{ .preReceive.configmap }}
           defaultMode: 0555
+      {{-   end }}
       {{- end }}
-      {{- if and .postReceive (has .postReceive .configmap) }}
-      - name: gitaly-hooks-postReceive
+      {{- if .postReceive }}
+      {{-   if .postReceive.configmap }}
+      - name: gitaly-hooks-post-receive
         configMap:
           name: {{ .postReceive.configmap }}
           defaultMode: 0555
+      {{-   end }}
       {{- end }}
-      {{- if and .update (hasKey .update "configmap") }}
+      {{- if .update }}
+      {{-   if .update.configmap }}
       - name: gitaly-hooks-update
         configMap:
           name: {{ .update.configmap }}
           defaultMode: 0555
+      {{-   end }}
       {{- end }}
       {{- end }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
