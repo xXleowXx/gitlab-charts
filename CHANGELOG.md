@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.7.4 (2021-01-13)
+
+- No changes.
+
 ## 4.7.3 (2021-01-08)
 
 - No changes.
@@ -57,6 +61,10 @@ entry.
 - Changes the default loglevel for registry to info. !1703
 
 
+## 4.6.5 (2021-01-13)
+
+- No changes.
+
 ## 4.6.4 (2021-01-07)
 
 - No changes.
@@ -110,6 +118,10 @@ entry.
 - Update resource specifications for Webservice and Sidekiq. !1634
 - Set release_package to run manually. !1641
 
+
+## 4.5.7 (2021-01-13)
+
+- No changes.
 
 ## 4.5.6 (2021-01-07)
 
