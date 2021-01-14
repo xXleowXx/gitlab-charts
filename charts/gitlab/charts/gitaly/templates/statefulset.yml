@@ -198,23 +198,29 @@ spec:
                   path: "gitaly.key"
           {{- end }}
       {{- with .Values.global.gitaly.hooks }}
-      {{- if and .preReceive (has .preReceive .configmap) }}
+      {{- if .preReceive }}
+      {{-   if .preReceive.configmap }}
       - name: gitaly-hooks-pre-receive
         configMap:
           name: {{ .preReceive.configmap }}
           defaultMode: 0555
+      {{-   end }}
       {{- end }}
-      {{- if and .postReceive (has .postReceive .configmap) }}
+      {{- if .postReceive }}
+      {{-   if .postReceive.configmap }}
       - name: gitaly-hooks-post-receive
         configMap:
           name: {{ .postReceive.configmap }}
           defaultMode: 0555
+      {{-   end }}
       {{- end }}
-      {{- if and .update (has .update .configmap) }}
+      {{- if .update }}
+      {{-   if .update.configmap }}
       - name: gitaly-hooks-update
         configMap:
           name: {{ .update.configmap }}
           defaultMode: 0555
+      {{-   end }}
       {{- end }}
       {{- end }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
