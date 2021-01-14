@@ -1,8 +1,8 @@
-{{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.replaceInternalGitaly) (not .Values.global.praefect.enabled)) -}}
+{{- if and .Values.global.gitaly.enabled  (or (not .Values.global.praefect.replaceInternalGitaly) (not .Values.global.praefect.enabled)) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "fullname" . }}-praefect
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
@@ -41,14 +41,14 @@ data:
     key_path = '/etc/gitlab-secrets/gitaly/gitaly.key'
     {{- end }}
 
-    <% @storages = [ {{ include "gitlab.gitaly.storageNames" . }}  ] %>
-    <% @index=`echo ${HOSTNAME##*-}`.to_i %>
-    <% if @storages.length > @index %>
+    <% @storages = [ {{ include "gitlab.praefect.gitaly.storageNames" . }}  ] %>
+    <% @hostname=ENV['HOSTNAME'].strip %>
+    <% if @storages.any? { |s| s.include?(@hostname) } %>
     [[storage]]
-    name = "<%= @storages[@index] %>"
+    name = "<%= @hostname %>"
     path = "/home/git/repositories"
     <% else %>
-    <% raise Exception, "Storage for node #{@index} is not present in the storageNames array. Did you use kubectl to scale up? You need to solely use helm for this purpose." %>
+    <% raise Exception, "Storage for node #{@hostname} is not present in the storageNames array. Did you use kubectl to scale up? You need to solely use helm for this purpose." %>
     <% end %>
 
     [logging]

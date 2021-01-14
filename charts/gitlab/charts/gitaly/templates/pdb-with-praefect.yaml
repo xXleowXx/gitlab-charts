@@ -1,4 +1,4 @@
-{{- if and .Values.global.gitaly.enabled .Values.global.praefect.enabled -}}
+{{- if and .Values.global.gitaly.enabled  (or (not .Values.global.praefect.replaceInternalGitaly) (not .Values.global.praefect.enabled)) -}}
 {{- range .Values.global.praefect.virtualStorages -}}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget

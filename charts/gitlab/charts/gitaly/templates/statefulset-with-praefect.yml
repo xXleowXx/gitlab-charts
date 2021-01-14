@@ -30,7 +30,7 @@ spec:
         storage: {{ .name }}
         {{- include "gitlab.podLabels" $ | nindent 8 }}
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap-with-praefect.yml") $ | sha256sum }}
       {{- range $key, $value := $.Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -172,7 +172,7 @@ spec:
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       - name: gitaly-config
         configMap:
-          name: {{ template "fullname" $ }}
+          name: {{ template "fullname" $ }}-praefect
       {{- if not $.Values.persistence.enabled }}
       - name: repo-data
         emptyDir: {}
