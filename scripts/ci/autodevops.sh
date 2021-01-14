@@ -133,9 +133,13 @@ CIYAML
     --set certmanager.install=false \
     --set prometheus.install=$PROMETHEUS_INSTALL \
     --set gitlab.webservice.maxReplicas=3 \
+    --set gitlab.webservice.resources.requests.cpu=500m \
+    --set gitlab.webservice.resources.requests.memory=2000M \
     --set gitlab.sidekiq.maxReplicas=2 \
+    --set gitlab.sidekiq.resources.requests.cpu=300m \
+    --set gitlab.sidekiq.resources.requests.memory=1500M \
     --set gitlab.task-runner.enabled=true \
-    --set gitlab.gitlab-shell.maxReplicas=3 \
+    --set gitlab.gitlab-shell.maxReplicas=2 \
     --set redis.resources.requests.cpu=100m \
     --set minio.resources.requests.cpu=100m \
     --set global.operator.enabled=true \
