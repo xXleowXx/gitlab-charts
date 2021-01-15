@@ -1,0 +1,6 @@
+---
+title: Add tolerations for minio create bucket job
+merge_request: 1744
+author: David ALEXANDRE
+type: added
+

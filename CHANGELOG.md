@@ -2,6 +2,80 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.7.4 (2021-01-13)
+
+- No changes.
+
+## 4.7.3 (2021-01-08)
+
+- No changes.
+
+## 4.7.2 (2021-01-07)
+
+### Fixed (1 change)
+
+- Fix nginx-ingress checkConfig error. !1730
+
+
+## 4.7.1 (2020-12-23)
+
+### Changed (1 change)
+
+- GitLab Runner to 0.24.0. !1724
+
+
+## 4.7.0 (2020-12-22)
+
+### Fixed (3 changes)
+
+- Make consolidated object store config a non-default option. !1588
+- Support using dedicated bucket for Minio. !1652
+- Add extraEnv to task-runner backup job. !1721
+
+### Changed (10 changes, 1 of them is from the community)
+
+- Rename and deprecate configuration keys because Piwik rebranded as Matomo. !1602 (Katrin Leinweber @katrinleinweber)
+- Remove Service port from gitlab-kas. !1659
+- Add prometheus annotations for kas. !1660
+- Allow toggling redirects to storage backends on a per-repository basis. !1667
+- Use gitlab-exporter v7.1.2. !1675
+- Registry: update to v2.12.0-gitlab. !1683
+- Update gitlab-kas to v13.7.0. !1694
+- Add install survey link to helm install notes. !1711
+- Add ability to customize workhorse scheme. !1714
+- Webservice: convert to generator pattern, allow splitting traffic groups.
+
+### Added (7 changes)
+
+- Add TLS support to Praefect. !1613
+- Add encrypted_settings_key_base rails secret. !1617
+- Add server-side global hook support through configmaps. !1653
+- Allow change or deletion of settings in Gitaly StatefulSet securityContexts. !1665
+- Add support for /database_bloat endpoint in gitlab-exporter. !1673
+- Configurable termination graceperiod for NGINX. !1685
+- Support setting of application_name in database.yml. !1712
+
+### Other (2 changes)
+
+- Update NGINX from v0.20.0 to 0.41.2. !1690
+- Changes the default loglevel for registry to info. !1703
+
+
+## 4.6.5 (2021-01-13)
+
+- No changes.
+
+## 4.6.4 (2021-01-07)
+
+- No changes.
+
+## 4.6.3 (2020-12-10)
+
+### Changed (1 change, 1 of them is from the community)
+
+- Update gitlab-runner from 0.22.0 to 0.23.0. !1686 (Jan Brummelte)
+
+
 ## 4.6.2 (2020-12-07)
 
 - No changes.
@@ -44,6 +118,14 @@ entry.
 - Update resource specifications for Webservice and Sidekiq. !1634
 - Set release_package to run manually. !1641
 
+
+## 4.5.7 (2021-01-13)
+
+- No changes.
+
+## 4.5.6 (2021-01-07)
+
+- No changes.
 
 ## 4.5.5 (2020-12-07)
 
@@ -150,6 +232,7 @@ entry.
 ### Fixed (1 change)
 
 - Moves GITLAB_WORKHORSE_SENTRY_DSN to the workhorse container. !1543
+- Fix dependency proxy object storage config. !1531 (Maikel Vlasman)
 
 ### Changed (7 changes, 1 of them is from the community)
 
@@ -279,6 +362,7 @@ entry.
 - Support consolidated object storage configuration. !1479
 - Adds NetworkPolicy object for the Webservice. !1491
 - Workhorse: support configuring logFormat, default JSON. !1497
+- Support custom labels for Pods of GitLab components !1457 (Maxence Laude)
 
 ### Other (1 change)
 
@@ -778,6 +862,7 @@ entry.
 - Add option for using Sidekiq Cluster to start Sidekiq. !1247
 - Add optional `priorityClassName` configuration value to Gitaly chart. !1282 (Theo Meneau)
 - Support configuration of multiple Redis instances. !1287
+- Minio: Adds podLabels and podAnnotations to chart. !1264 (Kavanaugh Latiolais)
 
 ### Other (1 change)
 

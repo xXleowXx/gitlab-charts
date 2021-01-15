@@ -6,6 +6,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   annotations:
     "helm.sh/hook": test-success
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed,before-hook-creation
 spec:
   containers:
   - name: test-runner

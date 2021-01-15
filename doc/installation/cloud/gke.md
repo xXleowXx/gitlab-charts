@@ -10,7 +10,7 @@ For a fully functional GitLab instance, you will need a few resources before
 deploying the `gitlab` chart. The following is how these charts are deployed
 and tested within GitLab.
 
-NOTE: **Note:**
+NOTE:
 Google provides a whitepaper for [deploying production-ready GitLab on
 Google Kubernetes Engine](https://cloud.google.com/solutions/deploying-production-ready-gitlab-on-gke), including all steps and external
 resource configuration. These are alternative to this document, and the
@@ -58,6 +58,7 @@ The table below describes all variables.
 | PREEMPTIBLE     | Cheaper, clusters live at *most* 24 hrs. No SLA on nodes/disks              | false                            |
 | USE_STATIC_IP   | Create a static IP for GitLab instead of an ephemeral IP with managed DNS   | false                            |
 | INT_NETWORK     | The IP space to use within this cluster                                     | default                          |
+| SUBNETWORK      | The subnetwork to use within this cluster                                   | default                          |
 
 Run the script, by passing in your desired parameters. It can work with the
 default parameters except for `PROJECT` which is required:

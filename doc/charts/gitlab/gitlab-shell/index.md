@@ -18,7 +18,7 @@ cluster this chart is deployed onto.
 
 In order to easily support SSH replicas, and avoid using shared storage for the SSH
 authorized keys, we are using the SSH [AuthorizedKeysCommand](https://man.openbsd.org/sshd_config#AuthorizedKeysCommand)
-to authenticate against GitLab's authorized keys endpoint. As a result, we don't persist
+to authenticate against the GitLab authorized keys endpoint. As a result, we don't persist
 or update the AuthorizedKeys file within these pods.
 
 ## Configuration
@@ -34,6 +34,7 @@ controlled by `global.shell.port`.
 | ------------------------ | -------------- | ---------------------------------------- |
 | `annotations`            |                | Pod annotations                          |
 | `podLabels`              |                | Supplemental Pod labels. Will not be used for selectors. |
+| `common.labels`          |                | Supplemental labels that are applied to all objects created by this chart. |
 | `config.loginGraceTime`  | `120`          | Specifies amount of time athat the server will disconnect after if the user has not successfully logged in |
 | `config.maxStartups.full`  | `100`     | SSHd refuse probability will increase linearly and all unauthenticated connection attempts would be refused when unauthenticated connections number will reach specified number |
 | `config.maxStartups.rate`  | `30`      | SSHd will refuse connections with specified probability when there would be too many unauthenticated connections (optional) |

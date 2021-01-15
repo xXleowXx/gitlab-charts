@@ -58,7 +58,7 @@ read through our [RBAC documentation](rbac.md).
 
 ### Preparing for Helm with RBAC
 
-NOTE: **Note:**
+NOTE:
 Ensure you have `kubectl` installed and it's up to date. Older versions do not
 have support for RBAC and will generate errors.
 
@@ -195,7 +195,7 @@ Helm repository has some additional information on developing with Helm in its
 
 ### Local Tiller
 
-CAUTION: **Not recommended:**
+WARNING:
 This method is not well supported, but should work.
 
 If you are using Helm v2 and not able to run Tiller in your cluster,

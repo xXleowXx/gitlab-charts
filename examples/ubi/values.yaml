@@ -51,7 +51,7 @@ global:
     tls:
       secretName: my-wildcard-cert-secret  # Your wildcard certificate.
 
-  # `global.hosts.ssh` is needed for `gitlab-shell` because `nginx-ingress` is disabled, 
+  # `global.hosts.ssh` is needed for `gitlab-shell` because `nginx-ingress` is disabled,
   # and it needs to be exposed separately.
   hosts:
     ssh: ssh.gitlab.example.com

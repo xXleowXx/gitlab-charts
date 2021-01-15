@@ -41,6 +41,6 @@ helm upgrade --install gitlab . \
   --set certmanager-issuer.email=me@example.com
 ```
 
-NOTE: **Note:**
+NOTE:
 If using Helm v2, please see notes about the `--timeout` option
 in the [Deployment documentation](../installation/deployment.md#deploy-using-helm).

@@ -24,6 +24,8 @@ queueSelector: false
 
 annotations: {}
 podLabels: {}
+common:
+  labels: {}
 
 logging:
   # set to "json" for json
@@ -96,6 +98,7 @@ global:
     # port: '5432'
     # database: 'gitlabhq_production'
     # username: 'gitlab'
+    # applicationName:
     # preparedStatements: false
     # password:
     #   secret: gitlab-postgres

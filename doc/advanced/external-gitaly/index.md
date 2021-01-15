@@ -11,7 +11,7 @@ This document intends to provide documentation on how to configure this Helm cha
 If you don't have Gitaly configured, for on-premise or deployment to VM,
 consider using our [Omnibus GitLab package](external-omnibus-gitaly.md).
 
-NOTE: **Note:**
+NOTE:
 External Gitaly _services_ can be provided by Gitaly nodes, or
 [Praefect](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) clusters.
 
@@ -127,7 +127,7 @@ have to
            tlsEnabled: true
    ```
 
-NOTE: **Note:**
+NOTE:
 You can choose any valid secret name and key for this, but make
 sure the key is unique across all the secrets specified in `customCAs` to avoid
 collision since all keys within the secrets will be mounted. You **do not**

@@ -13,6 +13,7 @@ GitLab Components:
 - Registry authentication certificates
 - SSH Host Keys and Certificates for GitLab Shell
 - Passwords for individual GitLab services
+- TLS certificate for GitLab Pages
 
 Optional External Services:
 
@@ -131,7 +132,7 @@ This secret is referenced by the `global.shell.hostKeys.secret` setting.
 
 ### Initial Enterprise license
 
-CAUTION: **Caution:**
+WARNING:
 This method will only add a license at the time of installation. Use the Admin Area in the web user interface to renew or upgrade licenses.
 
 Create a Kubernetes secret for storing the Enterprise license for the GitLab instance.
@@ -225,7 +226,7 @@ kubectl create secret generic <name>-rails-secret --from-file=secrets.yml
 
 This secret is referenced by the `global.railsSecrets.secret` setting.
 
-NOTE: **Note:**
+NOTE:
 The `encrypted_settings_key_base` was added in GitLab `13.7`, and will be required for GitLab `14.0`.
 
 ### GitLab Workhorse secret
@@ -338,7 +339,7 @@ kubectl create secret generic ldap-main-password --from-literal=password=yourpas
 Then use `--set global.appConfig.ldap.servers.main.password.secret=ldap-main-password` to
 inject the password into your configuration.
 
-NOTE: **Note:**
+NOTE:
 Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### SMTP password
@@ -352,7 +353,7 @@ kubectl create secret generic smtp-password --from-literal=password=yourpassword
 
 Then use `--set global.smtp.password.secret=smtp-password` in your Helm command.
 
-NOTE: **Note:**
+NOTE:
 Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### IMAP password for incoming emails
@@ -367,7 +368,7 @@ kubectl create secret generic incoming-email-password --from-literal=password=yo
 Then use `--set global.appConfig.incomingEmail.password.secret=incoming-email-password`
 in your Helm command along with other required settings as specified [in the docs](command-line-options.md#incoming-email-configuration).
 
-NOTE: **Note:**
+NOTE:
 Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### IMAP password for service desk emails
@@ -382,7 +383,7 @@ kubectl create secret generic service-desk-email-password --from-literal=passwor
 Then use `--set global.appConfig.serviceDeskEmail.password.secret=service-desk-email-password`
 in your Helm command along with other required settings as specified [in the docs](command-line-options.md#service-desk-email-configuration).
 
-NOTE: **Note:**
+NOTE:
 Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
 ### S/MIME Certificate

@@ -63,6 +63,8 @@ service:
   internalPort: 8080
   workhorseExternalPort: 8181
   workhorseInternalPort: 8181
+  # loadBalancerIP:
+  # loadBalancerSourceRanges:
 enabled: true
 ingress:
   enabled: true
@@ -176,6 +178,7 @@ global:
     # database: 'gitlabhq_production'
     # username: 'gitlab'
     # preparedStatements: false
+    # applicationName:
     # password:
     #   secret: gitlab-postgres
     #   key: psql-password
@@ -303,8 +306,8 @@ registry:
   tokenIssuer: gitlab-issuer
 extra: {}
   # google_analytics_id: '_your_tracking_id'
-  # piwik_url: '_your_piwik_url'
-  # piwik_site_id: '_your_piwik_site_id'
+  # matomo_url: '_your_matomo_url'
+  # matomo_site_id: '_your_matomo_site_id'
 rack_attack:
   git_basic_auth:
     enabled: false

@@ -41,6 +41,10 @@ spec:
       serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
       automountServiceAccountToken: false
       {{- end }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ template "name" . }}

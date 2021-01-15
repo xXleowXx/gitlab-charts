@@ -45,6 +45,8 @@ spec:
             - name: configure
               command: ['sh', '/config/configure']
               image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
+              env:
+                {{- include "gitlab.extraEnv" $ | nindent 16 }}
               volumeMounts:
                 {{- include "gitlab.extraVolumeMounts" . | nindent 16 }}
                 {{- include "gitlab.psql.ssl.volumeMount" . | nindent 16 }}
@@ -74,6 +76,7 @@ spec:
               image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
               {{ template "gitlab.imagePullPolicy" . }}
               env:
+                {{- include "gitlab.extraEnv" $ | nindent 16 }}
                 - name: ARTIFACTS_BUCKET_NAME
                   value: {{ .Values.global.appConfig.artifacts.bucket }}
                 - name: REGISTRY_BUCKET_NAME

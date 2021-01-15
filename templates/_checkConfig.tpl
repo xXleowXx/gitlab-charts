@@ -47,6 +47,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -76,15 +78,32 @@ contentSecurityPolicy:
 Ensure a certificate is provided when Gitaly is enabled and is instructed to
 listen over TLS */}}
 {{- define "gitlab.checkConfig.gitaly.tls" -}}
-{{- if and (and $.Values.global.gitaly.enabled $.Values.global.gitaly.tls.enabled) (not $.Values.global.gitaly.tls.secretName) }}
-gitaly: server enabled with TLS, no TLS certificate provided
-    It appears Gitaly is specified to listen over TLS, but no certificate was specified.
+{{- $errorMsg := list -}}
+{{- if and $.Values.global.gitaly.enabled $.Values.global.gitaly.tls.enabled -}}
+{{-   if $.Values.global.praefect.enabled -}}
+{{-     range $i, $vs := $.Values.global.praefect.virtualStorages -}}
+{{-       if not $vs.tlsSecretName }}
+{{-         $errorMsg = append $errorMsg (printf "global.praefect.virtualStorages[%d].tlsSecretName not specified ('%s')" $i $vs.name) -}}
+{{-       end }}
+{{-     end }}
+{{-   else }}
+{{-     if not $.Values.global.gitaly.tls.secretName -}}
+{{-       $errorMsg = append $errorMsg ("global.gitaly.tls.secretName not specified") -}}
+{{-     end }}
+{{-   end }}
+{{- end }}
+{{- if not (empty $errorMsg) }}
+gitaly:
+{{- range $msg := $errorMsg }}
+    {{ $msg }}
+{{- end }}
+    This configuration is not supported.
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.gitaly.tls */}}
 
 {{/*
-Ensure a certificate is provided when Praefect is enabled and is instructed to listen over TLS 
+Ensure a certificate is provided when Praefect is enabled and is instructed to listen over TLS
 */}}
 {{- define "gitlab.checkConfig.praefect.tls" -}}
 {{- if and (and $.Values.global.praefect.enabled $.Values.global.praefect.tls.enabled) (not $.Values.global.praefect.tls.secretName) }}
@@ -412,7 +431,7 @@ You must set terminationGracePeriodSeconds ({{ $terminationGracePeriodSeconds }}
 Ensure consolidate and type-specific object store configuration are not mixed.
 */}}
 {{- define "gitlab.checkConfig.objectStorage.consolidatedConfig" -}}
-{{-   if $.Values.global.appConfig.object_store.enabled  -}}
+{{-   if $.Values.global.appConfig.object_store.enabled -}}
 {{-     $problematicTypes := list -}}
 {{-     range $objectTypes := list "artifacts" "lfs" "uploads" "packages" "externalDiffs" "terraformState" "pseudonymizer" "dependencyProxy" -}}
 {{-       if hasKey $.Values.global.appConfig . -}}
@@ -430,7 +449,7 @@ When consolidated object storage is enabled, for each item `bucket` must be spec
 {{/* END gitlab.checkConfig.objectStorage.consolidatedConfig */}}
 
 {{- define "gitlab.checkConfig.objectStorage.typeSpecificConfig" -}}
-{{-   if and (not $.Values.global.minio.enabled) (not $.Values.global.appConfig.object_store.enabled)  -}}
+{{-   if and (not $.Values.global.minio.enabled) (not $.Values.global.appConfig.object_store.enabled) -}}
 {{-     $problematicTypes := list -}}
 {{-     range $objectTypes := list "artifacts" "lfs" "uploads" "packages" "externalDiffs" "terraformState" "pseudonymizer" "dependencyProxy" -}}
 {{-       if hasKey $.Values.global.appConfig . -}}
@@ -446,3 +465,39 @@ When type-specific object storage is enabled the `connection` property can not b
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.objectStorage.typeSpecificConfig */}}
+
+{{- define "gitlab.checkConfig.nginx.controller.extraArgs" -}}
+{{-   if (index $.Values "nginx-ingress").enabled -}}
+{{-     if hasKey (index $.Values "nginx-ingress").controller.extraArgs "force-namespace-isolation" -}}
+nginx-ingress:
+  `nginx-ingress.controller.extraArgs.force-namespace-isolation` was previously set by default in the GitLab chart's values.yaml file,
+  but has since been deprecated upon the upgrade to NGINX 0.41.2 (upstream chart version 3.11.1).
+  Please remove the `force-namespace-isolation` key.
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END "gitlab.checkConfig.nginx.controller" */}}
+
+{{/*
+Ensure that when type is set to LoadBalancer that loadBalancerSourceRanges are set
+*/}}
+{{- define "gitlab.checkConfig.webservice.loadBalancer" -}}
+{{-   if .Values.gitlab.webservice.enabled -}}
+{{-     $serviceType := .Values.gitlab.webservice.service.type -}}
+{{-     $numDeployments := len .Values.gitlab.webservice.deployments -}}
+{{-     if (and (eq $serviceType "LoadBalancer") (gt $numDeployments 1)) }}
+webservice:
+    It is not currently recommended to set a service type of `LoadBalancer` with multiple deployments defined.
+    Instead, use a global `service.type` of `ClusterIP` and override `service.type` in each deployment.
+{{-     end -}}
+{{-     range $name, $deployment := .Values.gitlab.webservice.deployments -}}
+{{-     $serviceType := $deployment.service.type -}}
+{{-     $loadBalancerSourceRanges := $deployment.service.loadBalancerSourceRanges -}}
+{{-       if (and (eq $serviceType "LoadBalancer") (empty ($loadBalancerSourceRanges))) }}
+webservice:
+    It is not currently recommended to set a service type of `{{ $serviceType }}` on a public exposed network without restrictions, please add `service.loadBalancerSourceRanges` to limit access to the service of the `{{ $name }}` deployment.
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.webservice.loadBalancer */}}

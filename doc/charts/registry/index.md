@@ -63,7 +63,7 @@ registry:
     readOnly:
       enabled: false
   image:
-    tag: 'v2.12.0-gitlab'
+    tag: 'v2.13.1-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -140,10 +140,10 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
 | `image.repository`                         | `registry`                                   | Registry image                                                                                       |
-| `image.tag`                                | `v2.12.0-gitlab`                              | Version of the image to use                                                                          |
+| `image.tag`                                | `v2.13.1-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
-| `log`                                      | `{level: warn, fields: {service: registry}}` | Configure the logging options                                                                        |
+| `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
 | `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
 | `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
@@ -227,7 +227,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v2.12.0-gitlab'`
+- `tag: 'v2.13.1-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
@@ -491,7 +491,7 @@ If you chose to use the `filesystem` driver:
 For the sake of resiliency and simplicity, it is recommended to make use of an
 external service, such as `s3`, `gcs`, `azure` or other compatible Object Storage.
 
-NOTE: **Note:**
+NOTE:
 The chart will populate `delete.enabled: true` into this configuration
 by default if not specified by the user. This keeps expected behavior in line with
 the default use of MinIO, as well as the Omnibus GitLab. Any user provided value

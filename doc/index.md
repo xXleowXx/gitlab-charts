@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This is the official, recommended, and supported method to install GitLab on a cloud native environment.
 
-NOTE: **Note:**
+NOTE:
 It is not necessary to have GitLab installed on Kubernetes in order to use
 the [GitLab Kubernetes integration](https://docs.gitlab.com/ee/user/project/clusters/).
 
@@ -26,11 +26,13 @@ can be installed separately.
   - GitLab/[Gitaly](charts/gitlab/gitaly/index.md)
   - GitLab/[GitLab Exporter](charts/gitlab/gitlab-exporter/index.md)
   - GitLab/[GitLab Grafana](charts/gitlab/gitlab-grafana/index.md)
+  - GitLab/[GitLab Pages](charts/gitlab/gitlab-pages/index.md)
   - GitLab/[GitLab Shell](charts/gitlab/gitlab-shell/index.md)
+  - GitLab/[Mailroom](charts/gitlab/mailroom/index.md)
   - GitLab/[Migrations](charts/gitlab/migrations/index.md)
   - GitLab/[Sidekiq](charts/gitlab/sidekiq/index.md)
+  - GitLab/[Task Runner](charts/gitlab/task-runner/index.md)
   - GitLab/[Webservice](charts/gitlab/webservice/index.md)
-  - GitLab/[Mailroom](charts/gitlab/mailroom/index.md)
 - Optional dependencies:
   - [PostgreSQL](https://artifacthub.io/packages/helm/bitnami/postgresql)
   - [Redis](https://artifacthub.io/packages/helm/bitnami/redis)
@@ -40,10 +42,12 @@ can be installed separately.
   - [Grafana](https://artifacthub.io/packages/helm/grafana/grafana)
   - [_Unprivileged_](https://docs.gitlab.com/runner/install/kubernetes.html#running-docker-in-docker-containers-with-gitlab-runners) [GitLab Runner](https://docs.gitlab.com/runner/) using the Kubernetes executor
   - Automatically provisioned SSL via [Let's Encrypt](https://letsencrypt.org/), using [Jetstack](https://www.jetstack.io/)'s [cert-manager](https://cert-manager.io/docs/)
+  - GitLab/[Praefect](charts/gitlab/praefect/index.md)
+  - GitLab/[Kubernetes Agent Server (KAS)](charts/gitlab/kas/index.md)
 
 ## Limitations
 
-GitLab Pages [cannot be deployed](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/37) using the Helm chart. Hybrid environments that deploy Pages using the Omnibus installer and deploy other GitLab services using the Helm chart are not supported.
+GitLab Pages [can be deployed](https://gitlab.com/groups/gitlab-org/-/epics/4283) using the Helm chart, but are [missing some functionality](https://gitlab.com/groups/gitlab-org/charts/-/epics/21).
 
 Database limitations:
 
@@ -118,7 +122,7 @@ To uninstall the GitLab Chart, run the following:
 helm uninstall gitlab
 ```
 
-NOTE: **Note:**
+NOTE:
 With Helm v2, you need to use the command `helm delete --purge gitlab`.
 
 For the purposes of continuity, these charts have some Kubernetes objects that
@@ -199,7 +203,7 @@ helm repo add gitlab https://charts.gitlab.io/
 helm search repo -l gitlab/gitlab
 ```
 
-NOTE: **Note:**
+NOTE:
 With Helm v2, the search command would be `helm search -l gitlab/gitlab`
 
 For more information, visit the [version mappings docs](installation/version_mappings.md).

@@ -1,4 +1,14 @@
 dependencies:
+- name: gitlab
+  version: '*.*.*'
+- name: shared-secrets
+  version: '*.*.*'
+- name: certmanager-issuer
+  version: '*.*.*'
+- name: minio
+  version: '*.*.*'
+- name: registry
+  version: '*.*.*'
 - name: cert-manager
   version: 0.10.1
   repository: https://charts.jetstack.io/
@@ -13,7 +23,7 @@ dependencies:
   repository: https://charts.bitnami.com/bitnami
   condition: postgresql.install
 - name: gitlab-runner
-  version: 0.23.0
+  version: 0.24.0
   repository: https://charts.gitlab.io/
   condition: gitlab-runner.install
 - name: grafana
@@ -24,3 +34,6 @@ dependencies:
   version: 10.3.4
   repository: https://charts.bitnami.com/bitnami
   condition: redis.install
+- name: nginx-ingress
+  condition: nginx-ingress.enabled
+  version: '*.*.*'

@@ -1,6 +1,17 @@
 {{/* ######### workhorse templates */}}
 
 {{/*
+Return the workhorse url
+*/}}
+{{- define "gitlab.workhorse.url" -}}
+{{ template "gitlab.workhorse.scheme" . }}://{{ template "gitlab.workhorse.host" . }}:{{ template "gitlab.workhorse.port" . }}
+{{- end -}}
+
+{{- define "gitlab.workhorse.scheme" -}}
+{{- coalesce .Values.workhorse.scheme .Values.global.workhorse.scheme "http" -}}
+{{- end -}}
+
+{{/*
 Return the workhorse hostname
 If the workhorse host is provided, it will use that, otherwise it will fallback
 to the service name

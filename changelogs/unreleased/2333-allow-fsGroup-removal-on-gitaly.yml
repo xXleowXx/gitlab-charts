@@ -1,5 +1,0 @@
----
-title: Allow change or deletion of settings in Gitaly StatefulSet securityContexts
-merge_request: 1665
-author:
-type: added
