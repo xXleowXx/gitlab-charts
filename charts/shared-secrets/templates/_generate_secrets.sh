@@ -74,7 +74,7 @@ generate_secret_if_needed {{ template "gitlab.pages.apiSecret.secret" . }} --fro
 {{ end }}
 
 # GitLab pages auth secret
-{{ if and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl.enabled true) }}
+{{ if and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl true) }}
 generate_secret_if_needed {{ template "gitlab.pages.authSecret.secret" . }} --from-literal={{ template "gitlab.pages.authSecret.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
 {{ end }}
 

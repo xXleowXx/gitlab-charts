@@ -417,6 +417,15 @@ global:
       # signupEnabled:
   ## End of global.appConfig
 
+  gitlabAuth:
+    pages: {}
+      # secret:
+      # appIdKey:
+      # appSecretKey:
+      # redirectUri:
+    mattermost: {}
+    grafana: {}
+
   ## doc/charts/geo.md
   geo:
     enabled: false
@@ -490,16 +499,7 @@ global:
 
   pages:
     enabled: false
-    accessControl:
-      enabled: false
-      gitlabAuth: {}
-        # secret
-        # appIdKey
-        # appSecretKey
-        # redirectUri
-      authSecret: {}
-        # secret:
-        # key
+    accessControl: false
     path:
     host:
     port:
@@ -515,6 +515,9 @@ global:
         # secret:
         # key:
     apiSecret: {}
+      # secret:
+      # key:
+    authSecret: {}
       # secret:
       # key:
 

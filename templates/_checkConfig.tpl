@@ -511,10 +511,10 @@ NOTE: To be removed when we can automatically register Pages as an application
 during deployment.
 */}}
 {{- define "gitlab.checkConfig.pages.manualAccessControl" -}}
-{{- if and (and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl.enabled true)) (empty $.Values.global.pages.accessControl.gitlabAuth.secret) }}
+{{- if and (and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl true)) (empty $.Values.global.gitlabAuth.pages.secret) }}
 pages:
     To enable GitLab Pages access control, a secret containing GitLab application
-    credentials should be specified as `global.pages.accessControl.gitlabAuth.secret`.
+    credentials should be specified as `global.gitlabAuth.pages.secret`.
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.pages.manualAccessControl */}}

@@ -20,7 +20,7 @@ manually, while we wait for [out-of-the box support to be implemented](https://g
 1. Add GitLab Pages as a [client application](https://docs.gitlab.com/ee/integration/oauth_provider.html#oauth-applications-in-the-admin-area)
    to use GitLab OAuth service.
 
-    1. Call back URL should be `http(s)://projects.<pages domain>/auth`.
+    1. Callback URL should be `http(s)://projects.<pages domain>/auth`.
 
 1. Take a note of the application ID and secret displayed on the screen.
 
@@ -37,8 +37,8 @@ manually, while we wait for [out-of-the box support to be implemented](https://g
    ```yaml
    global:
      pages:
-       accessControl:
-         enabled: true
-         gitlabAuth:
-           secret: <secret name>
+       accessControl: true
+     gitlabAuth:
+       pages:
+         secret: <secret name>
    ```

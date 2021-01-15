@@ -111,13 +111,13 @@ spec:
                 - key: tls.key
                   path: pages/{{ template "gitlab.pages.hostname" $ }}.key
           {{- end }}
-          {{- if eq $.Values.global.pages.accessControl.enabled true }}
+          {{- if eq $.Values.global.pages.accessControl true }}
           - secret:
-              name: {{ template "gitlab.pages.gitlabAuthSecret.secret" . }}
+              name: {{ template "gitlabAuth.pages.secret" . }}
               items:
-                - key: {{ template "gitlab.pages.gitlabAuthSecret.appIdKey" . }}
+                - key: {{ template "gitlabAuth.pages.appIdKey" . }}
                   path: pages/gitlab_appid
-                - key: {{ template "gitlab.pages.gitlabAuthSecret.appSecretKey" . }}
+                - key: {{ template "gitlabAuth.pages.appSecretKey" . }}
                   path: pages/gitlab_appsecret
           - secret:
               name: {{ template "gitlab.pages.authSecret.secret" . }}
