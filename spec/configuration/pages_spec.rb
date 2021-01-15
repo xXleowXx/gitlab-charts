@@ -166,7 +166,9 @@ describe 'GitLab Pages' do
             'global' => {
               'pages' => {
                 'enabled' => true,
-                'accessControl' => true,
+                'accessControl' => {
+                  'enabled' => true
+                },
                 'path' => '/srv/foobar',
                 'host' => 'mycustompages.com',
                 'port' => 123,

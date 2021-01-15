@@ -1456,6 +1456,7 @@ global:
   pages:
     enabled:
     accessControl:
+      enabled: false
     path:
     host:
     port:
@@ -1478,7 +1479,7 @@ global:
 | Name                            | Type      | Default                    | Description |
 | :---------------------------    | :-------: | :-------                   | :-----------|
 | `enabled`                       | Boolean   | False                      | Decides whether to install GitLab Pages chart in the cluster |
-| `accessControl`                 | Boolean   | False                      | Enables GitLab Pages Access Control |
+| `accessControl.enabled`         | Boolean   | False                      | Enables GitLab Pages Access Control |
 | `path`                          | String    | `/srv/gitlab/shared/pages` | Path where Pages deployment related files to be stored. Note: Unused by default, since object storage is used. |
 | `host`                          | String    |                            | Pages root domain. |
 | `port`                          | String    |                            | Port to be used to construct Pages URLs in UI. If left unset, default value of 80 or 443 is set based on HTTPS situation of Pages. |
