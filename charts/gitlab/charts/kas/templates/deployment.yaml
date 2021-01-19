@@ -88,4 +88,9 @@ spec:
                 items:
                   - key: {{ template "gitlab.kas.key" . }}
                     path: .gitlab_kas_secret
+            - secret:
+                name: {{ template "gitlab.redis.password.secret" . }}
+                items:
+                  - key: {{ template "gitlab.redis.password.key" . }}
+                    path: .gitlab_redis_secret
 {{- end }}

@@ -12,3 +12,24 @@ if there is a shared tls secret for all ingresses.
 {{- end -}}
 {{- pluck "secretName" .Values.ingress.tls .Values.global.ingress.tls $defaultName | first -}}
 {{- end -}}
+
+{{/*
+Build the structure describing sentinels
+*/}}
+{{- define "kas.redis" -}}
+{{- if .Values.global.redis.sharedState -}}
+{{- $_ := set $ "redisConfigName" "sharedState" -}}
+{{- end -}}
+{{- include "gitlab.redis.configMerge" . -}}
+{{- if not .redisMergedConfig.sentinels -}}
+server:
+  url: {{ template "gitlab.redis.url" . }}
+{{- else -}}
+sentinel:
+  master_name: {{ template "gitlab.redis.host" . }}
+  addresses:
+{{- range $i, $entry := .redisMergedConfig.sentinels }}
+    - {{ quote (print "tcp://" (trim $entry.host) ":" ( default 26379 $entry.port | int ) ) -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
