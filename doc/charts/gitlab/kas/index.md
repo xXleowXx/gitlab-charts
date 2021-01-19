@@ -65,9 +65,12 @@ the `helm install` command using the `--set` flags.
 
 ## Development (how to manual QA)
 
-1. Install the chart
+To install the chart:
 
-   Create your own Kubernetes cluster. Then checkout the MR working branch and install/upgrade GitLab with `kas` enabled from your local chart branch using `--set global.kas.enabled=true`, for example:
+1. Create your own Kubernetes cluster.
+1. Check out the merge request's working branch.
+1. Install (or upgrade) GitLab with `kas` enabled from your local chart branch,
+   using `--set global.kas.enabled=true`, for example:
 
    ```shell
    helm upgrade --force --install gitlab . \
@@ -78,17 +81,19 @@ the `helm install` command using the `--set` flags.
      --set global.kas.enabled=true
    ```
 
-1. You could either follow the whole manual process to configure and use the [GitLab Kubernetes Agent](https://docs.gitlab.com/ee/user/clusters/agent/), or you can use GDK to run this process for you automatically:
+1. Use the GDK to run the process to configure and use the
+   [GitLab Kubernetes Agent](https://docs.gitlab.com/ee/user/clusters/agent/):
+   (You can also follow the steps to configure and use the Agent manually.)
 
-   1. From your GDK GitLab repo, move into the QA folder `cd qa`.
-   1. Execute the following command to run the QA test:
+   1. From your GDK GitLab repo, move into the QA folder: `cd qa`.
+   1. Run the following command to run the QA test:
 
-   ```shell
-   GITLAB_USERNAME=$ROOT_USER
-   GITLAB_PASSWORD=$ROOT_PASSWORD
-   GITLAB_ADMIN_USERNAME=$ROOT_USER
-   GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD
-   bundle exec bin/qa Test::Instance::All https://your.gitlab.domain/ -- --tag orchestrated --tag quarantine qa/specs/features/ee/api/7_configure/kubernetes/kubernetes_agent_spec.rb
-   ```
+      ```shell
+      GITLAB_USERNAME=$ROOT_USER
+      GITLAB_PASSWORD=$ROOT_PASSWORD
+      GITLAB_ADMIN_USERNAME=$ROOT_USER
+      GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD
+      bundle exec bin/qa Test::Instance::All https://your.gitlab.domain/ -- --tag orchestrated --tag quarantine qa/specs/features/ee/api/7_configure/kubernetes/kubernetes_agent_spec.rb
+      ```
 
-   One can customize the `agentk` version to install with an environment variable, e.g.: `GITLAB_AGENTK_VERSION=v13.7.1`
+      You can also customize the `agentk` version to install with an environment variable: `GITLAB_AGENTK_VERSION=v13.7.1`
