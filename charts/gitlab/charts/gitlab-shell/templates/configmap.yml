@@ -33,7 +33,7 @@ data:
     log_file: "/var/log/gitlab-shell/gitlab-shell.log"
 
     # Log level. INFO by default
-    log_level: INFO
+    log_level: {{ .Values.logging.level | upper }}
 
     log_format: {{ .Values.logging.format }}
 

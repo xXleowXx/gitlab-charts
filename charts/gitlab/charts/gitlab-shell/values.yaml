@@ -79,6 +79,8 @@ deployment:
 
 logging:
   format: "text"
+  level: "INFO"
+  sshdLogLevel: "ERROR"
 
 config:
   loginGraceTime: 120

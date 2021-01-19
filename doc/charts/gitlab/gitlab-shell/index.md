@@ -64,6 +64,8 @@ controlled by `global.shell.port`.
 | `init.image.repository`  |                | initContainer image                      |
 | `init.image.tag`         |                | initContainer image tag                  |
 | `logging.format`         | `text`      | Set to `json` for JSON-structured logs   |
+| `logging.level`          | `INFO`      | Log level for gitlab-shell |
+| `logging.sshdLogLevel`   | `ERROR`     | Log level for underlying SSH daemon |
 | `replicaCount`           | `1`            | Shell replicas                           |
 | `serviceLabels`          | `{}`           | Supplemental service labels |
 | `service.externalTrafficPolicy` | `Cluster` | Shell service external traffic policy (Cluster or Local)  |
