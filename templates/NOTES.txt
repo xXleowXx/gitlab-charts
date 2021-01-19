@@ -63,12 +63,12 @@ NOTICE: The GitLab task-runner is scaled to 0.
 {{/* print survey link */}}
 {{- $appVersion := coalesce .Values.global.gitlabVersion .Chart.AppVersion -}}
 {{- if regexMatch "^\\d+\\.\\d+\\.\\d+(-rc\\d+)?(-pre)?$" $appVersion -}}
-{{- $surveyId := "SV_6kVqZANThUQ1bZb" -}}
+{{- $surveyInfo := dict "type" "install" "id" "SV_6kVqZANThUQ1bZb" -}}
 {{- if .Release.IsUpgrade -}}
-{{- $surveyId = "SV_0Hwcx9ncPfygMfj" -}}
+{{- $surveyInfo = dict "type" "upgrade" "id" "SV_0Hwcx9ncPfygMfj" -}}
 {{- end }}
-Help us improve the installation experience, let us know how we did with a 1 minute survey:
-{{ printf "https://gitlab.fra1.qualtrics.com/jfe/form/%s?installation=helm&release=%s" $surveyId (regexReplaceAll "^(\\d+)\\.(\\d+)\\..+" $appVersion "${1}-${2}") }}
+Help us improve the {{ $surveyInfo.type }} experience, let us know how we did with a 1 minute survey:
+{{ printf "https://gitlab.fra1.qualtrics.com/jfe/form/%s?installation=helm&release=%s" $surveyInfo.id (regexReplaceAll "^(\\d+)\\.(\\d+)\\..+" $appVersion "${1}-${2}") }}
 {{- end }}
 {{/* run deprecations */}}
 {{ include "gitlab.deprecations" . }}
