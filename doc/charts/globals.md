@@ -699,6 +699,7 @@ global:
     enableUsagePing: true
     enableSeatLink: true
     enableImpersonation: true
+    applicationSettingsCacheSeconds: 60
     defaultCanCreateGroup: true
     usernameChangingEnabled: true
     issueClosingPattern:
@@ -812,6 +813,7 @@ application are described below:
 | `enableUsagePing`                   | Boolean | `true`  | A flag to disable the [usage ping support](https://docs.gitlab.com/ee/user/admin_area/settings/usage_statistics.html). |
 | `enableSeatLink`                    | Boolean | `true`  | A flag to disable the [seat link support](https://docs.gitlab.com/ee/subscriptions/#seat-link). |
 | `enableImpersonation`               |         | `nil`   | A flag to disable [user impersonation by Administrators](https://docs.gitlab.com/ee/api/README.html#disable-impersonation). |
+| `applicationSettingsCacheSeconds`   | Integer | 60      | An interval value (in seconds) to invalidate the application settings cache  |
 | `defaultCanCreateGroup`             | Boolean | `true`  | A flag to decide if users are allowed to create groups. |
 | `usernameChangingEnabled`           | Boolean | `true`  | A flag to decide if users are allowed to change their username. |
 | `issueClosingPattern`               | String  | (empty) | [Pattern to close issues automatically](https://docs.gitlab.com/ee/administration/issue_closing_pattern.html). |
