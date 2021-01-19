@@ -475,8 +475,9 @@ rubocop:
     paths:
     - gems
 
-check_docs_lint:
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint:ruby-2.7.2-alpine-3.12-vale-2.4.3-markdownlint-0.24.0"
+# Perform documentation linting on Markdown files
+check_docs_markdown:
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.12-vale-2.8.0-markdownlint-0.26.0"
   stage: prepare
   cache: {}
   dependencies: []
@@ -486,6 +487,21 @@ check_docs_lint:
     - vale --minAlertLevel error doc
     # Lint Markdown
     - markdownlint --config .markdownlint.json 'doc/**/*.md'
+  except:
+    variables:
+      - $DEPS_PIPELINE
+      - $TRIGGER_JOB
+    refs:
+      - *com_auto_deploy_branch_ref
+
+# Perform link checks on published HTML files
+check_docs_links:
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.12-ruby-2.7.2"
+  stage: prepare
+  cache: {}
+  dependencies: []
+  before_script: []
+  script:
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
     # Build HTML from Markdown
