@@ -20,7 +20,6 @@ spec:
       labels:
         {{- include "gitlab.standardLabels" . | nindent 8 }}
         {{- include "gitlab.commonLabels" . | nindent 8 }}
-        {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") . | sha256sum }}
         checksum/config-sshd: {{ include (print $.Template.BasePath "/configmap-sshd.yml") . | sha256sum }}
