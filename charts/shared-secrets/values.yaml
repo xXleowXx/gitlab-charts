@@ -14,7 +14,7 @@ tolerations: []
 
 podLabels: {}
 
-podAnnotations: {}
+annotations: {}
 
 env: production
 global: {}
