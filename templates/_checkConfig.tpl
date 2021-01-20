@@ -442,7 +442,7 @@ Ensure consolidate and type-specific object store configuration are not mixed.
 {{-       end -}}
 {{-     end -}}
 {{-     if not (empty $problematicTypes) -}}
-When consolidated object storage is enabled, for each item `bucket` must be specified and the `connection` must be empty. Check the following object storeage configuration(s): {{ join "," $problematicTypes }}
+When consolidated object storage is enabled, for each item `bucket` must be specified and the `connection` must be empty. Check the following object storage configuration(s): {{ join "," $problematicTypes }}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
@@ -460,7 +460,7 @@ When consolidated object storage is enabled, for each item `bucket` must be spec
 {{-       end -}}
 {{-     end -}}
 {{-     if not (empty $problematicTypes) -}}
-When type-specific object storage is enabled the `connection` property can not be empty. Check the following object storeage configuration(s): {{ join "," $problematicTypes }}
+When type-specific object storage is enabled the `connection` property can not be empty. Check the following object storage configuration(s): {{ join "," $problematicTypes }}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
