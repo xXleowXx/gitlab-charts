@@ -9,9 +9,9 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
-    {{- if .Values.annotations -}}
-    {{-   toYaml .Values.annotations | nindent 4 }}
-    {{- end }}
+  {{- range $key, $value := .Values.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
 {{- end }}
 spec:
   template:
