@@ -10,7 +10,7 @@ metadata:
 data:
   gitlab-exporter.yml.erb: |
     server:
-      name: webrick
+      name: puma
       listen_address: 0.0.0.0
       listen_port: {{ .Values.service.internalPort }}
 
