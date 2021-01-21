@@ -182,6 +182,11 @@ describe 'GitLab Pages' do
                     'key' => 'custom-key'
                   }
                 }
+              },
+              'gitlabAuth' => {
+                'pages' => {
+                  'secret' => 'foobar-pages-gitlab-secret'
+                }
               }
             }
           }

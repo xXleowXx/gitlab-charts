@@ -47,7 +47,7 @@ can be installed separately.
 
 ## Limitations
 
-GitLab Pages [can be deployed](https://gitlab.com/groups/gitlab-org/-/epics/4283) using the Helm chart, but are [missing some functionality](https://gitlab.com/groups/gitlab-org/charts/-/epics/21).
+GitLab Pages [can be deployed](https://gitlab.com/groups/gitlab-org/-/epics/4283) using the Helm chart, but [access control](https://docs.gitlab.com/ee/administration/pages/index.html#access-control) is not supported out of the box. However, it can be [manually configured following the docs](advanced/manual-pages-access-control/index.md). Out-of-the box support is [being plannned](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2443).
 
 Database limitations:
 

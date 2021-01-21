@@ -49,6 +49,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.pages.manualAccessControl" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -501,3 +502,19 @@ webservice:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.webservice.loadBalancer */}}
+
+{{/*
+Ensure that if access control is enabled while running Pages in the cluster, a
+secret is specified for GitLab application credentials.
+
+NOTE: To be removed when we can automatically register Pages as an application
+during deployment.
+*/}}
+{{- define "gitlab.checkConfig.pages.manualAccessControl" -}}
+{{- if and (and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl true)) (empty $.Values.global.gitlabAuth.pages.secret) }}
+pages:
+    To enable GitLab Pages access control, a secret containing GitLab application
+    credentials should be specified as `global.gitlabAuth.pages.secret`.
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.pages.manualAccessControl */}}

@@ -111,6 +111,20 @@ spec:
                 - key: tls.key
                   path: pages/{{ template "gitlab.pages.hostname" $ }}.key
           {{- end }}
+          {{- if eq $.Values.global.pages.accessControl true }}
+          - secret:
+              name: {{ template "gitlabAuth.pages.secret" . }}
+              items:
+                - key: {{ template "gitlabAuth.pages.appIdKey" . }}
+                  path: pages/gitlab_appid
+                - key: {{ template "gitlabAuth.pages.appSecretKey" . }}
+                  path: pages/gitlab_appsecret
+          - secret:
+              name: {{ template "gitlab.pages.authSecret.secret" . }}
+              items:
+                - key: {{ template "gitlab.pages.authSecret.key" . }}
+                  path: pages/auth_secret
+          {{- end }}
       - name: pages-secrets
         emptyDir:
           medium: "Memory"

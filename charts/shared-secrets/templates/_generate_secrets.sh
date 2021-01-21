@@ -68,9 +68,14 @@ generate_secret_if_needed {{ template "gitlab.minio.credentials.secret" . }} --f
 # Gitlab runner secret
 generate_secret_if_needed {{ template "gitlab.gitlab-runner.registrationToken.secret" . }} --from-literal=runner-registration-token=$(gen_random 'a-zA-Z0-9' 64) --from-literal=runner-token=""
 
-# GitLab pages secret
+# GitLab pages API secret
 {{ if or (eq $.Values.global.pages.enabled true) (not (empty $.Values.global.pages.host)) }}
 generate_secret_if_needed {{ template "gitlab.pages.apiSecret.secret" . }} --from-literal={{ template "gitlab.pages.apiSecret.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
+{{ end }}
+
+# GitLab pages auth secret
+{{ if and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl true) }}
+generate_secret_if_needed {{ template "gitlab.pages.authSecret.secret" . }} --from-literal={{ template "gitlab.pages.authSecret.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
 {{ end }}
 
 {{ if .Values.global.kas.enabled -}}
