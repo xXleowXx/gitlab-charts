@@ -61,9 +61,8 @@ describe 'registry configuration' do
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
       expect(t.dig('ConfigMap/test-registry', 'metadata', 'labels')).to include('global' => 'registry')
       expect(t.dig('Deployment/test-registry', 'metadata', 'labels')).to include('foo' => 'global')
-      expect(t.dig('Deployment/test-registry', 'metadata', 'labels')).to include('global' => 'pod')
-      expect(t.dig('Deployment/test-registry', 'metadata', 'labels')).to include('global_pod' => true)
-      expect(t.dig('Deployment/test-registry', 'metadata', 'labels')).not_to include('global' => 'registry')
+      expect(t.dig('Deployment/test-registry', 'metadata', 'labels')).to include('global' => 'registry')
+      expect(t.dig('Deployment/test-registry', 'metadata', 'labels')).not_to include('global' => 'pod')
       expect(t.dig('Deployment/test-registry', 'metadata', 'labels')).not_to include('global' => 'global')
       expect(t.dig('Deployment/test-registry', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
       expect(t.dig('Deployment/test-registry', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
@@ -71,7 +70,6 @@ describe 'registry configuration' do
       expect(t.dig('HorizontalPodAutoscaler/test-registry', 'metadata', 'labels')).to include('global' => 'registry')
       expect(t.dig('Ingress/test-registry', 'metadata', 'labels')).to include('global' => 'registry')
       expect(t.dig('NetworkPolicy/test-registry-v1', 'metadata', 'labels')).to include('global' => 'registry')
-      binding.pry
       expect(t.dig('PodDisruptionBudget/test-registry-v1', 'metadata', 'labels')).to include('global' => 'registry')
       expect(t.dig('Service/test-registry', 'metadata', 'labels')).to include('global' => 'service')
       expect(t.dig('Service/test-registry', 'metadata', 'labels')).to include('global_service' => true)
