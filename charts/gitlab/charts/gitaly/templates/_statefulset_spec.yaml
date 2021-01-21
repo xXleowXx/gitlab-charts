@@ -186,7 +186,7 @@ spec:
       {{- include "gitlab.extraVolumes" . | nindent 6 }}
       - name: gitaly-config
         configMap:
-          {{- $cmName := template "fullname" . -}}
+          {{- $cmName := include "fullname" . -}}
           {{- if .storage}}
           {{- $cmName := printf "%s-%s" $cmName "-praefect" -}}
           {{- end }}
@@ -214,9 +214,9 @@ spec:
                   path: ".gitlab_shell_secret"
           {{- if .Values.global.gitaly.tls.enabled }}
           - secret:
-              {{- secretName := include "gitlab.gitaly.tls.secret" . -}}
+              {{- $secretName := include "gitlab.gitaly.tls.secret" . -}}
               {{- if .storage }}
-              {{-   secretName = .storage.tlsSecretName -}}
+              {{-   $secretName = .storage.tlsSecretName -}}
               {{- end }}
               name: {{ $secretName }}
               items:
