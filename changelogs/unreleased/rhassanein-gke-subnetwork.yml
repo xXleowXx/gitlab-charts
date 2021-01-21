@@ -1,5 +1,0 @@
----
-title: Add --subnetwork flag to the GKE bootstrap script
-merge_request: 1737
-author: rhassanein
-type: fixed
