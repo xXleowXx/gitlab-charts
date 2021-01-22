@@ -1,0 +1,24 @@
+{{- if and $.Values.rbac.create $.Values.rbac.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "gitlab.serviceAccount.name" . }}
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "gitlab.serviceAccount.name" . }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "gitlab.serviceAccount.name" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "gitlab.serviceAccount.name" . }}
+  namespace: {{ $.Release.Namespace }}
+{{- end }}
