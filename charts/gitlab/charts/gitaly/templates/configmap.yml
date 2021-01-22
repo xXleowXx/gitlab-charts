@@ -1,4 +1,4 @@
-{{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.replaceInternalGitaly) (not .Values.global.praefect.enabled)) -}}
+{{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.enabled) (and .Values.global.praefect.enabled (not .Values.global.praefect.replaceInternalGitaly))) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
