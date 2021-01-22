@@ -499,7 +499,7 @@ global:
     externalHttps: []
     artifactsServer: true
     objectStore:
-      enabled: true
+      enabled: false
       bucket: gitlab-pages
       # proxy_download: true
       connection: {}
