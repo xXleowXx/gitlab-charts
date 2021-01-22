@@ -79,7 +79,6 @@ deployment:
 
 logging:
   format: "text"
-  level: "INFO"
   sshdLogLevel: "ERROR"
 
 config:

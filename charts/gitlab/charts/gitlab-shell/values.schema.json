@@ -14,18 +14,6 @@
             "json"
           ]
         },
-        "level" : {
-          "title": "Log level for gitlab-shell",
-          "enum": [
-            "TRACE",
-            "DEBUG",
-            "INFO",
-            "WARN",
-            "ERROR",
-            "FATAL",
-            "PANIC"
-          ]
-        },
         "sshdLogLevel": {
           "title": "Log level for underlying SSH daemon",
           "enum": [
