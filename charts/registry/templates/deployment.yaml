@@ -23,8 +23,8 @@ spec:
       labels:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
-        {{- include "gitlab.standardLabels" $ | nindent 8 }}
-        {{- include "gitlab.commonLabels" $ | nindent 8 }}
+        {{- include "gitlab.standardLabels" . | nindent 8 }}
+        {{- include "gitlab.commonLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
