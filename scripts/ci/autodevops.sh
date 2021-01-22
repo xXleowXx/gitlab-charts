@@ -2,8 +2,6 @@
 
 # Auto DevOps variables and functions
 [[ "$TRACE" ]] && set -x
-auto_database_url=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${CI_ENVIRONMENT_SLUG}-postgres:5432/${POSTGRES_DB}
-export DATABASE_URL=${DATABASE_URL-$auto_database_url}
 export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
 export CI_APPLICATION_TAG=$CI_COMMIT_SHA
 export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
@@ -53,37 +51,10 @@ function crdExists() {
 }
 
 function deploy() {
-  track="${1-stable}"
-  name="$CI_ENVIRONMENT_SLUG"
-
+  # Enable / disable KAS based on environment
   local enable_kas=()
   if [[ -n "$KAS_ENABLED" ]]; then
     enable_kas=("--set" "global.kas.enabled=true")
-  fi
-
-  if [[ "$track" != "stable" ]]; then
-    name="$name-$track"
-  fi
-
-  replicas="1"
-  service_enabled="false"
-  postgres_enabled="$POSTGRES_ENABLED"
-  # canary uses stable db
-  [[ "$track" == "canary" ]] && postgres_enabled="false"
-
-  env_track=$( echo $track | tr -s  '[:lower:]'  '[:upper:]' )
-  env_slug=$( echo ${CI_ENVIRONMENT_SLUG//-/_} | tr -s  '[:lower:]'  '[:upper:]' )
-
-  if [[ "$track" == "stable" ]]; then
-    # for stable track get number of replicas from `PRODUCTION_REPLICAS`
-    eval new_replicas=\$${env_slug}_REPLICAS
-    service_enabled="true"
-  else
-    # for all tracks get number of replicas from `CANARY_PRODUCTION_REPLICAS`
-    eval new_replicas=\$${env_track}_${env_slug}_REPLICAS
-  fi
-  if [[ -n "$new_replicas" ]]; then
-    replicas="$new_replicas"
   fi
 
   # Use stable images when on the stable branch
@@ -194,7 +165,7 @@ function check_kas_status() {
     fi
 
     iteration=$((iteration+1))
-    kasState=($(kubectl get pods -n "$NAMESPACE" | grep "\-kas" | awk '{print $3}'))
+    kasState=($(kubectl get pods -n "$NAMESPACE" -lrelease=${RELEASE_NAME},app=kas | awk '{print $3}'))
     sleep 5;
   done
 }
