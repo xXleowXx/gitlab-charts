@@ -377,7 +377,7 @@ review_helm_test:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
   script:
-    - helm test "$CI_ENVIRONMENT_SLUG"
+    - helm test "$RELEASE_NAME"
   only:
     refs:
       - branches
@@ -397,7 +397,7 @@ production_helm_test:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   script:
-    - helm test "$CI_ENVIRONMENT_SLUG"
+    - helm test "$RELEASE_NAME"
   <<: *except_deps_update
   only:
     refs:
@@ -573,7 +573,6 @@ review-docs-cleanup:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://docker:2375
     GITLAB_PASSWORD: $ROOT_PASSWORD
-    RELEASE_NAME: $CI_ENVIRONMENT_SLUG
     S3_CONFIG_PATH: /etc/gitlab/minio
   script:
     - if [[ -n "${VARIABLES_FILE}" ]]; then source "${VARIABLES_FILE}"; ./scripts/ci/feature_spec_setup; else ./scripts/ci/integration_spec_setup; fi
