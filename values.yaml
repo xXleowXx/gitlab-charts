@@ -134,6 +134,7 @@ global:
 
   praefect:
     enabled: false
+    replaceInternalGitaly: true
     authToken: {}
     autoMigrate: true
     dbSecret: {}
