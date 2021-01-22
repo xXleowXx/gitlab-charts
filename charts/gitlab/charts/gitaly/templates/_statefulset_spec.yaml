@@ -188,7 +188,7 @@ spec:
         configMap:
           {{- $cmName := include "fullname" . -}}
           {{- if .storage}}
-          {{- $cmName := printf "%s-%s" $cmName "-praefect" -}}
+          {{-   $cmName = printf "%s-%s" $cmName "praefect" -}}
           {{- end }}
           name: {{ $cmName }}
       {{- if not .Values.persistence.enabled }}
