@@ -11,7 +11,6 @@ The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/
 ## Known Limitations
 
 1. The database has to be [manually created](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2310).
-1. [Migrating from an existing Gitaly setup](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2311) to Praefect is not supported.
 
 ## Requirements
 
@@ -86,6 +85,35 @@ global:
         accessMode: ReadWriteOnce
         storageClass: storageclass2
 ```
+
+### Migrating to Praefect
+
+When migrating from standalone Gitaly instances to a Praefect setup, `global.praefect.replaceInternalGitaly` can be set to `false`.
+This will ensure that the existing Gitaly instances are preserved while the new Praefect-managed Gitaly instances are created.
+
+```yaml
+global:
+  praefect:
+    enabled: true
+    replaceInternalGitaly: false
+    virtualStorages:
+    - name: default-praefect
+      gitalyReplicas: 4
+      maxUnavailable: 1
+    - name: vs2-praefect
+      gitalyReplicas: 5
+      maxUnavailable: 2
+```
+
+The instructions to [migrate existing repositories to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-existing-repositories-to-gitaly-cluster)
+can then be followed.
+
+NOTE:
+When migrating to Praefect, none of Praefect's virtual storages can be named `default`.
+This is because there must be at least one storage named `default` at all times,
+therefore the name is already taken by the non-Praefect configuration.
+This also means that `replaceInternalGitaly` must be set to `false` even after repositories
+have been migrated.
 
 ### Creating the database
 
