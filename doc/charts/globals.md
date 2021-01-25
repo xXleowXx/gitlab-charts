@@ -35,6 +35,7 @@ for more information on how the global variables work.
 - [Annotations](#annotations)
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
+- [OAuth](#configure-oauth-settings)
 
 ## Configure Host settings
 
@@ -1696,3 +1697,29 @@ global:
     SOME_KEY: some_value
     SOME_OTHER_KEY: some_other_value
 ```
+
+## Configure OAuth settings
+
+OAuth integration is configured out-of-the box for services which support it.
+The services specified in `global.OAuth` are automatically registered as OAuth
+client applications in GitLab during deployment. By default this list includes
+GitLab Pages, if access control is enabled.
+
+```yaml
+global:
+  OAuth:
+    gitlab-pages: {}
+    # secret
+    # appid
+    # appsecret
+    # redirectUri
+```
+
+| Name           | Type   | Default | Description                                                                                            |
+| :---           | :--:   | :------ | :----------                                                                                            |
+| `secret`       | String |         | Name of the secret with OAuth credentials for the service.                                             |
+| `appIdKey`     | String |         | Key in the secret under which App ID of service is stored. Default value being set is `appid`.         |
+| `appSecretKey` | String |         | Key in the secret under which App Secret of service is stored. Default value being set is `appsecret`. |
+| `redirectUri`  | String |         | URI to which user should be redirected after successful authorization.                                 |
+
+Check the [secrets documentation](../installation/secrets.md#oauth-integration) for more details on the secret.
