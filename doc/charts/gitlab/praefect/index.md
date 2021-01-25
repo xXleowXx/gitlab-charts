@@ -102,13 +102,16 @@ there will be some variation in how you connect.
 
    ```shell
    kubectl exec -it $(kubectl get pods -l app=postgresql -o custom-columns=NAME:.metadata.name --no-headers) -- bash
+   ```
+
+   ```shell
    PGPASSWORD=$(cat $POSTGRES_POSTGRES_PASSWORD_FILE) psql -U postgres -d template1
    ```
 
 1. Create the database user:
 
    ```sql
-   template1=# CREATE ROLE praefect WITH LOGIN;
+   CREATE ROLE praefect WITH LOGIN;
    ```
 
 1. Set the database user password.
@@ -124,9 +127,7 @@ there will be some variation in how you connect.
    1. Set the password in the `psql` prompt:
 
       ```sql
-      template1=# \password praefect
-      Enter new password:
-      Enter it again:
+      \password praefect
       ```
 
 1. Create the database:
