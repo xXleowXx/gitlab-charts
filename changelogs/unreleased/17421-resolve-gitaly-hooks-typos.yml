@@ -1,5 +1,0 @@
----
-title: Fix spelling and logic for Gitaly hook volumes (backport 4.7.x)
-merge_request: 1761
-author:
-type: fixed
