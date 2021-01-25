@@ -80,7 +80,7 @@ generate_secret_if_needed {{ template "gitlab.pages.authSecret.secret" . }} --fr
 
 # GitLab Pages OAuth secret
 {{ if and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl true) }}
-generate_secret_if_needed {{ template "OAuth.gitlab-pages.secret" . }} --from-literal={{ template "OAuth.gitlab-pages.appIdKey" . }}=$(gen_random 'a-zA-Z0-9' 64) --from-literal={{ template "OAuth.gitlab-pages.appSecretKey" . }}=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_if_needed {{ template "oauth.gitlab-pages.secret" . }} --from-literal={{ template "oauth.gitlab-pages.appIdKey" . }}=$(gen_random 'a-zA-Z0-9' 64) --from-literal={{ template "oauth.gitlab-pages.appSecretKey" . }}=$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
 
 {{ if .Values.global.kas.enabled -}}

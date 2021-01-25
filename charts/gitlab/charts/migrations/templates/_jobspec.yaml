@@ -125,11 +125,11 @@ spec:
           sources:
           {{- if eq $.Values.global.pages.accessControl true }}
           - secret:
-              name: {{ template "OAuth.gitlab-pages.secret" . }}
+              name: {{ template "oauth.gitlab-pages.secret" . }}
               items:
-                - key: {{ template "OAuth.gitlab-pages.appIdKey" . }}
+                - key: {{ template "oauth.gitlab-pages.appIdKey" . }}
                   path: oauth-secrets/gitlab-pages/appid
-                - key: {{ template "OAuth.gitlab-pages.appSecretKey" . }}
+                - key: {{ template "oauth.gitlab-pages.appSecretKey" . }}
                   path: oauth-secrets/gitlab-pages/appsecret
           - configMap:
               name: {{ template "fullname" . }}

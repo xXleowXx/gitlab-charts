@@ -65,7 +65,7 @@ data:
     tls-max-version={{ .Values.tls.maxVersion }}
     {{- end }}
     {{- if eq $.Values.global.pages.accessControl true }}
-    auth-redirect-uri={{ template "OAuth.gitlab-pages.authRedirectUri" . }}
+    auth-redirect-uri={{ template "oauth.gitlab-pages.authRedirectUri" . }}
     auth-client-id=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appid').strip.dump[1..-2] %>
     auth-client-secret=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appsecret').strip.dump[1..-2] %>
     auth-secret=<%= File.read('/etc/gitlab-secrets/pages/auth_secret').strip.dump[1..-2] %>

@@ -1701,13 +1701,13 @@ global:
 ## Configure OAuth settings
 
 OAuth integration is configured out-of-the box for services which support it.
-The services specified in `global.OAuth` are automatically registered as OAuth
+The services specified in `global.oauth` are automatically registered as OAuth
 client applications in GitLab during deployment. By default this list includes
 GitLab Pages, if access control is enabled.
 
 ```yaml
 global:
-  OAuth:
+  oauth:
     gitlab-pages: {}
     # secret
     # appid

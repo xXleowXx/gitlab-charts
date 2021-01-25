@@ -435,8 +435,8 @@ kubectl create secret generic oauth-gitlab-pages-secret --from-literal=appid=<ap
 
 This secret can be specified using the `global.oauth.<service name>.secret`
 setting. If keys other than `appid` and `appsecret` are used, they can be
-specified using `global.OAuth.<service name>.appIdKey` and
-`global.OAuth.<service name>.appSecretKey` settings.
+specified using `global.oauth.<service name>.appIdKey` and
+`global.oauth.<service name>.appSecretKey` settings.
 
 ## Next steps
 

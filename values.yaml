@@ -418,7 +418,7 @@ global:
       # signupEnabled:
   ## End of global.appConfig
 
-  OAuth:
+  oauth:
     gitlab-pages: {}
       # secret:
       # appIdKey:
