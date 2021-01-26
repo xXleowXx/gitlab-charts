@@ -67,21 +67,18 @@ Return the number of replicas set for Gitaly statefulset
 {{-   if .Values.global.gitaly.host }}0{{- else }}{{ len .Values.global.gitaly.internal.names }}{{- end }}
 {{- end -}}
 
-{{/* 
+{{/*
 Return the appropriate block for the Gitaly client secret.
 This differs depending on whether or not Praefect is enabled
 */}}
 {{- define "gitlab.gitaly.clientSecrets" -}}
 {{- /* Inject non-Praefect configuration if Praefect is disabled or if we're not replacing internal Gitaly. */ -}}
-{{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.enabled) (and .Values.global.praefect.enabled (not .Values.global.praefect.replaceInternalGitaly))) -}}
 - secret:
     name: {{ include "gitlab.gitaly.authToken.secret" . }}
     items:
       - key: {{ include "gitlab.gitaly.authToken.key" . }}
         path: gitaly/gitaly_token
-{{- end }}
-{{- /* Inject Praefect configuration if Praefect is enabled */ -}}
-{{- if and .Values.global.gitaly.enabled .Values.global.praefect.enabled }}
+{{- if .Values.global.praefect.enabled }}
 - secret:
     name: {{ include "gitlab.praefect.authToken.secret" . }}
     items:
