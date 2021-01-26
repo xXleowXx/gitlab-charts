@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.8.1 (2021-01-26)
+
+### Changed (1 change)
+
+- Update GitLab Runner chart to 0.25.0. !1775
+
+
 ## 4.8.0 (2021-01-22)
 
 ### Fixed (2 changes, 1 of them is from the community)
