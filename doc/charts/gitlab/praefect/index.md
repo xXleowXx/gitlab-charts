@@ -194,11 +194,13 @@ the `helm install` command using the `--set` flags.
 
 | Parameter                      | Default                                           | Description                                                                                             |
 | ------------------------------ | ------------------------------------------        | ----------------------------------------                                                                |
+| common.labels                  | `{}`                                              | Supplemental labels that are applied to all objects created by this chart.                              |
 | failover.enabled               | true                                              | Whether Praefect should perform failover on node failure                                                |
 | failover.readonlyAfter         | false                                             | Whether the nodes should be in read-only mode after failover                                            |
 | autoMigrate                    | true                                              | Automatically run migrations on startup                                                                 |
 | electionStrategy               | sql                                               | See [election strategy](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#automatic-failover-and-leader-election) |
 | image.repository               | `registry.gitlab.com/gitlab-org/build/cng/gitaly` | The default image repository to use. Praefect is bundled as part of the Gitaly image                    |
+| podLabels                      | `{}`                                              | Supplemental Pod labels. Will not be used for selectors.                                                |
 | service.name                   | `praefect`                                        | The name of the service to create                                                                       |
 | service.type                   | ClusterIP                                         | The type of service to create                                                                           |
 | service.internalPort           | 8075                                              | The internal port number that the Praefect pod will be listening on                                     |
@@ -214,3 +216,4 @@ the `helm install` command using the `--set` flags.
 | metrics.port                   | 9236                                              |                                                                                                         |
 | securityContext.runAsUser      | 1000                                              |                                                                                                         |
 | securityContext.fsGroup        | 1000                                              |                                                                                                         |
+| serviceLabels                  | `{}`                                              | Supplemental service labels                                                                             |
