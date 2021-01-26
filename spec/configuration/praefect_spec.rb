@@ -100,7 +100,10 @@ describe 'Praefect configuration' do
         {
           'global' => {
             'praefect' => {
-              'replaceInternalGitaly' => false
+              'replaceInternalGitaly' => false,
+              'virtualStorages' => [
+                { 'name' => 'default-praefect' }
+              ]
             }
           }
         }.deep_merge(values_praefect_enabled)
