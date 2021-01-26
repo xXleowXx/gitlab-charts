@@ -73,7 +73,7 @@ This differs depending on whether or not Praefect is enabled
 */}}
 {{- define "gitlab.gitaly.clientSecrets" -}}
 {{- /* Inject non-Praefect configuration if Praefect is disabled or if we're not replacing internal Gitaly. */ -}}
-{{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.replaceInternalGitaly) (not .Values.global.praefect.enabled)) -}}
+{{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.enabled) (and .Values.global.praefect.enabled (not .Values.global.praefect.replaceInternalGitaly))) -}}
 - secret:
     name: {{ include "gitlab.gitaly.authToken.secret" . }}
     items:
