@@ -1,18 +1,17 @@
-{{- $praefect := .Values.global.praefect.enabled -}}
 spec:
   selector:
     matchLabels:
       app: {{ template "name" . }}
       release: {{ .Release.Name }}
-      {{- if $praefect }}
+      {{- if .storage }}
       storage: {{ .storage.name }}
       {{- end }}
-  {{- if $praefect }}
+  {{- if .storage }}
   serviceName: {{ include "gitlab.praefect.gitaly.serviceName" (dict "context" . "name" .storage.name) }}
   {{- else }}
   serviceName: {{ include "gitlab.gitaly.serviceName" . }}
   {{- end }}
-  {{- if $praefect }}
+  {{- if .storage }}
   replicas: {{ default (include "gitlab.gitaly.replicas" .) .storage.gitalyReplicas }}
   {{- else }}
   replicas: {{ include "gitlab.gitaly.replicas" . }}
@@ -28,7 +27,7 @@ spec:
       labels:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
-        {{- if $praefect }}
+        {{- if .storage }}
         storage: {{ .storage.name }}
         {{- end }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
@@ -86,7 +85,7 @@ spec:
                 matchLabels:
                   app: {{ template "name" . }}
                   release: {{ .Release.Name }}
-                  {{- if $praefect }}
+                  {{- if .storage }}
                   storage: {{ .storage.name }}
                   {{- end }}
       {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
@@ -100,7 +99,7 @@ spec:
                 matchLabels:
                   app: {{ template "name" . }}
                   release: {{ .Release.Name }}
-                  {{- if $praefect }}
+                  {{- if .storage }}
                   storage: {{ .storage.name }}
                   {{- end }}
       {{- end }}
@@ -203,7 +202,7 @@ spec:
                   path: ".gitlab_shell_secret"
           {{- if .Values.global.gitaly.tls.enabled }}
           {{- $secretName := include "gitlab.gitaly.tls.secret" . -}}
-          {{- if $praefect }}
+          {{- if .storage }}
           {{-   $secretName = .storage.tlsSecretName -}}
           {{- end }}
           - secret:
@@ -253,7 +252,7 @@ spec:
   {{-  $storageClass := .Values.persistence.storageClass -}}
   {{-  $matchLabels := .Values.persistence.matchLabels -}}
   {{-  $matchExpressions := .Values.persistence.matchExpressions -}}
-  {{-  if $praefect -}}
+  {{-  if .storage -}}
   {{-    if hasKey .storage "persistence" -}}
   {{-      if and (hasKey .storage.persistence "enabled") .storage.persistence.enabled -}}
   {{-        $persistence = .storage.persistence.enabled -}}
@@ -286,7 +285,7 @@ spec:
         labels:
           app: {{ template "name" . }}
           release: {{ .Release.Name }}
-          {{- if $praefect }}
+          {{- if .storage }}
           storage: {{ .storage.name }}
           {{- end }}
         annotations:
