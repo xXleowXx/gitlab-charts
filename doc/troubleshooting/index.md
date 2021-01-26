@@ -115,7 +115,7 @@ This can happen when the runner registration token has been changed in GitLab. (
    kubectl delete secret <runner-secret-name>
    ```
 
-1. Create the new secret with two keys, (`runner-regisration-token` with your shared token, and an empty `runner-token`)
+1. Create the new secret with two keys, (`runner-registration-token` with your shared token, and an empty `runner-token`)
 
    ```shell
    kubectl create secret generic <runner-secret-name> --from-literal=runner-registration-token=<new-shared-runner-token> --from-literal=runner-token=""
