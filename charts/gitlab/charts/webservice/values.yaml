@@ -367,3 +367,6 @@ deployments: {}
   # default:
   #   ingress:
   #     path: /
+
+extraEnv:
+  ENABLE_PUMA_NAKAYOSHI_FORK: 'true'
