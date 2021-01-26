@@ -1,7 +1,11 @@
 {{- define "gitlab.appConfig.gitaly" -}}
 gitaly:
   client_path: /home/git/gitaly/bin
-  token: "<%= File.read('/etc/gitlab/gitaly/gitaly_token').strip.dump[1..-2] %>"
+  {{- $token := "gitaly_token" -}}
+  {{- if .Values.global.praefect.enabled -}}
+  {{- $token = "gitaly_token_praefect" -}}
+  {{- end }}
+  token: "<%= File.read('/etc/gitlab/gitaly/{{ $token }}').strip.dump[1..-2] %>"
 {{- end -}}
 
 {{- define "gitlab.appConfig.repositories" -}}
