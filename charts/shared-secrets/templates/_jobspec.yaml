@@ -17,6 +17,10 @@ spec:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
+      annotations:
+      {{- range $key, $value := .Values.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
     spec:
       {{- if .Values.tolerations }}
       tolerations:

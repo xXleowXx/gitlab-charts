@@ -213,11 +213,11 @@ spec:
                 - key: {{ template "gitlab.gitlab-shell.authToken.key" . }}
                   path: ".gitlab_shell_secret"
           {{- if .Values.global.gitaly.tls.enabled }}
+          {{- $secretName := include "gitlab.gitaly.tls.secret" . -}}
+          {{- if .storage }}
+          {{-   $secretName = .storage.tlsSecretName -}}
+          {{- end }}
           - secret:
-              {{- $secretName := include "gitlab.gitaly.tls.secret" . -}}
-              {{- if .storage }}
-              {{-   $secretName = .storage.tlsSecretName -}}
-              {{- end }}
               name: {{ $secretName }}
               items:
                 - key: "tls.crt"
@@ -264,32 +264,31 @@ spec:
   {{-  $storageClass := .Values.persistence.storageClass -}}
   {{-  $matchLabels := .Values.persistence.matchLabels -}}
   {{-  $matchExpressions := .Values.persistence.matchLabels -}}
-
-  {{- if .storage -}}
-  {{-   if hasKey .storage "persistence" -}}
-  {{-     if and (hasKey .storage.persistence "enabled") .storage.persistence.enabled -}}
-  {{-       $persistence = .storage.persistence.enabled -}}
-  {{-       if .storage.persistence.accessMode -}}
-  {{-         $accessMode = .storage.persistence.accessMode -}}
-  {{-       end -}}
-  {{-       if .storage.persistence.annotations -}}
-  {{-         $annotations = .storage.persistence.annotations -}}
-  {{-       end -}}
-  {{-       if .storage.persistence.size -}}
-  {{-         $size = .storage.persistence.size -}}
-  {{-       end -}}
-  {{-       if .storage.persistence.storageClass -}}
-  {{-         $storageClass  = .storage.persistence.storageClass -}}
-  {{-       end -}}
-  {{-       if .storage.persistence.matchLabels -}}
-  {{-         $matchLabels = .storage.persistence.matchLabels -}}
-  {{-       end -}}
-  {{-       if .storage.persistence.matchLabels -}}
-  {{-         $matchLabels = .storage.persistence.matchLabels -}}
-  {{-       end -}}
-  {{-     end -}}
-  {{-   end -}}
-  {{- end -}}
+  {{-  if .storage -}}
+  {{-    if hasKey .storage "persistence" -}}
+  {{-      if and (hasKey .storage.persistence "enabled") .storage.persistence.enabled -}}
+  {{-        $persistence = .storage.persistence.enabled -}}
+  {{-        if .storage.persistence.accessMode -}}
+  {{-          $accessMode = .storage.persistence.accessMode -}}
+  {{-        end -}}
+  {{-        if .storage.persistence.annotations -}}
+  {{-          $annotations = .storage.persistence.annotations -}}
+  {{-        end -}}
+  {{-        if .storage.persistence.size -}}
+  {{-          $size = .storage.persistence.size -}}
+  {{-        end -}}
+  {{-        if .storage.persistence.storageClass -}}
+  {{-          $storageClass  = .storage.persistence.storageClass -}}
+  {{-        end -}}
+  {{-        if .storage.persistence.matchLabels -}}
+  {{-          $matchLabels = .storage.persistence.matchLabels -}}
+  {{-        end -}}
+  {{-        if .storage.persistence.matchLabels -}}
+  {{-          $matchLabels = .storage.persistence.matchLabels -}}
+  {{-        end -}}
+  {{-      end -}}
+  {{-    end -}}
+  {{-  end }}
 
   {{ if $persistence }}
   volumeClaimTemplates:
