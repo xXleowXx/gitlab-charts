@@ -5,6 +5,8 @@ metadata:
   labels:
     controller-tools.k8s.io: "1.0"
     controller.gitlab.com: {{ .Values.version | quote }}
+    {{- include "gitlab.standardLabels" $ | nindent 4 }}
+    {{- include "gitlab.commonLabels" $ | nindent 4 }}
   annotations:
     gitlab.com/class: {{ .Release.Name }}
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
