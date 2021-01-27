@@ -32,7 +32,7 @@ spec:
         {{- end }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
-        checksum/config: {{ include (print .Template.BasePath "/configmap.yml") . | sha256sum }}
+        checksum/config: {{ include (print .Template.BasePath "/configmap.yml") (merge (dict) . (dict "skipStorages" true)) | sha256sum }}
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
