@@ -251,7 +251,7 @@ spec:
   {{-  $size := .Values.persistence.size -}}
   {{-  $storageClass := .Values.persistence.storageClass -}}
   {{-  $matchLabels := .Values.persistence.matchLabels -}}
-  {{-  $matchExpressions := .Values.persistence.matchLabels -}}
+  {{-  $matchExpressions := .Values.persistence.matchExpressions -}}
   {{-  if .storage -}}
   {{-    if hasKey .storage "persistence" -}}
   {{-      if and (hasKey .storage.persistence "enabled") .storage.persistence.enabled -}}
@@ -271,8 +271,8 @@ spec:
   {{-        if .storage.persistence.matchLabels -}}
   {{-          $matchLabels = .storage.persistence.matchLabels -}}
   {{-        end -}}
-  {{-        if .storage.persistence.matchLabels -}}
-  {{-          $matchLabels = .storage.persistence.matchLabels -}}
+  {{-        if .storage.persistence.matchExpressions -}}
+  {{-          $matchExpressions = .storage.persistence.matchExpressions -}}
   {{-        end -}}
   {{-      end -}}
   {{-    end -}}
