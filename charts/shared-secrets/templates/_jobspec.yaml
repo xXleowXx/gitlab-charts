@@ -21,7 +21,9 @@ spec:
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
+      {{- if .Values.global.istio.enabled }}
         sidecar.istio.io/inject: "false"
+      {{- end }}
     spec:
       {{- if .Values.tolerations }}
       tolerations:
