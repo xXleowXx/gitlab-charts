@@ -1,4 +1,4 @@
-{{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.enabled) (and .Values.global.praefect.enabled (not .Values.global.praefect.replaceInternalGitaly))) -}}
+{{- if eq (include "gitlab.gitaly.includeInternalResources" $) "true" -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
