@@ -13,6 +13,7 @@ spec:
     metadata:
       {{- if .Values.annotations }}
       annotations:
+        sidecar.istio.io/inject: "false"
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
