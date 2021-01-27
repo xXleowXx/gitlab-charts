@@ -156,7 +156,7 @@ Let's look at two snippet examples, which easily exmplify the reasoning:
         {{- with .Values.global.appConfig }}
         max_request_duration_seconds: {{ default (include "gitlab.appConfig.maxRequestDurationSeconds" $) .maxRequestDurationSeconds }}
         impersonation_enabled: {{ .enableImpersonation }}
-        application_settings_cache_seconds: {{ .applicationSettingsCacheSeconds }}
+        application_settings_cache_seconds: {{ .applicationSettingsCacheSeconds | int }}
         usage_ping_enabled: {{ eq .enableUsagePing true }}
         default_can_create_group: {{ eq .defaultCanCreateGroup true }}
         username_changing_enabled: {{ eq .usernameChangingEnabled true }}
