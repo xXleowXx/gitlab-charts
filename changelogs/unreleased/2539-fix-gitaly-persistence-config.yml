@@ -1,0 +1,5 @@
+---
+title: Fix Gitaly persistence configuration
+merge_request: 1796
+author:
+type: fixed
