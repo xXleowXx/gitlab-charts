@@ -62,6 +62,11 @@ maxReplicas: 10
 hpa:
   targetAverageValue: 100m
 
+# Nginx TCP configmap, generate by default
+tcpExternalConfig: false
+# Use PROXY protocol
+tcpProxyProtocol: false
+
 deployment:
   # terminationGracePeriodSeconds: 30
   livenessProbe:
@@ -110,4 +115,3 @@ networkpolicy:
     enabled: false
     rules: []
   annotations: {}
-
