@@ -36,6 +36,7 @@ configurations that can be supplied to the `helm install` command using the
 | Parameter                                 | Default           | Description                                              |
 | ----------------------------------------- | ----------------- | -------------------------------------------------------- |
 | `annotations`                             |                   | Pod annotations                                          |
+| `common.labels`                           | `{}`              | Supplemental labels that are applied to all objects created by this chart. |
 | `extraEnv`                                |                   | List of extra environment variables to expose            |
 | `image.pullPolicy`                        | `IfNotPresent`    | GitLab image pull policy                                 |
 | `image.pullSecrets`                       |                   | Secrets for the image repository                         |

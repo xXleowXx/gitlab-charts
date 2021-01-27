@@ -53,6 +53,8 @@ queueSelector: false
 
 annotations: {}
 podLabels: {}
+common:
+  labels: {}
 
 ## Additional environment variables to set
 extraEnv: {}
