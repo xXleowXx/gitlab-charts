@@ -75,7 +75,7 @@ generate_secret_if_needed {{ template "gitlab.pages.apiSecret.secret" . }} --fro
 
 # GitLab Pages auth secret for hashing cookie store when using access control
 {{ if and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl true) }}
-generate_secret_if_needed {{ template "gitlab.pages.authSecret.secret" . }} --from-literal={{ template "gitlab.pages.authSecret.key" . }}=$(gen_random 'a-zA-Z0-9' 64 | base64)
+generate_secret_if_needed {{ template "gitlab.pages.authSecret.secret" . }} --from-literal={{ template "gitlab.pages.authSecret.key" . }}=$(gen_random 'a-zA-Z0-9' 64 | base64 -w 0)
 {{ end }}
 
 # GitLab Pages OAuth secret
