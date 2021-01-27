@@ -14,3 +14,4 @@ sources:
 maintainers:
 - name: GitLab Inc.
   email: support@gitlab.com
+appVersion: 13.8.1

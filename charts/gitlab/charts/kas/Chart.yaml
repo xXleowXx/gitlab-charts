@@ -2,7 +2,7 @@
 apiVersion: v1
 name: kas
 version: 4.8.1
-appVersion: latest
+appVersion: 13.8.0
 description: GitLab Kubernetes Agent Server
 keywords:
 - agent
