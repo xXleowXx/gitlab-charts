@@ -478,6 +478,8 @@ rubocop:
 # Perform documentation linting on Markdown files
 check_docs_markdown:
   image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.12-vale-2.8.0-markdownlint-0.26.0"
+check_docs_lint:
+  image: "registry.gitlab.com/gitlab-org/gitlab-docs:lint"
   stage: prepare
   cache: {}
   dependencies: []
