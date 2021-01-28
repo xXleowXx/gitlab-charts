@@ -12,5 +12,5 @@ data:
 {{- $defaults := include (print $.Template.BasePath "/_default-config.yaml") . | fromYaml -}}
 {{- $custom := default .Values.customConfig .Values.global.kas.customConfig -}}
 {{- $merged := deepCopy $custom | mergeOverwrite $defaults -}}
-{{- $merged | toYaml | nindent 4 }}
+{{- $merged | mustToPrettyJson | nindent 4 }}
 {{- end }}
