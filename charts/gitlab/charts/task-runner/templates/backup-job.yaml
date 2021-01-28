@@ -180,6 +180,7 @@ spec:
                       - key: {{ default "config" .Values.backups.objectStorage.config.key }}
                         path: objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}
                 {{- end }}
+                {{- include "gitlab.kas.mountSecrets" $ | nindent 16 }}
                 {{- include "gitlab.pages.mountSecrets" $ | nindent 16 }}
                 {{- include "gitlab.minio.mountSecrets" $ | nindent 16 }}
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "object_store" "config" $.Values.global.appConfig.object_store) | nindent 16 }}
