@@ -1,6 +1,6 @@
 {{/* If Praefect enabled, note it is not production ready */}}
 {{- if eq .Values.global.praefect.enabled true }}
-WARNING: The Praefect chart has been enabled. Please note that it is still under development and not fully ready for production use.
+ARNING: The Praefect chart has been enabled. Please note that it is still under development and not fully ready for production use. Usage may require manual intervention during upgrades.
 {{- end }}
 
 {{/* Resource request changes */}}
