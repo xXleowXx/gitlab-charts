@@ -9,7 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) inside a GitLab installment deployed with the Helm charts.
 
 NOTE:
-This chart is still under development, and not specifically production ready to the degree that other components of the chart are.
+The Praefect chart is still under development. It is not production ready to the same degree as the other component charts. Upgrades may require manual intervention.
 
 ## Known Limitations
 
