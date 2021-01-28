@@ -112,10 +112,21 @@ describe 'kas configuration' do
       end
 
       context 'when customConfig is given' do
-        let(:custom_config) { { 'example' => 'config' } }
+        let(:custom_config) do
+          {
+            'example' => 'config',
+            'agent' => {
+              'listen' => {
+                'websocket' => false
+              }
+            }
+          }
+        end
 
-        it 'uses the custom config' do
-          expect(config_yaml_data).to eq(custom_config)
+        it 'deeply merges the custom config' do
+          expect(config_yaml_data['example']).to eq('config')
+          expect(config_yaml_data['agent']['listen']['address']).not_to be_nil
+          expect(config_yaml_data['agent']['listen']['websocket']).to eq(false)
         end
       end
     end

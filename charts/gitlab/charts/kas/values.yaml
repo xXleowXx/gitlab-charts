@@ -46,7 +46,7 @@ workhorse: {}
   # host: '0.0.0.0'
   # serviceName: 'webservice'
   # port: 8181
-# overwrites the default kas config
+# merged with the default kas config
 customConfig: {}
 
 ## Allow to overwrite under which User and Group we're running.
