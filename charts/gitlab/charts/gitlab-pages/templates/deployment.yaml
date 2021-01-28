@@ -49,6 +49,7 @@ spec:
           command: ['sh', '/config/configure']
           image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global.busybox) | quote }}
           env:
+          {{- include "gitlab.extraEnv" $ | nindent 12 }}
           volumeMounts:
           - name: pages-config
             mountPath: /config
@@ -59,7 +60,6 @@ spec:
           - name: pages-secrets
             mountPath: /init-secrets
             readOnly: false
-          {{- include "gitlab.extraEnv" $ | nindent 10 }}
           resources:
             {{- toYaml $.Values.init.resources | nindent 12 }}
       {{- include "pullsecrets" .Values.image | nindent 6 }}
