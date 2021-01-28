@@ -91,7 +91,6 @@ Returns `true` when:
   - Either:
     - Praefect is off, or
     - Praefect is on, but replaceInternalGitaly is off
-Otherwise, returns `false`.
 */}}
 {{- define "gitlab.gitaly.includeInternalResources" -}}
 {{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.enabled) (and .Values.global.praefect.enabled (not .Values.global.praefect.replaceInternalGitaly))) -}}
