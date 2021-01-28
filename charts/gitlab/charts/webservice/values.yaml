@@ -35,6 +35,8 @@ shutdown:
 annotations: {}
 
 podLabels: {}
+common:
+  labels: {}
 serviceLabels: {}
 
 metrics:

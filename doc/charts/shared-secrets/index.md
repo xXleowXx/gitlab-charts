@@ -27,6 +27,7 @@ to the `helm install` command using the `--set` flag:
 | `enabled`                  | `true`              | [See Below](#disable-functionality) |
 | `env`                      | `production`        | Rails environment                   |
 | `podLabels`                |                     | Supplemental Pod labels. Will not be used for selectors. |
+| `annotations`              |                     | Supplemental Pod annotations.       |
 | `image.pullPolicy`         | `Always`            | Gitaly image pull policy            |
 | `image.pullSecrets`        |                     | Secrets for the image repository    |
 | `image.repository`         | `registry.gitlab.com/gitlab-org/build/cng/kubectl` | Gitaly image repository |

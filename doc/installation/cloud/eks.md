@@ -40,7 +40,7 @@ The table below describes all variables.
 |-------------------|--------------------------------------------------|------------------|
 | `REGION`          | The region where your cluster lives              | `us-east-2`      |
 | `CLUSTER_NAME`    | The name of the cluster                          | `gitlab-cluster` |
-| `CLUSTER_VERSION` | The version of your EKS cluster                  | `1.14`           |
+| `CLUSTER_VERSION` | The version of your EKS cluster                  | `1.18`           |
 | `NUM_NODES`       | The number of nodes required                     | `2`              |
 | `MACHINE_TYPE`    | The type of nodes to deploy                      | `m5.xlarge`      |
 | `SERVICE_ACCOUNT` | The service account name to use for Helm/Tiller  | `tiller`         |
@@ -104,7 +104,7 @@ and then mapping your desired DNS name to the created ELB using a CNAME record.
 You can fetch your ELB's hostname to place in the CNAME record with the following:
 
 ```shell
-kubectl get ingress/RELEASE-webservice -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
+kubectl get ingress/RELEASE-webservice-default -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
 ```
 
 NOTE:

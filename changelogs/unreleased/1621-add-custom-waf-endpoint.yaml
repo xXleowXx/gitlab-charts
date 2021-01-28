@@ -1,5 +1,0 @@
----
-title: Support override of exposed hostname for grafana and webservice Ingress
-merge_request: 1621
-author: Louis Baumann
-type: added
