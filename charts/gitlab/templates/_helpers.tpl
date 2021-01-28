@@ -96,7 +96,5 @@ Otherwise, returns `false`.
 {{- define "gitlab.gitaly.includeInternalResources" -}}
 {{- if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.enabled) (and .Values.global.praefect.enabled (not .Values.global.praefect.replaceInternalGitaly))) -}}
 {{-   true }}
-{{- else }}
-{{-   false }}
 {{- end -}}
 {{- end -}}
