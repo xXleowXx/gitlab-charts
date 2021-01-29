@@ -106,7 +106,7 @@ describe 'checkConfig template' do
       {
         'global' => {
           'praefect' => {
-            'enabled' => 'true',
+            'enabled' => true,
             'virtualStorages' => [
               { 'name' => 'default', 'gitalyReplicas' => 3,
                 'maxUnavailable' => 2, 'tlsSecretName' => 'gitaly-default-tls' },
