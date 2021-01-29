@@ -72,7 +72,6 @@ Return the appropriate block for the Gitaly client secret.
 This differs depending on whether or not Praefect is enabled
 */}}
 {{- define "gitlab.gitaly.clientSecrets" -}}
-{{- /* Inject non-Praefect configuration if Praefect is disabled or if we're not replacing internal Gitaly. */ -}}
 - secret:
     name: {{ include "gitlab.gitaly.authToken.secret" . }}
     items:
