@@ -55,6 +55,8 @@ the `helm install` command using the `--set` flags.
 | `minReplicas`               | `2`            | HPA `maxReplicas`                |
 | `serviceAccount.annotations`| `{}`       | Service account annotations      |
 | `podLabels`                 | `{}`           | Supplemental Pod labels. Not used for selectors. |
+| `serviceLabels`             | `{}`           | Supplemental service labels |
+| `common.labels`             |                | Supplemental labels that are applied to all objects created by this chart. |
 | `resources.requests.cpu`    | `75m`                 | GitLab Exporter minimum CPU                    |
 | `resources.requests.memory` | `100M`                | GitLab Exporter minimum memory                 |
 | `service.externalPort`      | `8150`         | External port                    |

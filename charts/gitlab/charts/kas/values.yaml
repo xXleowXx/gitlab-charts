@@ -22,6 +22,9 @@ maxReplicas: 10
 maxUnavailable: 1
 minReplicas: 2
 podLabels: {}
+common:
+  labels: {}
+serviceLabels: {}
 resources:
   requests:
     cpu: 100m
