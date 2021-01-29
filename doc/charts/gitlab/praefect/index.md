@@ -88,8 +88,11 @@ global:
 
 ### Migrating to Praefect
 
+NOTE:
+Group-level wikis [cannot be moved using the API](https://docs.gitlab.com/ee/api/project_repository_storage_moves.html#limitations) at this time.
+
 When migrating from standalone Gitaly instances to a Praefect setup, `global.praefect.replaceInternalGitaly` can be set to `false`.
-This will ensure that the existing Gitaly instances are preserved while the new Praefect-managed Gitaly instances are created.
+This ensures that the existing Gitaly instances are preserved while the new Praefect-managed Gitaly instances are created.
 
 ```yaml
 global:
@@ -97,23 +100,42 @@ global:
     enabled: true
     replaceInternalGitaly: false
     virtualStorages:
-    - name: default-praefect
-      gitalyReplicas: 4
-      maxUnavailable: 1
-    - name: vs2-praefect
+    - name: virtualStorage2
       gitalyReplicas: 5
       maxUnavailable: 2
 ```
-
-The instructions to [migrate existing repositories to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-existing-repositories-to-gitaly-cluster)
-can then be followed.
 
 NOTE:
 When migrating to Praefect, none of Praefect's virtual storages can be named `default`.
 This is because there must be at least one storage named `default` at all times,
 therefore the name is already taken by the non-Praefect configuration.
-This also means that `replaceInternalGitaly` must be set to `false` even after repositories
-have been migrated.
+
+The instructions to [migrate existing repositories to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-existing-repositories-to-gitaly-cluster)
+can then be followed to move data from the `default` storage to `virtualStorage2`. If additional storages
+were defined under `global.gitaly.internal.names`, be sure to migrate repositories from those storages as well.
+
+After the repositories have been migrated to `virtualStorage2`, `replaceInternalGitaly` can be set back to `true` if a storage named
+`default` is added in the Praefect configuration.
+
+```yaml
+global:
+  praefect:
+    enabled: true
+    replaceInternalGitaly: true
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 4
+      maxUnavailable: 1
+    - name: virtualStorage2
+      gitalyReplicas: 5
+      maxUnavailable: 2
+```
+
+The instructions to [migrate existing repositories to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-existing-repositories-to-gitaly-cluster)
+can be followed again to move data from `virtualStorage2` to the newly-added `default` storage if desired.
+
+Finally, see the [repository storage paths documentation](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#choose-where-new-repositories-are-stored)
+to configure where new repositories are stored.
 
 ### Creating the database
 
