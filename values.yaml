@@ -452,6 +452,7 @@ global:
       # key:
     hostKeys: {}
       # secret:
+    tcpProxyProtocol: false
 
   ## Rails application secrets
   ## Secret created according to doc/installation/secrets.md#gitlab-rails-secret

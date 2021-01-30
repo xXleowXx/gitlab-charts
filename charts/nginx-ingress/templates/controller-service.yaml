@@ -6,6 +6,9 @@ metadata:
   {{- range $key, $value := .Values.controller.service.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
+  {{- if .Values.global.shell.tcpProxyProtocol }}
+    service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+  {{- end }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
     component: "{{ .Values.controller.name }}"

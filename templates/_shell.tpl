@@ -33,3 +33,14 @@ NOTE: All templates return _strings_, use as:
 {{- end -}}
 {{ default 22 .Values.global.shell.port }}
 {{- end -}}
+
+{{/*
+Return the string 'PROXY:NO_PROXY'
+
+The first 'PROXY' ensures the use of ProxyProtocol decoding in a TCP service.
+The latter 'NO_PROXY' ensures that the ProxyProtocol encoding is not used.
+Both strings are exactly compared with the string 'PROXY' (in capital letters).  
+*/}}
+{{- define "gitlab.shell.tcpProxyProtocol" -}}
+{{- if .Values.global.shell.tcpProxyProtocol -}}:PROXY:NO_PROXY{{ end }}
+{{- end -}}

@@ -1414,11 +1414,12 @@ global:
     hostKeys: {}
 ```
 
-| Name        | Type    | Default | Description |
-|:----------- |:-------:|:------- |:----------- |
-| `port`      | Integer | `22`    | See [port](#port) below for specific documentation. |
-| `authToken` |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
-| `hostKeys`  |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
+| Name                 | Type    | Default | Description |
+|:---------------------|:-------:|:------- |:----------- |
+| `port`               | Integer | `22`    | See [port](#port) below for specific documentation. |
+| `authToken`          |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
+| `hostKeys`           |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
+| `tcpProxyProtocol`   | Boolean | `false` | See [TCP Proxy Protocol](#tcp-proxy-protocol) below for specific documentation. |
 
 ### Port
 
@@ -1447,7 +1448,16 @@ nginx-ingress:
     service:
       type: NodePort
 ```
+### TCP Proxy Protocol
 
+You can enable the `Proxy Protocol` to carry connection information from the source to the destination (e.g. source IP address) when using an ELB in AWS. 
+A Proxy Protocol header will be added to the request header. By enabling this option, you will not break SSH.
+
+```yaml
+global:
+  shell:
+    tcpProxyProtocol: true
+```
 ## Configure GitLab Pages
 
 The global GitLab Pages settings that are used by other charts are documented
