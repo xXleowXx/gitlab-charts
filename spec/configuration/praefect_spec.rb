@@ -199,6 +199,7 @@ describe 'Praefect configuration' do
         expect(t.dig('ConfigMap/test-praefect', 'metadata', 'labels')).to include('global' => 'praefect')
         expect(t.dig('PodDisruptionBudget/test-praefect', 'metadata', 'labels')).to include('global' => 'praefect')
         expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('global' => 'service')
+        expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('foo' => 'global')
         expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('global_service' => true)
         expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('service' => true)
         expect(t.dig('Service/test-praefect', 'metadata', 'labels')).not_to include('global' => 'global')
