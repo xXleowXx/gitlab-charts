@@ -225,6 +225,7 @@ describe 'Gitaly configuration' do
         expect(t.dig('StatefulSet/test-gitaly', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
         expect(t.dig('StatefulSet/test-gitaly', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
         expect(t.dig('StatefulSet/test-gitaly', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+        expect(t.dig('StatefulSet/test-gitaly', 'spec', 'volumeClaimTemplates', 0, 'metadata')).to include('global' => 'gitaly')
         expect(t.dig('PodDisruptionBudget/test-gitaly', 'metadata', 'labels')).to include('global' => 'gitaly')
         expect(t.dig('Service/test-gitaly', 'metadata', 'labels')).to include('global' => 'service')
         expect(t.dig('Service/test-gitaly', 'metadata', 'labels')).to include('gitaly' => 'gitaly')
@@ -235,7 +236,8 @@ describe 'Gitaly configuration' do
         expect(t.dig('ServiceAccount/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'gitaly')
         expect(t.dig('Role/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'gitaly')
         expect(t.dig('RoleBinding/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'gitaly')
-        expect(t.dig('Job/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'gitaly')
+        expect(t.dig('Job/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Job/test-gitaly-pause', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
       end
     end
 
