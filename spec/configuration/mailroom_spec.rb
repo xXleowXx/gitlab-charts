@@ -149,11 +149,6 @@ describe 'Mailroom configuration' do
             'labels' => {
               'global_pod' => true
             }
-          },
-          'service' => {
-            'labels' => {
-              'global_service' => true
-            }
           }
         },
         'gitlab' => {
@@ -174,10 +169,6 @@ describe 'Mailroom configuration' do
             'serviceAccount' => {
               'create' => true,
               'enabled' => true
-            },
-            'serviceLabels' => {
-              'service' => true,
-              'global' => 'service'
             }
           }
         }

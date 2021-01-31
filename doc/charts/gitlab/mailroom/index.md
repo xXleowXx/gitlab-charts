@@ -88,7 +88,6 @@ serviceAccount:
 | `init.image.tag`                     | Mailroom init image tag                          |                             |
 | `init.resources`                     | Mailroom init container resource requirements    | `{ requests: { cpu: 50m }}` |
 | `podLabels`                          | Labels for running Mailroom Pods                 | `{}`                          |
-| `serviceLabels`                      | Supplemental service labels                      | `{}` |
 | `common.labels`                      | Supplemental labels that are applied to all objects created by this chart. | `{}` |
 | `resources`                          | Mailroom resource requirements                   | `{ requests: { cpu: 50m, memory: 150M }}` |
 | `networkpolicy.annotations`          | Annotations to add to the NetworkPolicy          | `{}`                          |

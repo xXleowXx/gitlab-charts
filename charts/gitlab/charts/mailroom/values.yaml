@@ -20,7 +20,6 @@ tolerations: []
 podLabels: {}
 common:
   labels: {}
-serviceLabels: {}
 
 global:
   # imagePullPolicy: IfNotPresent
