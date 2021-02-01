@@ -28,7 +28,10 @@ deployment:
     failureThreshold: 3
 
 podLabels: {}
+common:
+  labels: {}
 
+serviceLabels: {}
 service:
   name: registry
   type: ClusterIP
