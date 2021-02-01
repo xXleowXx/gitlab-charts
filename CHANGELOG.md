@@ -125,6 +125,23 @@ entry.
 - Changes the default loglevel for registry to info. !1703
 
 
+## 4.6.6 (2021-02-01)
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Fix dependency proxy object storage config. !1531 (Maikel Vlasman)
+
+### Changed (2 changes)
+
+- GitLab Runner chart to 0.15.0. !1224
+- GitLab Runner chart to 0.16.0, v12.10.1. !1299
+
+### Added (2 changes, 2 of them are from the community)
+
+- Minio: Adds podLabels and podAnnotations to chart. !1264 (Kavanaugh Latiolais)
+- Support custom labels for Pods of GitLab components. !1457 (Maxence Laude)
+
+
 ## 4.6.5 (2021-01-13)
 
 - No changes.
