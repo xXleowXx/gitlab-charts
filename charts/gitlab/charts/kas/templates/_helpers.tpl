@@ -21,10 +21,11 @@ Build the structure describing sentinels
 {{- $_ := set $ "redisConfigName" "sharedState" -}}
 {{- end -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- if not .redisMergedConfig.sentinels -}}
+password_file: /etc/kas/redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}
+{{ if not .redisMergedConfig.sentinels -}}
 server:
-  url: {{ template "gitlab.redis.url" . }}
-{{- else -}}
+  address: {{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
+{{ else -}}
 sentinel:
   master_name: {{ template "gitlab.redis.host" . }}
   addresses:

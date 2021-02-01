@@ -15,7 +15,6 @@ data:
 {{- else }}
     redis:
       {{- include "kas.redis" . | nindent 6 }}
-
     agent:
       listen:
         address: ":{{ .Values.service.internalPort }}"
