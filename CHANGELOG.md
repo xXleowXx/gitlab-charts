@@ -2,6 +2,14 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.8.2 (2021-02-01)
+
+### Fixed (2 changes)
+
+- Fixes backups when GitLab KAS is enabled. !1765
+- Fix Gitaly persistence configuration. !1796
+
+
 ## 4.8.1 (2021-01-26)
 
 ### Changed (1 change)
@@ -35,6 +43,10 @@ entry.
 - Add tolerations for minio create bucket job. !1744 (David ALEXANDRE)
 - Add upgrade survey link to upgrade output. !1762
 
+
+## 4.7.6 (2021-02-01)
+
+- No changes.
 
 ## 4.7.5 (2021-01-25)
 
@@ -111,6 +123,23 @@ entry.
 
 - Update NGINX from v0.20.0 to 0.41.2. !1690
 - Changes the default loglevel for registry to info. !1703
+
+
+## 4.6.6 (2021-02-01)
+
+### Fixed (1 change, 1 of them is from the community)
+
+- Fix dependency proxy object storage config. !1531 (Maikel Vlasman)
+
+### Changed (2 changes)
+
+- GitLab Runner chart to 0.15.0. !1224
+- GitLab Runner chart to 0.16.0, v12.10.1. !1299
+
+### Added (2 changes, 2 of them are from the community)
+
+- Minio: Adds podLabels and podAnnotations to chart. !1264 (Kavanaugh Latiolais)
+- Support custom labels for Pods of GitLab components. !1457 (Maxence Laude)
 
 
 ## 4.6.5 (2021-01-13)
