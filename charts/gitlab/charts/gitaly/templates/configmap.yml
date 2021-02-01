@@ -42,13 +42,12 @@ data:
     {{- end }}
 
     {{- /*
-    Passing in "skipStorages=true" here prevents changes in the Gitaly replica counts from modifying
+    Passing in "skipStorages=true" below prevents changes in the Gitaly replica counts from modifying
     the contents of the ConfigMap, which would cause existing pods to restart unnecessarily.
-    */ -}}
-
-    {{- if not .skipStorages }}
-
+    */}}
+    {{ if not .skipStorages }}
     <% @storages = [ {{ include "gitlab.gitaly.storageNames" . }}  ] %>
+    {{- end }}
 
     {{- if $.Values.global.praefect.enabled }}
 
@@ -71,8 +70,6 @@ data:
     <% else %>
     <% raise Exception, "Storage for node #{@index} is not present in the storageNames array. Did you use kubectl to scale up? You need to solely use helm for this purpose." %>
     <% end %>
-
-    {{- end }}
 
     {{- end }}
 
