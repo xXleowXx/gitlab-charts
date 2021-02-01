@@ -2,6 +2,14 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.8.2 (2021-02-01)
+
+### Fixed (2 changes)
+
+- Fixes backups when GitLab KAS is enabled. !1765
+- Fix Gitaly persistence configuration. !1796
+
+
 ## 4.8.1 (2021-01-26)
 
 ### Changed (1 change)
