@@ -67,7 +67,7 @@ pvc-61bdf136-8c2d-11e8-8267-42010a9a0113  redis
 
 ## Before making storage changes
 
-> **Note**: The person making the changes needs to have admin access to the cluster,
+> **Note**: The person making the changes needs to have administrator access to the cluster,
 > and appropriate access to the storage solutions being used. Often the changes
 > will first need to be applied in the storage solution, then the results need
 > to be updated in Kubernetes.
