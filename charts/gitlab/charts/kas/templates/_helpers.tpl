@@ -22,15 +22,15 @@ Build the structure describing sentinels
 {{- end -}}
 {{- include "gitlab.redis.configMerge" . -}}
 password_file: /etc/kas/redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}
-{{ if not .redisMergedConfig.sentinels -}}
+{{- if not .redisMergedConfig.sentinels }}
 server:
   address: {{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
-{{ else -}}
+{{- else }}
 sentinel:
   master_name: {{ template "gitlab.redis.host" . }}
   addresses:
 {{- range $i, $entry := .redisMergedConfig.sentinels }}
-    - {{ quote (print "tcp://" (trim $entry.host) ":" ( default 26379 $entry.port | int ) ) -}}
+    - {{ quote (print (trim $entry.host) ":" ( default 26379 $entry.port | int ) ) -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
