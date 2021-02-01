@@ -1,5 +1,0 @@
----
-title: Fixes backups when GitLab KAS is enabled
-merge_request: 1765
-author:
-type: fixed
