@@ -44,6 +44,10 @@ entry.
 - Add upgrade survey link to upgrade output. !1762
 
 
+## 4.7.6 (2021-02-01)
+
+- No changes.
+
 ## 4.7.5 (2021-01-25)
 
 ### Fixed (2 changes, 1 of them is from the community)
