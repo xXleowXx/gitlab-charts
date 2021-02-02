@@ -6,6 +6,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.commonLabels" . | nindent 4 }}
 spec:
   activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
   backoffLimit: {{ .Values.backoffLimit }}
@@ -18,8 +19,8 @@ spec:
       {{- end }}
       {{- end }}
       labels:
-        app: {{ template "name" . }}
-        release: {{ .Release.Name }}
+        {{- include "gitlab.standardLabels" . | nindent 8 }}
+        {{- include "gitlab.commonLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
     spec:
       {{- if .Values.tolerations }}

@@ -50,6 +50,75 @@ describe 'kas configuration' do
     end
   end
 
+  context 'When customer provides additional labels' do
+    let(:kas_label_values) do
+      {
+        'certmanager-issuer' => { 'email' => 'test@example.com' },
+        'global' => {
+          'common' => {
+            'labels' => {
+              'global' => 'global',
+              'foo' => 'global'
+            }
+          },
+          'kas' => { 'enabled' => 'true' },
+          'pod' => {
+            'labels' => {
+              'global_pod' => true
+            }
+          },
+          'service' => {
+            'labels' => {
+              'global_service' => true
+            }
+          }
+        },
+        'gitlab' => {
+          'kas' => {
+            'common' => {
+              'labels' => {
+                'global' => 'kas',
+                'kas' => 'kas'
+              }
+            },
+            'enabled' => 'true',
+            'podLabels' => {
+              'pod' => true,
+              'global' => 'pod'
+            },
+            'serviceAccount' => {
+              'create' => true,
+              'enabled' => true
+            },
+            'serviceLabels' => {
+              'service' => true,
+              'global' => 'service'
+            }
+          }
+        }
+      }
+    end
+    it 'Populates the additional labels in the expected manner' do
+      t = HelmTemplate.new(kas_label_values)
+      expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+      expect(t.dig('ConfigMap/test-kas', 'metadata', 'labels')).to include('global' => 'kas')
+      expect(t.dig('Deployment/test-kas', 'metadata', 'labels')).to include('foo' => 'global')
+      expect(t.dig('Deployment/test-kas', 'metadata', 'labels')).to include('global' => 'kas')
+      expect(t.dig('Deployment/test-kas', 'metadata', 'labels')).not_to include('global' => 'global')
+      expect(t.dig('Deployment/test-kas', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+      expect(t.dig('Deployment/test-kas', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+      expect(t.dig('Deployment/test-kas', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+      expect(t.dig('HorizontalPodAutoscaler/test-kas', 'metadata', 'labels')).to include('global' => 'kas')
+      expect(t.dig('Ingress/test-kas', 'metadata', 'labels')).to include('global' => 'kas')
+      expect(t.dig('PodDisruptionBudget/test-kas', 'metadata', 'labels')).to include('global' => 'kas')
+      expect(t.dig('Service/test-kas', 'metadata', 'labels')).to include('global' => 'service')
+      expect(t.dig('Service/test-kas', 'metadata', 'labels')).to include('global_service' => true)
+      expect(t.dig('Service/test-kas', 'metadata', 'labels')).to include('service' => true)
+      expect(t.dig('Service/test-kas', 'metadata', 'labels')).not_to include('global' => 'global')
+      expect(t.dig('ServiceAccount/test-kas', 'metadata', 'labels')).to include('global' => 'kas')
+    end
+  end
+
   context 'when kas is enabled with custom values' do
     let(:kas_enabled_template) do
       HelmTemplate.new(values.merge(kas_values))

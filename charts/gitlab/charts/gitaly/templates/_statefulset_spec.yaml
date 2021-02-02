@@ -40,7 +40,7 @@ spec:
       {{- if .storage }}
       {{- $cm = "/configmap-with-praefect.yml" -}}
       {{- end }}
-        checksum/config: {{ include (print .Template.BasePath $cm) . | sha256sum }}
+        checksum/config: {{ include (print .Template.BasePath $cm) (merge (dict) . (dict "skipStorages" true)) | sha256sum }}
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -263,7 +263,7 @@ spec:
   {{-  $size := .Values.persistence.size -}}
   {{-  $storageClass := .Values.persistence.storageClass -}}
   {{-  $matchLabels := .Values.persistence.matchLabels -}}
-  {{-  $matchExpressions := .Values.persistence.matchLabels -}}
+  {{-  $matchExpressions := .Values.persistence.matchExpressions -}}
   {{-  if .storage -}}
   {{-    if hasKey .storage "persistence" -}}
   {{-      if and (hasKey .storage.persistence "enabled") .storage.persistence.enabled -}}
@@ -283,8 +283,8 @@ spec:
   {{-        if .storage.persistence.matchLabels -}}
   {{-          $matchLabels = .storage.persistence.matchLabels -}}
   {{-        end -}}
-  {{-        if .storage.persistence.matchLabels -}}
-  {{-          $matchLabels = .storage.persistence.matchLabels -}}
+  {{-        if .storage.persistence.matchExpressions -}}
+  {{-          $matchExpressions = .storage.persistence.matchExpressions -}}
   {{-        end -}}
   {{-      end -}}
   {{-    end -}}
