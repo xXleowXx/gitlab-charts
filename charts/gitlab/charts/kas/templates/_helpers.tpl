@@ -14,23 +14,23 @@ if there is a shared tls secret for all ingresses.
 {{- end -}}
 
 {{/*
-Build the structure describing sentinels
+Build Redis config for KAS
 */}}
 {{- define "kas.redis" -}}
 {{- if .Values.global.redis.sharedState -}}
 {{- $_ := set $ "redisConfigName" "sharedState" -}}
 {{- end -}}
-{{- include "gitlab.redis.configMerge" . -}}
+{{- include "gitlab.redis.selectedMergedConfig" . -}}
 password_file: /etc/kas/redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}
 {{- if not .redisMergedConfig.sentinels }}
 server:
   address: {{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
 {{- else }}
 sentinel:
-  master_name: {{ template "gitlab.redis.host" . }}
   addresses:
-{{- range $i, $entry := .redisMergedConfig.sentinels }}
+  {{- range $i, $entry := .redisMergedConfig.sentinels }}
     - {{ quote (print (trim $entry.host) ":" ( default 26379 $entry.port | int ) ) -}}
-{{- end -}}
+  {{ end }}
+  master_name: {{ template "gitlab.redis.host" . }}
 {{- end -}}
 {{- end -}}
