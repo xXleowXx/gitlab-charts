@@ -12,6 +12,8 @@ if [[ $CI_ENVIRONMENT_SLUG =~ ^.{3}-review ]]; then
   RELEASE_NAME=rvw-${CI_COMMIT_REF_SLUG}
   # Trim release name to leave room for prefixes/suffixes
   RELEASE_NAME=${RELEASE_NAME:0:30}
+  # Trim any hyphens in the suffix
+  RELEASE_NAME=${RELEASE_NAME%-}
 else
   # otherwise, use CI_ENVIRONMENT_SLUG
   RELEASE_NAME=$CI_ENVIRONMENT_SLUG
