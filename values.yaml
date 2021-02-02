@@ -452,6 +452,7 @@ global:
       # key:
     hostKeys: {}
       # secret:
+    ## doc/charts/globals.md#tcp-proxy-protocol
     tcpProxyProtocol: false
 
   ## Rails application secrets
