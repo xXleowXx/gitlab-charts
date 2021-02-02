@@ -10,7 +10,7 @@ export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
 if [[ $CI_ENVIRONMENT_SLUG =~ ^.{3}-review ]]; then
   # if a "review", use CI_COMMIT_REF_SLUG
   RELEASE_NAME=rvw-${CI_COMMIT_REF_SLUG}
-  RELEASE_NAME=${RELEASE_NAME:0:48}
+  RELEASE_NAME=${RELEASE_NAME:0:30}
 else
   # otherwise, use CI_ENVIRONMENT_SLUG
   RELEASE_NAME=$CI_ENVIRONMENT_SLUG
