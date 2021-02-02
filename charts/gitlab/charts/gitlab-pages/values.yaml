@@ -56,6 +56,7 @@ podLabels: {}
 common:
   labels: {}
 
+serviceLabels: {}
 ## Additional environment variables to set
 extraEnv: {}
 # extraEnv:
