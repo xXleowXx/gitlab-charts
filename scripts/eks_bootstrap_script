@@ -1,9 +1,8 @@
 #!/bin/bash
 # This script will
 # 1. create an EKS cluster
-# 2. create an external IP
-# 3. add a context to $HOME/.kube/config
-# 5. Install tiller with a dedicated service account
+# 2. add a context to $HOME/.kube/config
+# 3. Install tiller with a dedicated service account
 
 set -e
 
