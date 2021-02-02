@@ -47,7 +47,7 @@ can be installed separately.
 
 ## Limitations
 
-GitLab Pages [can be deployed](https://gitlab.com/groups/gitlab-org/-/epics/4283) using the Helm chart, but are [missing some functionality](https://gitlab.com/groups/gitlab-org/charts/-/epics/21).
+GitLab Pages [can be deployed](https://gitlab.com/groups/gitlab-org/-/epics/4283) using the Helm chart, but is [missing access control](https://gitlab.com/groups/gitlab-org/charts/-/epics/21).
 
 ## GitLab Helm chart quick start guide
 
