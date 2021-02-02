@@ -33,6 +33,12 @@ data:
     key_path = '/etc/gitlab-secrets/gitaly/gitaly.key'
     {{- end }}
 
+    {{- /*
+    Passing in "skipStorages=true" below prevents changes in the Gitaly replica counts from modifying
+    the contents of the ConfigMap, which would cause existing pods to restart unnecessarily.
+    */}}
+    {{ if not .skipStorages }}
+
     {{- if .storage }}
 
     <% @storages = [ {{ include "gitlab.praefect.gitaly.storageNames" . }}  ] %>
@@ -56,6 +62,8 @@ data:
     <% else %>
     <% raise Exception, "Storage for node #{@index} is not present in the storageNames array. Did you use kubectl to scale up? You need to solely use helm for this purpose." %>
     <% end %>
+
+    {{- end }}
 
     {{- end }}
 
