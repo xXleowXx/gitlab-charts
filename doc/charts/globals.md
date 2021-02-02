@@ -1450,8 +1450,9 @@ nginx-ingress:
 ```
 ### TCP Proxy Protocol
 
-You can enable the `Proxy Protocol` to carry connection information from the source to the destination (e.g. source IP address) when using an ELB in AWS. 
-A Proxy Protocol header will be added to the request header. By enabling this option, you will not break SSH.
+You can enable handling [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/) on the SSH ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header. 
+By doing so, this will prevent SSH from receiving the additional headers and not break SSH. 
+One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster.
 
 ```yaml
 global:
