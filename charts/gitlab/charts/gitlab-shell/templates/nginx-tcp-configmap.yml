@@ -1,7 +1,7 @@
 {{- if not .Values.tcpExternalConfig}}
 {{- if .Values.enabled }}
 {{- $port := include "gitlab.shell.port" . | int -}}
-{{- $tcpProxyProtocol := include "gitlab.shell.tcpProxyProtocol" . }}
+{{- $tcpProxyProtocol := include "gitlab.shell.tcp.proxyProtocol" . }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
