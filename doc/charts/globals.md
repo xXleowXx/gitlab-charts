@@ -35,6 +35,7 @@ for more information on how the global variables work.
 - [Annotations](#annotations)
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
+- [Outgoing email](#outgoing-email)
 
 ## Configure Host settings
 
@@ -1696,3 +1697,27 @@ global:
     SOME_KEY: some_value
     SOME_OTHER_KEY: some_other_value
 ```
+
+## Outgoing email
+
+Outgoing email configuration is available via `global.smtp.*` and `global.email.*`.
+
+```yaml
+global:
+  email:
+    display_name: 'GitLab'
+    from: 'gitlab@example.com'
+    reply_to: 'noreply@example.com'
+  smtp:
+    enabled: true
+    address: 'smtp.example.com'
+    password:
+      secret: 'smtp-password'
+      key: 'password'
+```
+
+More information on the available configuration options is available in the
+[outgoing email documentation](../installation/deployment.md#outgoing-email)
+
+More detailed examples can be found in the
+[Omnibus SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).
