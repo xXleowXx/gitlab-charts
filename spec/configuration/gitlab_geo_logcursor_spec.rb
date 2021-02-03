@@ -6,12 +6,17 @@ require 'hash_deep_merge'
 describe 'geo-logcursor configuration' do
   let(:default_values) do
     {
-      # provide required setting
       'certmanager-issuer' => { 'email' => 'test@example.com' },
       'global' => {
         'geo' => {
           'enabled' => true,
-          'role' => 'primary'
+          'role' => 'secondary',
+          'psql' => {
+            'host' => 'localhost',
+            'password' => {
+              'secret' => 'foobar'
+            }
+          }
         },
         'hosts' => {
           'domain' => 'example.com'
@@ -21,6 +26,10 @@ describe 'geo-logcursor configuration' do
           'password' => {
             'secret' => 'foobar'
           }
+        },
+        'serviceAccount' => {
+          'create' => true,
+          'enabled' => true
         }
       },
       'postgres' => {
@@ -43,11 +52,6 @@ describe 'geo-logcursor configuration' do
             'labels' => {
               'global_pod' => true
             }
-          },
-          'service' => {
-            'labels' => {
-              'global_service' => true
-            }
           }
         },
         'gitlab' => {
@@ -61,10 +65,6 @@ describe 'geo-logcursor configuration' do
             'podLabels' => {
               'pod' => true,
               'global' => 'pod'
-            },
-            'serviceLabels' => {
-              'service' => true,
-              'global' => 'service'
             }
           }
         }
@@ -76,17 +76,11 @@ describe 'geo-logcursor configuration' do
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
       expect(t.dig('ConfigMap/test-geo-logcursor', 'metadata', 'labels')).to include('global' => 'geo-logcursor')
       expect(t.dig('Deployment/test-geo-logcursor', 'metadata', 'labels')).to include('foo' => 'global')
-      expect(t.dig('Deployment/test-geo-logcursor', 'metadata', 'labels')).to include('global' => 'pod')
-      expect(t.dig('Deployment/test-geo-logcursor', 'metadata', 'labels')).to include('global_pod' => true)
-      expect(t.dig('Deployment/test-geo-logcursor', 'metadata', 'labels')).not_to include('global' => 'geo-logcursor')
+      expect(t.dig('Deployment/test-geo-logcursor', 'metadata', 'labels')).to include('global' => 'geo-logcursor')
       expect(t.dig('Deployment/test-geo-logcursor', 'metadata', 'labels')).not_to include('global' => 'global')
       expect(t.dig('Deployment/test-geo-logcursor', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
       expect(t.dig('Deployment/test-geo-logcursor', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
       expect(t.dig('Deployment/test-geo-logcursor', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
-      expect(t.dig('Service/test-geo-logcursor', 'metadata', 'labels')).to include('global' => 'service')
-      expect(t.dig('Service/test-geo-logcursor', 'metadata', 'labels')).to include('global_service' => true)
-      expect(t.dig('Service/test-geo-logcursor', 'metadata', 'labels')).to include('service' => true)
-      expect(t.dig('Service/test-geo-logcursor', 'metadata', 'labels')).not_to include('global' => 'global')
       expect(t.dig('ServiceAccount/test-geo-logcursor', 'metadata', 'labels')).to include('global' => 'geo-logcursor')
     end
   end
