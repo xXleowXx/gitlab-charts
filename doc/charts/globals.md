@@ -1462,6 +1462,7 @@ global:
     tcp:
       proxyProtocol: true # default false
 ```
+
 ## Configure GitLab Pages
 
 The global GitLab Pages settings that are used by other charts are documented
