@@ -453,7 +453,8 @@ global:
     hostKeys: {}
       # secret:
     ## doc/charts/globals.md#tcp-proxy-protocol
-    tcpProxyProtocol: false
+    tcp:
+      proxyProtocol: false
 
   ## Rails application secrets
   ## Secret created according to doc/installation/secrets.md#gitlab-rails-secret

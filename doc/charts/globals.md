@@ -1412,14 +1412,16 @@ global:
     port:
     authToken: {}
     hostKeys: {}
+    tcp:
+      proxyProtocol: false
 ```
 
-| Name                 | Type    | Default | Description |
-|:---------------------|:-------:|:------- |:----------- |
-| `port`               | Integer | `22`    | See [port](#port) below for specific documentation. |
-| `authToken`          |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
-| `hostKeys`           |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
-| `tcpProxyProtocol`   | Boolean | `false` | See [TCP Proxy Protocol](#tcp-proxy-protocol) below for specific documentation. |
+| Name                  | Type    | Default | Description |
+|:--------------------- |:-------:|:------- |:----------- |
+| `port`                | Integer | `22`    | See [port](#port) below for specific documentation. |
+| `authToken`           |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
+| `hostKeys`            |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
+| `tcp.proxyProtocol`   | Boolean | `false` | See [TCP Proxy Protocol](#tcp-proxy-protocol) below for specific documentation. |
 
 ### Port
 
@@ -1457,7 +1459,8 @@ One common environment where one needs to enable handling of proxy protocol is w
 ```yaml
 global:
   shell:
-    tcpProxyProtocol: true
+    tcp:
+      proxyProtocol: true # default false
 ```
 ## Configure GitLab Pages
 
