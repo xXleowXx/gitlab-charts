@@ -5,6 +5,7 @@ Build a dict of redis configuration
 
 - inherit from global.redis, all but sentinels
 - use values within children, if they exist, even if "empty"
+- adds new comment for testing pipeline
 */}}
 {{- define "gitlab.redis.configMerge" -}}
 {{- $_ := set $ "redisConfigName" (default "" $.redisConfigName) -}}
