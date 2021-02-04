@@ -354,7 +354,10 @@ gitlab:
 ### proxyBodySize
 
 `proxyBodySize` is used to set the NGINX proxy maximum body size. This is commonly
-required to allow a larger Docker image than the default. As an alternative option,
+required to allow a larger Docker image than the default.
+It is equivalent to the `nginx['client_max_body_size']` configuration in an
+[Omnibus installation](../../../../omnibus/settings/nginx.md#request-entity-too-large).
+As an alternative option,
 you can set the body size with either of the following two parameters too:
 
 - `gitlab.webservice.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
