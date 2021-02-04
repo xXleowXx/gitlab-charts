@@ -86,7 +86,7 @@ module Gitlab
     end
 
     def gitaly_purge_storage
-      cmd = gitaly_full_command("find /home/git/repositories/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \;")
+      cmd = gitaly_full_command("find /home/git/repositories/ -mindepth 1 -maxdepth 1 -exec rm -rf {} \\;")
       stdout, status = Open3.capture2e(cmd)
 
       return [stdout, status]
