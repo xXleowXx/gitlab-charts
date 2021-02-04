@@ -13,6 +13,8 @@ data:
 {{- if .Values.customConfig }}
     {{- .Values.customConfig | toYaml | nindent 4 }}
 {{- else }}
+    logging:
+      level: "{{ .Values.logging.level }}"
     agent:
       listen:
         address: ":{{ .Values.service.internalPort }}"

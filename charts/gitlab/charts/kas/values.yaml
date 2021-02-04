@@ -25,6 +25,8 @@ podLabels: {}
 common:
   labels: {}
 serviceLabels: {}
+logging:
+  level: info
 resources:
   requests:
     cpu: 100m
