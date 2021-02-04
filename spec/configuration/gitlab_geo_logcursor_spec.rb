@@ -72,7 +72,6 @@ describe 'geo-logcursor configuration' do
     end
     it 'Populates the additional labels in the expected manner' do
       t = HelmTemplate.new(values)
-      binding.pry
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
       expect(t.dig('ConfigMap/test-geo-logcursor', 'metadata', 'labels')).to include('global' => 'geo-logcursor')
       expect(t.dig('Deployment/test-geo-logcursor', 'metadata', 'labels')).to include('foo' => 'global')
