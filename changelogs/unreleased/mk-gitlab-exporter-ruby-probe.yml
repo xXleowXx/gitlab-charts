@@ -1,0 +1,5 @@
+---
+title: Emit Ruby Prometheus metrics for gitlab-exporter
+merge_request: 1790
+author:
+type: other
