@@ -123,6 +123,20 @@ spec:
         projected:
           defaultMode: 0400
           sources:
+          {{- if eq $.Values.global.pages.accessControl true }}
+          - secret:
+              name: {{ template "oauth.gitlab-pages.secret" . }}
+              items:
+                - key: {{ template "oauth.gitlab-pages.appIdKey" . }}
+                  path: oauth-secrets/gitlab-pages/appid
+                - key: {{ template "oauth.gitlab-pages.appSecretKey" . }}
+                  path: oauth-secrets/gitlab-pages/appsecret
+          - configMap:
+              name: {{ template "fullname" . }}
+              items:
+                - key: pages_redirect_uri
+                  path: oauth-secrets/gitlab-pages/redirecturi
+          {{- end }}
           - secret:
               name: {{ template "gitlab.rails-secrets.secret" . }}
               items:
