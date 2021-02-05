@@ -392,7 +392,7 @@ describe 'Sidekiq configuration' do
             'sidekiq' => {
               'pods' => [
                 { 'name' => 'pod-1', 'queues' => 'merge' },
-                { 'name' => 'pod-2', 'negateQueues' => 'merge' },
+                { 'name' => 'pod-2', 'negateQueues' => 'merge', 'podLabels' => {'deployment' => 'negateQueues'} },
               ]
             }
           }
@@ -411,6 +411,7 @@ describe 'Sidekiq configuration' do
         expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
         expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
         expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+        expect(t.dig('Deployment/test-sidekiq-pod-2-v1', 'spec', 'template', 'metadata', 'labels')).to include('deployment' => 'negateQueues')
         expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
         expect(t.dig('NetworkPolicy/test-sidekiq-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
         expect(t.dig('PodDisruptionBudget/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
