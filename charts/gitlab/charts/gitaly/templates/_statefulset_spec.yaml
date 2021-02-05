@@ -25,11 +25,11 @@ spec:
   template:
     metadata:
       labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
         {{- if .storage }}
         storage: {{ .storage.name }}
         {{- end }}
-        {{- include "gitlab.standardLabels" . | nindent 8 }}
-        {{- include "gitlab.commonLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print .Template.BasePath "/configmap.yml") (merge (dict) . (dict "skipStorages" true)) | sha256sum }}
@@ -283,11 +283,11 @@ spec:
     - metadata:
         name: repo-data
         labels:
+          app: {{ template "name" . }}
+          release: {{ .Release.Name }}
           {{- if .storage }}
           storage: {{ .storage.name }}
           {{- end }}
-          {{- include "gitlab.standardLabels" . | nindent 10 }}
-          {{- include "gitlab.commonLabels" . | nindent 10 }}
         annotations:
         {{- range $key, $value := $annotations }}
           {{ $key }}: {{ $value | quote }}
