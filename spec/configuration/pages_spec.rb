@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'hash_deep_merge'
 require 'helm_template_helper'
 require 'yaml'
 
@@ -47,6 +48,72 @@ describe 'GitLab Pages' do
         resource_name = "#{resource}/test-gitlab-pages"
 
         expect(pages_enabled_template.resources_by_kind(resource)[resource_name]).to be_kind_of(Hash)
+      end
+    end
+
+    context 'When customer provides additional labels' do
+      let(:labels) do
+        {
+          'global' => {
+            'common' => {
+              'labels' => {
+                'global' => "global",
+                'foo' => "global"
+              }
+            },
+            'pod' => {
+              'labels' => {
+                'global_pod' => true
+              }
+            },
+            'service' => {
+              'labels' => {
+                'global_service' => true
+              }
+            }
+          },
+          'gitlab' => {
+            'gitlab-pages' => {
+              'common' => {
+                'labels' => {
+                  'global' => 'pages',
+                  'pages' => 'pages'
+                }
+              },
+              'podLabels' => {
+                'pod' => true,
+                'global' => 'pod'
+              },
+              'serviceAccount' => {
+                'create' => true,
+                'enabled' => true
+              },
+              'serviceLabels' => {
+                'service' => true,
+                'global' => 'service'
+              }
+            }
+          }
+        }.deep_merge(pages_enabled_values.deep_merge(values))
+      end
+      it 'Populates the additional labels in the expected manner' do
+        t = HelmTemplate.new(labels)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+        expect(t.dig('ConfigMap/test-gitlab-pages', 'metadata', 'labels')).to include('global' => 'pages')
+        expect(t.dig('Deployment/test-gitlab-pages', 'metadata', 'labels')).to include('foo' => 'global')
+        expect(t.dig('Deployment/test-gitlab-pages', 'metadata', 'labels')).to include('global' => 'pages')
+        expect(t.dig('Deployment/test-gitlab-pages', 'metadata', 'labels')).not_to include('global' => 'global')
+        expect(t.dig('Deployment/test-gitlab-pages', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Deployment/test-gitlab-pages', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+        expect(t.dig('Deployment/test-gitlab-pages', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+        expect(t.dig('HorizontalPodAutoscaler/test-gitlab-pages', 'metadata', 'labels')).to include('global' => 'pages')
+        expect(t.dig('Ingress/test-gitlab-pages', 'metadata', 'labels')).to include('global' => 'pages')
+        expect(t.dig('PodDisruptionBudget/test-gitlab-pages', 'metadata', 'labels')).to include('global' => 'pages')
+        expect(t.dig('Service/test-gitlab-pages', 'metadata', 'labels')).to include('global' => 'service')
+        expect(t.dig('Service/test-gitlab-pages', 'metadata', 'labels')).to include('global_service' => true)
+        expect(t.dig('Service/test-gitlab-pages', 'metadata', 'labels')).to include('service' => true)
+        expect(t.dig('Service/test-gitlab-pages', 'metadata', 'labels')).not_to include('global' => 'global')
+        expect(t.dig('ServiceAccount/test-gitlab-pages', 'metadata', 'labels')).to include('global' => 'pages')
       end
     end
 
