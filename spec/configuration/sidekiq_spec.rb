@@ -392,7 +392,7 @@ describe 'Sidekiq configuration' do
             'sidekiq' => {
               'pods' => [
                 { 'name' => 'pod-1', 'queues' => 'merge' },
-                { 'name' => 'pod-2', 'negateQueues' => 'merge', 'podLabels' => {'deployment' => 'negateQueues'} },
+                { 'name' => 'pod-2', 'negateQueues' => 'merge', 'podLabels' => { 'deployment' => 'negateQueues' } },
               ]
             }
           }
