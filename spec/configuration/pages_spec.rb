@@ -273,6 +273,50 @@ describe 'GitLab Pages' do
             }
           )
         end
+        describe 'access control' do
+          it 'creates necessary secrets and configmaps and mounts them on migration job' do
+            migrations_secret_mounts = pages_enabled_template.projected_volume_sources(
+              'Job/test-migrations-1',
+              'init-migrations-secrets'
+            )
+
+            oauth_secret_mount = migrations_secret_mounts.select do |item|
+              item.key?('secret') && \
+                item['secret']['name'] == 'test-oauth-gitlab-pages-secret' && \
+                item['secret']['items'][0]['key'] == 'appid' &&  \
+                item['secret']['items'][0]['path'] == 'oauth-secrets/gitlab-pages/appid' &&  \
+                item['secret']['items'][1]['key'] == 'appsecret' && \
+                item['secret']['items'][1]['path'] == 'oauth-secrets/gitlab-pages/appsecret'
+            end
+
+            oauth_configmap_mount = migrations_secret_mounts.select do |item|
+              item.key?('configMap') && \
+                item['configMap']['name'] == 'test-migrations' && \
+                item['configMap']['items'][0]['key'] == 'pages_redirect_uri' && \
+                item['configMap']['items'][0]['path'] == 'oauth-secrets/gitlab-pages/redirecturi'
+            end
+
+            expect(oauth_secret_mount.length).to eq(1)
+            expect(oauth_configmap_mount.length).to eq(1)
+          end
+
+          it 'creates necessary secrets and mounts them on pages deployment' do
+            pages_secret_mounts = pages_enabled_template.projected_volume_sources(
+              'Deployment/test-gitlab-pages',
+              'init-pages-secrets'
+            )
+
+            shared_secret_mount = pages_secret_mounts.select do |item|
+              item['secret']['name'] == 'test-oauth-gitlab-pages-secret' && \
+                item['secret']['items'][0]['key'] == 'appid' &&  \
+                item['secret']['items'][0]['path'] == 'pages/gitlab_appid' &&  \
+                item['secret']['items'][1]['key'] == 'appsecret' && \
+                item['secret']['items'][1]['path'] == 'pages/gitlab_appsecret'
+            end
+
+            expect(shared_secret_mount.length).to eq(1)
+          end
+        end
       end
 
       describe 'https' do
@@ -415,7 +459,8 @@ describe 'GitLab Pages' do
           {
             'global' => {
               'pages' => {
-                'enabled' => true
+                'enabled' => true,
+                'accessControl' => true
               }
             },
             'gitlab' => {
@@ -476,6 +521,10 @@ describe 'GitLab Pages' do
             sentry-environment=qwerty
             tls-min-version=tls1.0
             tls-max-version=tls1.2
+            auth-redirect-uri=https://projects.pages.example.com/auth
+            auth-client-id=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appid').strip.dump[1..-2] %>
+            auth-client-secret=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appsecret').strip.dump[1..-2] %>
+            auth-secret=<%= File.read('/etc/gitlab-secrets/pages/auth_secret').strip.dump[1..-2] %>
           MSG
 
           expect(config_data).to eq default_content
