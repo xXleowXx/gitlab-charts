@@ -27,8 +27,6 @@ image:
 service:
   tls: {}
 annotations: {}
-common:
-  labels: {}
 podLabels: {}
 serviceLabels: {}
 
