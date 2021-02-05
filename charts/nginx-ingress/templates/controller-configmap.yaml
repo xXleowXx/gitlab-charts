@@ -20,6 +20,3 @@ data:
 {{- if .Values.controller.config }}
   {{ toYaml .Values.controller.config | nindent 2 }}
 {{- end }}
-{{- if .Values.global.shell.tcp.proxyProtocol }}
-  use-proxy-protocol: "true"
-{{- end }}

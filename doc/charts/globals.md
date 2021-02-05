@@ -1454,7 +1454,8 @@ nginx-ingress:
 
 You can enable handling [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/) on the SSH ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header. 
 By doing so, this will prevent SSH from receiving the additional headers and not break SSH. 
-One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster.
+
+One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [eks loadbalancer example](../../examples/eks_loadbalancer_annotations.yml) to properly set it up.
 
 ```yaml
 global:
