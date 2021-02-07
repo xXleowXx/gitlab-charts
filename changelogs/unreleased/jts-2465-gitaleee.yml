@@ -1,0 +1,5 @@
+---
+title: Add common pod labels for Gitaly
+merge_request: 1800
+author:
+type: changed
