@@ -5,6 +5,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
     {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
 spec:
@@ -19,8 +20,8 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
-        release: {{ .Release.Name }}
+        {{- include "gitlab.standardLabels" . | nindent 8 }}
+        {{- include "gitlab.commonLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") . | sha256sum }}
@@ -110,6 +111,20 @@ spec:
                   path: pages/{{ template "gitlab.pages.hostname" $ }}.crt
                 - key: tls.key
                   path: pages/{{ template "gitlab.pages.hostname" $ }}.key
+          {{- end }}
+          {{- if eq $.Values.global.pages.accessControl true }}
+          - secret:
+              name: {{ template "oauth.gitlab-pages.secret" . }}
+              items:
+                - key: {{ template "oauth.gitlab-pages.appIdKey" . }}
+                  path: pages/gitlab_appid
+                - key: {{ template "oauth.gitlab-pages.appSecretKey" . }}
+                  path: pages/gitlab_appsecret
+          - secret:
+              name: {{ template "gitlab.pages.authSecret.secret" . }}
+              items:
+                - key: {{ template "gitlab.pages.authSecret.key" . }}
+                  path: pages/auth_secret
           {{- end }}
       - name: pages-secrets
         emptyDir:
