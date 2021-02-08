@@ -419,6 +419,13 @@ global:
       # signupEnabled:
   ## End of global.appConfig
 
+  oauth:
+    gitlab-pages: {}
+      # secret:
+      # appIdKey:
+      # appSecretKey:
+      # redirectUri:
+
   ## doc/charts/geo.md
   geo:
     enabled: false
@@ -508,6 +515,9 @@ global:
         # secret:
         # key:
     apiSecret: {}
+      # secret:
+      # key:
+    authSecret: {}
       # secret:
       # key:
 

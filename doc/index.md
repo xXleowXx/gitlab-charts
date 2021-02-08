@@ -45,10 +45,6 @@ can be installed separately.
   - GitLab/[Praefect](charts/gitlab/praefect/index.md)
   - GitLab/[Kubernetes Agent Server (KAS)](charts/gitlab/kas/index.md)
 
-## Limitations
-
-GitLab Pages [can be deployed](https://gitlab.com/groups/gitlab-org/-/epics/4283) using the Helm chart, but is [missing access control](https://gitlab.com/groups/gitlab-org/charts/-/epics/21).
-
 ## GitLab Helm chart quick start guide
 
 For those looking to get up and running with these charts as fast as possible, in
