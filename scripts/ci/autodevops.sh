@@ -148,10 +148,12 @@ CIYAML
       replicaCount: 1   # 2
   redis:
     resources:
-      cpu: 100m
+      requests:
+        cpu: 100m
   minio:
     resources:
-      cpu: 100m
+      requests:
+        cpu: 100m
 CIYAML
 
   helm upgrade --install \
