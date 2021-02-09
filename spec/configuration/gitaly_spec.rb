@@ -236,7 +236,7 @@ describe 'Gitaly configuration' do
         expect(t.dig('ServiceAccount/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'gitaly')
         expect(t.dig('Role/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'gitaly')
         expect(t.dig('RoleBinding/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'gitaly')
-        expect(t.dig('Job/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Job/test-gitaly-pause', 'metadata', 'labels')).to include('global' => 'gitaly')
         expect(t.dig('Job/test-gitaly-pause', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
       end
     end
