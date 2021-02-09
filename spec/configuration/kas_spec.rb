@@ -104,7 +104,7 @@ describe 'kas configuration' do
 
     describe 'templates/configmap.yaml' do
       subject(:config_yaml_data) do
-        YAML.safe_load(kas_enabled_template.dig('ConfigMap/test-kas', 'data', 'config.yaml'))
+        YAML.safe_load(kas_enabled_template.dig('ConfigMap/test-kas', 'data', 'config.yaml'), permitted_classes: [Symbol])
       end
 
       it 'uses the default configuration' do
