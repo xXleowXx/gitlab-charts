@@ -29,9 +29,6 @@ ActionMailer::Base.smtp_settings = {
   tls: {{ .Values.global.smtp.tls }},
   {{- end }}
   {{- if .Values.global.smtp.openssl_verify_mode }}
-  {{-   if eq .Values.global.smtp.openssl_verify_mode "ssl/tls" }}
-  {{-     fail "'ssl/tls' is not a valid value for `global.smtp.openssl_verify_mode.`" -}}
-  {{-   end }}
   openssl_verify_mode: {{ .Values.global.smtp.openssl_verify_mode | quote }}
   {{- end }}
 }
