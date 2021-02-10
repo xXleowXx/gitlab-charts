@@ -8,3 +8,5 @@ gitlab:
 observability:
   listen:
     address: ":{{ .Values.metrics.port }}"
+redis:
+  {{- include "kas.redis" . | nindent 2 }}
