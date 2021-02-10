@@ -175,7 +175,7 @@ describe 'kas configuration' do
 
     describe 'templates/configmap.yaml' do
       subject(:config_yaml_data) do
-        YAML.safe_load(kas_enabled_template.dig('ConfigMap/test-kas', 'data', 'config.yaml'))
+        YAML.safe_load(kas_enabled_template.dig('ConfigMap/test-kas', 'data', 'config.yaml'), permitted_classes: [Symbol])
       end
 
       it 'uses the default configuration' do
@@ -183,10 +183,21 @@ describe 'kas configuration' do
       end
 
       context 'when customConfig is given' do
-        let(:custom_config) { { 'example' => 'config' } }
+        let(:custom_config) do
+          {
+            'example' => 'config',
+            'agent' => {
+              'listen' => {
+                'websocket' => false
+              }
+            }
+          }
+        end
 
-        it 'uses the custom config' do
-          expect(config_yaml_data).to eq(custom_config)
+        it 'deeply merges the custom config' do
+          expect(config_yaml_data['example']).to eq('config')
+          expect(config_yaml_data['agent']['listen']['address']).not_to be_nil
+          expect(config_yaml_data['agent']['listen']['websocket']).to eq(false)
         end
       end
 
