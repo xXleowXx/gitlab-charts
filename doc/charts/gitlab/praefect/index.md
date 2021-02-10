@@ -8,6 +8,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) inside a GitLab installment deployed with the Helm charts.
 
+NOTE:
+The Praefect chart is still under development. It is not production ready to the same degree as the other component charts. Upgrades may require manual intervention.
+
 ## Known Limitations
 
 1. The database has to be [manually created](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2310).
@@ -99,13 +102,16 @@ there will be some variation in how you connect.
 
    ```shell
    kubectl exec -it $(kubectl get pods -l app=postgresql -o custom-columns=NAME:.metadata.name --no-headers) -- bash
+   ```
+
+   ```shell
    PGPASSWORD=$(cat $POSTGRES_POSTGRES_PASSWORD_FILE) psql -U postgres -d template1
    ```
 
 1. Create the database user:
 
    ```sql
-   template1=# CREATE ROLE praefect WITH LOGIN;
+   CREATE ROLE praefect WITH LOGIN;
    ```
 
 1. Set the database user password.
@@ -121,9 +127,7 @@ there will be some variation in how you connect.
    1. Set the password in the `psql` prompt:
 
       ```sql
-      template1=# \password praefect
-      Enter new password:
-      Enter it again:
+      \password praefect
       ```
 
 1. Create the database:
@@ -194,11 +198,13 @@ the `helm install` command using the `--set` flags.
 
 | Parameter                      | Default                                           | Description                                                                                             |
 | ------------------------------ | ------------------------------------------        | ----------------------------------------                                                                |
+| common.labels                  | `{}`                                              | Supplemental labels that are applied to all objects created by this chart.                              |
 | failover.enabled               | true                                              | Whether Praefect should perform failover on node failure                                                |
 | failover.readonlyAfter         | false                                             | Whether the nodes should be in read-only mode after failover                                            |
 | autoMigrate                    | true                                              | Automatically run migrations on startup                                                                 |
 | electionStrategy               | sql                                               | See [election strategy](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#automatic-failover-and-leader-election) |
 | image.repository               | `registry.gitlab.com/gitlab-org/build/cng/gitaly` | The default image repository to use. Praefect is bundled as part of the Gitaly image                    |
+| podLabels                      | `{}`                                              | Supplemental Pod labels. Will not be used for selectors.                                                |
 | service.name                   | `praefect`                                        | The name of the service to create                                                                       |
 | service.type                   | ClusterIP                                         | The type of service to create                                                                           |
 | service.internalPort           | 8075                                              | The internal port number that the Praefect pod will be listening on                                     |
@@ -214,3 +220,4 @@ the `helm install` command using the `--set` flags.
 | metrics.port                   | 9236                                              |                                                                                                         |
 | securityContext.runAsUser      | 1000                                              |                                                                                                         |
 | securityContext.fsGroup        | 1000                                              |                                                                                                         |
+| serviceLabels                  | `{}`                                              | Supplemental service labels                                                                             |

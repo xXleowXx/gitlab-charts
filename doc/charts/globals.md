@@ -35,6 +35,7 @@ for more information on how the global variables work.
 - [Annotations](#annotations)
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
+- [OAuth](#configure-oauth-settings)
 
 ## Configure Host settings
 
@@ -699,6 +700,7 @@ global:
     enableUsagePing: true
     enableSeatLink: true
     enableImpersonation: true
+    applicationSettingsCacheSeconds: 60
     defaultCanCreateGroup: true
     usernameChangingEnabled: true
     issueClosingPattern:
@@ -812,6 +814,7 @@ application are described below:
 | `enableUsagePing`                   | Boolean | `true`  | A flag to disable the [usage ping support](https://docs.gitlab.com/ee/user/admin_area/settings/usage_statistics.html). |
 | `enableSeatLink`                    | Boolean | `true`  | A flag to disable the [seat link support](https://docs.gitlab.com/ee/subscriptions/#seat-link). |
 | `enableImpersonation`               |         | `nil`   | A flag to disable [user impersonation by Administrators](https://docs.gitlab.com/ee/api/README.html#disable-impersonation). |
+| `applicationSettingsCacheSeconds`   | Integer | 60      | An interval value (in seconds) to invalidate the [application settings cache](https://docs.gitlab.com/ee/administration/application_settings_cache.html). |
 | `defaultCanCreateGroup`             | Boolean | `true`  | A flag to decide if users are allowed to create groups. |
 | `usernameChangingEnabled`           | Boolean | `true`  | A flag to decide if users are allowed to change their username. |
 | `issueClosingPattern`               | String  | (empty) | [Pattern to close issues automatically](https://docs.gitlab.com/ee/administration/issue_closing_pattern.html). |
@@ -1694,3 +1697,29 @@ global:
     SOME_KEY: some_value
     SOME_OTHER_KEY: some_other_value
 ```
+
+## Configure OAuth settings
+
+OAuth integration is configured out-of-the box for services which support it.
+The services specified in `global.oauth` are automatically registered as OAuth
+client applications in GitLab during deployment. By default this list includes
+GitLab Pages, if access control is enabled.
+
+```yaml
+global:
+  oauth:
+    gitlab-pages: {}
+    # secret
+    # appid
+    # appsecret
+    # redirectUri
+```
+
+| Name           | Type   | Default | Description                                                                                            |
+| :---           | :--:   | :------ | :----------                                                                                            |
+| `secret`       | String |         | Name of the secret with OAuth credentials for the service.                                             |
+| `appIdKey`     | String |         | Key in the secret under which App ID of service is stored. Default value being set is `appid`.         |
+| `appSecretKey` | String |         | Key in the secret under which App Secret of service is stored. Default value being set is `appsecret`. |
+| `redirectUri`  | String |         | URI to which user should be redirected after successful authorization.                                 |
+
+Check the [secrets documentation](../installation/secrets.md#oauth-integration) for more details on the secret.

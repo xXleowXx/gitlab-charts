@@ -35,6 +35,7 @@ Table below contains all the possible charts configurations that can be supplied
 
 | Parameter                   | Description                              | Default           |
 | --------------------------- | ---------------------------------------- | ----------------  |
+| `common.labels`             | Supplemental labels that are applied to all objects created by this chart.  | `{}` |
 | `image.repository`          | Migrations image repository              | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee` |
 | `image.tag`                 | Migrations image tag                     |                   |
 | `image.pullPolicy`          | Migrations pull policy                   | `Always`          |

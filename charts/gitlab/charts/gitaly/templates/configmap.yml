@@ -41,7 +41,13 @@ data:
     key_path = '/etc/gitlab-secrets/gitaly/gitaly.key'
     {{- end }}
 
+    {{- /*
+    Passing in "skipStorages=true" below prevents changes in the Gitaly replica counts from modifying
+    the contents of the ConfigMap, which would cause existing pods to restart unnecessarily.
+    */}}
+    {{ if not .skipStorages }}
     <% @storages = [ {{ include "gitlab.gitaly.storageNames" . }}  ] %>
+    {{- end }}
 
     {{- if $.Values.global.praefect.enabled }}
 

@@ -63,7 +63,7 @@ registry:
     readOnly:
       enabled: false
   image:
-    tag: 'v2.13.1-gitlab'
+    tag: 'v3.0.0-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -123,6 +123,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 |--------------------------------------------|----------------------------------------------|------------------------------------------------------------------------------------------------------|
 | `annotations`                              |                                              | Pod annotations                                                                                      |
 | `podLabels`                                |                                              | Supplemental Pod labels. Will not be used for selectors.                                             |
+| `common.labels`                            |                                              | Supplemental labels that are applied to all objects created by this chart.                           |
 | `authAutoRedirect`                         | `true`                                       | Auth auto-redirect (must be true for Windows clients to work)                                        |
 | `authEndpoint`                             | `global.hosts.gitlab.name`                   | Auth endpoint (only host and port)                                                                   |
 | `certificate.secret`                       | `gitlab-registry`                            | JWT certificate                                                                                      |
@@ -140,7 +141,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
 | `image.repository`                         | `registry`                                   | Registry image                                                                                       |
-| `image.tag`                                | `v2.13.1-gitlab`                              | Version of the image to use                                                                          |
+| `image.tag`                                | `v3.0.0-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
@@ -156,6 +157,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `profiling.stackdriver.projectid`          | GCP project where running                    | GCP project to report profiles to                                                                    |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
+| `serviceLabels`                            | `{}`                                         | Supplemental service labels                                                                          |
 | `tokenService`                             | `container_registry`                         | JWT token service                                                                                    |
 | `tokenIssuer`                              | `gitlab-issuer`                              | JWT token issuer                                                                                     |
 | `tolerations`                              | `[]`                                         | Toleration labels for pod assignment                                                                 |
@@ -227,7 +229,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v2.13.1-gitlab'`
+- `tag: 'v3.0.0-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`

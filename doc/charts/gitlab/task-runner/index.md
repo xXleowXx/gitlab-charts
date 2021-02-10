@@ -74,6 +74,7 @@ gitlab:
 | `backups.objectStorage.config.gcpProject`   | GCP Project to use when backend is `gcs`     | ""                           |
 | `backups.objectStorage.config.key`          | Key containing credentials in secret         | ""                           |
 | `backups.objectStorage.config.secret`       | Object storage credentials secret            | ""                           |
+| `common.labels`                             | Supplemental labels that are applied to all objects created by this chart. | `{}` |
 | `enabled`                                   | Task Runner enablement flag                  | true                         |
 | `extra`                                     | YAML block for [extra `gitlab.yml` configuration](https://gitlab.com/gitlab-org/gitlab/-/blob/8d2b59dbf232f17159d63f0359fa4793921896d5/config/gitlab.yml.example#L1193-1199) | {}                          |
 | `image.pullPolicy`                          | Task Runner image pull policy                | `IfNotPresent`               |

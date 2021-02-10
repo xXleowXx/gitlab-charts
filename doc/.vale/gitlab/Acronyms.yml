@@ -47,6 +47,7 @@ exceptions:
   - FAQ
   - FOSS
   - FQDN
+  - FREE
   - GCP
   - GDK
   - GDPR
@@ -58,6 +59,7 @@ exceptions:
   - GPL
   - GUI
   - HAML
+  - HEAD
   - HIPAA
   - HTML
   - HTTP
@@ -90,6 +92,7 @@ exceptions:
   - NGINX
   - NOTE
   - NPM
+  - NTP
   - ONLY
   - OWASP
   - PAT
@@ -115,11 +118,13 @@ exceptions:
   - RSS
   - RVM
   - SAML
+  - SAAS
   - SAST
   - SCIM
   - SCP
   - SCSS
   - SDK
+  - SELF
   - SEO
   - SHA
   - SLA
@@ -156,3 +161,4 @@ exceptions:
   - XML
   - XSS
   - YAML
+  - ZIP

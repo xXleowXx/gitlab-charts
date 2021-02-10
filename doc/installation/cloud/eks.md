@@ -93,19 +93,15 @@ when defining their storage solution.
 
 ## External Access to GitLab
 
-By default, GitLab will deploy an Ingress which will create an associated
+By default, installing the GitLab Chart will deploy an Ingress which will create an associated
 Elastic Load Balancer (ELB). Since the DNS names of the ELB cannot be known
 ahead of time, it's difficult to utilize [Let's Encrypt](https://letsencrypt.org/) to automatically provision
 HTTPS certificates.
 
 We recommend [using your own certificates](../tls.md#option-2-use-your-own-wildcard-certificate),
-and then mapping your desired DNS name to the created ELB using a CNAME record.
-
-You can fetch your ELB's hostname to place in the CNAME record with the following:
-
-```shell
-kubectl get ingress/RELEASE-webservice-default -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
-```
+and then mapping your desired DNS name to the created ELB using a CNAME
+record. Since the ELB must be created first before its hostname can be
+retrieved, follow the next instructions to install GitLab.
 
 NOTE:
 For environments where internal load balancers are required,
@@ -114,5 +110,17 @@ require [special annotations](https://gitlab.com/gitlab-org/charts/gitlab/blob/m
 
 ## Next Steps
 
-Continue with the [installation of the chart](../deployment.md) once you have
-the cluster up and running, and the static IP and DNS entry ready.
+Continue with the [installation of the chart](../deployment.md) once you
+have the cluster up and running. Set the domain name via the
+`global.hosts.domain` option, but omit the static IP setting via the
+`global.hosts.externalIP` option unless you plan on using an existing
+Elastic IP.
+
+After the Helm install, you can fetch your ELB's hostname to place in
+the CNAME record with the following:
+
+```shell
+kubectl get ingress/RELEASE-webservice-default -ojsonpath='{.status.loadBalancer.ingress[0].hostname}'
+```
+
+`RELEASE` should be substituted with the release name used in `helm install <RELEASE>`.
