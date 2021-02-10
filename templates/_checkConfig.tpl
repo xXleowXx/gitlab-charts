@@ -505,7 +505,7 @@ webservice:
 
 {{/*
 Ensure that a correct value is provided for
-`global.smtp.openssl_verify_mode
+`global.smtp.openssl_verify_mode`.
 */}}
 {{- define "gitlab.checkConfig.smtp.openssl_verify_mode" -}}
 {{-   $OpensslVerifyModes := list "none" "peer" "client_once" "fail_if_no_peer_cert" -}}
