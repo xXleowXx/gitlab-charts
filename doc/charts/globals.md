@@ -720,6 +720,7 @@ global:
       googleAnalyticsId:
       matomoUrl:
       matomoSiteId:
+      matomoDisableCookies:
     object_store:
       enabled: false
       proxy_download: true
@@ -884,6 +885,7 @@ under the `extra` key below `appConfig`:
 | `extra.googleAnalyticsId` | String | (empty) | Tracking ID for Google Analytics. |
 | `extra.matomoSiteId`       | String | (empty) | Matomo Site ID. |
 | `extra.matomoUrl`          | String | (empty) | Matomo URL. |
+| `extra.matomoDisableCookies`| Boolean | (empty) | Disable Matomo cookies (corresponds to `disableCookies` in the Matomo script) |
 
 ### Consolidated object storage
 
