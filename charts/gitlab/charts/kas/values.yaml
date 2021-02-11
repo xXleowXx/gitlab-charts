@@ -62,4 +62,3 @@ securityContext:
   fsGroup: 65532
 redis:
   enabled: true
-  password: {}
