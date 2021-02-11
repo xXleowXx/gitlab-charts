@@ -12,25 +12,3 @@ if there is a shared tls secret for all ingresses.
 {{- end -}}
 {{- pluck "secretName" .Values.ingress.tls .Values.global.ingress.tls $defaultName | first -}}
 {{- end -}}
-
-{{/*
-Build Redis config for KAS
-*/}}
-{{- define "kas.redis" -}}
-{{- if .Values.global.redis.sharedState -}}
-{{- $_ := set $ "redisConfigName" "sharedState" -}}
-{{- end -}}
-{{- include "gitlab.redis.selectedMergedConfig" . -}}
-password_file: /etc/kas/redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}
-{{- if not .redisMergedConfig.sentinels }}
-server:
-  address: {{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
-{{- else }}
-sentinel:
-  addresses:
-  {{- range $i, $entry := .redisMergedConfig.sentinels }}
-    - {{ quote (print (trim $entry.host) ":" ( default 26379 $entry.port | int ) ) -}}
-  {{ end }}
-  master_name: {{ template "gitlab.redis.host" . }}
-{{- end -}}
-{{- end -}}

@@ -6,9 +6,6 @@ annotations: {}
 global:
   kas:
     enabled: false
-  redis:
-    # host: '0.0.0.0'
-    password: {}
   # hosts:
     # kas:
       # name: kas.example.com
@@ -60,10 +57,3 @@ securityContext:
   runAsUser: 65532
   runAsGroup: 65532
   fsGroup: 65532
-redis:
-#  sentinel:
-#  addresses:
-  #      - localhost:6661 # required
-#  server:
-#    address: "localhost:6379"
-  password: {}
