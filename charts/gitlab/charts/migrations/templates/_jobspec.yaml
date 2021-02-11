@@ -170,8 +170,5 @@ spec:
         emptyDir:
           medium: "Memory"
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
-    {{- if .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
-    {{- end }}
+      {{- include "gitlab.nodeSelector" . | nindent 6 }}
 {{- end }}

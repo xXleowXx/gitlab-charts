@@ -34,7 +34,7 @@ spec:
   template:
     metadata:
     {{- if .Values.controller.podAnnotations }}
-      annotations: 
+      annotations:
       {{- range $key, $value := .Values.controller.podAnnotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -233,6 +233,8 @@ spec:
     {{- end }}
     {{- if .Values.controller.nodeSelector }}
       nodeSelector: {{ toYaml .Values.controller.nodeSelector | nindent 8 }}
+    {{- else }}
+    {{- include "gitlab.nodeSelector" . | nindent 6 }}
     {{- end }}
     {{- if .Values.controller.tolerations }}
       tolerations: {{ toYaml .Values.controller.tolerations | nindent 8 }}
