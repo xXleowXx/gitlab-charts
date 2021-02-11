@@ -1,5 +1,5 @@
 ---
-title: Adds ability to disable Redis specially for KAS
+title: KAS: Add ability to disable Redis
 merge_request: 1838
 author:
 type: added
