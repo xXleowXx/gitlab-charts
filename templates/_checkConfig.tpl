@@ -508,13 +508,13 @@ Ensure that a correct value is provided for
 `global.smtp.openssl_verify_mode`.
 */}}
 {{- define "gitlab.checkConfig.smtp.openssl_verify_mode" -}}
-{{-   $OpensslVerifyModes := list "none" "peer" "client_once" "fail_if_no_peer_cert" -}}
+{{-   $opensslVerifyModes := list "none" "peer" "client_once" "fail_if_no_peer_cert" -}}
 {{-   if .Values.global.smtp.openssl_verify_mode -}}
-{{-     if not (has .Values.global.smtp.openssl_verify_mode $OpensslVerifyModes) }}
+{{-     if not (has .Values.global.smtp.openssl_verify_mode $opensslVerifyModes) }}
 smtp:
     "{{ .Values.global.smtp.openssl_verify_mode }}" is not a valid value for `global.smtp.openssl_verify_mode`.
-    Valid values are: {{ join ", " $OpensslVerifyModes }}.
-{{-   end }}
+    Valid values are: {{ join ", " $opensslVerifyModes }}.
+{{-     end }}
 {{-   end }}
 {{- end -}}
 {{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}
