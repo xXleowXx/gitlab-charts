@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.8.4 (2021-02-11)
+
+- No changes.
+
 ## 4.8.3 (2021-02-05)
 
 - No changes.
@@ -47,6 +51,10 @@ entry.
 - Add tolerations for minio create bucket job. !1744 (David ALEXANDRE)
 - Add upgrade survey link to upgrade output. !1762
 
+
+## 4.7.7 (2021-02-11)
+
+- No changes.
 
 ## 4.7.6 (2021-02-01)
 
@@ -128,6 +136,10 @@ entry.
 - Update NGINX from v0.20.0 to 0.41.2. !1690
 - Changes the default loglevel for registry to info. !1703
 
+
+## 4.6.7 (2021-02-11)
+
+- No changes.
 
 ## 4.6.6 (2021-02-01)
 
