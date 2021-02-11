@@ -17,6 +17,7 @@ if there is a shared tls secret for all ingresses.
 Build Redis config for KAS
 */}}
 {{- define "kas.redis" -}}
+{{- if .Values.redis.enabled -}}
 {{- if .Values.global.redis.sharedState -}}
 {{- $_ := set $ "redisConfigName" "sharedState" -}}
 {{- end -}}
@@ -32,5 +33,6 @@ sentinel:
     - {{ quote (print (trim $entry.host) ":" ( default 26379 $entry.port | int ) ) -}}
   {{ end }}
   master_name: {{ template "gitlab.redis.host" . }}
+{{- end -}}
 {{- end -}}
 {{- end -}}

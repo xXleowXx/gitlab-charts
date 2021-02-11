@@ -58,6 +58,7 @@ the `helm install` command using the `--set` flags.
 | `podLabels`                 | `{}`           | Supplemental Pod labels. Not used for selectors. |
 | `serviceLabels`             | `{}`           | Supplemental service labels |
 | `common.labels`             |                | Supplemental labels that are applied to all objects created by this chart. |
+| `redis.enabled`             | `true`         | Allows opting-out of using Redis for KAS features. Warnings: Redis will become a hard depenency soon, so this key is already deprecated. |
 | `resources.requests.cpu`    | `75m`                 | GitLab Exporter minimum CPU                    |
 | `resources.requests.memory` | `100M`                | GitLab Exporter minimum memory                 |
 | `service.externalPort`      | `8150`         | External port                    |
