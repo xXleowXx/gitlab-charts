@@ -214,6 +214,24 @@ describe 'kas configuration' do
           }
         end
 
+        context 'when redis is disabled' do
+          let(:kas_values) do
+            default_kas_values.deep_merge!(
+              {
+                'gitlab' => {
+                  'kas' => {
+                    'redis' => { 'enabled' => false }
+                  }
+                }
+              }
+            )
+          end
+
+          it 'does not have redis config' do
+            expect(config_yaml_data['redis']).to eq(nil)
+          end
+        end
+
         context 'when redisConfigName is empty' do
           context 'when no sentinel is setup' do
             it 'takes the global redis config' do
