@@ -1,6 +1,18 @@
+## Example configuration in AWS
+# Configures NLB to use ProxyProtocol to pass real client IP
+# Configures NGINX to strip those headers from SSH
+
+global:
+  shell:
+    tcp:
+      proxyProtocol: true # Configure GitLab Shell's NGINX TCP to expect ProxyProtcol headers (and strip them)
 nginx-ingress:
   controller:
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-internal: 'true'
         service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*" # Configure NLB to use ProxyProtocol
+      config:
+        proxy-real-ip-cidr: 10.2.0.0/16  # The VPC CIDR
+        use-proxy-protocol: "true"       # Tell NGINX to Expect ProxyProtocol headers
