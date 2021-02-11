@@ -88,5 +88,4 @@ spec:
                 items:
                   - key: {{ template "gitlab.kas.key" . }}
                     path: .gitlab_kas_secret
-            {{- include "gitlab.redis.secrets" . | nindent 12 }}
 {{- end }}
