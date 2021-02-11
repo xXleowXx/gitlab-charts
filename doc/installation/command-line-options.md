@@ -132,11 +132,12 @@ must be `+%{key}`.
 
 ## GitLab Shell
 
-| Parameter                | Description                              | Default |
-|--------------------------|------------------------------------------|---------|
-| `global.shell.authToken` | Secret containing shared secret          |         |
-| `global.shell.hostKeys`  | Secret containing SSH host keys          |         |
-| `global.shell.port`      | Port number to expose on Ingress for SSH |         |
+| Parameter                        | Description                              | Default |
+|----------------------------------|------------------------------------------|---------|
+| `global.shell.authToken`         | Secret containing shared secret          |         |
+| `global.shell.hostKeys`          | Secret containing SSH host keys          |         |
+| `global.shell.port`              | Port number to expose on Ingress for SSH |         |
+| `global.shell.tcp.proxyProtocol` | Enable ProxyProtocol in SSH ingress      | false   |
 
 ## RBAC Settings
 
