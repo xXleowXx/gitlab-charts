@@ -121,9 +121,45 @@ function deploy() {
     environment: "${CI_ENVIRONMENT_SLUG}"
 CIYAML
 
+  # configure CI resources, intentionally trimmed.
+  cat << CIYAML > ci.scale.yaml
+  gitlab:
+    webservice:
+      minReplicas: 1    # 2
+      maxReplicas: 3    # 10
+      resources:
+        requests:
+          cpu: 500m     # 900m
+          memory: 1500M # 2.5G
+    sidekiq:
+      minReplicas: 1    # 1
+      maxReplicas: 2    # 10
+      resources:
+        requests:
+          cpu: 500m     # 900m
+          memory: 1000M # 2G
+    gitlab-shell:
+      minReplicas: 1    # 2
+      maxReplicas: 2    # 10
+    task-runner:
+      enabled: true
+  nginx-ingress:
+    controller:
+      replicaCount: 1   # 2
+  redis:
+    resources:
+      requests:
+        cpu: 100m
+  minio:
+    resources:
+      requests:
+        cpu: 100m
+CIYAML
+
   helm upgrade --install \
     $WAIT \
     -f ci.details.yaml \
+    -f ci.scale.yaml \
     --set releaseOverride="$RELEASE_NAME" \
     --set global.imagePullPolicy="Always" \
     --set global.hosts.hostSuffix="$HOST_SUFFIX" \
@@ -134,16 +170,6 @@ CIYAML
     --set global.appConfig.initialDefaults.signupEnabled=false \
     --set certmanager.install=false \
     --set prometheus.install=$PROMETHEUS_INSTALL \
-    --set gitlab.webservice.maxReplicas=3 \
-    --set gitlab.webservice.resources.requests.cpu=500m \
-    --set gitlab.webservice.resources.requests.memory=2000M \
-    --set gitlab.sidekiq.maxReplicas=2 \
-    --set gitlab.sidekiq.resources.requests.cpu=300m \
-    --set gitlab.sidekiq.resources.requests.memory=1500M \
-    --set gitlab.task-runner.enabled=true \
-    --set gitlab.gitlab-shell.maxReplicas=2 \
-    --set redis.resources.requests.cpu=100m \
-    --set minio.resources.requests.cpu=100m \
     --set global.operator.enabled=true \
     --set gitlab.operator.crdPrefix="$RELEASE_NAME" \
     --set global.gitlab.license.secret="$RELEASE_NAME-gitlab-license" \

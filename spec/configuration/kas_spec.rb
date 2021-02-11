@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-
 require 'spec_helper'
+require 'hash_deep_merge'
 require 'helm_template_helper'
 require 'yaml'
 
@@ -15,7 +15,7 @@ describe 'kas configuration' do
   let(:custom_secret_name) { 'kas_custom_secret_name' }
   let(:custom_config) { {} }
 
-  let(:kas_values) do
+  let(:default_kas_values) do
     {
       'gitlab' => {
         'kas' => {
@@ -33,6 +33,8 @@ describe 'kas configuration' do
       },
     }
   end
+
+  let(:kas_values) { default_kas_values }
 
   let(:required_resources) do
     %w[Deployment ConfigMap Ingress Service HorizontalPodAutoscaler PodDisruptionBudget]
@@ -173,7 +175,7 @@ describe 'kas configuration' do
 
     describe 'templates/configmap.yaml' do
       subject(:config_yaml_data) do
-        YAML.safe_load(kas_enabled_template.dig('ConfigMap/test-kas', 'data', 'config.yaml'))
+        YAML.safe_load(kas_enabled_template.dig('ConfigMap/test-kas', 'data', 'config.yaml'), permitted_classes: [Symbol])
       end
 
       it 'uses the default configuration' do
@@ -181,10 +183,127 @@ describe 'kas configuration' do
       end
 
       context 'when customConfig is given' do
-        let(:custom_config) { { 'example' => 'config' } }
+        let(:custom_config) do
+          {
+            'example' => 'config',
+            'agent' => {
+              'listen' => {
+                'websocket' => false
+              }
+            }
+          }
+        end
 
-        it 'uses the custom config' do
-          expect(config_yaml_data).to eq(custom_config)
+        it 'deeply merges the custom config' do
+          expect(config_yaml_data['example']).to eq('config')
+          expect(config_yaml_data['agent']['listen']['address']).not_to be_nil
+          expect(config_yaml_data['agent']['listen']['websocket']).to eq(false)
+        end
+      end
+
+      describe 'redis config' do
+        let(:sentinels) do
+          {
+            'redis' => {
+              'host' => 'global.host',
+              'sentinels' => [
+                { 'host' => 'sentinel1.example.com', 'port' => 26379 },
+                { 'host' => 'sentinel2.example.com', 'port' => 26379 }
+              ]
+            }
+          }
+        end
+
+        context 'when redis is disabled' do
+          let(:kas_values) do
+            default_kas_values.deep_merge!(
+              {
+                'gitlab' => {
+                  'kas' => {
+                    'redis' => { 'enabled' => false }
+                  }
+                }
+              }
+            )
+          end
+
+          it 'does not have redis config' do
+            expect(config_yaml_data['redis']).to eq(nil)
+          end
+        end
+
+        context 'when redisConfigName is empty' do
+          context 'when no sentinel is setup' do
+            it 'takes the global redis config' do
+              expect(config_yaml_data['redis']).to include(
+                "password_file" => "/etc/kas/redis/redis-password",
+                "server" => { "address" => "test-redis-master.default.svc:6379" })
+            end
+          end
+
+          context 'when sentinel is setup' do
+            let(:kas_values) do
+              vals = default_kas_values
+              vals['global'].deep_merge!(sentinels)
+              vals.deep_merge!('redis' => { 'install' => false })
+            end
+
+            it 'takes the global sentinel redis config' do
+              expect(config_yaml_data['redis']).to include(
+                { "sentinel" => { "addresses" => ["sentinel1.example.com:26379", "sentinel2.example.com:26379"],
+                                  "master_name" => "global.host" } })
+            end
+          end
+        end
+
+        context 'when a redis sharedState is setup' do
+          let(:kas_values) do
+            vals = default_kas_values
+            vals['global'].deep_merge!(redis_shared_state_config)
+            vals.deep_merge!('redis' => { 'install' => false })
+          end
+          let(:redis_shared_state_config) do
+            {
+              'redis' => {
+                'host' => "global.host",
+                'sharedState' => {
+                  'host' => "shared.redis",
+                  'port' => "6378",
+                  'password' => {
+                    'enabled' => true,
+                    'secret' => "shared-secret",
+                    'key' => "shared-key",
+                  },
+                  'sentinels' => sentinels
+                }
+              }
+            }
+          end
+          context 'when no sharedState sentinel is setup' do
+            context 'with no sentinels' do
+              let(:sentinels) { {} }
+              it 'configures a sharedState server config' do
+                expect(config_yaml_data['redis']).to include(
+                  "password_file" => "/etc/kas/redis/sharedState-password",
+                  "server" => { "address" => "shared.redis:6378" })
+              end
+            end
+          end
+
+          context 'when sharedState sentinel is setup' do
+            let(:sentinels) do
+              [
+                { 'host' => 'sentinel1.shared.com', 'port' => 26379 },
+                { 'host' => 'sentinel2.shared.com', 'port' => 26379 }
+              ]
+            end
+
+            it 'configures a sharedState sentinel config' do
+              expect(config_yaml_data['redis']).to include(
+                "password_file" => "/etc/kas/redis/sharedState-password",
+                "sentinel" => { "addresses" => ["sentinel1.shared.com:26379", "sentinel2.shared.com:26379"], "master_name" => "shared.redis" })
+            end
+          end
         end
       end
     end

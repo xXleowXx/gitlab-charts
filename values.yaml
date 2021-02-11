@@ -260,6 +260,7 @@ global:
       googleAnalyticsId:
       matomoUrl:
       matomoSiteId:
+      matomoDisableCookies:
 
     ## doc/charts/globals.md#lfs-artifacts-uploads-packages-external-mr-diffs
     object_store:

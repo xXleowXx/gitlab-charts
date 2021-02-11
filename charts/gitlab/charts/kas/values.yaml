@@ -6,6 +6,9 @@ annotations: {}
 global:
   kas:
     enabled: false
+  redis:
+    # host: '0.0.0.0'
+    password: {}
   # hosts:
     # kas:
       # name: kas.example.com
@@ -49,7 +52,7 @@ workhorse: {}
   # host: '0.0.0.0'
   # serviceName: 'webservice'
   # port: 8181
-# overwrites the default kas config
+# merged with the default kas config
 customConfig: {}
 
 ## Allow to overwrite under which User and Group we're running.
@@ -57,3 +60,5 @@ securityContext:
   runAsUser: 65532
   runAsGroup: 65532
   fsGroup: 65532
+redis:
+  enabled: true
