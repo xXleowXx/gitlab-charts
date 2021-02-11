@@ -1,0 +1,5 @@
+---
+title: Adds ability to disable Redis specially for KAS
+merge_request: 1838
+author:
+type: added
