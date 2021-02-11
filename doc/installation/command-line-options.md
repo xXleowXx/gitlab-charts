@@ -137,7 +137,7 @@ must be `+%{key}`.
 | `global.shell.authToken`         | Secret containing shared secret          |         |
 | `global.shell.hostKeys`          | Secret containing SSH host keys          |         |
 | `global.shell.port`              | Port number to expose on Ingress for SSH |         |
-| `global.shell.tcp.proxyProtocol` | Enable ProxyProtocol in SSH ingress      | false   |
+| `global.shell.tcp.proxyProtocol` | Enable ProxyProtocol in SSH Ingress      | false   |
 
 ## RBAC Settings
 
