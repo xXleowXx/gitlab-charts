@@ -61,9 +61,5 @@ securityContext:
   runAsGroup: 65532
   fsGroup: 65532
 redis:
-#  sentinel:
-#  addresses:
-  #      - localhost:6661 # required
-#  server:
-#    address: "localhost:6379"
+  enabled: true
   password: {}
