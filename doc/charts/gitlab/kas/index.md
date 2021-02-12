@@ -53,6 +53,7 @@ the `helm install` command using the `--set` flags.
 | `maxReplicas`               | `10`           | HPA `maxReplicas`                |
 | `maxUnavailable`            | `1`            | HPA `maxUnavailable`             |
 | `minReplicas`               | `2`            | HPA `maxReplicas`                |
+| `nodeSelector`              |                | Define a [nodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) for the `Pod`s of this `Deployment`, if present. |
 | `serviceAccount.annotations`| `{}`       | Service account annotations      |
 | `podLabels`                 | `{}`           | Supplemental Pod labels. Not used for selectors. |
 | `serviceLabels`             | `{}`           | Supplemental service labels |
