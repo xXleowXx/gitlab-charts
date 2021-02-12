@@ -1,5 +1,0 @@
----
-title: Fix redis service templating when Helm release includes 'redis'
-merge_request: 1832
-author:
-type: fixed
