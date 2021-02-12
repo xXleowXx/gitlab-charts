@@ -17,3 +17,8 @@ values.
   value: {{ $value | quote }}
 {{- end -}}
 {{- end -}}
+
+{{- define "sidekiq.commonLabels" -}}
+{{- $commonLabels := dict "Values" (dict "common" (dict) "global" (dict "common" (dict))) -}}
+{{- $commonLabels = merge .common.labels (default (dict) .podLabels) }}
+{{- end -}}
