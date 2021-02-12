@@ -189,6 +189,51 @@ Note the following:
   kubectl describe pod <gitlab-upgrade-check-pod-full-name>
   ```
 
+#### 4.8: Repository data appears to be lost upgrading Praefect
+
+The Praefect chart is not yet considered suitable for production use.
+
+If you have enabled Praefect before upgrading to version 4.8 of the chart (GitLab 13.8),
+note that the StatefulSet name for Gitaly will now include the virtual storage name.
+
+In version 4.8 of the Praefect chart, the ability to specify multiple virtual storages
+was added, making it necessary to change the StatefulSet name.
+
+Any existing Praefect-managed Gitaly StatefulSet names (and, therefore, their
+associated PersistentVolumeClaims) will change as well, leading to repository data
+appearing to be lost.
+
+Prior to upgrading, ensure that:
+
+- All your respositories are in sync across the Gitaly Cluster, and GitLab
+is not in use during the upgrade.
+- You have a complete and tested backup.
+
+Repository data can be restored by following the
+[managing persistent volumes documentation](../advanced/persistent-volumes/),
+which provides guidance on reconnecting existing PersistentVolumeClaims to previous
+PersistentVolumes.
+
+A key step of the process is setting the old persistent volumes' `persistentVolumeReclaimPolicy`
+to `Retain`. If this step is missed, actual data loss will likely occur.
+
+After reviewing the documentation, there is a scripted summary of the procedure
+[in a comment on one of a related issues](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2532#note_506467539).
+
+Having reconnected the PersistentVolumes, it is likely that all your respositories
+will be set `read-only` by Praefect, as shown by running the following in a
+Praefect container:
+
+```plaintext
+praefect -config /etc/gitaly/config.toml dataloss
+```
+
+If all your Git repositories are in sync across the old persistent volumes, use the
+`accept-dataloss` procedure for each repository to fix the Gitaly Cluster in Praefect.
+
+[We have an issue open](https://gitlab.com/gitlab-org/gitaly/-/issues/3448) to verify
+that this is the best approach to fixing Praefect.
+
 ## Upgrade steps for 3.0 release
 
 The `3.0.0` release requires manual steps in order to perform the upgrade.
