@@ -1,0 +1,5 @@
+---
+title: 'CI: Shorten RELEASE_NAME to 48 characters'
+merge_request: 1819
+author:
+type: fixed

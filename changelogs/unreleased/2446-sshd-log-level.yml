@@ -1,0 +1,5 @@
+---
+title: Expose settings to control GitLab Shell logging
+merge_request: 1767
+author:
+type: added
