@@ -100,6 +100,8 @@ global:
 
   ## doc/charts/globals.md#configure-redis-settings
   redis:
+    image:
+      tag: 6.0
     password:
       enabled: true
       # secret:
