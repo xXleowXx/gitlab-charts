@@ -1,5 +1,0 @@
----
-title: Prevent all Gitaly pods from restarting when replicas are changed
-merge_request: 1806
-author:
-type: fixed
