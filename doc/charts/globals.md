@@ -1738,6 +1738,9 @@ global:
   smtp:
     enabled: true
     address: 'smtp.example.com'
+    tls: true
+    authentication: 'plain'
+    user_name: 'example'
     password:
       secret: 'smtp-password'
       key: 'password'
