@@ -396,10 +396,19 @@ describe 'Sidekiq configuration' do
                   'deployment' => 'negateQueues',
                   'sidekiq' => 'pod-2'
                 } },
-                { 'name' => 'pod-3', 'fooQueue' => 'merge', 'common' => { 'labels' => {
-                  'deployment' => 'fooQueue',
-                  'sidekiq' => 'pod-3'
-                } } },
+                {
+                  'name' => 'pod-3',
+                  'fooQueue' => 'merge',
+                  'common' => {
+                    'labels' => {
+                      'deployment' => 'fooQueue',
+                      'sidekiq' => 'pod-common-3'
+                    }
+                  },
+                  'podLabels' => {
+                    'sidekiq' => 'pod-label-3'
+                  }
+                }
               ]
             }
           }
@@ -421,6 +430,9 @@ describe 'Sidekiq configuration' do
         expect(t.dig('Deployment/test-sidekiq-pod-2-v1', 'spec', 'template', 'metadata', 'labels')).to include('deployment' => 'negateQueues')
         expect(t.dig('Deployment/test-sidekiq-pod-2-v1', 'spec', 'template', 'metadata', 'labels')).to include('sidekiq' => 'pod-2')
         expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'spec', 'template', 'metadata', 'labels')).to include('deployment' => 'fooQueue')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'spec', 'template', 'metadata', 'labels')).to include('sidekiq' => 'pod-common-3')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'spec', 'template', 'metadata', 'labels')).not_to include('sidekiq' => 'pod-label-3')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'spec', 'template', 'metadata', 'labels')).not_to include('sidekiq' => 'sidekiq')
         expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
         expect(t.dig('NetworkPolicy/test-sidekiq-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
         expect(t.dig('PodDisruptionBudget/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
