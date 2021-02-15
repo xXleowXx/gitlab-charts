@@ -39,23 +39,18 @@
 {{- $podNodeSelector := default $nodeSelector .nodeSelector -}}
 {{- $podCommonLabels := .podLabels }}
 {{- if hasKey .common "labels" }}
-{{- $podCommonLabels = merge .common.labels (default (dict) .podLabels) }}
+{{- $podCommonLabels = default (dict) .common.labels }}
 {{- end }}
-FAKE: {{ $podCommonLabels }}
-  {{/*
-        {{- range $key, $value := .podLabels }}
-        {{ $key }}: {{ $value }}
-        {{- end }}
-        */}}
-
+{{- $commonPodLabels := include "sidekiq.commonPodLabels" (dict "commonLabels" $podCommonLabels "podLabels" .podLabels) | nindent 4 -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ printf "%s-v1" ($queueName | trunc 60) }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "gitlab.standardLabels" $ | nindent 4 }}
-    {{- include "gitlab.commonLabels" $ | nindent 4 }}
+    {{- include "gitlab.standardLabels" $ | nindent 4 -}}
+    {{- include "gitlab.commonLabels" $ | nindent 4 -}}
+    {{- $commonPodLabels }}
     queue-pod-name: {{ .name }}
   annotations:
     {{- include "gitlab.deploymentAnnotations" $ | nindent 4 }}
@@ -74,13 +69,11 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ $name }}
-        release: {{ $releaseName }}
-        queue-pod-name: {{ .name }}
         {{- include "gitlab.standardLabels" $ | nindent 8 }}
         {{- include "gitlab.commonLabels" $ | nindent 8 }}
         {{- include "gitlab.podLabels" $ | nindent 8 }}
-        {{/* include "podCommonLabels" $ | nindent 8 */}}
+        {{- $commonPodLabels | nindent 4 }}
+        queue-pod-name: {{ .name }}
       annotations:
         checksum/configmap: {{ $configMapChecksum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"

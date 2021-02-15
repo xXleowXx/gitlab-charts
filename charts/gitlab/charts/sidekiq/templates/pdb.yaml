@@ -4,6 +4,14 @@
 {{- $fullname := printf "%s-%s" $releaseName $name | trunc 63 | trimSuffix "-" -}}
 {{- range .Values.pods -}}
 {{- $queueName := printf "%s-%s" $fullname .name | trunc 63}}
+{{- $podCommonLabels := .podLabels }}
+{{- if not .common -}}
+{{- $_ := set . "common" (dict) -}}
+{{- end -}}
+{{- if hasKey .common "labels" }}
+{{- $podCommonLabels = default (dict) .common.labels }}
+{{- end }}
+{{- $commonPodLabels := include "sidekiq.commonPodLabels" (dict "commonLabels" $podCommonLabels "podLabels" .podLabels) | nindent 4 -}}
 ---
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
@@ -13,6 +21,8 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "gitlab.commonLabels" $ | nindent 4 }}
+    {{- $commonPodLabels }}
+    queue_pod_name: {{ .name }}
 spec:
   maxUnavailable: {{ default $.Values.maxUnavailable .maxUnavailable }}
   selector:

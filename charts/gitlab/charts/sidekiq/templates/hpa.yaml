@@ -5,6 +5,11 @@
 {{- range .Values.pods -}}
 {{- $queueName := printf "%s-%s" $fullname .name | trunc 63 }}
 {{- $hpa := default dict .hpa }}
+{{- $podCommonLabels := .podLabels }}
+{{- if hasKey .common "labels" }}
+{{- $podCommonLabels = default (dict) .common.labels }}
+{{- end }}
+{{- $commonPodLabels := include "sidekiq.commonPodLabels" (dict "commonLabels" $podCommonLabels "podLabels" .podLabels) | nindent 4 -}}
 ---
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
@@ -14,6 +19,8 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "gitlab.commonLabels" $ | nindent 4 }}
+    {{- $commonPodLabels }}
+    queue_pod_name: {{ .name }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

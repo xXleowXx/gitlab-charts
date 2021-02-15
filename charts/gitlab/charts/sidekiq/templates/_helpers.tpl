@@ -18,7 +18,14 @@ values.
 {{- end -}}
 {{- end -}}
 
-{{- define "sidekiq.commonLabels" -}}
-{{- $commonLabels := dict "Values" (dict "common" (dict) "global" (dict "common" (dict))) -}}
-{{- $commonLabels = merge .common.labels (default (dict) .podLabels) }}
+{{/*
+Returns a list of labels to be shared across all
+Sidekiq deployments, otherwise known as pods currently.
+*/}}
+{{- define "sidekiq.commonPodLabels" -}}
+{{/* include "sidekiq.podExtraEnv" (dict "local" . "parent" $) */}}
+{{- $commonPodLabels := merge (default (dict) .commonLabels) (default (dict) .podLabels) -}}
+{{- range $key, $value := $commonPodLabels }}
+{{ $key }}: {{ $value }}
+{{- end }}
 {{- end -}}
