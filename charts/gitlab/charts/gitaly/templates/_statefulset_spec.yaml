@@ -38,7 +38,7 @@ spec:
       annotations:
       {{- $cm := "/configmap.yml" -}}
       {{- if .storage }}
-      {{- $cm = "/configmap-with-praefect.yml" -}}
+      {{-   $cm = "/configmap-with-praefect.yml" -}}
       {{- end }}
         checksum/config: {{ include (print .Template.BasePath $cm) (merge (dict) . (dict "skipStorages" true)) | sha256sum }}
       {{- range $key, $value := .Values.annotations }}
