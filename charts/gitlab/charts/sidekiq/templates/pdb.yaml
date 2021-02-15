@@ -30,5 +30,7 @@ spec:
       app: {{ $name }}
       release: {{ $.Release.Name }}
       queue-pod-name: {{ .name }}
+# Leave this here - This line denotes end of block to the parser.
+---
 {{- end -}}
 {{- end -}}

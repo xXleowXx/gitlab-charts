@@ -33,5 +33,7 @@ spec:
     resource:
       name: cpu
       targetAverageValue: {{ default $.Values.hpa.targetAverageValue $hpa.targetAverageValue }}
+# Leave this here - This line denotes end of block to the parser.
+---
 {{- end }}
 {{- end -}}
