@@ -112,18 +112,18 @@ data:
     # The directory where gitaly-ruby is installed
     dir = "/srv/gitaly-ruby"
     {{- with .Values.ruby }}
-    {{- if .maxRss }}
+    {{-   if .maxRss }}
     max_rss = {{ .maxRss }}
-    {{- end }}
-    {{- if .gracefulRestartTimeout }}
+    {{-   end }}
+    {{-   if .gracefulRestartTimeout }}
     graceful_restart_timeout = "{{ .gracefulRestartTimeout }}"
-    {{- end }}
-    {{- if .restartDelay }}
+    {{-   end }}
+    {{-   if .restartDelay }}
     restart_delay = "{{ .restartDelay }}"
-    {{- end }}
-    {{- if .numWorkers }}
+    {{-   end }}
+    {{-   if .numWorkers }}
     num_workers = {{ .numWorkers }}
-    {{- end }}
+    {{-   end }}
     {{- end }}
     rugged_git_config_search_path = "/usr/local/etc"
 
@@ -150,11 +150,11 @@ data:
     custom_hooks_dir = "/home/git/custom_hooks"
 
     {{- if .Values.shell.concurrency }}
-    {{- range .Values.shell.concurrency }}
-    {{- if and .rpc .maxPerRepo }}
+    {{-   range .Values.shell.concurrency }}
+    {{-     if and .rpc .maxPerRepo }}
     [[concurrency]]
     rpc = "{{ .rpc }}"
     max_per_repo = {{ .maxPerRepo }}
-    {{- end }}
-    {{- end }}
+    {{-     end }}
+    {{-   end }}
     {{- end }}
