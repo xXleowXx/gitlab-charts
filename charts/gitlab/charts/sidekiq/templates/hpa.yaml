@@ -9,7 +9,6 @@
 {{- if hasKey .common "labels" }}
 {{- $podCommonLabels = default (dict) .common.labels }}
 {{- end }}
-{{- $commonPodLabels := include "sidekiq.commonPodLabels" (dict "commonLabels" $podCommonLabels "podLabels" .podLabels) | nindent 4 -}}
 ---
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
@@ -19,7 +18,7 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "gitlab.commonLabels" $ | nindent 4 }}
-    {{- $commonPodLabels }}
+    {{- include "sidekiq.commonLabels" (dict "commonLabels" $podCommonLabels) | nindent 4 -}}
     queue_pod_name: {{ .name }}
 spec:
   scaleTargetRef:

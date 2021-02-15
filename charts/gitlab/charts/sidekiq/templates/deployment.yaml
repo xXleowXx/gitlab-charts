@@ -41,16 +41,15 @@
 {{- if hasKey .common "labels" }}
 {{- $podCommonLabels = default (dict) .common.labels }}
 {{- end }}
-{{- $commonPodLabels := include "sidekiq.commonPodLabels" (dict "commonLabels" $podCommonLabels "podLabels" .podLabels) | nindent 4 -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ printf "%s-v1" ($queueName | trunc 60) }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "gitlab.standardLabels" $ | nindent 4 -}}
-    {{- include "gitlab.commonLabels" $ | nindent 4 -}}
-    {{- $commonPodLabels }}
+    {{- include "gitlab.standardLabels" $ | nindent 4 }}
+    {{- include "gitlab.commonLabels" $ | nindent 4 }}
+    {{- include "sidekiq.commonLabels" (dict "commonLabels" $podCommonLabels) | nindent 4 }}
     queue-pod-name: {{ .name }}
   annotations:
     {{- include "gitlab.deploymentAnnotations" $ | nindent 4 }}
@@ -72,7 +71,7 @@ spec:
         {{- include "gitlab.standardLabels" $ | nindent 8 }}
         {{- include "gitlab.commonLabels" $ | nindent 8 }}
         {{- include "gitlab.podLabels" $ | nindent 8 }}
-        {{- $commonPodLabels | nindent 4 }}
+        {{- include "sidekiq.podLabels" (dict "podLabels" .podLabels) | nindent 8 }}
         queue-pod-name: {{ .name }}
       annotations:
         checksum/configmap: {{ $configMapChecksum }}
