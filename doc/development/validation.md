@@ -32,15 +32,15 @@ Guidelines for developers regarding usage of schema files:
 
 # Validating immutable fields
 
-Some fields in the Kubernetes spec are immutable.  Ensure that no changes to
+Some fields in the Kubernetes spec are immutable. Ensure that no changes to
 immutable fields would impact customer upgrades.
 
 ## Statefulset
 
-A Statefulset contains a set of immutable fields.  Ensure
+A Statefulset contains a set of immutable fields. Ensure
 that none of the fields that are not allowed to be modified
-are indeed not modified.  This negatively impacts the ability
-to perform upgrades.  Example error message:
+are indeed not modified. This negatively impacts the ability
+to perform upgrades. Example error message:
 
 ```
 Error: UPGRADE FAILED: cannot patch "a-gitaly" with kind StatefulSet
