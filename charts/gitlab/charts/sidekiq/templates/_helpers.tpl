@@ -20,7 +20,8 @@ values.
 
 {{/*
 Returns a list of _common_ labels to be shared across all
-Sidekiq deployments, otherwise known as pods currently.
+Sidekiq deployments and other shared objects, otherwise
+known as pods currently.
 */}}
 {{- define "sidekiq.commonLabels" -}}
 {{- $commonPodLabels := merge (default (dict) .pod) (default (dict) .global) -}}
