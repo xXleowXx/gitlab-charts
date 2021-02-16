@@ -42,7 +42,7 @@ that none of the fields that are not allowed to be modified
 are indeed not modified. This negatively impacts the ability
 to perform upgrades. Example error message:
 
-```text
+```plaintext
 Error: UPGRADE FAILED: cannot patch "a-gitaly" with kind StatefulSet
   StatefulSet.apps "a-gitaly" is invalid
   spec: Forbidden:
