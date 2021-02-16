@@ -4,11 +4,8 @@
 {{- $fullname := printf "%s-%s" $releaseName $name | trunc 63 | trimSuffix "-" -}}
 {{- range .Values.pods -}}
 {{- $queueName := printf "%s-%s" $fullname .name | trunc 63}}
-{{- $podCommonLabels := .podLabels }}
-{{- if not .common -}}
-{{- $_ := set . "common" (dict) -}}
-{{- end -}}
-{{- if hasKey .common "labels" }}
+{{- $podCommonLabels := default (dict) }}
+{{- if hasKey . "common" }}
 {{- $podCommonLabels = default (dict) .common.labels }}
 {{- end }}
 ---
@@ -20,8 +17,7 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "gitlab.commonLabels" $ | nindent 4 }}
-    {{- include "sidekiq.commonLabels" (dict "commonLabels" $podCommonLabels) | nindent 4 -}}
-    queue_pod_name: {{ .name }}
+    {{- include "sidekiq.commonLabels" (dict "pod" $podCommonLabels "global" $.Values.common.labels) | nindent 4 }}
 spec:
   maxUnavailable: {{ default $.Values.maxUnavailable .maxUnavailable }}
   selector:
@@ -29,7 +25,6 @@ spec:
       app: {{ $name }}
       release: {{ $.Release.Name }}
       queue-pod-name: {{ .name }}
-# Leave this here - This line denotes end of block to the parser.
----
+
 {{- end -}}
 {{- end -}}

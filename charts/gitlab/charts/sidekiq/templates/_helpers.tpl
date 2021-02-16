@@ -23,8 +23,7 @@ Returns a list of _common_ labels to be shared across all
 Sidekiq deployments, otherwise known as pods currently.
 */}}
 {{- define "sidekiq.commonLabels" -}}
-{{/* include "sidekiq.podExtraEnv" (dict "local" . "parent" $) */}}
-{{- $commonPodLabels := merge (default (dict) .commonLabels) (default (dict) .podLabels) -}}
+{{- $commonPodLabels := merge (default (dict) .pod) (default (dict) .global) -}}
 {{- range $key, $value := $commonPodLabels }}
 {{ $key }}: {{ $value }}
 {{- end }}
@@ -35,8 +34,7 @@ Returns a list of _pod_ labels to be shared across all
 Sidekiq deployments, otherwise known as pods currently.
 */}}
 {{- define "sidekiq.podLabels" -}}
-{{/* include "sidekiq.podExtraEnv" (dict "local" . "parent" $) */}}
-{{- $commonPodLabels := merge (default (dict) .commonLabels) (default (dict) .podLabels) -}}
+{{- $commonPodLabels := default (dict) .pod -}}
 {{- range $key, $value := $commonPodLabels }}
 {{ $key }}: {{ $value }}
 {{- end }}
