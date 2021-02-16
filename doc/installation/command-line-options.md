@@ -69,7 +69,7 @@ helm inspect values gitlab/gitlab
 | `global.smtp.authentication`      | Type of SMTP authentication ("plain", "login", "cram_md5", or "" for no authentication) | `plain`               |
 | `global.smtp.domain`              | Optional HELO domain for SMTP                                                           | ""                    |
 | `global.smtp.enabled`             | Enable outgoing email                                                                   | false                 |
-| `global.smtp.openssl_verify_mode` | TLS verification mode ("none", "peer", or "ssl/tls")                                    | `peer`                |
+| `global.smtp.openssl_verify_mode` | TLS verification mode ("none", "peer", "client_once", or "fail_if_no_peer_cert")        | `peer`                |
 | `global.smtp.password.key`        | Key in `global.smtp.password.secret` that contains the SMTP password                    | `password`            |
 | `global.smtp.password.secret`     | Name of a `Secret` containing the SMTP password                                         | ""                    |
 | `global.smtp.port`                | Port for SMTP                                                                           | `2525`                |
