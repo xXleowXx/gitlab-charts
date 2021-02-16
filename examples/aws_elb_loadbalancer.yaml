@@ -1,0 +1,24 @@
+# Configuration for the use of AWS ELB LoadBalancer, in Layer 7 mode
+#
+# !! ONLY for 'aws-load-balancer-backend-protocol: http' !!
+#
+# - See https://kubernetes.io/docs/concepts/services-networking/service/#ssl-support-on-aws
+# - See https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.1/guide/service/annotations/
+# - See https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers
+
+nginx-ingress:
+  controller:
+    config:
+      # pass the X-Forwarded-* headers directly from the upstream
+      use-forwarded-headers: "true" 
+    service:
+      annotations:
+        # Layer 7, injects X-Forwarded-* headers
+        service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
+        service.beta.kubernetes.io/aws-load-balancer-internal: true
+        # 
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:...
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
+      targetPorts:
+        https: http # the ELB will send HTTP to 443 :why:
