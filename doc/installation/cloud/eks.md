@@ -108,8 +108,6 @@ For environments where internal load balancers are required,
 [Amazon's Elastic Load Balancers](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html)
 require specialized configuration. See [Cloud provider LoadBalancers](../../globals.md#cloud-provider-loadbalancers)
 
-
-
 ## Next Steps
 
 Continue with the [installation of the chart](../deployment.md) once you
