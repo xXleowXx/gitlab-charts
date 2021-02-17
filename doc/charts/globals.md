@@ -872,8 +872,8 @@ However, a custom Libravatar service can also be used if needed:
 
 | Name                | Type   | Default | Description |
 |:------------------- |:------:|:------- |:----------- |
-| `gravatar.plainURL` | String | (empty) | [HTTP URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/customization/libravatar.html). |
-| `gravatar.sslUrl`   | String | (empty) | [HTTPS URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/customization/libravatar.html). |
+| `gravatar.plainURL` | String | (empty) | [HTTP URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/administration/libravatar.html). |
+| `gravatar.sslUrl`   | String | (empty) | [HTTPS URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/administration/libravatar.html). |
 
 ### Hooking Analytics services to the GitLab instance
 
@@ -1068,7 +1068,7 @@ If you'd like to customize the secret value, refer to the [secrets documentation
 
 ### LDAP
 
-The `ldap.servers` setting allows for the configuration of [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap.html)
+The `ldap.servers` setting allows for the configuration of [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap/)
 user authentication. It is presented as a map, which will be translated into the appropriate
 LDAP servers configuration in `gitlab.yml`, as with an installation from source.
 
@@ -1116,7 +1116,7 @@ within Helm `--set` items. Be sure to escape commas in values such as `bind_dn`:
 
 It can be useful to prevent using LDAP credentials through the web UI when an alternative such as SAML is preferred. This allows LDAP to be used for group sync, while also allowing your SAML identity provider to handle additional checks like custom 2FA.
 
-When LDAP web sign in is disabled, users will not see a LDAP tab on the sign in page. This does not disable [using LDAP credentials for Git access.](https://docs.gitlab.com/ee/administration/auth/ldap.html#git-password-authentication)
+When LDAP web sign in is disabled, users will not see a LDAP tab on the sign in page. This does not disable [using LDAP credentials for Git access.](https://docs.gitlab.com/ee/administration/auth/ldap/#git-password-authentication)
 
 To disable the use of LDAP for web sign-in, set `global.appConfig.ldap.preventSignin: true`.
 
