@@ -67,6 +67,7 @@ global:
     tls: {}
     #   enabled: true
     #   secretName:
+    path: /
 
   gitlab:
     ## Enterprise license for this GitLab installation

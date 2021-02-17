@@ -74,6 +74,7 @@ ingress:
     # secretName:
     # enabled: true
   annotations: {}
+  path: # /
 
 global:
   ingress:
