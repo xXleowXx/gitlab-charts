@@ -28,7 +28,7 @@ item, ensuring presence of all keys.
 {{-   $_ := set $filledValues "name" $deployment -}}
 {{-   $_ := set $filledValues "fullname" $fullname -}}
 {{-   $_ := set $.Values.deployments $deployment $filledValues -}}
-{{-   if  has ($filledValues.ingress.path | toString ) (list "/" "/*") -}}
+{{-   if has ($filledValues.ingress.path | toString ) (list "/" "/*") -}}
 {{-     $_ := set $checks "hasBasePath" true -}}
 {{-   end -}}
 {{- end -}}
