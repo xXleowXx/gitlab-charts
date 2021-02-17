@@ -36,6 +36,7 @@ for more information on how the global variables work.
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
 - [OAuth](#configure-oauth-settings)
+- [Outgoing email](#outgoing-email)
 
 ## Configure Host settings
 
@@ -1742,3 +1743,30 @@ global:
 | `redirectUri`  | String |         | URI to which user should be redirected after successful authorization.                                 |
 
 Check the [secrets documentation](../installation/secrets.md#oauth-integration) for more details on the secret.
+
+## Outgoing email
+
+Outgoing email configuration is available via `global.smtp.*` and `global.email.*`.
+
+```yaml
+global:
+  email:
+    display_name: 'GitLab'
+    from: 'gitlab@example.com'
+    reply_to: 'noreply@example.com'
+  smtp:
+    enabled: true
+    address: 'smtp.example.com'
+    tls: true
+    authentication: 'plain'
+    user_name: 'example'
+    password:
+      secret: 'smtp-password'
+      key: 'password'
+```
+
+More information on the available configuration options is available in the
+[outgoing email documentation](../installation/command-line-options.md#outgoing-email-configuration)
+
+More detailed examples can be found in the
+[Omnibus SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).
