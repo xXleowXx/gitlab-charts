@@ -134,7 +134,7 @@ status:
 ## Making storage changes
 
 First, make the desired changes to the disk outside of the cluster. (Resize the
-disk in gke, or create a new disk from a snapshot or clone, etc).
+disk in GKE, or create a new disk from a snapshot or clone, etc).
 
 How you do this, and whether or not it can be done live, without downtime, is
 dependent on the storage solutions you are using, and can't be covered by this
@@ -160,7 +160,7 @@ The paths we have documented for storage changes are:
 
 First [locate the volume name](#locate-the-gitlab-volumes) you are changing.
 
-Use `kubectl edit` to make the desired config changes to the volume. (These changes
+Use `kubectl edit` to make the desired configuration changes to the volume. (These changes
 should only be updates to reflect the real state of the attached disk)
 
 For example:
@@ -445,7 +445,7 @@ for the options.
 > Gitaly [StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) before you will be able to issue a Helm update. This is
 > because the StatefulSet's Volume Template is immutable, and cannot be changed.
 >
-> You can delete the statefulset without deleting the Gitaly Pods:
+> You can delete the stateful set without deleting the Gitaly Pods:
 > `kubectl --namespace <namespace> delete --cascade=false StatefulSet <release-name>-gitaly`
 > The Helm update command will recreate the StatefulSet, which will adopt and
 > update the Gitaly pods.
