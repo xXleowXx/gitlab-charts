@@ -75,6 +75,7 @@ to the `helm install` command using the `--set` flags.
 | `psql.password.secret`           | `gitlab-postgres`     | psql secret name                               |
 | `psql.port`                      |                       | Set PostgreSQL server port. Takes precedence over `global.psql.port` |
 | `puma.disableWorkerKiller`       | `false`               | Disables Puma worker memory killer |
+| `puma.enableNakayoshiFork`       | `true`                | Reduce memory usage in preloaded cluster-mode apps by GCing and compacting before fork |
 | `puma.workerMaxMemory`           | `1024`                | The maximum memory (in megabytes) for the Puma worker killer |
 | `puma.threads.min`               | `4`                   | The minimum amount of Puma threads |
 | `puma.threads.max`               | `4`                   | The maximum amount of Puma threads |
