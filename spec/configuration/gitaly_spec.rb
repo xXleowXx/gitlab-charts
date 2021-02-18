@@ -258,7 +258,7 @@ describe 'Gitaly configuration' do
       it 'Populates the additional labels in the expected manner' do
         t = HelmTemplate.new(praefect_labeled_values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-        expect(t.dig('ConfigMap/test-gitaly', 'metadata', 'labels')).to include('global' => 'gitaly')
+        expect(t.dig('ConfigMap/test-gitaly-praefect', 'metadata', 'labels')).to include('global' => 'gitaly')
         expect(t.dig('StatefulSet/test-gitaly-foo', 'metadata', 'labels')).to include('foo' => 'global')
         expect(t.dig('StatefulSet/test-gitaly-foo', 'metadata', 'labels')).to include('global' => 'gitaly')
         expect(t.dig('StatefulSet/test-gitaly-foo', 'metadata', 'labels')).not_to include('global' => 'global')
