@@ -40,3 +40,10 @@ Sidekiq deployments, otherwise known as pods currently.
 {{ $key }}: {{ $value }}
 {{- end }}
 {{- end -}}
+
+
+{{/* WHEE */}}
+{{- define "sidekiq.pod.common.labels" -}}
+{{- $default := dict "labels" (dict) -}}
+{{- $_ := set . "common" (merge (default (dict) .common) $default) -}}
+{{- end -}}

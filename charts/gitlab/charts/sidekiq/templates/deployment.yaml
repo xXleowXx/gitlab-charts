@@ -38,7 +38,7 @@
 {{- if hasKey . "common" }}
 {{- $podCommonLabels = default (dict) .common.labels }}
 {{- end }}
-{{- $podPodCommonLabels := merge (default (dict) .podLabels) (default (dict) $.Values.podLabels) (default (dict) $.Values.global.pod.labels) -}}
+{{- $_ := set . "podLabels" (merge (default (dict) .podLabels) (default (dict) $.Values.podLabels) (default (dict) $.Values.global.pod.labels)) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -67,7 +67,7 @@ spec:
       labels:
         {{- include "gitlab.standardLabels" $ | nindent 8 }}
         {{- include "sidekiq.commonLabels" (dict "pod" $podCommonLabels "global" $.Values.common.labels) | nindent 8 }}
-        {{- include "sidekiq.podLabels" (dict "pod" $podPodCommonLabels) | nindent 8 }}
+        {{- include "sidekiq.podLabels" (dict "pod" .podLabels ) | nindent 8 }}
         queue-pod-name: {{ .name }}
       annotations:
         checksum/configmap: {{ $configMapChecksum }}
