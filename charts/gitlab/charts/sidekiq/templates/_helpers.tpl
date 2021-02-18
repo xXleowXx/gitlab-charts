@@ -41,8 +41,9 @@ Sidekiq deployments, otherwise known as pods currently.
 {{- end }}
 {{- end -}}
 
-
-{{/* WHEE */}}
+{{/*
+Create a datamodel for our common labels
+*/}}
 {{- define "sidekiq.pod.common.labels" -}}
 {{- $default := dict "labels" (dict) -}}
 {{- $_ := set . "common" (merge (default (dict) .common) $default) -}}

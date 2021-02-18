@@ -32,13 +32,10 @@
 {{- end }}
 {{- $configMapChecksum := include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 {{- range .Values.pods -}}
-{{- $queueName := printf "%s-%s" $fullname .name | trunc 63}}
-{{- $podNodeSelector := default $nodeSelector .nodeSelector -}}
-{{- $podCommonLabels := default (dict) }}
-{{- if hasKey . "common" }}
-{{- $podCommonLabels = default (dict) .common.labels }}
-{{- end }}
-{{- $_ := set . "podLabels" (merge (default (dict) .podLabels) (default (dict) $.Values.podLabels) (default (dict) $.Values.global.pod.labels)) -}}
+{{-   $queueName := printf "%s-%s" $fullname .name | trunc 63 }}
+{{-   $podNodeSelector := default $nodeSelector .nodeSelector -}}
+{{-   include "sidekiq.pod.common.labels" . }}
+{{-   $_ := set . "podLabels" (merge (default (dict) .podLabels) (default (dict) $.Values.podLabels) (default (dict) $.Values.global.pod.labels)) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -46,7 +43,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
-    {{- include "sidekiq.commonLabels" (dict "pod" $podCommonLabels "global" $.Values.common.labels) | nindent 4 }}
+    {{- include "sidekiq.commonLabels" (dict "pod" .common.labels "global" $.Values.common.labels) | nindent 4 }}
     queue-pod-name: {{ .name }}
   annotations:
     {{- include "gitlab.deploymentAnnotations" $ | nindent 4 }}
@@ -66,7 +63,7 @@ spec:
     metadata:
       labels:
         {{- include "gitlab.standardLabels" $ | nindent 8 }}
-        {{- include "sidekiq.commonLabels" (dict "pod" $podCommonLabels "global" $.Values.common.labels) | nindent 8 }}
+        {{- include "sidekiq.commonLabels" (dict "pod" .common.labels "global" $.Values.common.labels) | nindent 8 }}
         {{- include "sidekiq.podLabels" (dict "pod" .podLabels ) | nindent 8 }}
         queue-pod-name: {{ .name }}
       annotations:
