@@ -50,6 +50,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -520,3 +521,19 @@ webservice:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.webservice.loadBalancer */}}
+
+{{/*
+Ensure that a correct value is provided for
+`global.smtp.openssl_verify_mode`.
+*/}}
+{{- define "gitlab.checkConfig.smtp.openssl_verify_mode" -}}
+{{-   $opensslVerifyModes := list "none" "peer" "client_once" "fail_if_no_peer_cert" -}}
+{{-   if .Values.global.smtp.openssl_verify_mode -}}
+{{-     if not (has .Values.global.smtp.openssl_verify_mode $opensslVerifyModes) }}
+smtp:
+    "{{ .Values.global.smtp.openssl_verify_mode }}" is not a valid value for `global.smtp.openssl_verify_mode`.
+    Valid values are: {{ join ", " $opensslVerifyModes }}.
+{{-     end }}
+{{-   end }}
+{{- end -}}
+{{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}

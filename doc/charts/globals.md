@@ -36,6 +36,7 @@ for more information on how the global variables work.
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
 - [OAuth](#configure-oauth-settings)
+- [Outgoing email](#outgoing-email)
 
 ## Configure Host settings
 
@@ -872,8 +873,8 @@ However, a custom Libravatar service can also be used if needed:
 
 | Name                | Type   | Default | Description |
 |:------------------- |:------:|:------- |:----------- |
-| `gravatar.plainURL` | String | (empty) | [HTTP URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/customization/libravatar.html). |
-| `gravatar.sslUrl`   | String | (empty) | [HTTPS URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/customization/libravatar.html). |
+| `gravatar.plainURL` | String | (empty) | [HTTP URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/administration/libravatar.html). |
+| `gravatar.sslUrl`   | String | (empty) | [HTTPS URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/administration/libravatar.html). |
 
 ### Hooking Analytics services to the GitLab instance
 
@@ -1068,7 +1069,7 @@ If you'd like to customize the secret value, refer to the [secrets documentation
 
 ### LDAP
 
-The `ldap.servers` setting allows for the configuration of [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap.html)
+The `ldap.servers` setting allows for the configuration of [LDAP](https://docs.gitlab.com/ee/administration/auth/ldap/)
 user authentication. It is presented as a map, which will be translated into the appropriate
 LDAP servers configuration in `gitlab.yml`, as with an installation from source.
 
@@ -1116,7 +1117,7 @@ within Helm `--set` items. Be sure to escape commas in values such as `bind_dn`:
 
 It can be useful to prevent using LDAP credentials through the web UI when an alternative such as SAML is preferred. This allows LDAP to be used for group sync, while also allowing your SAML identity provider to handle additional checks like custom 2FA.
 
-When LDAP web sign in is disabled, users will not see a LDAP tab on the sign in page. This does not disable [using LDAP credentials for Git access.](https://docs.gitlab.com/ee/administration/auth/ldap.html#git-password-authentication)
+When LDAP web sign in is disabled, users will not see a LDAP tab on the sign in page. This does not disable [using LDAP credentials for Git access.](https://docs.gitlab.com/ee/administration/auth/ldap/#git-password-authentication)
 
 To disable the use of LDAP for web sign-in, set `global.appConfig.ldap.preventSignin: true`.
 
@@ -1415,13 +1416,16 @@ global:
     port:
     authToken: {}
     hostKeys: {}
+    tcp:
+      proxyProtocol: false
 ```
 
-| Name        | Type    | Default | Description |
-|:----------- |:-------:|:------- |:----------- |
-| `port`      | Integer | `22`    | See [port](#port) below for specific documentation. |
-| `authToken` |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
-| `hostKeys`  |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
+| Name                  | Type    | Default | Description |
+|:--------------------- |:-------:|:------- |:----------- |
+| `port`                | Integer | `22`    | See [port](#port) below for specific documentation. |
+| `authToken`           |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
+| `hostKeys`            |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
+| `tcp.proxyProtocol`   | Boolean | `false` | See [TCP proxy protocol](#tcp-proxy-protocol) below for specific documentation. |
 
 ### Port
 
@@ -1449,6 +1453,20 @@ nginx-ingress:
   controller:
     service:
       type: NodePort
+```
+
+### TCP proxy protocol
+
+You can enable handling [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/) on the SSH Ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header.
+By doing so, this will prevent SSH from receiving the additional headers and not break SSH.
+
+One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [eks loadbalancer example](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/eks_loadbalancer_annotations.yml) to properly set it up.
+
+```yaml
+global:
+  shell:
+    tcp:
+      proxyProtocol: true # default false
 ```
 
 ## Configure GitLab Pages
@@ -1725,3 +1743,30 @@ global:
 | `redirectUri`  | String |         | URI to which user should be redirected after successful authorization.                                 |
 
 Check the [secrets documentation](../installation/secrets.md#oauth-integration) for more details on the secret.
+
+## Outgoing email
+
+Outgoing email configuration is available via `global.smtp.*` and `global.email.*`.
+
+```yaml
+global:
+  email:
+    display_name: 'GitLab'
+    from: 'gitlab@example.com'
+    reply_to: 'noreply@example.com'
+  smtp:
+    enabled: true
+    address: 'smtp.example.com'
+    tls: true
+    authentication: 'plain'
+    user_name: 'example'
+    password:
+      secret: 'smtp-password'
+      key: 'password'
+```
+
+More information on the available configuration options is available in the
+[outgoing email documentation](../installation/command-line-options.md#outgoing-email-configuration)
+
+More detailed examples can be found in the
+[Omnibus SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).

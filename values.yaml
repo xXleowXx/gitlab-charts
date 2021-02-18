@@ -100,6 +100,8 @@ global:
 
   ## doc/charts/globals.md#configure-redis-settings
   redis:
+    image:
+      tag: 6.0
     password:
       enabled: true
       # secret:
@@ -461,6 +463,9 @@ global:
       # key:
     hostKeys: {}
       # secret:
+    ## doc/charts/globals.md#tcp-proxy-protocol
+    tcp:
+      proxyProtocol: false
 
   ## Rails application secrets
   ## Secret created according to doc/installation/secrets.md#gitlab-rails-secret
