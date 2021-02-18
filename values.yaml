@@ -19,14 +19,10 @@
 global:
   common:
     labels: {}
-  ## GitLab operator is Alpha. Not for production use.
+  ## GitLab operator is DEPRECATED. DO NOT USE.
   operator:
     enabled: false
     rollout:
-      # Enables automatic pause for deployment rollout. This must be set to `true` to fix
-      # Helm's issue with 3-way merge. See:
-      #   https://gitlab.com/gitlab-org/charts/gitlab/issues/1262
-      #   https://github.com/helm/helm/issues/3805
       autoPause: true
 
   ## Supplemental Pod labels. Will not be used for selectors.

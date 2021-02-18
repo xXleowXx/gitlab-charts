@@ -11,6 +11,9 @@ for management of deployment lifecycle. This component provides a method of sync
 stages of cloud-native GitLab installation/upgrade procedures. Using the Operator provides the ability to perform
 rolling upgrades without down time.
 
+WARNING:
+This functionality was Alpha and marked experimental. It is now DEPRECATED, and will be removed in the future. Do not use in production.
+
 ## Operator Chart
 
 We provide an [Operator Chart](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/charts/gitlab/charts/operator)
