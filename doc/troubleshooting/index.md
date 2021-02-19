@@ -92,7 +92,7 @@ the use of the application until resolved. Possible problems are:
 
 ## Applying configuration changes
 
-The following command will perform the neccessary operations to apply any updates made to `gitlab.yaml`:
+The following command will perform the necessary operations to apply any updates made to `gitlab.yaml`:
 
 ```shell
 helm upgrade <release name> <chart path> -f gitlab.yaml

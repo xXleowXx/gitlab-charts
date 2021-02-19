@@ -45,7 +45,7 @@ helm upgrade --install <release-name> . --set global.operator.enabled=true ...
 ```
 
 GitLab Chart does not manage the lifecycle of the CRD and it needs to be done outside the Chart. For more details see
-[crdctl](crdctl.md) utility.
+[`crdctl`](crdctl.md) utility.
 
 Note the following:
 
