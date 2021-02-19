@@ -398,7 +398,7 @@ describe 'Sidekiq configuration' do
                   'podLabels' => {
                     'deployment' => 'negateQueues',
                     'sidekiq' => 'pod-2'
-                  },
+                  }
                 },
                 {
                   'name' => 'pod-3',
