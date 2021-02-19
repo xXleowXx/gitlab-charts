@@ -136,7 +136,7 @@ Our [registry chart](../charts/registry/index.md) was altered from the upstream 
 
 Our [NGINX Ingress chart](../charts/nginx/index.md) was altered from the upstream [NGINX Ingress](https://github.com/kubernetes/ingress-nginx).
 
-- Add feature to allow for the TCP configuration map to be external to the chart
+- Add feature to allow for the TCP ConfigMap to be external to the chart
 - Add feature to allow Ingress class to be templated based on release name
 
 ## Kubernetes version used throughout Chart

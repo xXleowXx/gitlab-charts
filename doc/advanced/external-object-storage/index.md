@@ -189,7 +189,7 @@ Examples for [AWS](https://fog.io/storage/#using-amazon-s3-and-fog) (any S3 comp
 Backups are also stored in object storage, and need to be configured to point
 externally rather than the included MinIO service. The backup/restore procedure makes
 use of two separate buckets. A bucket for storing backups (`global.appConfig.backups.bucket`)
-and a `tmp` bucket for preserving existing data during the restore process (`global.appConfig.backups.tmpBucket`).
+and a temporary bucket for preserving existing data during the restore process (`global.appConfig.backups.tmpBucket`).
 Currently AWS S3-compatible object storage systems and Google Cloud Storage are supported backends
 The backend type is configurable by setting `global.appConfig.backups.objectStorage.backend` to `s3` and `gcs` respectively.
 A connection configuration through the `gitlab.task-runner.backups.objectStorage.config` key must also be provided.

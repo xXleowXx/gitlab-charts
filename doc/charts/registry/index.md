@@ -268,7 +268,7 @@ and Ingress to specific endpoints.
 
 | Name              | Type    | Default | Description |
 |:----------------- |:-------:|:------- |:----------- |
-| `enabled`         | Boolean | `false` | This setting enables the network policy for registry |
+| `enabled`         | Boolean | `false` | This setting enables the `NetworkPolicy` for registry |
 | `ingress.enabled` | Boolean | `false` | When set to `true`, the `Ingress` network policy will be activated. This will block all Ingress connections unless rules are specified. |
 | `ingress.rules`   | Array   | `[]`    | Rules for the Ingress policy, for details see <https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource> and the example below |
 | `egress.enabled`  | Boolean | `false` | When set to `true`, the `Egress` network policy will be activated. This will block all egress connections unless rules are specified. |
