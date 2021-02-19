@@ -87,6 +87,19 @@ spec:
               mountPath: /registry
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
+        {{- if .Values.database.enabled }}
+        - name: migrations
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.init.image.pullPolicy }}
+          command: ["sh", "/config/migrations"]
+          volumeMounts:
+            - name: registry-secrets
+              mountPath: /config
+            - name: registry-server-config
+              mountPath: /etc/docker/registry
+          resources:
+            {{- toYaml .Values.init.resources | nindent 12 }}
+        {{- end }}
       {{- include "pullsecrets" .Values.image | indent 6 }}
       containers:
         - name: registry
@@ -165,6 +178,9 @@ spec:
                 - key: {{ template "gitlab.registry.profiling.stackdriver.credentials.key" . }}
                   path: profiling-key.json
           {{- end }}
+          {{- if .Values.database.enabled -}}
+          {{-   include "registry.psql.secret" . | nindent 10 }}
+          {{- end -}}
           {{- include "registry.notifications.secrets" $ | nindent 10 }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end -}}

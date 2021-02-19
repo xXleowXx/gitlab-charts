@@ -163,3 +163,14 @@ Failing that a serviceAccount will be generated automatically
 {{- define "registry.serviceAccount.name" -}}
 {{- coalesce .Values.serviceAccount.name .Values.global.serviceAccount.name ( include "registry.fullname" . ) -}}
 {{- end -}}
+
+{{/*
+Returns the K8s Secret definition for the PostgreSQL password.
+*/}}
+{{- define "registry.psql.secret" -}}
+- secret:
+    name: {{ default (include "gitlab.psql.password.secret" . ) .Values.database.password.secret }}
+    items:
+      - key: {{ .Values.database.password.key }}
+        path: database_password
+{{- end -}}

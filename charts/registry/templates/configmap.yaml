@@ -10,6 +10,8 @@ metadata:
 data:
   configure: |-
     {{- .Values.init.script | nindent 4 }}
+  migrations: |-
+    {{- .Values.init.migrations_script | nindent 4 }}
   config.yml: |
     version: 0.1
     log:
@@ -106,4 +108,13 @@ data:
       {{- else }}
       {{- include (print $.Template.BasePath "/_storage_default.yaml") . | nindent 6}}
       {{- end }}
+    database:
+      enabled: {{ .Values.database.enabled }}
+      dbname: {{ .Values.database.dbname }}
+      user: {{ .Values.database.username  }}
+      password: "DB_PASSWORD_FILE"
+      host: {{ include "gitlab.psql.host" . | quote }}
+      port: {{ include "gitlab.psql.port" . }}
+      schema: {{ .Values.database.schema }}
+      sslmode: disable
 {{- end -}}
