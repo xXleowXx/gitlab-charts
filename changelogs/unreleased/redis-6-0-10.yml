@@ -1,5 +1,0 @@
----
-title: Bump Redis chart to Redis 6.0.10
-merge_request: 1772
-author:
-type: changed
