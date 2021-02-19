@@ -58,7 +58,7 @@ the `helm install` command using the `--set` flags.
 | `podLabels`                 | `{}`           | Supplemental Pod labels. Not used for selectors. |
 | `serviceLabels`             | `{}`           | Supplemental service labels |
 | `common.labels`             |                | Supplemental labels that are applied to all objects created by this chart. |
-| `redis.enabled`             | `true`         | Allows opting-out of using Redis for KAS features. Warnings: Redis will become a hard depenency soon, so this key is already deprecated. |
+| `redis.enabled`             | `true`         | Allows opting-out of using Redis for KAS features. Warnings: Redis will become a hard dependency soon, so this key is already deprecated. |
 | `resources.requests.cpu`    | `75m`                 | GitLab Exporter minimum CPU                    |
 | `resources.requests.memory` | `100M`                | GitLab Exporter minimum memory                 |
 | `service.externalPort`      | `8150`         | External port                    |
@@ -89,7 +89,7 @@ To install the chart:
    [GitLab Kubernetes Agent](https://docs.gitlab.com/ee/user/clusters/agent/):
    (You can also follow the steps to configure and use the Agent manually.)
 
-   1. From your GDK GitLab repo, move into the QA folder: `cd qa`.
+   1. From your GDK GitLab repository, move into the QA folder: `cd qa`.
    1. Run the following command to run the QA test:
 
       ```shell

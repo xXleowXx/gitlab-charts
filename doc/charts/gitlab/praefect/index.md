@@ -210,7 +210,7 @@ To run Praefect over TLS follow these steps:
 
 NOTE:
 A basic script for generating custom signed certificates for internal Praefect Pods
-[can be found in this repo](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/generate_certificates.sh).
+[can be found in this repository](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/generate_certificates.sh).
 Users can use or refer that script to generate certificates with proper SAN attributes.
 
 1. Create a TLS Secret using the certificate created.
@@ -255,7 +255,7 @@ the `helm install` command using the `--set` flags.
 | failover.enabled               | true                                              | Whether Praefect should perform failover on node failure                                                |
 | failover.readonlyAfter         | false                                             | Whether the nodes should be in read-only mode after failover                                            |
 | autoMigrate                    | true                                              | Automatically run migrations on startup                                                                 |
-| electionStrategy               | sql                                               | See [election strategy](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#automatic-failover-and-leader-election) |
+| electionStrategy               | `sql`                                               | See [election strategy](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#automatic-failover-and-leader-election) |
 | image.repository               | `registry.gitlab.com/gitlab-org/build/cng/gitaly` | The default image repository to use. Praefect is bundled as part of the Gitaly image                    |
 | podLabels                      | `{}`                                              | Supplemental Pod labels. Will not be used for selectors.                                                |
 | service.name                   | `praefect`                                        | The name of the service to create                                                                       |
