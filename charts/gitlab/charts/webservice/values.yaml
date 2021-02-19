@@ -95,6 +95,7 @@ puma:
     min: 4
     max: 4
   disableWorkerKiller: false
+  enableNakayoshiFork: true
 
 hpa:
   targetAverageValue: 1

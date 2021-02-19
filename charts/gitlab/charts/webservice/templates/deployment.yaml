@@ -209,6 +209,8 @@ spec:
               value: "{{ .puma.workerMaxMemory }}"
             - name: DISABLE_PUMA_WORKER_KILLER
               value: "{{ .puma.disableWorkerKiller }}"
+            - name: ENABLE_PUMA_NAKAYOSHI_FORK
+              value: "{{ .puma.enableNakayoshiFork }}"
             {{- else }}
             - name: UNICORN_MEMORY_MIN
               value: "{{ .unicorn.memory.min }}"
