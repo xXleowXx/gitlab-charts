@@ -1,5 +1,0 @@
----
-title: Fixes podLabels for sidekiq deployments
-merge_request: 1826
-author:
-type: fixed

@@ -1,5 +1,0 @@
----
-title: Fix SMTP openssl_verify_mode implementation
-merge_request: 1831
-author:
-type: fixed
