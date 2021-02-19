@@ -18,7 +18,6 @@ nginx-ingress:
   controller:
     service:
       annotations:
-        service.beta.kubernetes.io/aws-load-balancer-internal: 'true'
         # Configure NLB, Layer 4 with 'tcp'
         service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
         # Configure NLB to use ProxyProtocol
