@@ -104,7 +104,7 @@ record. Since the ELB must be created first before its hostname can be
 retrieved, follow the next instructions to install GitLab.
 
 NOTE:
-For environments where internal load balancers are required,
+For environments where AWS LoadBalancers are required,
 [Amazon's Elastic Load Balancers](https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html)
 require specialized configuration. See [Cloud provider LoadBalancers](../../charts/globals.md#cloud-provider-loadbalancers)
 
