@@ -56,7 +56,7 @@ gitlab:
 | `antiAffinityLabels.matchLabels`            | Labels for setting anti-affinity options     |                              |
 | `backups.cron.concurrencyPolicy`            | Kubernetes Job concurrency policy            | `Replace`                    |
 | `backups.cron.enabled`                      | Backup CronJob enabled flag                  | false                        |
-| `backups.cron.extraArgs`                    | String of args to pass to the backup utility |                              |
+| `backups.cron.extraArgs`                    | String of arguments to pass to the backup utility |                              |
 | `backups.cron.failedJobsHistoryLimit`       | Number of failed backup jobs list in history | `1`                          |
 | `backups.cron.persistence.accessMode`       | Backup cron persistence access mode          | `ReadWriteOnce`              |
 | `backups.cron.persistence.enabled`          | Backup cron enable persistence flag          | false                        |
@@ -66,7 +66,7 @@ gitlab:
 | `backups.cron.persistence.storageClass`     | StorageClass name for provisioning           |                              |
 | `backups.cron.persistence.subPath`          | Backup cron persistence volume mount path    |                              |
 | `backups.cron.persistence.volumeName`       | Existing persistent volume name              |                              |
-| `backups.cron.resources.requests.cpu`       | Backup cron minimum needed cpu               | `50m`                        |
+| `backups.cron.resources.requests.cpu`       | Backup cron minimum needed CPU               | `50m`                        |
 | `backups.cron.resources.requests.memory`    | Backup cron minimum needed memory            | `350M`                       |
 | `backups.cron.schedule`                     | Cron style schedule string                   | `0 1 * * *`                  |
 | `backups.cron.successfulJobsHistoryLimit`   | Number of successful backup jobs list in history | `3`                      |
