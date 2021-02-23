@@ -102,7 +102,10 @@ puma:
 workerProcesses: {{ .Values.workerProcesses | int }}
 shutdown:
   {{- .Values.shutdown | toYaml | nindent 2 }}
-{{- include "gitlab.nodeSelector" . | nindent 0 }}
+nodeSelector: # map
+  {{- if .Values.nodeSelector }}
+  {{- .Values.nodeSelector | toYaml | nindent 2 }}
+  {{- end }}
 tolerations: # array
   {{- if .Values.tolerations }}
   {{- .Values.tolerations | toYaml | nindent 2 }}
