@@ -18,9 +18,7 @@ describe 'Node Selector configuration' do
       'Deployment/test-cainjector',
       'Deployment/test-cert-manager',
       'Deployment/test-gitlab-runner',
-      'Deployment/test-prometheus-server',
-      'Deployment/test-nginx-ingress-controller',
-      'Deployment/test-nginx-ingress-default-backend'
+      'Deployment/test-prometheus-server'
     ]
   end
 

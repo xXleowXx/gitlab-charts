@@ -1,0 +1,5 @@
+---
+title: Support specifying `nodeSelector` globally
+merge_request: 1839
+author: Marshall Cottrell
+type: added
