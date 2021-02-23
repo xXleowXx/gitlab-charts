@@ -106,4 +106,32 @@ data:
       {{- else }}
       {{- include (print $.Template.BasePath "/_storage_default.yaml") . | nindent 6}}
       {{- end }}
+    {{- if .Values.database }}
+    database:
+      enabled: {{ eq true .Values.database.enabled }}
+      host: {{ .Values.database.host }}
+      port: {{ .Values.database.port }}
+      user: {{ .Values.database.user }}
+      password: {{ .Values.database.password }}
+      dbname: {{ .Values.database.dbname }}
+      sslmode: {{ .Values.database.sslmode }}
+      {{- if .Values.database.sslcert }}
+      sslcert: {{ .Values.database.sslcert }}
+      {{- end }}
+      {{- if .Values.database.sslkey }}
+      sslkey: {{ .Values.database.sslkey }}
+      {{- end }}
+      {{- if .Values.database.sslrootcert }}
+      sslrootcert: {{ .Values.database.sslrootcert }}
+      {{- end }}
+      {{- if .Values.database.connecttimeout }}
+      connecttimeout: {{ .Values.database.connecttimeout }}
+      {{- end }}
+      {{- if .Values.database.draintimeout }}
+      draintimeout: {{ .Values.database.draintimeout }}
+      {{- end }}
+      {{- if .Values.database.preparedstatements }}
+      preparedstatements: {{ eq true .Values.database.preparedstatements }}
+      {{- end }}
+    {{- end }}
 {{- end -}}

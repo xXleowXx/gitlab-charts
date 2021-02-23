@@ -155,6 +155,22 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the credentials are stored                                                             |
 | `profiling.stackdriver.service`            | `RELEASE-registry` (templated Service name)| Name of the Stackdriver service to record profiles under                                             |
 | `profiling.stackdriver.projectid`          | GCP project where running                    | GCP project to report profiles to                                                                    |
+| `database.enabled`                         | `false`                                      | Enable metadata database. This is an experimental feature and must not be used in production environments. |
+| `database.host`                            |                                              | The database server hostname. |
+| `database.port`                            |                                              | The database server port. |
+| `database.user`                            |                                              | The database username. |
+| `database.password`                        |                                              | The database password. |
+| `database.dbname`                          |                                              | The database name. |
+| `database.sslmode`                         |                                              | The SSL mode. Can be one of `disable`, `allow`, `prefer`, `require`, `verify-ca` or `verify-full`. |
+| `database.sslcert`                         |                                              | The PEM encoded certificate file path. |
+| `database.sslkey`                          |                                              | The PEM encoded key file path. |
+| `database.sslrootcert`                     |                                              | The PEM encoded root certificate file path. |
+| `database.connecttimeout`                  | `0`                                          | Maximum time to wait for a connection. Zero or not specified means waiting indefinitely. |
+| `database.draintimeout`                    | `0`                                          | Maximum time to wait to drain all connections on shutdown. Zero or not specified means waiting indefinitely. |
+| `database.preparedstatements`              | `false`                                      | Enable prepared statements. Disabled by default for compatibility with PgBouncer. |
+| `database.pool.maxidle`                    | `0`                                          | The maximum number of connections in the idle connection pool. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means no idle connections. |
+| `database.pool.maxopen`                    | `0`                                          | The maximum number of open connections to the database. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means unlimited open connections. |
+| `database.pool.maxlifetime`                | `0`                                          | The maximum amount of time a connection may be reused. Expired connections may be closed lazily before reuse. Zero or not specified means unlimited reuse. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
 | `serviceLabels`                            | `{}`                                         | Supplemental service labels                                                                          |
@@ -555,6 +571,33 @@ profiling:
       secret: gitlab-registry-profiling-creds
       key: credentials
     service: gitlab-registry
+```
+
+### database
+
+The `database` property is optional and enables the [metadata database](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database).
+
+NOTE: The metadata database is an experimental feature and must not be used in production.
+
+```yaml
+database:
+  enabled: true
+  host: localhost
+  port: 5432
+  user: postgres
+  password:
+  dbname: registry
+  sslmode: verify-full
+  sslcert: /path/to/client.crt
+  sslkey: /path/to/client.key
+  sslrootcert: /path/to/root.crt
+  connecttimeout: 5s
+  draintimeout: 2m
+  preparedstatements: false
+  pool:
+    maxidle: 25
+    maxopen: 25
+    maxlifetime: 5m
 ```
 
 ## Garbage Collection

@@ -1,3 +1,8 @@
+{{/* If the Container Registry metadata database is enabled, note it is not production ready */}}
+{{- if eq .Values.global.registry.database.enabled true }}
+WARNING: The Container Registry metadata database has been enabled. Please note that it is an experimental feature and must not be used in production.
+{{- end }}
+
 {{/* If Praefect enabled, note it is not production ready */}}
 {{- if eq .Values.global.praefect.enabled true }}
 WARNING: The Praefect chart has been enabled. Please note that it is still under development and not ready for production use. Usage may require significant manual intervention during upgrades.

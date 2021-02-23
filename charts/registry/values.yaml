@@ -265,3 +265,25 @@ profiling:
 
 serviceAccount:
   create: false
+
+# Disable metadata database by default
+# NOTE: This is an experimental feature and must not be used in production.
+# https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database
+database:
+  enabled: false
+  # host:
+  # port:
+  # user:
+  # password:
+  # dbname:
+  # sslmode:
+  # sslcert:
+  # sslkey:
+  # sslrootcert:
+  # connecttimeout:
+  # draintimeout:
+  # preparedstatements:
+  # pool:
+  #   maxidle:
+  #   maxopen:
+  #   maxlifetime:
