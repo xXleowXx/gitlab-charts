@@ -25,6 +25,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := list -}}
 {{/* add templates here */}}
 {{- $messages = append $messages (include "gitlab.checkConfig.contentSecurityPolicy" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.praefect.storageNames" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.cluster" .) -}}
@@ -49,6 +50,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -73,6 +75,24 @@ contentSecurityPolicy:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.contentSecurityPolicy */}}
+
+{{/*
+Ensure that if a user is migrating to Praefect, none of the Praefect virtual storage
+names are 'default', as it should already be used by the non-Praefect storage configuration.
+*/}}
+{{- define "gitlab.checkConfig.praefect.storageNames" -}}
+{{- if and $.Values.global.gitaly.enabled $.Values.global.praefect.enabled (not $.Values.global.praefect.replaceInternalGitaly) -}}
+{{-   range $i, $vs := $.Values.global.praefect.virtualStorages -}}
+{{-     if eq $vs.name "default" -}}
+praefect:
+    Praefect is enabled, but `global.praefect.replaceInternalGitaly=false`. In this scenario,
+    none of the Praefect virtual storage names can be 'default'. Please modify
+    `global.praefect.virtualStorages[{{ $i }}].name`.
+{{-     end }}
+{{-   end }}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.praefect.storageNames" -}}
 
 {{/*
 Ensure a certificate is provided when Gitaly is enabled and is instructed to
@@ -501,3 +521,19 @@ webservice:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.webservice.loadBalancer */}}
+
+{{/*
+Ensure that a correct value is provided for
+`global.smtp.openssl_verify_mode`.
+*/}}
+{{- define "gitlab.checkConfig.smtp.openssl_verify_mode" -}}
+{{-   $opensslVerifyModes := list "none" "peer" "client_once" "fail_if_no_peer_cert" -}}
+{{-   if .Values.global.smtp.openssl_verify_mode -}}
+{{-     if not (has .Values.global.smtp.openssl_verify_mode $opensslVerifyModes) }}
+smtp:
+    "{{ .Values.global.smtp.openssl_verify_mode }}" is not a valid value for `global.smtp.openssl_verify_mode`.
+    Valid values are: {{ join ", " $opensslVerifyModes }}.
+{{-     end }}
+{{-   end }}
+{{- end -}}
+{{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}

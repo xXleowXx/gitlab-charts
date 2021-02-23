@@ -20,19 +20,27 @@ spec:
   {{- if .Values.global.operator.enabled }}
   updateStrategy:
     rollingUpdate:
+      {{- if .storage }}
+      partition: {{ default (include "gitlab.gitaly.replicas" .) .storage.gitalyReplicas }}
+      {{- else }}
       partition: {{ include "gitlab.gitaly.replicas" . }}
+      {{- end }}
   {{- end }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
-        release: {{ .Release.Name }}
         {{- if .storage }}
         storage: {{ .storage.name }}
         {{- end }}
+        {{- include "gitlab.standardLabels" . | nindent 8 }}
+        {{- include "gitlab.commonLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
-        checksum/config: {{ include (print .Template.BasePath "/configmap.yml") (merge (dict) . (dict "skipStorages" true)) | sha256sum }}
+      {{- $cm := "/configmap.yml" -}}
+      {{- if .storage }}
+      {{-   $cm = "/configmap-with-praefect.yml" -}}
+      {{- end }}
+        checksum/config: {{ include (print .Template.BasePath $cm) (merge (dict) . (dict "skipStorages" true)) | sha256sum }}
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -178,7 +186,11 @@ spec:
       {{- include "gitlab.extraVolumes" . | nindent 6 }}
       - name: gitaly-config
         configMap:
-          name: {{ template "fullname" . }}
+          {{- $cmName := include "fullname" . -}}
+          {{- if .storage}}
+          {{-   $cmName = printf "%s-%s" $cmName "praefect" -}}
+          {{- end }}
+          name: {{ $cmName }}
       {{- if not .Values.persistence.enabled }}
       - name: repo-data
         emptyDir: {}
@@ -214,30 +226,30 @@ spec:
                   path: "gitaly.key"
           {{- end }}
       {{- with .Values.global.gitaly.hooks }}
-      {{- if .preReceive }}
-      {{-   if .preReceive.configmap }}
+      {{-   if .preReceive }}
+      {{-     if .preReceive.configmap }}
       - name: gitaly-hooks-pre-receive
         configMap:
           name: {{ .preReceive.configmap }}
           defaultMode: 0555
+      {{-     end }}
       {{-   end }}
-      {{- end }}
-      {{- if .postReceive }}
-      {{-   if .postReceive.configmap }}
+      {{-   if .postReceive }}
+      {{-     if .postReceive.configmap }}
       - name: gitaly-hooks-post-receive
         configMap:
           name: {{ .postReceive.configmap }}
           defaultMode: 0555
       {{-   end }}
-      {{- end }}
-      {{- if .update }}
-      {{-   if .update.configmap }}
+      {{-   end }}
+      {{-   if .update }}
+      {{-     if .update.configmap }}
       - name: gitaly-hooks-update
         configMap:
           name: {{ .update.configmap }}
           defaultMode: 0555
+      {{-     end }}
       {{-   end }}
-      {{- end }}
       {{- end }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
     {{- if .Values.nodeSelector }}
@@ -299,11 +311,11 @@ spec:
           requests:
             storage: {{ $size | quote }}
       {{- if $storageClass }}
-      {{- if (eq "-" $storageClass) }}
+      {{-   if (eq "-" $storageClass) }}
         storageClassName: ""
-      {{- else }}
+      {{-   else }}
         storageClassName: "{{ $storageClass }}"
-      {{- end -}}
+      {{-   end -}}
       {{- end }}
         selector:
       {{- if $matchLabels }}

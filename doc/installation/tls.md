@@ -27,7 +27,7 @@ helm install gitlab gitlab/gitlab \
   --set certmanager-issuer.email=you@example.com
 ```
 
-Installing certmanager is controlled by the `certmanager.install` setting, and using it in the charts is controlled by the
+Installing `cert-manager` is controlled by the `certmanager.install` setting, and using it in the charts is controlled by the
 `global.ingress.configureCertmanager` setting. Both of these are `true` by default, so only the issuer email needs to be
 provided by default.
 

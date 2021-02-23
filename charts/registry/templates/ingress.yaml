@@ -26,7 +26,7 @@ spec:
     - host: {{ $hostname }}
       http:
         paths:
-          - path: /
+          - path: {{ coalesce $.Values.ingress.path $.Values.global.ingress.path }}
             backend:
               serviceName: {{ template "fullname" . }}
               servicePort: {{ .Values.service.externalPort }}

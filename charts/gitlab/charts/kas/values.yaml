@@ -4,6 +4,7 @@
 
 annotations: {}
 global:
+  ingress: {}
   kas:
     enabled: false
   redis:
@@ -21,6 +22,7 @@ image:
 ingress:
   annotations: {}
   tls: {}
+  path: # /
 maxReplicas: 10
 maxUnavailable: 1
 minReplicas: 2
