@@ -133,6 +133,15 @@ For those users who need to have their `path` definitions end in `/*` to match t
 This setting will ensure that all `path` entries in Ingress resources throughout this chart will be rendered with this.
 The only exception is when populating the [`gitlab/webservice` deployments settings](gitlab/webservice/index.md#deployments-settings), where `path` must be specified.
 
+### Cloud provider LoadBalancers
+
+Various cloud providers' LoadBalancer implementations have an impact on how this the Ingress resources, and NGINX itself are configured as a part of this chart. The below table provides examples.
+
+| Provider | Layer | Example snippet |
+| :-- | --: | :-- |
+| AWS | 4 | [aws/elb-layer4-loadbalancer](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/elb-layer4-loadbalancer.yaml) |
+| AWS | 7 | [aws/elb-layer7-loadbalancer](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/elb-layer7-loadbalancer.yaml) |
+
 ### `global.ingress.configureCertmanager`
 
 Global setting that controls the automatic configuration of [cert-manager](https://artifacthub.io/packages/helm/jetstack/cert-manager)
@@ -1472,7 +1481,7 @@ nginx-ingress:
 You can enable handling [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/) on the SSH Ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header.
 By doing so, this will prevent SSH from receiving the additional headers and not break SSH.
 
-One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [EKS loadbalancer example](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/eks_loadbalancer_annotations.yml) to properly set it up.
+One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [AWS layer 4 loadbalancer example](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/aws/elb-layer4-loadbalancer.yml) to properly set it up.
 
 ```yaml
 global:
