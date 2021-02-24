@@ -113,23 +113,24 @@ spec:
               readOnly: true
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
             {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
-          # livenessProbe:
-          #   exec:
-          #     command:
-          #     - /scripts/healthcheck
-          #   initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
-          #   periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
-          #   timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
-          #   successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
-          #   failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
-          # readinessProbe:
-          #   tcpSocket:
-          #     port: {{ .Values.service.internalPort }}
-          #   initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
-          #   periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
-          #   timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
-          #   successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
-          #   failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+          livenessProbe:
+            httpGet:
+              port: 9122
+              path: /metrics
+            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              port: 9122
+              path: /metrics
+            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- if .Values.deployment.terminationGracePeriodSeconds }}
