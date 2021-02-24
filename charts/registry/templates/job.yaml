@@ -1,0 +1,128 @@
+{{- if and .Values.enabled .Values.database.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "registry.fullname" . }}-migrations
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.commonLabels" . | nindent 4 }}
+spec:
+  activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
+  backoffLimit: {{ .Values.backoffLimit }}
+  template:
+    metadata:
+      {{- if .Values.annotations }}
+      annotations:
+      {{-   range $key, $value := .Values.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{-   end }}
+      {{- end }}
+      labels:
+        {{- include "gitlab.standardLabels" . | nindent 8 }}
+        {{- include "gitlab.commonLabels" . | nindent 8 }}
+        {{- include "gitlab.podLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.tolerations }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
+      serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
+      {{- end }}
+      initContainers:
+      {{- include "gitlab.extraInitContainers" . | nindent 6 }}
+      {{- include "gitlab.certificates.initContainer" . | nindent 6 }}
+      - name: configure
+        image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
+        imagePullPolicy: {{ .Values.init.image.pullPolicy }}
+        command: ['sh', '/config/configure']
+        volumeMounts:
+          - name: registry-secrets
+            mountPath: /config
+          - name: registry-server-config
+            mountPath: /registry
+        resources:
+          {{- toYaml .Values.init.resources | nindent 10 }}
+      - name: dependencies
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
+        env:
+        - name: BYPASS_SCHEMA_VERSION
+          value: '1'
+        command:
+        - /bin/bash
+        args:
+        - /scripts/wait-for-deps
+        volumeMounts:
+          - name: registry-server-config
+            mountPath: /etc/docker/registry/
+            readOnly: true
+        resources:
+          {{- toYaml .Values.init.resources | nindent 10 }}
+      restartPolicy: OnFailure
+      {{- include "pullsecrets" .Values.image | indent 6 }}
+      containers:
+      {{- include "gitlab.extraContainers" . | nindent 6 }}
+      - name: migrations
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
+        command:
+        - /bin/bash
+        args:
+        - /scripts/db-migrate
+        volumeMounts:
+          - name: registry-server-config
+            mountPath: /etc/docker/registry/
+            readOnly: true
+        {{- include "gitlab.certificates.volumeMount" . | nindent 10 }}
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+      volumes:
+      - name: registry-server-config
+        emptyDir:
+          medium: "Memory"
+      - name: registry-secrets
+        projected:
+          sources:
+          - configMap:
+              name: {{ template "registry.fullname" . }}
+          - secret:
+              name: {{ template "gitlab.registry.certificate.secret" . }}
+              items:
+                  - key: registry-auth.crt
+                    path: certificate.crt
+          - secret:
+              name: {{ template "gitlab.registry.httpSecret.secret" . }}
+              items:
+                - key: {{ template "gitlab.registry.httpSecret.key" . }}
+                  path: httpSecret
+          {{- if .Values.global.minio.enabled }}
+          - secret:
+              name: {{ template "gitlab.minio.credentials.secret" . }}
+          {{- end }}
+          {{- if .Values.storage.secret }}
+          - secret:
+              name: {{ .Values.storage.secret }}
+              items:
+                - key: {{ default "config" .Values.storage.key }}
+                  path: storage/config
+                {{- if .Values.storage.extraKey }}
+                - key: {{ .Values.storage.extraKey }}
+                  path: storage/{{ .Values.storage.extraKey }}
+                {{- end }}
+          {{- end }}
+          {{- if .Values.profiling.stackdriver.credentials.secret }}
+          - secret:
+              name: {{ .Values.profiling.stackdriver.credentials.secret }}
+              items:
+                - key: {{ template "gitlab.registry.profiling.stackdriver.credentials.key" . }}
+                  path: profiling-key.json
+          {{- end }}
+          {{- include "registry.psql.secret" . | nindent 10 }}
+          {{- include "registry.notifications.secrets" $ | nindent 10 }}
+      {{- include "gitlab.certificates.volumes" . | nindent 6 }}
+{{- end }}

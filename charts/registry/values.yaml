@@ -4,6 +4,9 @@ image:
   pullPolicy: 'IfNotPresent'
   pullSecrets: []
 
+activeDeadlineSeconds: 3600
+backoffLimit: 6
+
 deployment:
   terminationGracePeriodSeconds: 30
   readinessProbe:
@@ -104,6 +107,7 @@ global:
   registry:
     certificate: {}
     httpSecret: {}
+  psql: {}
 
 ## Control the InitContainer behaviors.
 init:
@@ -148,6 +152,10 @@ init:
       sed -i '/storage:/ r /registry/storage/config' /registry/config.yml
       # Remove the now extraneous `config` file
       rm /registry/storage/config
+    fi
+    # Insert Database password, if enabled
+    if [ -f /config/database_password ] ; then
+      sed -i -e 's@DB_PASSWORD_FILE@'"$(cat /config/database_password)"'@' /registry/config.yml
     fi
     # Set to known path, to used ConfigMap
     cat /config/certificate.crt > /registry/certificate.crt
@@ -265,3 +273,12 @@ profiling:
 
 serviceAccount:
   create: false
+
+database:
+  enabled: false
+  schema: public
+  dbname: registry
+  username: registry
+  password:
+    secret:
+    key: postgresql-registry-password
