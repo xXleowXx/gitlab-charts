@@ -22,7 +22,9 @@ Build Redis config for KAS
 {{- $_ := set $ "redisConfigName" "sharedState" -}}
 {{- end -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
+{{- if .redisMergedConfig.password.enabled -}}
 password_file: /etc/kas/redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}
+{{- end -}}
 {{- if not .redisMergedConfig.sentinels }}
 server:
   address: {{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}
