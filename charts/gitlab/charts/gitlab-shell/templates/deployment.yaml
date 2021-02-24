@@ -86,6 +86,8 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" .Chart.AppVersion "prepend" "true")) }}"
           {{ template "gitlab.imagePullPolicy" . }}
+          command: ["bash", "/scripts/entrypoint.sh", "/srv/gitlab-shell/bin/gitlab-sshd", "-config-dir", "/srv/gitlab-shell"]
+          # command: ["bash", "-c", "while true; do sleep 1; done"]
           ports:
             - containerPort: {{ .Values.service.internalPort }}
               name: ssh
@@ -111,23 +113,23 @@ spec:
               readOnly: true
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
             {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
-          livenessProbe:
-            exec:
-              command:
-              - /scripts/healthcheck
-            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
-          readinessProbe:
-            tcpSocket:
-              port: {{ .Values.service.internalPort }}
-            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #     - /scripts/healthcheck
+          #   initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
+          #   periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
+          #   timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+          #   successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
+          #   failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+          # readinessProbe:
+          #   tcpSocket:
+          #     port: {{ .Values.service.internalPort }}
+          #   initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
+          #   periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
+          #   timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+          #   successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
+          #   failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- if .Values.deployment.terminationGracePeriodSeconds }}
