@@ -100,6 +100,7 @@ describe 'kas configuration' do
         }
       }
     end
+
     it 'Populates the additional labels in the expected manner' do
       t = HelmTemplate.new(kas_label_values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
@@ -233,6 +234,26 @@ describe 'kas configuration' do
         end
 
         context 'when redisConfigName is empty' do
+          context 'when global redis has no password' do
+            let(:kas_values) do
+              default_kas_values.deep_merge!(
+                {
+                  'global' => {
+                    'redis' => {
+                      'password' => {
+                        'enabled' => false
+                      }
+                    }
+                  }
+                }
+              )
+            end
+
+            it 'does not set password_file' do
+              expect(config_yaml_data['redis']).not_to have_key("password_file")
+            end
+          end
+
           context 'when no sentinel is setup' do
             it 'takes the global redis config' do
               expect(config_yaml_data['redis']).to include(
@@ -262,6 +283,9 @@ describe 'kas configuration' do
             vals['global'].deep_merge!(redis_shared_state_config)
             vals.deep_merge!('redis' => { 'install' => false })
           end
+
+          let(:redis_password_enabled) { true }
+
           let(:redis_shared_state_config) do
             {
               'redis' => {
@@ -270,7 +294,7 @@ describe 'kas configuration' do
                   'host' => "shared.redis",
                   'port' => "6378",
                   'password' => {
-                    'enabled' => true,
+                    'enabled' => redis_password_enabled,
                     'secret' => "shared-secret",
                     'key' => "shared-key",
                   },
@@ -279,6 +303,7 @@ describe 'kas configuration' do
               }
             }
           end
+
           context 'when no sharedState sentinel is setup' do
             context 'with no sentinels' do
               let(:sentinels) { {} }
@@ -302,6 +327,14 @@ describe 'kas configuration' do
               expect(config_yaml_data['redis']).to include(
                 "password_file" => "/etc/kas/redis/sharedState-password",
                 "sentinel" => { "addresses" => ["sentinel1.shared.com:26379", "sentinel2.shared.com:26379"], "master_name" => "shared.redis" })
+            end
+          end
+
+          context 'when redis has no password' do
+            let(:redis_password_enabled) { false }
+
+            it 'does not set password_file' do
+              expect(config_yaml_data['redis']).not_to have_key("password_file")
             end
           end
         end
