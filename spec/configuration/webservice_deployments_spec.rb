@@ -68,34 +68,96 @@ describe 'Webservice Deployments configuration' do
         }
       }.deep_merge(default_values)
     end
-    it 'Populates the additional labels in the expected manner' do
+
+    let(:web_deployment) do
+      {
+        'global' => {
+          'common' => {
+            'labels' => {
+              'foo' => 'global-common'
+            }
+          },
+          'pod' => {
+            'labels' => {
+              'foo' => 'global-pod'
+            }
+          }
+        },
+        'gitlab' => {
+          'webservice' => {
+            'common' => {
+              'labels' => {
+                'foo' => 'webservice-common'
+              }
+            },
+            'deployments' => {
+              'web' => {
+                'ingress' => {
+                  'path' => '/'
+                },
+                'common' => {
+                  'labels' => {
+                    'foo' => 'web-common'
+                  }
+                },
+                'pod' => {
+                  'labels' => {
+                    'foo' => 'web-pod'
+                  }
+                }
+              }
+            },
+            'podLabels' => {
+              'foo' => 'webservice-pod'
+            }
+          }
+        }
+      }.deep_merge(default_values)
+    end
+
+    it 'Populates the additional labels in the expected manner on the default deployment' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-      expect(t.dig('ConfigMap/test-webservice', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('ConfigMap/test-webservice', 'metadata', 'labels')).to include('webservice' => 'webservice')
-      expect(t.dig('ConfigMap/test-webservice', 'metadata', 'labels')).not_to include('global' => 'global')
-      expect(t.dig('Deployment/test-webservice-default', 'metadata', 'labels')).to include('foo' => 'global')
-      expect(t.dig('Deployment/test-webservice-default', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('Deployment/test-webservice-default', 'metadata', 'labels')).not_to include('global' => 'global')
-      expect(t.dig('Deployment/test-webservice-default', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
-      expect(t.dig('Deployment/test-webservice-default', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
-      expect(t.dig('Deployment/test-webservice-default', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
-      expect(t.dig('Ingress/test-webservice-default', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('Ingress/test-webservice-smartcard', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('Service/test-webservice-default', 'metadata', 'labels')).to include('global' => 'service')
-      expect(t.dig('Service/test-webservice-default', 'metadata', 'labels')).to include('global_service' => true)
-      expect(t.dig('Service/test-webservice-default', 'metadata', 'labels')).to include('service' => true)
-      expect(t.dig('Service/test-webservice-default', 'metadata', 'labels')).to include('webservice' => 'webservice')
-      expect(t.dig('Service/test-webservice-default', 'metadata', 'labels')).not_to include('global' => 'global')
-      expect(t.dig('ServiceAccount/test-webservice', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('HorizontalPodAutoscaler/test-webservice-default', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('NetworkPolicy/test-webservice-v1', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('PodDisruptionBudget/test-webservice-default', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('ServiceAccount/test-webservice-pause', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('ServiceAccount/test-webservice-pause', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('Role/test-webservice-pause', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('RoleBinding/test-webservice-pause', 'metadata', 'labels')).to include('global' => 'webservice')
-      expect(t.dig('Job/test-webservice-pause', 'metadata', 'labels')).to include('global' => 'webservice')
+      expect(t.labels('ConfigMap/test-webservice')).to include('global' => 'webservice')
+      expect(t.labels('ConfigMap/test-webservice')).to include('webservice' => 'webservice')
+      expect(t.labels('ConfigMap/test-webservice')).not_to include('global' => 'global')
+      expect(t.labels('Deployment/test-webservice-default')).to include('foo' => 'global')
+      expect(t.labels('Deployment/test-webservice-default')).to include('global' => 'webservice')
+      expect(t.labels('Deployment/test-webservice-default')).not_to include('global' => 'global')
+      expect(t.template_labels('Deployment/test-webservice-default')).to include('global' => 'pod')
+      expect(t.template_labels('Deployment/test-webservice-default')).to include('global_pod' => true)
+      expect(t.template_labels('Deployment/test-webservice-default')).to include('pod' => true)
+      expect(t.labels('Ingress/test-webservice-default')).to include('global' => 'webservice')
+      expect(t.labels('Ingress/test-webservice-smartcard')).to include('global' => 'webservice')
+      expect(t.labels('Service/test-webservice-default')).to include('global' => 'service')
+      expect(t.labels('Service/test-webservice-default')).to include('global_service' => true)
+      expect(t.labels('Service/test-webservice-default')).to include('service' => true)
+      expect(t.labels('Service/test-webservice-default')).to include('webservice' => 'webservice')
+      expect(t.labels('Service/test-webservice-default')).not_to include('global' => 'global')
+      expect(t.labels('ServiceAccount/test-webservice')).to include('global' => 'webservice')
+      expect(t.labels('HorizontalPodAutoscaler/test-webservice-default')).to include('global' => 'webservice')
+      expect(t.labels('NetworkPolicy/test-webservice-v1')).to include('global' => 'webservice')
+      expect(t.labels('PodDisruptionBudget/test-webservice-default')).to include('global' => 'webservice')
+      expect(t.labels('ServiceAccount/test-webservice-pause')).to include('global' => 'webservice')
+      expect(t.labels('ServiceAccount/test-webservice-pause')).to include('global' => 'webservice')
+      expect(t.labels('Role/test-webservice-pause')).to include('global' => 'webservice')
+      expect(t.labels('RoleBinding/test-webservice-pause')).to include('global' => 'webservice')
+      expect(t.labels('Job/test-webservice-pause')).to include('global' => 'webservice')
+    end
+
+    it 'Populates the additional labels on on all objects per deployment' do
+      t = HelmTemplate.new(web_deployment)
+      expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+      expect(t.labels('Deployment/test-webservice-web')).to include('foo' => 'web-common')
+      expect(t.labels('Deployment/test-webservice-web')).not_to include('foo' => 'webservice-common')
+      expect(t.labels('Deployment/test-webservice-web')).not_to include('foo' => 'global-pod')
+      expect(t.template_labels('Deployment/test-webservice-web')).to include('foo' => 'web-pod')
+      expect(t.template_labels('Deployment/test-webservice-web')).not_to include('foo' => 'webservice-pod')
+      expect(t.labels('Ingress/test-webservice-web')).to include('foo' => 'web-common')
+      expect(t.labels('Service/test-webservice-web')).to include('foo' => 'web-common')
+      expect(t.labels('Service/test-webservice-web')).not_to include('foo' => 'global-pod')
+      expect(t.labels('HorizontalPodAutoscaler/test-webservice-web')).to include('foo' => 'web-common')
+      expect(t.labels('PodDisruptionBudget/test-webservice-web')).to include('foo' => 'web-common')
     end
   end
 

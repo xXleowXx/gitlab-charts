@@ -21,6 +21,9 @@ metadata:
     {{- if .service.labels -}}
     {{-   toYaml .service.labels | nindent 4 }}
     {{- end }}
+    {{- if .common.labels -}}
+    {{-   toYaml .common.labels | nindent 4 }}
+    {{- end }}
   annotations:
     {{- include "gitlab.serviceAnnotations" $ | nindent 4 }}
     {{- if .service.annotations -}}
