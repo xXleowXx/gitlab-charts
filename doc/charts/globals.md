@@ -1685,8 +1685,8 @@ global:
 ### Common Labels
 
 Labels can be applied to nearly all objects that are created by various objects
-by using the configuration `common.labels`.  This can be applied under the
-`global` key, or under a specific charts' configuration.  Example:
+by using the configuration `common.labels`. This can be applied under the
+`global` key, or under a specific charts' configuration. Example:
 
 ```yaml
 global:
@@ -1702,8 +1702,8 @@ gitlab:
 
 With the above example configuration, nearly all components deployed by our Helm
 chart will be provided the label set `environment: production`. All components
-of the GitLab-Shell chart will receive the label set `foo: bar`.  Some charts
-allow for additional nesting.  For example, our Sidekiq and Webservices charts
+of the GitLab Shell chart will receive the label set `foo: bar`. Some charts
+allow for additional nesting. For example, our Sidekiq and Webservices charts
 allow for additional deployments depending on your configuration needs.
 
 ```yaml
@@ -1717,11 +1717,11 @@ gitlab:
 ```
 
 In the above example, all components associated with the `pod-0` sidekiq
-deployment will also recieve the label set `baz: bat`.  Refer to the Sidekiq and
+deployment will also recieve the label set `baz: bat`. Refer to the Sidekiq and
 Webservice chart for additional details.
 
 Note that some charts that we depend on are excluded from this label
-configuration.  The Nginx, Postgres, Minio, etc, will not receive these
+configuration. The Nginx, PostgreSQL, Minio, etc, will not receive these
 additional labels.
 
 ### Pod
