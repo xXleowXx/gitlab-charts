@@ -1721,7 +1721,7 @@ deployment will also recieve the label set `baz: bat`. Refer to the Sidekiq and
 Webservice chart for additional details.
 
 Note that some charts that we depend on are excluded from this label
-configuration. The Nginx, PostgreSQL, MinIO, etc, will not receive these
+configuration. The NGINX, PostgreSQL, MinIO, etc, will not receive these
 additional labels.
 
 ### Pod
