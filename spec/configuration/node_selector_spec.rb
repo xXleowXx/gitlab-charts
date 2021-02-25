@@ -22,10 +22,18 @@ describe 'Node Selector configuration' do
         # - shared-secrets/templates/_self-signed-cert-job.yml
         'ingress' => {
           'configureCertmanager' => 'false'
+        },
+
+        # ensures inclusion of:
+        # - gitlab/charts/webservice/templates/pause_job.yaml
+        # - gitlab/charts/sidekiq/templates/pause_job.yaml
+        # - gitlab/charts/gitaly/templates/pause_job.yaml
+        # - gitlab/charts/operator/templates/deployment.yaml
+        'operator' => {
+          'enabled' => 'true',
+          'rollout' => { 'autoPause' => 'true' }
         }
       },
-
-      'certmanager-issuer' => { 'email' => 'test@example.com' },
 
       # ensures inclusion of:
       # - nginx-ingress/templates/admission-webhooks/job-patch/job-createSecret.yaml
@@ -35,7 +43,9 @@ describe 'Node Selector configuration' do
           'enabled' => 'true',
           'patch' => { 'enabled' => 'true' }
         }
-      }
+      },
+
+      'certmanager-issuer' => { 'email' => 'test@example.com' }
     }
   end
 
