@@ -1716,12 +1716,12 @@ gitlab:
             baz: bat
 ```
 
-In the above example, all components associated with the `pod-0` sidekiq
+In the above example, all components associated with the `pod-0` Sidekiq
 deployment will also recieve the label set `baz: bat`. Refer to the Sidekiq and
 Webservice chart for additional details.
 
 Note that some charts that we depend on are excluded from this label
-configuration. The Nginx, PostgreSQL, Minio, etc, will not receive these
+configuration. The Nginx, PostgreSQL, MinIO, etc, will not receive these
 additional labels.
 
 ### Pod
