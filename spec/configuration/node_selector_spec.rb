@@ -8,7 +8,7 @@ describe 'Node Selector configuration' do
   let(:default_values) do
     {
       'global' => {
-        # the values we test for presence of across components
+        # the values we test for presence of NodeSelectors across components
         'nodeSelector' => { 'region' => 'us-central-1a' },
 
         # PLEASE UPDATE AS NEW COMPONENTS ARE ADDED (unless they are enabled by default)
@@ -21,8 +21,7 @@ describe 'Node Selector configuration' do
         # ensures inclusion of:
         # - shared-secrets/templates/_self-signed-cert-job.yml
         'ingress' => {
-          'configureCertmanager' => 'false',
-          'tls' => { 'enabled' => 'false' }
+          'configureCertmanager' => 'false'
         }
       },
 
