@@ -41,13 +41,13 @@ Kubernetes features.
 Follow the instructions to create and connect to the Kubernetes cluster of your
 choice:
 
-- [Google Kubernetes Engine](cloud/gke.md)
 - [Amazon EKS](cloud/eks.md)
-- [OpenShift Origin](cloud/openshift.md)
 - [Azure Kubernetes Service](cloud/aks.md)
+- [Google Kubernetes Engine](cloud/gke.md)
+- [OpenShift Origin](cloud/openshift.md)
+- [Oracle Kubernetes Service](cloud/oke.md)
 - VMware Tanzu - Documentation to be added.
 - On-Premises solutions - Documentation to be added.
-
 ## Deploying GitLab
 
 With the environment set up and configuration generated, you can now proceed to
