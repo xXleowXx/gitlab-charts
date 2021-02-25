@@ -44,12 +44,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.registry.database.host" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.registry.database.port" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.registry.database.user" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.registry.database.password" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.registry.database.dbname" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.registry.database.sslmode" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.database" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
@@ -432,80 +427,35 @@ Registry: Notifications should be defined in the global scope. Use `global.regis
 {{/* END gitlab.checkConfig.registry.notifications */}}
 
 {{/*
-Ensure that registry's database has a host configured if enabled
+Ensure that registry's database is configured properly
 */}}
-{{- define "gitlab.checkConfig.registry.database.host" -}}
+{{- define "gitlab.checkConfig.registry.database" -}}
 {{-   if $.Values.registry.database.enabled }}
 {{-     if not $.Values.registry.database.host }}
 registry:
     When enabling the metadata database, you must configure the database host.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
-{{-   end -}}
-{{- end -}}
-{{/* END gitlab.checkConfig.registry.database.host */}}
-
-{{/*
-Ensure that registry's database has a port configured if enabled
-*/}}
-{{- define "gitlab.checkConfig.registry.database.port" -}}
-{{-   if $.Values.registry.database.enabled }}
 {{-     if not $.Values.registry.database.port }}
 registry:
     When enabling the metadata database, you must configure the database port.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
-{{-   end -}}
-{{- end -}}
-{{/* END gitlab.checkConfig.registry.database.port */}}
-
-{{/*
-Ensure that registry's database has a user configured if enabled
-*/}}
-{{- define "gitlab.checkConfig.registry.database.user" -}}
-{{-   if $.Values.registry.database.enabled }}
 {{-     if not $.Values.registry.database.user }}
 registry:
     When enabling the metadata database, you must configure the database user.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
-{{-   end -}}
-{{- end -}}
-{{/* END gitlab.checkConfig.registry.database.user */}}
-
-{{/*
-Ensure that registry's database has a password configured if enabled
-*/}}
-{{- define "gitlab.checkConfig.registry.database.password" -}}
-{{-   if $.Values.registry.database.enabled }}
 {{-     if not $.Values.registry.database.password }}
 registry:
     When enabling the metadata database, you must configure the database password.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
-{{-   end -}}
-{{- end -}}
-{{/* END gitlab.checkConfig.registry.database.password */}}
-
-{{/*
-Ensure that registry's database has a name configured if enabled
-*/}}
-{{- define "gitlab.checkConfig.registry.database.dbname" -}}
-{{-   if $.Values.registry.database.enabled }}
 {{-     if not $.Values.registry.database.dbname }}
 registry:
     When enabling the metadata database, you must configure the database name.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
-{{-   end -}}
-{{- end -}}
-{{/* END gitlab.checkConfig.registry.database.dbname */}}
-
-{{/*
-Ensure that registry's database has a sslmode configured if enabled
-*/}}
-{{- define "gitlab.checkConfig.registry.database.sslmode" -}}
-{{-   if $.Values.registry.database.enabled }}
 {{-     if not $.Values.registry.database.sslmode }}
 registry:
     When enabling the metadata database, you must configure the SSL mode.
@@ -513,7 +463,7 @@ registry:
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.registry.database.sslmode */}}
+{{/* END gitlab.checkConfig.registry.database */}}
 
 {{/*
 Ensure Puma is used when the dependency proxy is enabled
