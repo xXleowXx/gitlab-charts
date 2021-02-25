@@ -367,6 +367,3 @@ deployments: {}
   # default:
   #   ingress:
   #     path: /
-
-extraEnv:
-  RUBY_GC_HEAP_INIT_SLOTS: '3000000'
