@@ -1,5 +1,5 @@
 ---
-title: Use Ruby GC defaults that better suit our needs
+title: Use Ruby GC defaults for Puma that better suit our needs
 merge_request: 1851
 author:
 type: performance
