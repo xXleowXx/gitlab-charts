@@ -30,7 +30,7 @@ data:
 
     # Log file.
     # Default is gitlab-shell.log in the root directory.
-    log_file: "/var/log/gitlab-shell/gitlab-shell.log"
+    log_file: "/dev/stdout"
 
     log_format: {{ .Values.logging.format }}
 
