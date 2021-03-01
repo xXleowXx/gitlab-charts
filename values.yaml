@@ -487,6 +487,10 @@ global:
       # secret:
       # key:
     # https://docs.docker.com/registry/notifications/#configuration
+    notificationSecret:
+      enabled: false
+      # secret: <release-name>-registry-notification
+      # key: secret
     notifications: {}
       # endpoints:
       #   - name: FooListener

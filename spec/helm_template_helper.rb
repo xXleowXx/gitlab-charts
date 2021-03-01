@@ -76,6 +76,15 @@ class HelmTemplate
     volumes[0]
   end
 
+  def find_secret(item, mount, secret)
+    secrets = find_volume(item,mount)
+    secrets['projected']['sources'].keep_if do |s|
+      s['secret']['name'] == secret
+    end
+
+    secrets['projected']['sources'].length == 1
+  end
+
   def find_volume_mount(item, container_name, volume_name, init = false)
     find_container(item, container_name, init)
       &.dig('volumeMounts')
