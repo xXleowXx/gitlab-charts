@@ -45,12 +45,15 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "name" $ }}
-        release: {{ $.Release.Name }}
+        standardLabels: true
         {{- include "gitlab.standardLabels" $ | nindent 8 }}
+        commonLabels: true
         {{- include "gitlab.commonLabels" $ | nindent 8 }}
+        podLabels: true
         {{- include "gitlab.podLabels" $ | nindent 8 }}
+        webserviceLabels: true
         {{- include "webservice.labels" . | nindent 8 }}
+        morePodLabels: true
         {{- if .pod.labels -}}
         {{-   toYaml .pod.labels | nindent 8 }}
         {{- end }}
