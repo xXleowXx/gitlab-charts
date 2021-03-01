@@ -1,6 +1,9 @@
 {{- if .Values.enabled -}}{{/* ENABLED */}}
 {{- if eq (include "gitlab.ingress.enabled" $) "true" -}}{{/* INGRESS ENABLED */}}
 {{- $gitlabHostname := include "gitlab.gitlab.hostname" $ -}}
+{{- if .Values.global.hosts.gitlab.hostnameOverride -}}
+{{-   $gitlabHostname = .Values.global.hosts.gitlab.hostnameOverride -}}
+{{- end -}}
 {{- $tlsSecret := include "webservice.tlsSecret" $ -}}
 {{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
