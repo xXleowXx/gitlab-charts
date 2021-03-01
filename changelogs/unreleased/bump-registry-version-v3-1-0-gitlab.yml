@@ -1,0 +1,5 @@
+---
+title: Bump Container Registry to v3.1.0-gitlab
+merge_request: # number (not the link) of the version bump merge request
+author:
+type: changed
