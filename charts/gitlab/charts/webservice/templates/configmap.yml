@@ -134,7 +134,7 @@ data:
           port: {{ .Values.monitoring.exporter.port }}
         sidekiq_exporter:
       shutdown:
-        blackout_seconds: {{ .Values.shutdown.blackoutSeconds }}
+        blackout_seconds: <%= ENV["SHUTDOWN_BLACKOUT_SECONDS"] || {{ .Values.shutdown.blackoutSeconds }} %>
       {{- include "gitlab.appConfig.rackAttack" . | nindent 6 }}
       ## Registry Integration
       {{- include "gitlab.appConfig.registry.configuration" $ | nindent 6 }}
