@@ -1700,11 +1700,11 @@ gitlab:
         foo: bar
 ```
 
-With the above example configuration, nearly all components deployed by our Helm
+With the above example configuration, nearly all components deployed by the Helm
 chart will be provided the label set `environment: production`. All components
 of the GitLab Shell chart will receive the label set `foo: bar`. Some charts
-allow for additional nesting. For example, our Sidekiq and Webservices charts
-allow for additional deployments depending on your configuration needs.
+allow for additional nesting. For example, the Sidekiq and Webservices charts
+allow for additional deployments depending on your configuration needs:
 
 ```yaml
 gitlab:
@@ -1718,9 +1718,9 @@ gitlab:
 
 In the above example, all components associated with the `pod-0` Sidekiq
 deployment will also recieve the label set `baz: bat`. Refer to the Sidekiq and
-Webservice chart for additional details.
+Webservice charts for additional details.
 
-Note that some charts that we depend on are excluded from this label
+Some charts that we depend on are excluded from this label
 configuration. The NGINX, PostgreSQL, MinIO, etc, will not receive these
 additional labels.
 
