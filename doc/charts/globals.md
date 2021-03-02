@@ -1720,9 +1720,9 @@ In the above example, all components associated with the `pod-0` Sidekiq
 deployment will also recieve the label set `baz: bat`. Refer to the Sidekiq and
 Webservice charts for additional details.
 
-Some charts that we depend on are excluded from this label
-configuration. The NGINX, PostgreSQL, MinIO, etc, will not receive these
-additional labels.
+Some charts that we depend on are excluded from this label configuration. Only
+the [GitLab component sub-charts](https://docs.gitlab.com/charts/charts/gitlab/)
+will receive these extra labels.
 
 ### Pod
 
