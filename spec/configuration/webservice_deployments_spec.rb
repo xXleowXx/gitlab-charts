@@ -398,7 +398,7 @@ describe 'Webservice Deployments configuration' do
         )).deep_merge(default_values)
     end
 
-    let(:deployment_value) do
+    let(:deployment_values) do
       YAML.safe_load(%(
         gitlab:
           webservice:
@@ -423,7 +423,7 @@ describe 'Webservice Deployments configuration' do
     end
 
     it 'setting deployment overrides chart when present' do
-      t = HelmTemplate.new(deployment_value)
+      t = HelmTemplate.new(deployment_values)
 
       expect(t.exit_code).to eq(0)
       expect(t.env('Deployment/test-webservice-a', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 120))
