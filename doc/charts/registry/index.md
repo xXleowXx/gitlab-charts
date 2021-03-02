@@ -589,11 +589,15 @@ database:
   port: 5432
   user: postgres
   password:
+    secret: gitlab-postgresql-password
+    key: postgresql-registry-password
   dbname: registry
   sslmode: verify-full
-  sslcert: /path/to/client.crt
-  sslkey: /path/to/client.key
-  sslrootcert: /path/to/root.crt
+  ssl:
+    secret: gitlab-registry-postgresql-ssl
+    clientKey: client-key.pem
+    clientCertificate: client-cert.pem
+    serverCA: server-ca.pem
   connecttimeout: 5s
   draintimeout: 2m
   preparedstatements: false
