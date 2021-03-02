@@ -34,6 +34,7 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+      {{- include "gitlab.nodeSelector" . | nindent 6 }}
       {{- if .Values.tolerations }}
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}
