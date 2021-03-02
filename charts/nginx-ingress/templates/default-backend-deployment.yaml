@@ -99,6 +99,8 @@ spec:
         {{- end }}
     {{- if .Values.defaultBackend.nodeSelector }}
       nodeSelector: {{ toYaml .Values.defaultBackend.nodeSelector | nindent 8 }}
+    {{- else }}
+    {{- include "gitlab.nodeSelector" . | nindent 6 }}
     {{- end }}
       serviceAccountName: {{ template "ingress-nginx.defaultBackend.serviceAccountName" . }}
     {{- if .Values.defaultBackend.tolerations }}

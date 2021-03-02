@@ -8,7 +8,7 @@
 {{- $concurrency := .Values.concurrency -}}
 {{- $timeout := .Values.timeout -}}
 {{- $resources := .Values.resources -}}
-{{- $nodeSelector := .Values.nodeSelector -}}
+{{- $nodeSelector := default .Values.global.nodeSelector .Values.nodeSelector -}}
 {{- $minioEnabled := .Values.global.minio.enabled -}}
 {{- $minioSecret := include "gitlab.minio.credentials.secret" . -}}
 {{- $railsSecretName := include "gitlab.rails-secrets.secret" . -}}

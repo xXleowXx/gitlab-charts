@@ -1679,6 +1679,21 @@ global:
       environment: production
 ```
 
+## Node Selector
+
+Custom `nodeSelector`s can be applied to all components globally. Any global defaults
+can also be overridden on each subchart individually.
+
+```yaml
+global:
+  nodeSelector:
+    disktype: ssd
+```
+
+> **Note**: charts that are maintained externally do not respect the `global.nodeSelector`
+> at this time and may need to be configured separately based on available chart values.
+> This includes Prometheus, cert-manager, Redis, etc.
+
 ## Labels
 
 ### Pod
