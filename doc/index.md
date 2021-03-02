@@ -107,9 +107,9 @@ helm upgrade gitlab gitlab/gitlab -f gitlab.yaml
 For more detailed information see [Upgrading](installation/upgrade.md).
 
 NOTE:
-**Zero-downtime upgrades** are not currently available with the GitLab charts.
+**Zero-downtime upgrades** are not available with the GitLab charts.
 Ongoing work to support this feature can be tracked via
-[GitLab Epic 3444](https://gitlab.com/groups/gitlab-org/-/epics/3444)
+[GitLab Epic 3444](https://gitlab.com/groups/gitlab-org/-/epics/3444).
 
 ## Uninstall
 
