@@ -276,7 +276,7 @@ Instructions for installing a development branch rather than a tagged release ca
 
 WARNING:
 This functionality was Alpha and marked experimental. It is now
-[DEPRECATED](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2210), and will be removed in
+[**deprecated**](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2210), and will be removed in
 the future. Do not use in production.
 
 ## Monitoring the Deployment
