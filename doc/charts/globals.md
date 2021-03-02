@@ -119,7 +119,27 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 | `enabled`                      | Boolean | `true`         | Global setting that controls whether to create Ingress objects for services that support them. |
 | `tls.enabled`                  | Boolean | `true`         | When set to `false`, this disables TLS in GitLab. This is useful for cases in which you cannot use TLS termination of Ingresses, such as when you have a TLS-terminating proxy before the Ingress Controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#configure-host-settings). |
 | `tls.secretName`               | String  |                | The name of the [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) that contains a **wildcard** certificate and key for the domain used in `global.hosts.domain`. |
-| `hostnameOverride`             | String  |                | Override the hostname used in Ingress configuration of the Webservice. Useful if GitLab has to be reachable behind a WAF that rewrites the Hostname to an internal hostname (e.g.: `gitlab.example.com` --> `gitlab.cluster.local`). |
+| `path`                         | String  | `/`            | Default for `path` entries in [Ingress objects](https://kubernetes.io/docs/concepts/services-networking/ingress/) |
+
+### Ingress Path
+
+This chart employs `global.ingress.path` as means to assist those users which need to alter the defintion of `path` entries for their Ingress objects.
+Many users will have no need for this setting, and _should not configure it_.
+
+For those users who need to have their `path` definitions end in `/*` to match their load balancer / proxy behaviors, such as when using `ingress.class: gce` in GCP,
+`ingress.class: alb` in AWS, or another such provider.
+
+This setting will ensure that all `path` entries in Ingress resources throughout this chart will be rendered with this.
+The only exception is when populating the [`gitlab/webservice` deployments settings](gitlab/webservice/index.md#deployments-settings), where `path` must be specified.
+
+### Cloud provider LoadBalancers
+
+Various cloud providers' LoadBalancer implementations have an impact on how this the Ingress resources, and NGINX itself are configured as a part of this chart. The below table provides examples.
+
+| Provider | Layer | Example snippet |
+| :-- | --: | :-- |
+| AWS | 4 | [aws/elb-layer4-loadbalancer](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/elb-layer4-loadbalancer.yaml) |
+| AWS | 7 | [aws/elb-layer7-loadbalancer](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/elb-layer7-loadbalancer.yaml) |
 
 ### `global.ingress.configureCertmanager`
 
@@ -182,13 +202,13 @@ global:
 | `host`               | String    |                        | The hostname of the PostgreSQL server with the database to use. This can be omitted if using PostgreSQL deployed by this chart.                                                                |
 | `serviceName`        | String    |                        | The name of the `service` which is operating the PostgreSQL database. If this is present, and `host` is not, the chart will template the hostname of the service in place of the `host` value. |
 | `database`           | String    | `gitlabhq_production`  | The name of the database to use on the PostgreSQL server.                                                                                                                                      |
-| `password.useSecret` | Bool      | `true`                 | Controls whether the password for PostgreSQL is read from a secret or file.                                                                                                                    |
+| `password.useSecret` | Boolean      | `true`                 | Controls whether the password for PostgreSQL is read from a secret or file.                                                                                                                    |
 | `password.file`      | String    |                        | Defines the path to the file that contains the password for PostgreSQL. Ignored if `password.useSecret` is true                                                                                |
 | `password.key`       | String    |                        | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. Ignored if `password.useSecret` is false.                            |
 | `password.secret`    | String    |                        | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from. Ignored if `password.useSecret` is false.                                             |
 | `port`               | Integer   | `5432`                 | The port on which to connect to the PostgreSQL server.                                                                                                                                         |
 | `username`           | String    | `gitlab`               | The username with which to authenticate to the database.                                                                                                                                       |
-| `preparedStatements` | Bool      | `false`                | If prepared statements should be used when communicating with the PostgreSQL server.                                                                                                           |
+| `preparedStatements` | Boolean      | `false`                | If prepared statements should be used when communicating with the PostgreSQL server.                                                                                                           |
 | `connectTimeout`     | Integer   |                        | The number of seconds to wait for a database connection.                                                                                                                                       |
 | `applicationName`    | String    |                        | The name of the application connecting to the database. Set to a blank string (`""`) to disable. By default, this will be set to the name of the running process (e.g. `sidekiq`, `puma`).     |
 
@@ -227,8 +247,8 @@ global:
 
 | Name                | Type    | Default | Description |
 |:-----------------   |:-------:|:------- |:----------- |
-| `secret`            | String  |         | Name of the Kuberentes `Secret` containing the following keys |
-| `clientCertificate` | String  |         | Name of the key witin the `Secret` containing the client certificate. |
+| `secret`            | String  |         | Name of the Kubernetes `Secret` containing the following keys |
+| `clientCertificate` | String  |         | Name of the key within the `Secret` containing the client certificate. |
 | `clientKey`         | String  |         | Name of the key within the `Secret` containing the client certificate's key file. |
 | `serverCA`          | String  |         | Name of the key within the `Secret` containing the certificate authority for the server. |
 
@@ -323,10 +343,10 @@ global:
 | `host`             | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
 | `serviceName`      | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
 | `port`             | Integer | `6379`  | The port on which to connect to the Redis server. |
-| `password.enabled` | Bool    | true    | The `password.enabled` provides a toggle for using a password with the Redis instance. |
+| `password.enabled` | Boolean    | true    | The `password.enabled` provides a toggle for using a password with the Redis instance. |
 | `password.key`     | String  |         | The `password.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
 | `password.secret`  | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
-| `scheme`           | String  | `redis` | The URI scheme to be used to generate Redis URLs. Valid values are `redis`, `rediss`, and `tcp`. If using `rediss` (SSL encrypted connection) scheme, the certificate used by the server should be a part of the system's trusted chains. This can be done by addinng them to the [custom certificate authorities](#custom-certificate-authorities) list. |
+| `scheme`           | String  | `redis` | The URI scheme to be used to generate Redis URLs. Valid values are `redis`, `rediss`, and `tcp`. If using `rediss` (SSL encrypted connection) scheme, the certificate used by the server should be a part of the system's trusted chains. This can be done by adding them to the [custom certificate authorities](#custom-certificate-authorities) list. |
 
 ### Redis Sentinel support
 
@@ -371,7 +391,7 @@ global:
 | `sentinels.[].port`| Integer | `26379` | The port on which to connect to the Redis Sentinel server. |
 
 All the prior Redis attributes in the general [configure Redis settings](#configure-redis-settings)
-continue to apply with the Sentinel support unless respecified in the table above.
+continue to apply with the Sentinel support unless re-specified in the table above.
 
 ### Multiple Redis support
 
@@ -381,10 +401,10 @@ for different persistence classes, currently: `cache`, `queues`, `shared_state` 
 
 | Instance     | Purpose                                             |
 |:-------------|:----------------------------------------------------|
-| cache        | Store cached data                                   |
-| queues       | Store Sidekiq background jobs                       |
-| shared_state | Store session-related and other persistent data     |
-| actioncable  | Pub/Sub queue backend for ActionCable               |
+| `cache`        | Store cached data                                   |
+| `queues`       | Store Sidekiq background jobs                       |
+| `shared_state` | Store session-related and other persistent data     |
+| `actioncable`  | Pub/Sub queue backend for ActionCable               |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -439,7 +459,7 @@ Redis instances.
 |:------------------ |:-------:|:------- |:----------- |
 | `.host`            | String  |         | The hostname of the Redis server with the database to use. |
 | `.port`            | Integer | `6379`  | The port on which to connect to the Redis server. |
-| `.password.enabled`| Bool    | true    | The `password.enabled` provides a toggle for using a password with the Redis instance. |
+| `.password.enabled`| Boolean    | true    | The `password.enabled` provides a toggle for using a password with the Redis instance. |
 | `.password.key`    | String  |         | The `password.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
 | `.password.secret` | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
 
@@ -664,7 +684,7 @@ global:
 
 | Name            | Type    | Default     | Description                                                        |
 | ----            | ----    | -------     | -----------                                                        |
-| enabled         | Bool    | false       | Whether or not to enable Praefect                                  |
+| enabled         | Boolean    | false       | Whether or not to enable Praefect                                  |
 | virtualStorages | List    | See [multiple virtual storages](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#multiple-virtual-storages) above.  | The list of desired virtual storages (each backed by a Gitaly StatefulSet) |
 | dbSecret.secret | String  |             | The name of the secret to use for authenticating with the database |
 | dbSecret.key    | String  |             | The name of the key in `dbSecret.secret` to use                    |
@@ -873,8 +893,8 @@ However, a custom Libravatar service can also be used if needed:
 
 | Name                | Type   | Default | Description |
 |:------------------- |:------:|:------- |:----------- |
-| `gravatar.plainURL` | String | (empty) | [HTTP URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/administration/libravatar.html). |
-| `gravatar.sslUrl`   | String | (empty) | [HTTPS URL to libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/administration/libravatar.html). |
+| `gravatar.plainURL` | String | (empty) | [HTTP URL to Libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/administration/libravatar.html). |
+| `gravatar.sslUrl`   | String | (empty) | [HTTPS URL to Libravatar instance (instead of using gravatar.com)](https://docs.gitlab.com/ee/administration/libravatar.html). |
 
 ### Hooking Analytics services to the GitLab instance
 
@@ -912,7 +932,7 @@ are not individually configured with a `connection` property.
 | `storage_options`| String  | `{}`    | [See below](#storage_options). |
 | `connection`     | String  | `{}`    | [See below](#connection). |
 
-The property structure is shared, and all properties here can be overriden by the individual
+The property structure is shared, and all properties here can be overridden by the individual
 items below. The `connection` property structure is identical.
 
 **Notice:** The `bucket`, `enabled`, and `proxy_download` properties are the only properties that must be
@@ -967,7 +987,7 @@ in the `storage_options` configuration section:
 
 |            Setting                  | Description |
 |-------------------------------------|-------------|
-| `server_side_encryption`            | Encryption mode (AES256 or aws:kms) |
+| `server_side_encryption`            | Encryption mode (`AES256` or `aws:kms`) |
 | `server_side_encryption_kms_key_id` | Amazon Resource Name. Only needed when `aws:kms` is used in `server_side_encryption`. See the [Amazon documentation on using KMS encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html) |
 
 Example:
@@ -1020,7 +1040,7 @@ documentation. This matches to [Fog](https://github.com/fog), and is different b
 provider modules.
 
 Examples for [AWS](https://fog.io/storage/#using-amazon-s3-and-fog) and [Google](https://fog.io/storage/#google-cloud-storage)
-providers can be found in [examples/objectstorage](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage).
+providers can be found in [`examples/objectstorage`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage).
 
 - [`rails.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.s3.yaml)
 - [`rails.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.gcs.yaml)
@@ -1288,7 +1308,7 @@ This property has two sub-keys: `secret` and `key`:
 - `key` is the name of the key in the secret which houses the YAML block. Defaults to `connection`.
 
 Examples for [AWS (s3)](https://fog.io/storage/#using-amazon-s3-and-fog) and [Google (GCS)](https://fog.io/storage/#google-cloud-storage)
-providers can be found in [examples/objectstorage](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage):
+providers can be found in [`examples/objectstorage`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage):
 
 - [`rails.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.s3.yaml)
 - [`rails.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.gcs.yaml)
@@ -1378,7 +1398,7 @@ global:
 
 ## Configure Workhorse settings
 
-Several components of the GitLab suite speak to the APIs via GitLab Workhorse. This is currently a part of the Webservice chart. These settings are consumed by all charts that need to contact GitLab Workhorse, providing an easy access to set them globaly vs individually.
+Several components of the GitLab suite speak to the APIs via GitLab Workhorse. This is currently a part of the Webservice chart. These settings are consumed by all charts that need to contact GitLab Workhorse, providing an easy access to set them globally vs individually.
 
 ```yaml
 global:
@@ -1460,7 +1480,7 @@ nginx-ingress:
 You can enable handling [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/) on the SSH Ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header.
 By doing so, this will prevent SSH from receiving the additional headers and not break SSH.
 
-One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [eks loadbalancer example](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/eks_loadbalancer_annotations.yml) to properly set it up.
+One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [AWS layer 4 loadbalancer example](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/aws/elb-layer4-loadbalancer.yml) to properly set it up.
 
 ```yaml
 global:
@@ -1700,7 +1720,7 @@ global:
 ```
 
 - `global.tracing.connection.string` is used to configure where tracing spans would be sent. You can read more about that in [GitLab tracing documentation](https://docs.gitlab.com/ee/development/distributed_tracing.html)
-- `global.tracing.urlTemplate` is used as a template for tracing info URL rendering in GitLab perfomance bar.
+- `global.tracing.urlTemplate` is used as a template for tracing info URL rendering in GitLab performance bar.
 
 ## extraEnv
 

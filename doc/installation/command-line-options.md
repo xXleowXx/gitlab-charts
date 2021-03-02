@@ -25,7 +25,7 @@ helm inspect values gitlab/gitlab
 | `global.gitlab.license.key`                    | Key pointing to the Enterprise license in the license secret                                | `license`                                     |
 | `global.gitlab.license.secret`                 | Global name of the secret containing the Enterprise license                                 | _none_                                        |
 | `global.application.create`                    | Create an [Application resource](https://github.com/kubernetes-sigs/application) for GitLab | `false`                                       |
-| `global.edition`                               | The edition of GitLab to install. Enterprise Edition (ee) or Community Edition (ce)         | `ee`                                          |
+| `global.edition`                               | The edition of GitLab to install. Enterprise Edition (`ee`) or Community Edition (`ce`)         | `ee`                                          |
 | `global.gitaly.enabled`                        | Gitaly enable flag                                                                          | true                                          |
 | `global.hosts.domain`                          | Domain name that will be used for all publicly exposed services                             | Required                                      |
 | `global.hosts.externalIP`                      | Static IP to assign to NGINX Ingress Controller                                             | Required                                      |
@@ -318,7 +318,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab.sidekiq.psql.password.secret`                          | psql password secret                                                 | `gitlab-postgres`                                                |
 | `gitlab.sidekiq.psql.port`                                     | Set PostgreSQL server port. Takes precedence over `global.psql.port` |                                                                  |
 | `gitlab.sidekiq.replicas`                                      | Sidekiq replicas                                                     | `1`                                                              |
-| `gitlab.sidekiq.resources.requests.cpu`                        | Sidekiq minimum needed cpu                                           | `100m`                                                           |
+| `gitlab.sidekiq.resources.requests.cpu`                        | Sidekiq minimum needed CPU                                           | `100m`                                                           |
 | `gitlab.sidekiq.resources.requests.memory`                     | Sidekiq minimum needed memory                                        | `600M`                                                           |
 | `gitlab.sidekiq.securityContext.fsGroup`                       | Group ID under which the pod should be started                       | `1000`                                                           |
 | `gitlab.sidekiq.securityContext.runAsUser`                     | User ID under which the pod should be started                        | `1000`                                                           |

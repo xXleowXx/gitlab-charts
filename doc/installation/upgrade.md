@@ -173,7 +173,7 @@ Note the following:
    1. Set replicas to 0 for the `webservice`, `sidekiq`, and `gitlab-exporter` deployments. This will prevent any other application from altering the database while the backup is being restored.
    1. Restore the database from the backup created in the pre stage.
    1. Run database migrations for the new version.
-   1. Unpause the deployments from the first step.
+   1. Resume the deployments from the first step.
 
    ```shell
    # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v4.0.0
@@ -205,7 +205,7 @@ appearing to be lost.
 
 Prior to upgrading, ensure that:
 
-- All your respositories are in sync across the Gitaly Cluster, and GitLab
+- All your repositories are in sync across the Gitaly Cluster, and GitLab
 is not in use during the upgrade.
 - You have a complete and tested backup.
 
@@ -220,7 +220,7 @@ to `Retain`. If this step is missed, actual data loss will likely occur.
 After reviewing the documentation, there is a scripted summary of the procedure
 [in a comment on one of a related issues](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2532#note_506467539).
 
-Having reconnected the PersistentVolumes, it is likely that all your respositories
+Having reconnected the PersistentVolumes, it is likely that all your repositories
 will be set `read-only` by Praefect, as shown by running the following in a
 Praefect container:
 
@@ -345,7 +345,7 @@ Note the following:
    1. Set replicas to 0 for the `webservice`, `sidekiq`, and `gitlab-exporter` deployments. This will prevent any other application from altering the database while the backup is being restored.
    1. Restore the database from the backup created in the pre stage.
    1. Run database migrations for the new version.
-   1. Unpause the deployments from the first step.
+   1. Resume the deployments from the first step.
 
    ```shell
    # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v3.0.0

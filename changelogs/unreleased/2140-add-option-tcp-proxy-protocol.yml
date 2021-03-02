@@ -1,5 +1,0 @@
----
-title: Allow the use of TCP ProxyProtocol in ELB AWS
-merge_request: 1814
-author: Cristhian Roa
-type: fixed

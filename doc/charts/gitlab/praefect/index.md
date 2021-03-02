@@ -92,6 +92,57 @@ global:
         storageClass: storageclass2
 ```
 
+### Migrating to Praefect
+
+NOTE:
+Group-level wikis [cannot be moved using the API](https://docs.gitlab.com/ee/api/project_repository_storage_moves.html#limitations) at this time.
+
+When migrating from standalone Gitaly instances to a Praefect setup, `global.praefect.replaceInternalGitaly` can be set to `false`.
+This ensures that the existing Gitaly instances are preserved while the new Praefect-managed Gitaly instances are created.
+
+```yaml
+global:
+  praefect:
+    enabled: true
+    replaceInternalGitaly: false
+    virtualStorages:
+    - name: virtualStorage2
+      gitalyReplicas: 5
+      maxUnavailable: 2
+```
+
+NOTE:
+When migrating to Praefect, none of Praefect's virtual storages can be named `default`.
+This is because there must be at least one storage named `default` at all times,
+therefore the name is already taken by the non-Praefect configuration.
+
+The instructions to [migrate existing repositories to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-existing-repositories-to-gitaly-cluster)
+can then be followed to move data from the `default` storage to `virtualStorage2`. If additional storages
+were defined under `global.gitaly.internal.names`, be sure to migrate repositories from those storages as well.
+
+After the repositories have been migrated to `virtualStorage2`, `replaceInternalGitaly` can be set back to `true` if a storage named
+`default` is added in the Praefect configuration.
+
+```yaml
+global:
+  praefect:
+    enabled: true
+    replaceInternalGitaly: true
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 4
+      maxUnavailable: 1
+    - name: virtualStorage2
+      gitalyReplicas: 5
+      maxUnavailable: 2
+```
+
+The instructions to [migrate existing repositories to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-existing-repositories-to-gitaly-cluster)
+can be followed again to move data from `virtualStorage2` to the newly-added `default` storage if desired.
+
+Finally, see the [repository storage paths documentation](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#choose-where-new-repositories-are-stored)
+to configure where new repositories are stored.
+
 ### Creating the database
 
 Praefect uses its own database to track its state. This has to be manually created in order for Praefect to be functional.
@@ -159,7 +210,7 @@ To run Praefect over TLS follow these steps:
 
 NOTE:
 A basic script for generating custom signed certificates for internal Praefect Pods
-[can be found in this repo](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/generate_certificates.sh).
+[can be found in this repository](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/generate_certificates.sh).
 Users can use or refer that script to generate certificates with proper SAN attributes.
 
 1. Create a TLS Secret using the certificate created.
@@ -204,7 +255,7 @@ the `helm install` command using the `--set` flags.
 | failover.enabled               | true                                              | Whether Praefect should perform failover on node failure                                                |
 | failover.readonlyAfter         | false                                             | Whether the nodes should be in read-only mode after failover                                            |
 | autoMigrate                    | true                                              | Automatically run migrations on startup                                                                 |
-| electionStrategy               | sql                                               | See [election strategy](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#automatic-failover-and-leader-election) |
+| electionStrategy               | `sql`                                               | See [election strategy](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#automatic-failover-and-leader-election) |
 | image.repository               | `registry.gitlab.com/gitlab-org/build/cng/gitaly` | The default image repository to use. Praefect is bundled as part of the Gitaly image                    |
 | podLabels                      | `{}`                                              | Supplemental Pod labels. Will not be used for selectors.                                                |
 | service.name                   | `praefect`                                        | The name of the service to create                                                                       |
