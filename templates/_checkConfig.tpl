@@ -431,24 +431,14 @@ Ensure that registry's database is configured properly
 */}}
 {{- define "gitlab.checkConfig.registry.database" -}}
 {{-   if $.Values.registry.database.enabled }}
-{{-     if not $.Values.registry.database.host }}
-registry:
-    When enabling the metadata database, you must configure the database host.
-    See https://docs.gitlab.com/charts/charts/registry#database
-{{-     end -}}
-{{-     if not $.Values.registry.database.port }}
-registry:
-    When enabling the metadata database, you must configure the database port.
-    See https://docs.gitlab.com/charts/charts/registry#database
-{{-     end -}}
 {{-     if not $.Values.registry.database.user }}
 registry:
-    When enabling the metadata database, you must configure the database user.
+    When enabling the metadata database, you must configure the database username.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
-{{-     if not $.Values.registry.database.password }}
+{{-     if not $.Values.registry.database.password.key }}
 registry:
-    When enabling the metadata database, you must configure the database password.
+    When enabling the metadata database, you must configure the key for the database password secret.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
 {{-     if not $.Values.registry.database.dbname }}
@@ -460,6 +450,14 @@ registry:
 registry:
     When enabling the metadata database, you must configure the SSL mode.
     See https://docs.gitlab.com/charts/charts/registry#database
+{{-     else -}}
+{{-       $validSSLModes := list "require" "disable" "allow" "prefer" "require" "verify-ca" "verify-full" -}}
+{{-       if not (has $.Values.registry.database.sslmode $validSSLModes) }}
+registry:
+    Invalid SSL mode "{{ .Values.registry.database.sslmode }}".
+    Valid values are: {{ join ", " $validSSLModes }}.
+    See https://docs.gitlab.com/charts/charts/registry#database
+{{-       end -}}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}

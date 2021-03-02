@@ -104,6 +104,7 @@ global:
   registry:
     certificate: {}
     httpSecret: {}
+  psql: {}
 
 ## Control the InitContainer behaviors.
 init:
@@ -154,6 +155,20 @@ init:
     # Copy the optional profiling keyfile to the expected location
     if [ -f /config/profiling-key.json ]; then
       cp /config/profiling-key.json /registry/profiling-key.json
+    fi
+    # Insert Database password, if enabled
+    if [ -f /config/database_password ] ; then
+      sed -i -e 's@DB_PASSWORD_FILE@'"$(cat /config/database_password)"'@' /registry/config.yml
+    fi
+    # Copy the database mutual TLS connection files to the expected location
+    if [ -f /config/client-certificate.pem ]; then
+      cp /config/client-certificate.pem /registry/client-certificate.pem
+    fi
+    if [ -f /config/client-key.pem ]; then
+      cp /config/client-key.pem /registry/client-key.pem
+    fi
+    if [ -f /config/server-ca.pem ]; then
+      cp /config/server-ca.pem /registry/server-ca.pem
     fi
 
 # define some sane resource requests and limitations
@@ -271,19 +286,10 @@ serviceAccount:
 # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database
 database:
   enabled: false
-  # host:
-  # port:
-  # user:
-  # password:
-  # dbname:
-  # sslmode:
-  # sslcert:
-  # sslkey:
-  # sslrootcert:
-  # connecttimeout:
-  # draintimeout:
-  # preparedstatements:
-  # pool:
-  #   maxidle:
-  #   maxopen:
-  #   maxlifetime:
+  user: registry
+  password:
+    secret: gitlab-postgresql-password
+    key: postgresql-registry-password
+  dbname: registry
+  sslmode: disable
+  ssl: {}

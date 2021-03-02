@@ -156,15 +156,17 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `profiling.stackdriver.service`            | `RELEASE-registry` (templated Service name)| Name of the Stackdriver service to record profiles under                                             |
 | `profiling.stackdriver.projectid`          | GCP project where running                    | GCP project to report profiles to                                                                    |
 | `database.enabled`                         | `false`                                      | Enable metadata database. This is an experimental feature and must not be used in production environments. |
-| `database.host`                            |                                              | The database server hostname. |
-| `database.port`                            |                                              | The database server port. |
+| `database.host`                            | `global.psql.host`                           | The database server hostname. |
+| `database.port`                            | `global.psql.port`                           | The database server port. |
 | `database.user`                            |                                              | The database username. |
-| `database.password`                        |                                              | The database password. |
+| `database.password.secret`                 | `gitlab-postgresql-password`                 | Name of the secret containing the database password. Defaults to the main PostgreSQL password secret. |
+| `database.password.key`                    | `postgresql-registry-password`               | Secret key in which the database password is stored. |
 | `database.dbname`                          |                                              | The database name. |
 | `database.sslmode`                         |                                              | The SSL mode. Can be one of `disable`, `allow`, `prefer`, `require`, `verify-ca` or `verify-full`. |
-| `database.sslcert`                         |                                              | The PEM encoded certificate file path. |
-| `database.sslkey`                          |                                              | The PEM encoded key file path. |
-| `database.sslrootcert`                     |                                              | The PEM encoded root certificate file path. |
+| `database.ssl.secret`                      | `global.psql.ssl.secret`                     | A secret containing client certificate, key and certificate authority. Defaults to the main PostgreSQL SSL secret. |
+| `database.ssl.clientCertificate`           | `global.psql.ssl.clientCertificate`          | The key inside the secret referring the client certificate. |
+| `database.ssl.clientKey`                   | `global.psql.ssl.clientKey`                  | The key inside the secret referring the client key.
+| `database.ssl.serverCA`                    | `global.psql.ssl.serverCA`                   | The key inside the secret referring the certificate authority (CA). |
 | `database.connecttimeout`                  | `0`                                          | Maximum time to wait for a connection. Zero or not specified means waiting indefinitely. |
 | `database.draintimeout`                    | `0`                                          | Maximum time to wait to drain all connections on shutdown. Zero or not specified means waiting indefinitely. |
 | `database.preparedstatements`              | `false`                                      | Enable prepared statements. Disabled by default for compatibility with PgBouncer. |

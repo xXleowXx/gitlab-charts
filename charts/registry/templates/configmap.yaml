@@ -106,23 +106,19 @@ data:
       {{- else }}
       {{- include (print $.Template.BasePath "/_storage_default.yaml") . | nindent 6}}
       {{- end }}
-    {{- if .Values.database }}
+    {{- if .Values.database.enabled }}
     database:
-      enabled: {{ eq true .Values.database.enabled }}
-      host: {{ .Values.database.host }}
-      port: {{ .Values.database.port }}
+      enabled: true
+      host: {{ default (include "gitlab.psql.host" .) .Values.database.host | quote }}
+      port: {{ default (include "gitlab.psql.port" .) .Values.database.port }}
       user: {{ .Values.database.user }}
-      password: {{ .Values.database.password }}
+      password: "DB_PASSWORD_FILE"
       dbname: {{ .Values.database.dbname }}
       sslmode: {{ .Values.database.sslmode }}
-      {{- if .Values.database.sslcert }}
-      sslcert: {{ .Values.database.sslcert }}
-      {{- end }}
-      {{- if .Values.database.sslkey }}
-      sslkey: {{ .Values.database.sslkey }}
-      {{- end }}
-      {{- if .Values.database.sslrootcert }}
-      sslrootcert: {{ .Values.database.sslrootcert }}
+      {{- if .Values.database.ssl }}
+      sslcert: /etc/docker/registry/client-certificate.pem
+      sslkey: /etc/docker/registry/client-key.pem
+      sslrootcert: /etc/docker/registry/server-ca.pem
       {{- end }}
       {{- if .Values.database.connecttimeout }}
       connecttimeout: {{ .Values.database.connecttimeout }}
@@ -131,7 +127,7 @@ data:
       draintimeout: {{ .Values.database.draintimeout }}
       {{- end }}
       {{- if .Values.database.preparedstatements }}
-      preparedstatements: {{ eq true .Values.database.preparedstatements }}
+      preparedstatements: {{ .Values.database.preparedstatements }}
       {{- end }}
     {{- end }}
 {{- end -}}
