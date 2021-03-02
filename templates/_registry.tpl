@@ -47,3 +47,18 @@ Return the registry's notification mount
         path: registry/notificationSecret
 {{ end }}
 {{- end -}}
+
+{{/*
+When Geo + Container Registry syncing enabled, adds the following notifier
+*/}}
+{{- define "global.geo.registry.syncNotifier" -}}
+endpoints:
+  - name: geo_event
+    url: https://{{ "registry.hostname" }}/api/v4/container_registry_event/events
+    timeout: 2s
+    threshold: 5
+    backoff: 1s
+    headers:
+      Authorization:
+        secret: {{- default (printf "%s-registry-notification" .Release.Name) .Values.global.registry.notificationSecret.secret | quote -}}
+{{- end -}}
