@@ -104,7 +104,8 @@ global:
   registry:
     certificate: {}
     httpSecret: {}
-  psql: {}
+  psql:
+    ssl: {}
 
 ## Control the InitContainer behaviors.
 init:
