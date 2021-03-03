@@ -60,5 +60,6 @@ endpoints:
     backoff: 1s
     headers:
       Authorization:
-        secret: {{- default (printf "%s-registry-notification" .Release.Name) .Values.global.registry.notificationSecret.secret | quote -}}
+        secret: {{ template "gitlab.registry.notificationSecret.secret" $ }}
+        key: {{ template "gitlab.registry.notificationSecret.key" $ }}
 {{- end -}}
