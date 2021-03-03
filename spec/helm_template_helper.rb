@@ -76,7 +76,7 @@ class HelmTemplate
     volumes[0]
   end
 
-  def find_secret(item, mount, secret)
+  def find_projected_secret(item, mount, secret)
     secrets = find_volume(item,mount)
     secrets['projected']['sources'].keep_if do |s|
       s['secret']['name'] == secret
