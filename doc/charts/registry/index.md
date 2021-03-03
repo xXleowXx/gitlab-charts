@@ -582,12 +582,15 @@ The `database` property is optional and enables the [metadata database](https://
 NOTE:
 The metadata database is an experimental feature and must not be used in production.
 
+NOTE:
+This feature requires PostgreSQL 12+.
+
 ```yaml
 database:
   enabled: true
-  host: localhost
+  host: registry.db.example.com
   port: 5432
-  user: postgres
+  user: registry
   password:
     secret: gitlab-postgresql-password
     key: postgresql-registry-password

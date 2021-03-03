@@ -427,7 +427,7 @@ Registry: Notifications should be defined in the global scope. Use `global.regis
 {{/* END gitlab.checkConfig.registry.notifications */}}
 
 {{/*
-Ensure that registry's database is configured properly
+Ensure Registry database is configured properly and dependencies are met
 */}}
 {{- define "gitlab.checkConfig.registry.database" -}}
 {{-   if $.Values.registry.database.enabled }}
@@ -436,6 +436,14 @@ Ensure that registry's database is configured properly
 registry:
     Invalid SSL mode "{{ .Values.registry.database.sslmode }}".
     Valid values are: {{ join ", " $validSSLModes }}.
+    See https://docs.gitlab.com/charts/charts/registry#database
+{{-     end -}}
+{{-     $pgImageTag := .Values.postgresql.image.tag -}}
+{{-     $pgMajorVersion := (split "." (split "-" ($pgImageTag | toString))._0)._0 | int -}}
+{{-     if lt $pgMajorVersion 12 -}}
+postgresql:
+    Invalid PostgreSQL version "{{ $pgImageTag }}".
+    PostgreSQL 12 is the minimum required version for the registry database.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
 {{-   end -}}
