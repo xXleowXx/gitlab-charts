@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab Operator
 
-GitLab Operator is an implementation of the [Operator pattern](https://coreos.com/blog/introducing-operators.html)
+GitLab Operator is an implementation of the [Operator pattern](https://www.openshift.com/blog)
 for management of deployment lifecycle. This component provides a method of synchronizing and controlling various
 stages of cloud-native GitLab installation/upgrade procedures. Using the Operator provides the ability to perform
 rolling upgrades without down time.
@@ -45,7 +45,7 @@ helm upgrade --install <release-name> . --set global.operator.enabled=true ...
 ```
 
 GitLab Chart does not manage the lifecycle of the CRD and it needs to be done outside the Chart. For more details see
-[crdctl](crdctl.md) utility.
+[`crdctl`](crdctl.md) utility.
 
 Note the following:
 

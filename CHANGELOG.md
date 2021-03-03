@@ -2,6 +2,62 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.9.1 (2021-02-23)
+
+- No changes.
+
+## 4.9.0 (2021-02-22)
+
+### Fixed (8 changes, 1 of them is from the community)
+
+- Add custom annotations for shared-secrets job. !1774
+- Prevent all Gitaly pods from restarting when replicas are changed. !1806
+- Fix Praefect spec test and warning typo. !1812
+- Allow the use of TCP ProxyProtocol in ELB AWS. !1814 (Cristhian Roa)
+- CI: Shorten RELEASE_NAME to 48 characters. !1819
+- Fixes podLabels for sidekiq deployments. !1826
+- Fix SMTP openssl_verify_mode implementation. !1831
+- Fix redis service templating when Helm release includes 'redis'. !1832
+
+### Changed (14 changes)
+
+- Support migration from Gitaly to Praefect. !1757
+- Bump Redis chart to Redis 6.0.10. !1772
+- Adds common labels for Container Registry Chart. !1778
+- Fix pod labels for GitLab ShellChart. !1779
+- Bump Container Registry to v3.0.0-gitlab. !1780
+- Add common pod labels for Webservices. !1785
+- Add common pod labels for kas. !1791
+- Add common pod labels for mailroom. !1792
+- Modify logic to check if Praefect is enabled. !1797
+- Add common pod labels for task-runner. !1798
+- Add common pod labels for praefect. !1799
+- Add common pod labels for Pages. !1805
+- Add common pod labels for Gitaly. !1829
+- Webservice: accept / or /* for default ingress.path. !1841
+
+### Performance (2 changes)
+
+- Bump gitlab-exporter to v10.0.0, tune malloc to release memory earlier. !1777
+- Tune Ruby GC for gitlab-exporter. !1820
+
+### Added (7 changes)
+
+- Expose settings to control GitLab Shell logging. !1767
+- Add application settings cache expiry support. !1768
+- Automatically enable OAuth for GitLab Pages. !1782
+- Add matomo_disable_cookies setting. !1813
+- Adds common labels across all objects for GitLab Geo-Logcursor chart. !1822
+- Add support for specifying a nodeSelector for Kas. !1836
+- KAS: Add ability to disable Redis. !1838
+
+### Other (3 changes)
+
+- Emit Ruby Prometheus metrics for gitlab-exporter. !1790
+- Clarify EKS installation instructions. !1801
+- Add outgoing email section to 'globals' docs. !1821
+
+
 ## 4.8.4 (2021-02-11)
 
 - No changes.

@@ -20,8 +20,8 @@ from the `ConfigMap`. The `ConfigMap` overrides the upstream defaults, but is
 [based on them](https://github.com/docker/distribution-library-image/blob/master/config-example.yml).
 See below for more details:
 
-- [distribution/cmd/registry/config-example.yml](https://github.com/docker/distribution/blob/master/cmd/registry/config-example.yml)
-- [distribution-library-image/config-example.yml](https://github.com/docker/distribution-library-image/blob/master/config-example.yml)
+- [`distribution/cmd/registry/config-example.yml`](https://github.com/docker/distribution/blob/master/cmd/registry/config-example.yml)
+- [`distribution-library-image/config-example.yml`](https://github.com/docker/distribution-library-image/blob/master/config-example.yml)
 
 ## Design Choices
 
@@ -42,7 +42,7 @@ This chart makes use of two required secrets and one optional:
 
 ### Optional
 
-- `profiling.stackdriver.credentials.secret`: If stackdriver profiling is enabled and
+- `profiling.stackdriver.credentials.secret`: If Stackdriver profiling is enabled and
   you need to provide explicit service account credentials, then the value in this secret
   (in the `credentials` key by default) is the GCP service account JSON credentials.
   If you are using GKE and are providing service accounts to your workloads using
@@ -63,7 +63,7 @@ registry:
     readOnly:
       enabled: false
   image:
-    tag: 'v3.0.0-gitlab'
+    tag: 'v3.1.0-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -141,7 +141,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
 | `image.repository`                         | `registry`                                   | Registry image                                                                                       |
-| `image.tag`                                | `v3.0.0-gitlab`                              | Version of the image to use                                                                          |
+| `image.tag`                                | `v3.1.0-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
@@ -150,10 +150,10 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
 | `reporting.sentry.dsn`                     |                                              | The Sentry DSN (Data Source Name)                                                                    |
 | `reporting.sentry.environment`             |                                              | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/environments/)                 |
-| `profiling.stackdriver.enabled`            | `false`                                      | Enable continuous profiling using stackdriver                                                        |
-| `profiling.stackdriver.credentials.secret` | `gitlab-registry-profiling-creds`            | Name of the secret containing creds                                                                  |
-| `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the creds are stored                                                             |
-| `profiling.stackdriver.service`            | `RELEASE-registry` (templated Service name)| Name of the stackdriver service to record profiles under                                             |
+| `profiling.stackdriver.enabled`            | `false`                                      | Enable continuous profiling using Stackdriver                                                        |
+| `profiling.stackdriver.credentials.secret` | `gitlab-registry-profiling-creds`            | Name of the secret containing credentials                                                                  |
+| `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the credentials are stored                                                             |
+| `profiling.stackdriver.service`            | `RELEASE-registry` (templated Service name)| Name of the Stackdriver service to record profiles under                                             |
 | `profiling.stackdriver.projectid`          | GCP project where running                    | GCP project to report profiles to                                                                    |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
@@ -229,7 +229,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v3.0.0-gitlab'`
+- `tag: 'v3.1.0-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
@@ -268,7 +268,7 @@ and Ingress to specific endpoints.
 
 | Name              | Type    | Default | Description |
 |:----------------- |:-------:|:------- |:----------- |
-| `enabled`         | Boolean | `false` | This setting enables the networkpolicy for registry |
+| `enabled`         | Boolean | `false` | This setting enables the `NetworkPolicy` for registry |
 | `ingress.enabled` | Boolean | `false` | When set to `true`, the `Ingress` network policy will be activated. This will block all Ingress connections unless rules are specified. |
 | `ingress.rules`   | Array   | `[]`    | Rules for the Ingress policy, for details see <https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource> and the example below |
 | `egress.enabled`  | Boolean | `false` | When set to `true`, the `Egress` network policy will be activated. This will block all egress connections unless rules are specified. |
@@ -368,7 +368,7 @@ certificate:
 ### compatibility
 
 The `compatibility` field is a map relating directly to the configuration file's
-[compatiblity](https://github.com/docker/distribution/blob/master/docs/configuration.md#compatibility)
+[compatibility](https://github.com/docker/distribution/blob/master/docs/configuration.md#compatibility)
 section.
 
 Default contents:
@@ -390,7 +390,7 @@ The `schema1` section controls the compatibility of the service with version 1
 of the Docker manifest schema. This setting is provide as a means of supporting
 Docker clients earlier than `1.10`, after which schema v2 is used by default.
 
-If you _must_ support older verions of Docker clients, you can do so by setting
+If you _must_ support older versions of Docker clients, you can do so by setting
 `registry.compatbility.schema1.enabled: true`.
 
 ### validation
@@ -432,7 +432,11 @@ notifications:
     includereferences: true
 ```
 
+<!-- vale gitlab.Spelling = NO -->
+
 ### hpa
+
+<!-- vale gitlab.Spelling = YES -->
 
 The `hpa` field is an object, controlling the number of [registry](https://hub.docker.com/_/registry/)
 instances to create as a part of the set. This defaults to a `minReplicas` value
@@ -454,7 +458,7 @@ Please refer to that documentation for more details.
 
 Examples for [AWS s3](https://docs.docker.com/registry/storage-drivers/s3/) and
 [Google GCS](https://docs.docker.com/registry/storage-drivers/gcs/) drivers can be
-found in [examples/objectstorage](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage):
+found in [`examples/objectstorage`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage):
 
 - [`registry.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.s3.yaml)
 - [`registry.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.gcs.yaml)
@@ -487,8 +491,8 @@ kubectl create secret generic registry-storage \
 If you chose to use the `filesystem` driver:
 
 - You will need to provide persistent volumes for this data.
-- [hpa.minReplicas](#hpa) should be set to `1`
-- [hpa.maxReplicas](#hpa) should be set to `1`
+- [`hpa.minReplicas`](#hpa) should be set to `1`
+- [`hpa.maxReplicas`](#hpa) should be set to `1`
 
 For the sake of resiliency and simplicity, it is recommended to make use of an
 external service, such as `s3`, `gcs`, `azure` or other compatible Object Storage.

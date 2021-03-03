@@ -67,6 +67,7 @@ global:
     tls: {}
     #   enabled: true
     #   secretName:
+    path: /
 
   gitlab:
     ## Enterprise license for this GitLab installation
@@ -136,6 +137,7 @@ global:
 
   praefect:
     enabled: false
+    replaceInternalGitaly: true
     authToken: {}
     autoMigrate: true
     dbSecret: {}

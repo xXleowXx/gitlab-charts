@@ -67,7 +67,7 @@ to the `helm install` command using the `--set` flags:
 | `psql.password.secret`               | `gitlab-postgres` | psql password secret                     |
 | `psql.port`                          |                   | Set PostgreSQL server port. Takes precedence over `global.psql.port` |
 | `redis.serviceName`                  | `redis`           | Redis service name                       |
-| `resources.requests.cpu`             | `900m`            | Sidekiq minimum needed cpu               |
+| `resources.requests.cpu`             | `900m`            | Sidekiq minimum needed CPU               |
 | `resources.requests.memory`          | `2G`              | Sidekiq minimum needed memory            |
 | `resources.limits.memory`            |                   | Sidekiq maximum allowed memory           |
 | `timeout`                            | `5`               | Sidekiq job timeout                      |
@@ -294,7 +294,7 @@ psql:
 | `password.secret` | String  |                       | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from. |
 | `port`            | Integer | `5432`                | The port on which to connect to the PostgreSQL server. |
 | `username`        | String  | `gitlab`              | The username with which to authenticate to the database. |
-| `preparedStatements`| Bool  | `false`               | If prepared statements should be used when communicating with the PostgreSQL server. |
+| `preparedStatements`| Boolean  | `false`               | If prepared statements should be used when communicating with the PostgreSQL server. |
 
 ### Gitaly
 
@@ -337,7 +337,7 @@ on a per-pod basis.
 | Name          | Type    | Default | Description |
 |:------------- |:-------:|:------- |:----------- |
 | `concurrency`               | Integer | `25`      | The number of tasks to process simultaneously. |
-| `cluster`                   | Bool    | `true`    | [See below](#cluster). Overridden by per-Pod value, if present. |
+| `cluster`                   | Boolean    | `true`    | [See below](#cluster). Overridden by per-Pod value, if present. |
 | `timeout`                   | Integer | `4`       | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. |
 | `memoryKiller.checkInterval`| Integer | `3`       | Amount of time in seconds between memory checks     |
 | `memoryKiller.maxRss`       | Integer | `2000000` | Maximum RSS before delayed shutdown triggered expressed in kilobytes |
@@ -366,12 +366,12 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | Name           | Type    | Default | Description |
 |:-------------- |:-------:|:------- |:----------- |
 | `concurrency`  | Integer |         | The number of tasks to process simultaneously. If not provided, it will be pulled from the chart-wide default. |
-| `cluster`      | Bool    | `true`  | [See below](#cluster). |
+| `cluster`      | Boolean    | `true`  | [See below](#cluster). |
 | `name`         | String  |         | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries. |
 | `queues`       | String / Array |         | [See below](#queues). |
 | `negateQueues` | String / Array |         | [See below](#negatequeues). |
-| `queueSelector` | Bool | `false` | Use the [queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector). Only valid when `cluster` is enabled. |
-| `experimentalQueueSelector` | Bool | `false` | Deprecated version of `queueSelector`. If either this or `queueSelector` is set, the queue selector will be enabled. Only valid when `cluster` is enabled. |
+| `queueSelector` | Boolean | `false` | Use the [queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector). Only valid when `cluster` is enabled. |
+| `experimentalQueueSelector` | Boolean | `false` | Deprecated version of `queueSelector`. If either this or `queueSelector` is set, the queue selector will be enabled. Only valid when `cluster` is enabled. |
 | `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. |
 | `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation. |
 | `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.|
@@ -482,7 +482,7 @@ Pods to specific endpoints.
 
 | Name              | Type    | Default | Description |
 |:----------------- |:-------:|:------- |:----------- |
-| `enabled`         | Boolean | `false` | This setting enables the networkpolicy |
+| `enabled`         | Boolean | `false` | This setting enables the network policy |
 | `ingress.enabled` | Boolean | `false` | When set to `true`, the `Ingress` network policy will be activated. This will block all Ingress connections unless rules are specified. |
 | `ingress.rules`   | Array   | `[]`    | Rules for the Ingress policy, for details see <https://kubernetes.io/docs/concepts/services-networking/network-policies/#the-networkpolicy-resource> and the example below |
 | `egress.enabled`  | Boolean | `false` | When set to `true`, the `Egress` network policy will be activated. This will block all egress connections unless rules are specified. |

@@ -65,6 +65,8 @@ spec:
       tolerations:
         {{- toYaml .tolerations | nindent 8 }}
       {{- end }}
+      {{- $nodeSelectors := dict "Values" (dict "global" (dict "nodeSelector" $.Values.global.nodeSelector) "nodeSelector" .nodeSelector) -}}
+      {{- include "gitlab.nodeSelector" $nodeSelectors | nindent 6 }}
       {{- if $.Values.priorityClassName }}
       priorityClassName: {{ $.Values.priorityClassName }}
       {{- end }}
@@ -378,9 +380,7 @@ spec:
               items:
                 - key: {{ template "gitlab.gitlab-shell.authToken.key" $ }}
                   path: shell/.gitlab_shell_secret
-          - secret:
-              {{ include "gitlab.gitaly.clientSecret" $ | nindent 14 }}
-                  path: gitaly/gitaly_token
+          {{- include "gitlab.gitaly.clientSecrets" $ | nindent 10 }}
           {{- include "gitlab.redis.secrets" $ | nindent 10 }}
           {{- include "gitlab.psql.secret" $ | nindent 10 }}
           {{- if include "gitlab.geo.secondary" $ }}
@@ -447,9 +447,5 @@ spec:
       - name: shared-upload-directory
         emptyDir: {}
       {{- include "gitlab.certificates.volumes" $ | nindent 6 }}
-    {{- if .nodeSelector }}
-      nodeSelector:
-        {{- toYaml .nodeSelector | nindent 8 }}
-    {{- end }}
 {{- end }}{{/* END range deployments */}}
 {{- end }}
