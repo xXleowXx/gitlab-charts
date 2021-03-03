@@ -634,7 +634,6 @@ describe 'checkConfig template' do
                      error_description: 'when terminationGracePeriodSeconds is < blackoutSeconds'
   end
 
-
   describe 'registry.database (PG version)' do
     let(:success_values) do
       YAML.safe_load(%(
