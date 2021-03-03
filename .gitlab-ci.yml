@@ -689,7 +689,7 @@ production_specs_eks:
     - if [ "$app_version" != "master"  ]; then
     -   qa_version="${app_version}-ee"
     - fi
-    - SIGNUP_DISABLED=true QA_DEBUG=true GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD GITLAB_ADMIN_USERNAME=root GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD EE_LICENSE=$REVIEW_APPS_EE_LICENSE gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL -- --tag smoke --tag reliable
+    - SIGNUP_DISABLED=true QA_DEBUG=true GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD GITLAB_ADMIN_USERNAME=root GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD EE_LICENSE=$REVIEW_APPS_EE_LICENSE gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL -- $TEST_SUITE
   artifacts:
     when: on_failure
     expire_in: 7d
@@ -763,10 +763,13 @@ release_package:
     refs:
       - master
 
+# QA jobs with Smoke and Reliable E2E suites
+
 qa_gke:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_gke"
+    TEST_SUITE: '--tag smoke --tag reliable'
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_gke
@@ -775,6 +778,7 @@ qa_eks:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_eks"
+    TEST_SUITE: '--tag smoke --tag reliable'
   environment:
     name: eks_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_eks
@@ -783,6 +787,7 @@ qa_gke_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_gke"
+    TEST_SUITE: '--tag smoke --tag reliable'
   environment:
     name: gke_production/$CI_COMMIT_REF_NAME
 
@@ -790,5 +795,30 @@ qa_eks_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_eks"
+    TEST_SUITE: '--tag smoke --tag reliable'
   environment:
     name: eks_production/$CI_COMMIT_REF_NAME
+
+# QA jobs with Full E2E suites 
+
+qa_gke_manual_full_suite:
+  extends: .qa_branch
+  parallel: 6
+  variables:
+    VARIABLES_FILE: "variables/review_gke"
+    TEST_SUITE: '--tag ~smoke --tag ~reliable'
+  environment:
+    name: gke_review/$CI_COMMIT_REF_NAME
+    on_stop: stop_review_gke
+  when: manual
+
+qa_eks_manual_full_suite:
+  extends: .qa_branch
+  parallel: 6
+  variables:
+    VARIABLES_FILE: "variables/review_eks"
+    TEST_SUITE: '--tag ~smoke --tag ~reliable'
+  environment:
+    name: eks_review/$CI_COMMIT_REF_NAME
+    on_stop: stop_review_eks
+  when: manual
