@@ -153,7 +153,7 @@ generate_secret_if_needed {{ template "gitlab.registry.httpSecret.secret" . }} -
 
 # Container Registry notification_secret
 {{ if .Values.global.geo.registry.syncEnabled }}
-generate_secret_if_needed {{ template "gitlab.registry.notificationSecret.secret" . }} --from-literal={{ template "gitlab.registry.notificationSecret.key" . }}=["$(gen_random 'a-zA-Z0-9' 32)"]
+generate_secret_if_needed {{ template "gitlab.registry.notificationSecret.secret" . }} --from-literal={{ template "gitlab.registry.notificationSecret.key" . }}=[\"$(gen_random 'a-zA-Z0-9' 32)\"]
 {{ end }}
 
 {{ if .Values.global.grafana.enabled -}}

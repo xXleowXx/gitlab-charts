@@ -127,9 +127,12 @@ Usage:
 Sensitive registry notification headers mounted as secrets
 */}}
 {{- define "registry.notifications.secrets" -}}
-{{- if $.Values.global.registry.notifications }}
+{{- $geoNotifier := include "global.geo.registry.syncNotifier" . | fromYaml -}}
+{{- $notifications := mustMerge $.Values.global.registry.notifications $geoNotifier -}}
+{{- if $notifications }}
   {{- $uniqSecrets := list -}}
-  {{- range $endpoint := $.Values.global.registry.notifications.endpoints -}}
+  {{- $endpoints := concat (list) $notifications.endpoints $geoNotifier.endpoints | uniq -}}
+  {{- range $endpoint := $endpoints -}}
     {{- if and $endpoint.name $endpoint.headers -}}
       {{- range $header, $value := $endpoint.headers -}}
         {{- if kindIs "map" $value -}}
