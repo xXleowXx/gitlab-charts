@@ -87,20 +87,15 @@ Protect against duplicate storage names across external Gitaly and/or Prafect.
 {{- $gitalyExternalNames := list -}}
 {{- $praefectNames := list -}}
 {{- $errorMsg := list -}}
-{{/* Collect Gitaly internal and external names if enabled */}}
-{{- if $gitaly.enabled -}}
-{{-   $gitalyInternalNames = $gitaly.internal.names -}}
-{{-   range $_, $n := $gitaly.external -}}
-{{-     $gitalyExternalNames = append $gitalyExternalNames $n.name -}}
-{{-   end -}}
+{{/* Collect Gitaly internal/external and Praefect names */}}
+{{- $gitalyInternalNames = $gitaly.internal.names -}}
+{{- range $_, $n := $gitaly.external -}}
+{{-   $gitalyExternalNames = append $gitalyExternalNames $n.name -}}
 {{- end -}}
-{{/* Collect Praefect names if enabled */}}
-{{- if $praefect.enabled -}}
-{{-   range $_, $n := $praefect.virtualStorages -}}
-{{-     $praefectNames = append $praefectNames $n.name -}}
-{{-   end -}}
+{{- range $_, $n := $praefect.virtualStorages -}}
+{{-   $praefectNames = append $praefectNames $n.name -}}
 {{- end -}}
-{{/* Attempt to find any duplicate storage names */}}
+{{/* Compare internal Gitaly names against external Gitaly and Praefect */}}
 {{- if $gitaly.enabled -}}
 {{-   range $igi, $ign := $gitalyInternalNames -}}
 {{/*    Compare internal Gitaly names to external Gitaly names */}}
@@ -108,20 +103,26 @@ Protect against duplicate storage names across external Gitaly and/or Prafect.
 {{-       if eq $ign $egn -}}
 {{-         $errorMsg = append $errorMsg (printf "`global.gitaly.internal.names[%d]` and `global.gitaly.external[%d].name` cannot both equal `%s`" $igi $egi $egn) -}}
 {{-       end -}}
-{{/*      Compare external Gitaly names to Praefect names */}}
+{{-     end -}}
+{{/*    Compare internal Gitaly names to Praefect names */}}
+{{-     if and $praefect.enabled (not $praefect.replaceInternalGitaly) -}}
 {{-       range $pi, $pn := $praefectNames -}}
-{{-         if eq $egn $pn -}}
-{{-           $errorMsg = append $errorMsg (printf "`global.gitaly.external.names[%d]` and `global.praefect.virtualStorages[%d].name` cannot both equal `%s`" $egi $pi $egn) -}}
+{{-         if eq $ign $pn -}}
+{{-           $errorMsg = append $errorMsg (printf "`global.gitaly.internal.names[%d]` and `global.praefect.virtualStorages[%d].name` cannot both equal `%s`" $igi $pi $ign) -}}
 {{-         end -}}
 {{-       end -}}
 {{-     end -}}
-{{/*    Compare internal Gitaly names to Praefect names */}}
-{{-     range $pi, $pn := $praefectNames -}}
-{{-       if eq $ign $pn -}}
-{{-         $errorMsg = append $errorMsg (printf "`global.gitaly.internal.names[%d]` and `global.praefect.virtualStorages[%d].name` cannot both equal `%s`" $igi $pi $ign) -}}
-{{-       end -}}
-{{-     end -}}
 {{-   end -}}
+{{- end -}}
+{{/* Compare external Gitaly names (if any) against Praefect */}}
+{{- if $praefect.enabled -}}
+{{-  range $egi, $egn := $gitalyExternalNames -}}
+{{-    range $pi, $pn := $praefectNames -}}
+{{-      if eq $egn $pn -}}
+{{-        $errorMsg = append $errorMsg (printf "`global.gitaly.external.names[%d]` and `global.praefect.virtualStorages[%d].name` cannot both equal `%s`" $egi $pi $egn) -}}
+{{-      end -}}
+{{-    end -}}
+{{-  end -}}
 {{- end -}}
 {{/* Ensure that one storage name is named 'default' */}}
 {{- if not (has "default" (concat $gitalyInternalNames $gitalyExternalNames $praefectNames)) -}}
@@ -134,7 +135,7 @@ gitaly:
 {{- end }}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.gitaly.storageNames" -}}
+{{/* END gitlab.checkConfig.gitaly.storageNames -}}
 
 {{/*
 Ensure that if a user is migrating to Praefect, none of the Praefect virtual storage
