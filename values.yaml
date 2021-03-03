@@ -451,6 +451,8 @@ global:
         # clientKey:
         # clientCertificate:
         # serverCA:
+    registry:
+      syncEnabled: false
 
   ## doc/charts/gitlab/kas/index.md
   kas:

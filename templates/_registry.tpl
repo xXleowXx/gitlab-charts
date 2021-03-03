@@ -39,7 +39,7 @@ Return the registry's notification secret key
 Return the registry's notification mount
 */}}
 {{- define "gitlab.registry.notificationSecret.mount" -}}
-{{ if .Values.global.registry.notificationSecret.enabled }}
+{{ if .Values.global.geo.registry.syncEnabled }}
 - secret:
     name: {{ template "gitlab.registry.notificationSecret.secret" $ }}
     items:

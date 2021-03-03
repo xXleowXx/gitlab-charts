@@ -30,9 +30,9 @@ describe 'global configuration' do
     let(:registry_notifications) do
       {
         'global' => {
-          'registry' => {
-            'notificationSecret' => {
-              'enabled' => true
+          'geo' => {
+            'registry' => {
+              'syncEnabled' => true
             }
           }
         }
@@ -42,9 +42,9 @@ describe 'global configuration' do
     it 'configures the consumption of the secret' do
       t = HelmTemplate.new(registry_notifications)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-      expect(t.find_secret('Deployment/test-sidekiq-all-in-1-v1', 'init-sidekiq-secrets', 'test-registry-notification')).to be true
-      expect(t.find_secret('Deployment/test-webservice-default', 'init-webservice-secrets', 'test-registry-notification')).to be true
-      expect(t.find_secret('Deployment/test-task-runner', 'init-task-runner-secrets', 'test-registry-notification')).to be true
+      expect(t.find_projected_secret('Deployment/test-sidekiq-all-in-1-v1', 'init-sidekiq-secrets', 'test-registry-notification')).to be true
+      expect(t.find_projected_secret('Deployment/test-webservice-default', 'init-webservice-secrets', 'test-registry-notification')).to be true
+      expect(t.find_projected_secret('Deployment/test-task-runner', 'init-task-runner-secrets', 'test-registry-notification')).to be true
     end
   end
 
@@ -101,9 +101,8 @@ describe 'global configuration' do
 
       # The below is ugly, both code wise, as well as informing the user testing WHAT is wrong...
       foo = t.dig('ConfigMap/test-registry', 'data', 'config.yml')
-      bar = YAML.load(foo) # can't use safe_load here...
+      bar = YAML.load(foo, Symbol) # TODO make safe_load work
 
-      binding.pry
       # Testing that we don't accidentally blow away a customization
       expect(bar['notifications']['endpoints'].any? { |item| item['name'] == 'FooListener' }).to eq(true)
 
@@ -144,9 +143,8 @@ describe 'global configuration' do
 
       # The below is ugly, both code wise, as well as informing the user testing WHAT is wrong...
       foo = t.dig('ConfigMap/test-registry', 'data', 'config.yml')
-      bar = YAML.load(foo) # can't use safe_load here...l TODO fix this
+      bar = YAML.load(foo)
 
-      binding.pry
       # Testing that we don't accidentally blow away a customization
       expect(bar['notifications']['endpoints'].any? { |item| item['name'] == 'FooListener' }).to eq(false)
 
