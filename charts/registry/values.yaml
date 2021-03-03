@@ -294,6 +294,6 @@ database:
   password:
     secret: gitlab-postgresql-password
     key: postgresql-registry-password
-  dbname: registry
+  name: registry
   sslmode: disable
   ssl: {}
