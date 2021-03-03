@@ -82,7 +82,6 @@ notifications:
   {{- $endpoints := concat (list) $notifications.endpoints $geoNotifier.endpoints | uniq -}}
   {{- if $endpoints }}
   endpoints:
-{{/* tribal knowledge TODO? */}}
     {{- range $endpoint := $endpoints -}}
       {{- if $endpoint.name -}}
         {{- $headers := pluck "headers" $endpoint | first -}}
