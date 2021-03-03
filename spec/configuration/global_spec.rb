@@ -70,6 +70,44 @@ describe 'global configuration' do
               'secret' => 'geo',
               'key' => 'postgresql-password'
             }
+          }
+        }
+      }.deep_merge(default_values)
+    end
+
+    it 'configures the consumption of the secret' do
+      t = HelmTemplate.new(registry_notifications)
+      expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+      config = t.dig('ConfigMap/test-registry', 'data', 'config.yml')
+      config_yaml = YAML.safe_load(config, permitted_classes: [Symbol])
+
+      # With geo enabled && syncing of the registry enabled, we insert this notifier
+      expect(config_yaml['notifications']['endpoints'].any? { |item| item['name'] == 'geo_event' }).to eq(true)
+    end
+  end
+
+  describe 'registry and geo sync enabled with other notifiers' do
+    let(:registry_notifications) do
+      {
+        'global' => {
+          'geo' => {
+            'enabled' => true,
+            'role' => 'primary',
+            'registry' => {
+              'syncEnabled' => true
+            }
+          },
+          'postgresql' => {
+            'install' => false
+          },
+          'psql' => {
+            'host' => 'geo-1.db.example.com',
+            'port' => '5432',
+            'password' => {
+              'secret' => 'geo',
+              'key' => 'postgresql-password'
+            }
           },
           'registry' => {
             'notifications' => {
@@ -96,62 +134,19 @@ describe 'global configuration' do
       }.deep_merge(default_values)
     end
 
-    it 'configures the consumption of the secret' do
+    it 'all notifications are included' do
       t = HelmTemplate.new(registry_notifications)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
       # The below is ugly, both code wise, as well as informing the user testing WHAT is wrong...
-      foo = t.dig('ConfigMap/test-registry', 'data', 'config.yml')
-      bar = YAML.safe_load(foo, permitted_classes: [Symbol])
+      config = t.dig('ConfigMap/test-registry', 'data', 'config.yml')
+      config_yaml = YAML.safe_load(config, permitted_classes: [Symbol])
 
       # Testing that we don't accidentally blow away a customization
-      expect(bar['notifications']['endpoints'].any? { |item| item['name'] == 'FooListener' }).to eq(true)
+      expect(config_yaml['notifications']['endpoints'].any? { |item| item['name'] == 'FooListener' }).to eq(true)
 
       # With geo enabled && syncing of the registry enabled, we insert this notifier
-      expect(bar['notifications']['endpoints'].any? { |item| item['name'] == 'geo_event' }).to eq(true)
-    end
-  end
-
-  describe 'registry and geo sync enabled' do
-    let(:registry_notifications) do
-      {
-        'global' => {
-          'geo' => {
-            'enabled' => true,
-            'role' => 'primary',
-            'registry' => {
-              'syncEnabled' => true
-            }
-          },
-          'postgresql' => {
-            'install' => false
-          },
-          'psql' => {
-            'host' => 'geo-1.db.example.com',
-            'port' => '5432',
-            'password' => {
-              'secret' => 'geo',
-              'key' => 'postgresql-password'
-            }
-          }
-        }
-      }.deep_merge(default_values)
-    end
-
-    it 'configures the consumption of the secret' do
-      t = HelmTemplate.new(registry_notifications)
-      expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-
-      # The below is ugly, both code wise, as well as informing the user testing WHAT is wrong...
-      foo = t.dig('ConfigMap/test-registry', 'data', 'config.yml')
-      bar = YAML.safe_load(foo, permitted_classes: [Symbol])
-
-      # Testing that we don't accidentally blow away a customization
-      expect(bar['notifications']['endpoints'].any? { |item| item['name'] == 'FooListener' }).to eq(false)
-
-      # With geo enabled && syncing of the registry enabled, we insert this notifier
-      expect(bar['notifications']['endpoints'].any? { |item| item['name'] == 'geo_event' }).to eq(true)
-      # TODO Add test to ensure we don't duplicate things
+      expect(config_yaml['notifications']['endpoints'].any? { |item| item['name'] == 'geo_event' }).to eq(true)
     end
   end
 end
