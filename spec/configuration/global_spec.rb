@@ -6,7 +6,6 @@ require 'hash_deep_merge'
 describe 'global configuration' do
   let(:default_values) do
     {
-      # provide required setting
       'certmanager-issuer' => { 'email' => 'test@example.com' },
       'global' => {}
     }

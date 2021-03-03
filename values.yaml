@@ -453,6 +453,7 @@ global:
         # serverCA:
     registry:
       syncEnabled: false
+      syncSecret: {}
 
   ## doc/charts/gitlab/kas/index.md
   kas:
