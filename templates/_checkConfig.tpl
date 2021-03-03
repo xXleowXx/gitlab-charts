@@ -441,7 +441,7 @@ registry:
 {{-     $pgImageTag := .Values.postgresql.image.tag -}}
 {{-     $pgMajorVersion := (split "." (split "-" ($pgImageTag | toString))._0)._0 | int -}}
 {{-     if lt $pgMajorVersion 12 -}}
-postgresql:
+registry:
     Invalid PostgreSQL version "{{ $pgImageTag }}".
     PostgreSQL 12 is the minimum required version for the registry database.
     See https://docs.gitlab.com/charts/charts/registry#database
