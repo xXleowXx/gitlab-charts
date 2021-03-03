@@ -113,7 +113,7 @@ data:
       port: {{ default (include "gitlab.psql.port" .) .Values.database.port }}
       user: {{ .Values.database.user }}
       password: "DB_PASSWORD_FILE"
-      dbname: {{ .Values.database.dbname }}
+      dbname: {{ .Values.database.name }}
       sslmode: {{ .Values.database.sslmode }}
       {{- if .Values.database.ssl }}
       sslcert: /etc/docker/registry/client-certificate.pem
