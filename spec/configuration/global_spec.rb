@@ -100,7 +100,7 @@ describe 'global configuration' do
 
       # The below is ugly, both code wise, as well as informing the user testing WHAT is wrong...
       foo = t.dig('ConfigMap/test-registry', 'data', 'config.yml')
-      bar = YAML.load(foo, Symbol) # TODO make safe_load work
+      bar = YAML.safe_load(foo, permitted_classes: [Symbol])
 
       # Testing that we don't accidentally blow away a customization
       expect(bar['notifications']['endpoints'].any? { |item| item['name'] == 'FooListener' }).to eq(true)
@@ -142,7 +142,7 @@ describe 'global configuration' do
 
       # The below is ugly, both code wise, as well as informing the user testing WHAT is wrong...
       foo = t.dig('ConfigMap/test-registry', 'data', 'config.yml')
-      bar = YAML.load(foo)
+      bar = YAML.safe_load(foo, permitted_classes: [Symbol])
 
       # Testing that we don't accidentally blow away a customization
       expect(bar['notifications']['endpoints'].any? { |item| item['name'] == 'FooListener' }).to eq(false)
