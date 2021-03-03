@@ -522,7 +522,7 @@ describe 'checkConfig template' do
     let(:success_values) do
       {
         'global' => {
-          'gitaly' => { 'external' => [{'name' => 'external1', 'hostname' => 'foo'}] }
+          'gitaly' => { 'external' => [ { 'name' => 'external1', 'hostname' => 'foo' } ] }
         }
       }.merge(default_required_values)
     end
@@ -530,7 +530,7 @@ describe 'checkConfig template' do
     let(:error_values) do
       {
         'global' => {
-          'gitaly' => { 'external' => [{'name' => 'default', 'hostname' => 'foo'}] }
+          'gitaly' => { 'external' => [ { 'name' => 'default', 'hostname' => 'foo' } ] }
         }
       }.merge(default_required_values)
     end
@@ -548,7 +548,7 @@ describe 'checkConfig template' do
         'global' => {
           'gitaly' => {
             'internal' => { 'names' => ['default'] },
-            'external' => [{'name' => 'external1', 'hostname' => 'foo'}]
+            'external' => [ { 'name' => 'external1', 'hostname' => 'foo' } ]
           }
         }
       }.merge(default_required_values)
@@ -559,12 +559,12 @@ describe 'checkConfig template' do
         'global' => {
           'gitaly' => {
             'internal' => { 'names' => ['internal1'] },
-            'external' => [{'name' => 'external1', 'hostname' => 'foo'}]
+            'external' => [ { 'name' => 'external1', 'hostname' => 'foo' } ]
           },
           'praefect' => {
             'enabled' => true,
             'replaceInternalGitaly' => false,
-            'virtualStorages' => [{'name' => 'praefect1', 'gitalyReplicas' => 2}]
+            'virtualStorages' => [ { 'name' => 'praefect1', 'gitalyReplicas' => 2 } ]
           }
         }
       }.merge(default_required_values)
