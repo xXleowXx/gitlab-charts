@@ -580,10 +580,10 @@ profiling:
 The `database` property is optional and enables the [metadata database](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database).
 
 NOTE:
-The metadata database is an experimental feature and must not be used in production.
+The metadata database is an experimental feature and _must not_ be used in production.
 
 NOTE:
-This feature requires PostgreSQL 12+.
+This feature requires PostgreSQL 12 or newer.
 
 ```yaml
 database:
