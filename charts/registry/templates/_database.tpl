@@ -1,4 +1,46 @@
 {{/*
+Return database configuration, if enabled.
+*/}}
+{{- define "registry.database.config" -}}
+{{- if .Values.database.enabled }}
+database:
+  enabled: true
+  host: {{ default (include "gitlab.psql.host" .) .Values.database.host | quote }}
+  port: {{ default (include "gitlab.psql.port" .) .Values.database.port }}
+  user: {{ .Values.database.user }}
+  password: "DB_PASSWORD_FILE"
+  dbname: {{ .Values.database.name }}
+  sslmode: {{ .Values.database.sslmode }}
+  {{- if .Values.database.ssl }}
+  sslcert: /etc/docker/registry/client-certificate.pem
+  sslkey: /etc/docker/registry/client-key.pem
+  sslrootcert: /etc/docker/registry/server-ca.pem
+  {{- end }}
+  {{- if .Values.database.connecttimeout }}
+  connecttimeout: {{ .Values.database.connecttimeout }}
+  {{- end }}
+  {{- if .Values.database.draintimeout }}
+  draintimeout: {{ .Values.database.draintimeout }}
+  {{- end }}
+  {{- if .Values.database.preparedstatements }}
+  preparedstatements: true
+  {{- end }}
+  {{- if .Values.database.pool }}
+  pool:
+    {{- if .Values.database.pool.maxidle }}
+    maxidle: {{ .Values.database.pool.maxidle }}
+    {{- end }}
+    {{- if .Values.database.pool.maxopen }}
+    maxopen: {{ .Values.database.pool.maxopen }}
+    {{- end }}
+    {{- if .Values.database.pool.maxlifetime }}
+    maxlifetime: {{ .Values.database.pool.maxlifetime }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Returns the K8s Secret definition for the PostgreSQL password.
 */}}
 {{- define "gitlab.registry.psql.secret" -}}

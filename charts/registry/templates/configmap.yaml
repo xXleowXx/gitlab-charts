@@ -106,28 +106,5 @@ data:
       {{- else }}
       {{- include (print $.Template.BasePath "/_storage_default.yaml") . | nindent 6}}
       {{- end }}
-    {{- if .Values.database.enabled }}
-    database:
-      enabled: true
-      host: {{ default (include "gitlab.psql.host" .) .Values.database.host | quote }}
-      port: {{ default (include "gitlab.psql.port" .) .Values.database.port }}
-      user: {{ .Values.database.user }}
-      password: "DB_PASSWORD_FILE"
-      dbname: {{ .Values.database.name }}
-      sslmode: {{ .Values.database.sslmode }}
-      {{- if .Values.database.ssl }}
-      sslcert: /etc/docker/registry/client-certificate.pem
-      sslkey: /etc/docker/registry/client-key.pem
-      sslrootcert: /etc/docker/registry/server-ca.pem
-      {{- end }}
-      {{- if .Values.database.connecttimeout }}
-      connecttimeout: {{ .Values.database.connecttimeout }}
-      {{- end }}
-      {{- if .Values.database.draintimeout }}
-      draintimeout: {{ .Values.database.draintimeout }}
-      {{- end }}
-      {{- if .Values.database.preparedstatements }}
-      preparedstatements: {{ .Values.database.preparedstatements }}
-      {{- end }}
-    {{- end }}
+    {{- include "registry.database.config" $ | nindent 4 }}
 {{- end -}}
