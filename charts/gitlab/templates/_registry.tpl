@@ -46,7 +46,7 @@ registry:
   api_url: {{ default "http" .Values.registry.api.protocol }}://{{ template "gitlab.registry.api.host" . }}:{{ default 5000 .Values.registry.api.port }}
   key: /etc/gitlab/registry/gitlab-registry.key
   issuer: {{ .Values.registry.tokenIssuer }}
-  {{ if .Values.global.registry.notificationSecret.enabled -}}
+  {{ if .Values.global.geo.registry.syncEnabled -}}
   notification_secret: "<%= File.read("/etc/gitlab/registry/notificationSecret").strip %>"
   {{- end -}}
 {{- end -}}{{/* "gitlab.appConfig.registry.configuration" */}}
