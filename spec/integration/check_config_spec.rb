@@ -518,6 +518,65 @@ describe 'checkConfig template' do
                      error_description: 'when Gitaly and external repos are disabled'
   end
 
+  describe 'gitaly.duplicate.repos' do
+    let(:success_values) do
+      {
+        'global' => {
+          'gitaly' => { 'external' => [{'name' => 'external1', 'hostname' => 'foo'}] }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_values) do
+      {
+        'global' => {
+          'gitaly' => { 'external' => [{'name' => 'default', 'hostname' => 'foo'}] }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_output) { '`global.gitaly.internal.names[0]` and `global.gitaly.external[0].name` cannot both equal `default`' }
+
+    include_examples 'config validation',
+                    success_description: 'when Gitaly is enabled and external name is not default',
+                    error_description: 'when Gitaly is enabled and external name is default (duplicate)'
+  end
+
+  describe 'gitaly.default.repo' do
+    let(:success_values) do
+      {
+        'global' => {
+          'gitaly' => {
+            'internal' => { 'names' => ['default'] },
+            'external' => [{'name' => 'external1', 'hostname' => 'foo'}]
+          }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_values) do
+      {
+        'global' => {
+          'gitaly' => {
+            'internal' => { 'names' => ['internal1'] },
+            'external' => [{'name' => 'external1', 'hostname' => 'foo'}]
+          },
+          'praefect' => {
+            'enabled' => true,
+            'replaceInternalGitaly' => false,
+            'virtualStorages' => [{'name' => 'praefect1', 'gitalyReplicas' => 2}]
+          }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_output) { 'There must be one (and only one) storage named \'default\'.' }
+
+    include_examples 'config validation',
+                    success_description: 'when Gitaly is enabled and external name is not default',
+                    error_description: 'when Gitaly is enabled and external name is default (duplicate)'
+  end
+
   describe 'gitaly.task-runner.replicas' do
     let(:success_values) do
       {
