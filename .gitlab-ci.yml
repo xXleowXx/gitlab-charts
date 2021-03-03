@@ -806,7 +806,7 @@ qa_gke_manual_full_suite:
   parallel: 6
   variables:
     VARIABLES_FILE: "variables/review_gke"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable'
+    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient'
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_gke
@@ -817,7 +817,7 @@ qa_eks_manual_full_suite:
   parallel: 6
   variables:
     VARIABLES_FILE: "variables/review_eks"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable'
+    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient'
   environment:
     name: eks_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_eks
