@@ -25,14 +25,14 @@ Return the registry's httpSecert secret key
 Return the registry's notification secret name
 */}}
 {{- define "gitlab.registry.notificationSecret.secret" -}}
-{{- default (printf "%s-registry-notification" .Release.Name) .Values.global.registry.notificationSecret.secret | quote -}}
+{{- default (printf "%s-registry-notification" .Release.Name) .Values.global.geo.registry.syncSecret.secret | quote -}}
 {{- end -}}
 
 {{/*
 Return the registry's notification secret key
 */}}
 {{- define "gitlab.registry.notificationSecret.key" -}}
-{{- default "secret" .Values.global.registry.notificationSecret.key | quote -}}
+{{- default "secret" .Values.global.geo.registry.syncSecret.key | quote -}}
 {{- end -}}
 
 {{/*
