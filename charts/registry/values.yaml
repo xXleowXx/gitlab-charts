@@ -27,11 +27,6 @@ deployment:
     successThreshold: 1
     failureThreshold: 3
 
-notificationSecret:
-  enabled: false
-  # secret: <release-name>-registry-notification
-  # key: secret
-
 podLabels: {}
 common:
   labels: {}
