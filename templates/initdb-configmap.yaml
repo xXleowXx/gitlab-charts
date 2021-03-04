@@ -16,5 +16,13 @@ data:
   enable_extensions.sh: |
     [[ -n "${POSTGRES_POSTGRES_PASSWORD_FILE:-}" ]] && POSTGRES_POSTGRES_PASSWORD=$(cat ${POSTGRES_POSTGRES_PASSWORD_FILE})
     PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD} psql -d {{ template "gitlab.psql.database" .}} -U postgres -c 'CREATE EXTENSION IF NOT EXISTS pg_trgm; CREATE EXTENSION IF NOT EXISTS btree_gist;'
+  {{ if .Values.registry.database.enabled }}
+  create_registry.sh: |
+    [[ -n "${POSTGRES_POSTGRES_PASSWORD_FILE:-}" ]] && POSTGRES_POSTGRES_PASSWORD=$(cat ${POSTGRES_POSTGRES_PASSWORD_FILE})
+    export PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD}
+    export USER_PASSWORD=$(cat /opt/bitnami/postgresql/secrets/{{ .Values.registry.database.password.key }})
+    psql -d {{ include "gitlab.psql.database" . }} -U postgres -c "CREATE ROLE {{ .Values.registry.database.user }} WITH LOGIN PASSWORD '$USER_PASSWORD'"
+    psql -d {{ include "gitlab.psql.database" . }} -U postgres -c "CREATE DATABASE {{ .Values.registry.database.name }} WITH OWNER {{ .Values.registry.database.user }}"
+  {{- end }}
 # Leave this here - This line denotes end of block to the parser.
 {{- end -}}
