@@ -183,7 +183,8 @@ gitlab.com/webservice-name: {{ .name }}
 {{- end -}}
 
 {{/*
-Output common webservice labels
+Returns a list of _common_ labels to be shared across all
+Webservice deployments and other shared objects.
 */}}
 {{- define "webservice.commonLabels" -}}
 {{- $commonLabels := merge (default (dict) .deployment) (default (dict) .webservice) -}}
@@ -192,6 +193,17 @@ Output common webservice labels
 {{ $key }}: {{ $value }}
 {{-   end }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Returns a list of _pod_ labels to be shared across all
+Webservice deployments.
+*/}}
+{{- define "webservice.podLabels" -}}
+{{- $commonPodLabels := default (dict) .pod -}}
+{{- range $key, $value := $commonPodLabels }}
+{{ $key }}: {{ $value }}
+{{- end }}
 {{- end -}}
 
 {{/*
