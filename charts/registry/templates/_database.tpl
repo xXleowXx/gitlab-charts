@@ -12,9 +12,9 @@ database:
   dbname: {{ .Values.database.name }}
   sslmode: {{ .Values.database.sslmode }}
   {{- if .Values.database.ssl }}
-  sslcert: /etc/docker/registry/client-certificate.pem
-  sslkey: /etc/docker/registry/client-key.pem
-  sslrootcert: /etc/docker/registry/server-ca.pem
+  sslcert: /etc/docker/registry/ssl/client-certificate.pem
+  sslkey: /etc/docker/registry/ssl/client-key.pem
+  sslrootcert: /etc/docker/registry/ssl/server-ca.pem
   {{- end }}
   {{- if .Values.database.connecttimeout }}
   connecttimeout: {{ .Values.database.connecttimeout }}
@@ -88,10 +88,10 @@ Returns the K8s Secret definition for a PostgreSQL mutual TLS connection.
     name: {{ include "gitlab.registry.psql.ssl.secret" . }}
     items:
       - key: {{ include "gitlab.registry.psql.ssl.clientCertificate" . }}
-        path: client-certificate.pem
+        path: ssl/client-certificate.pem
       - key: {{ include "gitlab.registry.psql.ssl.clientKey" . }}
-        path: client-key.pem
+        path: ssl/client-key.pem
       - key: {{ include "gitlab.registry.psql.ssl.serverCA" . }}
-        path: server-ca.pem
+        path: ssl/server-ca.pem
 {{-   end -}}
 {{- end -}}

@@ -162,17 +162,10 @@ init:
       sed -i -e 's@DB_PASSWORD_FILE@'"$(cat /config/database_password)"'@' /registry/config.yml
     fi
     # Copy the database TLS connection files to the expected location and set permissions
-    if [ -f /config/client-certificate.pem ]; then
-      cp /config/client-certificate.pem /registry/client-certificate.pem
-      chmod 600 /registry/client-certificate.pem
-    fi
-    if [ -f /config/client-key.pem ]; then
-      cp /config/client-key.pem /registry/client-key.pem
-      chmod 600 /registry/client-key.pem
-    fi
-    if [ -f /config/server-ca.pem ]; then
-      cp /config/server-ca.pem /registry/server-ca.pem
-      chmod 600 /registry/server-ca.pem
+    if [ -d /config/ssl ]; then
+      cp -r /config/ssl /registry/ssl
+      chmod 700 /registry/ssl
+      chmod 600 /registry/ssl/*.pem
     fi
 
 # define some sane resource requests and limitations
