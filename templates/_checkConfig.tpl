@@ -44,6 +44,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.database" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
@@ -424,6 +425,30 @@ Registry: Notifications should be defined in the global scope. Use `global.regis
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.notifications */}}
+
+{{/*
+Ensure Registry database is configured properly and dependencies are met
+*/}}
+{{- define "gitlab.checkConfig.registry.database" -}}
+{{-   if $.Values.registry.database.enabled }}
+{{-     $validSSLModes := list "require" "disable" "allow" "prefer" "require" "verify-ca" "verify-full" -}}
+{{-     if not (has $.Values.registry.database.sslmode $validSSLModes) }}
+registry:
+    Invalid SSL mode "{{ .Values.registry.database.sslmode }}".
+    Valid values are: {{ join ", " $validSSLModes }}.
+    See https://docs.gitlab.com/charts/charts/registry#database
+{{-     end -}}
+{{-     $pgImageTag := .Values.postgresql.image.tag -}}
+{{-     $pgMajorVersion := (split "." (split "-" ($pgImageTag | toString))._0)._0 | int -}}
+{{-     if lt $pgMajorVersion 12 -}}
+registry:
+    Invalid PostgreSQL version "{{ $pgImageTag }}".
+    PostgreSQL 12 is the minimum required version for the registry database.
+    See https://docs.gitlab.com/charts/charts/registry#database
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.database */}}
 
 {{/*
 Ensure Puma is used when the dependency proxy is enabled
