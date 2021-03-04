@@ -116,6 +116,10 @@ entry.
 - Add upgrade survey link to upgrade output. !1762
 
 
+## 4.7.8 (2021-03-04)
+
+- No changes.
+
 ## 4.7.7 (2021-02-11)
 
 - No changes.
