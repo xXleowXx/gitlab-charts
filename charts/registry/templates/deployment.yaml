@@ -84,6 +84,21 @@ spec:
               mountPath: /registry
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
+        {{- if .Values.database.enabled }}
+        - name: dependencies
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
+          command:
+          - /bin/bash
+          args:
+          - /scripts/wait-for-deps
+          volumeMounts:
+            - name: registry-server-config
+              mountPath: /etc/docker/registry/
+              readOnly: true
+          resources:
+            {{- toYaml .Values.init.resources | nindent 12 }}
+        {{- end }}
       {{- include "pullsecrets" .Values.image | indent 6 }}
       containers:
         - name: registry
