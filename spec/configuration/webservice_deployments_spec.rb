@@ -100,7 +100,7 @@ describe 'Webservice Deployments configuration' do
             }
           }
         }
-      }.deep_merge(default_values)
+      }.deep_merge(values)
     end
 
     it 'Populates the additional labels in the expected manner on the default deployment' do

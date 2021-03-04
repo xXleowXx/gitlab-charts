@@ -183,6 +183,18 @@ gitlab.com/webservice-name: {{ .name }}
 {{- end -}}
 
 {{/*
+Output common webservice labels
+*/}}
+{{- define "webservice.commonLabels" -}}
+{{- $commonLabels := merge (default (dict) .deployment) (default (dict) .webservice) -}}
+{{- if $commonLabels }}
+{{-   range $key, $value := $commonLabels }}
+{{ $key }}: {{ $value }}
+{{-   end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Returns the extraEnv keys and values to inject into containers.
 
 Global values will override any chart-specific values.
