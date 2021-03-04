@@ -106,4 +106,5 @@ data:
       {{- else }}
       {{- include (print $.Template.BasePath "/_storage_default.yaml") . | nindent 6}}
       {{- end }}
+    {{- include "registry.database.config" $ | nindent 4 }}
 {{- end -}}
