@@ -59,6 +59,10 @@ from the parent chart, these values will be:
 ```yaml
 registry:
   enabled:
+  migrations:
+    enabled: true
+    activeDeadlineSeconds:
+    backoffLimit:
   maintenance:
     readOnly:
       enabled: false
@@ -147,6 +151,9 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
 | `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
+| `migrations.enabled`                       | `true`                                       | Enable the migrations job to automatically run migrations upon initial deployment.                   |
+| `migrations.activeDeadlineSeconds`         | `3600`                                       | Set the [activeDeadlineSeconds](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
+| `migrations.backoffLimit`                  | `6`                                          | Set the [backoffLimit](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
 | `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
 | `reporting.sentry.dsn`                     |                                              | The Sentry DSN (Data Source Name)                                                                    |
 | `reporting.sentry.environment`             |                                              | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/environments/)                 |
@@ -608,6 +615,72 @@ database:
     maxidle: 25
     maxopen: 25
     maxlifetime: 5m
+```
+
+#### Creating the database
+
+If the Registry database is enabled, Registry will use its own database to track its state.
+
+NOTE:
+The steps below are not required if using the bundled PostgreSQL server.
+The Registry database (and associated role) will be automatically created by the PostgreSQL chart via
+the initdb scripts.
+
+NOTE:
+These instructions assume you are using the bundled PostgreSQL server. If you are using your own server,
+there will be some variation in how you connect.
+
+1. Log into your database instance:
+
+   ```shell
+   kubectl exec -it $(kubectl get pods -l app=postgresql -o custom-columns=NAME:.metadata.name --no-headers) -- bash
+   ```
+
+   ```shell
+   PGPASSWORD=$(cat $POSTGRES_POSTGRES_PASSWORD_FILE) psql -U postgres -d template1
+   ```
+
+1. Create the database user:
+
+   ```sql
+   CREATE ROLE registry WITH LOGIN;
+   ```
+
+1. Set the database user password.
+
+   By default, the `shared-secrets` chart will generate a secret for you.
+
+   1. Fetch the password:
+
+      ```shell
+      kubectl get secret RELEASE_NAME-postgresql-password -o jsonpath="{.data.postgresql-registry-password}" | base64 --decode
+      ```
+
+   1. Set the password in the `psql` prompt:
+
+      ```sql
+      \password registry
+      ```
+
+1. Create the database:
+
+   ```sql
+   CREATE DATABASE registry WITH OWNER registry;
+   ```
+
+## migrations
+
+The `migrations` property is optional and enables the migrations job.
+
+NOTE:
+The migrations job will only run migrations upon the initital release of the Chart.
+Subsequent migrations must be executed directly within any of the running Registry pods.
+
+```yaml
+migrations:
+  enabled: true
+  activeDeadlineSeconds: 3600
+  backoffLimit: 6
 ```
 
 ## Garbage Collection
