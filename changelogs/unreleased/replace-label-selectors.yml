@@ -1,0 +1,5 @@
+---
+title: Use template for label selectors on NGINX objects
+merge_request: 1877
+author: Antony Perigault
+type: fixed
