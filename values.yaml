@@ -454,6 +454,8 @@ global:
     registry:
       syncEnabled: false
       syncSecret: {}
+        # secret: <release-name>-registry-notification
+        # key: secret
 
   ## doc/charts/gitlab/kas/index.md
   kas:
@@ -490,10 +492,6 @@ global:
       # secret:
       # key:
     # https://docs.docker.com/registry/notifications/#configuration
-    notificationSecret:
-      enabled: false
-      # secret: <release-name>-registry-notification
-      # key: secret
     notifications: {}
       # endpoints:
       #   - name: FooListener
