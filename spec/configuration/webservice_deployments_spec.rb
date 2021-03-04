@@ -154,6 +154,7 @@ describe 'Webservice Deployments configuration' do
       expect(t.labels('Deployment/test-webservice-web')).to include('ws_common' => true)
       expect(t.labels('Deployment/test-webservice-web')).to include('global' => 'webservice')
       expect(t.labels('Deployment/test-webservice-web')).to include('webservice' => 'webservice')
+
       expect(t.labels('Deployment/test-webservice-web')).not_to include('foo' => 'webservice-common')
       expect(t.labels('Deployment/test-webservice-web')).not_to include('foo' => 'global-pod')
       expect(t.labels('Deployment/test-webservice-web')).not_to include('web_pod' => true)
@@ -166,6 +167,7 @@ describe 'Webservice Deployments configuration' do
       expect(t.labels('Deployment/test-webservice-web')).not_to include('global_pod' => true)
       expect(t.labels('Deployment/test-webservice-web')).not_to include('global_service' => true)
       expect(t.labels('Deployment/test-webservice-web')).not_to include('foo' => 'global_service')
+
       expect(t.template_labels('Deployment/test-webservice-web')).to include('foo' => 'web-pod')
       expect(t.template_labels('Deployment/test-webservice-web')).to include('web_pod' => true)
       expect(t.template_labels('Deployment/test-webservice-web')).to include('web_common' => true)
@@ -175,9 +177,20 @@ describe 'Webservice Deployments configuration' do
       expect(t.template_labels('Deployment/test-webservice-web')).not_to include('foo' => 'webservice_pod')
 
       expect(t.labels('Ingress/test-webservice-web')).to include('foo' => 'web-common')
+      expect(t.labels('Ingress/test-webservice-web')).to include('web_common' => true)
+      expect(t.labels('Ingress/test-webservice-web')).to include('ws_common' => true)
+      expect(t.labels('Ingress/test-webservice-web')).to include('global' => 'webservice')
+      expect(t.labels('Ingress/test-webservice-web')).to include('webservice' => 'webservice')
 
       expect(t.labels('Service/test-webservice-web')).to include('foo' => 'web-common')
+      expect(t.labels('Service/test-webservice-web')).to include('ws_service' => true)
+      expect(t.labels('Service/test-webservice-web')).to include('web_common' => true)
+      expect(t.labels('Service/test-webservice-web')).to include('ws_common' => true)
+      expect(t.labels('Service/test-webservice-web')).to include('global' => 'webservice')
+      expect(t.labels('Service/test-webservice-web')).to include('webservice' => 'webservice')
       expect(t.labels('Service/test-webservice-web')).not_to include('foo' => 'global-pod')
+      expect(t.labels('Service/test-webservice-web')).not_to include('foo' => 'webservice_service')
+      expect(t.labels('Service/test-webservice-web')).not_to include('global' => 'service')
 
       expect(t.labels('HorizontalPodAutoscaler/test-webservice-web')).to include('foo' => 'web-common')
 
