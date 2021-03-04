@@ -122,7 +122,7 @@ spec:
                 - key: {{ template "gitlab.registry.profiling.stackdriver.credentials.key" . }}
                   path: profiling-key.json
           {{- end }}
-          {{- include "registry.psql.secret" . | nindent 10 }}
+          {{- include "gitlab.registry.psql.secret" . | nindent 10 }}
           {{- include "registry.notifications.secrets" $ | nindent 10 }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end }}
