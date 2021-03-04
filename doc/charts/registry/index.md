@@ -367,17 +367,19 @@ not provided.
 To create this secret manually:
 
 ```shell
-kubectl create secret generic gitlab-registry-notification --from-literal=secret=strongrandomstring
+kubectl create secret generic gitlab-registry-notification --from-literal=secret=[\"strongrandomstring\"]
 ```
 
 Then proceed to set
 
 ```yaml
 global:
-  registry:
-    notificationSecret:
-      enabled: true
-      secret: gitlab-registry-notification
+  geo:
+    registry:
+      syncEnabled: true
+      syncSecret:
+        secret: gitlab-registry-notification
+        key: secret
 ```
 
 Ensuring the `secret` value is set to the name of the secret created above
