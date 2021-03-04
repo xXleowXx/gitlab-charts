@@ -18,7 +18,7 @@ Build Redis config for KAS
 */}}
 {{- define "kas.redis" -}}
 {{- if .Values.redis.enabled -}}
-{{- if get .Values.global.redis .Values.redis.clusterConfig -}}
+{{- if hasKey .Values.global.redis .Values.redis.clusterConfig -}}
 {{- $_ := set $ "redisConfigName" .Values.redis.clusterConfig -}}
 {{- end -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
