@@ -4,8 +4,10 @@ image:
   pullPolicy: 'IfNotPresent'
   pullSecrets: []
 
-activeDeadlineSeconds: 3600
-backoffLimit: 6
+migrations:
+  enabled: true
+  activeDeadlineSeconds: 3600
+  backoffLimit: 6
 
 deployment:
   terminationGracePeriodSeconds: 30
