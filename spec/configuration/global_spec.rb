@@ -25,7 +25,7 @@ describe 'global configuration' do
     end
   end
 
-  describe 'registry notifications enabled' do
+  describe 'registry geo sync enabled' do
     let(:registry_notifications) do
       {
         'global' => {
@@ -75,7 +75,7 @@ describe 'global configuration' do
       }.deep_merge(default_values)
     end
 
-    it 'configures the consumption of the secret' do
+    it 'configures the notification endpoint' do
       t = HelmTemplate.new(registry_notifications)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
@@ -83,7 +83,7 @@ describe 'global configuration' do
       config_yaml = YAML.safe_load(config, permitted_classes: [Symbol])
 
       # With geo enabled && syncing of the registry enabled, we insert this notifier
-      expect(config_yaml['notifications']['endpoints'].any? { |item| item['name'] == 'geo_event' }).to eq(true)
+      expect(config_yaml['notifications']['endpoints'].count { |item| item['name'] == 'geo_event' }).to eq(1)
     end
   end
 
@@ -143,10 +143,10 @@ describe 'global configuration' do
       config_yaml = YAML.safe_load(config, permitted_classes: [Symbol])
 
       # Testing that we don't accidentally blow away a customization
-      expect(config_yaml['notifications']['endpoints'].any? { |item| item['name'] == 'FooListener' }).to eq(true)
+      expect(config_yaml['notifications']['endpoints'].count { |item| item['name'] == 'FooListener' }).to eq(1)
 
       # With geo enabled && syncing of the registry enabled, we insert this notifier
-      expect(config_yaml['notifications']['endpoints'].any? { |item| item['name'] == 'geo_event' }).to eq(true)
+      expect(config_yaml['notifications']['endpoints'].count { |item| item['name'] == 'geo_event' }).to eq(1)
     end
   end
 end
