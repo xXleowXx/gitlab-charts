@@ -47,6 +47,12 @@ registry:
   key: /etc/gitlab/registry/gitlab-registry.key
   issuer: {{ .Values.registry.tokenIssuer }}
   {{ if .Values.global.geo.registry.syncEnabled -}}
-  notification_secret: "<%= File.read("/etc/gitlab/registry/notificationSecret").strip %>"
+<% foo = YAML.load_file("/etc/gitlab/registry/notificationSecret") %>
+<% if foo.class == Array %>
+<%   bar = foo[0] %>
+<% else %>
+<%   bar = foo %>
+<% end %>
+  notification_secret: <%= bar %>
   {{- end -}}
 {{- end -}}{{/* "gitlab.appConfig.registry.configuration" */}}
