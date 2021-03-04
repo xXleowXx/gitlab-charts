@@ -53,8 +53,6 @@ spec:
         env:
         - name: BYPASS_SCHEMA_VERSION
           value: '1'
-        command:
-        - /bin/bash
         args:
         - /scripts/wait-for-deps
         volumeMounts:
@@ -70,8 +68,6 @@ spec:
       - name: migrations
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
-        command:
-        - /bin/bash
         args:
         - /scripts/db-migrate
         volumeMounts:
