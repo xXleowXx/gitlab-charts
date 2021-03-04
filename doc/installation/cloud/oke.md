@@ -57,8 +57,3 @@ kubectl get ingress/<RELEASE>-webservice-default -ojsonpath='{.status.loadBalanc
 ```
 
 `<RELEASE>` should be substituted with the release name used in `helm install <RELEASE>`.
-
-
- ```shell
- kubectl get service gitlab-nginx-ingress-controller -o yaml
- ```
