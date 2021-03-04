@@ -39,6 +39,7 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+      {{- include "gitlab.nodeSelector" . | nindent 6 }}
       {{- if .Values.tolerations }}
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}
@@ -46,10 +47,6 @@ spec:
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
-      {{- end }}
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
         podAntiAffinity:
@@ -166,6 +163,9 @@ spec:
                   path: profiling-key.json
           {{- end }}
           {{- include "registry.notifications.secrets" $ | nindent 10 }}
-          {{- include "registry.psql.secret" . | nindent 10 }}
+          {{- if .Values.database.enabled -}}
+          {{-   include "gitlab.registry.psql.secret" . | nindent 10 }}
+          {{-   include "gitlab.registry.psql.ssl" . | nindent 10 }}
+          {{- end -}}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end -}}

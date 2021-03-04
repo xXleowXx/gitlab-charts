@@ -274,7 +274,10 @@ Instructions for installing a development branch rather than a tagged release ca
 
 ### GitLab Operator (experimental)
 
-If you would like to use GitLab Operator to achieve zero downtime upgrades, please follow the [documentation for using the operator](operator.md).
+WARNING:
+This functionality was Alpha and marked experimental. It is now
+[**deprecated**](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2210), and will be removed in
+the future. Do not use in production.
 
 ## Monitoring the Deployment
 

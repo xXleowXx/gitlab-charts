@@ -64,3 +64,13 @@ securityContext:
   fsGroup: 65532
 redis:
   enabled: true
+
+networkpolicy:
+  enabled: false
+  egress:
+    enabled: false
+    rules: []
+  ingress:
+    enabled: false
+    rules: []
+  annotations: {}

@@ -106,13 +106,5 @@ data:
       {{- else }}
       {{- include (print $.Template.BasePath "/_storage_default.yaml") . | nindent 6}}
       {{- end }}
-    database:
-      enabled: {{ .Values.database.enabled }}
-      dbname: {{ .Values.database.dbname }}
-      user: {{ .Values.database.username  }}
-      password: "DB_PASSWORD_FILE"
-      host: {{ include "gitlab.psql.host" . | quote }}
-      port: {{ include "gitlab.psql.port" . }}
-      schema: {{ .Values.database.schema }}
-      sslmode: disable
+    {{- include "registry.database.config" $ | nindent 4 }}
 {{- end -}}

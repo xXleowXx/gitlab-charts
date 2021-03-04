@@ -119,7 +119,6 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 | `enabled`                      | Boolean | `true`         | Global setting that controls whether to create Ingress objects for services that support them. |
 | `tls.enabled`                  | Boolean | `true`         | When set to `false`, this disables TLS in GitLab. This is useful for cases in which you cannot use TLS termination of Ingresses, such as when you have a TLS-terminating proxy before the Ingress Controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#configure-host-settings). |
 | `tls.secretName`               | String  |                | The name of the [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) that contains a **wildcard** certificate and key for the domain used in `global.hosts.domain`. |
-| `hostnameOverride`             | String  |                | Override the hostname used in Ingress configuration of the Webservice. Useful if GitLab has to be reachable behind a WAF that rewrites the Hostname to an internal hostname (e.g.: `gitlab.example.com` --> `gitlab.cluster.local`). |
 | `path`                         | String  | `/`            | Default for `path` entries in [Ingress objects](https://kubernetes.io/docs/concepts/services-networking/ingress/) |
 
 ### Ingress Path
@@ -848,7 +847,7 @@ application are described below:
 #### Content Security Policy
 
 Setting a Content Security Policy (CSP) can help thwart JavaScript cross-site
-scripting (XSS) attacks. See GitLab documentation for configuration details. [Content Security Policy Documentation](h1ttps://docs.gitlab.com/omnibus/settings/configuration.html#content-security-policy)
+scripting (XSS) attacks. See GitLab documentation for configuration details. [Content Security Policy Documentation](https://docs.gitlab.com/omnibus/settings/configuration.html#content-security-policy)
 
 Note that when enabled, the `directives` MUST be configured. Sane example
 configuration below:
@@ -1679,6 +1678,21 @@ global:
     annotations:
       environment: production
 ```
+
+## Node Selector
+
+Custom `nodeSelector`s can be applied to all components globally. Any global defaults
+can also be overridden on each subchart individually.
+
+```yaml
+global:
+  nodeSelector:
+    disktype: ssd
+```
+
+> **Note**: charts that are maintained externally do not respect the `global.nodeSelector`
+> at this time and may need to be configured separately based on available chart values.
+> This includes Prometheus, cert-manager, Redis, etc.
 
 ## Labels
 
