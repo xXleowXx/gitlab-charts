@@ -18,8 +18,8 @@ Build Redis config for KAS
 */}}
 {{- define "kas.redis" -}}
 {{- if .Values.redis.enabled -}}
-{{- if .Values.global.redis.sharedState -}}
-{{- $_ := set $ "redisConfigName" "sharedState" -}}
+{{- if get .Values.global.redis .Values.redis.clusterConfig -}}
+{{- $_ := set $ "redisConfigName" .Values.redis.clusterConfig -}}
 {{- end -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
 {{- if .redisMergedConfig.password.enabled -}}
