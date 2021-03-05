@@ -134,7 +134,7 @@ The only exception is when populating the [`gitlab/webservice` deployments setti
 
 ### Cloud provider LoadBalancers
 
-Various cloud providers' LoadBalancer implementations have an impact on how this the Ingress resources, and NGINX itself are configured as a part of this chart. The below table provides examples.
+Various cloud providers' LoadBalancer implementations have an impact on configuration of the Ingress resources and NGINX controller deployed as part of this chart. The next table provides examples.
 
 | Provider | Layer | Example snippet |
 | :-- | --: | :-- |
