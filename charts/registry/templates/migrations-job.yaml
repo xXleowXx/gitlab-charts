@@ -47,12 +47,15 @@ spec:
             mountPath: /registry
         resources:
           {{- toYaml .Values.init.resources | nindent 10 }}
+        env:
+        {{- include "gitlab.extraEnv" . | nindent 8 }}
       - name: dependencies
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
         env:
         - name: BYPASS_SCHEMA_VERSION
           value: '1'
+        {{- include "gitlab.extraEnv" . | nindent 8 }}
         args:
         - /scripts/wait-for-deps
         volumeMounts:
@@ -77,6 +80,8 @@ spec:
         {{- include "gitlab.certificates.volumeMount" . | nindent 10 }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
+        env:
+        {{- include "gitlab.extraEnv" . | nindent 8 }}
       volumes:
       - name: registry-server-config
         emptyDir:
