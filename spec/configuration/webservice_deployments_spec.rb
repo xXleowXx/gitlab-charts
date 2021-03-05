@@ -383,7 +383,7 @@ describe 'Webservice Deployments configuration' do
         gitlab:
           webservice:
             shutdown:
-              blackoutSeconds: 10
+              blackoutSeconds: 20
             # individual configurations
             deployments:
               a:
@@ -417,9 +417,9 @@ describe 'Webservice Deployments configuration' do
       t = HelmTemplate.new(chart_values)
 
       expect(t.exit_code).to eq(0)
-      expect(t.env('Deployment/test-webservice-a', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 10))
-      expect(t.env('Deployment/test-webservice-b', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 10))
-      expect(t.env('Deployment/test-webservice-c', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 10))
+      expect(t.env('Deployment/test-webservice-a', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 20))
+      expect(t.env('Deployment/test-webservice-b', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 20))
+      expect(t.env('Deployment/test-webservice-c', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 20))
     end
 
     it 'setting deployment overrides chart when present' do
@@ -428,7 +428,7 @@ describe 'Webservice Deployments configuration' do
       expect(t.exit_code).to eq(0)
       expect(t.env('Deployment/test-webservice-a', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 120))
       expect(t.env('Deployment/test-webservice-b', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 0))
-      expect(t.env('Deployment/test-webservice-c', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 10))
+      expect(t.env('Deployment/test-webservice-c', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 20))
     end
   end
 end
