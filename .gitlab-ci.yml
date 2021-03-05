@@ -802,7 +802,7 @@ qa_eks_production:
 # QA jobs with Full E2E suites
 
 qa_gke_trigger_manual_full_suite:
-  image: alpine
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
   stage: specs
   script: echo 'The job will trigger Full E2E suite against GKE'
   when: manual
@@ -824,7 +824,7 @@ qa_gke_manual_full_suite:
   needs: [ "qa_gke_trigger_manual_full_suite" ]
 
 qa_eks_trigger_manual_full_suite:
-  image: alpine
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
   stage: specs
   script: echo 'The job will trigger Full E2E suite against EKS'
   when: manual
