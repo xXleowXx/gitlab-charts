@@ -799,7 +799,18 @@ qa_eks_production:
   environment:
     name: eks_production/$CI_COMMIT_REF_NAME
 
-# QA jobs with Full E2E suites 
+# QA jobs with Full E2E suites
+
+qa_gke_trigger_manual_full_suite:
+  image: alpine
+  stage: specs
+  script: echo 'The job will trigger Full E2E suite against GKE'
+  when: manual
+  except:
+    refs:
+      - master
+      - /(^docs[\/-].+|.+-docs$)/
+      - *com_auto_deploy_branch_ref
 
 qa_gke_manual_full_suite:
   extends: .qa_branch
@@ -810,7 +821,18 @@ qa_gke_manual_full_suite:
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_gke
+  needs: [ "qa_gke_trigger_manual_full_suite" ]
+
+qa_eks_trigger_manual_full_suite:
+  image: alpine
+  stage: specs
+  script: echo 'The job will trigger Full E2E suite against EKS'
   when: manual
+  except:
+    refs:
+      - master
+      - /(^docs[\/-].+|.+-docs$)/
+      - *com_auto_deploy_branch_ref
 
 qa_eks_manual_full_suite:
   extends: .qa_branch
@@ -821,4 +843,4 @@ qa_eks_manual_full_suite:
   environment:
     name: eks_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_eks
-  when: manual
+  needs: [ "qa_eks_trigger_manual_full_suite" ]
