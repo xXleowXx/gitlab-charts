@@ -90,8 +90,7 @@ spec:
         - name: dependencies
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
-          args:
-          - /scripts/wait-for-deps
+          command: ["/scripts/wait-for-deps"]
           volumeMounts:
             - name: registry-server-config
               mountPath: /etc/docker/registry/
