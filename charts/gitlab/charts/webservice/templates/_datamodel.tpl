@@ -73,7 +73,7 @@ service:
   {{- if .Values.service.loadBalancerIP -}}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
-  {{- if .Values.service.loadBalancerSourceRanges -}}
+  {{- if .Values.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
     {{- range .Values.service.loadBalancerSourceRanges }}
     - {{ . | quote }}
