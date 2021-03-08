@@ -33,11 +33,24 @@ function label_secret(){
 function generate_secret_if_needed(){
   local secret_args=( "${@:2}")
   local secret_name=$1
+
   if ! $(kubectl --namespace=$namespace get secret $secret_name > /dev/null 2>&1); then
     kubectl --namespace=$namespace create secret generic $secret_name ${secret_args[@]}
   else
-    echo "secret \"$secret_name\" already exists"
+    echo "secret \"$secret_name\" already exists. checking content."
+    for arg in "${secret_args[@]}"; do
+      from=$(echo -n "${arg}" | awk -F'=' '{print $1}')
+      key=$(echo -n "${arg}" | awk -F'=' '{print $2}')
+      desiredValue=$(echo -n "${arg}" | awk -F'=' '{print $3}' | base64 | tr --delete '\n')
+      existingValue=$(kubectl --namespace=$namespace get secret $secret_name -ojsonpath="{.data.${key}}")
+
+      if [ -z "${from##*literal*}" ] && [ "${key}" != "" ] && [ "${existingValue}" == "" ]; then
+        echo "key \"${key}\" does not exist. patching it in."
+        kubectl --namespace=$namespace patch secret ${secret_name} -p "{\"data\":{\"$key\":\"${desiredValue}\"}}"
+      fi
+    done
   fi;
+
   label_secret $secret_name
 }
 
