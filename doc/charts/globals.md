@@ -88,7 +88,7 @@ global:
 | `registry.servicePort` | String  | `registry`    | The named port of the `service` where the Registry server can be reached. |
 | `smartcard.name`       | String  | `smartcard`   | The hostname for smartcard authentication. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `kas.name`             | String  | `kas`         | The hostname for the KAS. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
-| `kas.https`            | Boolean | `false`       | If `hosts.https` or `kas.https` are `true`, the KAS external URL will use `https://` instead of `http://`. |
+| `kas.https`            | Boolean | `false`       | If `hosts.https` or `kas.https` are `true`, the KAS external URL will use `wss://` instead of `ws://`. |
 | `pages.name`           | String  | `pages`       | The hostname for GitLab Pages. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `pages.https`          | String  |               | If `global.pages.https` or `global.hosts.pages.https` or `global.hosts.https` are `true`, then URL for GitLab Pages in the Project settings UI will use `https://` instead of `http://`. |
 
@@ -1068,6 +1068,8 @@ The incoming email settings are explained in the [command line options page](../
 
 ### KAS settings
 
+#### Custom secret
+
 One can optionally customize the KAS `secret` name as well and `key`, either by
 using Helm's `--set variable` option:
 
@@ -1076,7 +1078,7 @@ using Helm's `--set variable` option:
 --set global.appConfig.gitlab_kas.key=custom-secret-key \
 ```
 
-or by configuring your `values.yml`.
+or by configuring your `values.yml`:
 
 ```yaml
 global:
@@ -1087,6 +1089,49 @@ global:
 ```
 
 If you'd like to customize the secret value, refer to the [secrets documentation](../installation/secrets.md#gitlab-kas-secret).
+
+#### Custom URLs
+
+The URLs used for KAS by the GitLab backend can be customized
+using Helm's `--set variable` option:
+
+```shell
+--set global.appConfig.gitlab_kas.externalUrl="wss://custom-kas-url.example.com" \
+--set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
+```
+
+or by configuring your `values.yml`:
+
+```yaml
+global:
+  appConfig:
+    gitlab_kas:
+      externalUrl: "wss://custom-kas-url.example.com"
+      internalUrl: "grpc://custom-internal-url"
+```
+
+#### External KAS
+
+The GitLab backend can be made aware of an external KAS server (i.e. not
+managed by the chart) by explicitly enabling it and configuring the required
+URLs. You can do so using Helm's `--set variable` option:
+
+```shell
+--set global.appConfig.gitlab_kas.enabled=true \
+--set global.appConfig.gitlab_kas.externalUrl="wss://custom-kas-url.example.com" \
+--set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
+```
+
+or by configuring your `values.yml`:
+
+```yaml
+global:
+  appConfig:
+    gitlab_kas:
+      enabled: true
+      externalUrl: "wss://custom-kas-url.example.com"
+      internalUrl: "grpc://custom-internal-url"
+```
 
 ### LDAP
 
