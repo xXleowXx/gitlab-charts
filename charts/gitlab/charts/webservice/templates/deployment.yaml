@@ -45,8 +45,8 @@ spec:
       labels:
         {{- include "gitlab.standardLabels" $ | nindent 8 }}
         {{- include "gitlab.commonLabels" $ | nindent 8 }}
-        {{- include "gitlab.podLabels" $ | nindent 8 }}
         {{- include "webservice.labels" . | nindent 8 }}
+        {{- include "gitlab.podLabels" $ | nindent 8 }}
         {{- include "webservice.commonLabels" (dict "deployment" .common.labels "webservice" $.Values.common.labels) | nindent 8 }}
         {{- include "webservice.podLabels" (dict "pod" .pod.labels ) | nindent 8 }}
       annotations:

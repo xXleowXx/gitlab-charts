@@ -114,14 +114,14 @@ describe 'Webservice Deployments configuration' do
       expect(t.labels('Deployment/test-webservice-default')).to include('global' => 'webservice')
       expect(t.labels('Deployment/test-webservice-default')).not_to include('global' => 'global')
 
-      expect(t.template_labels('Deployment/test-webservice-default')).to include('global' => 'pod')
+      expect(t.template_labels('Deployment/test-webservice-default')).to include('global' => 'webservice')
       expect(t.template_labels('Deployment/test-webservice-default')).to include('global_pod' => true)
       expect(t.template_labels('Deployment/test-webservice-default')).to include('ws_pod' => true)
 
       expect(t.labels('Ingress/test-webservice-default')).to include('global' => 'webservice')
       expect(t.labels('Ingress/test-webservice-smartcard')).to include('global' => 'webservice')
 
-      expect(t.labels('Service/test-webservice-default')).to include('global' => 'service')
+      expect(t.labels('Service/test-webservice-default')).to include('global' => 'webservice')
       expect(t.labels('Service/test-webservice-default')).to include('global_service' => true)
       expect(t.labels('Service/test-webservice-default')).to include('ws_service' => true)
       expect(t.labels('Service/test-webservice-default')).to include('webservice' => 'webservice')
