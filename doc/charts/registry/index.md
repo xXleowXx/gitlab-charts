@@ -621,10 +621,12 @@ database:
 
 If the Registry database is enabled, Registry will use its own database to track its state.
 
-NOTE:
-The steps below are not required if using the bundled PostgreSQL server.
-The Registry database (and associated role) will be automatically created by the PostgreSQL chart via
-the initdb scripts.
+The database and associated role will be automatically created if the following criteria are met:
+
+- The bundled PostgreSQL instance is used.
+- The bundled PostgreSQL instance has not yet been deployed.
+
+If any of these criteria are not met, then follow the steps below to manually create the database and role.
 
 NOTE:
 These instructions assume you are using the bundled PostgreSQL server. If you are using your own server,
