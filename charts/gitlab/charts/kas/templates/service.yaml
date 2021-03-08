@@ -16,11 +16,11 @@ spec:
     - port: {{ .Values.service.externalPort }}
       targetPort: {{ .Values.service.internalPort }}
       protocol: TCP
-      name: tcp-{{ template "name" . }}
+      name: tcp-{{ template "name" . }}-external-api
     - port: {{ .Values.global.kas.service.apiExternalPort }}
       targetPort: {{ .Values.service.apiInternalPort }}
       protocol: TCP
-      name: tcp-{{ template "name" . }}-api
+      name: tcp-{{ template "name" . }}-internal-api
   selector:
     app: {{ template "name" . }}
     release: {{ .Release.Name }}
