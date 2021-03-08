@@ -675,8 +675,8 @@ there will be some variation in how you connect.
 The `migrations` property is optional and enables the migrations job.
 
 NOTE:
-The migrations job will only run migrations upon the initital release of the Chart.
-Subsequent migrations must be executed directly within any of the running Registry pods.
+The migrations job will run upon the initital release and any future upgrades of the Chart.
+Migrations can also be executed directly within any of the running Registry pods.
 
 ```yaml
 migrations:
