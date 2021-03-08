@@ -90,39 +90,6 @@ spec:
           sources:
           - configMap:
               name: {{ template "registry.fullname" . }}
-          - secret:
-              name: {{ template "gitlab.registry.certificate.secret" . }}
-              items:
-                  - key: registry-auth.crt
-                    path: certificate.crt
-          - secret:
-              name: {{ template "gitlab.registry.httpSecret.secret" . }}
-              items:
-                - key: {{ template "gitlab.registry.httpSecret.key" . }}
-                  path: httpSecret
-          {{- if .Values.global.minio.enabled }}
-          - secret:
-              name: {{ template "gitlab.minio.credentials.secret" . }}
-          {{- end }}
-          {{- if .Values.storage.secret }}
-          - secret:
-              name: {{ .Values.storage.secret }}
-              items:
-                - key: {{ default "config" .Values.storage.key }}
-                  path: storage/config
-                {{- if .Values.storage.extraKey }}
-                - key: {{ .Values.storage.extraKey }}
-                  path: storage/{{ .Values.storage.extraKey }}
-                {{- end }}
-          {{- end }}
-          {{- if .Values.profiling.stackdriver.credentials.secret }}
-          - secret:
-              name: {{ .Values.profiling.stackdriver.credentials.secret }}
-              items:
-                - key: {{ template "gitlab.registry.profiling.stackdriver.credentials.key" . }}
-                  path: profiling-key.json
-          {{- end }}
           {{- include "gitlab.registry.psql.secret" . | nindent 10 }}
-          {{- include "registry.notifications.secrets" $ | nindent 10 }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end }}
