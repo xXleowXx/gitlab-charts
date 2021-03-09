@@ -1229,6 +1229,19 @@ args:
   approval_prompt: ''
 ```
 
+Example of configuration of SAML:
+
+```yaml
+name: saml
+label: 'SAML'
+args:
+  assertion_consumer_service_url: 'https://gitlab.example.com/users/auth/saml/callback'
+  idp_cert_fingerprint: 'xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx'
+  idp_sso_target_url: 'https://SAML_IDP/app/xxxxxxxxx/xxxxxxxxx/sso/saml'
+  issuer: 'https://gitlab.example.com'
+  name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
+```
+
 This content can be saved as `provider.yaml`, and then a secret created from it:
 
 ```shell
