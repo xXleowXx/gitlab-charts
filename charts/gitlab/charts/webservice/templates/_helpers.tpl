@@ -200,8 +200,7 @@ Returns a list of _pod_ labels to be shared across all
 Webservice deployments.
 */}}
 {{- define "webservice.podLabels" -}}
-{{- $commonPodLabels := default (dict) .pod -}}
-{{- range $key, $value := $commonPodLabels }}
+{{- range $key, $value := .pod.labels }}
 {{ $key }}: {{ $value }}
 {{- end }}
 {{- end -}}
