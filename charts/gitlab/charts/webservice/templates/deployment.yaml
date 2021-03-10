@@ -217,6 +217,8 @@ spec:
             - name: UNICORN_MEMORY_MAX
               value: "{{ .unicorn.memory.max }}"
             {{- end }}
+            - name: SHUTDOWN_BLACKOUT_SECONDS
+              value: "{{ .shutdown.blackoutSeconds }}"
             {{- include "gitlab.tracing.env" $ | nindent 12 }}
             - name: GITLAB_TRACING_URL
               value: {{ $.Values.global.tracing.urlTemplate | quote }}
