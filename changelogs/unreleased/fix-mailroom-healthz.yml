@@ -1,0 +1,5 @@
+---
+title: honour existing health check script shipped with gitlab-mailroom container
+merge_request: 1875
+author: Dmitry Makovey
+type: changed

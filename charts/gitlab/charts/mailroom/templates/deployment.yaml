@@ -97,13 +97,11 @@ spec:
           livenessProbe:
             exec:
               command:
-                - pgrep
-                - mail_room
+                - /scripts/healthcheck
           readinessProbe:
             exec:
               command:
-                - pgrep
-                - mail_room
+                - /scripts/healthcheck
           lifecycle:
             preStop:
               exec:
