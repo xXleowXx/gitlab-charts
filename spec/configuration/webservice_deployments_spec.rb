@@ -8,6 +8,10 @@ describe 'Webservice Deployments configuration' do
     "#{kind}/test-webservice-#{name}"
   end
 
+  def env_value(name, value)
+    { 'name' => name, 'value' => value.to_s }
+  end
+
   let(:default_values) do
     { 'certmanager-issuer' => { 'email' => 'test@example.com' } }
   end
@@ -172,10 +176,6 @@ describe 'Webservice Deployments configuration' do
   end
 
   context 'deployments datamodel' do
-    def env_value(name, value)
-      { 'name' => name, 'value' => value.to_s }
-    end
-
     let(:test_values) do
       YAML.safe_load(%(
       gitlab:
@@ -374,6 +374,61 @@ describe 'Webservice Deployments configuration' do
           expect(pod_template_spec['tolerations'][0]['effect']).to eql("NoSchedule")
         end
       end
+    end
+  end
+
+  context 'shutdown.blackoutSeconds' do
+    let(:chart_values) do
+      YAML.safe_load(%(
+        gitlab:
+          webservice:
+            shutdown:
+              blackoutSeconds: 20
+            # individual configurations
+            deployments:
+              a:
+                ingress:
+                  path: /
+              b:
+                ingress:
+                  path: /b
+              c:
+                ingress:
+                  path: /c
+        )).deep_merge(default_values)
+    end
+
+    let(:deployment_values) do
+      YAML.safe_load(%(
+        gitlab:
+          webservice:
+            # individual configurations
+            deployments:
+              a:
+                shutdown:
+                  blackoutSeconds: 120
+              b:
+                shutdown:
+                  blackoutSeconds: 0
+        )).deep_merge(chart_values)
+    end
+
+    it 'setting chart wide applys to all' do
+      t = HelmTemplate.new(chart_values)
+
+      expect(t.exit_code).to eq(0)
+      expect(t.env('Deployment/test-webservice-a', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 20))
+      expect(t.env('Deployment/test-webservice-b', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 20))
+      expect(t.env('Deployment/test-webservice-c', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 20))
+    end
+
+    it 'setting deployment overrides chart when present' do
+      t = HelmTemplate.new(deployment_values)
+
+      expect(t.exit_code).to eq(0)
+      expect(t.env('Deployment/test-webservice-a', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 120))
+      expect(t.env('Deployment/test-webservice-b', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 0))
+      expect(t.env('Deployment/test-webservice-c', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 20))
     end
   end
 end
