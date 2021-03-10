@@ -1229,7 +1229,7 @@ args:
   approval_prompt: ''
 ```
 
-Example of configuration of SAML:
+SAML configuration example:
 
 ```yaml
 name: saml
