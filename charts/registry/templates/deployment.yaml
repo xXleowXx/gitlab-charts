@@ -163,5 +163,9 @@ spec:
                   path: profiling-key.json
           {{- end }}
           {{- include "registry.notifications.secrets" $ | nindent 10 }}
+          {{- if .Values.database.enabled -}}
+          {{-   include "gitlab.registry.psql.secret" . | nindent 10 }}
+          {{-   include "gitlab.registry.psql.ssl" . | nindent 10 }}
+          {{- end -}}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end -}}

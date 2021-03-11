@@ -633,4 +633,70 @@ describe 'checkConfig template' do
                      success_description: 'when terminationGracePeriodSeconds is >= blackoutSeconds',
                      error_description: 'when terminationGracePeriodSeconds is < blackoutSeconds'
   end
+
+  describe 'registry.database (PG version)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 11
+
+        registry:
+          database:
+            enabled: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'PostgreSQL 12 is the minimum required version' }
+
+    include_examples 'config validation',
+                     success_description: 'when postgresql.image.tag is >= 12',
+                     error_description: 'when postgresql.image.tag is < 12'
+  end
+
+  describe 'registry.database (sslmode)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+            sslmode: disable
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+            sslmode: testing
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Invalid SSL mode' }
+
+    include_examples 'config validation',
+                     success_description: 'when database.sslmode is valid',
+                     error_description: 'when when database.sslmode is not valid'
+  end
 end

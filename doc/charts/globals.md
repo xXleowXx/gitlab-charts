@@ -134,7 +134,7 @@ The only exception is when populating the [`gitlab/webservice` deployments setti
 
 ### Cloud provider LoadBalancers
 
-Various cloud providers' LoadBalancer implementations have an impact on how this the Ingress resources, and NGINX itself are configured as a part of this chart. The below table provides examples.
+Various cloud providers' LoadBalancer implementations have an impact on configuration of the Ingress resources and NGINX controller deployed as part of this chart. The next table provides examples.
 
 | Provider | Layer | Example snippet |
 | :-- | --: | :-- |
@@ -847,7 +847,7 @@ application are described below:
 #### Content Security Policy
 
 Setting a Content Security Policy (CSP) can help thwart JavaScript cross-site
-scripting (XSS) attacks. See GitLab documentation for configuration details. [Content Security Policy Documentation](h1ttps://docs.gitlab.com/omnibus/settings/configuration.html#content-security-policy)
+scripting (XSS) attacks. See GitLab documentation for configuration details. [Content Security Policy Documentation](https://docs.gitlab.com/omnibus/settings/configuration.html#content-security-policy)
 
 Note that when enabled, the `directives` MUST be configured. Sane example
 configuration below:
@@ -1227,6 +1227,19 @@ app_secret: 'APP SECRET'
 args:
   access_type: offline
   approval_prompt: ''
+```
+
+SAML configuration example:
+
+```yaml
+name: saml
+label: 'SAML'
+args:
+  assertion_consumer_service_url: 'https://gitlab.example.com/users/auth/saml/callback'
+  idp_cert_fingerprint: 'xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx'
+  idp_sso_target_url: 'https://SAML_IDP/app/xxxxxxxxx/xxxxxxxxx/sso/saml'
+  issuer: 'https://gitlab.example.com'
+  name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
 ```
 
 This content can be saved as `provider.yaml`, and then a secret created from it:
