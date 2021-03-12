@@ -41,7 +41,7 @@ function generate_secret_if_needed(){
     for arg in "${secret_args[@]}"; do
       from=$(echo -n "${arg}" | awk -F'=' '{print $1}')
       key=$(echo -n "${arg}" | awk -F'=' '{print $2}')
-      desiredValue=$(echo -n "${arg}" | awk -F'=' '{print $3}' | base64 | tr --delete '\n')
+      desiredValue=$(echo -n "${arg}" | awk -F'=' '{print $3}' | base64 -w 0)
       existingValue=$(kubectl --namespace=$namespace get secret $secret_name -ojsonpath="{.data.${key}}")
 
       if [ -z "${from##*literal*}" ] && [ "${key}" != "" ] && [ "${existingValue}" == "" ]; then
