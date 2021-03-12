@@ -1,0 +1,5 @@
+---
+title: Allow opting out of workhorse redis
+merge_request: 1889
+author:
+type: performance
