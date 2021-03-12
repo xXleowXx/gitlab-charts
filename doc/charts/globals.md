@@ -1428,7 +1428,7 @@ global:
 | scheme | String | `http` | Scheme of the API endpoint |
 | host | String | | Fully qualified hostname or IP address of an API endpoint. Overrides the presence of `serviceName`. |
 | port | Integer | `8181` | Port number of associated API server. |
-| redis | Boolean | `true` | Whether publish/subscribe over Redis is enabled. |
+| `redis` | Boolean | `true` | Whether publish/subscribe over Redis is enabled. |
 
 ### Bootsnap Cache
 
