@@ -68,7 +68,6 @@ Returns the nginx ingress class
 
 {{/*
 Populate registry notifications
-$events := mustAppend $.Values.global.registry.notifications.events (include "global.geo.registry.syncNotifier" .)
 */}}
 {{- define "registry.notifications.config" -}}
 {{- $geoNotifier := include "global.geo.registry.syncNotifier" . | fromYaml -}}
