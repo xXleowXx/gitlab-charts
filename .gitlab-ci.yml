@@ -808,6 +808,9 @@ qa_gke_trigger_manual_full_suite:
   stage: qa-manual
   variables:
     VARIABLES_FILE: "variables/review_gke"
+  environment:
+    name: gke_review/$CI_COMMIT_REF_NAME
+    on_stop: stop_review_gke
   script: echo 'The job will trigger Full E2E suite against GKE'
   when: manual
 
@@ -828,6 +831,9 @@ qa_eks_trigger_manual_full_suite:
   stage: qa-manual
   variables:
     VARIABLES_FILE: "variables/review_eks"
+  environment:
+    name: eks_review/$CI_COMMIT_REF_NAME
+    on_stop: stop_review_eks
   script: echo 'The job will trigger Full E2E suite against EKS'
   when: manual
 
