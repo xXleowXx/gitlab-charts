@@ -699,4 +699,38 @@ describe 'checkConfig template' do
                      success_description: 'when database.sslmode is valid',
                      error_description: 'when when database.sslmode is not valid'
   end
+
+  describe 'registry.migration (disablemirrorfs)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+          migration:
+            disablemirrorfs: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          migration:
+            disablemirrorfs: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Disabling filesystem metadata requires the metadata database to be enabled' }
+
+    include_examples 'config validation',
+                     success_description: 'when migration.disablemirrorfs is true so does database.enabled',
+                     error_description: 'when migration.disablemirrorfs is true but database.enabled is not'
+  end
 end
