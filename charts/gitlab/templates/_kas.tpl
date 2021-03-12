@@ -1,7 +1,7 @@
 {{/* ######### KAS related templates */}}
 
 {{- define "gitlab.kas.mountSecrets" -}}
-{{- if .Values.global.kas.enabled -}}
+{{- if (or .Values.global.kas.enabled .Values.global.appConfig.gitlab_kas.enabled) -}}
 # mount secret for kas
 - secret:
     name: {{ template "gitlab.kas.secret" . }}
