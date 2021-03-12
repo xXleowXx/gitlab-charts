@@ -155,6 +155,7 @@ data:
   installation_type: |
     gitlab-helm-chart
   workhorse-config.toml.erb: |
+    {{- if .Values.global.workhorse.redis }}
     [redis]
     {{- if not .Values.global.redis.sentinels }}
     URL = "{{ template "gitlab.redis.scheme" . }}://{{ template "gitlab.redis.host" . }}:{{ template "gitlab.redis.port" . }}"
@@ -166,6 +167,7 @@ data:
     Password = "<%= File.read("/etc/gitlab/redis/redis-password").strip.dump[1..-2] %>"
     {{- end }}
     {{- include "workhorse.object_storage.config" $ | nindent 4 }}
+    {{- end }}
     [image_resizer]
     max_scaler_procs = {{ .Values.workhorse.imageScaler.maxProcs | int }}
     max_filesize = {{ .Values.workhorse.imageScaler.maxFileSizeBytes | int }}
