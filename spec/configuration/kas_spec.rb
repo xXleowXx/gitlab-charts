@@ -20,8 +20,8 @@ describe 'kas configuration' do
       'gitlab' => {
         'kas' => {
           'enabled' => 'true',
-          'customConfig' => custom_config,
-        },
+          'customConfig' => custom_config
+        }
       },
       'global' => {
         'kas' => { 'enabled' => 'true' },
@@ -30,7 +30,7 @@ describe 'kas configuration' do
           'key' => custom_secret_key,
           'secret' => custom_secret_name
         } }
-      },
+      }
     }
   end
 
@@ -296,7 +296,7 @@ describe 'kas configuration' do
                   'password' => {
                     'enabled' => redis_password_enabled,
                     'secret' => "shared-secret",
-                    'key' => "shared-key",
+                    'key' => "shared-key"
                   },
                   'sentinels' => sentinels
                 }
@@ -336,6 +336,115 @@ describe 'kas configuration' do
             it 'does not set password_file' do
               expect(config_yaml_data['redis']).not_to have_key("password_file")
             end
+          end
+        end
+      end
+    end
+  end
+
+  describe 'gitlab.yml.erb/gitlab_kas' do
+    let(:helm_template) do
+      HelmTemplate.new(values.merge(kas_values))
+    end
+
+    def gitlab_yml(chart)
+      YAML.safe_load(
+        helm_template.resources_by_kind('ConfigMap')["ConfigMap/test-#{chart}"]['data']['gitlab.yml.erb']
+      )['production']['gitlab_kas']
+    end
+
+    %w[webservice task-runner sidekiq].each do |chart|
+      context "for #{chart}" do
+        it 'has the correct defaults' do
+          expect(gitlab_yml(chart)).to include(
+            'enabled' => true,
+            'internal_url' => 'grpc://test-kas.svc:8153',
+            'external_url' => 'wss://kas.example.com'
+          )
+        end
+
+        context 'when using a custom external hostname' do
+          let(:kas_values) do
+            default_kas_values.deep_merge!(
+              'global' => {
+                'hosts' => {
+                  'kas' => {
+                    'name' => 'kas.other.example.com'
+                  }
+                }
+              }
+            )
+          end
+
+          it 'uses the custom host for the external URL' do
+            expect(gitlab_yml(chart)).to include(
+              'external_url' => 'wss://kas.other.example.com'
+            )
+          end
+        end
+
+        context 'when using custom URLs' do
+          let(:kas_values) do
+            default_kas_values.deep_merge!(
+              'global' => {
+                'appConfig' => {
+                  'gitlab_kas' => {
+                    'externalUrl' => 'wss://custom-external-url.example.com',
+                    'internalUrl' => 'grpc://custom-internal-url.example.com'
+                  }
+                }
+              }
+            )
+          end
+
+          it 'uses the custom external URL' do
+            expect(gitlab_yml(chart)).to include(
+              'external_url' => 'wss://custom-external-url.example.com',
+              'internal_url' => 'grpc://custom-internal-url.example.com'
+            )
+          end
+        end
+
+        context 'when kas is fully disabled' do
+          let(:kas_values) do
+            default_kas_values.deep_merge!(
+              'global' => {
+                'kas' => {
+                  'enabled' => false
+                }
+              }
+            )
+          end
+
+          it 'is not present' do
+            expect(gitlab_yml(chart)).to be(nil)
+          end
+        end
+
+        context 'when kas chart is disabled, but gitlab_kas is enabled in the appConfig' do
+          let(:kas_values) do
+            default_kas_values.deep_merge!(
+              'global' => {
+                'kas' => {
+                  'enabled' => false
+                },
+                'appConfig' => {
+                  'gitlab_kas' => {
+                    'enabled' => true,
+                    'externalUrl' => 'wss://custom-external-url.example.com',
+                    'internalUrl' => 'grpc://custom-internal-url.example.com'
+                  }
+                }
+              }
+            )
+          end
+
+          it 'renders the custom values in gitlab.yml.erb' do
+            expect(gitlab_yml(chart)).to include(
+              'enabled' => true,
+              'external_url' => 'wss://custom-external-url.example.com',
+              'internal_url' => 'grpc://custom-internal-url.example.com'
+            )
           end
         end
       end
