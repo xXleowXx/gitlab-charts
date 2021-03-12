@@ -617,7 +617,7 @@ The `migration` property is optional and provides options related to the
 [migration](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#migration)
 of metadata from the filesystem to the metadata database.
 
-NOTE:
+WARNING:
 This is an experimental feature and _must not_ be used in production.
 
 NOTE:

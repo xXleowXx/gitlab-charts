@@ -730,7 +730,7 @@ describe 'checkConfig template' do
     let(:error_output) { 'Disabling filesystem metadata requires the metadata database to be enabled' }
 
     include_examples 'config validation',
-                     success_description: 'when migration.disablemirrorfs is true so does database.enabled',
-                     error_description: 'when migration.disablemirrorfs is true but database.enabled is not'
+                     success_description: 'when migration disablemirrorfs is true, with database enabled',
+                     error_description: 'when migration disablemirrorfs is true, with database disabled'
   end
 end
