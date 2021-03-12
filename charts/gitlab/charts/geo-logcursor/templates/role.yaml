@@ -4,10 +4,9 @@ kind: Role
 metadata:
   name: {{ template "gitlab.serviceAccount.name" . }}
 rules:
-- apiGroups: [""]
-  resources: ["secrets"]
-  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
-
+{{- if $.Values.rbac.role.rules }}
+{{- toYaml $.Values.rbac.role.rules | nindent 2 }}
+{{- end -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
