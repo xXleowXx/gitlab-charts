@@ -54,6 +54,8 @@ ingress:
   proxyConnectTimeout: {{ .Values.ingress.proxyConnectTimeout }}
   proxyReadTimeout: {{ .Values.ingress.proxyReadTimeout }}
   proxyBodySize: {{ .Values.ingress.proxyBodySize | quote }}
+common:
+  labels: {}
 deployment:
   annotations:
     {{- if .Values.deployment.annotations }}

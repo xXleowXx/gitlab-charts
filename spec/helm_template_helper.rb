@@ -62,6 +62,14 @@ class HelmTemplate
     @mapped.dig(item,'spec','template','spec','volumes')
   end
 
+  def labels(item)
+    @mapped.dig(item,'metadata','labels')
+  end
+
+  def template_labels(item)
+    @mapped.dig(item,'spec','template','metadata','labels')
+  end
+
   def find_volume(item, volume_name)
     volumes = volumes(item)
     volumes.keep_if { |volume| volume['name'] == volume_name }
