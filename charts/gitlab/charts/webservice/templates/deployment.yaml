@@ -209,6 +209,8 @@ spec:
               value: "{{ .puma.workerMaxMemory }}"
             - name: DISABLE_PUMA_WORKER_KILLER
               value: "{{ .puma.disableWorkerKiller }}"
+            - name: RUBY_GC_HEAP_INIT_SLOTS
+              value: "3000000"
             {{- else }}
             - name: UNICORN_MEMORY_MIN
               value: "{{ .unicorn.memory.min }}"
