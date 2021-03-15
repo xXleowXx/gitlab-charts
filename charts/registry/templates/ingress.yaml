@@ -28,7 +28,7 @@ spec:
         paths:
           - path: {{ coalesce $.Values.ingress.path $.Values.global.ingress.path }}
             backend:
-              serviceName: {{ template "fullname" . }}
+              serviceName: {{ template "registry.fullname" . }}
               servicePort: {{ .Values.service.externalPort }}
   {{- if (and $tlsSecret (eq (include "gitlab.ingress.tls.enabled" $) "true" )) }}
   tls:
