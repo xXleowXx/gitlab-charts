@@ -48,11 +48,6 @@ registry:
   issuer: {{ .Values.registry.tokenIssuer }}
   {{ if .Values.global.geo.registry.syncEnabled -}}
 <% notification_secret = YAML.load_file("/etc/gitlab/registry/notificationSecret") %>
-<% if notification_secret.class == Array %>
-<%   secret_string = notification_secret[0] %>
-<% else %>
-<%   secret_string = notification_secret %>
-<% end %>
-  notification_secret: <%= secret_string %>
+  notification_secret: <%= [notification_secret].flatten.first %>
   {{- end -}}
 {{- end -}}{{/* "gitlab.appConfig.registry.configuration" */}}
