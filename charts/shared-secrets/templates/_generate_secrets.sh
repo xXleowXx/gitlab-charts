@@ -51,7 +51,6 @@ function generate_secret_from_literals(){
   for arg in "${raw_args[@]}"; do
     local key=$(echo ${arg} | awk -F'=' '{print $1}')
     local value=$(echo ${arg} | awk -F'=' '{print $2}')
-    echo "key is ${key}, value is ${value}"
 
     keysValues+=( ["${key}"]="${value}" )
     secret_args+=("--from-literal=${key}=${value}")
