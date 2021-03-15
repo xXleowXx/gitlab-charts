@@ -63,6 +63,5 @@ endpoints:
       Authorization:
         secret: {{ template "gitlab.registry.notificationSecret.secret" $ }}
         key: {{ template "gitlab.registry.notificationSecret.key" $ }}
-{{- else -}}
 {{- end -}}
 {{- end -}}
