@@ -92,8 +92,4 @@ spec:
             {{- if .Values.redis.enabled -}}
             {{- include "gitlab.redis.secrets" . | nindent 12 }}
             {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
-      {{- end }}
 {{- end }}

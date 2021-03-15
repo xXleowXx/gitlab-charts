@@ -7,12 +7,15 @@ global:
   ingress: {}
   kas:
     enabled: false
+    service:
+      apiExternalPort: 8153 # port for connections from the GitLab backend
   redis:
     # host: '0.0.0.0'
     password: {}
   # hosts:
     # kas:
       # name: kas.example.com
+      # https: true
   # imagePullPolicy: IfNotPresent
 hpa:
   targetAverageValue: 100m
@@ -37,6 +40,7 @@ resources:
 service:
   externalPort: 8150
   internalPort: 8150
+  apiInternalPort: 8153
   type: ClusterIP
 metrics:
   enabled: true
