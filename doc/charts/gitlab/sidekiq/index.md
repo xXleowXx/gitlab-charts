@@ -406,7 +406,11 @@ these files in the GitLab source:
 1. [`ee/app/workers/all_queues.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/app/workers/all_queues.yml)
 
 NOTE:
-When [`cluster`](#cluster) is `false`, this must be an array of queue names as strings.
+In GitLab 14.0, the [`cluster`](#cluster) option will [no longer be
+supported](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/337). In
+previous versions, setting `cluster` to `false` would mean that `queues` should
+be an array of queue names as strings. It must now **always** be a single
+string.
 
 ### negateQueues
 
@@ -432,15 +436,14 @@ ignored.
 
 Currently defaults to `true`.
 
-When using Sidekiq Cluster, `queues` (or `negateQueues`) must be a string. When
-not using Sidekiq Cluster, they must be an array of strings. The latter option
-will [not be supported from GitLab
-14.0](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/337).
-
-NOTE:
 Unlike in other installation methods, `cluster` will never start
 more than one Sidekiq process inside a pod. To run additional Sidekiq processes,
 run additional pods.
+
+NOTE:
+This option will be [removed in GitLab
+14.0](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/337)
+with no option to disable this mode.
 
 ### Example `pod` entry
 
