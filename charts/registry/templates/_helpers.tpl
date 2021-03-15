@@ -71,7 +71,7 @@ Populate registry notifications
 */}}
 {{- define "registry.notifications.config" -}}
 {{- $geoNotifier := include "global.geo.registry.syncNotifier" . | fromYaml -}}
-{{- $notifications := mustMerge $.Values.global.registry.notifications $geoNotifier -}}
+{{- $notifications := merge $.Values.global.registry.notifications $geoNotifier -}}
 {{- if $notifications }}
 notifications:
   {{- if $notifications.events }}
@@ -126,7 +126,7 @@ Sensitive registry notification headers mounted as secrets
 */}}
 {{- define "registry.notifications.secrets" -}}
 {{- $geoNotifier := include "global.geo.registry.syncNotifier" . | fromYaml -}}
-{{- $notifications := mustMerge $.Values.global.registry.notifications $geoNotifier -}}
+{{- $notifications := merge $.Values.global.registry.notifications $geoNotifier -}}
 {{- if $notifications }}
   {{- $uniqSecrets := list -}}
   {{- $endpoints := concat (list) $notifications.endpoints $geoNotifier.endpoints | uniq -}}
