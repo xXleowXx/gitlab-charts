@@ -33,19 +33,46 @@ function label_secret(){
 function generate_secret_if_needed(){
   local secret_args=( "${@:2}")
   local secret_name=$1
+  if ! $(kubectl --namespace=$namespace get secret $secret_name > /dev/null 2>&1); then
+    kubectl --namespace=$namespace create secret generic $secret_name ${secret_args[@]}
+  else
+    echo "secret \"$secret_name\" already exists"
+  fi;
+  label_secret $secret_name
+}
+
+# Args: secretname, key=value pairs
+function generate_secret_from_literals(){
+  local secret_name=$1
+  local raw_args=( "${@:2}")
+  local secret_args=()
+  declare -A keysValues
+
+  for arg in "${raw_args[@]}"; do
+    local key=$(echo ${arg} | awk -F'=' '{print $1}')
+    local value=$(echo ${arg} | awk -F'=' '{print $2}')
+    echo "key is ${key}, value is ${value}"
+
+    keysValues+=( ["${key}"]="${value}" )
+    secret_args+=("--from-literal=${key}=${value}")
+  done
 
   if ! $(kubectl --namespace=$namespace get secret $secret_name > /dev/null 2>&1); then
     kubectl --namespace=$namespace create secret generic $secret_name ${secret_args[@]}
   else
     echo "secret \"$secret_name\" already exists. checking content."
-    for arg in "${secret_args[@]}"; do
-      from=$(echo -n "${arg}" | awk -F'=' '{print $1}')
-      key=$(echo -n "${arg}" | awk -F'=' '{print $2}')
-      desiredValue=$(echo -n "${arg}" | awk -F'=' '{print $3}' | base64 -w 0)
-      existingValue=$(kubectl --namespace=$namespace get secret $secret_name -ojsonpath="{.data.${key}}")
 
-      if [ -z "${from##*literal*}" ] && [ "${key}" != "" ] && [ "${existingValue}" == "" ]; then
+    for key in "${!keysValues[@]}"; do
+      local flags="--namespace=$namespace --allow-missing-template-keys=false"
+      if ! $(kubectl $flags get secret $secret_name -ojsonpath="{.data.${key}}" > /dev/null 2>&1); then
         echo "key \"${key}\" does not exist. patching it in."
+
+        # If desired value is an empty string, leave it as such. Otherwise, base64 encode it.
+        desiredValue=$(echo ${keysValues[${key}]})
+        if [ "${desiredValue}" != "" ]; then
+          desiredValue=$(echo "${desiredValue}" | base64 -w 0)
+        fi
+
         kubectl --namespace=$namespace patch secret ${secret_name} -p "{\"data\":{\"$key\":\"${desiredValue}\"}}"
       fi
     done
