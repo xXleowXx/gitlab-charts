@@ -1,5 +1,5 @@
 {{/* If the Container Registry metadata database is enabled, note it is not production ready */}}
-{{- if eq .Values.registry.database.enabled true }}
+{{- if eq $.Values.global.registry.database.enabled true }}
 WARNING: The Container Registry metadata database has been enabled. Please note that it is an experimental feature and must not be used in production.
 {{- end }}
 

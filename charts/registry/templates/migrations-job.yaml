@@ -1,4 +1,4 @@
-{{- if and .Values.enabled .Values.database.enabled .Values.migrations.enabled }}
+{{- if and .Values.enabled $.Values.global.registry.database.enabled .Values.migrations.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -90,6 +90,6 @@ spec:
           sources:
           - configMap:
               name: {{ template "registry.fullname" . }}
-          {{- include "gitlab.registry.psql.secret" . | nindent 10 }}
+          {{- include "gitlab.registry.dbSecret.projectedVolume" $ | nindent 10 }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end }}

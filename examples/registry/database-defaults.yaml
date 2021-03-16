@@ -2,6 +2,7 @@ postgresql:
   image:
     tag: 12
 
-registry:
-  database:
-    enabled: true
+global:
+  registry:
+    database:
+      enabled: true

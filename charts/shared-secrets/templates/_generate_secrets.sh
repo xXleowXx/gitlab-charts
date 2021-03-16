@@ -53,8 +53,12 @@ generate_secret_if_needed {{ template "gitlab.redis.password.secret" . }} --from
 # Postgres password
 generate_secret_if_needed {{ template "gitlab.psql.password.secret" . }} \
   --from-literal=postgresql-password=$(gen_random 'a-zA-Z0-9' 64) \
-  --from-literal=postgresql-postgres-password=$(gen_random 'a-zA-Z0-9' 64) \
-  --from-literal=postgresql-registry-password=$(gen_random 'a-zA-Z0-9' 64)
+  --from-literal=postgresql-postgres-password=$(gen_random 'a-zA-Z0-9' 64)
+{{ end }}
+
+{{ if $.Values.global.registry.database.enabled -}}
+# Registry database password
+generate_secret_if_needed {{ template "gitlab.registry.dbSecret.secret" . }} --from-literal={{ template "gitlab.registry.dbSecret.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
 
 # Gitlab shell
