@@ -358,8 +358,11 @@ foo:
 {{- end -}}
 ```
 
-And then pulling the above into a variable:
+And then pulling the above into a variable and configuration:
 
 ```plaintext
 {{- $fooVar := include "exampleTemplate" . | fromYaml -}}
+{{- $barVar := merge $.Values.global.some.config $fooVar -}}
+config:
+{{ $barVar }}
 ```
