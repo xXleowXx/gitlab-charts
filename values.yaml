@@ -383,6 +383,9 @@ global:
     gitlab_kas: {}
       # secret:
       # key:
+      # enabled:
+      # externalUrl:
+      # internalUrl:
 
     ## doc/charts/globals.md#omniauth
     omniauth:

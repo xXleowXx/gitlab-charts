@@ -95,15 +95,13 @@ spec:
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
             {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
           livenessProbe:
-            exec:
-              command:
-                - pgrep
-                - mail_room
+            httpGet:
+              path: /liveness
+              port: 8080
           readinessProbe:
             exec:
               command:
-                - pgrep
-                - mail_room
+                - /scripts/healthcheck
           lifecycle:
             preStop:
               exec:

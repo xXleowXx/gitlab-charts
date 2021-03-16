@@ -88,6 +88,7 @@ global:
 | `registry.servicePort` | String  | `registry`    | The named port of the `service` where the Registry server can be reached. |
 | `smartcard.name`       | String  | `smartcard`   | The hostname for smartcard authentication. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `kas.name`             | String  | `kas`         | The hostname for the KAS. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
+| `kas.https`            | Boolean | `false`       | If `hosts.https` or `kas.https` are `true`, the KAS external URL will use `wss://` instead of `ws://`. |
 | `pages.name`           | String  | `pages`       | The hostname for GitLab Pages. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `pages.https`          | String  |               | If `global.pages.https` or `global.hosts.pages.https` or `global.hosts.https` are `true`, then URL for GitLab Pages in the Project settings UI will use `https://` instead of `http://`. |
 
@@ -134,7 +135,7 @@ The only exception is when populating the [`gitlab/webservice` deployments setti
 
 ### Cloud provider LoadBalancers
 
-Various cloud providers' LoadBalancer implementations have an impact on how this the Ingress resources, and NGINX itself are configured as a part of this chart. The below table provides examples.
+Various cloud providers' LoadBalancer implementations have an impact on configuration of the Ingress resources and NGINX controller deployed as part of this chart. The next table provides examples.
 
 | Provider | Layer | Example snippet |
 | :-- | --: | :-- |
@@ -1097,6 +1098,8 @@ The incoming email settings are explained in the [command line options page](../
 
 ### KAS settings
 
+#### Custom secret
+
 One can optionally customize the KAS `secret` name as well and `key`, either by
 using Helm's `--set variable` option:
 
@@ -1105,7 +1108,7 @@ using Helm's `--set variable` option:
 --set global.appConfig.gitlab_kas.key=custom-secret-key \
 ```
 
-or by configuring your `values.yml`.
+or by configuring your `values.yml`:
 
 ```yaml
 global:
@@ -1116,6 +1119,49 @@ global:
 ```
 
 If you'd like to customize the secret value, refer to the [secrets documentation](../installation/secrets.md#gitlab-kas-secret).
+
+#### Custom URLs
+
+The URLs used for KAS by the GitLab backend can be customized
+using Helm's `--set variable` option:
+
+```shell
+--set global.appConfig.gitlab_kas.externalUrl="wss://custom-kas-url.example.com" \
+--set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
+```
+
+or by configuring your `values.yml`:
+
+```yaml
+global:
+  appConfig:
+    gitlab_kas:
+      externalUrl: "wss://custom-kas-url.example.com"
+      internalUrl: "grpc://custom-internal-url"
+```
+
+#### External KAS
+
+The GitLab backend can be made aware of an external KAS server (i.e. not
+managed by the chart) by explicitly enabling it and configuring the required
+URLs. You can do so using Helm's `--set variable` option:
+
+```shell
+--set global.appConfig.gitlab_kas.enabled=true \
+--set global.appConfig.gitlab_kas.externalUrl="wss://custom-kas-url.example.com" \
+--set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
+```
+
+or by configuring your `values.yml`:
+
+```yaml
+global:
+  appConfig:
+    gitlab_kas:
+      enabled: true
+      externalUrl: "wss://custom-kas-url.example.com"
+      internalUrl: "grpc://custom-internal-url"
+```
 
 ### LDAP
 
@@ -1257,6 +1303,19 @@ app_secret: 'APP SECRET'
 args:
   access_type: offline
   approval_prompt: ''
+```
+
+SAML configuration example:
+
+```yaml
+name: saml
+label: 'SAML'
+args:
+  assertion_consumer_service_url: 'https://gitlab.example.com/users/auth/saml/callback'
+  idp_cert_fingerprint: 'xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx'
+  idp_sso_target_url: 'https://SAML_IDP/app/xxxxxxxxx/xxxxxxxxx/sso/saml'
+  issuer: 'https://gitlab.example.com'
+  name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
 ```
 
 This content can be saved as `provider.yaml`, and then a secret created from it:
@@ -1725,6 +1784,48 @@ global:
 > This includes Prometheus, cert-manager, Redis, etc.
 
 ## Labels
+
+### Common Labels
+
+Labels can be applied to nearly all objects that are created by various objects
+by using the configuration `common.labels`. This can be applied under the
+`global` key, or under a specific charts' configuration. Example:
+
+```yaml
+global:
+  common:
+    labels:
+      environment: production
+gitlab:
+  gitlab-shell:
+    common:
+      labels:
+        foo: bar
+```
+
+With the above example configuration, nearly all components deployed by the Helm
+chart will be provided the label set `environment: production`. All components
+of the GitLab Shell chart will receive the label set `foo: bar`. Some charts
+allow for additional nesting. For example, the Sidekiq and Webservices charts
+allow for additional deployments depending on your configuration needs:
+
+```yaml
+gitlab:
+  sidekiq:
+    pods:
+      - name: pod-0
+        common:
+          labels:
+            baz: bat
+```
+
+In the above example, all components associated with the `pod-0` Sidekiq
+deployment will also recieve the label set `baz: bat`. Refer to the Sidekiq and
+Webservice charts for additional details.
+
+Some charts that we depend on are excluded from this label configuration. Only
+the [GitLab component sub-charts](gitlab/index.md) will receive these
+extra labels.
 
 ### Pod
 

@@ -2,6 +2,14 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.9.3 (2021-03-08)
+
+- No changes.
+
+## 4.9.2 (2021-03-04)
+
+- No changes.
+
 ## 4.9.1 (2021-02-23)
 
 - No changes.
@@ -58,6 +66,10 @@ entry.
 - Add outgoing email section to 'globals' docs. !1821
 
 
+## 4.8.5 (2021-03-04)
+
+- No changes.
+
 ## 4.8.4 (2021-02-11)
 
 - No changes.
@@ -107,6 +119,10 @@ entry.
 - Add tolerations for minio create bucket job. !1744 (David ALEXANDRE)
 - Add upgrade survey link to upgrade output. !1762
 
+
+## 4.7.8 (2021-03-04)
+
+- No changes.
 
 ## 4.7.7 (2021-02-11)
 
