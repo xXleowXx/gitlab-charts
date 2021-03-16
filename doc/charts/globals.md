@@ -513,7 +513,7 @@ global:
       ssl: {}
 ```
 
-For more details on `bucket`, `certificate`,  and `httpSecret` settings, see the documentation within the [registry chart](registry/index.md).
+For more details on `bucket`, `certificate`, and `httpSecret` settings, see the documentation within the [registry chart](registry/index.md).
 
 | Name                | Type    | Default | Description |
 |:-----------------   |:-------:|:------- |:----------- |
