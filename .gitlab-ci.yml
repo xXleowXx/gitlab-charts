@@ -48,8 +48,6 @@ stages:
   - qa
   - package
   - cleanup
-  - qa-manual
-  - qa-complete
 
 before_script:
   - source scripts/ci/autodevops.sh
@@ -765,7 +763,7 @@ release_package:
     refs:
       - master
 
-# QA jobs with Smoke and Reliable E2E suites
+# QA jobs for Smoke and Reliable E2E suites
 
 qa_gke:
   extends: .qa_branch
@@ -801,25 +799,10 @@ qa_eks_production:
   environment:
     name: eks_production/$CI_COMMIT_REF_NAME
 
-# QA jobs with Full E2E suites
-
-qa_gke_trigger_manual_full_suite:
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
-  stage: qa-manual
-  variables:
-    VARIABLES_FILE: "variables/review_gke"
-  environment:
-    name: gke_review/$CI_COMMIT_REF_NAME
-    on_stop: stop_review_gke
-  script: echo 'The job will trigger Full E2E suite against GKE'
-  when: manual
-  artifacts:
-    paths:
-    - variables
+# QA jobs for Full E2E suites
 
 qa_gke_manual_full_suite:
   extends: .qa_branch
-  stage: qa-complete
   parallel: 6
   variables:
     VARIABLES_FILE: "variables/review_gke"
@@ -827,25 +810,9 @@ qa_gke_manual_full_suite:
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_gke
-  needs: [ "qa_gke_trigger_manual_full_suite" ]
-
-qa_eks_trigger_manual_full_suite:
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
-  stage: qa-manual
-  variables:
-    VARIABLES_FILE: "variables/review_eks"
-  environment:
-    name: eks_review/$CI_COMMIT_REF_NAME
-    on_stop: stop_review_eks
-  script: echo 'The job will trigger Full E2E suite against EKS'
-  when: manual
-  artifacts:
-    paths:
-    - variables
 
 qa_eks_manual_full_suite:
   extends: .qa_branch
-  stage: qa-complete
   parallel: 6
   variables:
     VARIABLES_FILE: "variables/review_eks"
@@ -853,4 +820,3 @@ qa_eks_manual_full_suite:
   environment:
     name: eks_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_eks
-  needs: [ "qa_eks_trigger_manual_full_suite" ]
