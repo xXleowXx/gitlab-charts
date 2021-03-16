@@ -813,6 +813,9 @@ qa_gke_trigger_manual_full_suite:
     on_stop: stop_review_gke
   script: echo 'The job will trigger Full E2E suite against GKE'
   when: manual
+  artifacts:
+    paths:
+    - variables
 
 qa_gke_manual_full_suite:
   extends: .qa_branch
@@ -836,6 +839,9 @@ qa_eks_trigger_manual_full_suite:
     on_stop: stop_review_eks
   script: echo 'The job will trigger Full E2E suite against EKS'
   when: manual
+  artifacts:
+    paths:
+    - variables
 
 qa_eks_manual_full_suite:
   extends: .qa_branch
