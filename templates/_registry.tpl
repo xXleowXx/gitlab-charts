@@ -39,7 +39,7 @@ Return the registry's notification secret key
 Return the registry's notification mount
 */}}
 {{- define "gitlab.registry.notificationSecret.mount" -}}
-{{ if .Values.global.geo.registry.syncEnabled }}
+{{ if and .Values.global.geo.enabled .Values.global.geo.registry.syncEnabled }}
 - secret:
     name: {{ template "gitlab.registry.notificationSecret.secret" $ }}
     items:
@@ -52,7 +52,7 @@ Return the registry's notification mount
 When Geo + Container Registry syncing enabled, adds the following notifier
 */}}
 {{- define "global.geo.registry.syncNotifier" -}}
-{{- if .Values.global.geo.registry.syncEnabled -}}
+{{- if and .Values.global.geo.enabled .Values.global.geo.registry.syncEnabled -}}
 endpoints:
   - name: geo_event
     url: https://{{ "registry.hostname" }}/api/v4/container_registry_event/events

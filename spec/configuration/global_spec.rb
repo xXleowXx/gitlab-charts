@@ -5,10 +5,11 @@ require 'hash_deep_merge'
 
 describe 'global configuration' do
   let(:default_values) do
-    {
-      'certmanager-issuer' => { 'email' => 'test@example.com' },
-      'global' => {}
-    }
+    YAML.safe_load(%(
+      certmanager-issuer:
+        email: test@example.com
+      global: {}
+    ))
   end
 
   context 'required settings' do
@@ -25,20 +26,27 @@ describe 'global configuration' do
     end
   end
 
-  describe 'registry geo sync enabled' do
+  describe 'registry and geo sync enabled' do
     let(:registry_notifications) do
-      {
-        'global' => {
-          'geo' => {
-            'registry' => {
-              'syncEnabled' => true
-            }
-          }
-        }
-      }.deep_merge(default_values)
+      YAML.safe_load(%(
+        global:
+          geo:
+            enabled: true
+            role: primary
+            registry:
+              syncEnabled: true
+          postgresql:
+            install: false
+          psql:
+            host: geo-1.db.example.com
+            port: 5432
+            password:
+              secret: geo
+              key: postgresql-password
+      )).deep_merge(default_values)
     end
 
-    it 'configures the consumption of the secret' do
+    it 'configures the notification endpoint' do
       t = HelmTemplate.new(registry_notifications)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
       expect(t.find_projected_secret('Deployment/test-sidekiq-all-in-1-v1', 'init-sidekiq-secrets', 'test-registry-notification')).to be true
@@ -46,38 +54,6 @@ describe 'global configuration' do
       expect(t.find_projected_secret('Deployment/test-task-runner', 'init-task-runner-secrets', 'test-registry-notification')).to be true
       gitlab_config = t.dig('ConfigMap/test-sidekiq', 'data', 'gitlab.yml.erb')
       expect(gitlab_config).to include('notification_secret')
-    end
-  end
-
-  describe 'registry and geo sync enabled' do
-    let(:registry_notifications) do
-      {
-        'global' => {
-          'geo' => {
-            'enabled' => true,
-            'role' => 'primary',
-            'registry' => {
-              'syncEnabled' => true
-            }
-          },
-          'postgresql' => {
-            'install' => false
-          },
-          'psql' => {
-            'host' => 'geo-1.db.example.com',
-            'port' => '5432',
-            'password' => {
-              'secret' => 'geo',
-              'key' => 'postgresql-password'
-            }
-          }
-        }
-      }.deep_merge(default_values)
-    end
-
-    it 'configures the notification endpoint' do
-      t = HelmTemplate.new(registry_notifications)
-      expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
       config = t.dig('ConfigMap/test-registry', 'data', 'config.yml')
       config_yaml = YAML.safe_load(config, permitted_classes: [Symbol])
@@ -89,49 +65,37 @@ describe 'global configuration' do
 
   describe 'registry and geo sync enabled with other notifiers' do
     let(:registry_notifications) do
-      {
-        'global' => {
-          'geo' => {
-            'enabled' => true,
-            'role' => 'primary',
-            'registry' => {
-              'syncEnabled' => true
-            }
-          },
-          'postgresql' => {
-            'install' => false
-          },
-          'psql' => {
-            'host' => 'geo-1.db.example.com',
-            'port' => '5432',
-            'password' => {
-              'secret' => 'geo',
-              'key' => 'postgresql-password'
-            }
-          },
-          'registry' => {
-            'notifications' => {
-              'endpoints' => [{
-                'name' => 'FooListener',
-                'url' => 'https://foolistener.com/event',
-                'timeout' => '500ms',
-                'threshold' => '10',
-                'backoff' => '1s',
-                'headers' => {
-                  'FooBar' => ['1', '2'],
-                  'Authorization' => {
-                    'secret' => 'gitlab-registry-authorization-header'
-                  },
-                  'SpecificPassword' => {
-                    'secret' => 'gitlab-registry-specific-password',
-                    'key' => 'password'
-                  }
-                }
-              }]
-            }
-          }
-        }
-      }.deep_merge(default_values)
+      YAML.safe_load(%(
+        global:
+          geo:
+            enabled: true
+            role: primary
+            registry:
+              syncEnabled: true
+          postgresql:
+            install: false
+          psql:
+            host: geo-1.db.example.com
+            port: 5432
+            password:
+              secret: geo
+              key: postgresql-password
+          registry:
+            notifications:
+              endpoints:
+                - name: FooListener
+                  url: https://foolistener.com/event
+                  timeout: 500ms
+                  threshold: 10
+                  ackoff: 1s
+                  headers:
+                    FooBar: ['1', '2']
+                    Authorization:
+                      secret: gitlab-registry-authorization-header
+                    SpecificPassword:
+                      secret: gitlab-registry-specific-password
+                      key: password
+      )).deep_merge(default_values)
     end
 
     it 'all notifications are included' do
