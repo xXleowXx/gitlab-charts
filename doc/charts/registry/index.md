@@ -173,6 +173,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `database.pool.maxidle`                    | `0`                                          | The maximum number of connections in the idle connection pool. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means no idle connections. |
 | `database.pool.maxopen`                    | `0`                                          | The maximum number of open connections to the database. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means unlimited open connections. |
 | `database.pool.maxlifetime`                | `0`                                          | The maximum amount of time a connection may be reused. Expired connections may be closed lazily before reuse. Zero or not specified means unlimited reuse. |
+| `migration.disablemirrorfs`                | `false`                                      | When set to `true`, the registry does not write metadata to the filesystem. Must be used in combination with the metadata database. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
 | `serviceLabels`                            | `{}`                                         | Supplemental service labels                                                                          |
@@ -608,6 +609,23 @@ database:
     maxidle: 25
     maxopen: 25
     maxlifetime: 5m
+```
+
+### migration
+
+The `migration` property is optional and provides options related to the
+[migration](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#migration)
+of metadata from the filesystem to the metadata database.
+
+WARNING:
+This is an experimental feature and _must not_ be used in production.
+
+NOTE:
+This feature requires the [metadata database](#database) to be enabled.
+
+```yaml
+migration:
+  disablemirrorfs: true
 ```
 
 ## Garbage Collection
