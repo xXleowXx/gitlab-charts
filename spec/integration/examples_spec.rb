@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'helm_template_helper'
 
 describe 'example configurations' do
   root = File.join(__dir__, '..', '..')

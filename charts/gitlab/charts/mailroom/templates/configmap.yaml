@@ -9,6 +9,9 @@ metadata:
     {{- include "gitlab.commonLabels" . | nindent 4 }}
 data:
   mail_room.yml: |
+    :health_check:
+      :address: 0.0.0.0
+      :port: 8080
     :mailboxes:
       -
         {{- with .Values.global.appConfig.incomingEmail }}

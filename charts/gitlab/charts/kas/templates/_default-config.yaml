@@ -10,3 +10,7 @@ observability:
     address: ":{{ .Values.metrics.port }}"
 redis:
   {{- include "kas.redis" . | nindent 2 }}
+api:
+  listen:
+    address: ":{{ .Values.service.apiInternalPort }}"
+    authentication_secret_file: "/etc/kas/.gitlab_kas_secret"
