@@ -810,6 +810,7 @@ qa_gke_manual_full_suite:
   environment:
     name: gke_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_gke
+  when: manual
 
 qa_eks_manual_full_suite:
   extends: .qa_branch
@@ -820,3 +821,4 @@ qa_eks_manual_full_suite:
   environment:
     name: eks_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_eks
+  when: manual
