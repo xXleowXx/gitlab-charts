@@ -7,16 +7,15 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # GitLab Operator
 
 GitLab Operator is an implementation of the [Operator pattern](https://www.openshift.com/blog)
-for management of deployment lifecycle. This component provides a method of synchronizing and controlling various
+for management of deployment lifecycle. The creation of a GitLab Operator strengths the support of OpenShift from GitLab. This component also provides a method of synchronizing and controlling various
 stages of cloud-native GitLab installation/upgrade procedures. Using the Operator provides the ability to perform
 rolling upgrades without down time.
 
-Notice:
+WARNING:
+This functionality was Alpha and marked experimental. It is now [**deprecated**](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2210).
 
-The previous Operator project gitlab/gitlab-operator helm chart is now [**deprecated**](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2210), and will be removed in the future. Do not use in production.
+The prior [GitLab Operator](https://gitlab.com/gitlab-org/charts/components/gitlab-operator) was developed, but never passed alpha status or recommended for use. This operator is now deprecated, should not be used, and will be removed in the future.
 
+A new Operator is currently in development and will soon be released in beta soon. More information can be found [here.](https://gitlab.com/groups/gitlab-org/-/epics/3444)
 
-The [GitLab Operator](https://gitlab.com/gitlab-org/gl-openshift/gitlab-operator) is being actively developed, progressing towards an initial beta release soon. Progress can be followed in the [beta epic](https://gitlab.com/groups/gitlab-org/-/epics/3444).
-
-
-The GitLab Runner Operator is currently in production, and can be found [here](https://docs.gitlab.com/runner/install/openshift.html)
+Additionally, a [GitLab Runner-specific Operator](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/...) is generally available, allowing users to easily run GitLab CI jobs in OpenShift.
