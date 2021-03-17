@@ -395,6 +395,7 @@ spec:
               items:
                 - key: registry-auth.key
                   path: registry/gitlab-registry.key
+          {{- include "gitlab.registry.notificationSecret.mount" $ | nindent 10 -}}
           - secret:
               name: {{ template "gitlab.workhorse.secret" $ }}
               items:

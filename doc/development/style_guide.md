@@ -347,3 +347,22 @@ Example of assignment versus initialization (look close!)
 {{- $someVar -}}
 {{- end -}}
 ```
+
+Example of using a template:
+
+```plaintext
+{{- define "exampleTemplate" -}}
+foo:
+  bar:
+   baz: bat
+{{- end -}}
+```
+
+And then pulling the above into a variable and configuration:
+
+```plaintext
+{{- $fooVar := include "exampleTemplate" . | fromYaml -}}
+{{- $barVar := merge $.Values.global.some.config $fooVar -}}
+config:
+{{ $barVar }}
+```
