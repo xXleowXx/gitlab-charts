@@ -9,7 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 GitLab Operator is an implementation of the [Operator pattern](https://www.openshift.com/blog)
 for management of deployment lifecycle. The creation of a GitLab Operator strengths the support of OpenShift from GitLab. This component also provides a method of synchronizing and controlling various
 stages of cloud-native GitLab installation/upgrade procedures. Using the Operator provides the ability to perform
-rolling upgrades without down time.
+rolling upgrades with minmal down time.
 
 WARNING:
 This functionality was Alpha and marked experimental. It is now [**deprecated**](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2210).
