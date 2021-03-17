@@ -455,7 +455,7 @@ registry:
 Ensure Registry migration is configured properly and dependencies are met
 */}}
 {{- define "gitlab.checkConfig.registry.migration" -}}
-{{-   if and $.Values.registry.migration.disablemirrorfs (not $.Values.registry.database.enabled) }}
+{{-   if and $.Values.registry.migration.disablemirrorfs (not $.Values.global.registry.database.enabled) }}
 registry:
     Disabling filesystem metadata requires the metadata database to be enabled.
     See https://docs.gitlab.com/charts/charts/registry#migration
