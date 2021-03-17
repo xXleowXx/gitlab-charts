@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.9.4 (2021-03-17)
+
+### Changed (1 change)
+
+- GitLab Runner to 0.26.0. !1858
+
+
 ## 4.9.3 (2021-03-08)
 
 - No changes.
