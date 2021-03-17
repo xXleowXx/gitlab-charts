@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # GitLab Operator
 
 GitLab Operator is an implementation of the [Operator pattern](https://www.openshift.com/blog)
-for management of deployment lifecycle. The creation of a GitLab Operator strengths the support of OpenShift from GitLab. This component also provides a method of synchronizing and controlling various
+for managing the lifecycle and upgrades of a GitLab instance. The GitLab Operator strengthens the support of OpenShift from GitLab, but is intended to be as native to Kubernetes as for OpenShift. The GitLab Operator provides a method of synchronizing and controlling various
 stages of cloud-native GitLab installation/upgrade procedures. Using the Operator provides the ability to perform
 rolling upgrades with minmal down time.
 
