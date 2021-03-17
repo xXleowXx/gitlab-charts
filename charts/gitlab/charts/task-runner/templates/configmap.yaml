@@ -108,6 +108,9 @@ data:
         {{- if .Values.extra }}
         {{- toYaml .Values.extra | nindent 8 }}
         {{- end }}
+  registry.yml: |
+    version: 0.1
+    {{- include "registry.database.config" $ | nindent 4 }}
   configure: |
     {{- include "gitlab.scripts.configure.secrets" (dict "required" "shell gitaly registry rails-secrets") | nindent 4 -}}
     {{- include "gitlab.psql.ssl.initScript" . | nindent 4 }}
@@ -140,6 +143,10 @@ data:
       mv "/${secret_dir}/objectstorage/.s3cfg" "/${secret_dir}/.s3cfg"
     fi
     {{- end }}
+    # Insert Database password, if enabled
+    if [ -f "/${secret_dir}/registry/database_password" ] ; then
+      sed -i -e 's@DB_PASSWORD_FILE@'"$(cat /${secret_dir}/registry/database_password)"'@' /${secret_dir}/registry/config.yml
+    fi
   configure-gsutil: |
     # The following script is used to configure gsutil when creating backups
     # It provides inputs to the `gsutil config -e` prompt as follows:

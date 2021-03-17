@@ -132,6 +132,8 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
+            - name: REGISTRY_CONFIG_FILE
+              value: '/etc/gitlab/registry/config.yml'
             {{- if eq .Values.backups.objectStorage.backend "gcs" }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: '/etc/gitlab/objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}'
@@ -213,6 +215,18 @@ spec:
               items:
                 - key: registry-auth.key
                   path: registry/gitlab-registry.key
+          {{- if $.Values.global.registry.database.enabled }}
+          - secret:
+              name: {{ include "gitlab.registry.dbSecret.secret" . }}
+              items:
+                - key: {{ include "gitlab.registry.dbSecret.key" . }}
+                  path: registry/database_password
+          {{- end }}
+          - configMap:
+              name: {{ template "fullname" . }}
+              items:
+                - key: "registry.yml"
+                  path: registry/config.yml
           {{- if or .Values.backups.objectStorage.config (not (or .Values.global.minio.enabled .Values.global.appConfig.object_store.enabled)) }}
           - secret:
               name: {{ required "A valid backups.objectStorage.config.secret is needed!" .Values.backups.objectStorage.config.secret }}
