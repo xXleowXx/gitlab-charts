@@ -100,7 +100,11 @@ serviceAccount:
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
   # name:
-rbac: {}
+rbac:
+  create: false
+  role:
+    rules: {}
+
 
 networkpolicy:
   enabled: false
