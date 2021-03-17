@@ -451,6 +451,11 @@ global:
         # clientKey:
         # clientCertificate:
         # serverCA:
+    registry:
+      syncEnabled: false
+      syncSecret: {}
+        # secret: <release-name>-registry-notification
+        # key: secret
 
   ## doc/charts/gitlab/kas/index.md
   kas:
