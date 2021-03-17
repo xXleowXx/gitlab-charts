@@ -43,9 +43,9 @@ database:
 {{/*
 Return Registry's database secret entry as a projected volume
 */}}
-{{- define "gitlab.registry.dbSecret.projectedVolume" -}}
+{{- define "gitlab.registry.database.password.projectedVolume" -}}
 - secret:
-    name: {{ default (printf "%s-registry-dbsecret" .Release.Name) .Values.database.password.secret }}
+    name: {{ default (printf "%s-registry-database-password" .Release.Name) .Values.database.password.secret }}
     items:
       - key: {{ .Values.database.password.key }}
         path: database_password

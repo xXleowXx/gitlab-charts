@@ -285,8 +285,8 @@ database:
   enabled: false
   user: registry
   password:
-    # secret: RELEASE_NAME-postgresql-password
-    key: secret
+    # secret: RELEASE_NAME-registry-database-password
+    key: password
   name: registry
   sslmode: disable
   ssl: {}

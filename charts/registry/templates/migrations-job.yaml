@@ -79,6 +79,6 @@ spec:
           sources:
           - configMap:
               name: {{ template "registry.fullname" . }}
-          {{- include "gitlab.registry.dbSecret.projectedVolume" . | nindent 10 }}
+          {{- include "gitlab.registry.database.password.projectedVolume" . | nindent 10 }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end }}

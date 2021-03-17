@@ -667,7 +667,7 @@ there will be some variation in how you connect.
 1. Create the secret with the database password:
 
    ```shell
-   kubectl create secret generic RELEASE_NAME-registry-dbsecret --from-literal=secret=randomstring
+   kubectl create secret generic RELEASE_NAME-registry-database-password --from-literal=password=randomstring
    ```
 
 1. Log into your database instance:
@@ -688,12 +688,10 @@ there will be some variation in how you connect.
 
 1. Set the database user password.
 
-   By default, the `shared-secrets` chart will generate a secret for you.
-
    1. Fetch the password:
 
       ```shell
-      kubectl get secret RELEASE_NAME-registry-dbsecret -o jsonpath="{.data.secret}" | base64 --decode
+      kubectl get secret RELEASE_NAME-registry-database-password -o jsonpath="{.data.password}" | base64 --decode
       ```
 
    1. Set the password in the `psql` prompt:
