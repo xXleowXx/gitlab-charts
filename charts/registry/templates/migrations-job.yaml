@@ -49,20 +49,6 @@ spec:
           {{- toYaml .Values.init.resources | nindent 10 }}
         env:
         {{- include "gitlab.extraEnv" . | nindent 8 }}
-      - name: dependencies
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
-        env:
-        - name: BYPASS_SCHEMA_VERSION
-          value: '1'
-        {{- include "gitlab.extraEnv" . | nindent 8 }}
-        command: ["/scripts/wait-for-deps"]
-        volumeMounts:
-          - name: registry-server-config
-            mountPath: /etc/docker/registry/
-            readOnly: true
-        resources:
-          {{- toYaml .Values.init.resources | nindent 10 }}
       restartPolicy: OnFailure
       {{- include "pullsecrets" .Values.image | indent 6 }}
       containers:
@@ -71,6 +57,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
         args:
+        - /scripts/wait-for-deps
         - /scripts/db-migrate
         volumeMounts:
           - name: registry-server-config
@@ -80,6 +67,8 @@ spec:
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         env:
+        - name: BYPASS_SCHEMA_VERSION
+          value: 'true'
         {{- include "gitlab.extraEnv" . | nindent 8 }}
       volumes:
       - name: registry-server-config
