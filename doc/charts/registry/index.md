@@ -162,6 +162,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the credentials are stored                                                             |
 | `profiling.stackdriver.service`            | `RELEASE-registry` (templated Service name)| Name of the Stackdriver service to record profiles under                                             |
 | `profiling.stackdriver.projectid`          | GCP project where running                    | GCP project to report profiles to                                                                    |
+| `migration.disablemirrorfs`                | `false`                                      | When set to `true`, the registry does not write metadata to the filesystem. Must be used in combination with the metadata database. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
 | `serviceLabels`                            | `{}`                                         | Supplemental service labels                                                                          |
@@ -660,6 +661,23 @@ migrations:
   enabled: true
   activeDeadlineSeconds: 3600
   backoffLimit: 6
+```
+
+### migration
+
+The `migration` property is optional and provides options related to the
+[migration](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#migration)
+of metadata from the filesystem to the metadata database.
+
+WARNING:
+This is an experimental feature and _must not_ be used in production.
+
+NOTE:
+This feature requires the [metadata database](#database) to be enabled.
+
+```yaml
+migration:
+  disablemirrorfs: true
 ```
 
 ## Garbage Collection

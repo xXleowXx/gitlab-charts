@@ -45,6 +45,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.database" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.migration" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
@@ -449,6 +450,18 @@ registry:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.database */}}
+
+{{/*
+Ensure Registry migration is configured properly and dependencies are met
+*/}}
+{{- define "gitlab.checkConfig.registry.migration" -}}
+{{-   if and $.Values.registry.migration.disablemirrorfs (not $.Values.registry.database.enabled) }}
+registry:
+    Disabling filesystem metadata requires the metadata database to be enabled.
+    See https://docs.gitlab.com/charts/charts/registry#migration
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.migration */}}
 
 {{/*
 Ensure Puma is used when the dependency proxy is enabled
