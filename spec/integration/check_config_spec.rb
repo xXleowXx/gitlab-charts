@@ -711,9 +711,12 @@ describe 'checkConfig template' do
           image:
             tag: 12
 
+        global:
+          registry:
+            database:
+              enabled: true
+
         registry:
-          database:
-            enabled: true
           migration:
             disablemirrorfs: true
       )).merge(default_required_values)
