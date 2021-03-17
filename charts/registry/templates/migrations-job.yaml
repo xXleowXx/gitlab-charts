@@ -8,8 +8,8 @@ metadata:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
     {{- include "gitlab.commonLabels" . | nindent 4 }}
 spec:
-  activeDeadlineSeconds: {{ .Values.migrations.activeDeadlineSeconds }}
-  backoffLimit: {{ .Values.migrations.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.database.migrations.activeDeadlineSeconds }}
+  backoffLimit: {{ .Values.database.migrations.backoffLimit }}
   template:
     metadata:
       {{- if .Values.annotations }}
