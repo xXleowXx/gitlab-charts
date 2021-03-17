@@ -41,17 +41,6 @@ database:
 {{- end -}}
 
 {{/*
-Returns the K8s Secret definition for the PostgreSQL password.
-*/}}
-{{- define "gitlab.registry.psql.secret" -}}
-- secret:
-    name: {{ default (include "gitlab.psql.password.secret" . ) .Values.database.password.secret }}
-    items:
-      - key: {{ .Values.database.password.key }}
-        path: database_password
-{{- end -}}
-
-{{/*
 Return PostgreSQL SSL secret name
 */}}
 {{- define "gitlab.registry.psql.ssl.secret" -}}
@@ -65,8 +54,7 @@ Return Registry's database secret entry as a projected volume
 - secret:
     name: {{ default (printf "%s-registry-dbsecret" .Release.Name) .Values.database.password.secret }}
     items:
-      - key: {{ include "gitlab.registry.dbSecret.key" . }}
-      - key: {{- default "secret" .Values.database.password.key | quote -}}
+      - key: {{ .Values.database.password.key }}
         path: database_password
 {{- end -}}
 
