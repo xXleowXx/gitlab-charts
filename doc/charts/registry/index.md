@@ -151,9 +151,6 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
 | `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
-| `migrations.enabled`                       | `true`                                       | Enable the migrations job to automatically run migrations upon initial deployment.                   |
-| `migrations.activeDeadlineSeconds`         | `3600`                                       | Set the [activeDeadlineSeconds](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
-| `migrations.backoffLimit`                  | `6`                                          | Set the [backoffLimit](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
 | `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
 | `reporting.sentry.dsn`                     |                                              | The Sentry DSN (Data Source Name)                                                                    |
 | `reporting.sentry.environment`             |                                              | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/environments/)                 |
@@ -180,6 +177,9 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `database.pool.maxidle`                    | `0`                                          | The maximum number of connections in the idle connection pool. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means no idle connections. |
 | `database.pool.maxopen`                    | `0`                                          | The maximum number of open connections to the database. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means unlimited open connections. |
 | `database.pool.maxlifetime`                | `0`                                          | The maximum amount of time a connection may be reused. Expired connections may be closed lazily before reuse. Zero or not specified means unlimited reuse. |
+| `database.migrations.enabled`              | `true`                                       | Enable the migrations job to automatically run migrations upon initial deployment and upgrades of the Chart. Note that migrations can also be run manually from within any running Registry pods. |
+| `database.migrations.activeDeadlineSeconds` | `3600`                                      | Set the [activeDeadlineSeconds](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
+| `database.migrations.backoffLimit`         | `6`                                          | Set the [backoffLimit](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
 | `migration.disablemirrorfs`                | `false`                                      | When set to `true`, the registry does not write metadata to the filesystem. Must be used in combination with the metadata database. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
@@ -648,6 +648,10 @@ database:
     maxidle: 25
     maxopen: 25
     maxlifetime: 5m
+  migrations:
+    enabled: true
+    activeDeadlineSeconds: 3600
+    backoffLimit: 6
 ```
 
 #### Creating the database
@@ -703,21 +707,6 @@ there will be some variation in how you connect.
    ```sql
    CREATE DATABASE registry WITH OWNER registry;
    ```
-
-## migrations
-
-The `migrations` property is optional and enables the migrations job.
-
-NOTE:
-The migrations job will run upon the initital release and any future upgrades of the Chart.
-Migrations can also be executed directly within any of the running Registry pods.
-
-```yaml
-migrations:
-  enabled: true
-  activeDeadlineSeconds: 3600
-  backoffLimit: 6
-```
 
 ### migration
 
