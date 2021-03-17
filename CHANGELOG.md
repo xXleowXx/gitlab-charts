@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.9.4 (2021-03-17)
+
+### Changed (1 change)
+
+- GitLab Runner to 0.26.0. !1858
+
+
 ## 4.9.3 (2021-03-08)
 
 - No changes.
@@ -66,6 +73,10 @@ entry.
 - Add outgoing email section to 'globals' docs. !1821
 
 
+## 4.8.6 (2021-03-17)
+
+- No changes.
+
 ## 4.8.5 (2021-03-04)
 
 - No changes.
@@ -119,6 +130,10 @@ entry.
 - Add tolerations for minio create bucket job. !1744 (David ALEXANDRE)
 - Add upgrade survey link to upgrade output. !1762
 
+
+## 4.7.9 (2021-03-17)
+
+- No changes.
 
 ## 4.7.8 (2021-03-04)
 
