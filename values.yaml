@@ -33,7 +33,7 @@ global:
   edition: ee
 
   ## doc/charts/globals.md#gitlab-version
-  # gitlabVersion: master
+  gitlabVersion: add-gitlab-registry-command
 
   ## doc/charts/globals.md#application-resource
   application:
