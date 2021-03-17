@@ -145,7 +145,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
 | `image.repository`                         | `registry`                                   | Registry image                                                                                       |
-| `image.tag`                                | `v3.2.0-gitlab`                              | Version of the image to use                                                                          |
+| `image.tag`                                | `v3.2.1-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
@@ -237,7 +237,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v3.2.0-gitlab'`
+- `tag: 'v3.2.1-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
@@ -341,6 +341,38 @@ To create this secret manually:
 ```shell
 kubectl create secret generic gitlab-registry-httpsecret --from-literal=secret=strongrandomstring
 ```
+
+### Notification Secret
+
+Notification Secret is utilized for Geo to help manage syncing Container
+Registry data between primary and secondary sites.
+
+The content of the key this references correlates to the `http.secret` value of
+[registry](https://hub.docker.com/_/registry/). This value should be populated with
+a cryptographically generated random string.
+
+The `notificationSecret` secret object will automatically create this secret if
+not provided.
+
+To create this secret manually:
+
+```shell
+kubectl create secret generic gitlab-registry-notification --from-literal=secret=[\"strongrandomstring\"]
+```
+
+Then proceed to set
+
+```yaml
+global:
+  geo:
+    registry:
+      syncEnabled: true
+      syncSecret:
+        secret: gitlab-registry-notification
+        key: secret
+```
+
+Ensuring the `secret` value is set to the name of the secret created above
 
 ### authEndpoint
 

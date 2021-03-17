@@ -158,6 +158,11 @@ generate_secret_if_needed {{ template "gitlab.workhorse.secret" . }} --from-lite
 # Registry http.secret secret
 generate_secret_if_needed {{ template "gitlab.registry.httpSecret.secret" . }} --from-literal={{ template "gitlab.registry.httpSecret.key" . }}=$(gen_random 'a-z0-9' 128 | base64 -w 0)
 
+# Container Registry notification_secret
+{{ if and .Values.global.geo.enabled .Values.global.geo.registry.syncEnabled }}
+generate_secret_if_needed {{ template "gitlab.registry.notificationSecret.secret" . }} --from-literal={{ template "gitlab.registry.notificationSecret.key" . }}=[\"$(gen_random 'a-zA-Z0-9' 32)\"]
+{{ end }}
+
 {{ if .Values.global.grafana.enabled -}}
 # Grafana password
 generate_secret_if_needed "gitlab-grafana-initial-password" --from-literal=password=$(gen_random 'a-zA-Z0-9' 64)
