@@ -36,17 +36,6 @@ Return Registry's database secret key
 {{- end -}}
 
 {{/*
-Return Praefect's database secret entry as a projected volume
-*/}}
-{{- define "gitlab.registry.dbSecret.projectedVolume" -}}
-- secret:
-    name: {{ include "gitlab.registry.dbSecret.secret" . }}
-    items:
-      - key: {{ include "gitlab.registry.dbSecret.key" . }}
-        path: database_password
-{{- end -}}
-
-{{/*
 Return the registry's notification secret name
 */}}
 {{- define "gitlab.registry.notificationSecret.secret" -}}

@@ -41,6 +41,17 @@ database:
 {{- end -}}
 
 {{/*
+Return Praefect's database secret entry as a projected volume
+*/}}
+{{- define "gitlab.registry.dbSecret.projectedVolume" -}}
+- secret:
+    name: {{ include "gitlab.registry.dbSecret.secret" . }}
+    items:
+      - key: {{ include "gitlab.registry.dbSecret.key" . }}
+        path: database_password
+{{- end -}}
+
+{{/*
 Return PostgreSQL SSL secret name
 */}}
 {{- define "gitlab.registry.psql.ssl.secret" -}}
