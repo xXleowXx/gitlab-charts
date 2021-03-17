@@ -502,39 +502,9 @@ global:
     certificate:
     httpSecret:
     notifications: {}
-    database:
-      enabled: true
-      user: registry
-      password:
-        secret: custom-registry-dbsecret
-        key: secret
-      name: registry
-      sslmode: disable
-      ssl: {}
 ```
 
 For more details on `bucket`, `certificate`, and `httpSecret` settings, see the documentation within the [registry chart](registry/index.md).
-
-| Name                | Type    | Default | Description |
-|:-----------------   |:-------:|:------- |:----------- |
-| `database.enabled`  | Boolean | `false` | Enable metadata database. This is an experimental feature and must not be used in production environments. |
-| `database.host`     | String  | `global.psql.host` | The database server hostname. |
-| `database.port`     | Integer | `global.psql.port` | The database server port. |
-| `database.user`     | String  | `registry` | The database username. |
-| `database.password.secret` | String | `RELEASE_NAME-registry-dbsecret` | Name of the secret containing the database password. |
-| `database.password.key`    | String | `postgresql-registry-password`   | Secret key in which the database password is stored. |
-| `database.name`            | String | `registry` | The database name. |
-| `database.sslmode`         | String | `disable` | The SSL mode. Can be one of `disable`, `allow`, `prefer`, `require`, `verify-ca` or `verify-full`. |
-| `database.ssl.secret`      | String | `global.psql.ssl.secret` | A secret containing client certificate, key and certificate authority. Defaults to the main PostgreSQL SSL secret. |
-| `database.ssl.clientCertificate` | String | `global.psql.ssl.clientCertificate` | The key inside the secret referring the client certificate. |
-| `database.ssl.clientKey`         | String | `global.psql.ssl.clientKey`         | The key inside the secret referring the client key.
-| `database.ssl.serverCA`          | String | `global.psql.ssl.serverCA`          | The key inside the secret referring the certificate authority (CA). |
-| `database.connecttimeout`        | Integer |                                    | Maximum time to wait for a connection. Zero or not specified means waiting indefinitely. |
-| `database.draintimeout`          | Integer |                                    | Maximum time to wait to drain all connections on shutdown. Zero or not specified means waiting indefinitely. |
-| `database.preparedstatements`    | Boolean |                                    | Enable prepared statements. Disabled by default for compatibility with PgBouncer. |
-| `database.pool.maxidle`          | Integer |                                    | The maximum number of connections in the idle connection pool. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means no idle connections. |
-| `database.pool.maxopen`          | Integer |                                    | The maximum number of open connections to the database. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means unlimited open connections. |
-| `database.pool.maxlifetime`      | Integer |                                    | The maximum amount of time a connection may be reused. Expired connections may be closed lazily before reuse. Zero or not specified means unlimited reuse. |
 
 ### notifications
 

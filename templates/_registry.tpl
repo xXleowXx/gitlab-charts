@@ -22,20 +22,6 @@ Return the registry's httpSecert secret key
 {{- end -}}
 
 {{/*
-Returns Registry's database secret name
-*/}}
-{{- define "gitlab.registry.dbSecret.secret" -}}
-{{ default (printf "%s-registry-dbsecret" .Release.Name) .Values.global.registry.database.password.secret }}
-{{- end -}}
-
-{{/*
-Return Registry's database secret key
-*/}}
-{{- define "gitlab.registry.dbSecret.key" -}}
-{{- default "secret" .Values.global.registry.database.password.key | quote -}}
-{{- end -}}
-
-{{/*
 Return the registry's notification secret name
 */}}
 {{- define "gitlab.registry.notificationSecret.secret" -}}

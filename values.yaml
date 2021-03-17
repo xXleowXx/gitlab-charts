@@ -507,18 +507,6 @@ global:
       #         secret: gitlab-registry-specific-password
       #         key: password
       # events: {}
-    # Disable metadata database by default
-    # NOTE: This is an experimental feature and must not be used in production.
-    # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database
-    database:
-      enabled: false
-      user: registry
-      password: {}
-        # secret: RELEASE_NAME-registry-dbsecret
-        # key: secret
-      name: registry
-      sslmode: disable
-      ssl: {}
 
   pages:
     enabled: false

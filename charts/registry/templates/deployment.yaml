@@ -86,7 +86,7 @@ spec:
             {{- toYaml .Values.init.resources | nindent 12 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
-        {{- if $.Values.global.registry.database.enabled }}
+        {{- if .Values.database.enabled }}
         - name: dependencies
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
@@ -181,7 +181,7 @@ spec:
                   path: profiling-key.json
           {{- end }}
           {{- include "registry.notifications.secrets" $ | nindent 10 }}
-          {{- if .Values.global.registry.database.enabled -}}
+          {{- if .Values.database.enabled -}}
           {{-   include "gitlab.registry.dbSecret.projectedVolume" . | nindent 10 }}
           {{-   include "gitlab.registry.psql.ssl" . | nindent 10 }}
           {{- end -}}

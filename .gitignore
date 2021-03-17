@@ -7,4 +7,3 @@ requirements.lock
 gems
 .bundle
 build
-spec/examples.txt

@@ -162,6 +162,24 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `profiling.stackdriver.credentials.key`    | `credentials`                                | Secret key in which the credentials are stored                                                             |
 | `profiling.stackdriver.service`            | `RELEASE-registry` (templated Service name)| Name of the Stackdriver service to record profiles under                                             |
 | `profiling.stackdriver.projectid`          | GCP project where running                    | GCP project to report profiles to                                                                    |
+| `database.enabled`                         | `false`                                      | Enable metadata database. This is an experimental feature and must not be used in production environments. |
+| `database.host`                            | `global.psql.host`                           | The database server hostname. |
+| `database.port`                            | `global.psql.port`                           | The database server port. |
+| `database.user`                            |                                              | The database username. |
+| `database.password.secret`                 | `gitlab-postgresql-password`                 | Name of the secret containing the database password. Defaults to the main PostgreSQL password secret. |
+| `database.password.key`                    | `postgresql-registry-password`               | Secret key in which the database password is stored. |
+| `database.name`                            |                                              | The database name. |
+| `database.sslmode`                         |                                              | The SSL mode. Can be one of `disable`, `allow`, `prefer`, `require`, `verify-ca` or `verify-full`. |
+| `database.ssl.secret`                      | `global.psql.ssl.secret`                     | A secret containing client certificate, key and certificate authority. Defaults to the main PostgreSQL SSL secret. |
+| `database.ssl.clientCertificate`           | `global.psql.ssl.clientCertificate`          | The key inside the secret referring the client certificate. |
+| `database.ssl.clientKey`                   | `global.psql.ssl.clientKey`                  | The key inside the secret referring the client key.
+| `database.ssl.serverCA`                    | `global.psql.ssl.serverCA`                   | The key inside the secret referring the certificate authority (CA). |
+| `database.connecttimeout`                  | `0`                                          | Maximum time to wait for a connection. Zero or not specified means waiting indefinitely. |
+| `database.draintimeout`                    | `0`                                          | Maximum time to wait to drain all connections on shutdown. Zero or not specified means waiting indefinitely. |
+| `database.preparedstatements`              | `false`                                      | Enable prepared statements. Disabled by default for compatibility with PgBouncer. |
+| `database.pool.maxidle`                    | `0`                                          | The maximum number of connections in the idle connection pool. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means no idle connections. |
+| `database.pool.maxopen`                    | `0`                                          | The maximum number of open connections to the database. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means unlimited open connections. |
+| `database.pool.maxlifetime`                | `0`                                          | The maximum amount of time a connection may be reused. Expired connections may be closed lazily before reuse. Zero or not specified means unlimited reuse. |
 | `migration.disablemirrorfs`                | `false`                                      | When set to `true`, the registry does not write metadata to the filesystem. Must be used in combination with the metadata database. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
@@ -641,6 +659,12 @@ Follow the steps below to manually create the database and role.
 NOTE:
 These instructions assume you are using the bundled PostgreSQL server. If you are using your own server,
 there will be some variation in how you connect.
+
+1. Create the secret with the database password:
+
+   ```shell
+   kubectl create secret generic RELEASE_NAME-registry-dbsecret --from-literal=secret=randomstring
+   ```
 
 1. Log into your database instance:
 

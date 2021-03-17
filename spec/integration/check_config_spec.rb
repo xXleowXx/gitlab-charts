@@ -641,10 +641,9 @@ describe 'checkConfig template' do
           image:
             tag: 12
 
-        global:
-          registry:
-            database:
-              enabled: true
+        registry:
+          database:
+            enabled: true
       )).merge(default_required_values)
     end
 
@@ -654,10 +653,9 @@ describe 'checkConfig template' do
           image:
             tag: 11
 
-        global:
-          registry:
-            database:
-              enabled: true
+        registry:
+          database:
+            enabled: true
       )).merge(default_required_values)
     end
 
@@ -675,11 +673,10 @@ describe 'checkConfig template' do
           image:
             tag: 12
 
-        global:
-          registry:
-            database:
-              enabled: true
-              sslmode: disable
+        registry:
+          database:
+            enabled: true
+            sslmode: disable
       )).merge(default_required_values)
     end
 
@@ -689,11 +686,10 @@ describe 'checkConfig template' do
           image:
             tag: 12
 
-        global:
-          registry:
-            database:
-              enabled: true
-              sslmode: testing
+        registry:
+          database:
+            enabled: true
+            sslmode: testing
       )).merge(default_required_values)
     end
 
@@ -711,12 +707,9 @@ describe 'checkConfig template' do
           image:
             tag: 12
 
-        global:
-          registry:
-            database:
-              enabled: true
-
         registry:
+          database:
+            enabled: true
           migration:
             disablemirrorfs: true
       )).merge(default_required_values)

@@ -283,6 +283,19 @@ profiling:
 serviceAccount:
   create: false
 
+# Disable metadata database by default
+# NOTE: This is an experimental feature and must not be used in production.
+# https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database
+database:
+  enabled: false
+  user: registry
+  password: {}
+    # secret: RELEASE_NAME-postgresql-password
+    # key: secret
+  name: registry
+  sslmode: disable
+  ssl: {}
+
 # Configuration settings to support the migration of large registries to the metadata database.
 # NOTE: This is an experimental feature and must not be used in production.
 # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#migration
