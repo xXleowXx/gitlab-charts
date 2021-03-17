@@ -14,7 +14,7 @@ rolling upgrades with minmal down time.
 WARNING:
 This functionality was Alpha and marked experimental. It is now [**deprecated**](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2210).
 
-The prior [GitLab Operator](https://gitlab.com/gitlab-org/charts/components/gitlab-operator) was developed, but never passed alpha status or recommended for use. This operator is now deprecated, should not be used, and will be removed in the future.
+The prior [GitLab Operator](https://gitlab.com/gitlab-org/charts/components/gitlab-operator) was developed, but never passed alpha status or recommended for use. That operator is now deprecated, should not be used, and will be removed in the future.
 
 A new Operator is currently in development and will soon be released in beta soon. More information can be found [here.](https://gitlab.com/groups/gitlab-org/-/epics/3444)
 
