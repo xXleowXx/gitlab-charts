@@ -1,0 +1,5 @@
+---
+title: Update GKE bootstrap script to wait for the api to be available
+merge_request: 1894
+author:
+type: fixed
