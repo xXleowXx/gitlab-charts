@@ -149,7 +149,7 @@ spec:
               mountPath: '/etc/gitlab-secrets'
               readOnly: true
             - name: git-config
-              mountPath: '/usr/local/etc/gitconfig'
+              mountPath: '/usr/local/etc'
               readOnly: true
             - name: repo-data
               mountPath: '/home/git/repositories'
