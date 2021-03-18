@@ -2,6 +2,39 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.10.0 (2021-03-22)
+
+### Fixed (6 changes, 2 of them are from the community)
+
+- Skip kas redis.password_file when password disabled. !1853
+- Add missing hostnameOverride logic. !1861
+- Use template for label selectors on NGINX objects. !1877 (Antony Perigault)
+- Webervice: Fix template loadBalancerSourceRanges in Service object. !1882 (Rafed Ramzi)
+- Fix Registry ingress' serviceName value. !1887
+- Update GKE bootstrap script to wait for the api to be available. !1894
+
+### Changed (9 changes, 1 of them is from the community)
+
+- Fixes podLabels for sidekiq deployments. !1842
+- Adds common labels for all webservice deployment objects. !1856
+- Bump Container Registry to v3.1.0-gitlab. !1866
+- Adds Geo Notification Event for Container Registry. !1868
+- honour existing health check script shipped with gitlab-mailroom container. !1875 (Dmitry Makovey)
+- Add internal and external URL config for KAS. !1879
+- Use HTTP liveness check for mailroom. !1891
+- Bump Container Registry to v3.2.0-gitlab. !1893
+- Bump Container Registry to v3.2.1-gitlab. !1896
+
+### Added (6 changes, 1 of them is from the community)
+
+- Add optional networkpolicy for KAS. !1837
+- Support specifying `nodeSelector` globally. !1839 (Marshall Cottrell)
+- Add global.ingress.path to address #2563. !1846
+- Add database configurations to registry chart. !1854
+- Webservice: enable per-deployment blackoutSeconds. !1867
+- Add migration configurations to registry chart. !1888
+
+
 ## 4.9.4 (2021-03-17)
 
 ### Changed (1 change)

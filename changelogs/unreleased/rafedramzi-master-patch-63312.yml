@@ -1,5 +1,0 @@
----
-title: 'Webervice: Fix template loadBalancerSourceRanges in Service object'
-merge_request: 1882
-author: Rafed Ramzi
-type: fixed
