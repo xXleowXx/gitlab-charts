@@ -284,12 +284,16 @@ serviceAccount:
 database:
   enabled: false
   user: registry
-  password:
-    secret: gitlab-postgresql-password
-    key: postgresql-registry-password
+  password: {}
+    # secret: RELEASE_NAME-registry-database-password
+    # key: password
   name: registry
   sslmode: disable
   ssl: {}
+  migrations:
+    enabled: true
+    activeDeadlineSeconds: 3600
+    backoffLimit: 6
 
 # Configuration settings to support the migration of large registries to the metadata database.
 # NOTE: This is an experimental feature and must not be used in production.
