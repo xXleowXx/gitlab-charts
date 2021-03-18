@@ -59,10 +59,6 @@ from the parent chart, these values will be:
 ```yaml
 registry:
   enabled:
-  migrations:
-    enabled: true
-    activeDeadlineSeconds:
-    backoffLimit:
   maintenance:
     readOnly:
       enabled: false
