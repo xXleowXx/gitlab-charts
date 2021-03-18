@@ -706,7 +706,7 @@ there will be some variation in how you connect.
 
    ```shell
    template1=# exit
-   I have no name!@gitlab-postgresql-0/$ exit
+   ...@gitlab-postgresql-0/$ exit
    ```
 
 ### migration
