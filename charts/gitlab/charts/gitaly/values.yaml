@@ -32,6 +32,22 @@ common:
 podLabels: {}
 serviceLabels: {}
 
+gitconfig:
+  core:
+    fsyncObjectFiles: true
+  gc:
+    auto: 0
+  repack:
+    writeBitmaps: true
+  pack:
+    threads: 1
+    useSparse: true
+  receive:
+    fsckObjects: true
+    advertisePushOptions: true
+  fetch:
+    writeCommitGraph: true
+
 init:
   image: {}
     # repository:

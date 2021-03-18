@@ -41,6 +41,7 @@ spec:
       {{-   $cm = "/configmap-with-praefect.yml" -}}
       {{- end }}
         checksum/config: {{ include (print .Template.BasePath $cm) (merge (dict) . (dict "skipStorages" true)) | sha256sum }}
+        checksum/config-git: {{ include (print $.Template.BasePath "/configmap-git.yml") . | sha256sum }}
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -147,6 +148,9 @@ spec:
             - name: gitaly-secrets
               mountPath: '/etc/gitlab-secrets'
               readOnly: true
+            - name: git-config
+              mountPath: '/usr/local/etc'
+              readOnly: true
             - name: repo-data
               mountPath: '/home/git/repositories'
               {{- if and .Values.persistence.enabled .Values.persistence.subPath }}
@@ -191,6 +195,9 @@ spec:
           {{-   $cmName = printf "%s-%s" $cmName "praefect" -}}
           {{- end }}
           name: {{ $cmName }}
+      - name: git-config
+        configMap:
+          name: {{ template "fullname" . }}-git
       {{- if not .Values.persistence.enabled }}
       - name: repo-data
         emptyDir: {}

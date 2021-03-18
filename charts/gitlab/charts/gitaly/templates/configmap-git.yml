@@ -1,0 +1,33 @@
+{{- if and .Values.global.gitaly.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-git
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.commonLabels" . | nindent 4 }}
+data:
+  gitconfig: |
+    [core]
+        alternateRefsCommand = "exit 0 #"
+        autocrlf = input
+        symlinks = false
+        fsyncObjectFiles = {{ .Values.gitconfig.core.fsyncObjectFiles }}
+    [gc]
+        auto = {{ .Values.gitconfig.gc.auto }}
+    [repack]
+        writeBitmaps = {{ .Values.gitconfig.repack.writeBitmaps }}
+    [pack]
+        threads = {{ .Values.gitconfig.receive.threads }}
+        useSparse = {{ .Values.gitconfig.receive.fsckobjects }}
+    [receive]
+        fsckObjects = {{ .Values.gitconfig.receive.fsckObjects }}
+        advertisePushOptions = {{ .Values.gitconfig.receive.advertisePushOptions }}
+    [transfer]
+        hiderefs = ^refs/tmp/
+        hiderefs = ^refs/keep-around/
+        hiderefs = ^refs/remotes/
+    [fetch]
+      writeCommitGraph = {{ .Values.gitconfig.fetch.writeCommitGraph }}
+{{- end }}
