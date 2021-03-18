@@ -47,7 +47,7 @@ Return Registry's database secret entry as a projected volume
 - secret:
     name: {{ default (printf "%s-registry-database-password" .Release.Name) .Values.database.password.secret }}
     items:
-      - key: {{ .Values.database.password.key }}
+      - key: {{ default "password" .Values.database.password.key }}
         path: database_password
 {{- end -}}
 
