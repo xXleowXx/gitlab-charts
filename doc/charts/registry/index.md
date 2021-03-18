@@ -159,8 +159,8 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `database.host`                            | `global.psql.host`                           | The database server hostname. |
 | `database.port`                            | `global.psql.port`                           | The database server port. |
 | `database.user`                            |                                              | The database username. |
-| `database.password.secret`                 | `gitlab-postgresql-password`                 | Name of the secret containing the database password. Defaults to the main PostgreSQL password secret. |
-| `database.password.key`                    | `postgresql-registry-password`               | Secret key in which the database password is stored. |
+| `database.password.secret`                 | `RELEASE-registry-database-password`         | Name of the secret containing the database password. |
+| `database.password.key`                    | `password`                                   | Secret key in which the database password is stored. |
 | `database.name`                            |                                              | The database name. |
 | `database.sslmode`                         |                                              | The SSL mode. Can be one of `disable`, `allow`, `prefer`, `require`, `verify-ca` or `verify-full`. |
 | `database.ssl.secret`                      | `global.psql.ssl.secret`                     | A secret containing client certificate, key and certificate authority. Defaults to the main PostgreSQL SSL secret. |
