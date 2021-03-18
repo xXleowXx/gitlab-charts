@@ -702,7 +702,7 @@ there will be some variation in how you connect.
    CREATE DATABASE registry WITH OWNER registry;
    ```
 
-1. Safely exit from the PostgreSQL command line and then from the pod using `exit`:
+1. Safely exit from the PostgreSQL command line and then from the container using `exit`:
 
    ```shell
    template1=# exit
