@@ -706,6 +706,13 @@ there will be some variation in how you connect.
    CREATE DATABASE registry WITH OWNER registry;
    ```
 
+1. Safely exit from the PostgreSQL command line and then from the pod using `exit`:
+
+   ```shell
+   template1=# exit
+   I have no name!@gitlab-postgresql-0/$ exit
+   ```
+
 ### migration
 
 The `migration` property is optional and provides options related to the
