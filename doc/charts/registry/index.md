@@ -159,8 +159,8 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `database.host`                            | `global.psql.host`                           | The database server hostname. |
 | `database.port`                            | `global.psql.port`                           | The database server port. |
 | `database.user`                            |                                              | The database username. |
-| `database.password.secret`                 | `gitlab-postgresql-password`                 | Name of the secret containing the database password. Defaults to the main PostgreSQL password secret. |
-| `database.password.key`                    | `postgresql-registry-password`               | Secret key in which the database password is stored. |
+| `database.password.secret`                 | `RELEASE-registry-database-password`         | Name of the secret containing the database password. |
+| `database.password.key`                    | `password`                                   | Secret key in which the database password is stored. |
 | `database.name`                            |                                              | The database name. |
 | `database.sslmode`                         |                                              | The SSL mode. Can be one of `disable`, `allow`, `prefer`, `require`, `verify-ca` or `verify-full`. |
 | `database.ssl.secret`                      | `global.psql.ssl.secret`                     | A secret containing client certificate, key and certificate authority. Defaults to the main PostgreSQL SSL secret. |
@@ -173,6 +173,9 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `database.pool.maxidle`                    | `0`                                          | The maximum number of connections in the idle connection pool. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means no idle connections. |
 | `database.pool.maxopen`                    | `0`                                          | The maximum number of open connections to the database. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means unlimited open connections. |
 | `database.pool.maxlifetime`                | `0`                                          | The maximum amount of time a connection may be reused. Expired connections may be closed lazily before reuse. Zero or not specified means unlimited reuse. |
+| `database.migrations.enabled`              | `true`                                       | Enable the migrations job to automatically run migrations upon initial deployment and upgrades of the Chart. Note that migrations can also be run manually from within any running Registry pods. |
+| `database.migrations.activeDeadlineSeconds` | `3600`                                      | Set the [activeDeadlineSeconds](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
+| `database.migrations.backoffLimit`         | `6`                                          | Set the [backoffLimit](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
 | `migration.disablemirrorfs`                | `false`                                      | When set to `true`, the registry does not write metadata to the filesystem. Must be used in combination with the metadata database. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
@@ -641,7 +644,70 @@ database:
     maxidle: 25
     maxopen: 25
     maxlifetime: 5m
+  migrations:
+    enabled: true
+    activeDeadlineSeconds: 3600
+    backoffLimit: 6
 ```
+
+#### Creating the database
+
+If the Registry database is enabled, Registry will use its own database to track its state.
+
+Follow the steps below to manually create the database and role.
+
+NOTE:
+These instructions assume you are using the bundled PostgreSQL server. If you are using your own server,
+there will be some variation in how you connect.
+
+1. Create the secret with the database password:
+
+   ```shell
+   kubectl create secret generic RELEASE_NAME-registry-database-password --from-literal=password=randomstring
+   ```
+
+1. Log into your database instance:
+
+   ```shell
+   kubectl exec -it $(kubectl get pods -l app=postgresql -o custom-columns=NAME:.metadata.name --no-headers) -- bash
+   ```
+
+   ```shell
+   PGPASSWORD=$(cat $POSTGRES_POSTGRES_PASSWORD_FILE) psql -U postgres -d template1
+   ```
+
+1. Create the database user:
+
+   ```sql
+   CREATE ROLE registry WITH LOGIN;
+   ```
+
+1. Set the database user password.
+
+   1. Fetch the password:
+
+      ```shell
+      kubectl get secret RELEASE_NAME-registry-database-password -o jsonpath="{.data.password}" | base64 --decode
+      ```
+
+   1. Set the password in the `psql` prompt:
+
+      ```sql
+      \password registry
+      ```
+
+1. Create the database:
+
+   ```sql
+   CREATE DATABASE registry WITH OWNER registry;
+   ```
+
+1. Safely exit from the PostgreSQL command line and then from the container using `exit`:
+
+   ```shell
+   template1=# exit
+   ...@gitlab-postgresql-0/$ exit
+   ```
 
 ### migration
 
