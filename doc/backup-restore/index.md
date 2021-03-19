@@ -133,7 +133,7 @@ This can happen during a backup or restore of a GitLab instance. It is easy to m
 kubectl get pods -lrelease=RELEASE_NAME,app=task-runner
 ```
 
-  - Get all buckets in the pod's environment:
+  - Get all buckets in the pod's environment. Replace `<task-runner-pod-name>` with your actual task-runner pod name, but leave `"BUCKET_NAME"` as it is:
 ```shell
 kubectl describe pod <task-runner-pod-name> | grep "BUCKET_NAME"
 ```
