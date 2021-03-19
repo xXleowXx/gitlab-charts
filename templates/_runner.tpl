@@ -29,3 +29,14 @@ Override runner charts cache.s3ServerAddress value to match minio
 {{- define "gitlab-runner.cache.s3ServerAddress" -}}
 {{ default ( include "gitlab.minio.hostname" . ) .Values.runners.cache.s3ServerAddress | quote }}
 {{- end -}}
+
+{{/*
+Override runner charts gitlabUrl value
+*/}}
+{{- define "gitlab-runner.gitlabUrl" -}}
+{{- if .Values.gitlabUrl -}}
+{{- .Values.gitlabUrl -}}
+{{- else -}}
+{{- template "gitlab.gitlab.url" . -}}
+{{- end -}}
+{{- end -}}
