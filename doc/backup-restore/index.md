@@ -135,17 +135,17 @@ kubectl get pods -lrelease=RELEASE_NAME,app=task-runner
 
   - Get all buckets in the pod's environment:
 ```shell
-kubectl describe pod `<task-runner-pod-name>` | grep "BUCKET_NAME"
+kubectl describe pod <task-runner-pod-name> | grep "BUCKET_NAME"
 ```
 
   - Confirm that you have access to every bucket in the environment:
 ```shell
 #List
-gsutil ls gs://`<bucket-to-validate>`/
+gsutil ls gs://<bucket-to-validate>/
 
 #Read
-gsutil cp gs://`<bucket-to-validate>`/`<object-to-get>` `<save-to-location>`
+gsutil cp gs://<bucket-to-validate>/<object-to-get> <save-to-location>
 
 #Write
-gsutil cp -n LOCAL_FILE gs://`<bucket-to-validate>`/
+gsutil cp -n <local-file> gs://<bucket-to-validate>/
 ```
