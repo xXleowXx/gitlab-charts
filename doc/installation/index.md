@@ -13,7 +13,7 @@ Install GitLab on Kubernetes with the cloud native GitLab Helm chart.
 In order to deploy GitLab on Kubernetes, the following are required:
 
 1. kubectl 1.13 or higher, compatible with your cluster
-   ([+/- 1 minor release from your cluster](https://kubernetes.io/docs/tasks/tools/install-kubectl/#before-you-begin)).
+   ([+/- 1 minor release from your cluster](https://kubernetes.io/docs/tasks/tools/)).
 1. Helm v2 (2.12 or higher, excluding 2.15) or v3 (3.0.2 or higher).
 1. A Kubernetes cluster, version 1.13 or higher. 8vCPU and 30GB of RAM is recommended.
 

@@ -25,7 +25,7 @@ Omnibus GitLab package.
 
 ## Configure external GitLab Pages instance
 
-1. [Install GitLab](https://about.gitlab.com/install) using the Omnibus GitLab
+1. [Install GitLab](https://about.gitlab.com/install/) using the Omnibus GitLab
    package.
 
 1. Edit `/etc/gitlab/gitlab.rb` file and replace its contents with the
