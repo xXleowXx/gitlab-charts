@@ -465,6 +465,7 @@ registry:
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.migration */}}
 
+{{/*
 Ensure Registry online garbage collection is configured properly and dependencies are met
 */}}
 {{- define "gitlab.checkConfig.registry.gc" -}}
