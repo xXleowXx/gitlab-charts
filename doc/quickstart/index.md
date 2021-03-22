@@ -42,7 +42,7 @@ A cluster with a total of 8vCPU and 30GB of RAM, or more is recommended.
 ### Installing kubectl
 
 We'll point right to the official Kubernetes documentation for
-[installing kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+[installing kubectl](https://kubernetes.io/docs/tasks/tools/).
 It is simple, covers most operating systems and also covers Google
 Cloud SDK, which you may have installed during the previous step.
 
