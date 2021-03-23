@@ -50,9 +50,8 @@ spec:
       app: {{ $name }}
       release: {{ $releaseName }}
       queue-pod-name: {{ .name }}
-  {{- if .Values.deployment.strategy }}
-  strategy:
-    {{- .Values.deployment.strategy | toYaml | nindent 4 }}
+  {{- if or $.Values.deployment.strategy .strategy}}
+  strategy: {{ default $.Values.deployment.strategy .strategy | toYaml | nindent 4 }}
   {{- end }}
   template:
     metadata:

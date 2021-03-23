@@ -247,8 +247,6 @@ concurrency: 25
 # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 deployment:
   strategy: {}
-
-deployment:
   terminationGracePeriodSeconds: 30
 
 hpa:
@@ -273,6 +271,7 @@ pods:
     #   checkInterval: 3
     # minReplicas: 1
     # maxReplicas: 10
+    # strategy: {}
     # queues: ''
     # extraVolumes
     # extraVolumeMounts

@@ -397,7 +397,8 @@ global.appConfig.extra.piwikUrl:
 {{- define "gitlab.deprecate.registry.updateStrategy" -}}
 {{- if .Values.registry.updateStrategy }}
 registry:
-    The `updateStrategy` property has been replaced. Please use `deployment.strategy` instead.
+    The configuration of `registry.updateStrategy` has moved. Please use
+`registry.deployment.strategy` instead.
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.registry.updateStrategy */}}
