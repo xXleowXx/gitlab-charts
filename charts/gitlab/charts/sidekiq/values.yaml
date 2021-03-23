@@ -241,11 +241,12 @@ minReplicas: 1
 maxReplicas: 10
 concurrency: 25
 
-# updateStrategy is utilized to configure the desired upgrade approach and
+# `deployment.strategy` is utilized to configure the desired upgrade approach and
 # configuration for the deployment.  See the Kubernetes documentation
 # related to this subject.
 # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-updateStrategy: {}
+deployment:
+  strategy: {}
 
 deployment:
   terminationGracePeriodSeconds: 30
@@ -272,7 +273,6 @@ pods:
     #   checkInterval: 3
     # minReplicas: 1
     # maxReplicas: 10
-    # updateStrategy: {}
     # queues: ''
     # extraVolumes
     # extraVolumeMounts
