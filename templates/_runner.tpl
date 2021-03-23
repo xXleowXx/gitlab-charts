@@ -36,9 +36,7 @@ Override gitlab external URL
 {{- define "gitlab-runner.gitlabUrl" -}}
 {{- if .Values.gitlabUrl -}}
 {{-   .Values.gitlabUrl -}}
-{{- else if .Values.bypassIngress }}
-{{-   printf "http://gitlab-webservice-default.%s.svc:8181" .Release.Namespace -}}
-{{- else }}
+{{- else -}}
 {{-   template "gitlab.gitlab.url" . -}}
 {{- end -}}
 {{- end -}}
