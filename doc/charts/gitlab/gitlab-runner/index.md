@@ -35,7 +35,7 @@ Privileged containers have extended capabilities, for example they can mount arb
 | Parameter                                      | Description                                | Default                               |
 | ---------------------------------------------- | ------------------------------------------ | ------------------------------------- |
 | `gitlab-runner.image`                          | Runner image                               | `gitlab/gitlab-runner:alpine-v10.5.0` |
-| `gitlab-runner.gitlabUrl`                      | URL that the Runner uses to register to GitLab Server                | `gitlab external URL`                 |
+| `gitlab-runner.gitlabUrl`                      | URL that the Runner uses to register to GitLab Server                | GitLab external URL                   |
 | `gitlab-runner.install`                        | Install the `gitlab-runner` chart          | `true`                                |
 | `gitlab-runner.imagePullPolicy`                | Image pull policy                          | `IfNotPresent`                        |
 | `gitlab-runner.init.image.repository`          | `initContainer` image                      |                                       |
