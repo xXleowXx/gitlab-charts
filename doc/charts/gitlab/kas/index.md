@@ -59,7 +59,7 @@ the `helm install` command using the `--set` flags.
 | `serviceLabels`             | `{}`           | Supplemental service labels |
 | `common.labels`             |                | Supplemental labels that are applied to all objects created by this chart. |
 | `redis.enabled`             | `true`         | Allows opting-out of using Redis for KAS features. Warnings: Redis will become a hard dependency soon, so this key is already deprecated. |
-| `redis.clusterConfig`       | `sharedState`  | The Redis cluster configuration to pull from `global.redis` to use for KAS. If `global.redis.sharedState` or any other `clusterConfig` you're using is not undefined, then it will fallback to the primary `global.redis` configuration. See [Multiple Redis Support](https://docs.gitlab.com/charts/charts/globals#multiple-redis-support) if you want to have KAS using a separate Redis instance. |
+| `redis.clusterConfig`       | `sharedState`  | The Redis cluster configuration to pull from `global.redis` to use for KAS. If `global.redis.sharedState` or any other `clusterConfig` you're using is not undefined, then it will fallback to the primary `global.redis` configuration. See [Multiple Redis Support](../../globals.md#multiple-redis-support) if you want to have KAS using a separate Redis instance. |
 | `resources.requests.cpu`    | `75m`                 | GitLab Exporter minimum CPU                    |
 | `resources.requests.memory` | `100M`                | GitLab Exporter minimum memory                 |
 | `service.externalPort`      | `8150`         | External port (for agentk connections) |
