@@ -221,7 +221,8 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab-runner.concurrent`                                     | number of concurrent jobs                                            | `20`                                                             |
 | `gitlab-runner.imagePullPolicy`                                | image pull policy                                                    | `IfNotPresent`                                                   |
 | `gitlab-runner.image`                                          | runner image                                                         | `gitlab/gitlab-runner:alpine-v10.5.0`                            |
-| `gitlab-runner.gitlabUrl`                                      | URL that the Runner uses to register to GitLab Server                                         | `gitlab external URL`                                            |
+| `gitlab-runner.gitlabUrl`                                      | URL that the Runner uses to register to GitLab Server                                         | 
+GitLab external URL                                              |
 | `gitlab-runner.install`                                        | install the `gitlab-runner` chart                                    | true                                                             |
 | `gitlab-runner.rbac.clusterWideAccess`                         | deploy containers of jobs cluster-wide                               | false                                                            |
 | `gitlab-runner.rbac.create`                                    | whether to create RBAC service account                               | true                                                             |
