@@ -35,8 +35,8 @@ Overwrite runner charts gitlabUrl value
 */}}
 {{- define "gitlab-runner.gitlabUrl" -}}
 {{- if .Values.gitlabUrl -}}
-{{- .Values.gitlabUrl -}}
+{{-   .Values.gitlabUrl -}}
 {{- else -}}
-{{- template "gitlab.gitlab.url" . -}}
+{{-   template "gitlab.gitlab.url" . -}}
 {{- end -}}
 {{- end -}}
