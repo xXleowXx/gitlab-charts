@@ -755,3 +755,33 @@ kubectl exec -n gitlabns <registry-pod> -- /bin/registry garbage-collect -m /etc
 helm upgrade mygitlab gitlab/gitlab -f mygitlab.yml --wait
 # All done :)
 ```
+
+### Running administrative commands against the Container Registry
+
+The administrative commands can be run against the Container Registry
+only from a Registry pod, where both the `registry` binary as well as necessary
+configuration is available. [Issue #2629](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2629)
+is open to discuss how to provide this functionality from the task-runner pod.
+
+To run administrative commands:
+
+1. Connect to a Registry pod:
+
+   ```shell
+   kubectl exec -it <registry-pod> -- bash
+   ```
+
+1. Once inside the Registry pod, the `registry` binary is available in `PATH` and
+   can be used directly. The configuration file is available at
+   `/etc/docker/registry/config.yml`. The following example checks the status
+   of the database migration:
+
+   ```shell
+   registry database migrate status /etc/docker/registry/config.yml
+   ```
+
+For further details and other available commands, refer to the relevant
+documentation:
+
+- [General Registry documentation](https://docs.docker.com/registry/)
+- [GitLab-specific Registry documentation](https://gitlab.com/gitlab-org/container-registry/-/tree/master/docs-gitlab)
