@@ -29,6 +29,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registryStorage" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registryHttpSecret" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registry.replicas" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.registry.updateStrategy" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.unicorn" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.unicornWorkhorse.image" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.omniauth" .) -}}
