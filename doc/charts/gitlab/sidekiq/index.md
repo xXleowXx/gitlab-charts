@@ -44,6 +44,7 @@ to the `helm install` command using the `--set` flags:
 | `common.labels`                      |                   | Supplemental labels that are applied to all objects created by this chart. |
 | `concurrency`                        | `25`              | Sidekiq default concurrency              |
 | `cluster`                            | `true`            | [See below](#cluster).                   |
+| `deployment.strategy`                | `{}`              | Allows one to configure the update strategy utilized by the deployment |
 | `deployment.terminationGracePeriodSeconds` | `30`        | Optional duration in seconds the pod needs to terminate gracefully. |
 | `enabled`                            | `true`            | Sidekiq enabled flag                     |
 | `extraContainers`                    |                   | List of extra containers to include      |
@@ -91,7 +92,6 @@ to the `helm install` command using the `--set` flags:
 | `readinessProbe.failureThreshold`    | 3                 | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded   |
 | `securityContext.fsGroup`            | `1000`            | Group ID under which the pod should be started |
 | `securityContext.runAsUser`          | `1000`            | User ID under which the pod should be started  |
-| `updateStrategy`                     | `{}`              | Allows one to configure the update strategy utilized by the deployment |
 | `priorityClassName`                  | `""`              | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction |
 
 ## Chart configuration examples
@@ -384,7 +384,7 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `maxReplicas`  | Integer | `10`    | Maximum number of replicas |
 | `maxUnavailable` | Integer | `1`   | Limit of maximum number of Pods to be unavailable |
 | `podLabels`      | `{}`  | `{}`    | Supplemental Pod labels. Will not be used for selectors. |
-| `updateStrategy` |       | `{}`    | Allows one to configure the update strategy utilized by the deployment |
+| `deployment.strategy` |       | `{}`    | Allows one to configure the update strategy utilized by the deployment |
 | `extraVolumes` | String  |         | Configures extra volumes for the given pod. |
 | `extraVolumeMounts` | String |     | Configures extra volume mounts for the given pod. |
 | `priorityClassName` | String | `""` | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction |
