@@ -31,7 +31,7 @@ Override runner charts cache.s3ServerAddress value to match minio
 {{- end -}}
 
 {{/*
-Overwrite runner charts gitlabUrl value
+Override gitlab external URL
 */}}
 {{- define "gitlab-runner.gitlabUrl" -}}
 {{- if .Values.gitlabUrl -}}
