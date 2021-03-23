@@ -37,6 +37,7 @@ configurations that can be supplied to the `helm install` command using the
 | ----------------------------------------- | ----------------- | -------------------------------------------------------- |
 | `annotations`                             |                   | Pod annotations                                          |
 | `common.labels`                           | `{}`              | Supplemental labels that are applied to all objects created by this chart. |
+| `deployment.strategy`                     | `{}`              | Allows one to configure the update strategy used by the deployment. When not provided, the cluster default is used. |
 | `extraEnv`                                |                   | List of extra environment variables to expose            |
 | `image.pullPolicy`                        | `IfNotPresent`    | GitLab image pull policy                                 |
 | `image.pullSecrets`                       |                   | Secrets for the image repository                         |
