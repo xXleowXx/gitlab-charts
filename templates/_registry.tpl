@@ -55,7 +55,7 @@ When Geo + Container Registry syncing enabled, adds the following notifier
 {{- if and .Values.global.geo.enabled .Values.global.geo.registry.syncEnabled -}}
 endpoints:
   - name: geo_event
-    url: https://{{ "registry.hostname" }}/api/v4/container_registry_event/events
+    url: https://{{ include "gitlab.gitlab.hostname" . }}/api/v4/container_registry_event/events
     timeout: 2s
     threshold: 5
     backoff: 1s

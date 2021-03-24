@@ -1,0 +1,5 @@
+---
+title: Fixes incorrect set hostname for geo syncing Container Registry
+merge_request: 1913
+author:
+type: fixed
