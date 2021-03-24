@@ -247,6 +247,9 @@ concurrency: 25
 # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 updateStrategy: {}
 
+deployment:
+  terminationGracePeriodSeconds: 30
+
 hpa:
   targetAverageValue: 350m
 timeout: 5
@@ -279,6 +282,7 @@ pods:
     # common:
     #   labels: {}
     # podLabels: {}
+    # terminationGracePeriodSeconds: 30
 
 ## Allow to overwrite under which User and Group we're running.
 securityContext:

@@ -105,6 +105,7 @@ spec:
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" $ }}
       {{- end }}
+      terminationGracePeriodSeconds: {{ int (default $.Values.deployment.terminationGracePeriodSeconds .terminationGracePeriodSeconds) }}
       initContainers:
         {{- include "gitlab.extraInitContainers" $ | nindent 8 }}
         {{- include "gitlab.certificates.initContainer" $ | nindent 8 }}

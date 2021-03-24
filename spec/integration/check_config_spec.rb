@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'helm_template_helper'
 require 'yaml'
+require 'hash_deep_merge'
 
 describe 'checkConfig template' do
   let(:check) do
@@ -732,5 +733,127 @@ describe 'checkConfig template' do
     include_examples 'config validation',
                      success_description: 'when migration disablemirrorfs is true, with database enabled',
                      error_description: 'when migration disablemirrorfs is true, with database disabled'
+  end
+
+  describe 'sidekiq.timeout' do
+    context 'with deployment-global values specified for both timeout and terminationGracePeriodSeconds and no pod-local values specified for either' do
+      let(:success_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              deployment:
+                terminationGracePeriodSeconds: 30
+              timeout: 10
+        )).deep_merge(default_required_values)
+      end
+
+      let(:error_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              deployment:
+                terminationGracePeriodSeconds: 30
+              timeout: 40
+        )).deep_merge(default_required_values)
+      end
+
+      let(:error_output) { 'You must set `terminationGracePeriodSeconds` (30) longer than `timeout` (40) for pod `all-in-1`.' }
+
+      include_examples 'config validation',
+                      success_description: 'when Sidekiq timeout is less than terminationGracePeriodSeconds',
+                      error_description: 'when Sidekiq timeout is more than terminationGracePeriodSeconds'
+    end
+
+    context 'with pod-local value specified for only timeout' do
+      let(:success_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              pods:
+                - name: 'valid-1'
+                  cluster: false
+                  timeout: 10
+        )).deep_merge(default_required_values)
+      end
+
+      let(:error_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              pods:
+                - name: 'valid-1'
+                  cluster: false
+                  timeout: 50
+        )).deep_merge(default_required_values)
+      end
+
+      let(:error_output) { 'You must set `terminationGracePeriodSeconds` (30) longer than `timeout` (50) for pod `valid-1`.' }
+
+      include_examples 'config validation',
+                      success_description: 'when Sidekiq timeout is less than terminationGracePeriodSeconds',
+                      error_description: 'when Sidekiq timeout is more than terminationGracePeriodSeconds'
+    end
+
+    context 'with pod-local value specified for only terminationGracePeriodSeconds' do
+      let(:success_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              pods:
+                - name: 'valid-1'
+                  cluster: false
+                  terminationGracePeriodSeconds: 50
+        )).deep_merge(default_required_values)
+      end
+
+      let(:error_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              pods:
+                - name: 'valid-1'
+                  cluster: false
+                  terminationGracePeriodSeconds: 1
+        )).deep_merge(default_required_values)
+      end
+
+      let(:error_output) { 'You must set `terminationGracePeriodSeconds` (1) longer than `timeout` (5) for pod `valid-1`.' }
+
+      include_examples 'config validation',
+                      success_description: 'when Sidekiq timeout is less than terminationGracePeriodSeconds',
+                      error_description: 'when Sidekiq timeout is more than terminationGracePeriodSeconds'
+    end
+
+    context 'with pod-local value specified for both terminationGracePeriodSeconds and timeout' do
+      let(:success_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              pods:
+                - name: 'valid-1'
+                  cluster: false
+                  terminationGracePeriodSeconds: 50
+                  timeout: 10
+        )).deep_merge(default_required_values)
+      end
+
+      let(:error_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              pods:
+                - name: 'valid-1'
+                  cluster: false
+                  terminationGracePeriodSeconds: 50
+                  timeout: 60
+        )).deep_merge(default_required_values)
+      end
+
+      let(:error_output) { 'You must set `terminationGracePeriodSeconds` (50) longer than `timeout` (60) for pod `valid-1`.' }
+
+      include_examples 'config validation',
+                      success_description: 'when Sidekiq timeout is less than terminationGracePeriodSeconds',
+                      error_description: 'when Sidekiq timeout is more than terminationGracePeriodSeconds'
+    end
   end
 end

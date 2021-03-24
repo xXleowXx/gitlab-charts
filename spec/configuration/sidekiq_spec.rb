@@ -457,4 +457,81 @@ describe 'Sidekiq configuration' do
       end
     end
   end
+
+  describe 'terminationGracePeriodSeconds' do
+    let(:default_values) do
+      YAML.safe_load(%(
+        certmanager-issuer:
+          email: 'test@example.com'
+      ))
+    end
+
+    context 'with default deployment-global value and no pod-local value' do
+      it 'sets default deployment-global value for terminationGracePeriodSeconds in the Pod spec' do
+        t = HelmTemplate.new(default_values)
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(30)
+      end
+    end
+
+    context 'with user specified deployment-global value' do
+      let(:chart_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              deployment:
+                terminationGracePeriodSeconds: 60
+        ))
+      end
+
+      it 'sets user specified deployment-global value for terminationGracePeriodSeconds in the Pod spec' do
+        t = HelmTemplate.new(default_values.deep_merge(chart_values))
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(60)
+      end
+    end
+
+    context 'with user specified pod-local value' do
+      let(:chart_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              pods:
+                - name: 'pod-1'
+                  queues: 'merge'
+                  terminationGracePeriodSeconds: 55
+             ))
+      end
+
+      it 'sets user specified pod-local value for terminationGracePeriodSeconds in the Pod spec' do
+        t = HelmTemplate.new(default_values.deep_merge(chart_values))
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(55)
+      end
+    end
+
+    context 'with user specified deployment-global and pod-local values' do
+      let(:chart_values) do
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              deployment:
+                terminationGracePeriodSeconds: 77
+              pods:
+                - name: 'pod-1'
+                  queues: 'merge'
+                  terminationGracePeriodSeconds: 66
+                - name: 'pod-2'
+                  queues: 'zero'
+        ))
+      end
+
+      it 'sets user specified pod-local value for terminationGracePeriodSeconds in the Pod spec' do
+        t = HelmTemplate.new(default_values.deep_merge(chart_values))
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(66)
+      end
+
+      it 'sets user specified deployment-global value for terminationGracePeriodSeconds in the Pod spec where pod-local value is not set' do
+        t = HelmTemplate.new(default_values.deep_merge(chart_values))
+        expect(t.dig('Deployment/test-sidekiq-pod-2-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(77)
+      end
+    end
+  end
 end
