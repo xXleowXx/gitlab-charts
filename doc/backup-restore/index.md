@@ -128,27 +128,27 @@ If you get an error like this from GCP: `[Error] AccessDeniedException: 403 <GCP
 
 This can happen during a backup or restore of a GitLab instance. It is easy to make the mistake of just checking the backup bucket. Don't do this. Check all buckets in your environment because the backup and restore operations use all buckets in the environment.
 
-- Start by finding your task-runner pod:
+1. Find your task-runner pod:
 
-```shell
-kubectl get pods -lrelease=RELEASE_NAME,app=task-runner
-```
+   ```shell
+   kubectl get pods -lrelease=RELEASE_NAME,app=task-runner
+   ```
 
-- Get all buckets in the pod's environment. Replace `<task-runner-pod-name>` with your actual task-runner pod name, but leave `"BUCKET_NAME"` as it is:
+1. Get all buckets in the pod's environment. Replace `<task-runner-pod-name>` with your actual task-runner pod name, but leave `"BUCKET_NAME"` as it is:
 
-```shell
-kubectl describe pod <task-runner-pod-name> | grep "BUCKET_NAME"
-```
+   ```shell
+   kubectl describe pod <task-runner-pod-name> | grep "BUCKET_NAME"
+   ```
 
-- Confirm that you have access to every bucket in the environment:
+1. Confirm that you have access to every bucket in the environment:
 
-```shell
-#List
-gsutil ls gs://<bucket-to-validate>/
+   ```shell
+   # List
+   gsutil ls gs://<bucket-to-validate>/
 
-#Read
-gsutil cp gs://<bucket-to-validate>/<object-to-get> <save-to-location>
+   # Read
+   gsutil cp gs://<bucket-to-validate>/<object-to-get> <save-to-location>
 
-#Write
-gsutil cp -n <local-file> gs://<bucket-to-validate>/
-```
+   # Write
+   gsutil cp -n <local-file> gs://<bucket-to-validate>/
+   ```
