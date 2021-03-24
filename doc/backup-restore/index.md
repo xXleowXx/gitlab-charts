@@ -124,9 +124,11 @@ You should see a list of available buckets.
 
 ### "AccessDeniedException: 403" errors in GCP
 
-If you get an error like this from GCP: `[Error] AccessDeniedException: 403 <GCP Account> does not have storage.objects.list access to the Google Cloud Storage bucket.`, please confirm that all buckets in your environment have been created, and that the GCP Account can access (list, read and write) all buckets.
+An error like `[Error] AccessDeniedException: 403 <GCP Account> does not have storage.objects.list access to the Google Cloud Storage bucket.`
+usually happens during a backup or restore of a GitLab instance, because of missing permissions.
 
-This can happen during a backup or restore of a GitLab instance. It is easy to make the mistake of just checking the backup bucket. Don't do this. Check all buckets in your environment because the backup and restore operations use all buckets in the environment.
+The backup and restore operations use all buckets in the environment,so
+confirm that all buckets in your environment have been created, and that the GCP account can access (list, read, and write) all buckets:
 
 1. Find your task-runner pod:
 
