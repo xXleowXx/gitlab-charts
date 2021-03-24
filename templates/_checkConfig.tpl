@@ -469,7 +469,7 @@ registry:
 Ensure Registry online garbage collection is configured properly and dependencies are met
 */}}
 {{- define "gitlab.checkConfig.registry.gc" -}}
-{{-   if and (not $.Values.registry.gc.disabled) (not $.Values.registry.database.enabled) }}
+{{-   if not (or $.Values.registry.gc.disabled $.Values.registry.database.enabled) }}
 registry:
     Enabling online garbage collection requires the metadata database to be enabled.
     See https://docs.gitlab.com/charts/charts/registry#gc
