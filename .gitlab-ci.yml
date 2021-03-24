@@ -428,7 +428,7 @@ rubocop:
   stage: prepare
   dependencies: []
   before_script:
-    - apk add make gcc libc-dev patch
+    - apk add make gcc libc-dev
   except:
     <<: *deps_pipeline
     refs:
