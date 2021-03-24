@@ -44,6 +44,7 @@ to the `helm install` command using the `--set` flags:
 | `common.labels`                      |                   | Supplemental labels that are applied to all objects created by this chart. |
 | `concurrency`                        | `25`              | Sidekiq default concurrency              |
 | `cluster`                            | `true`            | [See below](#cluster).                   |
+| `deployment.terminationGracePeriodSeconds` | `30`        | Optional duration in seconds the pod needs to terminate gracefully. |
 | `enabled`                            | `true`            | Sidekiq enabled flag                     |
 | `extraContainers`                    |                   | List of extra containers to include      |
 | `extraInitContainers`                |                   | List of extra init containers to include |
@@ -372,7 +373,7 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `negateQueues` | String / Array |         | [See below](#negatequeues). |
 | `queueSelector` | Boolean | `false` | Use the [queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector). Only valid when `cluster` is enabled. |
 | `experimentalQueueSelector` | Boolean | `false` | Deprecated version of `queueSelector`. If either this or `queueSelector` is set, the queue selector will be enabled. Only valid when `cluster` is enabled. |
-| `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. |
+| `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. This value **must** be less than `terminationGracePeriodSeconds`. |
 | `resources`    |         |         | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation. |
 | `nodeSelector` |         |         | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.|
 | `memoryKiller.checkInterval`| Integer | `3`       | Amount of time between memory checks     |
@@ -389,6 +390,7 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `priorityClassName` | String | `""` | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction |
 | `hpa.targetAverageValue` | String |  | Overrides the autoscaling target value for the given pod. |
 | `extraEnv` | Map | | List of extra environment variables to expose. The chart-wide value is merged into this, with values from the pod taking precedence |
+| `terminationGracePeriodSeconds` | `30` | Optional duration in seconds the pod needs to terminate gracefully. |
 
 ### queues
 
