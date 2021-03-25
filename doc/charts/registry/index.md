@@ -176,6 +176,16 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `database.migrations.enabled`              | `true`                                       | Enable the migrations job to automatically run migrations upon initial deployment and upgrades of the Chart. Note that migrations can also be run manually from within any running Registry pods. |
 | `database.migrations.activeDeadlineSeconds` | `3600`                                      | Set the [activeDeadlineSeconds](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
 | `database.migrations.backoffLimit`         | `6`                                          | Set the [backoffLimit](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
+| `gc.disabled`                              | `true`                                      | When set to `true`, the online GC workers are disabled. |
+| `gc.maxbackoff`                            | `24h`                                        | The maximum exponential backoff duration used to sleep between worker runs when an error occurs. Also applied when there are no tasks to be processed unless `gc.noidlebackoff` is `true`. Please note that this is not the absolute maximum, as a randomized jitter factor of up to 33% is always added. |
+| `gc.noidlebackoff`                         | `false`                                      | When set to `true`, disables exponential backoffs between worker runs when there are no tasks to be processed. |
+| `gc.transactiontimeout`                    | `10s`                                        | The database transaction timeout for each worker run. Each worker starts a database transaction at the start. The worker run is canceled if this timeout is exceeded to avoid stalled or long-running transactions. |
+| `gc.blobs.disabled`                        | `false`                                      | When set to `true`, the GC worker for blobs is disabled. |
+| `gc.blobs.interval`                        | `5s`                                         | The initial sleep interval between each worker run. |
+| `gc.blobs.storagetimeout`                  | `5s`                                         | The timeout for storage operations. Used to limit the duration of requests to delete dangling blobs on the storage backend. |
+| `gc.manifests.disabled`                    | `false`                                      | When set to `true`, the GC worker for manifests is disabled. |
+| `gc.manifests.interval`                    | `5s`                                         | The initial sleep interval between each worker run. |
+| `gc.reviewafter`                           | `24h`                                        | The minimum amount of time after which the garbage collector should pick up a record for review. `-1` means no wait. |
 | `migration.disablemirrorfs`                | `false`                                      | When set to `true`, the registry does not write metadata to the filesystem. Must be used in combination with the metadata database. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
@@ -724,6 +734,33 @@ This feature requires the [metadata database](#database) to be enabled.
 ```yaml
 migration:
   disablemirrorfs: true
+```
+
+### gc
+
+The `gc` property is optional and provides options related to
+[online garbage collection](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc).
+
+WARNING:
+This is an experimental feature and _must not_ be used in production.
+
+NOTE:
+This feature requires the [metadata database](#database) to be enabled.
+
+```yaml
+gc:
+  disabled: false
+  maxbackoff: 24h
+  noidlebackoff: false
+  transactiontimeout: 10s
+  reviewafter: 24h
+  manifests:
+    disabled: false
+    interval: 5s
+  blobs:
+    disabled: false
+    interval: 5s
+    storagetimeout: 5s
 ```
 
 ## Garbage Collection
