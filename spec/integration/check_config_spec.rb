@@ -856,4 +856,37 @@ describe 'checkConfig template' do
                       error_description: 'when Sidekiq timeout is more than terminationGracePeriodSeconds'
     end
   end
+  describe 'registry.gc (disabled)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+          gc:
+            disabled: false
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          gc:
+            disabled: false
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Enabling online garbage collection requires the metadata database to be enabled' }
+
+    include_examples 'config validation',
+                     success_description: 'when gc disabled is false, with database enabled',
+                     error_description: 'when gc disabled is false, with database disabled'
+  end
 end

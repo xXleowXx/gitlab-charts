@@ -45,6 +45,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.database" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.gc" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.migration" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
@@ -463,6 +464,18 @@ registry:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.migration */}}
+
+{{/*
+Ensure Registry online garbage collection is configured properly and dependencies are met
+*/}}
+{{- define "gitlab.checkConfig.registry.gc" -}}
+{{-   if not (or $.Values.registry.gc.disabled $.Values.registry.database.enabled) }}
+registry:
+    Enabling online garbage collection requires the metadata database to be enabled.
+    See https://docs.gitlab.com/charts/charts/registry#gc
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.gc */}}
 
 {{/*
 Ensure Puma is used when the dependency proxy is enabled
