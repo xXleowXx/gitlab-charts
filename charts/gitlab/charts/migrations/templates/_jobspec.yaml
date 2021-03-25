@@ -100,7 +100,7 @@ spec:
               subPath: migrations/initial_root_password
             - name: migrations-secrets
               mountPath: /srv/gitlab/config/gitlab_shared_runners_registration_token
-              subPath: migrations/gitlab_shared_runners_registration_token              
+              subPath: migrations/gitlab_shared_runners_registration_token
             {{- if .Values.global.gitlab.license.secret }}
             - name: migrations-secrets
               mountPath: /srv/gitlab/config/Gitlab.gitlab-license
@@ -157,7 +157,7 @@ spec:
                   path: migrations/initial_root_password
           - secret:
               name: {{ template "gitlab.gitlab-runner.registrationToken.secret" . }}
-              item: 
+              items: 
                 - key: runner-registration-token
                   path: migrations/gitlab_shared_runners_registration_token
           {{- if .Values.global.gitlab.license.secret }}
