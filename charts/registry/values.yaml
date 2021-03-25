@@ -300,3 +300,9 @@ database:
 # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#migration
 migration:
   disablemirrorfs: false
+
+# Disable online garbage collection by default.
+# NOTE: This is an experimental feature and must not be used in production.
+# https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc
+gc:
+  disabled: true
