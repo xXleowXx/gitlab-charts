@@ -1419,7 +1419,7 @@ global:
     serviceName: webservice-default
     host: api.example.com
     port: 8181
-    redis: false
+    redis: true
 ```
 
 | Name | Type | | Default | Description |
