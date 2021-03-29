@@ -166,8 +166,8 @@ data:
     {{- if .Values.global.redis.password.enabled }}
     Password = "<%= File.read("/etc/gitlab/redis/redis-password").strip.dump[1..-2] %>"
     {{- end }}
-    {{- include "workhorse.object_storage.config" $ | nindent 4 }}
     {{- end }}
+    {{- include "workhorse.object_storage.config" $ | nindent 4 }}
     [image_resizer]
     max_scaler_procs = {{ .Values.workhorse.imageScaler.maxProcs | int }}
     max_filesize = {{ .Values.workhorse.imageScaler.maxFileSizeBytes | int }}
