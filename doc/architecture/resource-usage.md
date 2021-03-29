@@ -92,7 +92,7 @@ In future tests we will try to include sustained concurrent load, to better matc
 
 Webservice resources were analyzed during testing with the
 [10k reference architecture](https://docs.gitlab.com/ee/administration/reference_architectures/10k_users.html).
-Notes can be found in the [Webservice resources documentation](../charts/gitlab/sidekiq/index.md#resources).
+Notes can be found in the [Webservice resources documentation](../charts/gitlab/webservice/index.md#resources).
 
 ### Sidekiq
 
