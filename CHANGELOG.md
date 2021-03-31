@@ -2,6 +2,17 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.10.1 (2021-03-31)
+
+### Fixed (1 change)
+
+- Fixes Container Registry notification when Geo syncing is disabled. !1899
+
+### Changed (1 change)
+
+- GitLab Exporter to 10.1.0. !1915
+
+
 ## 4.10.0 (2021-03-22)
 
 ### Fixed (6 changes, 2 of them are from the community)
@@ -34,6 +45,10 @@ entry.
 - Webservice: enable per-deployment blackoutSeconds. !1867
 - Add migration configurations to registry chart. !1888
 
+
+## 4.9.5 (2021-03-31)
+
+- No changes.
 
 ## 4.9.4 (2021-03-17)
 
@@ -105,6 +120,10 @@ entry.
 - Clarify EKS installation instructions. !1801
 - Add outgoing email section to 'globals' docs. !1821
 
+
+## 4.8.7 (2021-03-31)
+
+- No changes.
 
 ## 4.8.6 (2021-03-17)
 
