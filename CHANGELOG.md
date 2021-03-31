@@ -46,6 +46,10 @@ entry.
 - Add migration configurations to registry chart. !1888
 
 
+## 4.9.5 (2021-03-31)
+
+- No changes.
+
 ## 4.9.4 (2021-03-17)
 
 ### Changed (1 change)
