@@ -338,13 +338,6 @@ Handles merging a set of labels for services
 {{- end -}}
 {{- end -}}
 
-{{/*
-Returns gitlabUrl needed for gitlab-runner
-*/}}
-{{- define "gitlab-runner.gitlabUrl" -}}
-{{- template "gitlab.gitlab.url" . -}}
-{{- end -}}
-
 {{/* selfsigned cert for when other options aren't provided */}}
 {{- define "gitlab.wildcard-self-signed-cert-name" -}}
 {{- default (printf "%s-wildcard-tls" .Release.Name) .Values.global.ingress.tls.secretName -}}

@@ -1,5 +1,0 @@
----
-title: Fix Registry ingress' serviceName value
-merge_request: 1887
-author:
-type: fixed

@@ -4,12 +4,12 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Using the Praefect chart
-
-The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) inside a GitLab installment deployed with the Helm charts.
+# Using the Praefect chart (alpha)
 
 WARNING:
-The Praefect chart is still under development. It is not yet suitable for production use. Upgrades may require significant manual intervention.
+The Praefect chart is still under development. The alpha version is not yet suitable for production use. Upgrades may require significant manual intervention.
+
+The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) inside a GitLab installment deployed with the Helm charts.
 
 ## Known limitations and issues
 

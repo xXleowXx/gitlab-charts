@@ -45,6 +45,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.database" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.gc" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.migration" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
@@ -52,6 +54,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.timeout" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -451,6 +454,30 @@ registry:
 {{/* END gitlab.checkConfig.registry.database */}}
 
 {{/*
+Ensure Registry migration is configured properly and dependencies are met
+*/}}
+{{- define "gitlab.checkConfig.registry.migration" -}}
+{{-   if and $.Values.registry.migration.disablemirrorfs (not $.Values.registry.database.enabled) }}
+registry:
+    Disabling filesystem metadata requires the metadata database to be enabled.
+    See https://docs.gitlab.com/charts/charts/registry#migration
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.migration */}}
+
+{{/*
+Ensure Registry online garbage collection is configured properly and dependencies are met
+*/}}
+{{- define "gitlab.checkConfig.registry.gc" -}}
+{{-   if not (or $.Values.registry.gc.disabled $.Values.registry.database.enabled) }}
+registry:
+    Enabling online garbage collection requires the metadata database to be enabled.
+    See https://docs.gitlab.com/charts/charts/registry#gc
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.gc */}}
+
+{{/*
 Ensure Puma is used when the dependency proxy is enabled
 */}}
 {{- define "gitlab.checkConfig.dependencyProxy.puma" -}}
@@ -562,3 +589,17 @@ smtp:
 {{-   end }}
 {{- end -}}
 {{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}
+
+{{/*
+Ensure that Sidekiq timeout is less than terminationGracePeriodSeconds
+*/}}
+{{- define "gitlab.checkConfig.sidekiq.timeout" -}}
+{{-   range $i, $pod := $.Values.gitlab.sidekiq.pods -}}
+{{-     $activeTimeout := int (default $.Values.gitlab.sidekiq.timeout $pod.timeout) }}
+{{-     $activeTerminationGracePeriodSeconds := int (default $.Values.gitlab.sidekiq.deployment.terminationGracePeriodSeconds $pod.terminationGracePeriodSeconds) }}
+{{-     if gt $activeTimeout $activeTerminationGracePeriodSeconds }}
+sidekiq:
+  You must set `terminationGracePeriodSeconds` ({{ $activeTerminationGracePeriodSeconds }}) longer than `timeout` ({{ $activeTimeout }}) for pod `{{ $pod.name }}`.
+{{-     end }}
+{{-   end }}
+{{- end -}}
