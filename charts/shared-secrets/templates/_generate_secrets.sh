@@ -49,8 +49,8 @@ function generate_secret_from_literals(){
   declare -A keysValues
 
   for arg in "${raw_args[@]}"; do
-    local key=$(echo ${arg} | awk -F'=' '{print $1}')
-    local value=$(echo ${arg} | awk -F'=' '{print $2}')
+    local key=$(echo -n ${arg} | awk -F':' '{print $1}')
+    local value=$(echo -n ${arg} | awk -F':' '{print $2}')
 
     keysValues+=( ["${key}"]="${value}" )
     secret_args+=("--from-literal=${key}=${value}")
@@ -67,9 +67,9 @@ function generate_secret_from_literals(){
         echo "key \"${key}\" does not exist. patching it in."
 
         # If desired value is an empty string, leave it as such. Otherwise, base64 encode it.
-        desiredValue=$(echo ${keysValues[${key}]})
+        local desiredValue=$(echo -n ${keysValues[${key}]})
         if [ "${desiredValue}" != "" ]; then
-          desiredValue=$(echo "${desiredValue}" | base64 -w 0)
+          desiredValue=$(echo -n "${desiredValue}" | base64 -w 0)
         fi
 
         kubectl --namespace=$namespace patch secret ${secret_name} -p "{\"data\":{\"$key\":\"${desiredValue}\"}}"
@@ -81,50 +81,50 @@ function generate_secret_from_literals(){
 }
 
 # Initial root password
-generate_secret_if_needed {{ template "gitlab.migrations.initialRootPassword.secret" . }} --from-literal={{ template "gitlab.migrations.initialRootPassword.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_from_literals {{ template "gitlab.migrations.initialRootPassword.secret" . }} {{ template "gitlab.migrations.initialRootPassword.key" . }}:$(gen_random 'a-zA-Z0-9' 64)
 
 {{ if and (not .Values.global.redis.host) .Values.global.redis.password.enabled -}}
 # Redis password
-generate_secret_if_needed {{ template "gitlab.redis.password.secret" . }} --from-literal={{ template "gitlab.redis.password.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_from_literals {{ template "gitlab.redis.password.secret" . }} {{ template "gitlab.redis.password.key" . }}:$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
 
 {{ if not .Values.global.psql.host -}}
 # Postgres password
-generate_secret_if_needed {{ template "gitlab.psql.password.secret" . }} --from-literal=postgresql-password=$(gen_random 'a-zA-Z0-9' 64) --from-literal=postgresql-postgres-password=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_from_literals {{ template "gitlab.psql.password.secret" . }} postgresql-password:$(gen_random 'a-zA-Z0-9' 64) postgresql-postgres-password:$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
 
 # Gitlab shell
-generate_secret_if_needed {{ template "gitlab.gitlab-shell.authToken.secret" . }} --from-literal={{ template "gitlab.gitlab-shell.authToken.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_from_literals {{ template "gitlab.gitlab-shell.authToken.secret" . }} {{ template "gitlab.gitlab-shell.authToken.key" . }}:$(gen_random 'a-zA-Z0-9' 64) firstname:mitch lastname:nielsen
 
 # Gitaly secret
-generate_secret_if_needed {{ template "gitlab.gitaly.authToken.secret" . }} --from-literal={{ template "gitlab.gitaly.authToken.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_from_literals {{ template "gitlab.gitaly.authToken.secret" . }} {{ template "gitlab.gitaly.authToken.key" . }}:$(gen_random 'a-zA-Z0-9' 64)
 
 {{ if .Values.global.minio.enabled -}}
 # Minio secret
-generate_secret_if_needed {{ template "gitlab.minio.credentials.secret" . }} --from-literal=accesskey=$(gen_random 'a-zA-Z0-9' 64) --from-literal=secretkey=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_from_literals {{ template "gitlab.minio.credentials.secret" . }} accesskey:$(gen_random 'a-zA-Z0-9' 64) secretkey:$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
 
 # Gitlab runner secret
-generate_secret_if_needed {{ template "gitlab.gitlab-runner.registrationToken.secret" . }} --from-literal=runner-registration-token=$(gen_random 'a-zA-Z0-9' 64) --from-literal=runner-token=""
+generate_secret_from_literals {{ template "gitlab.gitlab-runner.registrationToken.secret" . }} runner-registration-token:$(gen_random 'a-zA-Z0-9' 64) runner-token:""
 
 # GitLab Pages API secret
 {{ if or (eq $.Values.global.pages.enabled true) (not (empty $.Values.global.pages.host)) }}
-generate_secret_if_needed {{ template "gitlab.pages.apiSecret.secret" . }} --from-literal={{ template "gitlab.pages.apiSecret.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
+generate_secret_from_literals {{ template "gitlab.pages.apiSecret.secret" . }} {{ template "gitlab.pages.apiSecret.key" . }}:$(gen_random 'a-zA-Z0-9' 32 | base64)
 {{ end }}
 
 # GitLab Pages auth secret for hashing cookie store when using access control
 {{ if and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl true) }}
-generate_secret_if_needed {{ template "gitlab.pages.authSecret.secret" . }} --from-literal={{ template "gitlab.pages.authSecret.key" . }}=$(gen_random 'a-zA-Z0-9' 64 | base64 -w 0)
+generate_secret_from_literals {{ template "gitlab.pages.authSecret.secret" . }} {{ template "gitlab.pages.authSecret.key" . }}:$(gen_random 'a-zA-Z0-9' 64 | base64)
 {{ end }}
 
 # GitLab Pages OAuth secret
 {{ if and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl true) }}
-generate_secret_if_needed {{ template "oauth.gitlab-pages.secret" . }} --from-literal={{ template "oauth.gitlab-pages.appIdKey" . }}=$(gen_random 'a-zA-Z0-9' 64) --from-literal={{ template "oauth.gitlab-pages.appSecretKey" . }}=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_from_literals {{ template "oauth.gitlab-pages.secret" . }} {{ template "oauth.gitlab-pages.appIdKey" . }}:$(gen_random 'a-zA-Z0-9' 64) {{ template "oauth.gitlab-pages.appSecretKey" . }}:$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
 
 {{ if .Values.global.kas.enabled -}}
 # Gitlab-kas secret
-generate_secret_if_needed {{ template "gitlab.kas.secret" . }} --from-literal={{ template "gitlab.kas.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
+generate_secret_from_literals {{ template "gitlab.kas.secret" . }} {{ template "gitlab.kas.key" . }}:$(gen_random 'a-zA-Z0-9' 32 | base64)
 {{ end }}
 
 # Registry certificates
@@ -185,25 +185,25 @@ cp /etc/ssh/ssh_host_* host_keys/
 generate_secret_if_needed {{ template "gitlab.gitlab-shell.hostKeys.secret" . }} --from-file host_keys
 
 # Gitlab-workhorse secret
-generate_secret_if_needed {{ template "gitlab.workhorse.secret" . }} --from-literal={{ template "gitlab.workhorse.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
+generate_secret_from_literals {{ template "gitlab.workhorse.secret" . }} {{ template "gitlab.workhorse.key" . }}:$(gen_random 'a-zA-Z0-9' 32 | base64)
 
 # Registry http.secret secret
-generate_secret_if_needed {{ template "gitlab.registry.httpSecret.secret" . }} --from-literal={{ template "gitlab.registry.httpSecret.key" . }}=$(gen_random 'a-z0-9' 128 | base64 -w 0)
+generate_secret_from_literals {{ template "gitlab.registry.httpSecret.secret" . }} {{ template "gitlab.registry.httpSecret.key" . }}:$(gen_random 'a-z0-9' 128 | base64 -w 0)
 
 # Container Registry notification_secret
 {{ if and .Values.global.geo.enabled .Values.global.geo.registry.syncEnabled }}
-generate_secret_if_needed {{ template "gitlab.registry.notificationSecret.secret" . }} --from-literal={{ template "gitlab.registry.notificationSecret.key" . }}=[\"$(gen_random 'a-zA-Z0-9' 32)\"]
+generate_secret_from_literals {{ template "gitlab.registry.notificationSecret.secret" . }} {{ template "gitlab.registry.notificationSecret.key" . }}:[\"$(gen_random 'a-zA-Z0-9' 32)\"]
 {{ end }}
 
 {{ if .Values.global.grafana.enabled -}}
 # Grafana password
-generate_secret_if_needed "gitlab-grafana-initial-password" --from-literal=password=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_from_literals "gitlab-grafana-initial-password" password:$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
 
 {{ if .Values.global.praefect.enabled }}
 # Praefect DB password
-generate_secret_if_needed {{ template "gitlab.praefect.dbSecret.secret" . }} --from-literal={{ template "gitlab.praefect.dbSecret.key" . }}=$(gen_random 'a-zA-Z0-9', 32)
+generate_secret_from_literals {{ template "gitlab.praefect.dbSecret.secret" . }} {{ template "gitlab.praefect.dbSecret.key" . }}:$(gen_random 'a-zA-Z0-9', 32)
 
 # Gitaly secret
-generate_secret_if_needed {{ template "gitlab.praefect.authToken.secret" . }} --from-literal={{ template "gitlab.praefect.authToken.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
+generate_secret_from_literals {{ template "gitlab.praefect.authToken.secret" . }} {{ template "gitlab.praefect.authToken.key" . }}:$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
