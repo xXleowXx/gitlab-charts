@@ -146,4 +146,30 @@ be sure are working:
 1. If you get a certificate warning, there has been a problem with Let's Encrypt,
 usually related to DNS, or the need to retry.
 
+
+### Helm Install Returns `roles.rbac.authorization.k8s.io "gitlab-shared-secrets" is forbidden`
+
+After running:
+
+```shell
+helm install gitlab gitlab/gitlab  \
+  --set global.hosts.domain=DOMAIN \
+  --set certmanager-issuer.email=user@example.com
+```
+
+You might see an error similar to:
+
+```shell
+Error: failed pre-install: warning: Hook pre-install gitlab/charts/shared-secrets/templates/rbac-config.yaml failed: roles.rbac.authorization.k8s.io "gitlab-shared-secrets" is forbidden: user "some-user@some-domain.com" (groups=["system:authenticated"]) is attempting to grant RBAC permissions not currently held:
+{APIGroups:[""], Resources:["secrets"], Verbs:["get" "list" "create" "patch"]}
+```
+
+This is most likely because your user requires cluster-scope write access, as explained [here](https://helm.sh/docs/topics/rbac/#example-grant-a-user-readwrite-access-at-the-cluster-scope). Enabling `admin` access should be good for the purpose of this Quick Start guide, e.g:
+
+```shell
+kubectl create clusterrolebinding some-user-admin
+  --clusterrole view \​
+  --user some-user@some-domain.com
+```
+
 For further troubleshooting tips, see our [troubleshooting](../troubleshooting/index.md) guide.
