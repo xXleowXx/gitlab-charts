@@ -1,5 +1,0 @@
----
-title: 'Fix for Rancher/RKE: Remove extra space before -}} in _kas.tpl'
-merge_request: 1925
-author:
-type: fixed

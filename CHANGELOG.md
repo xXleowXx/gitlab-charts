@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.10.2 (2021-04-01)
+
+### Fixed (1 change)
+
+- Fix for Rancher/RKE: Remove extra space before -}} in _kas.tpl. !1925
+
+
 ## 4.10.1 (2021-03-31)
 
 ### Fixed (1 change)
