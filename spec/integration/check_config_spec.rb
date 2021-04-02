@@ -521,38 +521,30 @@ describe 'checkConfig template' do
 
   describe 'gitaly.duplicate.repos' do
     let(:success_values) do
-      default_required_values.deep_merge(
-        YAML.safe_load(
-          <<~CONFIG
-            global:
-              gitaly:
-                internal:
-                  names:
-                  - default
-                external:
-                  - name: foo
-                    hostname: bar
-          CONFIG
-        )
-      )
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            internal:
+              names:
+              - default
+            external:
+              - name: foo
+                hostname: bar
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      default_required_values.deep_merge(
-        YAML.safe_load(
-          <<~CONFIG
-            global:
-              gitaly:
-                internal:
-                  names:
-                  - default
-                  - foo
-                external:
-                  - name: foo
-                    hostname: bar
-          CONFIG
-        )
-      )
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            internal:
+              names:
+              - default
+              - foo
+            external:
+              - name: foo
+                hostname: bar
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'Each storage name must be unique.' }
@@ -564,43 +556,35 @@ describe 'checkConfig template' do
 
   describe 'gitaly.duplicate.repos with praefect' do
     let(:success_values) do
-      default_required_values.deep_merge(
-        YAML.safe_load(
-          <<~CONFIG
-            global:
-              gitaly:
-                internal:
-                  names:
-                  - default
-                  - foo
-              praefect:
-                enabled: true
-                replaceInternalGitaly: false
-                virtualStorages:
-                - name: defaultPraefect
-          CONFIG
-        )
-      )
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            internal:
+              names:
+              - default
+              - foo
+          praefect:
+            enabled: true
+            replaceInternalGitaly: false
+            virtualStorages:
+            - name: defaultPraefect
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      default_required_values.deep_merge(
-        YAML.safe_load(
-          <<~CONFIG
-            global:
-              gitaly:
-                internal:
-                  names:
-                  - default
-                  - foo
-              praefect:
-                enabled: true
-                replaceInternalGitaly: false
-                virtualStorages:
-                - name: foo
-          CONFIG
-        )
-      )
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            internal:
+              names:
+              - default
+              - foo
+          praefect:
+            enabled: true
+            replaceInternalGitaly: false
+            virtualStorages:
+            - name: foo
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'Each storage name must be unique.' }
@@ -612,37 +596,29 @@ describe 'checkConfig template' do
 
   describe 'gitaly.default.repo' do
     let(:success_values) do
-      default_required_values.deep_merge(
-        YAML.safe_load(
-          <<~CONFIG
-            global:
-              gitaly:
-                internal:
-                  names:
-                  - default
-                external:
-                  - name: external1
-                    hostname: foo
-          CONFIG
-        )
-      )
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            internal:
+              names:
+              - default
+            external:
+              - name: external1
+                hostname: foo
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      default_required_values.deep_merge(
-        YAML.safe_load(
-          <<~CONFIG
-            global:
-              gitaly:
-                internal:
-                  names:
-                  - foo
-                external:
-                  - name: bar
-                    hostname: baz
-          CONFIG
-        )
-      )
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            internal:
+              names:
+              - foo
+            external:
+              - name: bar
+                hostname: baz
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'There must be one (and only one) storage named \'default\'.' }
@@ -654,47 +630,39 @@ describe 'checkConfig template' do
 
   describe 'gitaly.default.repo with praefect' do
     let(:success_values) do
-      default_required_values.deep_merge(
-        YAML.safe_load(
-          <<~CONFIG
-            global:
-              gitaly:
-                internal:
-                  names:
-                    - default
-                external:
-                  - name: external1
-                    hostname: foo
-              praefect:
-                enabled: true
-                replaceInternalGitaly: false
-                virtualStorages:
-                - name: praefect1
-          CONFIG
-        )
-      )
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            internal:
+              names:
+                - default
+            external:
+              - name: external1
+                hostname: foo
+          praefect:
+            enabled: true
+            replaceInternalGitaly: false
+            virtualStorages:
+            - name: praefect1
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      default_required_values.deep_merge(
-        YAML.safe_load(
-          <<~CONFIG
-            global:
-              gitaly:
-                internal:
-                  names:
-                    - internal1
-                external:
-                  - name: external1
-                    hostname: baz
-              praefect:
-                enabled: true
-                replaceInternalGitaly: false
-                virtualStorages:
-                - name: praefect1
-          CONFIG
-        )
-      )
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            internal:
+              names:
+                - internal1
+            external:
+              - name: external1
+                hostname: baz
+          praefect:
+            enabled: true
+            replaceInternalGitaly: false
+            virtualStorages:
+            - name: praefect1
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'There must be one (and only one) storage named \'default\'.' }
