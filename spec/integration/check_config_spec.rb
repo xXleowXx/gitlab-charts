@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'helm_template_helper'
 require 'yaml'
+require 'hash_deep_merge'
 
 describe 'checkConfig template' do
   let(:check) do
@@ -520,61 +521,187 @@ describe 'checkConfig template' do
 
   describe 'gitaly.duplicate.repos' do
     let(:success_values) do
-      {
-        'global' => {
-          'gitaly' => { 'external' => [ { 'name' => 'external1', 'hostname' => 'foo' } ] }
-        }
-      }.merge(default_required_values)
+      default_required_values.deep_merge(
+        YAML.safe_load(
+          <<~CONFIG
+            global:
+              gitaly:
+                internal:
+                  names:
+                  - default
+                external:
+                  - name: foo
+                    hostname: bar
+          CONFIG
+        )
+      )
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'gitaly' => { 'external' => [ { 'name' => 'default', 'hostname' => 'foo' } ] }
-        }
-      }.merge(default_required_values)
+      default_required_values.deep_merge(
+        YAML.safe_load(
+          <<~CONFIG
+            global:
+              gitaly:
+                internal:
+                  names:
+                  - default
+                  - foo
+                external:
+                  - name: foo
+                    hostname: bar
+          CONFIG
+        )
+      )
     end
 
-    let(:error_output) { '`global.gitaly.internal.names[0]` and `global.gitaly.external[0].name` cannot both equal `default`' }
+    let(:error_output) { 'Each storage name must be unique.' }
 
     include_examples 'config validation',
-                    success_description: 'when Gitaly is enabled and external name is not default',
-                    error_description: 'when Gitaly is enabled and external name is default (duplicate)'
+                    success_description: 'when Gitaly is enabled and storage names are unique',
+                    error_description: 'when Gitaly is enabled and storage names are not unique'
+  end
+
+  describe 'gitaly.duplicate.repos with praefect' do
+    let(:success_values) do
+      default_required_values.deep_merge(
+        YAML.safe_load(
+          <<~CONFIG
+            global:
+              gitaly:
+                internal:
+                  names:
+                  - default
+                  - foo
+              praefect:
+                enabled: true
+                replaceInternalGitaly: false
+                virtualStorages:
+                - name: defaultPraefect
+          CONFIG
+        )
+      )
+    end
+
+    let(:error_values) do
+      default_required_values.deep_merge(
+        YAML.safe_load(
+          <<~CONFIG
+            global:
+              gitaly:
+                internal:
+                  names:
+                  - default
+                  - foo
+              praefect:
+                enabled: true
+                replaceInternalGitaly: false
+                virtualStorages:
+                - name: foo
+          CONFIG
+        )
+      )
+    end
+
+    let(:error_output) { 'Each storage name must be unique.' }
+
+    include_examples 'config validation',
+                    success_description: 'when Gitaly is enabled and storage names are unique',
+                    error_description: 'when Gitaly is enabled and storage names are not unique'
   end
 
   describe 'gitaly.default.repo' do
     let(:success_values) do
-      {
-        'global' => {
-          'gitaly' => {
-            'internal' => { 'names' => ['default'] },
-            'external' => [ { 'name' => 'external1', 'hostname' => 'foo' } ]
-          }
-        }
-      }.merge(default_required_values)
+      default_required_values.deep_merge(
+        YAML.safe_load(
+          <<~CONFIG
+            global:
+              gitaly:
+                internal:
+                  names:
+                  - default
+                external:
+                  - name: external1
+                    hostname: foo
+          CONFIG
+        )
+      )
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'gitaly' => {
-            'internal' => { 'names' => ['internal1'] },
-            'external' => [ { 'name' => 'external1', 'hostname' => 'foo' } ]
-          },
-          'praefect' => {
-            'enabled' => true,
-            'replaceInternalGitaly' => false,
-            'virtualStorages' => [ { 'name' => 'praefect1', 'gitalyReplicas' => 2 } ]
-          }
-        }
-      }.merge(default_required_values)
+      default_required_values.deep_merge(
+        YAML.safe_load(
+          <<~CONFIG
+            global:
+              gitaly:
+                internal:
+                  names:
+                  - foo
+                external:
+                  - name: bar
+                    hostname: baz
+          CONFIG
+        )
+      )
     end
 
     let(:error_output) { 'There must be one (and only one) storage named \'default\'.' }
 
     include_examples 'config validation',
-                    success_description: 'when Gitaly is enabled and external name is not default',
-                    error_description: 'when Gitaly is enabled and external name is default (duplicate)'
+                    success_description: 'when Gitaly is enabled and one storage is named "default"',
+                    error_description: 'when Gitaly is enabled and no storages are named "default"'
+  end
+
+  describe 'gitaly.default.repo with praefect' do
+    let(:success_values) do
+      default_required_values.deep_merge(
+        YAML.safe_load(
+          <<~CONFIG
+            global:
+              gitaly:
+                internal:
+                  names:
+                    - default
+                external:
+                  - name: external1
+                    hostname: foo
+              praefect:
+                enabled: true
+                replaceInternalGitaly: false
+                virtualStorages:
+                - name: praefect1
+          CONFIG
+        )
+      )
+    end
+
+    let(:error_values) do
+      default_required_values.deep_merge(
+        YAML.safe_load(
+          <<~CONFIG
+            global:
+              gitaly:
+                internal:
+                  names:
+                    - internal1
+                external:
+                  - name: external1
+                    hostname: baz
+              praefect:
+                enabled: true
+                replaceInternalGitaly: false
+                virtualStorages:
+                - name: praefect1
+          CONFIG
+        )
+      )
+    end
+
+    let(:error_output) { 'There must be one (and only one) storage named \'default\'.' }
+
+    include_examples 'config validation',
+                    success_description: 'when Gitaly and Praefect are enabled and one storage is named "default"',
+                    error_description: 'when Gitaly and Praefect are enabled and no storages are named "default"'
   end
 
   describe 'gitaly.task-runner.replicas' do

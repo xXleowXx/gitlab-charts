@@ -79,55 +79,26 @@ contentSecurityPolicy:
 
 {{/*
 Protect against duplicate storage names across external Gitaly and/or Prafect.
+Also ensures that one (and only one) storage is named 'default'.
+
+Collects the list of storage names by rendering the 'gitlab.appConfig.repositories'
+template, and grabbing any lines that start with exactly 4 spaces.
 */}}
 {{- define "gitlab.checkConfig.gitaly.storageNames" -}}
-{{- $gitaly := $.Values.global.gitaly -}}
-{{- $praefect := $.Values.global.praefect -}}
-{{- $gitalyInternalNames := list -}}
-{{- $gitalyExternalNames := list -}}
-{{- $praefectNames := list -}}
 {{- $errorMsg := list -}}
-{{/* Collect Gitaly internal/external and Praefect names */}}
-{{- $gitalyInternalNames = $gitaly.internal.names -}}
-{{- range $_, $n := $gitaly.external -}}
-{{-   $gitalyExternalNames = append $gitalyExternalNames $n.name -}}
+{{- $config := include "gitlab.appConfig.repositories" $ -}}
+{{- $storages := list }}
+{{- range (splitList "\n" $config) -}}
+{{-   if (regexMatch "^    [^ ]" . ) -}}
+{{-     $storages = append $storages (trim . | trimSuffix ":") -}}
+{{-   end }}
+{{- end }}
+{{- if gt (len $storages) (len (uniq $storages)) -}}
+{{-   $errorMsg = append $errorMsg (printf "Each storage name must be unique. Current storage names: %s" $storages | sortAlpha | join ", ") -}}
 {{- end -}}
-{{- range $_, $n := $praefect.virtualStorages -}}
-{{-   $praefectNames = append $praefectNames $n.name -}}
-{{- end -}}
-{{/* Compare internal Gitaly names against external Gitaly and Praefect */}}
-{{- if $gitaly.enabled -}}
-{{-   range $igi, $ign := $gitalyInternalNames -}}
-{{/*    Compare internal Gitaly names to external Gitaly names */}}
-{{-     range $egi, $egn := $gitalyExternalNames -}}
-{{-       if eq $ign $egn -}}
-{{-         $errorMsg = append $errorMsg (printf "`global.gitaly.internal.names[%d]` and `global.gitaly.external[%d].name` cannot both equal `%s`" $igi $egi $egn) -}}
-{{-       end -}}
-{{-     end -}}
-{{/*    Compare internal Gitaly names to Praefect names */}}
-{{-     if and $praefect.enabled (not $praefect.replaceInternalGitaly) -}}
-{{-       range $pi, $pn := $praefectNames -}}
-{{-         if eq $ign $pn -}}
-{{-           $errorMsg = append $errorMsg (printf "`global.gitaly.internal.names[%d]` and `global.praefect.virtualStorages[%d].name` cannot both equal `%s`" $igi $pi $ign) -}}
-{{-         end -}}
-{{-       end -}}
-{{-     end -}}
-{{-   end -}}
-{{- end -}}
-{{/* Compare external Gitaly names (if any) against Praefect */}}
-{{- if $praefect.enabled -}}
-{{-  range $egi, $egn := $gitalyExternalNames -}}
-{{-    range $pi, $pn := $praefectNames -}}
-{{-      if eq $egn $pn -}}
-{{-        $errorMsg = append $errorMsg (printf "`global.gitaly.external.names[%d]` and `global.praefect.virtualStorages[%d].name` cannot both equal `%s`" $egi $pi $egn) -}}
-{{-      end -}}
-{{-    end -}}
-{{-  end -}}
-{{- end -}}
-{{/* Ensure that one storage name is named 'default' */}}
-{{- if not (has "default" (concat $gitalyInternalNames $gitalyExternalNames $praefectNames)) -}}
-{{-   $errorMsg = append $errorMsg "There must be one (and only one) storage named 'default'." -}}
-{{- end -}}
+{{- if not (has "default" $storages) -}}
+{{-   $errorMsg = append $errorMsg ("There must be one (and only one) storage named 'default'.") -}}
+{{- end }}
 {{- if not (empty $errorMsg) }}
 gitaly:
 {{- range $msg := $errorMsg }}
