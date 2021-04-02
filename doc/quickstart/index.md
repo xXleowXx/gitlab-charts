@@ -146,7 +146,6 @@ be sure are working:
 1. If you get a certificate warning, there has been a problem with Let's Encrypt,
 usually related to DNS, or the need to retry.
 
-
 ### Helm Install Returns `roles.rbac.authorization.k8s.io "gitlab-shared-secrets" is forbidden`
 
 After running:
