@@ -499,7 +499,7 @@ describe 'checkConfig template' do
     let(:success_values) do
       {
         'global' => {
-          'gitaly' => { 'enabled' => false, 'external' => [{ 'name' => 'foo', 'hostname' => 'bar' }] }
+          'gitaly' => { 'enabled' => false, 'external' => [{ 'name' => 'default', 'hostname' => 'bar' }] }
         }
       }.merge(default_required_values)
     end
