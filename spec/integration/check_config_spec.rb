@@ -606,8 +606,8 @@ describe 'checkConfig template' do
     let(:error_output) { 'Each storage name must be unique.' }
 
     include_examples 'config validation',
-                    success_description: 'when Gitaly is enabled and storage names are unique',
-                    error_description: 'when Gitaly is enabled and storage names are not unique'
+                    success_description: 'when Gitaly and Praefect are enabled and storage names are unique',
+                    error_description: 'when Gitaly and Praefect are enabled and storage names are not unique'
   end
 
   describe 'gitaly.default.repo' do
