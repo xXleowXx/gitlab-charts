@@ -78,8 +78,9 @@ contentSecurityPolicy:
 {{/* END gitlab.checkConfig.contentSecurityPolicy */}}
 
 {{/*
-Protect against duplicate storage names in the repositories configuration.
-Also ensure that one (and only one) storage is named 'default'.
+Protect against problems in storage names within repositories configuration.
+- Ensure that one (and only one) storage is named 'default'.
+- Ensure no duplicates
 
 Collects the list of storage names by rendering the 'gitlab.appConfig.repositories'
 template, and grabbing any lines that start with exactly 4 spaces.
