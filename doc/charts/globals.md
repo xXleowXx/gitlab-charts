@@ -797,6 +797,12 @@ global:
         key: password
       mailbox: inbox
       idleTimeout: 60
+      inboxMethod: "imap"
+      inboxOptions:
+        clientSecret:
+          key: secret
+        pollInterval: 60
+
     serviceDeskEmail:
       enabled: false
       address: ""
@@ -810,6 +816,12 @@ global:
         key: password
       mailbox: inbox
       idleTimeout: 60
+      inboxMethod: "imap"
+      inboxOptions:
+        clientSecret:
+          key: secret
+        pollInterval: 60
+
     pseudonymizer:
       configMap:
       bucket: gitlab-pseudo

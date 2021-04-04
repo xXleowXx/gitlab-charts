@@ -42,6 +42,12 @@ global:
         logPath: "/dev/stdout"
       mailbox: inbox
       idleTimeout: 60
+      inboxMethod: "imap"
+      inboxOptions:
+        clientSecret:
+          key: secret
+        pollInterval: 60
+
     serviceDeskEmail:
       enabled: false
       address:
@@ -58,6 +64,11 @@ global:
         logPath: "/dev/stdout"
       mailbox: inbox
       idleTimeout: 60
+      inboxMethod: "imap"
+      inboxOptions:
+        clientSecret:
+          key: secret
+        pollInterval: 60
 
 hpa:
   minReplicas: 1

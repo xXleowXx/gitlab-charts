@@ -387,6 +387,36 @@ in your Helm command along with other required settings as specified [in the doc
 NOTE:
 Use the `Secret` name, not the _actual password_ when configuring the Helm property.
 
+### Microsoft Graph client secret for incoming emails
+
+To let GitLab have access to [incoming emails](https://docs.gitlab.com/ee/administration/incoming_email.html)
+store the password of the IMAP account in a Kubernetes secret.
+
+```shell
+kubectl create secret generic incoming-email-client-secret --from-literal=secret=your-secret-here
+```
+
+Then use `--set global.appConfig.incomingEmail.inboxOptions.clientSecret.secret=incoming-email-client-secret`
+in your Helm command along with other required settings as specified [in the docs](command-line-options.md#incoming-email-configuration).
+
+NOTE:
+Use the `Secret` name, not the _actual password_ when configuring the Helm property.
+
+### Microsoft Graph client secret for service desk emails
+
+To let GitLab have access to [service_desk emails](https://docs.gitlab.com/ee/user/project/service_desk.html#using-custom-email-address)
+store the password of the IMAP account in a Kubernetes secret.
+
+```shell
+kubectl create secret generic service-desk-email-client-secret --from-literal=secret=your-secret-here
+```
+
+Then use `--set global.appConfig.serviceDeskEmail.inboxOptions.clientSecret.secret=service-desk-email-client-secret`
+in your Helm command along with other required settings as specified [in the docs](command-line-options.md#service-desk-email-configuration).
+
+NOTE:
+Use the `Secret` name, not the _actual password_ when configuring the Helm property.
+
 ### S/MIME Certificate
 
 Outgoing email messages can be digitally signed using the [S/MIME](https://en.wikipedia.org/wiki/S/MIME) standard.
