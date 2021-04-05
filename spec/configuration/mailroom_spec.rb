@@ -96,12 +96,12 @@ describe 'Mailroom configuration' do
               'address' => 'servicedesk+%{key}@test.example.com',
               'inboxMethod' => 'microsoft_graph',
               'inboxOptions' => {
-                'tenantId' => 'SOME-TENANT-ID',
-                'clientId' => 'SOME-CLIENT-ID',
+                'tenantId' => 'OTHER-TENANT-ID',
+                'clientId' => 'OTHER-CLIENT-ID',
                 'clientSecret' => {
                   'secret' => 'mailroom-client-id'
                 },
-                'pollInterval' => 30
+                'pollInterval' => 45
               }
             }
           }
@@ -114,12 +114,12 @@ describe 'Mailroom configuration' do
 
         expect(t.exit_code).to eq(0)
         expect(mail_room_yml[:mailboxes].length).to eq(2)
-        expect(raw_mail_room_yml).to include(%(:client_secret: "<%= File.read("/etc/gitlab/mailroom/client_id_incoming_email").strip.dump[1..-2] %>"))
+        expect(raw_mail_room_yml).to include(%(:client_secret: "<%= File.read("/etc/gitlab/mailroom/client_id_service_desk").strip.dump[1..-2] %>"))
         expect(mailbox[:inbox_options]).to be_a(Hash)
-        expect(mailbox[:inbox_options][:tenant_id]).to eq('SOME-TENANT-ID')
-        expect(mailbox[:inbox_options][:client_id]).to eq('SOME-CLIENT-ID')
+        expect(mailbox[:inbox_options][:tenant_id]).to eq('OTHER-TENANT-ID')
+        expect(mailbox[:inbox_options][:client_id]).to eq('OTHER-CLIENT-ID')
         expect(mailbox[:inbox_options][:client_secret]).to eq('secret')
-        expect(mailbox[:inbox_options][:poll_interval]).to eq(30)
+        expect(mailbox[:inbox_options][:poll_interval]).to eq(45)
       end
     end
   end
