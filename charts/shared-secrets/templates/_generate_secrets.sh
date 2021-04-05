@@ -37,7 +37,7 @@ function generate_secret_if_needed(){
   if ! $(kubectl --namespace=$namespace get secret $secret_name > /dev/null 2>&1); then
     kubectl --namespace=$namespace create secret generic $secret_name ${secret_args[@]}
   else
-    echo "secret \"$secret_name\" already exists. checking content."
+    echo "secret \"$secret_name\" already exists."
 
     for arg in "${secret_args[@]}"; do
       local from=$(echo -n ${arg} | cut -d '=' -f1)
