@@ -97,7 +97,7 @@ function do_creds() {
     options+=(--auto-kubeconfig)
   fi
 
-  eksctl utils write-kubeconfig -r "${region}" -n "${cluster_name}" ${options[*]}
+  eksctl utils write-kubeconfig -r "${region}" -c "${cluster_name}" ${options[*]}
 }
 
 while getopts c:n:k:r:m:s:K:R:A opt
