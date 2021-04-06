@@ -50,43 +50,43 @@ In future tests we will try to include sustained concurrent load, to better matc
 - **Idle values**
   - 0 tasks, 2 pods
     - cpu: 0
-    - memory: 5M
+    - memory: `5M`
 
 - **Minimal Load**
   - 1 tasks (one empty clone), 2 pods
     - cpu: 0
-    - memory: 5M
+    - memory: `5M`
 
 - **Average Loads**
   - 5 concurrent clones, 2 pods
-    - cpu: 0.1
-    - memory: 5M
+    - cpu: `100m`
+    - memory: `5M`
   - 20 concurrent clones, 2 pods
-    - cpu: 0.08
-    - memory: 6M
+    - cpu: `80m`
+    - memory: `6M`
 
 - **Stressful Task**
   - SSH clone the Linux kernel (17MB/s)
-    - CPU: 0.28
-    - memory: 17M
+    - cpu: `280m`
+    - memory: `17M`
   - SSH push the Linux kernel (2MB/s)
-    - CPU: 0.14
-    - memory: 13M
+    - cpu: `140m`
+    - memory: `13M`
     - *Upload connection speed was likely a factor during our tests*
 
 - **Heavy Load**
   - 100 concurrent clones, 4 pods
-    - cpu: 0.11
-    - memory: 7M
+    - cpu: `110m`
+    - memory: `7M`
 
 - **Default Requests**
-  - CPU: 0 (from minimal load)
-  - memory: 6M (from average load)
-  - target CPU average: 0.1 (from average loads)
+  - cpu: 0 (from minimal load)
+  - memory: `6M` (from average load)
+  - target CPU average: `100m` (from average loads)
 
 - **Recommended Limits**
-  - CPU: > 0.3 (greater than stress task)
-  - memory: > 20M (greater than stress task)
+  - cpu: > `300m` (greater than stress task)
+  - memory: > `20M` (greater than stress task)
 
 ### Webservice
 
@@ -106,36 +106,36 @@ Until we learn more about our users need, we expect that our users will be using
 
 - **Idle values**
   - 0 agents connected, 2 pods
-    - CPU: 0.01
-    - Memory: 50MiB
+    - cpu: `10m`
+    - memory: `55M`
 - **Minimal Load**:
   - 1 agents connected, 2 pods
-    - CPU: 0.01
-    - Memory: 50MiB
+    - cpu: `10m`
+    - memory: `55M`
 - **Average Load**: 1 agent is connected to the cluster.
   - 5 agents connected, 2 pods
-    - CPU: 0.01
-    - Memory: 60MiB
+    - cpu: `10m`
+    - memory: `65M`
 - **Stressful Task**:
   - 20 agents connected, 2 pods
-    - CPU: 0.03
-    - Memory: 90MiB
+    - cpu: `30m`
+    - memory: `95M`
 - **Heavy Load**:
   - 50 agents connected, 2 pods
-    - CPU: 0.04
-    - Memory: 140MiB
+    - cpu: `40m`
+    - memory: `150M`
 - **Extra Heavy Load**:
   - 200 agents connected, 2 pods
-    - CPU: 0.05
-    - Memory: 300MiB
+    - cpu: `50m`
+    - memory: `315M`
 
 The KAS resources defaults set by this chart are more than enough to handle even the 50 agents scenario.
 If you are planning to reach what we consider an **Extra Heavy Load**, then you should consider tweaking the 
 default to scale up.
 
 - **Defaults**: 2 pods, each with
-  - CPU: 0.1
-  - memory: 100M
+  - cpu: `100m`
+  - memory: `100M`
   
 For more information on how these numbers were calculated, see the 
 [issue discussion](https://gitlab.com/gitlab-org/gitlab/-/issues/296789#note_542196438).
