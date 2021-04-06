@@ -17,14 +17,8 @@ spec:
   replicas: {{ include "gitlab.gitaly.replicas" . }}
   {{- end }}
   podManagementPolicy: Parallel
-  {{- if .Values.global.operator.enabled }}
-  updateStrategy:
-    rollingUpdate:
-      {{- if .storage }}
-      partition: {{ default (include "gitlab.gitaly.replicas" .) .storage.gitalyReplicas }}
-      {{- else }}
-      partition: {{ include "gitlab.gitaly.replicas" . }}
-      {{- end }}
+  {{- if .Values.statefulset.strategy }}
+  updateStrategy: {{ .Values.statefulset.strategy | toYaml | nindent 4 }}
   {{- end }}
   template:
     metadata:
