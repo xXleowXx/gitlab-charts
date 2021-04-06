@@ -66,7 +66,7 @@ function deploy() {
   if [[ -n "$OPERATOR_ENABLED" ]]; then
     enable_operator=(
       "--set global.operator.enabled=true"
-      "--set gitlab.operator.crdPrefix="$RELEASE_NAME"
+      "--set gitlab.operator.crdPrefix=${RELEASE_NAME}"
     )
   fi
 
