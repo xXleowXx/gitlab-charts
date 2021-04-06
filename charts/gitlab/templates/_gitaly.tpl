@@ -49,7 +49,7 @@ default:
   {{-   end -}}
 {{-   else -}}
 {{- /* global.gitaly host is not specified */ -}}
-{{-     if and .Values.global.gitaly.enabled (or (not .Values.global.praefect.enabled) (and .Values.global.praefect.enabled (not .Values.global.praefect.replaceInternalGitaly))) -}}
+{{-     if eq (include "gitlab.gitaly.includeInternalResources" $) "true" -}}
 {{- /* Internal default repo */ -}}
 {{        template "gitlab.gitaly.storage.internal" . }}
 {{-     end -}}
