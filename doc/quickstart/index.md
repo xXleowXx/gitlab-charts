@@ -163,6 +163,6 @@ Error: failed pre-install: warning: Hook pre-install gitlab/charts/shared-secret
 {APIGroups:[""], Resources:["secrets"], Verbs:["get" "list" "create" "patch"]}
 ```
 
-You need to [prepare for Helm with RBAC](https://docs.gitlab.com/charts/installation/tools.html#preparing-for-helm-with-rbac)
+You need to [prepare for Helm with RBAC](../installation/tools.md#preparing-for-helm-with-rbac).
 
 For further troubleshooting tips, see our [troubleshooting](../troubleshooting/index.md) guide.
