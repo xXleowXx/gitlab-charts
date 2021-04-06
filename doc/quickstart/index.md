@@ -163,12 +163,6 @@ Error: failed pre-install: warning: Hook pre-install gitlab/charts/shared-secret
 {APIGroups:[""], Resources:["secrets"], Verbs:["get" "list" "create" "patch"]}
 ```
 
-This is most likely because your user requires [cluster-scope write access](https://helm.sh/docs/topics/rbac/#example-grant-a-user-readwrite-access-at-the-cluster-scope). Enabling `admin` access should be good for the purpose of this Quick Start guide, for example:
-
-```shell
-kubectl create clusterrolebinding some-user-admin
-  --clusterrole view \​
-  --user some-user@some-domain.com
-```
+You need to [prepare for Helm with RBCA](https://docs.gitlab.com/13.8/charts/installation/tools.html#preparing-for-helm-with-rbac)
 
 For further troubleshooting tips, see our [troubleshooting](../troubleshooting/index.md) guide.
