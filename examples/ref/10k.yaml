@@ -5,7 +5,7 @@ gitlab:
   webservice:
     maxReplicas: 20
     maxUnavailable: 10
-    minReplicas: 20
+    minReplicas: 2
     hpa:
       targetAverageValue: 1600m
     ingress:
@@ -21,7 +21,7 @@ gitlab:
     workerProcesses: 4
   sidekiq:
     maxReplicas: 16
-    minReplicas: 12
+    minReplicas: 2
     hpa:
       targetAverageValue: 700m
     nodeSelector:
