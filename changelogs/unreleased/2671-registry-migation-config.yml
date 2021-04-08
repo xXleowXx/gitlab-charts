@@ -1,5 +1,5 @@
 ---
 title: 'Registry: use separate, minimal config for migration'
-merge_request:
+merge_request: 1939
 author:
 type: fixed
