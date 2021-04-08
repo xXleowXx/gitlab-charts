@@ -74,7 +74,7 @@ class HelmTemplate
     @mapped.dig(item, 'metadata', 'annotations')
   end
 
-  def template_anotations(item)
+  def template_annotations(item)
     @mapped.dig(item,'spec','template','metadata','annotations')
   end
 

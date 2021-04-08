@@ -30,8 +30,32 @@ describe 'Annotations configuration' do
       resources_by_kind = t.resources_by_kind('Deployment').reject { |key, _| ignored_charts.include? key }
 
       resources_by_kind.each do |key, _|
-        expect(t.dig(key, 'metadata', 'annotations')).to include(default_values['global']['deployment']['annotations'])
+        expect(t.annotations(key)).to include(default_values['global']['deployment']['annotations'])
       end
     end
   end
+
+  context 'When configuring EKS IRSA annotation' do
+    let(:irsa_annotations) do
+      YAML.safe_load(%(
+        global:
+          serviceAccount:
+            enabled: true
+            create: false
+            name: aws-role-sa
+            iam_role_arn: "arn:aws:iam::1234567890:role/eks-fake-role-arn"
+      )).deep_merge(default_values)
+    end
+    annotation_key = 'eks.amazonaws.com/role-arn'
+
+    it 'Populates eks.amazonaws.com/role-arn annotation' do
+      t = HelmTemplate.new(irsa_annotations)
+      expect(t.exit_code).to eq(0)
+
+      expect(t.template_annotations('Deployment/test-task-runner')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
+      expect(t.template_annotations('Deployment/test-webservice-default')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
+      expect(t.template_annotations('Deployment/test-sidekiq-all-in-1-v1')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
+    end
+  end
 end
+
