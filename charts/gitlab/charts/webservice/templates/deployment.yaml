@@ -52,6 +52,9 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+      {{- if $.Values.global.serviceAccount.iam_role_arn }}
+        eks.amazonaws.com/role-arn: {{ $.Values.global.serviceAccount.iam_role_arn | quote }}
+      {{- end }}
       {{- range $key, $value := .pod.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
