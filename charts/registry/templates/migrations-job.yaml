@@ -79,6 +79,11 @@ spec:
           sources:
           - configMap:
               name: {{ template "registry.fullname" . }}
+              items:
+              - key: configure
+                path: configure
+              - key: migrations-config.yml
+                path: config.yml
           {{- include "gitlab.registry.database.password.projectedVolume" . | nindent 10 }}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end }}
