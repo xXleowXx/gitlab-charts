@@ -3,10 +3,10 @@ gitlab:
   # - cpu:    31850m
   # - memory: 26041340Ki
   webservice:
-    # Max and Min pod sizes are recommended to be the same for Webservice as Rails is heavy to start
+    # Min pods recommended to be set to 75% of max to start
     maxReplicas: 20
     maxUnavailable: 10
-    minReplicas: 20
+    minReplicas: 15
     hpa:
       targetAverageValue: 1600m
     ingress:
