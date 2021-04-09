@@ -131,7 +131,6 @@ describe 'Strategy configuration' do
     end
   end
 
-
   context 'When populating a chart strategy property' do
     let(:local_template) { HelmTemplate.new(chart_values) }
 
