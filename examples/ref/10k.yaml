@@ -21,8 +21,8 @@ gitlab:
         memory: 5G # roughly, 1.25GB/worker
     workerProcesses: 4
   sidekiq:
-    maxReplicas: 16
-    minReplicas: 12
+    maxReplicas: 14
+    minReplicas: 10
     hpa:
       targetAverageValue: 700m
     nodeSelector:
