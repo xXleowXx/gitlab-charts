@@ -91,10 +91,10 @@ notifications:
           {{- range $header, $value := $headers -}}
             {{- if kindIs "map" $value -}}
               {{- if hasKey $value "secret" }}
-        {{ $header }}: SECRET_{{ $value.secret }}_{{ default "value" $value.key }}
+        {{ $header }}: [SECRET_{{ $value.secret }}_{{ default "value" $value.key }}]
               {{- end -}}
             {{- else }}
-        {{ $header }}: {{ $value }}
+        {{ $header }}: [{{ $value }}]
             {{- end -}}
           {{- end -}}
         {{- end -}}
