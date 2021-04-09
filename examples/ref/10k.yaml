@@ -3,9 +3,10 @@ gitlab:
   # - cpu:    31850m
   # - memory: 26041340Ki
   webservice:
+    # Min pods recommended to be set to 75% of max to start
     maxReplicas: 20
     maxUnavailable: 10
-    minReplicas: 20
+    minReplicas: 15
     hpa:
       targetAverageValue: 1600m
     ingress:
@@ -20,8 +21,8 @@ gitlab:
         memory: 5G # roughly, 1.25GB/worker
     workerProcesses: 4
   sidekiq:
-    maxReplicas: 16
-    minReplicas: 12
+    maxReplicas: 14
+    minReplicas: 10
     hpa:
       targetAverageValue: 700m
     nodeSelector:
