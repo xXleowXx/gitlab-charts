@@ -25,6 +25,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := list -}}
 {{/* add templates here */}}
 {{- $messages = append $messages (include "gitlab.checkConfig.contentSecurityPolicy" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.gitaly.storageNames" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.praefect.storageNames" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
@@ -79,6 +80,38 @@ contentSecurityPolicy:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.contentSecurityPolicy */}}
+
+{{/*
+Protect against problems in storage names within repositories configuration.
+- Ensure that one (and only one) storage is named 'default'.
+- Ensure no duplicates
+
+Collects the list of storage names by rendering the 'gitlab.appConfig.repositories'
+template, and grabbing any lines that start with exactly 4 spaces.
+*/}}
+{{- define "gitlab.checkConfig.gitaly.storageNames" -}}
+{{- $errorMsg := list -}}
+{{- $config := include "gitlab.appConfig.repositories" $ -}}
+{{- $storages := list }}
+{{- range (splitList "\n" $config) -}}
+{{-   if (regexMatch "^    [^ ]" . ) -}}
+{{-     $storages = append $storages (trim . | trimSuffix ":") -}}
+{{-   end }}
+{{- end }}
+{{- if gt (len $storages) (len (uniq $storages)) -}}
+{{-   $errorMsg = append $errorMsg (printf "Each storage name must be unique. Current storage names: %s" $storages | sortAlpha | join ", ") -}}
+{{- end -}}
+{{- if not (has "default" $storages) -}}
+{{-   $errorMsg = append $errorMsg ("There must be one (and only one) storage named 'default'.") -}}
+{{- end }}
+{{- if not (empty $errorMsg) }}
+gitaly:
+{{- range $msg := $errorMsg }}
+    {{ $msg }}
+{{- end }}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.gitaly.storageNames -}}
 
 {{/*
 Ensure that if a user is migrating to Praefect, none of the Praefect virtual storage

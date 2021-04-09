@@ -248,7 +248,7 @@ describe 'Gitaly configuration' do
             'praefect' => {
               'enabled' => true,
               'virtualStorages' => [{
-                'name' => 'foo'
+                'name' => 'default'
               }]
             }
           }
@@ -259,20 +259,20 @@ describe 'Gitaly configuration' do
         t = HelmTemplate.new(praefect_labeled_values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
         expect(t.dig('ConfigMap/test-gitaly-praefect', 'metadata', 'labels')).to include('global' => 'gitaly')
-        expect(t.dig('StatefulSet/test-gitaly-foo', 'metadata', 'labels')).to include('foo' => 'global')
-        expect(t.dig('StatefulSet/test-gitaly-foo', 'metadata', 'labels')).to include('global' => 'gitaly')
-        expect(t.dig('StatefulSet/test-gitaly-foo', 'metadata', 'labels')).not_to include('global' => 'global')
-        expect(t.dig('StatefulSet/test-gitaly-foo', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
-        expect(t.dig('StatefulSet/test-gitaly-foo', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
-        expect(t.dig('StatefulSet/test-gitaly-foo', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
-        expect(t.dig('StatefulSet/test-gitaly-foo', 'spec', 'volumeClaimTemplates', 0, 'metadata', 'labels')).to include('storage' => 'foo')
-        expect(t.dig('StatefulSet/test-gitaly-foo', 'spec', 'volumeClaimTemplates', 0, 'metadata', 'labels')).not_to include('global' => 'gitaly')
-        expect(t.dig('PodDisruptionBudget/test-gitaly-foo', 'metadata', 'labels')).to include('global' => 'gitaly')
-        expect(t.dig('Service/test-gitaly-foo', 'metadata', 'labels')).to include('gitaly' => 'gitaly')
-        expect(t.dig('Service/test-gitaly-foo', 'metadata', 'labels')).to include('global' => 'service')
-        expect(t.dig('Service/test-gitaly-foo', 'metadata', 'labels')).to include('global_service' => true)
-        expect(t.dig('Service/test-gitaly-foo', 'metadata', 'labels')).to include('service' => true)
-        expect(t.dig('Service/test-gitaly-foo', 'metadata', 'labels')).not_to include('global' => 'global')
+        expect(t.dig('StatefulSet/test-gitaly-default', 'metadata', 'labels')).to include('foo' => 'global')
+        expect(t.dig('StatefulSet/test-gitaly-default', 'metadata', 'labels')).to include('global' => 'gitaly')
+        expect(t.dig('StatefulSet/test-gitaly-default', 'metadata', 'labels')).not_to include('global' => 'global')
+        expect(t.dig('StatefulSet/test-gitaly-default', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('StatefulSet/test-gitaly-default', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+        expect(t.dig('StatefulSet/test-gitaly-default', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+        expect(t.dig('StatefulSet/test-gitaly-default', 'spec', 'volumeClaimTemplates', 0, 'metadata', 'labels')).to include('storage' => 'default')
+        expect(t.dig('StatefulSet/test-gitaly-default', 'spec', 'volumeClaimTemplates', 0, 'metadata', 'labels')).not_to include('global' => 'gitaly')
+        expect(t.dig('PodDisruptionBudget/test-gitaly-default', 'metadata', 'labels')).to include('global' => 'gitaly')
+        expect(t.dig('Service/test-gitaly-default', 'metadata', 'labels')).to include('gitaly' => 'gitaly')
+        expect(t.dig('Service/test-gitaly-default', 'metadata', 'labels')).to include('global' => 'service')
+        expect(t.dig('Service/test-gitaly-default', 'metadata', 'labels')).to include('global_service' => true)
+        expect(t.dig('Service/test-gitaly-default', 'metadata', 'labels')).to include('service' => true)
+        expect(t.dig('Service/test-gitaly-default', 'metadata', 'labels')).not_to include('global' => 'global')
         expect(t.dig('ServiceAccount/test-gitaly', 'metadata', 'labels')).to include('global' => 'gitaly')
       end
     end
