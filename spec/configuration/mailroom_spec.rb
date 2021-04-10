@@ -35,6 +35,101 @@ describe 'Mailroom configuration' do
     end
   end
 
+  context 'with IMAP settings' do
+    let(:incoming_email_settings) do
+      {
+        'incomingEmail' => {
+          'enabled' => true,
+          'address' => 'incoming+%{key}@test.example.com',
+          'host' => 'example.com',
+          'port' => 993,
+          'ssl' => true,
+          'startTls' => true,
+          'user' => 'myusername',
+          'password' => {
+            'secret' => 'mailroom-secret'
+          }
+        }
+      }
+    end
+    let(:app_config) { incoming_email_settings }
+    let(:values) do
+      {
+        # provide required setting
+        'certmanager-issuer' => { 'email' => 'test@example.com' },
+        # required to activate mailroom
+        'global' => {
+          'appConfig' => app_config
+        }
+      }
+    end
+    let(:template) { HelmTemplate.new(values) }
+    let(:raw_mail_room_yml) { template.dig('ConfigMap/test-mailroom', 'data', 'mail_room.yml') }
+    let(:mail_room_yml) do
+      data = raw_mail_room_yml.dup
+      data.gsub!(/:password: .*/, ':password: secret')
+      data.gsub!(/:redis_url: .*/, 'redis_url: redis://test.example.com')
+      YAML.safe_load(data, permitted_classes: [Symbol])
+    end
+    let(:mailbox) { mail_room_yml[:mailboxes].first }
+
+    it 'renders mail_room.yml' do
+      t = HelmTemplate.new(values)
+
+      expect(t.exit_code).to eq(0)
+      expect(mail_room_yml[:mailboxes].length).to eq(1)
+      expect(raw_mail_room_yml).to include(%(:password: "<%= File.read("/etc/gitlab/mailroom/password_incoming_email").strip.dump[1..-2] %>"))
+      expect(mailbox[:email]).to eq('myusername')
+      expect(mailbox[:name]).to eq('inbox')
+      expect(mailbox[:delete_after_delivery]).to be true
+      expect(mailbox[:inbox_method]).to eq('imap')
+      expect(mailbox[:host]).to eq('example.com')
+      expect(mailbox[:port]).to eq(993)
+      expect(mailbox[:ssl]).to be true
+      expect(mailbox[:start_tls]).to be true
+      expect(mailbox[:inbox_options]).to be_nil
+    end
+
+    context 'with Service Desk' do
+      let(:app_config) do
+        incoming_email_settings.merge(
+          {
+            'serviceDeskEmail' => {
+              'enabled' => true,
+              'address' => 'incoming+%{key}@test.example2.com',
+              'host' => 'example2.com',
+              'port' => 587,
+              'ssl' => false,
+              'startTls' => false,
+              'user' => 'servicedesk',
+              'password' => {
+                'secret' => 'mailroom-secret'
+              }
+            }
+          }
+        )
+      end
+      let(:mailbox) { mail_room_yml[:mailboxes].last }
+
+      it 'renders both mailboxes in mail_room.yml' do
+        t = HelmTemplate.new(values)
+
+        expect(t.exit_code).to eq(0)
+        expect(mail_room_yml[:mailboxes].length).to eq(2)
+        expect(raw_mail_room_yml).to include(%(:password: "<%= File.read("/etc/gitlab/mailroom/password_service_desk").strip.dump[1..-2] %>"))
+        expect(mailbox[:email]).to eq('servicedesk')
+        expect(mailbox[:name]).to eq('inbox')
+        expect(mailbox[:delete_after_delivery]).to be true
+        expect(mailbox[:inbox_method]).to eq('imap')
+        expect(mailbox[:host]).to eq('example2.com')
+        expect(mailbox[:port]).to eq(587)
+        expect(mailbox[:ssl]).to be false
+        expect(mailbox[:start_tls]).to be false
+        expect(mailbox[:inbox_options]).to be_nil
+      end
+    end
+  end
+
   context 'with Microsoft Graph settings' do
     let(:incoming_email_settings) do
       {
