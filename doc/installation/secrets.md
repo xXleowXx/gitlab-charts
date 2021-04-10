@@ -22,6 +22,8 @@ Optional External Services:
 - OmniAuth
 - IMAP for incoming emails (via mail_room service)
 - IMAP for service desk emails (via mail_room service)
+- Microsoft Graph with OAuth2 for incoming emails (via mail_room service)
+- Microsoft Graph with OAuth2 for service desk email (via mail_room service)
 - S/MIME certificate
 - Smartcard authentication
 - OAuth integration
