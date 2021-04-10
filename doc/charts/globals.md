@@ -798,10 +798,9 @@ global:
       mailbox: inbox
       idleTimeout: 60
       inboxMethod: "imap"
-      inboxOptions:
-        clientSecret:
-          key: secret
-        pollInterval: 60
+      clientSecret:
+        key: secret
+      pollInterval: 60
 
     serviceDeskEmail:
       enabled: false
@@ -817,10 +816,9 @@ global:
       mailbox: inbox
       idleTimeout: 60
       inboxMethod: "imap"
-      inboxOptions:
-        clientSecret:
-          key: secret
-        pollInterval: 60
+      clientSecret:
+        key: secret
+      pollInterval: 60
 
     pseudonymizer:
       configMap:

@@ -42,14 +42,12 @@ describe 'Mailroom configuration' do
           'enabled' => true,
           'address' => 'incoming+%{key}@test.example.com',
           'inboxMethod' => 'microsoft_graph',
-          'inboxOptions' => {
-            'tenantId' => 'SOME-TENANT-ID',
-            'clientId' => 'SOME-CLIENT-ID',
-            'clientSecret' => {
-              'secret' => 'mailroom-client-id'
-            },
-            'pollInterval' => 30
-          }
+          'tenantId' => 'SOME-TENANT-ID',
+          'clientId' => 'SOME-CLIENT-ID',
+          'clientSecret' => {
+            'secret' => 'mailroom-client-id'
+          },
+          'pollInterval' => 30
         }
       }
     end
@@ -95,14 +93,12 @@ describe 'Mailroom configuration' do
               'enabled' => true,
               'address' => 'servicedesk+%{key}@test.example.com',
               'inboxMethod' => 'microsoft_graph',
-              'inboxOptions' => {
-                'tenantId' => 'OTHER-TENANT-ID',
-                'clientId' => 'OTHER-CLIENT-ID',
-                'clientSecret' => {
-                  'secret' => 'mailroom-client-id'
-                },
-                'pollInterval' => 45
-              }
+              'tenantId' => 'OTHER-TENANT-ID',
+              'clientId' => 'OTHER-CLIENT-ID',
+              'clientSecret' => {
+                'secret' => 'mailroom-client-id'
+              },
+              'pollInterval' => 45
             }
           }
         )

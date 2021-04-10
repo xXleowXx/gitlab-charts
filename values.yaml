@@ -343,10 +343,9 @@ global:
       mailbox: inbox
       idleTimeout: 60
       inboxMethod: "imap"
-      inboxOptions:
-        clientSecret:
-          key: secret
-        pollInterval: 60
+      clientSecret:
+        key: secret
+      pollInterval: 60
 
     ## doc/charts/globals.md#service-desk-email-settings
     ## doc/installation/deployment.md#service-desk-email
@@ -367,10 +366,9 @@ global:
       mailbox: inbox
       idleTimeout: 60
       inboxMethod: "imap"
-      inboxOptions:
-        clientSecret:
-          key: secret
-        pollInterval: 60
+      clientSecret:
+        key: secret
+      pollInterval: 60
 
     ## doc/charts/globals.md#ldap
     ldap:

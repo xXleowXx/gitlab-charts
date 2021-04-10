@@ -27,10 +27,10 @@ data:
         :inbox_method: {{ .inboxMethod }}
         {{- if eq .inboxMethod "microsoft_graph" }}
         :inbox_options:
-          :tenant_id: "{{ .inboxOptions.tenantId }}"
-          :client_id: "{{ .inboxOptions.clientId }}"
+          :tenant_id: "{{ .tenantId }}"
+          :client_id: "{{ .clientId }}"
           :client_secret: "<%= File.read("/etc/gitlab/mailroom/client_id_incoming_email").strip.dump[1..-2] %>"
-          :poll_interval: {{ .inboxOptions.pollInterval }}
+          :poll_interval: {{ .pollInterval }}
         {{- else }}
         :host: {{ .host }}
         :port: {{ .port }}
@@ -66,10 +66,10 @@ data:
         :inbox_method: {{ .inboxMethod }}
         {{- if eq .inboxMethod "microsoft_graph" }}
         :inbox_options:
-          :tenant_id: "{{ .inboxOptions.tenantId }}"
-          :client_id: "{{ .inboxOptions.clientId }}"
+          :tenant_id: "{{ .tenantId }}"
+          :client_id: "{{ .clientId }}"
           :client_secret: "<%= File.read("/etc/gitlab/mailroom/client_id_service_desk").strip.dump[1..-2] %>"
-          :poll_interval: {{ .inboxOptions.pollInterval }}
+          :poll_interval: {{ .pollInterval }}
         {{- else }}
         :host: {{ .host }}
         :port: {{ .port }}

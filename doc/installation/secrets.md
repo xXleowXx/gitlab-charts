@@ -396,7 +396,7 @@ store the password of the IMAP account in a Kubernetes secret.
 kubectl create secret generic incoming-email-client-secret --from-literal=secret=your-secret-here
 ```
 
-Then use `--set global.appConfig.incomingEmail.inboxOptions.clientSecret.secret=incoming-email-client-secret`
+Then use `--set global.appConfig.incomingEmail.clientSecret.secret=incoming-email-client-secret`
 in your Helm command along with other required settings as specified [in the docs](command-line-options.md#incoming-email-configuration).
 
 NOTE:
@@ -411,7 +411,7 @@ store the password of the IMAP account in a Kubernetes secret.
 kubectl create secret generic service-desk-email-client-secret --from-literal=secret=your-secret-here
 ```
 
-Then use `--set global.appConfig.serviceDeskEmail.inboxOptions.clientSecret.secret=service-desk-email-client-secret`
+Then use `--set global.appConfig.serviceDeskEmail.clientSecret.secret=service-desk-email-client-secret`
 in your Helm command along with other required settings as specified [in the docs](command-line-options.md#service-desk-email-configuration).
 
 NOTE:

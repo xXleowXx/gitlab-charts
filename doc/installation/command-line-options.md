@@ -105,13 +105,13 @@ helm inspect values gitlab/gitlab
 
 ### Microsoft Graph settings
 
-| Parameter                                                         | Description                                                                                              | Default    |
-|-------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|------------|
-| `global.appConfig.incomingEmail.inboxOptions.tenantId`            | The tenant ID for your Microsoft Azure Active Directory                                                  | empty      |
-| `global.appConfig.incomingEmail.inboxOptions.clientId`            | The client ID for your OAuth2 app                                                                        | empty      |
-| `global.appConfig.incomingEmail.inboxOptions.clientSecret.key`    | Key in `appConfig.incomingEmail.inboxOptions.clientSecret.secret` that contains the OAuth2 client secret | empty      |
-| `global.appConfig.incomingEmail.inboxOptions.clientSecret.secret` | Name of a `Secret` containing the OAuth2 client secret                                                   | secret     |
-| `global.appConfig.incomingEmail.inboxOptions.pollInterval`        | The interval in seconds how often to poll for new mail                                                   | 60         |
+| Parameter                                            | Description                                                                                              | Default    |
+|------------------------------------------------------|----------------------------------------------------------------------------------------------------------|------------|
+| `global.appConfig.incomingEmail.tenantId`            | The tenant ID for your Microsoft Azure Active Directory                                                  | empty      |
+| `global.appConfig.incomingEmail.clientId`            | The client ID for your OAuth2 app                                                                        | empty      |
+| `global.appConfig.incomingEmail.clientSecret.key`    | Key in `appConfig.incomingEmail.clientSecret.secret` that contains the OAuth2 client secret              | empty      |
+| `global.appConfig.incomingEmail.clientSecret.secret` | Name of a `Secret` containing the OAuth2 client secret                                                   | secret     |
+| `global.appConfig.incomingEmail.pollInterval`        | The interval in seconds how often to poll for new mail                                                   | 60         |
 
 See the [instructions for creating secrets][secrets.md].
 
@@ -149,13 +149,13 @@ must be `+%{key}`.
 
 ### Microsoft Graph settings
 
-| Parameter                                                            | Description                                                                                                 | Default    |
-|----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|------------|
-| `global.appConfig.serviceDeskEmail.inboxOptions.tenantId`            | The tenant ID for your Microsoft Azure Active Directory                                                     | empty      |
-| `global.appConfig.serviceDeskEmail.inboxOptions.clientId`            | The client ID for your OAuth2 app                                                                           | empty      |
-| `global.appConfig.serviceDeskEmail.inboxOptions.clientSecret.key`    | Key in `appConfig.serviceDeskEmail.inboxOptions.clientSecret.secret` that contains the OAuth2 client secret | empty      |
-| `global.appConfig.serviceDeskEmail.inboxOptions.clientSecret.secret` | Name of a `Secret` containing the OAuth2 client secret                                                      | secret     |
-| `global.appConfig.serviceDeskEmail.inboxOptions.pollInterval`        | The interval in seconds how often to poll for new mail
+| Parameter                                               | Description                                                                                                 | Default    |
+|---------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|------------|
+| `global.appConfig.serviceDeskEmail.tenantId`            | The tenant ID for your Microsoft Azure Active Directory                                                     | empty      |
+| `global.appConfig.serviceDeskEmail.clientId`            | The client ID for your OAuth2 app                                                                           | empty      |
+| `global.appConfig.serviceDeskEmail.clientSecret.key`    | Key in `appConfig.serviceDeskEmail.clientSecret.secret` that contains the OAuth2 client secret              | empty      |
+| `global.appConfig.serviceDeskEmail.clientSecret.secret` | Name of a `Secret` containing the OAuth2 client secret                                                      | secret     |
+| `global.appConfig.serviceDeskEmail.pollInterval`        | The interval in seconds how often to poll for new mail                                                      | 60         |
 
 See the [instructions for creating secrets][secrets.md].
 

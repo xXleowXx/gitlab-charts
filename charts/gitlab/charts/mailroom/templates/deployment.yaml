@@ -120,9 +120,9 @@ spec:
           {{- include "gitlab.redis.secret" . | nindent 10 }}
           {{- if eq .Values.global.appConfig.incomingEmail.inboxMethod "microsoft_graph" }}
           - secret:
-              name: {{ .Values.global.appConfig.incomingEmail.inboxOptions.clientSecret.secret | required "Missing required secret containing the OAuth2 Client ID for incoming email. Make sure to set `.Values.global.appConfig.incomingEmail.inboxOptions.clientSecret.secret`" }}
+              name: {{ .Values.global.appConfig.incomingEmail.clientSecret.secret | required "Missing required secret containing the OAuth2 Client ID for incoming email. Make sure to set `.Values.global.appConfig.incomingEmail.clientSecret.secret`" }}
               items:
-                - key: {{ .Values.global.appConfig.incomingEmail.inboxOptions.clientSecret.key }}
+                - key: {{ .Values.global.appConfig.incomingEmail.clientSecret.key }}
                   path: mailroom/client_id_incoming_email
           {{- else }}
           - secret:
@@ -134,9 +134,9 @@ spec:
           {{- if .Values.global.appConfig.serviceDeskEmail.enabled }}
           {{- if eq .Values.global.appConfig.serviceDeskEmail.inboxMethod "microsoft_graph" }}
           - secret:
-              name: {{ .Values.global.appConfig.serviceDeskEmail.inboxOptions.clientSecret.secret | required "Missing required secret containing the OAuth2 Client ID for service desk email. Make sure to set `.Values.global.appConfig.serviceDeskEmail.inboxOptions.clientSecret.secret`" }}
+              name: {{ .Values.global.appConfig.serviceDeskEmail.clientSecret.secret | required "Missing required secret containing the OAuth2 Client ID for service desk email. Make sure to set `.Values.global.appConfig.serviceDeskEmail.clientSecret.secret`" }}
               items:
-                - key: {{ .Values.global.appConfig.serviceDeskEmail.inboxOptions.clientSecret.key }}
+                - key: {{ .Values.global.appConfig.serviceDeskEmail.clientSecret.key }}
                   path: mailroom/client_id_service_desk
           {{- else }}
           - secret:
