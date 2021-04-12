@@ -31,6 +31,7 @@ monitoring:
 shutdown:
   blackoutSeconds: 10
 
+extraEnv: {}
 
 annotations: {}
 
