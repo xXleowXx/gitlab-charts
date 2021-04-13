@@ -824,6 +824,10 @@ global:
       enabled: false
       CASecret:
       clientCertificateRequiredHost:
+    pipelineValidationService:
+      url:
+      token:
+      timeout:
 ```
 
 ### General application settings
@@ -1443,6 +1447,26 @@ global:
 | `clientCertificateRequiredHost` | String  |         | Hostname to use for smartcard authentication. By default, the provided or computed smartcard hostname is used. |
 | `sanExtensions`                 | Boolean | `false` | Enable the use of SAN extensions to match users with certificates. |
 | `requiredForGitAccess`          | Boolean | `false` | Require browser session with smartcard sign-in for Git access. |
+
+### Pipeline Validation Service settings
+
+These settings relate to the [External Pipeline Validation service](https://docs.gitlab.com/ee/administration/external_pipeline_validation.html)
+
+```yaml
+global:
+  appConfig:
+    pipelineValidationService:
+      token:
+      url:
+      token:
+      timeout:
+```
+
+| Name      | Type    | Default | Description                                      |
+| :---------| :-----: | :------ | :----------------------------------------------- |
+| `url`     | String  |         | The URL to query for permission/validation to start new pipelines    |
+| `token`   | String  |         | An optional token to pass as a header, to the validation service URL |
+| `timeout` | Integer |         | How long (in seconds) to wait for a response from the service. GitLab itself defaults to 5 seconds |
 
 ## Configure Rails settings
 
