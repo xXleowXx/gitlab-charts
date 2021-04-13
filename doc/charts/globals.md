@@ -1466,7 +1466,7 @@ global:
 | :---------| :-----: | :------ | :----------------------------------------------- |
 | `url`     | String  |         | The URL to query for permission/validation to start new pipelines    |
 | `token`   | String  |         | An optional token to pass as a header, to the validation service URL |
-| `timeout` | Integer |         | How long (in seconds) to wait for a response from the service.  GitLab itself defaults to 5 seconds |
+| `timeout` | Integer |         | How long (in seconds) to wait for a response from the service. GitLab itself defaults to 5 seconds |
 
 ## Configure Rails settings
 
