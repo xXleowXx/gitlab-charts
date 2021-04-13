@@ -123,6 +123,7 @@ data:
 {{- end }}
       sidekiq:
         log_format: {{ .Values.logging.format }}
+      {{- include "gitlab.appConfig.pipelineValidationService.configuration" . | nindent 6 }}
   configure: |
     {{- include "gitlab.scripts.configure.secrets" (dict "required" "gitaly registry rails-secrets") | nindent 4 -}}
     {{- include "gitlab.psql.ssl.initScript" . | nindent 4 }}

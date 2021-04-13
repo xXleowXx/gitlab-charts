@@ -417,6 +417,11 @@ global:
       sanExtensions: false
       requiredForGitAccess: false
 
+    pipelineValidationService: {}
+      # url:
+      # token:
+      # timeout:
+
     # Config that only applies to the defaults on initial install
     initialDefaults: {}
       # signupEnabled:
