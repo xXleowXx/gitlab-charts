@@ -128,6 +128,10 @@ entry.
 - Add outgoing email section to 'globals' docs. !1821
 
 
+## 4.8.8 (2021-04-13)
+
+- No changes.
+
 ## 4.8.7 (2021-03-31)
 
 - No changes.
