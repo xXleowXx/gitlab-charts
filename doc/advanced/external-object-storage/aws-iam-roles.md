@@ -105,11 +105,11 @@ role in the GitLab configuration:
                 --approve
    ```
 
-1. Set the following options when the GitLab chart is deployed. _Note_: Using
+1. Set the following options when the GitLab chart is deployed. Using
    quotes around the AWS IAM ARN will assist the YAML parser to not be confused
    by the multiple colons encoded into the ARN. It is important to note that
    the ServiceAccount is enabled but not created (default is to enable and
-   create the ServiceAccount) as it was created in the previous step.
+   create the ServiceAccount) as it was created in the previous step:
 
    ```yaml
    global:
