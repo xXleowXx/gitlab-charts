@@ -453,9 +453,7 @@ global:
         # serverCA:
     registry:
       syncEnabled: false
-      syncSecret: {}
-        # secret: <release-name>-registry-notification
-        # key: secret
+      ## Consumes global.registry.notificationSecret
 
   ## doc/charts/gitlab/kas/index.md
   kas:
@@ -489,6 +487,9 @@ global:
     certificate: {}
       # secret:
     httpSecret: {}
+      # secret:
+      # key:
+    notificationSecret: {}
       # secret:
       # key:
     # https://docs.docker.com/registry/notifications/#configuration

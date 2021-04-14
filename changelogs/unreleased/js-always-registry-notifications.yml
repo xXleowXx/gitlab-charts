@@ -1,0 +1,5 @@
+---
+title: Always create notification_secret for gitlab.yml consumed by webservices
+merge_request: 1948
+author:
+type: changed

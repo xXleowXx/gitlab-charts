@@ -368,15 +368,11 @@ kubectl create secret generic gitlab-registry-httpsecret --from-literal=secret=s
 
 ### Notification Secret
 
-Notification Secret is utilized for Geo to help manage syncing Container
-Registry data between primary and secondary sites.
+Notification Secret is utilized for calling back to the GitLab application in various ways.
+Such as Geo to help manage syncing Container Registry data between primary and secondary sites.
 
-The content of the key this references correlates to the `http.secret` value of
-[registry](https://hub.docker.com/_/registry/). This value should be populated with
-a cryptographically generated random string.
-
-The `notificationSecret` secret object will automatically create this secret if
-not provided.
+The `notificationSecret` secret object will be automatically created if
+not provided, when the `shared-secrets` feature is enabled.
 
 To create this secret manually:
 
@@ -388,12 +384,16 @@ Then proceed to set
 
 ```yaml
 global:
+  # To provide your own secret
+  registry:
+    notificationSecret:
+        secret: gitlab-registry-notification
+        key: secret
+
+  # If utilising Geo, and wishing to sync the container registry
   geo:
     registry:
       syncEnabled: true
-      syncSecret:
-        secret: gitlab-registry-notification
-        key: secret
 ```
 
 Ensuring the `secret` value is set to the name of the secret created above
