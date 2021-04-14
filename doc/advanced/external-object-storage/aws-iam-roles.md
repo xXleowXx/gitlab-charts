@@ -87,10 +87,8 @@ role in the GitLab configuration:
    This policy can be constructed to suit specific access and compliance
    requirements. Otherwise, the `AmazonS3FullAccess` IAM policy can be used,
    but this will allow access to **all** S3 buckets.
-1. An OIDC provider will need to be established for the cluster. You will
-   need to have the EKS cluster established for the OIDC provider to be
-   associated with the cluster. This is best done with using the
-   [`eksctl` command](https://eksctl.io/).
+1. An OIDC provider will need to be established for the EKS cluster.
+   This is best done with using the [`eksctl` command](https://eksctl.io/):
 
    ```shell
    eksctl  utils associate-iam-oidc-provider --name <CLUSTER NAME> --approve
