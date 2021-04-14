@@ -1,5 +1,5 @@
 ---
 title: Remove metrics port from Gitaly service
-merge_request:
+merge_request: 1947
 author:
 type: removed
