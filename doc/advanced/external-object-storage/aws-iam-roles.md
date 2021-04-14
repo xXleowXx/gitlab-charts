@@ -85,7 +85,7 @@ role in the GitLab configuration:
 
 1. An IAM policy needs to be constructed to access the S3 bucket.
    This policy can be constructed to suit specific access and compliance
-   requirements. Otherwise the `AmazonS3FullAccess` IAM policy can be used,
+   requirements. Otherwise, the `AmazonS3FullAccess` IAM policy can be used,
    but this will allow access to **all** S3 buckets.
 1. An OIDC provider will need to be established for the cluster. You will
    need to have the EKS cluster established for the OIDC provider to be
