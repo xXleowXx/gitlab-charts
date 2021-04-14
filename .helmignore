@@ -44,3 +44,4 @@ spec/
 dependencies.yml
 dependencies_io/
 .markdownlint.json
+vendor/
