@@ -1713,11 +1713,13 @@ global:
     annotations: {}
     ## Name to be used for serviceAccount, otherwise defaults to chart fullname
     # name:
+    # iam_role_arn:
 ```
 
 - Setting `global.serviceAccount.enabled` to `true` will create a custom service account for each deployment.
 - Setting `global.serviceAccount.create` to `false` will disable automatic service account creation.
 - Setting `global.serviceAccount.name` will use that name in the deployment for either auto-generated or manually created service accounts.
+- Setting `global.serviceAccount.iam_role_arn` will allow AWS IAM role to be used to access an object store. Please see [Using IAM Roles for Service Accounts](../advanced/external-object-storage/aws-iam-roles.md#using-iam-roles-for-service-accounts) for more information.
 
 ## Annotations
 

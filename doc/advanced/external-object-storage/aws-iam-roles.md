@@ -70,3 +70,76 @@ The [`s3cmd.config`](index.md#backups-storage-example) secret is to be created w
 [default]
 bucket_location = us-east-1
 ```
+
+### Using IAM Roles for Service Accounts
+
+If GitLab is running in an AWS EKS cluster (version 1.14 or greater) one can
+use an AWS IAM role to authenticate to the S3 object storage without the need
+of generating or storing access tokens. More information regarding using
+IAM roles in an EKS cluster can be found in the
+[Introducing fine-grained IAM roles for service accounts](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/)
+AWS documentation.
+
+A number of items need to be setup in AWS in addition to enabling the IAM
+role in the GitLab configuration.
+
+1. First an IAM policy needs to be constructed to access the S3 bucket.
+   This policy can be constructed to suit specific access and compliance
+   requirements. Otherwise the `AmazonS3FullAccess` IAM policy can be used,
+   but this will allow access to **all** S3 buckets.
+1. An OIDC provider will need to be established for the cluster. You will
+   need to have the EKS cluster established for the OIDC provider to be
+   associated with the cluster. This is best done with using the
+   [`eksctl` command](https://eksctl.io/).
+
+   ```shell
+   eksctl  utils associate-iam-oidc-provider --name <CLUSTER NAME> --approve
+   ```
+
+1. Create the Kubernetes ServiceAccount for GitLab to use with `eksctl`.
+   This will add the proper annotations to associate the ServiceAccount with
+   the IAM role.
+
+   ```shell
+   eksctl create iamserviceaccount --name <SERVICE ACCT NAME> \
+                --namespace <NAMESPACE> --cluster <CLUSTER NAME> \
+                --attach-policy-arn <AWS IAM ARN> \
+                --approve
+   ```
+
+1. Set the following options when the GitLab chart is deployed. _Note_: Using
+   quotes around the AWS IAM ARN will assist the YAML parser to not be confused
+   by the multiple colons encoded into the ARN. It is important to note that
+   the ServiceAccount is enabled but not created (default is to enable and
+   create the ServiceAccount) as it was created in the previous step.
+
+   ```yaml
+   global:
+     serviceAccount:
+       enabled: true
+       create: false
+       name: <SERVICE ACCT NAME>
+       iam_role_arn: "<AWS IAM ARN>"
+   ```
+
+   The settings can also be added to the Helm deployment command with the
+   following command line switches.
+
+   ```shell
+   --set global.serviceAccount.enabled=true
+   --set global.serviceAccount.create=false
+   --set global.serviceAccount.name=<SERVICE ACCT NAME>
+   --set global.serviceAccount.iam_role_arn=<AWS IAM ARN>
+   ```
+
+The above procedure will create the `eks.amazonaws.com/role-arn` annotations
+on the gitlab-sidekiq, taskrunner and webservice Pods. In addition, the
+ServiceAccount created in step 3 will also have the annotation.
+
+WARNING:
+Using the `backup-utility` as specified in the [backup documenation](../../backup-restore/backup.md)
+does not properly copy the backup file to the S3 bucket. The `backup-utility` uses
+the `s3cmd` to perform the copy of the backup file and it has a known
+[issue](https://github.com/s3tools/s3cmd/issues/1075) of not supporting OIDC
+authentication. There is a [pull request](https://github.com/s3tools/s3cmd/pull/1112)
+to mitigate this issue, but it has yet to be accepted into the `s3cmd` code base.
