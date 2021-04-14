@@ -73,7 +73,7 @@ bucket_location = us-east-1
 
 ### Using IAM roles for service accounts
 
-If GitLab is running in an AWS EKS cluster (version 1.14 or greater) one can
+If GitLab is running in an AWS EKS cluster (version 1.14 or greater), you can
 use an AWS IAM role to authenticate to the S3 object storage without the need
 of generating or storing access tokens. More information regarding using
 IAM roles in an EKS cluster can be found in the
