@@ -98,7 +98,7 @@ role in the GitLab configuration:
 
 1. Create the Kubernetes ServiceAccount for GitLab to use with `eksctl`.
    This will add the proper annotations to associate the ServiceAccount with
-   the IAM role.
+   the IAM role:
 
    ```shell
    eksctl create iamserviceaccount --name <SERVICE ACCT NAME> \
