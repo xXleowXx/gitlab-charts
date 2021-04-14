@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.10.3 (2021-04-13)
+
+- No changes.
+
 ## 4.10.2 (2021-04-01)
 
 ### Fixed (1 change)
@@ -52,6 +56,10 @@ entry.
 - Webservice: enable per-deployment blackoutSeconds. !1867
 - Add migration configurations to registry chart. !1888
 
+
+## 4.9.6 (2021-04-13)
+
+- No changes.
 
 ## 4.9.5 (2021-03-31)
 
@@ -127,6 +135,10 @@ entry.
 - Clarify EKS installation instructions. !1801
 - Add outgoing email section to 'globals' docs. !1821
 
+
+## 4.8.8 (2021-04-13)
+
+- No changes.
 
 ## 4.8.7 (2021-03-31)
 
