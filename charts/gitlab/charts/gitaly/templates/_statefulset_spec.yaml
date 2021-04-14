@@ -44,6 +44,12 @@ spec:
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
+      {{- if $.Values.metrics.enabled }}
+        gitlab.com/prometheus_scrape: "true"
+        gitlab.com/prometheus_port: "{{ $.Values.metrics.metricsPort }}"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ $.Values.metrics.metricsPort }}"
+      {{- end }}
     spec:
       {{- if .Values.tolerations }}
       tolerations:
