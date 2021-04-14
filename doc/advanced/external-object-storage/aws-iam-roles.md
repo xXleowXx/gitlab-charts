@@ -83,7 +83,7 @@ AWS documentation.
 A number of items need to be setup in AWS in addition to enabling the IAM
 role in the GitLab configuration:
 
-1. First an IAM policy needs to be constructed to access the S3 bucket.
+1. An IAM policy needs to be constructed to access the S3 bucket.
    This policy can be constructed to suit specific access and compliance
    requirements. Otherwise the `AmazonS3FullAccess` IAM policy can be used,
    but this will allow access to **all** S3 buckets.
