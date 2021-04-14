@@ -121,7 +121,7 @@ role in the GitLab configuration:
    ```
 
    The settings can also be added to the Helm deployment command with the
-   following command line switches.
+   following command line switches:
 
    ```shell
    --set global.serviceAccount.enabled=true
