@@ -131,13 +131,13 @@ role in the GitLab configuration:
    ```
 
 The above procedure will create the `eks.amazonaws.com/role-arn` annotations
-on the gitlab-sidekiq, taskrunner and webservice Pods. In addition, the
+on the `gitlab-sidekiq`, `taskrunner` and `webservice` pods. In addition, the
 ServiceAccount created in step 3 will also have the annotation.
 
 WARNING:
 Using the `backup-utility` as specified in the [backup documenation](../../backup-restore/backup.md)
 does not properly copy the backup file to the S3 bucket. The `backup-utility` uses
 the `s3cmd` to perform the copy of the backup file and it has a known
-[issue](https://github.com/s3tools/s3cmd/issues/1075) of not supporting OIDC
-authentication. There is a [pull request](https://github.com/s3tools/s3cmd/pull/1112)
+issue of [not supporting OIDC authentication](https://github.com/s3tools/s3cmd/issues/1075).
+There is a [pull request](https://github.com/s3tools/s3cmd/pull/1112)
 to mitigate this issue, but it has yet to be accepted into the `s3cmd` code base.
