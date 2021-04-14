@@ -81,7 +81,7 @@ IAM roles in an EKS cluster can be found in the
 AWS documentation.
 
 A number of items need to be setup in AWS in addition to enabling the IAM
-role in the GitLab configuration.
+role in the GitLab configuration:
 
 1. First an IAM policy needs to be constructed to access the S3 bucket.
    This policy can be constructed to suit specific access and compliance
