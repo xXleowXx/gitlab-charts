@@ -41,7 +41,9 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.postgresql.deprecatedVersion" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.postgresql.noPasswordFile" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.database.externalLoadBalancing" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.incomingEmail.microsoftGraph" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.serviceDesk" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.serviceDesk.microsoftGraph" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
@@ -406,6 +408,27 @@ postgresql:
 {{/* END gitlab.checkConfig.database.externalLoadBalancing */}}
 
 {{/*
+Ensure that tenantId and clientId are set if Microsoft Graph settings are used in incomingEmail
+*/}}
+{{- define "gitlab.checkConfig.incomingEmail.microsoftGraph" -}}
+{{- with $.Values.global.appConfig.incomingEmail }}
+{{-   if (and .enabled (eq .inboxMethod "microsoft_graph")) }}
+{{-     if not .tenantId }}
+incomingEmail:
+    When configuring incoming email with Microsoft Graph, be sure to specify the tenant ID.
+    See https://docs.gitlab.com/ee/administration/incoming_email.html#microsoft-graph
+{{-     end -}}
+{{-     if not .clientId }}
+incomingEmail:
+    When configuring incoming email with Microsoft Graph, be sure to specify the client ID.
+    See https://docs.gitlab.com/ee/administration/incoming_email.html#microsoft-graph
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.incomingEmail.microsoftGraph */}}
+
+{{/*
 Ensure that incomingEmail is enabled too if serviceDesk is enabled
 */}}
 {{- define "gitlab.checkConfig.serviceDesk" -}}
@@ -423,6 +446,27 @@ serviceDesk:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.serviceDesk */}}
+
+{{/*
+Ensure that tenantId and clientId are set if Microsoft Graph settings are used in serviceDesk
+*/}}
+{{- define "gitlab.checkConfig.serviceDesk.microsoftGraph" -}}
+{{- with $.Values.global.appConfig.serviceDesk }}
+{{-   if (and .enabled (eq .inboxMethod "microsoft_graph")) }}
+{{-     if not .tenantId }}
+incomingEmail:
+    When configuring Service Desk with Microsoft Graph, be sure to specify the tenant ID.
+    See https://docs.gitlab.com/ee/user/project/service_desk.html#microsoft-graph
+{{-     end -}}
+{{-     if not .clientId }}
+incomingEmail:
+    When configuring Service Desk with Microsoft Graph, be sure to specify the client ID.
+    See https://docs.gitlab.com/ee/user/project/service_desk.html#microsoft-graph
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.serviceDesk.microsoftGraph */}}
 
 {{/*
 Ensure that sentry has a DSN configured if enabled
