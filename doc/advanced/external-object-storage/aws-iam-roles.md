@@ -141,3 +141,50 @@ the `s3cmd` to perform the copy of the backup file and it has a known
 issue of [not supporting OIDC authentication](https://github.com/s3tools/s3cmd/issues/1075).
 There is a [pull request](https://github.com/s3tools/s3cmd/pull/1112)
 to mitigate this issue, but it has yet to be accepted into the `s3cmd` code base.
+
+#### Troubleshooting IAM roles for service accounts
+
+One can test if the IAM role is correctly setup and that GitLab is accessing
+S3 using the IAM role. This is accomplished by logging into the `taskrunner`
+pod and installing the `awscli` python package.
+
+```shell
+kubectl exec -it <TASK RUNNER POD> bash
+pip install awscli
+```
+
+With the `awscli` package installed verify that you are able to communicate
+with the AWS API with the following command.
+
+```shell
+/home/git/.local/bin/aws sts get-caller-identity
+```
+
+NOTE:
+The `aws` command is not in the path so it is necessary to use the
+full path to execute the command.
+
+A normal response showing the temporary user ID, account number and IAM
+ARN (this will not be the IAM ARN for the role used to access S3) will be
+returned if connection to the AWS API was successful. An unsuccessful
+connection will require more troubleshooting to determine why the `taskrunner`
+pod is not able to communicate with the AWS APIs.
+
+If connecting to the AWS APIs is successful, then the following command
+will assume the IAM role that was created and verify that a STS token can
+be retrieved for accessing S3. The `AWS_ROLE_ARN` and `AWS_WEB_IDENTITY_TOKEN_FILE`
+variables are defined in the environment when IAM role annotation has been
+added to the pod and do not require that they be defined.
+
+```shell
+/home/git/.local/bin/aws sts assume-role-with-web-identity --role-arn $AWS_ROLE_ARN  --role-session-name gitlab --web-identity-token file://$AWS_WEB_IDENTITY_TOKEN_FILE
+```
+
+If the IAM role could not be assumed then an error message similar to the
+following will be displayed:
+
+```text
+An error occurred (AccessDenied) when calling the AssumeRoleWithWebIdentity operation: Not authorized to perform sts:AssumeRoleWithWebIdentity
+```
+
+Otherwise the STS credentials and IAM role information will be displayed.
