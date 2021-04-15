@@ -91,7 +91,7 @@ role in the GitLab configuration:
    This is best done with using the [`eksctl` command](https://eksctl.io/):
 
    ```shell
-   eksctl  utils associate-iam-oidc-provider --name <CLUSTER NAME> --approve
+   eksctl utils associate-iam-oidc-provider --name <CLUSTER NAME> --approve
    ```
 
 1. Create the Kubernetes ServiceAccount for GitLab to use with `eksctl`.
