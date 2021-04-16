@@ -212,12 +212,13 @@ You can find the full explanation and workaround in [Migrating from Helm v2 to H
 
 ## Restoration failure: `ERROR:  cannot drop view pg_stat_statements because extension pg_stat_statements requires it`
 
-You may face this error when restoring a backup on your Helm chart instance. Use the following steps as a woraround:
+You may face this error when restoring a backup on your Helm chart instance. Use the following steps as a workaround:
 
 - run `/srv/gitlab/bin/rails dbconsole -p` inside your `task-runner` pod to open the DB console
-- inside the consolle run `DROP EXTENSION pg_stat_statements`
+- inside the console run `DROP EXTENSION pg_stat_statements`
 - perform the restoration process
-- after the restoration is completed, recreate the extension by running `CREATE EXTENSION pg_stat_statements` in the DB console
+- after the restoration is completed, run `CREATE EXTENSION pg_stat_statements` in the DB console to re-create the extension
 
-Note that there may be other extensions failing, for instance `pg_buffercache`. 
+Note:
+Other extensions failing, for instance `pg_buffercache`. 
 You may find more details about it in the issue [https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469).
