@@ -58,4 +58,3 @@ describe 'Annotations configuration' do
     end
   end
 end
-

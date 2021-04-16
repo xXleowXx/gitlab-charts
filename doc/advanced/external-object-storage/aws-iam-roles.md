@@ -183,7 +183,7 @@ added to the pod and do not require that they be defined.
 If the IAM role could not be assumed then an error message similar to the
 following will be displayed:
 
-```text
+```plaintext
 An error occurred (AccessDenied) when calling the AssumeRoleWithWebIdentity operation: Not authorized to perform sts:AssumeRoleWithWebIdentity
 ```
 
