@@ -63,7 +63,9 @@ documentation.
   - [LDAP Password](#ldap-password)
   - [SMTP Password](#smtp-password)
   - [IMAP Password for incoming email](#imap-password-for-incoming-emails)
+  - [Microsoft Graph client secret for incoming emails](#microsoft-graph-client-secret-for-incoming-emails)
   - [IMAP Password for service desk](#imap-password-for-service-desk-emails)
+  - [Microsoft Graph client secret for service desk](#microsoft-graph-client-secret-for-service-desk-emails)
   - [S/MIME Certificate](#smime-certificate)
   - [Smartcard Authentication](#smartcard-authentication)
 
