@@ -117,7 +117,7 @@ role in the GitLab configuration:
        enabled: true
        create: false
        name: <SERVICE ACCT NAME>
-       iam_role_arn: "<AWS IAM ARN>"
+       eksRoleArn: "<AWS IAM ARN>"
    ```
 
    The settings can also be added to the Helm deployment command with the
@@ -127,7 +127,7 @@ role in the GitLab configuration:
    --set global.serviceAccount.enabled=true
    --set global.serviceAccount.create=false
    --set global.serviceAccount.name=<SERVICE ACCT NAME>
-   --set global.serviceAccount.iam_role_arn=<AWS IAM ARN>
+   --set global.serviceAccount.eksRoleArn=<AWS IAM ARN>
    ```
 
 The above procedure will create the `eks.amazonaws.com/role-arn` annotations

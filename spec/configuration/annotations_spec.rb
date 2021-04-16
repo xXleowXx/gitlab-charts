@@ -43,7 +43,7 @@ describe 'Annotations configuration' do
             enabled: true
             create: false
             name: aws-role-sa
-            iam_role_arn: "arn:aws:iam::1234567890:role/eks-fake-role-arn"
+            eksRoleArn: "arn:aws:iam::1234567890:role/eks-fake-role-arn"
       )).deep_merge(default_values)
     end
     annotation_key = 'eks.amazonaws.com/role-arn'
