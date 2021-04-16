@@ -342,6 +342,10 @@ global:
         logPath: "/dev/stdout"
       mailbox: inbox
       idleTimeout: 60
+      inboxMethod: "imap"
+      clientSecret:
+        key: secret
+      pollInterval: 60
 
     ## doc/charts/globals.md#service-desk-email-settings
     ## doc/installation/deployment.md#service-desk-email
@@ -361,6 +365,10 @@ global:
         logPath: "/dev/stdout"
       mailbox: inbox
       idleTimeout: 60
+      inboxMethod: "imap"
+      clientSecret:
+        key: secret
+      pollInterval: 60
 
     ## doc/charts/globals.md#ldap
     ldap:
