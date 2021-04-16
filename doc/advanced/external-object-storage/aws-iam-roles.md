@@ -146,7 +146,7 @@ to mitigate this issue, but it has yet to be accepted into the `s3cmd` code base
 
 One can test if the IAM role is correctly setup and that GitLab is accessing
 S3 using the IAM role. This is accomplished by logging into the `taskrunner`
-pod and installing the `awscli` python package.
+pod and installing the `awscli` Python package.
 
 ```shell
 kubectl exec -it <TASK RUNNER POD> bash
