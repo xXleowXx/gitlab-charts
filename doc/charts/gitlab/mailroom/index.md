@@ -141,8 +141,7 @@ See the [GitLab documentation on creating an Azure Active Directory application]
 
 Provide the tenant ID, client ID, and client secret. You can find details for these settings in the [command line options](../../../installation/command-line-options.md#incoming-email-configuration).
 
-Create a Kubernetes secret containing IMAP
-password as described in the [secrets guide](../../../installation/secrets.md#imap-password-for-incoming-email).
+Create a Kubernetes secret containing the client secret as described in the [secrets guide](../../../installation/secrets.md#microsoft-graph-client-secret-for-incoming-emails).
 
 ### Reply-by-email
 
