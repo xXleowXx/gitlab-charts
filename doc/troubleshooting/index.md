@@ -219,6 +219,6 @@ You may face this error when restoring a backup on your Helm chart instance. Use
 - perform the restoration process
 - after the restoration is completed, run `CREATE EXTENSION pg_stat_statements` in the DB console to re-create the extension
 
-Note:
+NOTE:
 Other extensions failing, for instance `pg_buffercache`. 
 You may find more details about it in the issue [https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469).
