@@ -454,3 +454,14 @@ Override upstream redis secret key name
 {{- define "redis.secretPasswordKey" -}}
 {{ template "gitlab.redis.password.key" . }}
 {{- end -}}
+
+{{/*
+Return the appropriate apiVersion for Ingress.
+*/}}
+{{- define "ingress.apiVersion" -}}
+{{- if ge .Capabilities.KubeVersion.Minor "19"}}
+{{- print "networking.k8s.io/v1" -}}
+{{- else}}
+{{- print "networking.k8s.io/v1beta1" -}}
+{{- end -}}
+{{- end -}}

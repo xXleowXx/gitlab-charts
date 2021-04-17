@@ -3,11 +3,7 @@
 {{- $hostname := include "registry.hostname" . -}}
 {{- $tlsSecret := include "registry.tlsSecret" . -}}
 
-{{- if ge .Capabilities.KubeVersion.Minor "19" }}
-apiVersion: networking.k8s.io/v1
-{{- else }}
-apiVersion: networking.k8s.io/v1beta1
-{{- end }}
+apiVersion: {{ template "ingress.apiVersion" $}}
 kind: Ingress
 metadata:
   name: {{ template "registry.fullname" . }}
