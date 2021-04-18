@@ -28,13 +28,13 @@ spec:
       http:
         paths:
           - path: {{ coalesce $.Values.ingress.path $.Values.global.ingress.path }}
-            {{- if ge $.Capabilities.KubeVersion.Minor "19" -}}
+            {{ if ge $.Capabilities.KubeVersion.Minor "19" -}}
             pathType: {{ $.Values.global.ingress.pathType }}
             backend:
               service:
-                  name: {{ template "registry.fullname" . }}
-                  port:
-                    number:  {{ .Values.service.externalPort }}
+                name: {{ template "registry.fullname" . }}
+                port:
+                  number:  {{ .Values.service.externalPort }}
             {{- else}}
             backend:
               serviceName: {{ template "registry.fullname" . }}
