@@ -459,9 +459,9 @@ Override upstream redis secret key name
 Return the appropriate apiVersion for Ingress.
 */}}
 {{- define "ingress.apiVersion" -}}
-{{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1"}}
+{{- if ge .Capabilities.KubeVersion.Minor "19" -}}
 {{- print "networking.k8s.io/v1" -}}
-{{- else}}
+{{- else -}}
 {{- print "networking.k8s.io/v1beta1" -}}
 {{- end -}}
 {{- end -}}

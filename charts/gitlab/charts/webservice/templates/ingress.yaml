@@ -41,7 +41,7 @@ spec:
       http:
         paths:
           - path: {{ .ingress.path }}
-            {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1"}}
+            {{- if ge $.Capabilities.KubeVersion.Minor "19" -}}
             pathType: {{ $.Values.global.ingress.pathType }}
             backend:
               service:
@@ -55,7 +55,7 @@ spec:
             {{- end -}}
           {{- if has .ingress.path (list "/" "/*") }}
           - path: /admin/sidekiq{{ .ingress.path }}
-            {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1"}}
+            {{- if ge $.Capabilities.KubeVersion.Minor "19" -}}
             pathType: {{ $.Values.global.ingress.pathType }}
             backend:
               service:
