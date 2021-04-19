@@ -37,6 +37,7 @@ for more information on how the global variables work.
 - [extraEnv](#extraenv)
 - [OAuth](#configure-oauth-settings)
 - [Outgoing email](#outgoing-email)
+- [Platform](#platform)
 
 ## Configure Host settings
 
@@ -1713,13 +1714,11 @@ global:
     annotations: {}
     ## Name to be used for serviceAccount, otherwise defaults to chart fullname
     # name:
-    # eksRoleArn:
 ```
 
 - Setting `global.serviceAccount.enabled` to `true` will create a custom service account for each deployment.
 - Setting `global.serviceAccount.create` to `false` will disable automatic service account creation.
 - Setting `global.serviceAccount.name` will use that name in the deployment for either auto-generated or manually created service accounts.
-- Setting `global.serviceAccount.eksRoleArn` will allow AWS IAM role to be used to access an object store. See [Using IAM roles for service accounts](../advanced/external-object-storage/aws-iam-roles.md#using-iam-roles-for-service-accounts) for more information.
 
 ## Annotations
 
@@ -1908,3 +1907,18 @@ More information on the available configuration options is available in the
 
 More detailed examples can be found in the
 [Omnibus SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).
+
+## Platform
+
+Platform specific settings to enable features for certain operational
+environments.
+
+```yaml
+global:
+  platform:
+    eksRoleArn:
+```
+
+| Name           | Type   | Default | Description                                                                                            |
+| :---           | :--:   | :------ | :----------                                                                                            |
+| `eksRoleArn`   | String |         | Object storage IAM role. See [Using IAM roles for service accounts](../advanced/external-object-storage/aws-iam-roles.md#using-iam-roles-for-service-accounts) for more information.  |
