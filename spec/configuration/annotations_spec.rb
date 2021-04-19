@@ -35,7 +35,7 @@ describe 'Annotations configuration' do
     end
   end
 
-  context 'When configuring EKS IRSA annotation' do
+  context 'When configuring EKS IRSA annotation', :focus => true do
     let(:irsa_annotations) do
       YAML.safe_load(%(
         global:
@@ -43,6 +43,7 @@ describe 'Annotations configuration' do
             enabled: true
             create: false
             name: aws-role-sa
+          platform:
             eksRoleArn: "arn:aws:iam::1234567890:role/eks-fake-role-arn"
       )).deep_merge(default_values)
     end
