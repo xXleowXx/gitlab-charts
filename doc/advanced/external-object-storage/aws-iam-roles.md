@@ -142,19 +142,19 @@ issue of [not supporting OIDC authentication](https://github.com/s3tools/s3cmd/i
 There is a [pull request](https://github.com/s3tools/s3cmd/pull/1112)
 to mitigate this issue, but it has yet to be accepted into the `s3cmd` code base.
 
-#### Troubleshooting IAM roles for service accounts
+## Troubleshooting
 
-One can test if the IAM role is correctly setup and that GitLab is accessing
-S3 using the IAM role. This is accomplished by logging into the `taskrunner`
-pod and installing the `awscli` Python package.
+You can test if the IAM role is correctly set up and that GitLab is accessing
+S3 using the IAM role by logging into the `taskrunner` pod and installing the
+`awscli` Python package:
 
 ```shell
 kubectl exec -it <TASK RUNNER POD> bash
 pip install awscli
 ```
 
-With the `awscli` package installed verify that you are able to communicate
-with the AWS API with the following command.
+With the `awscli` package installed, verify that you are able to communicate
+with the AWS API:
 
 ```shell
 /home/git/.local/bin/aws sts get-caller-identity
@@ -174,7 +174,7 @@ If connecting to the AWS APIs is successful, then the following command
 will assume the IAM role that was created and verify that a STS token can
 be retrieved for accessing S3. The `AWS_ROLE_ARN` and `AWS_WEB_IDENTITY_TOKEN_FILE`
 variables are defined in the environment when IAM role annotation has been
-added to the pod and do not require that they be defined.
+added to the pod and do not require that they be defined:
 
 ```shell
 /home/git/.local/bin/aws sts assume-role-with-web-identity --role-arn $AWS_ROLE_ARN  --role-session-name gitlab --web-identity-token file://$AWS_WEB_IDENTITY_TOKEN_FILE
@@ -187,4 +187,4 @@ following will be displayed:
 An error occurred (AccessDenied) when calling the AssumeRoleWithWebIdentity operation: Not authorized to perform sts:AssumeRoleWithWebIdentity
 ```
 
-Otherwise the STS credentials and IAM role information will be displayed.
+Otherwise, the STS credentials and IAM role information will be displayed.
