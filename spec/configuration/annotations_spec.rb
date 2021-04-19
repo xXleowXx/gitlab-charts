@@ -35,7 +35,7 @@ describe 'Annotations configuration' do
     end
   end
 
-  context 'When configuring EKS IRSA annotation', :focus => true do
+  context 'When configuring EKS IRSA annotation' do
     let(:irsa_annotations) do
       YAML.safe_load(%(
         global:
@@ -56,6 +56,21 @@ describe 'Annotations configuration' do
       expect(t.template_annotations('Deployment/test-task-runner')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
       expect(t.template_annotations('Deployment/test-webservice-default')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
       expect(t.template_annotations('Deployment/test-sidekiq-all-in-1-v1')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
+    end
+
+    it 'Populates eks.amazonaws.com/role-arn annotation when backup cron enabled' do
+      backup_annotations = YAML.safe_load(%(
+        gitlab:
+          task-runner:
+            backups:
+              cron:
+                enabled: true
+        )).deep_merge(irsa_annotations)
+
+      t = HelmTemplate.new(backup_annotations)
+      expect(t.exit_code).to eq(0)
+
+      expect(t.template_annotations('CronJob/test-task-runner-backup')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
     end
   end
 end

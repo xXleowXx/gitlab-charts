@@ -67,7 +67,9 @@ class HelmTemplate
   end
 
   def template_labels(item)
-    @mapped.dig(item,'spec','template','metadata','labels')
+    # only one of the following should return results
+    @mapped.dig(item,'spec','template','metadata','labels') ||
+    @mapped.dig(item, 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'labels')
   end
 
   def annotations(item)
@@ -75,7 +77,9 @@ class HelmTemplate
   end
 
   def template_annotations(item)
-    @mapped.dig(item,'spec','template','metadata','annotations')
+    # only one of the following should return results
+    @mapped.dig(item,'spec','template','metadata','annotations') ||
+    @mapped.dig(item, 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'annotations')
   end
 
   def find_volume(item, volume_name)
