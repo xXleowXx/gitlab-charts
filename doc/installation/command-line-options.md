@@ -113,7 +113,7 @@ helm inspect values gitlab/gitlab
 | `global.appConfig.incomingEmail.clientSecret.secret` | Name of a `Secret` containing the OAuth2 client secret                                                   | secret     |
 | `global.appConfig.incomingEmail.pollInterval`        | The interval in seconds how often to poll for new mail                                                   | 60         |
 
-See the [instructions for creating secrets][secrets.md].
+See the [instructions for creating secrets](secrets.md).
 
 ## Service Desk Email configuration
 
@@ -157,7 +157,7 @@ must be `+%{key}`.
 | `global.appConfig.serviceDeskEmail.clientSecret.secret` | Name of a `Secret` containing the OAuth2 client secret                                                      | secret     |
 | `global.appConfig.serviceDeskEmail.pollInterval`        | The interval in seconds how often to poll for new mail                                                      | 60         |
 
-See the [instructions for creating secrets][secrets.md].
+See the [instructions for creating secrets](secrets.md).
 
 ## Default Project Features configuration
 
