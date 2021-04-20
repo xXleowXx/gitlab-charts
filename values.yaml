@@ -979,6 +979,8 @@ grafana:
   ## We host Grafana as a sub-url of GitLab
   grafana.ini:
     server:
+      server:
+        serve_from_subpath: true
       root_url: http://localhost/-/grafana/
   ## We generate and provide random passwords
   ## NOTE: the Secret & ConfigMap names are hard coded!
