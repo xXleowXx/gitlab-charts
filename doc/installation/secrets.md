@@ -316,7 +316,7 @@ Generate a random 32 character alpha-numeric key shared by all registry pods, an
 Replace `<name>` with the name of the release.
 
 ```shell
-kubectl create secret generic gitlab-registry-notification --from-literal=secret=[\"$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32)\"]
+kubectl create secret generic <name>-registry-notification --from-literal=secret=[\"$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32)\"]
 ```
 
 ### Praefect DB password
