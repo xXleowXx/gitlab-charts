@@ -48,14 +48,15 @@ describe 'Annotations configuration' do
       )).deep_merge(default_values)
     end
     annotation_key = 'eks.amazonaws.com/role-arn'
+    annotation_value = 'arn:aws:iam::1234567890:role/eks-fake-role-arn'
 
     it 'Populates eks.amazonaws.com/role-arn annotation' do
       t = HelmTemplate.new(irsa_annotations)
       expect(t.exit_code).to eq(0)
 
-      expect(t.template_annotations('Deployment/test-task-runner')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
-      expect(t.template_annotations('Deployment/test-webservice-default')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
-      expect(t.template_annotations('Deployment/test-sidekiq-all-in-1-v1')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
+      expect(t.template_annotations('Deployment/test-task-runner')[annotation_key]).to eq(annotation_value)
+      expect(t.template_annotations('Deployment/test-webservice-default')[annotation_key]).to eq(annotation_value)
+      expect(t.template_annotations('Deployment/test-sidekiq-all-in-1-v1')[annotation_key]).to eq(annotation_value)
     end
 
     it 'Populates eks.amazonaws.com/role-arn annotation when backup cron enabled' do
@@ -70,7 +71,7 @@ describe 'Annotations configuration' do
       t = HelmTemplate.new(backup_annotations)
       expect(t.exit_code).to eq(0)
 
-      expect(t.template_annotations('CronJob/test-task-runner-backup')[annotation_key]).to eq('arn:aws:iam::1234567890:role/eks-fake-role-arn')
+      expect(t.template_annotations('CronJob/test-task-runner-backup')[annotation_key]).to eq(annotation_value)
     end
   end
 end
