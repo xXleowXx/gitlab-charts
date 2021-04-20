@@ -64,6 +64,9 @@ spec:
         checksum/configmap: {{ $configMapChecksum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         checksum/configmap-pod: {{ pluck ( .name | quote ) $queues | last | sha256sum }}
+      {{- if $.Values.global.platform.eksRoleArn }}
+        eks.amazonaws.com/role-arn: {{ $.Values.global.platform.eksRoleArn | quote }}
+      {{- end }}
       {{- range $key, $value := $.Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
