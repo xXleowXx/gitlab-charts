@@ -42,7 +42,7 @@ spec:
         paths:
           - path: {{ .ingress.path }}
             {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
-            pathType: {{ $.Values.global.ingress.pathType }}
+            pathType: {{ default .ingress.pathType $.Values.global.ingress.pathType }}
             backend:
               service:
                   name: {{ template "webservice.fullname.withSuffix" . }}
@@ -56,7 +56,7 @@ spec:
           {{- if has .ingress.path (list "/" "/*") }}
           - path: /admin/sidekiq{{ .ingress.path }}
             {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
-            pathType: {{ $.Values.global.ingress.pathType }}
+            pathType: {{ .ingress.pathType }}
             backend:
               service:
                 name: {{ template "webservice.fullname.withSuffix" . }}
