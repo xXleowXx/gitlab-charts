@@ -594,6 +594,7 @@ global:
   ## Global settings related to Workhorse
   workhorse:
     serviceName: webservice-default
+    redis: true
     # scheme:
     # host:
     # port:
