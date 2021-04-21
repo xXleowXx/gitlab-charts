@@ -1,5 +1,0 @@
----
-title: Add checkConfig to validate Gitaly storage names
-merge_request: 1873
-author:
-type: added

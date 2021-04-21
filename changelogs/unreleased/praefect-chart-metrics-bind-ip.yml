@@ -1,6 +1,0 @@
----
-title: Configure the metrics endpoint of praefect to be reachable from all interfaces
-  not just localhost.
-merge_request: 1946
-author: Tim Neumann
-type: fixed

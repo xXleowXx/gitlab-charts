@@ -1,5 +1,0 @@
----
-title: Gitaly - move metrics port from service to pod
-merge_request: 1947
-author:
-type: removed
