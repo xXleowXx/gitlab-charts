@@ -1,5 +1,0 @@
----
-title: Allow configuring terminationGracePeriodSeconds for Sidekiq pod
-merge_request: 1905
-author:
-type: added

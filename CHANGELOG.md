@@ -2,6 +2,37 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.11.0 (2021-04-22)
+
+### Removed (1 change)
+
+- Gitaly - move metrics port from service to pod. !1947
+
+### Fixed (5 changes, 1 of them is from the community)
+
+- Fixes incorrect set hostname for geo syncing Container Registry. !1913
+- Allow separate external Gitaly when Praefect is enabled. !1928
+- Registry: use separate, minimal config for migration. !1939
+- Configure the metrics endpoint of praefect to be reachable from all interfaces not just localhost. !1946 (Tim Neumann)
+- Bump gitlab-exporter to 10.2.0 to fix Puma related crash. !1954
+
+### Changed (3 changes)
+
+- GitLab Runner to 0.27.0 / 13.10.0. !1904
+- Registry to 3.3.0-gitlab. !1942
+- GitLab Runner chart to 0.28.0. !1956
+
+### Added (7 changes)
+
+- Add Registry migrations job. !1857
+- Add checkConfig to validate Gitaly storage names. !1873
+- [shared-secrets chart] If Secret key does not exist, patch it in. !1883
+- Allow configuring terminationGracePeriodSeconds for Sidekiq pod. !1905
+- Add online GC configurations to registry chart. !1908
+- Add Microsoft Graph config support for MailRoom. !1929
+- Added support for IAM roles in EKS. !1940
+
+
 ## 4.10.3 (2021-04-13)
 
 - No changes.

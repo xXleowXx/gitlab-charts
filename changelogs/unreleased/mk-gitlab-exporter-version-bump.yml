@@ -1,5 +1,0 @@
----
-title: Bump gitlab-exporter to 10.2.0 to fix Puma related crash
-merge_request: 1954
-author:
-type: fixed

@@ -1,5 +1,0 @@
----
-title: Allow separate external Gitaly when Praefect is enabled
-merge_request: 1928
-author:
-type: fixed
