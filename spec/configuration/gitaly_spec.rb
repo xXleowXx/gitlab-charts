@@ -5,24 +5,23 @@ require 'hash_deep_merge'
 
 describe 'Gitaly configuration' do
   let(:default_values) do
-    { 'certmanager-issuer' => { 'email' => 'test@example.com' } }
+    YAML.safe_load(%(
+      certmanager-issuer:
+        email:
+          test@example.com
+    ))
   end
 
   context 'When disabled and provided external instances' do
     let(:values) do
-      {
-        'global' => {
-          'gitaly' => {
-            'enabled' => false,
-            'external' => [
-              {
-                'name' => 'default',
-                'hostname' => 'git.example.com',
-              }
-            ],
-          },
-        }
-      }.deep_merge(default_values)
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            enabled: false
+            external:
+            - name: default
+              hostname: git.example.com
+      )).deep_merge(default_values)
     end
 
     it 'populates external instances to gitlab.yml' do
@@ -37,20 +36,15 @@ describe 'Gitaly configuration' do
 
     context 'when external is configured with tlsEnabled' do
       let(:values) do
-        {
-          'global' => {
-            'gitaly' => {
-              'enabled' => false,
-              'external' => [
-                {
-                  'name' => 'default',
-                  'hostname' => 'git.example.com',
-                  'tlsEnabled' => true
-                }
-              ],
-            },
-          }
-        }.deep_merge(default_values)
+        YAML.safe_load(%(
+          global:
+            gitaly:
+              enabled: false
+              external:
+              - name: default
+                hostname: git.example.com
+                tlsEnabled: true
+        )).deep_merge(default_values)
       end
 
       it 'populates a tls uri' do
@@ -66,20 +60,16 @@ describe 'Gitaly configuration' do
 
     context 'when tls is enabled' do
       let(:values) do
-        {
-          'global' => {
-            'gitaly' => {
-              'enabled' => false,
-              'external' => [
-                {
-                  'name' => 'default',
-                  'hostname' => 'git.example.com',
-                },
-              ],
-              'tls' => { 'enabled' => true }
-            },
-          }
-        }.deep_merge(default_values)
+        YAML.safe_load(%(
+          global:
+            gitaly:
+              enabled: false
+              external:
+              - name: default
+                hostname: git.example.com
+              tls:
+                enabled: true
+        )).deep_merge(default_values)
       end
 
       it 'populates a tls uri' do
@@ -95,21 +85,17 @@ describe 'Gitaly configuration' do
 
     context 'when tls is enabled, and instance disables tls' do
       let(:values) do
-        {
-          'global' => {
-            'gitaly' => {
-              'enabled' => false,
-              'external' => [
-                {
-                  'name' => 'default',
-                  'hostname' => 'git.example.com',
-                  'tlsEnabled' => false
-                },
-              ],
-              'tls' => { 'enabled' => true }
-            },
-          }
-        }.deep_merge(default_values)
+        YAML.safe_load(%(
+          global:
+            gitaly:
+              enabled: false
+              external:
+              - name: default
+                hostname: git.example.com
+                tlsEnabled: false
+              tls:
+                enabled: true
+        )).deep_merge(default_values)
       end
 
       it 'populates a tcp uri' do
@@ -128,30 +114,28 @@ describe 'Gitaly configuration' do
     context 'when the administrator changes or deletes values' do
       using RSpec::Parameterized::TableSyntax
       where(:fsGroup, :runAsUser, :expectedContext) do
-        nil | nil | { 'fsGroup' => 1000, 'runAsUser' => 1000 }
-        nil | ""  | { 'fsGroup' => 1000 }
-        nil | 24  | { 'fsGroup' => 1000, 'runAsUser' => 24 }
-        42  | nil | { 'fsGroup' => 42, 'runAsUser' => 1000 }
-        42  | ""  | { 'fsGroup' => 42 }
-        42  | 24  | { 'fsGroup' => 42, 'runAsUser' => 24 }
-        ""  | nil | { 'runAsUser' => 1000 }
-        ""  | ""  | nil
-        ""  | 24  | { 'runAsUser' => 24 }
+        nil | nil | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
+        nil | ""  | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
+        nil | 24  | { 'fsGroup' => 1000,  'runAsUser' => 24   }
+        42  | nil | { 'fsGroup' => 42,    'runAsUser' => 1000 }
+        42  | ""  | { 'fsGroup' => 42,    'runAsUser' => 1000 }
+        42  | 24  | { 'fsGroup' => 42,    'runAsUser' => 24   }
+        ""  | nil | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
+        ""  | ""  | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
+        ""  | 24  | { 'fsGroup' => 1000,  'runAsUser' => 24   }
       end
 
       with_them do
         let(:values) do
-          {
-            'gitlab' => {
-              'gitaly' => {
-                'securityContext' => {
-                  'fsGroup' => fsGroup,
-                  'runAsUser' => runAsUser
-                }.select { |k, v| !v.nil? }
-              }
-            }
-          }.deep_merge(default_values)
+          YAML.safe_load(%(
+            gitlab:
+              gitaly:
+                securityContext:
+                  fsGroup: #{fsGroup}
+                  runAsUser: #{runAsUser}
+          )).deep_merge(default_values)
         end
+
         let(:gitaly_stateful_set) { 'StatefulSet/test-gitaly' }
 
         it 'should render securityContext correctly' do
@@ -167,51 +151,36 @@ describe 'Gitaly configuration' do
 
   context 'When customer provides additional labels' do
     let(:labeled_values) do
-      {
-        'global' => {
-          'common' => {
-            'labels' => {
-              'global' => 'global',
-              'foo' => 'global'
-            }
-          },
-          'operator' => {
-            'enabled' => true
-          },
-          'pod' => {
-            'labels' => {
-              'global_pod' => true
-            }
-          },
-          'service' => {
-            'labels' => {
-              'global_service' => true
-            }
-          }
-        },
-        'gitlab' => {
-          'gitaly' => {
-            'common' => {
-              'labels' => {
-                'global' => 'gitaly',
-                'gitaly' => 'gitaly'
-              }
-            },
-            'podLabels' => {
-              'pod' => true,
-              'global' => 'pod'
-            },
-            'serviceAccount' => {
-              'create' => true,
-              'enabled' => true
-            },
-            'serviceLabels' => {
-              'service' => true,
-              'global' => 'service'
-            }
-          }
-        }
-      }.deep_merge(default_values)
+      YAML.safe_load(%(
+        global:
+          common:
+            labels:
+              global: global
+              foo: global
+          operator:
+            enabled: true
+          pod:
+            labels:
+              global_pod: true
+          service:
+            labels:
+              global_service: true
+        gitlab:
+          gitaly:
+            common:
+              labels:
+                global: gitaly
+                gitaly: gitaly
+            podLabels:
+              pod: true
+              global: pod
+            serviceAccount:
+              create: true
+              enabled: true
+            serviceLabels:
+              service: true
+              global: service
+      )).deep_merge(default_values)
     end
 
     context 'with only gitaly' do
@@ -243,16 +212,13 @@ describe 'Gitaly configuration' do
 
     context 'with praefect enabled' do
       let(:praefect_labeled_values) do
-        {
-          'global' => {
-            'praefect' => {
-              'enabled' => true,
-              'virtualStorages' => [{
-                'name' => 'default'
-              }]
-            }
-          }
-        }.deep_merge(default_values).deep_merge(labeled_values)
+        YAML.safe_load(%(
+          global:
+            praefect:
+              enabled: true
+              virtualStorages:
+              - name: default
+        )).deep_merge(default_values).deep_merge(labeled_values)
       end
 
       it 'Populates the additional labels in the expected manner' do
