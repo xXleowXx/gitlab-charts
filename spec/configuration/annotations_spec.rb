@@ -3,14 +3,22 @@
 require 'spec_helper'
 require 'helm_template_helper'
 require 'yaml'
+require 'hash_deep_merge'
 
 describe 'Annotations configuration' do
   let(:default_values) do
-    {
-      'certmanager-issuer' => { 'email' => 'test@example.com' },
-      'gitlab' => { 'kas' => { 'enabled' => 'true' } }, # DELETE THIS WHEN KAS BECOMES ENABLED BY DEFAULT
-      'global' => { 'deployment' => { 'annotations' => { 'environment' => 'development' } } }
-    }
+    YAML.safe_load(%(
+      global:
+        deployment:
+          annotations:
+            environment: development
+      certmanager-issuer:
+        email:
+          test@example.com
+      gitlab:
+        kas:
+          enabled: true  # DELETE THIS WHEN KAS BECOMES ENABLED BY DEFAULT
+    ))
   end
 
   let(:ignored_charts) do
