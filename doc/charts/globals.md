@@ -502,10 +502,11 @@ global:
     bucket: registry
     certificate:
     httpSecret:
+    notificationSecret:
     notifications: {}
 ```
 
-For more details on `bucket`, `certificate`, and `httpSecret` settings, see the documentation within the [registry chart](registry/index.md).
+For more details on `bucket`, `certificate`, `httpSecret`, and `notificationSecret` settings, see the documentation within the [registry chart](registry/index.md).
 
 ### notifications
 

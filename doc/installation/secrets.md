@@ -56,6 +56,7 @@ documentation.
   - [Praefect DB password](#praefect-db-password)
   - [MinIO secret](#minio-secret)
   - [Registry HTTP secret](#registry-http-secret)
+  - [Registry notification secret](#registry-notification-secret)
   - [Grafana password](#grafana-password)
   - [GitLab Pages secret](#gitlab-pages-secret)
 - [External Services](#external-services)
@@ -311,6 +312,15 @@ Replace `<name>` with the name of the release.
 
 ```shell
 kubectl create secret generic <name>-registry-httpsecret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64 | base64)
+```
+
+### Registry notification secret
+
+Generate a random 32 character alpha-numeric key shared by all registry pods, and the GitLab webservice pods.
+Replace `<name>` with the name of the release.
+
+```shell
+kubectl create secret generic <name>-registry-notification --from-literal=secret=[\"$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32)\"]
 ```
 
 ### Praefect DB password
