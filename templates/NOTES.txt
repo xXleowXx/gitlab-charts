@@ -86,6 +86,14 @@ NOTICE: The GitLab task-runner is scaled to 0.
 WARNING: global.operator.enabled is set.
     The gitlab/gitlab-operator chart houses "gitlab-operator". This functionality was Alpha, and marked experimental. This is now DEPRECATED and will be removed in the future.
 {{- end }}
+
+{{/* WARN: global.registry.notificationSecret */}}
+{{- if and (not (index .Values "shared-secrets" "enabled")) (not .Values.global.registry.notificationSecret) -}}
+WARNING: shared-secrets.enabled is false, no global.registry.notificationSecret provided.
+  The shared-secrets chart has been disabled, and `global.registry.notificationSecret` has not been provided.
+  Starting in 4.11.x of this chart, this secret must be present, but shared-secrets will not be run to generated it.
+  Please see https://docs.gitlab.com/charts/charts/globals#configure-registry-settings
+{{- end }}
 {{/* print install survey link */}}
 {{- $appVersion := coalesce .Values.global.gitlabVersion .Chart.AppVersion -}}
 {{- if and .Release.IsInstall (regexMatch "^\\d+\\.\\d+\\.\\d+(-rc\\d+)?(-pre)?$" $appVersion) }}
