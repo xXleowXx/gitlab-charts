@@ -209,3 +209,31 @@ and specify a compatible version of the `gitlab/gitlab` chart in your `helm` com
 
 This is a known issue. After migrating a Helm 2 release to Helm 3, the subsequent upgrades may fail.
 You can find the full explanation and workaround in [Migrating from Helm v2 to Helm v3](../installation/migration/helm.md#known-issues).
+
+## Restoration failure: `ERROR:  cannot drop view pg_stat_statements because extension pg_stat_statements requires it`
+
+You may face this error when restoring a backup on your Helm chart instance. Use the following steps as a workaround:
+
+1. Inside your `task-runner` pod open the DB console:
+
+   ```shell
+   /srv/gitlab/bin/rails dbconsole -p
+   ```
+
+1. Drop the extension:
+
+   ```shell
+   DROP EXTENSION pg_stat_statements
+   ```
+
+1. Perform the restoration process.
+1. After the restoration is complete, re-create the extension in the DB console:
+
+   ```shell
+   CREATE EXTENSION pg_stat_statements
+   ```
+
+If you encounter the same issue with the `pg_buffercache` extension,
+follow the same steps above to drop and re-create it.
+
+You can find more details about this error in issue [#2469](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469).
