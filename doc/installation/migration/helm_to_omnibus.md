@@ -12,7 +12,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 1. Prepare a clean machine and install Omnibus GitLab version identical to your GitLab Helm chart version by following the guide [Manually download and install a GitLab package](https://docs.gitlab.com/omnibus/manual_install.html).
 
-1. Create [a backup of your GitLab Helm chart instance](https://docs.gitlab.com/charts/backup-restore/backup.html). Make sure to [backup secrets as well](https://docs.gitlab.com/charts/backup-restore/backup.html#backup-the-secrets) as well.
+1. Create [a backup of your GitLab Helm chart instance](../backup-restore/backup.md). Make sure to [backup secrets as well](https://docs.gitlab.com/charts/backup-restore/backup.html#backup-the-secrets) as well.
 
 1. backup your `/etc/gitlab/gitlab-secrets.json` on your Omnibus GitLab instance.
 
