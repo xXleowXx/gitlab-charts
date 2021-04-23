@@ -216,7 +216,7 @@ You may face this error when restoring a backup on your Helm chart instance. Use
 
 1. Inside your `task-runner` pod open the DB console:
 
-   ```sh
+   ```shell
    /srv/gitlab/bin/rails dbconsole -p
    ```
 
