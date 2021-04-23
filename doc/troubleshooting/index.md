@@ -222,14 +222,14 @@ You may face this error when restoring a backup on your Helm chart instance. Use
 
 1. Drop the extension:
 
-   ```
+   ```shell
    DROP EXTENSION pg_stat_statements
    ```
 
 1. Perform the restoration process.
 1. After the restoration is complete, re-create the extension in the DB console:
 
-   ```
+   ```shell
    CREATE EXTENSION pg_stat_statements
    ```
 
