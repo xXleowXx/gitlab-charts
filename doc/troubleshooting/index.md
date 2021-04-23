@@ -214,11 +214,26 @@ You can find the full explanation and workaround in [Migrating from Helm v2 to H
 
 You may face this error when restoring a backup on your Helm chart instance. Use the following steps as a workaround:
 
-- run `/srv/gitlab/bin/rails dbconsole -p` inside your `task-runner` pod to open the DB console
-- inside the console run `DROP EXTENSION pg_stat_statements`
-- perform the restoration process
-- after the restoration is completed, run `CREATE EXTENSION pg_stat_statements` in the DB console to re-create the extension
+1. Inside your `task-runner` pod open the DB console:
 
-NOTE:
-Other extensions failing, for instance `pg_buffercache`. 
-You may find more details about it in the issue [https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469).
+   ```sh
+   /srv/gitlab/bin/rails dbconsole -p
+   ```
+
+1. Drop the extension:
+
+   ```
+   DROP EXTENSION pg_stat_statements
+   ```
+
+1. Perform the restoration process.
+1. After the restoration is complete, re-create the extension in the DB console:
+
+   ```
+   CREATE EXTENSION pg_stat_statements
+   ```
+
+If you encounter the same issue with the `pg_buffercache` extension,
+follow the same steps above to drop and re-create it.
+
+You can find more details about this error in issue [#2469](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469).
