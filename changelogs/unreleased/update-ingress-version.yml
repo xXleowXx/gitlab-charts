@@ -1,0 +1,5 @@
+---
+title: Update Ingress resource ApiVersion from 'extensions/v1beta1' to 'networking.k8s.io/v1'
+merge_request: 1951
+author: Silvester Wainaina
+type: changed
