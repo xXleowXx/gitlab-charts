@@ -100,6 +100,23 @@ WARNING: shared-secrets.enabled is false, no global.registry.notificationSecret 
 Help us improve the installation experience, let us know how we did with a 1 minute survey:
 {{ printf "https://gitlab.fra1.qualtrics.com/jfe/form/SV_6kVqZANThUQ1bZb?installation=helm&release=%s" (regexReplaceAll "^(\\d+)\\.(\\d+)\\..+" $appVersion "${1}-${2}") }}
 {{- end }}
+
+{{/* WARN: Usage of PAGES_UPDATE_LEGACY_STORAGE with bundled Pages discouraged.*/}}
+{{- if .Values.global.pages.enabled -}}
+{{-   $envValues := dict }}
+{{-   $_ := set $envValues "gitlab.webservice" (default false .Values.gitlab.webservice.extraEnv.PAGES_UPDATE_LEGACY_STORAGE) }}
+{{-   $_ := set $envValues "gitlab.sidekiq" (default false .Values.gitlab.sidekiq.extraEnv.PAGES_UPDATE_LEGACY_STORAGE) }}
+{{-   $_ := set $envValues "global" (default false .Values.global.extraEnv.PAGES_UPDATE_LEGACY_STORAGE) }}
+{{-   $taskrunnerExtraEnv := index .Values.gitlab "task-runner" "extraEnv" }}
+{{-   $_ := set $envValues "gitlab.task-runner" (default false $taskrunnerExtraEnv.PAGES_UPDATE_LEGACY_STORAGE) }}
+{{-   range $component, $value := $envValues }}
+{{-     if eq $value true }}
+WARNING: GitLab Pages configured to use disk storage via `{{ $component }}.extraEnv.PAGES_UPDATE_LEGACY_STORAGE`.
+    Using `PAGES_UPDATE_LEGACY_STORAGE` environment variable with bundled Pages service is not recommended. This setting is specifically used when using an external GitLab Pages deployment.
+{{-     end }}
+{{-   end }}
+{{- end }}
+
 {{/* run deprecations */}}
 {{ include "gitlab.deprecations" . }}
 {{/* run checkConfig */}}

@@ -1,0 +1,6 @@
+---
+title: Support using PAGES_UPDATE_LEGACY_STORAGE env variable to enable Pages disk
+  access
+merge_request: 1938
+author:
+type: other
