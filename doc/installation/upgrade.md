@@ -207,7 +207,7 @@ Prior to upgrading, ensure that:
 
 - All your repositories are in sync across the Gitaly Cluster, and GitLab
 is not in use during the upgrade. To check whether the repositories are in sync,
-please run the command below in one of your praefect pods:
+please run the command below in one of your Praefect pods:
 
   ```shell
   /usr/local/bin/praefect -config /etc/gitaly/config.toml dataloss
