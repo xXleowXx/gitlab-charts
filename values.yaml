@@ -64,6 +64,7 @@ global:
     #   enabled: true
     #   secretName:
     path: /
+    pathType: Prefix
 
   gitlab:
     ## Enterprise license for this GitLab installation
