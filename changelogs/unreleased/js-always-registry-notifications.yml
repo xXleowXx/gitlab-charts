@@ -1,5 +1,0 @@
----
-title: Enables the ability to configure the notification_secret separate from the Geo configuration
-merge_request: 1948
-author:
-type: changed
