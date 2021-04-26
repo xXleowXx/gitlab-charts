@@ -42,7 +42,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 1. After the restoration is completed, run [Doctor Rake tasks](https://docs.gitlab.com/ee/administration/raketasks/doctor.html) to make sure that the secrets are valid.
 
-1. After everything is verified, you may [uninstall](https://docs.gitlab.com/charts/#uninstall) the GitLab helm chart instance. 
+1. After everything is verified, you may [uninstall](../../index.md#uninstall) the GitLab helm chart instance. 
 
 ## Troubleshooting
 
