@@ -12,11 +12,11 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 1. Prepare a clean machine and install Omnibus GitLab version identical to your GitLab Helm chart version by following the guide [Manually download and install a GitLab package](https://docs.gitlab.com/omnibus/manual_install.html).
 
+1. Verify the integrity of Git repositories on your GitLab Helm chart instance before the migration. See the [integrity check Rake task](https://docs.gitlab.com/ee/administration/raketasks/check.html) documentation for how to perform this task.
+
 1. Create [a backup of your GitLab Helm chart instance](../../backup-restore/backup.md). Make sure to [backup secrets](../../backup-restore/backup.md#backup-the-secrets) as well.
 
 1. backup your `/etc/gitlab/gitlab-secrets.json` on your Omnibus GitLab instance.
-
-1. Use the file `secrets.yaml` obtained from your GitLab Helm chart instance to fill your `/etc/gitlab/gitlab-secrets.json` file on the new Omnibus GitLab instance:
 
 1. Use the file `secrets.yaml` obtained from your GitLab Helm chart instance to fill your `/etc/gitlab/gitlab-secrets.json` file on the new Omnibus GitLab instance:
     1. open it with any text editor available and replace all the secrets in the section `gitlab_rails` with the secrets from the file `secrets.yaml`:
@@ -29,10 +29,21 @@ info: To determine the technical writer assigned to the Stage/Group associated w
             
     1. Run `sudo gitlab-ctl reconfigure` after the secrets are updated.
 
-1. Configure [object storage](https://docs.gitlab.com/ee/administration/object_storage.html) with your Omnibus GitLab instance and make sure it works fine by testing LFS, artifacts, uploads,etc.
+1. Configure [object storage](https://docs.gitlab.com/ee/administration/object_storage.html) with your Omnibus GitLab instance and make sure it works fine by testing LFS, artifacts, uploads, etc.
 
-1. Sync the data from your object storage connected to the Helm chart instance with to the new storage connected to Omnibus GitLab. For s3-compatible storage it should be possible by copying the data using `s3cmd` utility.
+1. If you are using Container Registry, [configure its object storage separately](https://docs.gitlab.com/ee/administration/packages/container_registry.html#use-object-storage) as it does not support consolidated object storage:
+
+1. Sync the data from your object storage connected to the Helm chart instance with the new storage connected to Omnibus GitLab. For s3-compatible storage it should be possible by copying the data using `s3cmd` utility.
+
+    NOTE:
+    You may re-use your old object storage with the new Omnibus GitLab instance. In this case, you will not need to sync data between two object storages. However, note that it could be de-provisioned when you uninstall GitLab Helm chart if you are using built-in MinIO instance.
 
 1. Copy the GitLab backup to the folder `/var/opt/gitlab/backups` on your Omnibus GitLab server and perform [the restoration](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-gitlab-installations).
 
 1. After the restoration is completed, run [Doctor Rake tasks](https://docs.gitlab.com/ee/administration/raketasks/doctor.html) to make sure that the secrets are valid.
+
+1. After everything is verified, you may [uninstall](https://docs.gitlab.com/charts/#uninstall) the GitLab helm chart instance. 
+
+## Troubleshooting
+
+1. If you plan to use s3-compatible object storage like MinIO with your Omnibus GitLab instance, you should configure the options `endpoint` pointing to your MinIO and set `path_style` to `true` in your `/etc/gitlab/gitlab.rb`.
