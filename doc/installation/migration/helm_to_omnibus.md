@@ -26,6 +26,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
             ```shell
             -----BEGIN RSA PRIVATE KEY-----\nprivatekey\nhere\n-----END RSA PRIVATE KEY-----\n
             ```
+            
     1. Run `sudo gitlab-ctl reconfigure` after the secrets are updated.
 
 1. Configure [object storage](https://docs.gitlab.com/ee/administration/object_storage.html) with your Omnibus GitLab instance and make sure it works fine by testing LFS, artifacts, uploads,etc.
