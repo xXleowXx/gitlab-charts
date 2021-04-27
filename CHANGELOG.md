@@ -41,6 +41,10 @@ No changes.
 - Added support for IAM roles in EKS. !1940
 
 
+## 4.10.4 (2021-04-27)
+
+No changes.
+
 ## 4.10.3 (2021-04-13)
 
 - No changes.
