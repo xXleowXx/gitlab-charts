@@ -130,4 +130,72 @@ describe 'gitlab.yml.erb configuration' do
       end
     end
   end
+
+  context 'sidekiq' do
+    let(:required_values) do
+      {
+        'global' => {
+          'appConfig' => {
+            'sidekiq' => {
+              'routingRules' => value
+            }
+          }
+        }
+      }.merge(default_values)
+    end
+
+    context 'when empty array' do
+      let(:value) { [] }
+
+      it 'populates the gitlab.yml.erb with an empty array' do
+        t = HelmTemplate.new(required_values)
+
+        expect(t.stderr).to eq("")
+        expect(t.exit_code).to eq(0)
+        expect(t.dig(
+          'ConfigMap/test-webservice',
+          'data',
+          'gitlab.yml.erb'
+        )).to include(
+<<-YAML
+  sidekiq:
+    routing_rules: []
+YAML
+)
+      end
+    end
+
+    context 'when an array of tuples' do
+      let(:value) do
+        [
+          ["resource_boundary=cpu", "cpu_boundary"],
+          ["feature_category=pages", nil],
+          ["feature_category=search", ''],
+          ["feature_category=memory|resource_boundary=memory", 'memory'],
+          ["*", "default"]
+        ]
+      end
+
+      it 'populates the gitlab.yml.erb with corresponding array' do
+        t = HelmTemplate.new(required_values)
+
+        expect(t.exit_code).to eq(0)
+        expect(t.dig(
+          'ConfigMap/test-webservice',
+          'data',
+          'gitlab.yml.erb'
+        )).to include(
+<<-YAML
+  sidekiq:
+    routing_rules:
+      - ["resource_boundary=cpu","cpu_boundary"]
+      - ["feature_category=pages",null]
+      - ["feature_category=search",""]
+      - ["feature_category=memory|resource_boundary=memory","memory"]
+      - ["*","default"]
+YAML
+)
+      end
+    end
+  end
 end
