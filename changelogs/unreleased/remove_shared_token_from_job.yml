@@ -1,5 +1,0 @@
----
-title: Pass GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN as file instead of ENV
-merge_request: 1920
-author: Sarmad Abualkaz
-type: changed
