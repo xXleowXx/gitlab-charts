@@ -100,6 +100,10 @@ No changes.
 - Add migration configurations to registry chart. !1888
 
 
+## 4.9.7 (2021-04-27)
+
+No changes.
+
 ## 4.9.6 (2021-04-13)
 
 - No changes.
