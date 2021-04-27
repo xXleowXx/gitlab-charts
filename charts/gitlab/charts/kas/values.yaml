@@ -68,6 +68,7 @@ securityContext:
   fsGroup: 65532
 redis:
   enabled: true
+  clusterConfig: sharedState
 
 networkpolicy:
   enabled: false
