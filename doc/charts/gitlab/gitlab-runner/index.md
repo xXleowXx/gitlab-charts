@@ -58,7 +58,7 @@ Privileged containers have extended capabilities, for example they can mount arb
 | `gitlab-runner.runners.cache.secretName`       | Secret to access key and secret key from    | `gitlab-minio`                        |
 | `gitlab-runner.runners.cache.s3CachePath`      | Path in the bucket                         | `gitlab-runner`                       |
 | `gitlab-runner.runners.cache.s3CacheInsecure`  | Use http                                   | `false`                               |
-| `gitlab-runner.runners.config`                 | Custom `config.toml` for GitLab runner     | config template with default image `ubuntu:16.04`, see more in [runner helm chart values](https://gitlab.com/gitlab-org/charts/gitlab-runner/-/blob/master/values.yaml)         |
+| `gitlab-runner.runners.config`                 | Custom `config.toml` for GitLab runner     | Configuration template with default image `ubuntu:16.04`, see more in [runner helm chart values](https://gitlab.com/gitlab-org/charts/gitlab-runner/-/blob/master/values.yaml)         |
 | `gitlab-runner.runners.builds.cpuLimit`        | Build container CPU limit                  |                                       |
 | `gitlab-runner.runners.builds.memoryLimit`     | Build container memory limit               |                                       |
 | `gitlab-runner.runners.builds.cpuRequests`     | Build container requested CPU              |                                       |
@@ -96,9 +96,9 @@ pullSecrets:
 
 ### `gitlab-runner.runners.config`
 
-If GitLab was installed using helm chart, it's tricky to configure gitlab-runner's `config.toml`. Luckily since GitLab 13.6 we have an option to pass config template.
+If GitLab was installed using the helm chart, you can configure the runner's `config.toml` by passing a configuration template.
 
-Below is example use of custom DNS for runners, excluding any cluster or host nameservers. Line `image = ...` is included to remain defaults untouched.
+The following example sets a custom config and uses custom DNS for runners, excluding any cluster or host nameservers. The `image = "ubuntu:16.04"` line is included so that the defaults remain untouched:
 
 ```yaml
 gitlab-runner:
