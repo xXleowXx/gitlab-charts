@@ -504,6 +504,9 @@ check_docs_links:
   variables:
     GIT_STRATEGY: none
     DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
+    DOCS_GITLAB_REPO_SUFFIX: charts
+    # By default, deploy the Review App using the `master` branch of the `gitlab-org/gitlab-docs` project
+    DOCS_BRANCH: master
   when: manual
   except:
     - triggers
@@ -516,8 +519,8 @@ review-docs-deploy:
   extends:
   - .review-docs
   environment:
-    name: docs_review/$CI_COMMIT_REF_SLUG
-    url: http://docs-preview-charts-$CI_COMMIT_REF_SLUG.$DOCS_REVIEW_APPS_DOMAIN/charts
+    name: review-docs/$CI_COMMIT_REF_SLUG
+    url: http://${DOCS_BRANCH}-${DOCS_GITLAB_REPO_SUFFIX}-${CI_COMMIT_REF_SLUG}.${DOCS_REVIEW_APPS_DOMAIN}/${DOCS_GITLAB_REPO_SUFFIX}
     on_stop: review-docs-cleanup
   script:
   - ./trigger-build docs deploy
@@ -527,7 +530,7 @@ review-docs-cleanup:
   extends:
   - .review-docs
   environment:
-    name: docs_review/$CI_COMMIT_REF_SLUG
+    name: review-docs/$CI_COMMIT_REF_SLUG
     action: stop
   script:
   - ./trigger-build docs cleanup
