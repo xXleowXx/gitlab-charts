@@ -73,6 +73,8 @@ The script can also be used to clean up the created GKE resources:
 PROJECT=<gcloud project id> ./scripts/gke_bootstrap_script.sh down
 ```
 
+If you're planning to use Let's Encrypt CA, then also add `USE_STATIC_IP=true`.
+
 With the cluster created, continue to [creating the DNS entry](#dns-entry).
 
 ### Manual cluster creation
