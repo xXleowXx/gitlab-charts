@@ -48,7 +48,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
     NOTE:
     You may re-use your old object storage with the new Omnibus GitLab instance. In this case, you
-    do not need to sync data between two object storages. However, it could be de-provisioned when
+    do not need to sync data between two object storages. However, the storage could be de-provisioned when
     you uninstall GitLab Helm chart if you are using the built-in MinIO instance.
 
 1. Copy the GitLab backup to the folder `/var/opt/gitlab/backups` on your Omnibus GitLab server, and
