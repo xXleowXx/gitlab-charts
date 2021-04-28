@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.11.2 (2021-04-27)
+
+No changes.
+
 ## 4.11.1 (2021-04-22)
 
 - No changes.
@@ -36,6 +40,10 @@ entry.
 - Add Microsoft Graph config support for MailRoom. !1929
 - Added support for IAM roles in EKS. !1940
 
+
+## 4.10.4 (2021-04-27)
+
+No changes.
 
 ## 4.10.3 (2021-04-13)
 
@@ -91,6 +99,10 @@ entry.
 - Webservice: enable per-deployment blackoutSeconds. !1867
 - Add migration configurations to registry chart. !1888
 
+
+## 4.9.7 (2021-04-27)
+
+No changes.
 
 ## 4.9.6 (2021-04-13)
 
