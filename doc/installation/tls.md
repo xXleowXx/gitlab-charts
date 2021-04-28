@@ -91,6 +91,10 @@ helm install gitlab gitlab/gitlab \
   --set minio.ingress.tls.secretName=RELEASE-minio-tls
 ```
 
+#### Trusted Certificates
+
+If you are configuring your GitLab instance to talk with other services, it may be necessary to provide the certificate chains for those services to GitLab through the Helm chart as well. Please review [our documentation on customer certificate authorities](../charts/globals.html#custom-certificate-authorities) for more information.
+
 ## Option 4: Use auto-generated self-signed wildcard certificate
 
 These charts also provide the capability to provide a auto-generated self-signed wildcard certificate.
@@ -131,3 +135,4 @@ helm install gitlab gitlab/gitlab \
   --set global.pages.enabled=true \
   --set gitlab.gitlab-pages.ingress.tls.secretName=<secret name>
 ```
+
