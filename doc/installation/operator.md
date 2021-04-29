@@ -16,6 +16,6 @@ This functionality was Alpha and marked experimental. It is now [**deprecated**]
 
 The prior [GitLab Operator](https://gitlab.com/gitlab-org/charts/components/gitlab-operator) was developed, but never passed alpha status or recommended for use. That operator is now deprecated, should not be used, and will be removed in the future.
 
-A new GitLab Operator is currently in development and will soon be released into beta. More information can be found [here.](https://gitlab.com/groups/gitlab-org/-/epics/3444)
+A new GitLab Operator is currently in development and will soon be released into beta. More information can be found in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/3444).
 
 Additionally, a [GitLab Runner-specific Operator](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/...) is generally available, allowing users to easily run GitLab CI jobs in OpenShift.
