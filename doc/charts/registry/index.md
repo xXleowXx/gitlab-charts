@@ -141,7 +141,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
 | `image.repository`                         | `registry`                                   | Registry image                                                                                       |
-| `image.tag`                                | `v3.3.0-gitlab`                              | Version of the image to use                                                                          |
+| `image.tag`                                | `v3.4.0-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
