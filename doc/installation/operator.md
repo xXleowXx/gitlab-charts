@@ -18,4 +18,4 @@ The prior [GitLab Operator](https://gitlab.com/gitlab-org/charts/components/gitl
 
 A new GitLab Operator is currently in development and will soon be released into beta. More information can be found in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/3444).
 
-Additionally, a [GitLab Runner-specific Operator](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/...) is generally available, allowing users to easily run GitLab CI jobs in OpenShift.
+Additionally, a [GitLab Runner-specific Operator](https://docs.gitlab.com/runner/install/openshift.html) is generally available, allowing users to easily run GitLab CI jobs in OpenShift.
