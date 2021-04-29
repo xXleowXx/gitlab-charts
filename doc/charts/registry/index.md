@@ -63,7 +63,7 @@ registry:
     readOnly:
       enabled: false
   image:
-    tag: 'v3.1.0-gitlab'
+    tag: 'v3.4.0-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -261,7 +261,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v3.1.0-gitlab'`
+- `tag: 'v3.4.0-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
