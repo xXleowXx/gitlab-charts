@@ -764,6 +764,8 @@ prometheus:
     enabled: false
   server:
     retention: 15d
+    strategy:
+      type: Recreate
   #
   serverFiles:
     prometheus.yml:
