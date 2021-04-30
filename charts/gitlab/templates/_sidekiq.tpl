@@ -8,16 +8,12 @@ Usage:
 {{- with $.Values.global.appConfig.sidekiq }}
 sidekiq:
 {{- if kindIs "slice" .routingRules }}
-  {{- if eq (len .routingRules) 0 }}
-  routing_rules: []
-  {{- else }}
+  {{- if gt (len .routingRules) 0 }}
   routing_rules:
     {{- range $rule := .routingRules }}
-    {{- if and (kindIs "slice" $rule) (eq (len $rule) 2) }}
     - {{ toJson $rule }}
-    {{- end }}
     {{- end }}
   {{- end }}
 {{- end }}
 {{- end }}
-{{- end -}}{{/* "gitlab.appConfig.sentry.configuration" */}}
+{{- end -}}{{/* "gitlab.appConfig.sidekiq.configuration" */}}

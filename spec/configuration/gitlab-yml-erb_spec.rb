@@ -137,7 +137,7 @@ describe 'gitlab.yml.erb configuration' do
         ))
       end
 
-      it 'populates the gitlab.yml.erb with an empty array' do
+      it 'does not populate the gitlab.yml.erb' do
         t = HelmTemplate.new(required_values)
 
         expect(t.stderr).to eq("")
@@ -148,10 +148,7 @@ describe 'gitlab.yml.erb configuration' do
             'data',
             'gitlab.yml.erb'
           )
-        )['production']).to include(YAML.safe_load(%(
-          sidekiq:
-            routing_rules: []
-        )))
+        )['production']).to have_key('sidekiq')
       end
     end
 
