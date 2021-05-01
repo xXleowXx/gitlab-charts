@@ -87,3 +87,30 @@ configurations that can be supplied to the `helm install` command using the
 | `tls.minVersion`                 |                       | Specifies the minimum SSL/TLS version                |
 | `tls.maxVersion`                 |                       | Specifies the maximum SSL/TLS version                |
 | `useHttp2`                       | `true`                | Enable HTTP2 support                                 |
+
+## Chart configuration examples
+
+### extraVolumes
+
+`extraVolumes` allows you to configure extra volumes chart-wide.
+
+Below is an example use of `extraVolumes`:
+
+```yaml
+extraVolumes: |
+  - name: example-volume
+    persistentVolumeClaim:
+      claimName: example-pvc
+```
+
+### extraVolumeMounts
+
+`extraVolumeMounts` allows you to configure extra volumeMounts on all containers chart-wide.
+
+Below is an example use of `extraVolumeMounts`:
+
+```yaml
+extraVolumeMounts: |
+  - name: example-volume
+    mountPath: /etc/example
+```
