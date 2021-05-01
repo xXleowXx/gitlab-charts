@@ -127,7 +127,7 @@ workhorse: {}
 # extraVolumes: |
 #   - name: example-volume
 #     persistentVolumeClaim:
-#       claimName: gitlab-pages
+#       claimName: gitlab-pages-pvc
 
 # extraVolumeMounts: |
 #   - name: example-volume

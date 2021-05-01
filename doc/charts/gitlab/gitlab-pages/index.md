@@ -68,6 +68,8 @@ configurations that can be supplied to the `helm install` command using the
 | `artifactsServerTimeout`         | `10`                  | Timeout (in seconds) for a proxied request to the artifacts server |
 | `artifactsServerUrl`             |                       | API URL to proxy artifact requests to                |
 | `domainConfigSource`             | `gitlab`              | Domain configuration source                          |
+| `extraVolumeMounts`              |                       | List of extra volumes mounts to add                  |
+| `extraVolumes`                   |                       | List of extra volumes to create                      |
 | `gitlabClientHttpTimeout`        |                       | GitLab API HTTP client connection timeout in seconds |
 | `gitlabClientJwtExpiry`          |                       | JWT Token expiry time in seconds                     |
 | `gitlabServer`                   |                       | GitLab server FQDN                                   |
