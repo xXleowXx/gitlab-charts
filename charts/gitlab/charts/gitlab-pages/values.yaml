@@ -4,7 +4,7 @@
 
 global:
   pages:
-    enabled: true
+    enabled: false
   # hosts:
     # pages:
       # name: pages.example.com
@@ -122,3 +122,13 @@ workhorse: {}
   # host: '0.0.0.0'
   # serviceName: 'webservice'
   # port: 8181
+
+# Extra volumes and volumeMounts configuration
+# extraVolumes: |
+#   - name: example-volume
+#     persistentVolumeClaim:
+#       claimName: gitlab-pages
+
+# extraVolumeMounts: |
+#   - name: example-volume
+#     mountPath: /etc/example
