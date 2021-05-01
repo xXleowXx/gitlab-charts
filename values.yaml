@@ -519,7 +519,7 @@ global:
       # events: {}
 
   pages:
-    enabled: false
+    enabled: true
     accessControl: false
     path:
     host:
