@@ -133,7 +133,7 @@ imagePullPolicy: {{ coalesce $imageObj.pullPolicy .Values.global.imagePullPolicy
 {{/* ######### cert-manager templates */}}
 
 {{- define "gitlab.certmanager_annotations" -}}
-{{- if (pluck "configureCertmanager" .Values.global.ingress .Values.ingress (dict "configureCertmanager" false) | first) -}}
+{{- if (pluck "configureCertmanager" .Values.ingress .Values.global.ingress (dict "configureCertmanager" false) | first) -}}
 certmanager.k8s.io/issuer: "{{ .Release.Name }}-issuer"
 {{- end -}}
 {{- end -}}
