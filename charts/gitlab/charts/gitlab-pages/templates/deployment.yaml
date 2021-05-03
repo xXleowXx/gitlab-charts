@@ -96,7 +96,6 @@ spec:
               name: metrics
           {{- end }}
       volumes:
-      {{- include "gitlab.extraVolumes" $ | nindent 6 -}}
       - name: pages-config
         configMap:
           name: {{ template "fullname" . }}
