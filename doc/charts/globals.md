@@ -351,6 +351,23 @@ global:
 | `password.secret`  | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
 | `scheme`           | String  | `redis` | The URI scheme to be used to generate Redis URLs. Valid values are `redis`, `rediss`, and `tcp`. If using `rediss` (SSL encrypted connection) scheme, the certificate used by the server should be a part of the system's trusted chains. This can be done by adding them to the [custom certificate authorities](#custom-certificate-authorities) list. |
 
+### Configure Redis chart-specific settings
+
+Settings to configure the [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis)
+directly are located under the `redis` key.
+
+```yaml
+redis:
+  install: true
+  image:
+    registry: registry.example.com
+    repository: example/redis
+    tag: x.y.z
+```
+
+Refer to the [full list of settings](https://artifacthub.io/packages/helm/bitnami/redis/11.3.4#parameters)
+for more information.
+
 ### Redis Sentinel support
 
 The current Redis Sentinel support only supports Sentinels that have
