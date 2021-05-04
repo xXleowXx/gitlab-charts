@@ -5,9 +5,10 @@ require 'hash_deep_merge'
 
 describe 'gitlab.yml.erb configuration' do
   let(:default_values) do
-    {
-      'certmanager-issuer' => { 'email' => 'test@example.com' }
-    }
+    YAML.safe_load(%(
+      certmanager-issuer:
+        email: test@example.com
+    ))
   end
 
   context 'when CSP is disabled' do
@@ -23,37 +24,30 @@ describe 'gitlab.yml.erb configuration' do
 
   context 'when CSP is enabled' do
     let(:required_values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'contentSecurityPolicy' => {
-              'enabled' => true,
-              'report_only' => false,
-              'directives' => {
-                'connect_src' => "'self'",
-                'frame_acestors' => "'self'",
-                'frame_src' => "'self'",
-                'img_src' => "* data: blob:",
-                'object_src' => "'none'",
-                'script_src' => "'self' 'unsafe-inline' 'unsafe-eval'",
-                'style_src' => "'self'"
-              }
-            }
-          }
-        }
-      }.merge(default_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            contentSecurityPolicy:
+              enabled: true
+              report_only: false
+              directives:
+                connect_src: "'self'"
+                frame_ancestor: "'self'"
+                frame_src: "'self'"
+                img_src: "* data: blob:"
+                object_src: "'none'"
+                script_src: "'self' 'unsafe-inline' 'unsafe-eval'"
+                style_src: "'self'"
+      )).merge(default_values)
     end
 
     let(:missing_values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'contentSecurityPolicy' => {
-              'enabled' => true
-            }
-          }
-        }
-      }.merge(default_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            contentSecurityPolicy:
+              enabled: true
+      )).merge(default_values)
     end
 
     it 'populates the gitlab.yml.erb' do
@@ -76,15 +70,12 @@ describe 'gitlab.yml.erb configuration' do
 
   context 'matomoDisableCookies' do
     let(:required_values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'extra' => {
-              'matomoDisableCookies' => value
-            }
-          }
-        }
-      }.merge(default_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            extra:
+              matomoDisableCookies: #{value}
+      )).merge(default_values)
     end
 
     context 'when true' do

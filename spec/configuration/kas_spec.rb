@@ -5,10 +5,14 @@ require 'helm_template_helper'
 require 'yaml'
 
 describe 'kas configuration' do
-  let(:values) do
-    {
-      'certmanager-issuer' => { 'email' => 'test@example.com' }
-    }
+  let(:default_values) do
+    YAML.safe_load(%(
+      certmanager-issuer:
+        email: test@example.com
+    ))
+    # {
+    #   'certmanager-issuer' => { 'email' => 'test@example.com' }
+    # }
   end
 
   let(:custom_secret_key) { 'kas_custom_secret_key' }
@@ -16,6 +20,21 @@ describe 'kas configuration' do
   let(:custom_config) { {} }
 
   let(:default_kas_values) do
+    # YAML.safe_load(%(
+    #   gitlab:
+    #     kas:
+    #       enabled: true
+    #       customConfig: |
+    #         #{custom_config}
+    #   global:
+    #     kas:
+    #       enabled: true
+    #     imagePullPolicy: Always
+    #     appConfig:
+    #       gitlab_kas:
+    #         key: #{custom_secret_key}
+    #         secret: #{custom_secret_name}
+    # ))
     {
       'gitlab' => {
         'kas' => {
@@ -42,7 +61,7 @@ describe 'kas configuration' do
 
   describe 'kas is disabled by default' do
     it 'does not create any kas related resource' do
-      template = HelmTemplate.new(values)
+      template = HelmTemplate.new(default_values)
 
       required_resources.each do |resource|
         resource_name = "#{resource}/test-kas"
@@ -54,51 +73,37 @@ describe 'kas configuration' do
 
   context 'When customer provides additional labels' do
     let(:kas_label_values) do
-      {
-        'certmanager-issuer' => { 'email' => 'test@example.com' },
-        'global' => {
-          'common' => {
-            'labels' => {
-              'global' => 'global',
-              'foo' => 'global'
-            }
-          },
-          'kas' => { 'enabled' => 'true' },
-          'pod' => {
-            'labels' => {
-              'global_pod' => true
-            }
-          },
-          'service' => {
-            'labels' => {
-              'global_service' => true
-            }
-          }
-        },
-        'gitlab' => {
-          'kas' => {
-            'common' => {
-              'labels' => {
-                'global' => 'kas',
-                'kas' => 'kas'
-              }
-            },
-            'enabled' => 'true',
-            'podLabels' => {
-              'pod' => true,
-              'global' => 'pod'
-            },
-            'serviceAccount' => {
-              'create' => true,
-              'enabled' => true
-            },
-            'serviceLabels' => {
-              'service' => true,
-              'global' => 'service'
-            }
-          }
-        }
-      }
+      YAML.safe_load(%(
+        global:
+          common:
+            labels:
+              global: global
+              foo: global
+          kas:
+            enabled: true
+          pod:
+            labels:
+              global_pod: true
+          service:
+            labels:
+              global_service: true
+        gitlab:
+          kas:
+            common:
+              labels:
+                global: kas
+                kas: kas
+            enabled: true
+            podLabels:
+              pod: true
+              global: pod
+            serviceAccount:
+              create: true
+              enabled: true
+            serviceLabels:
+              service: true
+              global: service
+      )).merge(default_values)
     end
 
     it 'Populates the additional labels in the expected manner' do
@@ -124,7 +129,7 @@ describe 'kas configuration' do
 
   context 'when kas is enabled with custom values' do
     let(:kas_enabled_template) do
-      HelmTemplate.new(values.merge(kas_values))
+      HelmTemplate.new(default_values.merge(kas_values))
     end
 
     it 'creates all kas related required_resources' do
@@ -185,14 +190,12 @@ describe 'kas configuration' do
 
       context 'when customConfig is given' do
         let(:custom_config) do
-          {
-            'example' => 'config',
-            'agent' => {
-              'listen' => {
-                'websocket' => false
-              }
-            }
-          }
+          YAML.safe_load(%(
+            example: config
+            agent:
+              listen:
+                websocket: false
+          ))
         end
 
         it 'deeply merges the custom config' do
@@ -203,28 +206,27 @@ describe 'kas configuration' do
       end
 
       describe 'redis config' do
-        let(:sentinels) do
-          {
-            'redis' => {
-              'host' => 'global.host',
-              'sentinels' => [
-                { 'host' => 'sentinel1.example.com', 'port' => 26379 },
-                { 'host' => 'sentinel2.example.com', 'port' => 26379 }
-              ]
-            }
-          }
+      let(:sentinels) do
+          YAML.safe_load(%(
+            redis:
+              host: global.host
+              sentinels:
+              - host: sentinel1.example.com
+                port: 26379
+              - host: sentinel2.example.com
+                port: 26379
+          ))
         end
 
         context 'when redis is disabled' do
           let(:kas_values) do
             default_kas_values.deep_merge!(
-              {
-                'gitlab' => {
-                  'kas' => {
-                    'redis' => { 'enabled' => false }
-                  }
-                }
-              }
+              YAML.safe_load(%(
+                gitlab:
+                  kas:
+                    redis:
+                      enabled: false
+              ))
             )
           end
 
@@ -237,15 +239,21 @@ describe 'kas configuration' do
           context 'when global redis has no password' do
             let(:kas_values) do
               default_kas_values.deep_merge!(
-                {
-                  'global' => {
-                    'redis' => {
-                      'password' => {
-                        'enabled' => false
-                      }
-                    }
-                  }
-                }
+                YAML.safe_load(%(
+                  global:
+                    redis:
+                      password:
+                        enabled: false
+                ))
+                # {
+                #   'global' => {
+                #     'redis' => {
+                #       'password' => {
+                #         'enabled' => false
+                #       }
+                #     }
+                #   }
+                # }
               )
             end
 
@@ -287,21 +295,33 @@ describe 'kas configuration' do
           let(:redis_password_enabled) { true }
 
           let(:redis_shared_state_config) do
-            {
-              'redis' => {
-                'host' => "global.host",
-                'sharedState' => {
-                  'host' => "shared.redis",
-                  'port' => "6378",
-                  'password' => {
-                    'enabled' => redis_password_enabled,
-                    'secret' => "shared-secret",
-                    'key' => "shared-key"
-                  },
-                  'sentinels' => sentinels
-                }
-              }
-            }
+            YAML.safe_load(%(
+              redis:
+                host: global.host
+                sharedState:
+                  host: shared.redis
+                  port: 6378
+                  password:
+                    enabled: #{redis_password_enabled}
+                    secret: shared-secret
+                    key: shared-key
+                  sentinels: #{sentinels}
+            ))
+            # {
+            #   'redis' => {
+            #     'host' => "global.host",
+            #     'sharedState' => {
+            #       'host' => "shared.redis",
+            #       'port' => "6378",
+            #       'password' => {
+            #         'enabled' => redis_password_enabled,
+            #         'secret' => "shared-secret",
+            #         'key' => "shared-key"
+            #       },
+            #       'sentinels' => sentinels
+            #     }
+            #   }
+            # }
           end
 
           context 'when no sharedState sentinel is setup' do
@@ -344,7 +364,7 @@ describe 'kas configuration' do
 
   describe 'gitlab.yml.erb/gitlab_kas' do
     let(:helm_template) do
-      HelmTemplate.new(values.merge(kas_values))
+      HelmTemplate.new(default_values.merge(kas_values))
     end
 
     def gitlab_yml(chart)
