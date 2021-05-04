@@ -165,6 +165,7 @@ data:
   installation_type: |
     gitlab-helm-chart
   workhorse-config.toml.erb: |
+    {{- if .workhorse.keywatcher }}
     [redis]
     {{- if not $.Values.global.redis.sentinels }}
     URL = "{{ template "gitlab.redis.scheme" $ }}://{{ template "gitlab.redis.host" $ }}:{{ template "gitlab.redis.port" $ }}"
@@ -174,6 +175,7 @@ data:
     {{- end }}
     {{- if $.Values.global.redis.password.enabled }}
     Password = "<%= File.read("/etc/gitlab/redis/redis-password").strip.dump[1..-2] %>"
+    {{- end }}
     {{- end }}
     {{- include "workhorse.object_storage.config" $ | nindent 4 }}
     [image_resizer]
