@@ -1,3 +1,5 @@
+# vim: set filetype=sh:
+
 namespace={{ .Release.Namespace }}
 release={{ .Release.Name }}
 env={{ index .Values "shared-secrets" "env" }}
