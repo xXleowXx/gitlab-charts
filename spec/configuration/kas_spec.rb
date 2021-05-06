@@ -10,9 +10,6 @@ describe 'kas configuration' do
       certmanager-issuer:
         email: test@example.com
     ))
-    # {
-    #   'certmanager-issuer' => { 'email' => 'test@example.com' }
-    # }
   end
 
   let(:custom_secret_key) { 'kas_custom_secret_key' }
@@ -20,37 +17,20 @@ describe 'kas configuration' do
   let(:custom_config) { {} }
 
   let(:default_kas_values) do
-    # YAML.safe_load(%(
-    #   gitlab:
-    #     kas:
-    #       enabled: true
-    #       customConfig: |
-    #         #{custom_config}
-    #   global:
-    #     kas:
-    #       enabled: true
-    #     imagePullPolicy: Always
-    #     appConfig:
-    #       gitlab_kas:
-    #         key: #{custom_secret_key}
-    #         secret: #{custom_secret_name}
-    # ))
-    {
-      'gitlab' => {
-        'kas' => {
-          'enabled' => 'true',
-          'customConfig' => custom_config
-        }
-      },
-      'global' => {
-        'kas' => { 'enabled' => 'true' },
-        'imagePullPolicy' => 'Always',
-        'appConfig' => { 'gitlab_kas' => {
-          'key' => custom_secret_key,
-          'secret' => custom_secret_name
-        } }
-      }
-    }
+    YAML.safe_load(%(
+      gitlab:
+        kas:
+          enabled: true
+          customConfig: #{custom_config.to_json}
+      global:
+        kas:
+          enabled: true
+        imagePullPolicy: Always
+        appConfig:
+          gitlab_kas:
+            key: #{custom_secret_key}
+            secret: #{custom_secret_name}
+    ))
   end
 
   let(:kas_values) { default_kas_values }
@@ -220,14 +200,12 @@ describe 'kas configuration' do
 
         context 'when redis is disabled' do
           let(:kas_values) do
-            default_kas_values.deep_merge!(
-              YAML.safe_load(%(
-                gitlab:
-                  kas:
-                    redis:
-                      enabled: false
-              ))
-            )
+            default_kas_values.deep_merge!(YAML.safe_load(%(
+              gitlab:
+                kas:
+                  redis:
+                    enabled: false
+            )))
           end
 
           it 'does not have redis config' do
@@ -238,23 +216,12 @@ describe 'kas configuration' do
         context 'when redisConfigName is empty' do
           context 'when global redis has no password' do
             let(:kas_values) do
-              default_kas_values.deep_merge!(
-                YAML.safe_load(%(
-                  global:
-                    redis:
-                      password:
-                        enabled: false
-                ))
-                # {
-                #   'global' => {
-                #     'redis' => {
-                #       'password' => {
-                #         'enabled' => false
-                #       }
-                #     }
-                #   }
-                # }
-              )
+              default_kas_values.deep_merge!(YAML.safe_load(%(
+                global:
+                  redis:
+                    password:
+                      enabled: false
+              )))
             end
 
             it 'does not set password_file' do
@@ -264,9 +231,11 @@ describe 'kas configuration' do
 
           context 'when no sentinel is setup' do
             it 'takes the global redis config' do
-              expect(config_yaml_data['redis']).to include(
-                "password_file" => "/etc/kas/redis/redis-password",
-                "server" => { "address" => "test-redis-master.default.svc:6379" })
+              expect(config_yaml_data['redis']).to include(YAML.safe_load(%(
+                password_file: /etc/kas/redis/redis-password
+                server:
+                  address: test-redis-master.default.svc:6379
+              )))
             end
           end
 
@@ -278,9 +247,13 @@ describe 'kas configuration' do
             end
 
             it 'takes the global sentinel redis config' do
-              expect(config_yaml_data['redis']).to include(
-                { "sentinel" => { "addresses" => ["sentinel1.example.com:26379", "sentinel2.example.com:26379"],
-                                  "master_name" => "global.host" } })
+              expect(config_yaml_data['redis']).to include(YAML.safe_load(%(
+                sentinel:
+                  addresses:
+                    - sentinel1.example.com:26379
+                    - sentinel2.example.com:26379
+                  master_name: global.host
+              )))
             end
           end
         end
@@ -305,48 +278,42 @@ describe 'kas configuration' do
                     enabled: #{redis_password_enabled}
                     secret: shared-secret
                     key: shared-key
-                  sentinels: #{sentinels}
+                  sentinels: #{sentinels.to_json}
             ))
-            # {
-            #   'redis' => {
-            #     'host' => "global.host",
-            #     'sharedState' => {
-            #       'host' => "shared.redis",
-            #       'port' => "6378",
-            #       'password' => {
-            #         'enabled' => redis_password_enabled,
-            #         'secret' => "shared-secret",
-            #         'key' => "shared-key"
-            #       },
-            #       'sentinels' => sentinels
-            #     }
-            #   }
-            # }
           end
 
           context 'when no sharedState sentinel is setup' do
             context 'with no sentinels' do
               let(:sentinels) { {} }
               it 'configures a sharedState server config' do
-                expect(config_yaml_data['redis']).to include(
-                  "password_file" => "/etc/kas/redis/sharedState-password",
-                  "server" => { "address" => "shared.redis:6378" })
+                expect(config_yaml_data['redis']).to include(YAML.safe_load(%(
+                  password_file: /etc/kas/redis/sharedState-password
+                  server:
+                    address: shared.redis:6378
+                )))
               end
             end
           end
 
           context 'when sharedState sentinel is setup' do
             let(:sentinels) do
-              [
-                { 'host' => 'sentinel1.shared.com', 'port' => 26379 },
-                { 'host' => 'sentinel2.shared.com', 'port' => 26379 }
-              ]
+              YAML.safe_load(%(
+                - host: sentinel1.shared.com
+                  port: 26379
+                - host: sentinel2.shared.com
+                  port: 26379
+              ))
             end
 
             it 'configures a sharedState sentinel config' do
-              expect(config_yaml_data['redis']).to include(
-                "password_file" => "/etc/kas/redis/sharedState-password",
-                "sentinel" => { "addresses" => ["sentinel1.shared.com:26379", "sentinel2.shared.com:26379"], "master_name" => "shared.redis" })
+              expect(config_yaml_data['redis']).to include(YAML.safe_load(%(
+                password_file: /etc/kas/redis/sharedState-password
+                sentinel:
+                  addresses:
+                    - sentinel1.shared.com:26379
+                    - sentinel2.shared.com:26379
+                  master_name: shared.redis
+              )))
             end
           end
 
@@ -376,64 +343,56 @@ describe 'kas configuration' do
     %w[webservice task-runner sidekiq].each do |chart|
       context "for #{chart}" do
         it 'has the correct defaults' do
-          expect(gitlab_yml(chart)).to include(
-            'enabled' => true,
-            'internal_url' => 'grpc://test-kas.svc:8153',
-            'external_url' => 'wss://kas.example.com'
-          )
+          expect(gitlab_yml(chart)).to include(YAML.safe_load(%(
+            enabled: true
+            internal_url: grpc://test-kas.svc:8153
+            external_url: wss://kas.example.com
+          )))
         end
 
         context 'when using a custom external hostname' do
           let(:kas_values) do
-            default_kas_values.deep_merge!(
-              'global' => {
-                'hosts' => {
-                  'kas' => {
-                    'name' => 'kas.other.example.com'
-                  }
-                }
-              }
-            )
+            default_kas_values.deep_merge!(YAML.safe_load(%(
+              global:
+                hosts:
+                  kas:
+                    name: kas.other.example.com
+            )))
           end
 
           it 'uses the custom host for the external URL' do
-            expect(gitlab_yml(chart)).to include(
-              'external_url' => 'wss://kas.other.example.com'
-            )
+            expect(gitlab_yml(chart)).to include(YAML.safe_load(%(
+              external_url: wss://kas.other.example.com
+            )))
           end
         end
 
         context 'when using custom URLs' do
           let(:kas_values) do
-            default_kas_values.deep_merge!(
-              'global' => {
-                'appConfig' => {
-                  'gitlab_kas' => {
-                    'externalUrl' => 'wss://custom-external-url.example.com',
-                    'internalUrl' => 'grpc://custom-internal-url.example.com'
-                  }
-                }
-              }
-            )
+            default_kas_values.deep_merge!(YAML.safe_load(%(
+              global:
+                appConfig:
+                  gitlab_kas:
+                    externalUrl: wss://custom-external-url.example.com
+                    internalUrl: grpc://custom-internal-url.example.com
+            )))
           end
 
           it 'uses the custom external URL' do
-            expect(gitlab_yml(chart)).to include(
-              'external_url' => 'wss://custom-external-url.example.com',
-              'internal_url' => 'grpc://custom-internal-url.example.com'
-            )
+            expect(gitlab_yml(chart)).to include(YAML.safe_load(%(
+              external_url: wss://custom-external-url.example.com
+              internal_url: grpc://custom-internal-url.example.com
+            )))
           end
         end
 
         context 'when kas is fully disabled' do
           let(:kas_values) do
-            default_kas_values.deep_merge!(
-              'global' => {
-                'kas' => {
-                  'enabled' => false
-                }
-              }
-            )
+            default_kas_values.deep_merge!(YAML.safe_load(%(
+              global:
+                kas:
+                  enabled: false
+            )))
           end
 
           it 'is not present' do
@@ -443,28 +402,24 @@ describe 'kas configuration' do
 
         context 'when kas chart is disabled, but gitlab_kas is enabled in the appConfig' do
           let(:kas_values) do
-            default_kas_values.deep_merge!(
-              'global' => {
-                'kas' => {
-                  'enabled' => false
-                },
-                'appConfig' => {
-                  'gitlab_kas' => {
-                    'enabled' => true,
-                    'externalUrl' => 'wss://custom-external-url.example.com',
-                    'internalUrl' => 'grpc://custom-internal-url.example.com'
-                  }
-                }
-              }
-            )
+            default_kas_values.deep_merge!(YAML.safe_load(%(
+              global:
+                kas:
+                  enabled: false
+                appConfig:
+                  gitlab_kas:
+                    enabled: true
+                    externalUrl: wss://custom-external-url.example.com
+                    internalUrl: grpc://custom-internal-url.example.com
+            )))
           end
 
           it 'renders the custom values in gitlab.yml.erb' do
-            expect(gitlab_yml(chart)).to include(
-              'enabled' => true,
-              'external_url' => 'wss://custom-external-url.example.com',
-              'internal_url' => 'grpc://custom-internal-url.example.com'
-            )
+            expect(gitlab_yml(chart)).to include(YAML.safe_load(%(
+              enabled: true
+              external_url: wss://custom-external-url.example.com
+              internal_url: grpc://custom-internal-url.example.com
+            )))
           end
         end
       end
