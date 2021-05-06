@@ -58,7 +58,7 @@ Privileged containers have extended capabilities, for example they can mount arb
 | `gitlab-runner.runners.cache.secretName`       | Secret to access key and secret key from    | `gitlab-minio`                        |
 | `gitlab-runner.runners.cache.s3CachePath`      | Path in the bucket                         | `gitlab-runner`                       |
 | `gitlab-runner.runners.cache.s3CacheInsecure`  | Use http                                   | `false`                               |
-| `gitlab-runner.runners.config`                 | Custom `config.toml` for GitLab runner     | Configuration template with default image `ubuntu:16.04`, see more in [runner helm chart values](https://gitlab.com/gitlab-org/charts/gitlab-runner/-/blob/master/values.yaml)         |
+| `gitlab-runner.runners.config`                 | Custom `config.toml` for GitLab runner     | Configuration template with default image `ubuntu:16.04`, see more in [runner Helm chart values](https://gitlab.com/gitlab-org/charts/gitlab-runner/-/blob/master/values.yaml)         |
 | `gitlab-runner.runners.builds.cpuLimit`        | Build container CPU limit                  |                                       |
 | `gitlab-runner.runners.builds.memoryLimit`     | Build container memory limit               |                                       |
 | `gitlab-runner.runners.builds.cpuRequests`     | Build container requested CPU              |                                       |
