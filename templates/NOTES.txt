@@ -117,6 +117,11 @@ WARNING: GitLab Pages configured to use disk storage via `{{ $component }}.extra
 {{-   end }}
 {{- end }}
 
+{{/* WARN: Unicorn is deprecated and will be removed in 14.0 */}}
+{{- if eq .Values.gitlab.webservice.webServer "unicorn" -}}
+WARNING: Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma by setting `gitlab.webservice.webServer` value to `puma`. Check https://docs.gitlab.com/ee/administration/operations/puma.html for details.
+{{- end }}
+
 {{/* run deprecations */}}
 {{ include "gitlab.deprecations" . }}
 {{/* run checkConfig */}}
