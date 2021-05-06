@@ -326,6 +326,7 @@ webservice:
 | Name                                   | Type    | Default | Description |
 |:-------------------------------------- |:-------:|:------- |:----------- |
 | `ingress.annotations` | Map  |  See [below](#annotations) | These annotations will be used for every Ingress. For example: `ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. |
+| `ingress.configureCertmanager`         | Boolean |         | Toggles Ingress annotation `certmanager.k8s.io/issuer` |
 | `ingress.enabled`                      | Boolean | `false` | Setting that controls whether to create Ingress objects for services that support them. When `false`, the `global.ingress.enabled` setting value is used. |
 | `ingress.proxyBodySize`                | String  | `512m`  | [See Below](#proxybodysize). |
 | `ingress.tls.enabled`                  | Boolean | `true`  | When set to `false`, you disable TLS for GitLab Webservice. This is mainly useful for cases in which you cannot use TLS termination at Ingress-level, like when you have a TLS-terminating proxy before the Ingress Controller. |

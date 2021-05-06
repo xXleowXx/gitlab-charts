@@ -74,6 +74,7 @@ ingress:
     # secretName:
     # enabled: true
   annotations: {}
+  configureCertmanager:
   path: # /
 
 global:
