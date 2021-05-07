@@ -126,7 +126,7 @@ for gitlab-pages (via `gitlab-pages.ingress.configureCertmanager`), so you will
 have to provide your own k8s Secret containing a wild card certificate. If you
 have an external cert-manager configured using `global.ingress.annotations`, you
 probably also want to override such annotations in
-`gitlab-pages.ingress.annotations`
+`gitlab-pages.ingress.annotations`.
 
 By default, the name of this secret is `<RELEASE>-pages-tls`. A different name
 can be specified using the `gitlab.gitlab-pages.ingress.tls.secretName` setting
