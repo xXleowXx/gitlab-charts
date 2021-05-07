@@ -16,10 +16,10 @@ A new GitLab Operator is currently in development and has been released into bet
 The GitLab Operator aims to manage the full lifecycle of GitLab instances in your Kubernetes or Openshift container platforms.
 While new and still actively being developed, the operator aims to:
 
-* ease installation and configuration of GitLab instances
-* offer seamless upgrades from version to version
-* ease backup and restore of GitLab and its components
-* aggregate and visualize metrics using Prometheus and Grafana
-* setup auto-scaling
+- Ease installation and configuration of GitLab instances.
+- Offer seamless upgrades from version to version.
+- Ease backup and restore of GitLab and its components.
+- Aggregate and visualize metrics using Prometheus and Grafana.
+- Set up auto-scaling.
 
 Additionally, a [GitLab Runner-specific Operator](https://docs.gitlab.com/runner/install/openshift.html) is generally available, allowing users to easily run GitLab CI jobs in OpenShift.
