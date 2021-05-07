@@ -186,7 +186,7 @@ describe 'kas configuration' do
       end
 
       describe 'redis config' do
-      let(:sentinels) do
+        let(:sentinels) do
           YAML.safe_load(%(
             redis:
               host: global.host
