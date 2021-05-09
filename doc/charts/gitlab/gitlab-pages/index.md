@@ -94,6 +94,6 @@ This section controls the gitlab-pages Ingress.
 |:---------------------- |:-------:|:------- |:----------- |
 | `annotations`          | String  |         | This field is an exact match to the standard `annotations` for [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). |
 | `configureCertmanager` | Boolean | `false` | Toggles Ingress annotation `certmanager.k8s.io/issuer`. Note that acquisition of a TLS certificate for gitlab-pages via cert-manager is disabled as a wildcard certificate acquisition requires a different kind of cert-manager Issuer than is available. |
-| `enabled`              | Boolean | `false` | Setting that controls whether to create Ingress objects for services that support them. When `false` the `global.ingress.enabled` setting is used. |
+| `enabled`              | Boolean | `true` | Setting that controls whether to create Ingress objects for services that support them. When `false` the `global.ingress.enabled` setting is used. |
 | `tls.enabled`          | Boolean | `true`  | When set to `false`, you disable TLS for the Registry subchart. This is mainly useful for cases in which you cannot use TLS termination at `ingress-level`, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `tls.secretName`       | String  |         | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the registry URL. When not set, the `global.ingress.tls.secretName` is used instead. Defaults to not being set. |
