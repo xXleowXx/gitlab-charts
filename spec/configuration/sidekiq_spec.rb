@@ -5,19 +5,31 @@ require 'hash_deep_merge'
 
 describe 'Sidekiq configuration' do
   let(:default_values) do
-    {
-      # provide required setting
-      'certmanager-issuer' => { 'email' => 'test@example.com' },
+    YAML.safe_load(%(
+      certmanager-issuer:
+        email: test@example.com
       # required to activate mailroom
-      'gitlab' => {
-        'sidekiq' => {
-          'pods' => [
-            { 'name' => 'pod-1', 'queues' => 'merge' },
-            { 'name' => 'pod-2', 'negateQueues' => 'merge' },
-          ]
-        }
-      }
-    }
+      gitlab:
+        sidekiq:
+          pods:
+          - name: pod-1
+            queues: merge
+          - name: pod-2
+            negateQueues: merge
+    ))
+    # {
+    #   # provide required setting
+    #   'certmanager-issuer' => { 'email' => 'test@example.com' },
+    #   # required to activate mailroom
+    #   'gitlab' => {
+    #     'sidekiq' => {
+    #       'pods' => [
+    #         { 'name' => 'pod-1', 'queues' => 'merge' },
+    #         { 'name' => 'pod-2', 'negateQueues' => 'merge' },
+    #       ]
+    #     }
+    #   }
+    # }
   end
 
   context 'when setting extraEnv' do

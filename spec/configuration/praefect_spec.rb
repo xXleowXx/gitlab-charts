@@ -124,7 +124,6 @@ describe 'Praefect configuration' do
                 gitalyReplicas: 3
               - name: vs2
                 gitalyReplicas: 3
-
         )).deep_merge(values_praefect_enabled)
       end
 
