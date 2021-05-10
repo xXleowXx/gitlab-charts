@@ -75,6 +75,7 @@ gitlab:
 | `backups.objectStorage.config.key`          | Key containing credentials in secret         | ""                           |
 | `backups.objectStorage.config.secret`       | Object storage credentials secret            | ""                           |
 | `common.labels`                             | Supplemental labels that are applied to all objects created by this chart. | `{}` |
+| `deployment.strategy`                       | Allows one to configure the update strategy utilized by the deployment | { `type`: `Recreate` } |
 | `enabled`                                   | Task Runner enablement flag                  | true                         |
 | `extra`                                     | YAML block for [extra `gitlab.yml` configuration](https://gitlab.com/gitlab-org/gitlab/-/blob/8d2b59dbf232f17159d63f0359fa4793921896d5/config/gitlab.yml.example#L1193-1199) | {}                          |
 | `image.pullPolicy`                          | Task Runner image pull policy                | `IfNotPresent`               |
