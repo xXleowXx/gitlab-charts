@@ -274,3 +274,4 @@ the `helm install` command using the `--set` flags.
 | securityContext.runAsUser      | 1000                                              |                                                                                                         |
 | securityContext.fsGroup        | 1000                                              |                                                                                                         |
 | serviceLabels                  | `{}`                                              | Supplemental service labels                                                                             |
+| statefulset.strategy           | `{}`                                              | Allows one to configure the update strategy utilized by the statefulset                                 |
