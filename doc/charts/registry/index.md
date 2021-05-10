@@ -130,6 +130,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `compatiblity`                             |                                              | Configuration of compatibility settings                                                              |
 | `debug`                                    |                                              | Debug port and Prometheus metrics                                                                    |
 | `deployment.terminationGracePeriodSeconds` | `30`                                         | Optional duration in seconds the pod needs to terminate gracefully.                                  |
+| `deployment.strategy`                      | `{}`                                         | Allows one to configure the update strategy utilized by the deployment                               |
 | `draintimeout`                             | `'0'`                                        | Amount of time to wait for HTTP connections to drain after receiving a SIGTERM signal (e.g. `'10s'`) |
 | `relativeurls`                             | `false`                                      | Enable the registry to return relative URLs in Location headers. |
 | `enabled`                                  | `true`                                       | Enable registry flag                                                                                 |
@@ -193,7 +194,6 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `tokenService`                             | `container_registry`                         | JWT token service                                                                                    |
 | `tokenIssuer`                              | `gitlab-issuer`                              | JWT token issuer                                                                                     |
 | `tolerations`                              | `[]`                                         | Toleration labels for pod assignment                                                                 |
-| `updateStrategy`                           | `{}`                                         | Allows one to configure the update strategy utilized by the deployment                                |
 
 ## Chart configuration examples
 

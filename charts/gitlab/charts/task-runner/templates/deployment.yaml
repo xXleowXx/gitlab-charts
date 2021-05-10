@@ -11,13 +11,13 @@ metadata:
     {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas | int }}
-  strategy:
-    rollingUpdate: null
-    type: Recreate
   selector:
     matchLabels:
       app: {{ template "name" . }}
       release: {{ .Release.Name }}
+  {{- if .Values.deployment.strategy }}
+  strategy: {{ .Values.deployment.strategy | toYaml | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:
