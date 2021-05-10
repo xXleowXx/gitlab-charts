@@ -354,7 +354,7 @@ global:
 ### Configure Redis chart-specific settings
 
 Settings to configure the [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis)
-directly are located under the `redis` key.
+directly are located under the `redis` key:
 
 ```yaml
 redis:
