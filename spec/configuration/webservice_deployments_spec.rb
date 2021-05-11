@@ -13,98 +13,74 @@ describe 'Webservice Deployments configuration' do
   end
 
   let(:default_values) do
-    { 'certmanager-issuer' => { 'email' => 'test@example.com' } }
+    YAML.safe_load(%(
+      certmanager-issuer:
+        email: test@example.com
+    ))
   end
 
   context 'When customer provides additional labels' do
     let(:values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'smartcard' => {
-              'enabled' => true
-            }
-          },
-          'common' => {
-            'labels' => {
-              'global' => true,
-              'foo' => 'global'
-            }
-          },
-          'operator' => {
-            'enabled' => true
-          },
-          'pod' => {
-            'labels' => {
-              'global_pod' => true,
-              'foo' => 'global_pod'
-            }
-          },
-          'service' => {
-            'labels' => {
-              'global_service' => true,
-              'foo' => 'global_service'
-            }
-          }
-        },
-        'gitlab' => {
-          'webservice' => {
-            'common' => {
-              'labels' => {
-                'global' => 'webservice',
-                'ws_common' => true,
-                'foo' => 'webservice-common',
-                'webservice' => 'webservice'
-              }
-            },
-            'networkpolicy' => {
-              'enabled' => true
-            },
-            'podLabels' => {
-              'foo' => 'webservice_pod',
-              'ws_pod' => true,
-              'global' => 'pod'
-            },
-            'serviceAccount' => {
-              'enabled' => true,
-              'create' => true
-            },
-            'serviceLabels' => {
-              'foo' => 'webservice_service',
-              'ws_service' => true,
-              'global' => 'service'
-            }
-          }
-        }
-      }.deep_merge(default_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            smartcard:
+              enabled: true
+          common:
+            labels:
+              global: true
+              foo: global
+          operator:
+            enabled: true
+          pod:
+            labels:
+              global_pod: true
+              foo: global_pod
+          service:
+            labels:
+              global_service: true
+              foo: global_service
+        gitlab:
+          webservice:
+            common:
+              labels:
+                global: webservice
+                ws_common: true
+                foo: webservice-common
+                webservice: webservice
+            networkpolicy:
+              enabled: true
+            podLabels:
+              foo: webservice_pod
+              ws_pod: true
+              global: pod
+            serviceAccount:
+              create: true
+              enabled: true
+            serviceLabels:
+              foo: webservice_service
+              ws_service: true
+              global: service
+      )).deep_merge(default_values)
     end
 
     let(:web_deployment) do
-      {
-        'gitlab' => {
-          'webservice' => {
-            'deployments' => {
-              'web' => {
-                'ingress' => {
-                  'path' => '/'
-                },
-                'common' => {
-                  'labels' => {
-                    'web_common' => true,
-                    'foo' => 'web-common'
-                  }
-                },
-                'pod' => {
-                  'labels' => {
-                    'web_pod' => true,
-                    'foo' => 'web-pod'
-                  }
-                }
-              }
-            }
-          }
-        }
-      }.deep_merge(values)
+      YAML.safe_load(%(
+        gitlab:
+          webservice:
+            deployments:
+              web:
+                ingress:
+                  path: /
+                common:
+                  labels:
+                    web_common: true
+                    foo: web-common
+                pod:
+                  labels:
+                    web_pod: true
+                    foo: web-pod
+      )).deep_merge(values)
     end
 
     it 'Populates the additional labels in the expected manner on the default deployment' do
