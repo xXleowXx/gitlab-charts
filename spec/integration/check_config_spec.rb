@@ -1009,6 +1009,143 @@ describe 'checkConfig template' do
                       error_description: 'when Sidekiq timeout is more than terminationGracePeriodSeconds'
     end
   end
+
+  describe 'sidekiq.routingRules' do
+    let(:error_output) { 'The Sidekiq\'s routing rules list must be an ordered array of tuples of query and corresponding queue.' }
+
+    context 'with an empty routingRules setting' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules: []
+        )).deep_merge(default_required_values)
+      end
+
+      it 'succeeds' do
+        expect(exit_code).to eq(0)
+        expect(stdout).to include('name: gitlab-checkconfig-test')
+        expect(stderr).to be_empty
+      end
+    end
+
+    context 'with a valid routingRules setting' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                  - ["resource_boundary=cpu", "cpu_boundary"]
+                  - ["feature_category=pages", null]
+                  - ["feature_category=search", "search"]
+                  - ["feature_category=memory|resource_boundary=memory", "memory-bound"]
+                  - ["*", "default"]
+        )).deep_merge(default_required_values)
+      end
+
+      it 'succeeds' do
+        expect(exit_code).to eq(0)
+        expect(stdout).to include('name: gitlab-checkconfig-test')
+        expect(stderr).to be_empty
+      end
+    end
+
+    context 'a string routingRules setting is a string' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules: 'hello'
+        )).deep_merge(default_required_values)
+      end
+
+      it 'returns an error' do
+        expect(exit_code).to be > 0
+        expect(stdout).to be_empty
+        expect(stderr).to include(error_output)
+      end
+    end
+
+    context 'one rule is a string' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                - ["resource_boundary=cpu", "cpu_boundary"]
+                - "feature_category=pages"
+        )).deep_merge(default_required_values)
+      end
+
+      it 'returns an error' do
+        expect(exit_code).to be > 0
+        expect(stdout).to be_empty
+        expect(stderr).to include(error_output)
+      end
+    end
+
+    context 'one rule has 3 elements' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                - ["resource_boundary=cpu", "cpu_boundary"]
+                - ["resource_boundary=cpu", "cpu_boundary", "something"]
+        )).deep_merge(default_required_values)
+      end
+
+      it 'returns an error' do
+        expect(exit_code).to be > 0
+        expect(stdout).to be_empty
+        expect(stderr).to include(error_output)
+      end
+    end
+
+    context "one rule's queue is invalid" do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                - ["resource_boundary=cpu", "cpu_boundary"]
+                - ['rule', 123]
+        )).deep_merge(default_required_values)
+      end
+
+      it 'returns an error' do
+        expect(exit_code).to be > 0
+        expect(stdout).to be_empty
+        expect(stderr).to include(error_output)
+      end
+    end
+
+    context "one rule's query is invalid" do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                - ["resource_boundary=cpu", "cpu_boundary"]
+                - [123, 'valid-queue']
+        )).deep_merge(default_required_values)
+      end
+
+      it 'returns an error' do
+        expect(exit_code).to be > 0
+        expect(stdout).to be_empty
+        expect(stderr).to include(error_output)
+      end
+    end
+  end
+
   describe 'registry.gc (disabled)' do
     let(:success_values) do
       YAML.safe_load(%(
