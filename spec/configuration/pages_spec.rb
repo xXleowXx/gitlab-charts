@@ -252,6 +252,7 @@ describe 'GitLab Pages' do
             }
           )
         end
+
         describe 'access control' do
           it 'creates necessary secrets and configmaps and mounts them on migration job' do
             migrations_secret_mounts = pages_enabled_template.projected_volume_sources(
