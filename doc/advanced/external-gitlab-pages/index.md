@@ -66,7 +66,6 @@ Omnibus GitLab package.
    ```yaml
    global:
      pages:
-       enabled: true
        path: '/srv/gitlab/shared/pages'
        host: <Pages root domain>
        port: '80'  # Set to 443 if Pages is served over HTTPS
@@ -78,7 +77,14 @@ Omnibus GitLab package.
        apiSecret:
          secret: gitlab-pages-api-key
          key: shared_secret
+     extraEnv:
+       PAGES_UPDATE_LEGACY_STORAGE: true  # Bypass automatic disabling of disk storage
    ```
+
+   NOTE: By setting `PAGES_UPDATE_LEGACY_STORAGE` environment variable to true,
+   the feature flag `pages_update_legacy_storage` is enabled which deploys Pages
+   to local disk. When you migrate to object storage, do remember to remove this
+   variable.
 
 1. [Deploy the chart](../../installation/deployment.md#deploy-using-helm)
    using this configuration.

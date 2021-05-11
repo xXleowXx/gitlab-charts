@@ -76,6 +76,7 @@ helm inspect values gitlab/gitlab
 | `global.smtp.starttls_auto`       | Use STARTTLS if enabled on the mail server                                              | false                 |
 | `global.smtp.tls`                 | Enables SMTP/TLS (SMTPS: SMTP over direct TLS connection)                               | _none_                |
 | `global.smtp.user_name`           | Username for SMTP authentication https                                                  | ""                    |
+| `global.smtp.pool`                | Enables SMTP connection pooling                                                         | false                 |
 
 ## Incoming Email configuration
 

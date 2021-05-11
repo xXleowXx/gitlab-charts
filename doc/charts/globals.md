@@ -122,6 +122,7 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 | `tls.enabled`                  | Boolean | `true`         | When set to `false`, this disables TLS in GitLab. This is useful for cases in which you cannot use TLS termination of Ingresses, such as when you have a TLS-terminating proxy before the Ingress Controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#configure-host-settings). |
 | `tls.secretName`               | String  |                | The name of the [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) that contains a **wildcard** certificate and key for the domain used in `global.hosts.domain`. |
 | `path`                         | String  | `/`            | Default for `path` entries in [Ingress objects](https://kubernetes.io/docs/concepts/services-networking/ingress/) |
+| `pathType`                     | String  | `Prefix`       | A [Path Type](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) allows you to specify how a path should be matched. Our current default is `Prefix` but you can use `ImplementationSpecific` or `Exact` depending on your use case. |
 
 ### Ingress Path
 
@@ -350,6 +351,23 @@ global:
 | `password.secret`  | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
 | `scheme`           | String  | `redis` | The URI scheme to be used to generate Redis URLs. Valid values are `redis`, `rediss`, and `tcp`. If using `rediss` (SSL encrypted connection) scheme, the certificate used by the server should be a part of the system's trusted chains. This can be done by adding them to the [custom certificate authorities](#custom-certificate-authorities) list. |
 
+### Configure Redis chart-specific settings
+
+Settings to configure the [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis)
+directly are located under the `redis` key:
+
+```yaml
+redis:
+  install: true
+  image:
+    registry: registry.example.com
+    repository: example/redis
+    tag: x.y.z
+```
+
+Refer to the [full list of settings](https://artifacthub.io/packages/helm/bitnami/redis/11.3.4#parameters)
+for more information.
+
 ### Redis Sentinel support
 
 The current Redis Sentinel support only supports Sentinels that have
@@ -502,10 +520,11 @@ global:
     bucket: registry
     certificate:
     httpSecret:
+    notificationSecret:
     notifications: {}
 ```
 
-For more details on `bucket`, `certificate`, and `httpSecret` settings, see the documentation within the [registry chart](registry/index.md).
+For more details on `bucket`, `certificate`, `httpSecret`, and `notificationSecret` settings, see the documentation within the [registry chart](registry/index.md).
 
 ### notifications
 
