@@ -1088,6 +1088,44 @@ describe 'checkConfig template' do
       end
     end
 
+    context 'one rule has 0 elements' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                - ["resource_boundary=cpu", "cpu_boundary"]
+                - []
+        )).deep_merge(default_required_values)
+      end
+
+      it 'returns an error' do
+        expect(exit_code).to be > 0
+        expect(stdout).to be_empty
+        expect(stderr).to include(error_output)
+      end
+    end
+
+    context 'one rule has 1 element' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                - ["resource_boundary=cpu", "cpu_boundary"]
+                - ["hello"]
+        )).deep_merge(default_required_values)
+      end
+
+      it 'returns an error' do
+        expect(exit_code).to be > 0
+        expect(stdout).to be_empty
+        expect(stderr).to include(error_output)
+      end
+    end
+
     context 'one rule has 3 elements' do
       let(:values) do
         YAML.safe_load(%(
@@ -1115,7 +1153,7 @@ describe 'checkConfig template' do
               sidekiq:
                 routingRules:
                 - ["resource_boundary=cpu", "cpu_boundary"]
-                - ['rule', 123]
+                - ["rule", 123]
         )).deep_merge(default_required_values)
       end
 
