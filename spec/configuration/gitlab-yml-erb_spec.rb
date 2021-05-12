@@ -122,7 +122,7 @@ describe 'gitlab.yml.erb configuration' do
     end
   end
 
-  context 'sidekiq' do
+  context 'sidekiq.routingRules' do
     let(:required_values) do
       value.merge(default_values)
     end
