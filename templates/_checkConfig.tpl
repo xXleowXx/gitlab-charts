@@ -31,6 +31,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.cluster" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queueSelector" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.timeout" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.routingRules" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.appConfig.maxRequestDurationSeconds" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.extern.repos" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.geo.database" .) -}}
@@ -57,7 +59,6 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.timeout" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -219,6 +220,53 @@ sidekiq: queueSelector
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.sidekiq.queueSelector */}}
+
+{{/*
+Ensure that Sidekiq timeout is less than terminationGracePeriodSeconds
+*/}}
+{{- define "gitlab.checkConfig.sidekiq.timeout" -}}
+{{-   range $i, $pod := $.Values.gitlab.sidekiq.pods -}}
+{{-     $activeTimeout := int (default $.Values.gitlab.sidekiq.timeout $pod.timeout) }}
+{{-     $activeTerminationGracePeriodSeconds := int (default $.Values.gitlab.sidekiq.deployment.terminationGracePeriodSeconds $pod.terminationGracePeriodSeconds) }}
+{{-     if gt $activeTimeout $activeTerminationGracePeriodSeconds }}
+sidekiq:
+  You must set `terminationGracePeriodSeconds` ({{ $activeTerminationGracePeriodSeconds }}) longer than `timeout` ({{ $activeTimeout }}) for pod `{{ $pod.name }}`.
+{{-     end }}
+{{-   end }}
+{{- end -}}
+{{/* END gitlab.checkConfig.sidekiq.timeout */}}
+
+{{/*
+Ensure that Sidekiq routingRules configuration is in a valid format
+*/}}
+{{- define "gitlab.checkConfig.sidekiq.routingRules" -}}
+{{- $validRoutingRules := true -}}
+{{- with $.Values.global.appConfig.sidekiq.routingRules }}
+{{-   if not (kindIs "slice" .) }}
+{{-     $validRoutingRules = false }}
+{{-   else -}}
+{{-     range $rule := . }}
+{{-       if (not (kindIs "slice" $rule)) }}
+{{-         $validRoutingRules = false }}
+{{-       else if (ne (len $rule) 2) }}
+{{-         $validRoutingRules = false }}
+{{/*      The first item (routing query) must be a string */}}
+{{-       else if not (kindIs "string" (index $rule 0)) }}
+{{-         $validRoutingRules = false }}
+{{/*      The second item (queue name) must be either a string or null */}}
+{{-       else if not (or (kindIs "invalid" (index $rule 1)) (kindIs "string" (index $rule 1))) -}}
+{{-         $validRoutingRules = false }}
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- if eq false $validRoutingRules }}
+sidekiq:
+    The Sidekiq's routing rules list must be an ordered array of tuples of query and corresponding queue.
+    See https://docs.gitlab.com/charts/charts/globals.html#sidekiq-routing-rules-settings
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.sidekiq.routingRules */}}
 
 {{/*
 Ensure a database is configured when using Geo
@@ -666,17 +714,3 @@ smtp:
 {{-   end }}
 {{- end -}}
 {{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}
-
-{{/*
-Ensure that Sidekiq timeout is less than terminationGracePeriodSeconds
-*/}}
-{{- define "gitlab.checkConfig.sidekiq.timeout" -}}
-{{-   range $i, $pod := $.Values.gitlab.sidekiq.pods -}}
-{{-     $activeTimeout := int (default $.Values.gitlab.sidekiq.timeout $pod.timeout) }}
-{{-     $activeTerminationGracePeriodSeconds := int (default $.Values.gitlab.sidekiq.deployment.terminationGracePeriodSeconds $pod.terminationGracePeriodSeconds) }}
-{{-     if gt $activeTimeout $activeTerminationGracePeriodSeconds }}
-sidekiq:
-  You must set `terminationGracePeriodSeconds` ({{ $activeTerminationGracePeriodSeconds }}) longer than `timeout` ({{ $activeTimeout }}) for pod `{{ $pod.name }}`.
-{{-     end }}
-{{-   end }}
-{{- end -}}

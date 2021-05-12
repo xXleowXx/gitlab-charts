@@ -431,6 +431,9 @@ global:
       sanExtensions: false
       requiredForGitAccess: false
 
+    sidekiq:
+      routingRules: []
+
     # Config that only applies to the defaults on initial install
     initialDefaults: {}
       # signupEnabled:
