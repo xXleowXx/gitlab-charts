@@ -10,7 +10,7 @@ The GitLab Runner subchart provides a GitLab Runner for running CI jobs. It is e
 
 ## Requirements
 
-This chart depends on the shared-secrets subchart to populate its `registrationToken` for automatic registration. If you intend to run this chart as a stand-alone chart with an existing GitLab instance then you will need to manually set the `registrationToken` in the `gitlab-runner` secret to be equal to that displayed by the running GitLab instance.
+This chart depends on the shared-secrets Job to populate its `registrationToken` for automatic registration. If you intend to run this chart as a stand-alone chart with an existing GitLab instance then you will need to manually set the `registrationToken` in the `gitlab-runner` secret to be equal to that displayed by the running GitLab instance.
 
 ## Configuration
 
