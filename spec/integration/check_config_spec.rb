@@ -1302,4 +1302,46 @@ describe 'checkConfig template' do
                      success_description: 'when serviceDesk is configured with Microsoft Graph',
                      error_description: 'when serviceDesk is missing required Microsoft Graph settings'
   end
+
+  describe 'geo.replication.primaryApiUrl' do
+    let(:success_values) do
+      {
+        'global' => {
+          'geo' => {
+            'enabled' => true,
+            'registry' => {
+              'replication' => {
+                'enabled' => true,
+                'primaryApiUrl' => 'http://registry.foobar.com'
+              }
+            }
+          },
+          'psql' => { 'host' => 'foo', 'password' => { 'secret' => 'bar' } }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_values) do
+      {
+        'global' => {
+          'geo' => {
+            'enabled' => true,
+            'role' => 'secondary',
+            'registry' => {
+              'replication' => {
+                'enabled' => true
+              }
+            }
+          },
+          'psql' => { 'host' => 'foo', 'password' => { 'secret' => 'bar' } }
+        }
+      }.merge(default_required_values)
+    end
+
+    let(:error_output) { 'Registry replication is enabled for GitLab Geo, but no primary API URL is specified.' }
+
+    include_examples 'config validation',
+                     success_description: 'when Registry replication is enabled for Geo and primary API URL is specified',
+                     error_description: 'when Registry replication is enabled for Geo but no primary API URL is specified'
+  end
 end
