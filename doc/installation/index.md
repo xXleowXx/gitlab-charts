@@ -60,3 +60,8 @@ If you are upgrading an existing Kubernetes installation, follow the
 
 To migrate your existing Omnibus GitLab instance to your Kubernetes cluster,
 follow the [migration documentation](migration/index.md).
+
+## Migrating from Kubernetes to Omnibus GitLab
+
+To migrate your existing GitLab Helm chart instance to Omnibus GitLab,
+follow the documentation [Migrate from the Helm Chart to the Linux package](migration/helm_to_package.md).
