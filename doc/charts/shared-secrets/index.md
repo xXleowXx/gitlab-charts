@@ -1,5 +1,5 @@
 ---
-redirect_to: '../shared-secrets.md
+redirect_to: '../shared-secrets.md'
 ---
 
 This document was moved to [another location](../shared-secrets.md).
