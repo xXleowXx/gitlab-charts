@@ -7,8 +7,7 @@ describe 'gitlab-exporter configuration' do
   let(:default_values) do
     YAML.safe_load(%(
       certmanager-issuer:
-        email:
-          test@example.com
+        email: test@example.com
       global: {}
       gitlab:
         gitlab-exporter:

@@ -39,7 +39,7 @@ describe 'Database configuration' do
 
     context 'custom serviceName' do
       let(:global_values) do
-        default_values.merge(YAML.safe_load(%(
+        default_values.deep_merge(YAML.safe_load(%(
           global:
             psql:
               serviceName: my-postgresql
@@ -59,7 +59,7 @@ describe 'Database configuration' do
   describe 'global.psql settings' do
     context 'when psql.database set globally' do
       let(:global_values) do
-        default_values.merge(YAML.safe_load(%(
+        default_values.deep_merge(YAML.safe_load(%(
           global:
             psql:
               database: testing
