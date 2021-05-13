@@ -12,8 +12,7 @@ describe 'Annotations configuration' do
           annotations:
             environment: development
       certmanager-issuer:
-        email:
-          test@example.com
+        email: test@example.com
       gitlab:
         kas:
           enabled: true  # DELETE THIS WHEN KAS BECOMES ENABLED BY DEFAULT
