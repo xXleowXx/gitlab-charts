@@ -273,6 +273,7 @@ GitLab external URL                                              |
 | `gitlab-runner.resources.requests.cpu`                         | runner resources                                                     |                                                                  |
 | `gitlab-runner.resources.requests.memory`                      | runner resources                                                     |                                                                  |
 | `gitlab-runner.runners.privileged`                             | run in privileged mode,needed for `dind`                            | false                                                            |
+| `gitlab-runner.runners.cache.secretName`                       | secret to get `accesskey` and `secretkey` from                       | `gitlab-minio`                                                   |
 | `gitlab-runner.runners.config`                                 | Runner configuration as string                                      | See [Chart documentation](../charts/gitlab/gitlab-runner/index.md#default-runner-configuration)|
 | `gitlab-runner.unregisterRunners`                              | unregister all runners before termination                            | true                                                             |
 | `gitlab.geo-logcursor.securityContext.fsGroup`                 | Group ID under which the pod should be started                       | `1000`                                                           |

@@ -48,6 +48,7 @@ Privileged containers have extended capabilities, for example they can mount arb
 | `gitlab-runner.rbac.clusterWideAccess`         | Deploy containers of jobs cluster-wide     | `false`                               |
 | `gitlab-runner.rbac.serviceAccountName`        | Name of the RBAC service account to create | `default`                             |
 | `gitlab-runner.runners.privileged`             | Run in privileged mode, needed for `dind`  | `false`                               |
+| `gitlab-runner.runners.cache.secretName`       | Secret to access key and secret key from   | `gitlab-minio`                        |
 | `gitlab-runner.runners.config`                 | Runner configuration as string             | See [below](#default-runner-configuration)|
 | `gitlab-runner.resources.limits.cpu`           | Runner CPU limit                           |                                       |
 | `gitlab-runner.resources.limits.memory`        | Runner memory limit                        |                                       |
