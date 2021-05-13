@@ -72,7 +72,7 @@ gitlab-runner:
           Path = "gitlab-runner"
           Shared = true
           [runners.cache.s3]
-            ServerAddress = {{ include "gitlab-runner.cache.s3ServerAddress" . }}
+            ServerAddress = {{ include "gitlab-runner.cache-tpl.s3ServerAddress" . }}
             BucketName = "runner-cache"
             BucketLocation = "us-east-1"
             Insecure = false
