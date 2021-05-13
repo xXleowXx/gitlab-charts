@@ -1,6 +1,8 @@
+# vim: set filetype=sh:
+
 namespace={{ .Release.Namespace }}
 release={{ .Release.Name }}
-env={{ .Values.env }}
+env={{ index .Values "shared-secrets" "env" }}
 
 pushd $(mktemp -d)
 
