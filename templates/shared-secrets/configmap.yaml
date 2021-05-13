@@ -15,7 +15,7 @@ metadata:
 {{- end }}
 data:
   generate-secrets: |
-    {{- include (print $.Template.BasePath "/shared-secrets/_shared-secrets-generate_secrets.sh.tpl") . | nindent 4 }}
+    {{- include (print $.Template.BasePath "/shared-secrets/_generate_secrets.sh.tpl") . | nindent 4 }}
 ---
 {{ if .Values.global.operator.enabled -}}
 apiVersion: v1
@@ -27,14 +27,14 @@ metadata:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
 data:
   template: |-
-    {{- include (print $.Template.BasePath "/shared-secrets/_shared-secrets-jobspec.yaml") . | nindent 4 }}
+    {{- include (print $.Template.BasePath "/shared-secrets/_jobspec.yaml") . | nindent 4 }}
   role: |-
-    {{- include (print $.Template.BasePath "/shared-secrets/_shared-secrets-rbac-role.yaml") . | nindent 4 }}
+    {{- include (print $.Template.BasePath "/shared-secrets/_rbac-role.yaml") . | nindent 4 }}
   serviceAccount: |-
-    {{- include (print $.Template.BasePath "/shared-secrets/_shared-secrets-rbac-serviceaccount.yaml") . | nindent 4 }}
+    {{- include (print $.Template.BasePath "/shared-secrets/_rbac-serviceaccount.yaml") . | nindent 4 }}
   roleBinding: |-
-    {{- include (print $.Template.BasePath "/shared-secrets/_shared-secrets-rbac-rolebinding.yaml") . | nindent 4 }}
+    {{- include (print $.Template.BasePath "/shared-secrets/_rbac-rolebinding.yaml") . | nindent 4 }}
   selfSignedCertTemplate: |-
-    {{- include (print $.Template.BasePath "/shared-secrets/_shared-secrets-self-signed-cert-job.yml") . | nindent 4 }}
+    {{- include (print $.Template.BasePath "/shared-secrets/_self-signed-cert-job.yml") . | nindent 4 }}
 {{- end -}}
 {{- end -}}
