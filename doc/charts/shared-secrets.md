@@ -79,5 +79,5 @@ shared-secrets:
 
 NOTE:
 If you disable this job, you **must** manually create all secrets,
-and provide all necessary secret content. See [installation/secrets](../../installation/secrets.md#manual-secret-creation-optional)
+and provide all necessary secret content. See [installation/secrets](../installation/secrets.md#manual-secret-creation-optional)
 for further details.
