@@ -244,11 +244,13 @@ You may face this issue if the option `workhorse.keywatcher` was set to `false` 
 Use the following steps to verify:
 
 1. Access the container `gitlab-workhorse` in the pod serving `/api/*`:
+
    ```shell
    kubectl exec -it --container=gitlab-workhorse <gitlab_api_pod> -- /bin/bash
    ```
 
 1. Inspect the file `/srv/gitlab/config/workhorse-config.toml`. The `[redis]` configuration might be missing:
+
    ```shell
    cat /srv/gitlab/config/workhorse-config.toml | grep '\[redis\]'
    ``` 
