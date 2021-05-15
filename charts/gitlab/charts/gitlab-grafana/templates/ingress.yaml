@@ -7,7 +7,7 @@
 apiVersion: {{ template "ingress.apiVersion" $}}
 kind: Ingress
 metadata:
-  name: {{ .Release.Name }}-grafana
+  name: {{ .Release.Name }}-grafana-app
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
@@ -31,12 +31,12 @@ spec:
             pathType: {{ default "Prefix" $.Values.global.ingress.pathType }}
             backend:
               service:
-                  name: {{ .Release.Name }}-grafana
+                  name: {{ .Release.Name }}-grafana-app
                   port:
                     number: 80
             {{- else -}}
             backend:
-              serviceName: {{ .Release.Name }}-grafana
+              serviceName: {{ .Release.Name }}-grafana-app
               servicePort: 80
             {{- end -}}
   {{- if (and $tlsSecret (eq (include "gitlab.ingress.tls.enabled" $) "true" )) }}

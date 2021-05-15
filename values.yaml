@@ -989,6 +989,7 @@ gitlab-runner:
 grafana:
   ## Override and provide "bogus" administation secrets
   ## gitlab/gitlab-grafana provides overrides via shared-secrets
+  nameOverride: grafana-app
   admin:
     existingSecret: bogus
   env:
