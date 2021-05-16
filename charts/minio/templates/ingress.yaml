@@ -10,6 +10,7 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "gitlab.standardLabels" . | indent 4 }}
+{{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "{{ template "minio.ingressclass" . }}"
     kubernetes.io/ingress.provider: nginx
