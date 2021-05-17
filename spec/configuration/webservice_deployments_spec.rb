@@ -530,4 +530,43 @@ describe 'Webservice Deployments configuration' do
       expect(t.env('Deployment/test-webservice-c', 'webservice')).to include(env_value('SHUTDOWN_BLACKOUT_SECONDS', 20))
     end
   end
+
+  context 'when workhorse keywatcher flag is enabled' do
+    let(:deployments_values) do
+      YAML.safe_load(%(
+        gitlab:
+          webservice:
+            deployments:
+              default:
+                workhorse:
+                  keywatcher: false
+                ingress:
+                  path: /
+              api:
+                ingress:
+                  path: /api
+              git:
+                workhorse:
+                  keywatcher: false
+                ingress:
+                  path:
+      )).deep_merge(default_values)
+    end
+
+    it 'configmap is generated' do
+      t = HelmTemplate.new(deployments_values)
+      expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+      # Read ConfigMaps from the rendered template
+      configmaps = t.resources_by_kind('ConfigMap')
+      workhorse_config = {}
+      ['default', 'api', 'git'].each do |container|
+        workhorse_config[container] = configmaps.fetch("ConfigMap/test-workhorse-#{container}").fetch("data").fetch("workhorse-config.toml.erb")
+      end
+
+      expect(workhorse_config['default']).not_to include("[redis]")
+      expect(workhorse_config['api']).to include("[redis]")
+      expect(workhorse_config['git']).not_to include("[redis]")
+    end
+  end
 end
