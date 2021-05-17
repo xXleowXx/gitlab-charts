@@ -221,8 +221,8 @@ describe 'GitLab Pages' do
                 host: mycustompages.com
                 port: 123
                 https: false
-                externalHttp: ["1.2.3.4"]
-                externalHttps: ["1.2.3.4"]
+                externalHttp: ['1.2.3.4']
+                externalHttps: ['1.2.3.4']
                 artifactsServer: false
                 objectStore:
                   enabled: true
@@ -606,7 +606,7 @@ describe 'GitLab Pages' do
             global:
               pages:
                 enabled: true
-                externalHttps: ["1.2.3.4"]
+                externalHttps: ['1.2.3.4']
           ))
         end
 
@@ -668,8 +668,8 @@ describe 'GitLab Pages' do
             global:
               pages:
                 enabled: true
-                externalHttp: ["1.2.3.4"]
-                externalHttps: ["1.2.3.4"]
+                externalHttp: ['1.2.3.4']
+                externalHttps: ['1.2.3.4']
           ))
         end
 
@@ -736,8 +736,8 @@ describe 'GitLab Pages' do
                 global:
                   pages:
                     enabled: true
-                    externalHttp: ["1.2.3.4"]
-                    externalHttps: ["1.2.3.4"]
+                    externalHttp: ['1.2.3.4']
+                    externalHttps: ['1.2.3.4']
               ))
             end
 
@@ -752,8 +752,8 @@ describe 'GitLab Pages' do
                 global:
                   pages:
                     enabled: true
-                    externalHttp: ["1.2.3.4", "1.2.3.5"]
-                    externalHttps: ["1.2.3.4", "1.2.3.6"]
+                    externalHttp: ['1.2.3.4', '1.2.3.5']
+                    externalHttps: ['1.2.3.4', '1.2.3.6']
               ))
             end
 
@@ -770,8 +770,8 @@ describe 'GitLab Pages' do
               global:
                 pages:
                   enabled: true
-                  externalHttp: ["1.2.3.4"]
-                  externalHttps: ["1.2.3.4"]
+                  externalHttp: ['1.2.3.4']
+                  externalHttps: ['1.2.3.4']
               gitlab:
                 gitlab-pages:
                   service:
