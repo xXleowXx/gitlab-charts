@@ -113,15 +113,15 @@ describe 'Gitaly configuration' do
     context 'when the administrator changes or deletes values' do
       using RSpec::Parameterized::TableSyntax
       where(:fsGroup, :runAsUser, :expectedContext) do
-        nil | nil | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
-        nil | ""  | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
-        nil | 24  | { 'fsGroup' => 1000,  'runAsUser' => 24   }
-        42  | nil | { 'fsGroup' => 42,    'runAsUser' => 1000 }
-        42  | ""  | { 'fsGroup' => 42,    'runAsUser' => 1000 }
-        42  | 24  | { 'fsGroup' => 42,    'runAsUser' => 24   }
-        ""  | nil | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
-        ""  | ""  | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
-        ""  | 24  | { 'fsGroup' => 1000,  'runAsUser' => 24   }
+        nil | nil | { 'fsGroup' => 1000, 'runAsUser' => 1000 }
+        nil | ""  | { 'fsGroup' => 1000 }
+        nil | 24  | { 'fsGroup' => 1000, 'runAsUser' => 24 }
+        42  | nil | { 'fsGroup' => 42, 'runAsUser' => 1000 }
+        42  | ""  | { 'fsGroup' => 42 }
+        42  | 24  | { 'fsGroup' => 42, 'runAsUser' => 24 }
+        ""  | nil | { 'runAsUser' => 1000 }
+        ""  | ""  | nil
+        ""  | 24  | { 'runAsUser' => 24 }
       end
 
       with_them do
@@ -137,7 +137,7 @@ describe 'Gitaly configuration' do
 
         let(:gitaly_stateful_set) { 'StatefulSet/test-gitaly' }
 
-        it 'should render securityContext correctly' do
+        it 'should render securityContext correctly', :focus => true do
           t = HelmTemplate.new(values)
           gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
           security_context = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['securityContext']
