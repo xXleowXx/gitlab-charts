@@ -256,4 +256,10 @@ Use the following steps to verify:
    ``` 
    
 If the `[redis]` configuration is not present, the `workhorse.keywatcher` flag was set to `false` during deployment
-thus causing the extra load in the `/api/v4/jobs/requests` endpoint.
+thus causing the extra load in the `/api/v4/jobs/requests` endpoint. To fix this, enable the `keywatcher` in the
+`webservice` chart:
+
+```yaml
+workhorse:
+  keywatcher: true
+```
