@@ -113,15 +113,15 @@ describe 'Gitaly configuration' do
     context 'when the administrator changes or deletes values' do
       using RSpec::Parameterized::TableSyntax
       where(:fsGroup, :runAsUser, :expectedContext) do
-        nil | nil | nil
-        nil | ""  | nil
-        nil | 24  | { 'runAsUser' => 24 }
-        42  | nil | { 'fsGroup' => 42 }
-        42  | ""  | { 'fsGroup' => 42 }
-        42  | 24  | { 'fsGroup' => 42, 'runAsUser' => 24 }
-        ""  | nil | nil
-        ""  | ""  | nil
-        ""  | 24  | { 'runAsUser' => 24 }
+        nil | nil | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
+        nil | ""  | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
+        nil | 24  | { 'fsGroup' => 1000,  'runAsUser' => 24   }
+        42  | nil | { 'fsGroup' => 42,    'runAsUser' => 1000 }
+        42  | ""  | { 'fsGroup' => 42,    'runAsUser' => 1000 }
+        42  | 24  | { 'fsGroup' => 42,    'runAsUser' => 24   }
+        ""  | nil | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
+        ""  | ""  | { 'fsGroup' => 1000,  'runAsUser' => 1000 }
+        ""  | 24  | { 'fsGroup' => 1000,  'runAsUser' => 24   }
       end
 
       with_them do
@@ -130,8 +130,8 @@ describe 'Gitaly configuration' do
             gitlab:
               gitaly:
                 securityContext:
-                  fsGroup: #{fsGroup}
-                  runAsUser: #{runAsUser}
+                  #{"fsGroup: #{fsGroup}" unless fsGroup.nil?}
+                  #{"runAsUser: #{runAsUser}" unless runAsUser.nil?}
           )).deep_merge(default_values)
         end
 
