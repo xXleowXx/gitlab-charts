@@ -123,6 +123,7 @@ deployment:
   strategy: {}
 
 workhorse:
+  keywatcher: true
   sentryDSN: ""
   extraArgs: ""
   logFormat: json # valid: (json, structured, text)
