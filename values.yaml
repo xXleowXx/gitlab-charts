@@ -431,6 +431,9 @@ global:
       sanExtensions: false
       requiredForGitAccess: false
 
+    sidekiq:
+      routingRules: []
+
     # Config that only applies to the defaults on initial install
     initialDefaults: {}
       # signupEnabled:
@@ -929,6 +932,29 @@ shared-secrets:
   enabled: true
   rbac:
     create: true
+  selfsign:
+    image:
+      repository: registry.gitlab.com/gitlab-org/build/cng/cfssl-self-sign
+      tag: 1.2
+    keyAlgorithm: "rsa"
+    keySize: "4096"
+    expiry: "365d"
+    caSubject: "GitLab Helm Chart"
+    pullSecrets: []
+  env: production
+  serviceAccount:
+    create: true
+    name: # Specify a pre-existing ServiceAccount name
+  resources:
+    requests:
+      cpu: 50m
+  securityContext:
+    # in debian/alpine based images, this is `nobody:nogroup`
+    runAsUser: 65534
+    fsGroup: 65534
+  tolerations: []
+  podLabels: {}
+  annotations: {}
 
 ## Installation & configuration of gitlab/gitlab-runner
 ## See requirements.yaml for current version
@@ -938,13 +964,21 @@ gitlab-runner:
     create: true
   runners:
     locked: false
-    cache:
-      cacheType: s3
-      s3BucketName: runner-cache
-      cacheShared: true
-      s3BucketLocation: us-east-1
-      s3CachePath: gitlab-runner
-      s3CacheInsecure: false
+    config: |
+      [[runners]]
+        [runners.kubernetes]
+        image = "ubuntu:18.04"
+        {{- if .Values.global.minio.enabled }}
+        [runners.cache]
+          Type = "s3"
+          Path = "gitlab-runner"
+          Shared = true
+          [runners.cache.s3]
+            ServerAddress = {{ include "gitlab-runner.cache-tpl.s3ServerAddress" . }}
+            BucketName = "runner-cache"
+            BucketLocation = "us-east-1"
+            Insecure = false
+        {{ end }}
   podAnnotations:
     gitlab.com/prometheus_scrape: "true"
     gitlab.com/prometheus_port: 9252
@@ -976,6 +1010,7 @@ grafana:
   ## We host Grafana as a sub-url of GitLab
   grafana.ini:
     server:
+      serve_from_sub_path: true
       root_url: http://localhost/-/grafana/
   ## We generate and provide random passwords
   ## NOTE: the Secret & ConfigMap names are hard coded!

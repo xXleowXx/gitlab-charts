@@ -121,4 +121,72 @@ describe 'gitlab.yml.erb configuration' do
       end
     end
   end
+
+  context 'sidekiq.routingRules' do
+    let(:required_values) do
+      value.merge(default_values)
+    end
+
+    context 'when empty array' do
+      let(:value) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules: []
+        ))
+      end
+
+      it 'does not populate the gitlab.yml.erb' do
+        t = HelmTemplate.new(required_values)
+
+        expect(t.stderr).to eq("")
+        expect(t.exit_code).to eq(0)
+        expect(YAML.safe_load(
+          t.dig(
+            'ConfigMap/test-webservice',
+            'data',
+            'gitlab.yml.erb'
+          )
+        )['production']).to have_key('sidekiq')
+      end
+    end
+
+    context 'when an array of tuples' do
+      let(:value) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                  - ["resource_boundary=cpu", "cpu_boundary"]
+                  - ["feature_category=pages", null]
+                  - ["feature_category=search", '']
+                  - ["feature_category=memory|resource_boundary=memory", 'memory']
+                  - ["*", "default"]
+        ))
+      end
+
+      it 'populates the gitlab.yml.erb with corresponding array' do
+        t = HelmTemplate.new(required_values)
+
+        expect(t.exit_code).to eq(0)
+        expect(YAML.safe_load(
+          t.dig(
+            'ConfigMap/test-webservice',
+            'data',
+            'gitlab.yml.erb'
+          )
+        )['production']).to include(YAML.safe_load(%(
+          sidekiq:
+            routing_rules:
+              - ["resource_boundary=cpu","cpu_boundary"]
+              - ["feature_category=pages",null]
+              - ["feature_category=search",""]
+              - ["feature_category=memory|resource_boundary=memory","memory"]
+              - ["*","default"]
+        )))
+      end
+    end
+  end
 end

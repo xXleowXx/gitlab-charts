@@ -169,7 +169,7 @@ there will be some variation in how you connect.
 
 1. Set the database user password.
 
-   By default, the `shared-secrets` chart will generate a secret for you.
+   By default, the `shared-secrets` Job will generate a secret for you.
 
    1. Fetch the password:
 
