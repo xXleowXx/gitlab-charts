@@ -6,8 +6,8 @@ require 'hash_deep_merge'
 describe 'gitlab.yml.erb configuration' do
   let(:default_values) do
     YAML.safe_load(%(
-      'certmanager-issuer':
-        email: "test@example.com"
+      certmanager-issuer:
+        email: test@example.com
     ))
   end
 
@@ -32,7 +32,7 @@ describe 'gitlab.yml.erb configuration' do
               report_only: false
               directives:
                 connect_src: "'self'"
-                frame_acestors: "'self'"
+                frame_ancestor: "'self'"
                 frame_src: "'self'"
                 img_src: "* data: blob:"
                 object_src: "'none'"
