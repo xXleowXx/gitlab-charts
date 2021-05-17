@@ -15,7 +15,10 @@ describe 'checkConfig template' do
   let(:exit_code) { check[2].to_i }
 
   let(:default_required_values) do
-    { 'certmanager-issuer' => { 'email' => 'test@example.com' } }
+    YAML.safe_load(%(
+      certmanager-issuer:
+        email: test@example.com
+    ))
   end
 
   shared_examples 'config validation' do |success_description: '', error_description: ''|
@@ -54,25 +57,24 @@ describe 'checkConfig template' do
 
   describe 'gitaly.tls without Praefect' do
     let(:success_values) do
-      {
-        'global' => {
-          'gitaly' => {
-            'enabled' => 'true',
-            'tls' => { 'enabled' => true, 'secretName' => 'example-tls' }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            enabled: true
+            tls:
+              enabled: true
+              secretName: example-tls
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'gitaly' => {
-            'enabled' => 'true',
-            'tls' => { 'enabled' => true }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            enabled: true
+            tls:
+              enabled: true
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'global.gitaly.tls.secretName not specified' }
@@ -84,43 +86,44 @@ describe 'checkConfig template' do
 
   describe 'gitaly.tls with Praefect' do
     let(:success_values) do
-      {
-        'global' => {
-          'praefect' => {
-            'enabled' => true,
-            'virtualStorages' => [
-              { 'name' => 'default', 'gitalyReplicas' => 3,
-                'maxUnavailable' => 2, 'tlsSecretName' => 'gitaly-default-tls' },
-              { 'name' => 'vs1', 'gitalyReplicas' => 2,
-                'maxUnavailable' => 1, 'tlsSecretName' => 'gitaly-vs2-tls' }
-            ]
-          },
-          'gitaly' => {
-            'enabled' => 'true',
-            'tls' => { 'enabled' => true }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          praefect:
+            enabled: true
+            virtualStorages:
+            - name: default
+              gitalyReplicas: 3
+              maxUnavailable: 2
+              tlsSecretName: gitaly-default-tls
+            - name: vs1
+              gitalyReplicas: 2
+              maxUnavailable: 1
+              tlsSecretName: gitaly-vs2-tls
+          gitaly:
+            enabled: true
+            tls:
+              enabled: true
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'praefect' => {
-            'enabled' => true,
-            'virtualStorages' => [
-              { 'name' => 'default', 'gitalyReplicas' => 3,
-                'maxUnavailable' => 2, 'tlsSecretName' => 'gitaly-default-tls' },
-              { 'name' => 'vs2', 'gitalyReplicas' => 2,
-                'maxUnavailable' => 1 }
-            ]
-          },
-          'gitaly' => {
-            'enabled' => 'true',
-            'tls' => { 'enabled' => true }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          praefect:
+            enabled: true
+            virtualStorages:
+            - name: default
+              gitalyReplicas: 3
+              maxUnavailable: 2
+              tlsSecretName: gitaly-default-tls
+            - name: vs2
+              gitalyReplicas: 2
+              maxUnavailable: 1
+          gitaly:
+            enabled: true
+            tls:
+              enabled: true
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'global.praefect.virtualStorages[1].tlsSecretName not specified (\'vs2\')' }
@@ -132,29 +135,29 @@ describe 'checkConfig template' do
 
   describe 'sidekiq.queues.mixed' do
     let(:success_values) do
-      {
-        'gitlab' => {
-          'sidekiq' => {
-            'pods' => [
-              { 'name' => 'valid-1', 'queues' => 'merge' },
-              { 'name' => 'valid-2', 'negateQueues' => 'post_receive' }
-            ]
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        gitlab:
+          sidekiq:
+            pods:
+            - name: valid-1
+              queues: merge
+            - name: valid-2
+              negateQueues: post_receive
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'gitlab' => {
-          'sidekiq' => {
-            'pods' => [
-              { 'name' => 'invalid-1', 'queues' => 'merge', 'negateQueues' => 'post_receive' },
-              { 'name' => 'invalid-2', 'queues' => 'merge', 'negateQueues' => 'post_receive' }
-            ]
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        gitlab:
+          sidekiq:
+            pods:
+            - name: invalid-1
+              queues: merge
+              negateQueues: post_receive
+            - name: invalid-2
+              queues: merge
+              negateQueues: post_receive
+      )).merge(default_required_values)
     end
 
     let(:error_output) { '`negateQueues` is not usable if `queues` is provided' }
@@ -166,29 +169,31 @@ describe 'checkConfig template' do
 
   describe 'sidekiq.queues.cluster' do
     let(:success_values) do
-      {
-        'gitlab' => {
-          'sidekiq' => {
-            'pods' => [
-              { 'name' => 'valid-1', 'cluster' => true, 'queues' => 'merge,post_receive' },
-              { 'name' => 'valid-2', 'cluster' => false, 'negateQueues' => ['merge', 'post_receive'] }
-            ]
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        gitlab:
+          sidekiq:
+            pods:
+            - name: valid-1
+              cluster: true
+              queues: merge,post_receive
+            - name: valid-2
+              cluster: false
+              negateQueues: [merge, post_receive]
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'gitlab' => {
-          'sidekiq' => {
-            'pods' => [
-              { 'name' => 'invalid-1', 'cluster' => true, 'queues' => ['merge'] },
-              { 'name' => 'invalid-2', 'cluster' => true, 'negateQueues' => ['merge'] }
-            ]
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        gitlab:
+          sidekiq:
+            pods:
+            - name: invalid-1
+              cluster: true
+              queues: [merge]
+            - name: invalid-2
+              cluster: true
+              negateQueues: [merge]
+      )).merge(default_required_values)
     end
 
     let(:error_output) { '`queues` is not a string' }
@@ -202,27 +207,25 @@ describe 'checkConfig template' do
     # Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
     ['queueSelector', 'experimentalQueueSelector'].each do |config|
       let(:success_values) do
-        {
-          'gitlab' => {
-            'sidekiq' => {
-              'pods' => [
-                { 'name' => 'valid-1', 'cluster' => true, config => true },
-              ]
-            }
-          }
-        }.merge(default_required_values)
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              pods:
+              - name: valid-1
+                cluster: true
+                #{config}: true
+        )).merge(default_required_values)
       end
 
       let(:error_values) do
-        {
-          'gitlab' => {
-            'sidekiq' => {
-              'pods' => [
-                { 'name' => 'valid-1', 'cluster' => false, config => true },
-              ]
-            }
-          }
-        }.merge(default_required_values)
+        YAML.safe_load(%(
+          gitlab:
+            sidekiq:
+              pods:
+              - name: valid-1
+                cluster: false
+                #{config}: true
+        )).merge(default_required_values)
       end
 
       let(:error_output) { "`#{config}` only works when `cluster` is enabled" }
@@ -235,33 +238,31 @@ describe 'checkConfig template' do
 
   describe 'database.externaLoadBalancing' do
     let(:success_values) do
-      {
-        'global' => {
-          'psql' => {
-            'host' => 'primary',
-            'password' => { 'secret' => 'bar' },
-            'load_balancing' => {
-              'hosts' => [ 'a', 'b', 'c' ]
-            }
-          }
-        },
-        'postgresql' => { 'install' => false }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          psql:
+            host: primary
+            password:
+              secret: bar
+            load_balancing:
+              hosts: [a, b, c]
+        postgresql:
+          install: false
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'psql' => {
-            'host' => 'primary',
-            'password' => { 'secret' => 'bar' },
-            'load_balancing' => {
-              'hosts' => [ 'a', 'b', 'c' ]
-            }
-          }
-        },
-        'postgresql' => { 'install' => true }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          psql:
+            host: primary
+            password:
+              secret: bar
+            load_balancing:
+              hosts: [a, b, c]
+        postgresql:
+          install: true
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'PostgreSQL is set to install, but database load balancing is also enabled' }
@@ -272,33 +273,31 @@ describe 'checkConfig template' do
 
     describe 'database.externaLoadBalancing missing required elements' do
       let(:success_values) do
-        {
-          'global' => {
-            'psql' => {
-              'host' => 'primary',
-              'password' => { 'secret' => 'bar' },
-              'load_balancing' => {
-                'hosts' => [ 'a', 'b', 'c' ]
-              }
-            }
-          },
-          'postgresql' => { 'install' => false }
-        }.merge(default_required_values)
+        YAML.safe_load(%(
+          global:
+            psql:
+              host: primary
+              password:
+                secret: bar
+              load_balancing:
+                hosts: [a, b, c]
+          postgresql:
+            install: false
+        )).merge(default_required_values)
       end
 
       let(:error_values) do
-        {
-          'global' => {
-            'psql' => {
-              'host' => 'primary',
-              'password' => { 'secret' => 'bar' },
-              'load_balancing' => {
-                'invalid' => 'item'
-              }
-            }
-          },
-          'postgresql' => { 'install' => false }
-        }.merge(default_required_values)
+        YAML.safe_load(%(
+          global:
+            psql:
+              host: primary
+              password:
+                secret: bar
+              load_balancing:
+                invalid: item
+          postgresql:
+            install: false
+        )).merge(default_required_values)
       end
 
       let(:error_output) { 'You must specify `load_balancing.hosts` or `load_balancing.discover`' }
@@ -310,33 +309,31 @@ describe 'checkConfig template' do
 
     describe 'database.externaLoadBalancing.hosts' do
       let(:success_values) do
-        {
-          'global' => {
-            'psql' => {
-              'host' => 'primary',
-              'password' => { 'secret' => 'bar' },
-              'load_balancing' => {
-                'hosts' => [ 'a', 'b', 'c' ]
-              }
-            }
-          },
-          'postgresql' => { 'install' => false }
-        }.merge(default_required_values)
+        YAML.safe_load(%(
+          global:
+            psql:
+              host: primary
+              password:
+                secret: bar
+              load_balancing:
+                hosts: [a, b, c]
+          postgresql:
+            install: false
+        )).merge(default_required_values)
       end
 
       let(:error_values) do
-        {
-          'global' => {
-            'psql' => {
-              'host' => 'primary',
-              'password' => { 'secret' => 'bar' },
-              'load_balancing' => {
-                'hosts' => 'a'
-              }
-            }
-          },
-          'postgresql' => { 'install' => false }
-        }.merge(default_required_values)
+        YAML.safe_load(%(
+          global:
+            psql:
+              host: primary
+              password:
+                secret: bar
+              load_balancing:
+                hosts: a
+          postgresql:
+            install: false
+        )).merge(default_required_values)
       end
 
       let(:error_output) { 'Database load balancing using `hosts` is configured, but does not appear to be a list' }
@@ -348,33 +345,32 @@ describe 'checkConfig template' do
 
     describe 'database.externaLoadBalancing.discover' do
       let(:success_values) do
-        {
-          'global' => {
-            'psql' => {
-              'host' => 'primary',
-              'password' => { 'secret' => 'bar' },
-              'load_balancing' => {
-                'discover' => { 'record' => 'secondary' }
-              }
-            }
-          },
-          'postgresql' => { 'install' => false }
-        }.merge(default_required_values)
+        YAML.safe_load(%(
+          global:
+            psql:
+              host: primary
+              password:
+                secret: bar
+              load_balancing:
+                discover:
+                  record: secondary
+          postgresql:
+            install: false
+        )).merge(default_required_values)
       end
 
       let(:error_values) do
-        {
-          'global' => {
-            'psql' => {
-              'host' => 'primary',
-              'password' => { 'secret' => 'bar' },
-              'load_balancing' => {
-                'discover' => true
-              }
-            }
-          },
-          'postgresql' => { 'install' => false }
-        }.merge(default_required_values)
+        YAML.safe_load(%(
+          global:
+            psql:
+              host: primary
+              password:
+                secret: bar
+              load_balancing:
+                discover: true
+          postgresql:
+            install: false
+        )).merge(default_required_values)
       end
 
       let(:error_output) { 'Database load balancing using `discover` is configured, but does not appear to be a map' }
@@ -387,20 +383,23 @@ describe 'checkConfig template' do
 
   describe 'geo.database' do
     let(:success_values) do
-      {
-        'global' => {
-          'geo' => { 'enabled' => true },
-          'psql' => { 'host' => 'foo', 'password' => { 'secret' => 'bar' } }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          geo:
+            enabled: true
+          psql:
+            host: foo
+            password:
+              secret: bar
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'geo' => { 'enabled' => true }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          geo:
+            enabled: true
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'Geo was configured but no database was provided' }
@@ -412,21 +411,28 @@ describe 'checkConfig template' do
 
   describe 'geo.secondary.database' do
     let(:success_values) do
-      {
-        'global' => {
-          'geo' => { 'enabled' => true },
-          'psql' => { 'host' => 'foo', 'password' => { 'secret' => 'bar' } }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          geo:
+            enabled: true
+          psql:
+            host: foo
+            password:
+              secret: bar
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'geo' => { 'enabled' => true, 'role' => 'secondary' },
-          'psql' => { 'host' => 'foo', 'password' => { 'secret' => 'bar' } }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          geo:
+            enabled: true
+            role: secondary
+          psql:
+            host: foo
+            password:
+              secret: bar
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'Geo was configured with `role: secondary`, but no database was provided' }
@@ -438,21 +444,23 @@ describe 'checkConfig template' do
 
   describe 'appConfig.maxRequestDurationSeconds' do
     let(:success_values) do
-      {
-        'global' => {
-          'appConfig' => { 'maxRequestDurationSeconds' => 50 },
-          'webservice' => { 'workerTimeout' => 60 }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            maxRequestDurationSeconds: 50
+            webservice:
+              workerTimeout: 60
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'appConfig' => { 'maxRequestDurationSeconds' => 70 },
-          'webservice' => { 'workerTimeout' => 60 }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            maxRequestDurationSeconds: 70
+            webservice:
+              workerTimeout: 60
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'global.appConfig.maxRequestDurationSeconds (70) is greater than or equal to global.webservice.workerTimeout (60)' }
@@ -464,28 +472,22 @@ describe 'checkConfig template' do
 
   describe 'appConfig.sentry.dsn' do
     let(:success_values) do
-      {
-        'registry' => {
-          'reporting' => {
-            'sentry' => {
-              'enabled' => true,
-              'dsn' => 'somedsn'
-            }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        registry:
+          reporting:
+            sentry:
+              enabled: true
+              dsn: somedsn
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'registry' => {
-          'reporting' => {
-            'sentry' => {
-              'enabled' => true
-            }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        registry:
+          reporting:
+            sentry:
+              enabled: true
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'When enabling sentry, you must configure at least one DSN.' }
@@ -497,19 +499,23 @@ describe 'checkConfig template' do
 
   describe 'gitaly.extern.repos' do
     let(:success_values) do
-      {
-        'global' => {
-          'gitaly' => { 'enabled' => false, 'external' => [{ 'name' => 'default', 'hostname' => 'bar' }] }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            enabled: false
+            external:
+            - name: default
+              hostname: bar
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'gitaly' => { 'enabled' => false, 'external' => [] }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          gitaly:
+            enabled: false
+            external: []
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'external Gitaly repos needs to be specified if global.gitaly.enabled is not set' }
@@ -674,19 +680,23 @@ describe 'checkConfig template' do
 
   describe 'gitaly.task-runner.replicas' do
     let(:success_values) do
-      {
-        'gitlab' => {
-          'task-runner' => { 'replicas' => 1, 'persistence' => { 'enabled' => true } }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        gitlab:
+          task-runner:
+            replicas: 1
+            persistence:
+              enabled: true
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'gitlab' => {
-          'task-runner' => { 'replicas' => 2, 'persistence' => { 'enabled' => true } }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        gitlab:
+          task-runner:
+            replicas: 2
+            persistence:
+              enabled: true
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'more than 1 replica, but also with a PersistentVolumeClaim' }
@@ -698,18 +708,21 @@ describe 'checkConfig template' do
 
   describe 'multipleRedis' do
     let(:success_values) do
-      {
-        'redis' => { 'install' => true }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        redis:
+          install: true
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'redis' => { 'install' => true },
-        'global' => {
-          'redis' => { 'cache' => { 'host' => 'foo' } }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        redis:
+          install: true
+        global:
+          redis:
+            cache:
+              host: foo
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'If configuring multiple Redis servers, you can not use the in-chart Redis server' }
@@ -721,26 +734,24 @@ describe 'checkConfig template' do
 
   describe 'dependencyProxy.puma' do
     let(:success_values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'dependencyProxy' => { 'enabled' => true }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            dependencyProxy:
+              enabled: true
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'dependencyProxy' => { 'enabled' => true }
-          }
-        },
-        'gitlab' => {
-          'webservice' => { 'webServer' => 'unicorn' }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            dependencyProxy:
+              enabled: true
+        gitlab:
+          webservice:
+            webServer: unicorn
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'You must be using the Puma webservice in order to use Dependency Proxy.' }
@@ -752,33 +763,25 @@ describe 'checkConfig template' do
 
   describe 'webserviceTermination' do
     let(:success_values) do
-      {
-        'gitlab' => {
-          'webservice' => {
-            'deployment' => {
-              'terminationGracePeriodSeconds' => 50
-            },
-            'shutdown' => {
-              'blackoutSeconds' => 10
-            }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        gitlab:
+          webservice:
+            deployment:
+              terminationGracePeriodSeconds: 50
+            shutdown:
+              blackoutSeconds: 10
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'gitlab' => {
-          'webservice' => {
-            'deployment' => {
-              'terminationGracePeriodSeconds' => 5
-            },
-            'shutdown' => {
-              'blackoutSeconds' => 20
-            }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        gitlab:
+          webservice:
+            deployment:
+              terminationGracePeriodSeconds: 5
+            shutdown:
+              blackoutSeconds: 20
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'fail' }
@@ -1220,37 +1223,29 @@ describe 'checkConfig template' do
 
   describe 'incomingEmail.microsoftGraph' do
     let(:success_values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'incomingEmail' => {
-              'enabled' => true,
-              'inboxMethod' => 'microsoft_graph',
-              'tenantId' => 'MY-TENANT-ID',
-              'clientId' => 'MY-CLIENT-ID',
-              'clientSecret' => {
-                'secret' => 'secret'
-              }
-            }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            incomingEmail:
+              enabled: true
+              inboxMethod: microsoft_graph
+              tenantId: MY-TENANT-ID
+              clientId: MY-CLIENT-ID
+              clientSecret:
+                secret: secret
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'incomingEmail' => {
-              'enabled' => true,
-              'inboxMethod' => 'microsoft_graph',
-              'clientSecret' => {
-                'secret' => 'secret'
-              }
-            }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            incomingEmail:
+              enabled: true
+              inboxMethod: microsoft_graph
+              clientSecret:
+                secret: secret
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'be sure to specify the tenant ID' }
@@ -1262,55 +1257,43 @@ describe 'checkConfig template' do
 
   describe 'serviceDesk.microsoftGraph' do
     let(:success_values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'incomingEmail' => {
-              'enabled' => true,
-              'inboxMethod' => 'microsoft_graph',
-              'tenantId' => 'MY-TENANT-ID',
-              'clientId' => 'MY-CLIENT-ID',
-              'clientSecret' => {
-                'secret' => 'secret'
-              }
-            },
-            'serviceDesk' => {
-              'enabled' => true,
-              'inboxMethod' => 'microsoft_graph',
-              'tenantId' => 'MY-TENANT-ID',
-              'clientId' => 'MY-CLIENT-ID',
-              'clientSecret' => {
-                'secret' => 'secret'
-              }
-            }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            incomingEmail:
+              enabled: true
+              inboxMethod: microsoft_graph
+              tenantId: MY-TENANT-ID
+              clientId: MY-CLIENT-ID
+              clientSecret:
+                secret: secret
+            serviceDesk:
+              enabled: true
+              inboxMethod: microsoft_graph
+              tenantId: MY-TENANT-ID
+              clientId: MY-CLIENT-ID
+              clientSecret:
+                secret: secret
+      )).merge(default_required_values)
     end
 
     let(:error_values) do
-      {
-        'global' => {
-          'appConfig' => {
-            'incomingEmail' => {
-              'enabled' => true,
-              'inboxMethod' => 'microsoft_graph',
-              'tenantId' => 'MY-TENANT-ID',
-              'clientId' => 'MY-CLIENT-ID',
-              'clientSecret' => {
-                'secret' => 'secret'
-              }
-            },
-            'serviceDesk' => {
-              'enabled' => true,
-              'inboxMethod' => 'microsoft_graph',
-              'clientSecret' => {
-                'secret' => 'secret'
-              }
-            }
-          }
-        }
-      }.merge(default_required_values)
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            incomingEmail:
+              enabled: true
+              inboxMethod: microsoft_graph
+              tenantId: MY-TENANT-ID
+              clientId: MY-CLIENT-ID
+              clientSecret:
+                secret: secret
+            serviceDesk:
+              enabled: true
+              inboxMethod: microsoft_graph
+              clientSecret:
+                secret: secret
+      )).merge(default_required_values)
     end
 
     let(:error_output) { 'be sure to specify the tenant ID' }
