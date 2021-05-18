@@ -81,7 +81,7 @@ gitlab-runner:
 
 ## Chart configuration examples
 
-Runners configuration to use only custom nameservers (exclude any cluster or host nameservers). We also need to include defaults.
+Runners configuration to use only custom nameservers (exclude any cluster or host nameservers).
 
 ```yaml
 gitlab-runner:
@@ -89,7 +89,7 @@ gitlab-runner:
     config: |
       [[runners]]
         [runners.kubernetes]
-          image = "ubuntu:16.04"
+          image = "ubuntu:18.04"
           dns_policy = "none"
         [runners.kubernetes.dns_config]
           nameservers = ["8.8.8.8"]
