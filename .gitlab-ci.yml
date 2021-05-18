@@ -141,6 +141,7 @@ lint_package:
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
+    - kubectl version
     - ensure_namespace
     - create_secret
     - install_external_dns "${DNS_PROVIDER}" "${KUBE_INGRESS_BASE_DOMAIN}"
@@ -447,7 +448,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 check_docs_markdown:
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.12-vale-2.8.0-markdownlint-0.26.0"
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.13-vale-2.10.2-markdownlint-0.26.0
   stage: prepare
   cache: {}
   dependencies: []
@@ -466,7 +467,7 @@ check_docs_markdown:
 
 # Perform link checks on published HTML files
 check_docs_links:
-  image: "registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.12-ruby-2.7.2"
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.13-ruby-2.7.2
   stage: prepare
   cache: {}
   dependencies: []
@@ -503,6 +504,9 @@ check_docs_links:
   variables:
     GIT_STRATEGY: none
     DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
+    DOCS_GITLAB_REPO_SUFFIX: charts
+    # By default, deploy the Review App using the `master` branch of the `gitlab-org/gitlab-docs` project
+    DOCS_BRANCH: master
   when: manual
   except:
     - triggers
@@ -515,8 +519,8 @@ review-docs-deploy:
   extends:
   - .review-docs
   environment:
-    name: docs_review/$CI_COMMIT_REF_SLUG
-    url: http://docs-preview-charts-$CI_COMMIT_REF_SLUG.$DOCS_REVIEW_APPS_DOMAIN/charts
+    name: review-docs/$CI_COMMIT_REF_SLUG
+    url: http://${DOCS_BRANCH}-${DOCS_GITLAB_REPO_SUFFIX}-${CI_COMMIT_REF_SLUG}.${DOCS_REVIEW_APPS_DOMAIN}/${DOCS_GITLAB_REPO_SUFFIX}
     on_stop: review-docs-cleanup
   script:
   - ./trigger-build docs deploy
@@ -526,7 +530,7 @@ review-docs-cleanup:
   extends:
   - .review-docs
   environment:
-    name: docs_review/$CI_COMMIT_REF_SLUG
+    name: review-docs/$CI_COMMIT_REF_SLUG
     action: stop
   script:
   - ./trigger-build docs cleanup
@@ -534,7 +538,7 @@ review-docs-cleanup:
 # ---------------------------------------------------------------------------
 
 .specs: &specs
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:ruby-2.7.2-git-2.29-chrome-85-node-12.18-yarn-1.22-docker-19.03.1
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images:ruby-2.7.2.patched-golang-1.14-git-2.31-lfs-2.9-chrome-89-node-14.15-yarn-1.22-postgresql-11-graphicsmagick-1.3.36
 
   stage: specs
   services:
@@ -545,6 +549,10 @@ review-docs-cleanup:
     GITLAB_PASSWORD: $ROOT_PASSWORD
     S3_CONFIG_PATH: /etc/gitlab/minio
   script:
+    - |
+      curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
+      echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+      apt update -qq && apt install docker-ce-cli=5:20.10.5~3-0~debian-buster
     - if [[ -n "${VARIABLES_FILE}" ]]; then source "${VARIABLES_FILE}"; ./scripts/ci/feature_spec_setup; else ./scripts/ci/integration_spec_setup; fi
     - bundle config set path 'gems'
     - bundle install -j $(nproc)

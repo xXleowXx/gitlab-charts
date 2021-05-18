@@ -2,6 +2,79 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.11.4 (2021-05-14)
+
+No changes.
+
+## 4.11.3 (2021-04-30)
+
+No changes.
+
+## 4.11.2 (2021-04-27)
+
+No changes.
+
+## 4.11.1 (2021-04-22)
+
+- No changes.
+
+## 4.11.0 (2021-04-22)
+
+### Removed (1 change)
+
+- Gitaly - move metrics port from service to pod. !1947
+
+### Fixed (5 changes, 1 of them is from the community)
+
+- Fixes incorrect set hostname for geo syncing Container Registry. !1913
+- Allow separate external Gitaly when Praefect is enabled. !1928
+- Registry: use separate, minimal config for migration. !1939
+- Configure the metrics endpoint of praefect to be reachable from all interfaces not just localhost. !1946 (Tim Neumann)
+- Bump gitlab-exporter to 10.2.0 to fix Puma related crash. !1954
+
+### Changed (3 changes)
+
+- GitLab Runner to 0.27.0 / 13.10.0. !1904
+- Registry to 3.3.0-gitlab. !1942
+- GitLab Runner chart to 0.28.0. !1956
+
+### Added (7 changes)
+
+- Add Registry migrations job. !1857
+- Add checkConfig to validate Gitaly storage names. !1873
+- [shared-secrets chart] If Secret key does not exist, patch it in. !1883
+- Allow configuring terminationGracePeriodSeconds for Sidekiq pod. !1905
+- Add online GC configurations to registry chart. !1908
+- Add Microsoft Graph config support for MailRoom. !1929
+- Added support for IAM roles in EKS. !1940
+
+
+## 4.10.4 (2021-04-27)
+
+No changes.
+
+## 4.10.3 (2021-04-13)
+
+- No changes.
+
+## 4.10.2 (2021-04-01)
+
+### Fixed (1 change)
+
+- Fix for Rancher/RKE: Remove extra space before -}} in _kas.tpl. !1925
+
+
+## 4.10.1 (2021-03-31)
+
+### Fixed (1 change)
+
+- Fixes Container Registry notification when Geo syncing is disabled. !1899
+
+### Changed (1 change)
+
+- GitLab Exporter to 10.1.0. !1915
+
+
 ## 4.10.0 (2021-03-22)
 
 ### Fixed (6 changes, 2 of them are from the community)
@@ -34,6 +107,18 @@ entry.
 - Webservice: enable per-deployment blackoutSeconds. !1867
 - Add migration configurations to registry chart. !1888
 
+
+## 4.9.7 (2021-04-27)
+
+No changes.
+
+## 4.9.6 (2021-04-13)
+
+- No changes.
+
+## 4.9.5 (2021-03-31)
+
+- No changes.
 
 ## 4.9.4 (2021-03-17)
 
@@ -105,6 +190,14 @@ entry.
 - Clarify EKS installation instructions. !1801
 - Add outgoing email section to 'globals' docs. !1821
 
+
+## 4.8.8 (2021-04-13)
+
+- No changes.
+
+## 4.8.7 (2021-03-31)
+
+- No changes.
 
 ## 4.8.6 (2021-03-17)
 
