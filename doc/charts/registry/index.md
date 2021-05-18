@@ -35,7 +35,7 @@ This chart makes use of two required secrets and one optional:
 
 - `global.registry.certificate.secret`: A global secret that will contain the public
   certificate bundle to verify the authentication tokens provided by the associated
-  GitLab instance(s). See [documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html#disable-container-registry-but-use-gitlab-as-an-auth-endpoint)
+  GitLab instance(s). See [documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html#use-an-external-container-registry-with-gitlab-as-an-auth-endpoint)
   on using GitLab as an auth endpoint.
 - `global.registry.httpSecret.secret`: A global secret that will contain the
   [shared secret](https://docs.docker.com/registry/configuration/#http) between registry pods.
