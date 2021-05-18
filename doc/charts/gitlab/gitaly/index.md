@@ -160,7 +160,7 @@ annotations:
 
 ### priorityClassName
 
-`priorityClassName` allows you to assign a [PriorityClass](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/)
+`priorityClassName` allows you to assign a [PriorityClass](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/)
 to the Gitaly pods.
 
 Below is an example use of `priorityClassName`:
