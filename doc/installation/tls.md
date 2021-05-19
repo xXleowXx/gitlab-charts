@@ -129,8 +129,7 @@ probably also want to override such annotations in
 `gitlab-pages.ingress.annotations`.
 
 By default, the name of this secret is `<RELEASE>-pages-tls`. A different name
-can be specified using the `gitlab.gitlab-pages.ingress.tls.secretName` setting
-as shown below.
+can be specified using the `gitlab.gitlab-pages.ingress.tls.secretName` setting:
 
 ```shell
 helm install gitlab gitlab/gitlab \
