@@ -15,6 +15,7 @@ spec:
         app: {{ template "minio.name" . }}
         release: {{ .Release.Name }}
         component: create-buckets
+        {{- include "gitlab.commonLabels" . | nindent 8 }}
     spec:
       restartPolicy: OnFailure
       {{- include "gitlab.nodeSelector" . | nindent 6 }}
