@@ -62,8 +62,6 @@ to the `helm install` command using the `--set` flags.
 | `image.tag`                      |                       | Webservice image tag                              |
 | `init.image.repository`          |                       | initContainer image                            |
 | `init.image.tag`                 |                       | initContainer image tag                        |
-| `unicorn.memory.min`             | `1024`                | The minimum memory threshold (in megabytes) for the Unicorn worker killer |
-| `unicorn.memory.max`             | `1280`                | The maximum memory threshold (in megabytes) for the Unicorn worker killer |
 | `metrics.enabled`                | `true`                | Toggle Prometheus metrics exporter             |
 | `minio.bucket`                   | `git-lfs`             | Name of storage bucket, when using MinIO       |
 | `minio.port`                     | `9000`                | Port for MinIO service                         |
@@ -273,8 +271,6 @@ deployments:
       # inherits `resources`
     workhorse: # map
       # inherits `workhorse`
-    unicorn: # map
-      # inherits `unicorn`
     extraEnv: #
       # inherits `extraEnv`
     puma: # map
@@ -365,16 +361,6 @@ you can set the body size with either of the following two parameters too:
 - `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
 
 ## Resources
-
-### Unicorn Worker Killer memory settings
-
-Memory thresholds for the [unicorn-worker-killer](https://docs.gitlab.com/ee/administration/operations/unicorn.html#unicorn-worker-killer)
-can be customized using the `unicorn.memory.min` and `unicorn.memory.max` chart values. While the
-default values are sane, you can increase (or lower) these values to fine-tune
-them for your environment or troubleshoot performance issues.
-
-NOTE:
-These settings are effective on a _per process basis_, not for an entire Pod.
 
 ### Memory requests/limits
 
@@ -505,9 +491,7 @@ shell:
 
 ### WebServer options
 
-Current version of chart supports both Unicorn and Puma web servers.
-Puma is the default, however you can switch to the Unicorn
-server by setting `webServer: unicorn`
+Current version of chart supports Puma web server.
 
 Puma unique options:
 
