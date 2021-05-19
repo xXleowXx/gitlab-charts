@@ -80,60 +80,29 @@ IAM roles in an EKS cluster can be found in the
 [Introducing fine-grained IAM roles for service accounts](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/)
 AWS documentation.
 
-A number of items need to be setup in AWS in addition to enabling the IAM
-role in the GitLab configuration:
+It is recommended that the ServiceAccount be created as described in the
+above AWS documentation to create the proper annotations on the ServiceAccount
+and the required OIDC provider.
 
-1. An IAM policy needs to be constructed to access the S3 bucket.
-   This policy can be constructed to suit specific access and compliance
-   requirements. Otherwise, the `AmazonS3FullAccess` IAM policy can be used,
-   but this will allow access to **all** S3 buckets.
-1. An OIDC provider will need to be established for the EKS cluster.
-   This is best done with using the [`eksctl` command](https://eksctl.io/):
+Set the following options when the GitLab chart is deployed. It is important
+to note that the ServiceAccount is enabled but not created.
 
-   ```shell
-   eksctl utils associate-iam-oidc-provider --name <CLUSTER NAME> --approve
-   ```
+```yaml
+global:
+  serviceAccount:
+    enabled: true
+    create: false
+    name: <SERVICE ACCT NAME>
+```
 
-1. Create the Kubernetes ServiceAccount for GitLab to use with `eksctl`.
-   This will add the proper annotations to associate the ServiceAccount with
-   the IAM role:
+The settings can also be added to the Helm deployment command with the
+following command line switches:
 
-   ```shell
-   eksctl create iamserviceaccount --name <SERVICE ACCT NAME> \
-                --namespace <NAMESPACE> --cluster <CLUSTER NAME> \
-                --attach-policy-arn <AWS IAM ARN> \
-                --approve
-   ```
-
-1. Set the following options when the GitLab chart is deployed. Using
-   quotes around the AWS IAM ARN will assist the YAML parser to not be confused
-   by the multiple colons encoded into the ARN. It is important to note that
-   the ServiceAccount is enabled but not created (default is to enable and
-   create the ServiceAccount) as it was created in the previous step:
-
-   ```yaml
-   global:
-     serviceAccount:
-       enabled: true
-       create: false
-       name: <SERVICE ACCT NAME>
-     platform:
-       eksRoleArn: "<AWS IAM ARN>"
-   ```
-
-   The settings can also be added to the Helm deployment command with the
-   following command line switches:
-
-   ```shell
-   --set global.serviceAccount.enabled=true
-   --set global.serviceAccount.create=false
-   --set global.serviceAccount.name=<SERVICE ACCT NAME>
-   --set global.platform.eksRoleArn=<AWS IAM ARN>
-   ```
-
-The above procedure will create the `eks.amazonaws.com/role-arn` annotations
-on the `gitlab-sidekiq`, `taskrunner` and `webservice` pods. In addition, the
-ServiceAccount created in step 3 will also have the annotation.
+```shell
+--set global.serviceAccount.enabled=true
+--set global.serviceAccount.create=false
+--set global.serviceAccount.name=<SERVICE ACCT NAME>
+```
 
 WARNING:
 Using the `backup-utility` as specified in the [backup documenation](../../backup-restore/backup.md)

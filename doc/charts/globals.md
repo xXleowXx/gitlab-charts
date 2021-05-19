@@ -1976,18 +1976,3 @@ More information on the available configuration options is available in the
 
 More detailed examples can be found in the
 [Omnibus SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).
-
-## Platform
-
-Platform specific settings to enable features for certain operational
-environments.
-
-```yaml
-global:
-  platform:
-    eksRoleArn:
-```
-
-| Name           | Type   | Default | Description                                                                                            |
-| :---           | :--:   | :------ | :----------                                                                                            |
-| `eksRoleArn`   | String |         | Object storage IAM role. See [Using IAM roles for service accounts](../advanced/external-object-storage/aws-iam-roles.md#using-iam-roles-for-service-accounts) for more information.  |
