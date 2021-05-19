@@ -81,7 +81,7 @@ gitlab-runner:
 
 ## Chart configuration examples
 
-Runners configuration to use only custom nameservers (exclude any cluster or host nameservers).
+Runners configuration to use only custom nameservers (exclude any cluster or host nameservers):
 
 ```yaml
 gitlab-runner:
