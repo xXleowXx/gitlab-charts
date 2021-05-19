@@ -122,7 +122,7 @@ a wildcard certificate applicable for `*.<pages domain>` (default value of
 
 Because a wild card certificate is required, it can not be automatically created
 by cert-manager and Let's Encrypt. cert-manager is therefore by default disabled
-for gitlab-pages (via `gitlab-pages.ingress.configureCertmanager`), so you will
+for GitLab Pages (via `gitlab-pages.ingress.configureCertmanager`), so you will
 have to provide your own k8s Secret containing a wild card certificate. If you
 have an external cert-manager configured using `global.ingress.annotations`, you
 probably also want to override such annotations in
