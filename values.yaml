@@ -662,10 +662,6 @@ global:
    # SOME_KEY: some_value
    # SOME_OTHER_KEY: some_other_value
 
-  ## https://docs.gitlab.com/charts/charts/globals
-  platform:
-    eksRoleArn:
-
 ## End of global
 
 upgradeCheck:
