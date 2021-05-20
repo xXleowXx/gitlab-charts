@@ -1013,6 +1013,8 @@ grafana:
     server:
       serve_from_sub_path: true
       root_url: http://localhost/-/grafana/
+    auth:
+      login_cookie_name: gitlab_grafana_session
   ## We generate and provide random passwords
   ## NOTE: the Secret & ConfigMap names are hard coded!
   extraSecretMounts:
