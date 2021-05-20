@@ -1976,3 +1976,8 @@ More information on the available configuration options is available in the
 
 More detailed examples can be found in the
 [Omnibus SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).
+
+## Platform
+
+The `platform` key is reserved for specific features targeting a specific
+platform like GKE or EKS.
