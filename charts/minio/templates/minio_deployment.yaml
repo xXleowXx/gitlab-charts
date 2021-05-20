@@ -28,8 +28,8 @@ spec:
         heritage: "{{ .Release.Service }}"
         component: app
         {{- include "gitlab.standardLabels" . | nindent 8 }}
-        {{- include "gitlab.podLabels" . | nindent 8 }}
         {{- include "gitlab.commonLabels" . | nindent 8 }}
+        {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
 {{- if .Values.podAnnotations }}
 {{ toYaml .Values.podAnnotations | trimSuffix "\n" | indent 8 }}
