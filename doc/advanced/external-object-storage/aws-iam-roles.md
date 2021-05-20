@@ -7,7 +7,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # IAM roles for AWS
 
 The default configuration for external object storage in the charts is to use access and secret keys.
-It is also possible to use IAM roles in combination with [`kube2iam`](https://github.com/jtblin/kube2iam) or [`kiam`](https://github.com/uswitch/kiam).
+It is also possible to use IAM roles in combination with [`kube2iam`](https://github.com/jtblin/kube2iam),
+[`kiam`](https://github.com/uswitch/kiam), or [IRSA](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/).
 
 ## IAM role
 
@@ -78,11 +79,25 @@ use an AWS IAM role to authenticate to the S3 object storage without the need
 of generating or storing access tokens. More information regarding using
 IAM roles in an EKS cluster can be found in the
 [Introducing fine-grained IAM roles for service accounts](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/)
-AWS documentation.
+documentation from AWS.
 
-It is recommended that the ServiceAccount be created as described in the
-above AWS documentation to create the proper annotations on the ServiceAccount
-and the required OIDC provider.
+Appropriate IRSA annotations for roles can be applied to ServiceAccounts throughout
+this Helm chart, in one of two ways:
+
+1. Pre-created ServiceAccounts, created as described in the above AWS documentation.
+This will ensure the proper annotations on the ServiceAccount and the linked OIDC provider.
+1. Chart-generated ServiceAccounts, with annotations defined. We allow for the configuration
+of annoations on ServiceAccounts, both globally and on a per-chart basis.
+
+WARNING:
+Using the `backup-utility` as specified in the [backup documenation](../../backup-restore/backup.md)
+does not properly copy the backup file to the S3 bucket. The `backup-utility` uses
+the `s3cmd` to perform the copy of the backup file and it has a known
+issue of [not supporting OIDC authentication](https://github.com/s3tools/s3cmd/issues/1075).
+There is a [pull request](https://github.com/s3tools/s3cmd/pull/1112)
+to mitigate this issue, but it has yet to be accepted into the `s3cmd` code base.
+
+#### Using pre-created service accounts
 
 Set the following options when the GitLab chart is deployed. It is important
 to note that the ServiceAccount is enabled but not created.
@@ -95,22 +110,64 @@ global:
     name: <SERVICE ACCT NAME>
 ```
 
-The settings can also be added to the Helm deployment command with the
-following command line switches:
+Fine-grained ServiceAccounts control is also available:
 
-```shell
---set global.serviceAccount.enabled=true
---set global.serviceAccount.create=false
---set global.serviceAccount.name=<SERVICE ACCT NAME>
+
+```yaml
+registry:
+  serviceAccount:
+    create: false
+    name: gitlab-registry
+gitlab:
+  webservice:
+    serviceAccount:
+      create: false
+      name: gitlab-webservice
+  sidekiq:
+    serviceAccount:
+      create: false
+      name: gitlab-sidekiq
+  task-runner:
+    serviceAccount:
+      create: false
+      name: gitlab-task-runner
 ```
 
-WARNING:
-Using the `backup-utility` as specified in the [backup documenation](../../backup-restore/backup.md)
-does not properly copy the backup file to the S3 bucket. The `backup-utility` uses
-the `s3cmd` to perform the copy of the backup file and it has a known
-issue of [not supporting OIDC authentication](https://github.com/s3tools/s3cmd/issues/1075).
-There is a [pull request](https://github.com/s3tools/s3cmd/pull/1112)
-to mitigate this issue, but it has yet to be accepted into the `s3cmd` code base.
+#### Using chart-owned service accounts
+
+The `eks.amazonaws.com/role-arn` annotation can be applied to _all_ ServiceAccounts
+created by GitLab owned charts by configurating `global.serviceAccount.annotations`.
+
+```yaml
+global:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/name
+```
+
+Annotations can also be added on a per ServiceAccount basis, but adding the matching
+defintion for each chart. These can be the same role, or individual roles.
+
+```yaml
+registry:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/gitlab-registry
+gitlab:
+  webservice:
+    serviceAccount:
+      annotations:
+        eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/gitlab
+  sidekiq:
+    serviceAccount:
+      annotations:
+        eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/gitlab
+  task-runner:
+    serviceAccount:
+      annotations:
+        eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/gitlab-task-runner
+```
+
 
 ## Troubleshooting
 
