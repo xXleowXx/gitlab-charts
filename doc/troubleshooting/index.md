@@ -18,9 +18,6 @@ should first purge the failed install before installing again.
 helm uninstall <release-name>
 ```
 
-NOTE:
-With Helm v2, the uninstall command would be `helm delete --purge <release-name>`.
-
 If instead, the initial install command timed out, but GitLab still came up successfully,
 you can add the `--force` flag to the `helm upgrade` command to ignore the error
 and attempt to update the release.
@@ -40,10 +37,6 @@ example, `Test Username` is the culprit:
 ```shell
 helm upgrade gitlab gitlab/gitlab --timeout 600s --set global.email.display_name=Test Username ...
 ```
-
-NOTE:
-If using Helm v2, please see notes about the `--timeout` option
-in the [Deployment documentation](../installation/deployment.md#deploy-using-helm).
 
 To fix it, pass the parameters in single quotes:
 
@@ -205,11 +198,6 @@ start by removing that property.
 Check the [version mappings between the chart and GitLab](../index.md#gitlab-version-mappings)
 and specify a compatible version of the `gitlab/gitlab` chart in your `helm` command.
 
-## UPGRADE FAILED: "cannot patch ..." after `helm 2to3 convert`
-
-This is a known issue. After migrating a Helm 2 release to Helm 3, the subsequent upgrades may fail.
-You can find the full explanation and workaround in [Migrating from Helm v2 to Helm v3](../installation/migration/helm.md#known-issues).
-
 ## Restoration failure: `ERROR:  cannot drop view pg_stat_statements because extension pg_stat_statements requires it`
 
 You may face this error when restoring a backup on your Helm chart instance. Use the following steps as a workaround:
@@ -253,8 +241,8 @@ Use the following steps to verify:
 
    ```shell
    cat /srv/gitlab/config/workhorse-config.toml | grep '\[redis\]'
-   ``` 
-   
+   ```
+
 If the `[redis]` configuration is not present, the `workhorse.keywatcher` flag was set to `false` during deployment
 thus causing the extra load in the `/api/v4/jobs/requests` endpoint. To fix this, enable the `keywatcher` in the
 `webservice` chart:
