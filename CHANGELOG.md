@@ -2,6 +2,38 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.12.0 (2021-05-21)
+
+### Added (2 changes)
+
+- [Add support for SMTP connection pooling](gitlab-org/charts/gitlab@9db6d3baca1efae954130cf34a030e1d38907d97) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/1963))
+- [Add Sidekiq routing rules configuration](gitlab-org/charts/gitlab@7538f58c173881d2221098007306ef4b84a191e1) ([merge request](gitlab-org/charts/gitlab!1968))
+
+### Fixed (2 changes)
+
+- [Shared-secrets: add annotations to self-signed job](gitlab-org/charts/gitlab@165e685da49147c584e0f1dc5403787dc669adf4) ([merge request](gitlab-org/charts/gitlab!1998))
+- [Fix grafana ingress misconfiguration](gitlab-org/charts/gitlab@81277b932410b41d468371492e59f4aafcf64eff) ([merge request](gitlab-org/charts/gitlab!1955))
+
+### Changed (8 changes)
+
+- [Remove shared-secrets chart and move templates to root](gitlab-org/charts/gitlab@9dc08d0e2158abbccafe550b9059da0187e2d6e2) ([merge request](gitlab-org/charts/gitlab!1982))
+- [Switch to using the new runner config for cache](gitlab-org/charts/gitlab@ffd6c5e48462d8230eb6948267c6952882812de9) ([merge request](gitlab-org/charts/gitlab!1989))
+- [Update Ingress Api version to `networking.k8s.io/v1/Ingress`](gitlab-org/charts/gitlab@ffdfd9af150f2254fbbd754814d10495328670d2) ([merge request](gitlab-org/charts/gitlab!1984))
+- [Registry to v3.4.0-gitlab](gitlab-org/charts/gitlab@bf0be4e577293310622436ba13bb4700298ff180) ([merge request](gitlab-org/charts/gitlab!1975))
+- [Resolve registry and webservice ingress enabled bug](gitlab-org/charts/gitlab@ee1e3f90a386e50984410307e386569a95d28892) ([merge request](gitlab-org/charts/gitlab!1972))
+- [Pass GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN as file instead of ENV](gitlab-org/charts/gitlab@7a049f4dba9f41bc72308bbaa2618e954e590b10) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/1920))
+- [Update Ingress API version from 'extensions/v1beta1' to 'networking.k8s.io/v1'](gitlab-org/charts/gitlab@d883ad9c149e36ff67f4080f520711f0c76de2f4) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/1951))
+- [Enables the ability to configure the notification_secret](gitlab-org/charts/gitlab@80f49f27e8070580afb808d0fec6f3ad0cb89dd8) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/1948))
+
+### Deprecated (1 change)
+
+- [Add deprecation warning for Unicorn](gitlab-org/charts/gitlab@214fb34a7d64df9506d66b3f1b2d4b21aa5bddb2) ([merge request](gitlab-org/charts/gitlab!1987))
+
+### Other (2 changes)
+
+- [Refactor a yaml indentation inconsistency](gitlab-org/charts/gitlab@e43cbb7f3b75ef88ef6a478ef809826b7e51bfbe) ([merge request](gitlab-org/charts/gitlab!1978))
+- [Support using PAGES_UPDATE_LEGACY_STORAGE env variable to enable Pages disk access](gitlab-org/charts/gitlab@ba72fead4cc4af5268a258b7a4bdbac85665f15c) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/1938))
+
 ## 4.11.4 (2021-05-14)
 
 No changes.
