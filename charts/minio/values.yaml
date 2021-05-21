@@ -43,6 +43,9 @@ global:
   minio:
     enabled: true
 
+common:
+  labels: {}
+  
 ## Control the InitContainer behaviors.
 init:
   image:
