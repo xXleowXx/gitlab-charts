@@ -393,7 +393,9 @@ global:
   # If utilising Geo, and wishing to sync the container registry
   geo:
     registry:
-      syncEnabled: true
+      replication:
+        enabled: true
+        primaryApiUrl: <URL to primary registry>
 ```
 
 Ensuring the `secret` value is set to the name of the secret created above

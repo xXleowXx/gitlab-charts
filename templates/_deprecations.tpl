@@ -52,6 +52,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.gitaly.serviceName" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.psql.pool" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.appConfig.extra.piwik" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.global.geo.registry.syncEnabled" .) -}}
 
 {{- /* prepare output */}}
 {{- $deprecated := without $deprecated "" -}}
@@ -420,3 +421,10 @@ sidekiq:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.sidekiq.pods.updateStrategy */}}
+
+{{- define "gitlab.deprecate.global.geo.registry.syncEnabled" -}}
+{{- if and (eq true .Values.global.geo.enabled) (hasKey .Values.global.geo.registry "syncEnabled") -}}
+geo:
+  The configuration of `global.geo.registry.syncEnabled` has moved. Please use `global.geo.registry.replication.enabled` instead.
+{{- end -}}
+{{- end -}}
