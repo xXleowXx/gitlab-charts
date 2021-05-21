@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # IAM roles for AWS
 
-The default configuration for external object storage in the charts is to use access and secret keys.
+The default configuration for external object storage in the charts uses access and secret keys.
 It is also possible to use IAM roles in combination with [`kube2iam`](https://github.com/jtblin/kube2iam),
 [`kiam`](https://github.com/uswitch/kiam), or [IRSA](https://aws.amazon.com/blogs/opensource/introducing-fine-grained-iam-roles-service-accounts/).
 
@@ -82,12 +82,12 @@ IAM roles in an EKS cluster can be found in the
 documentation from AWS.
 
 Appropriate IRSA annotations for roles can be applied to ServiceAccounts throughout
-this Helm chart, in one of two ways:
+this Helm chart in one of two ways:
 
-1. Pre-created ServiceAccounts, created as described in the above AWS documentation.
+1. ServiceAccounts that have been pre-created as described in the above AWS documentation.
 This will ensure the proper annotations on the ServiceAccount and the linked OIDC provider.
-1. Chart-generated ServiceAccounts, with annotations defined. We allow for the configuration
-of annotations on ServiceAccounts, both globally and on a per-chart basis.
+1. Chart-generated ServiceAccounts with annotations defined. We allow for the configuration
+of annotations on ServiceAccounts both globally and on a per-chart basis.
 
 WARNING:
 Using the `backup-utility` as specified in the [backup documentation](../../backup-restore/backup.md)
