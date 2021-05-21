@@ -87,10 +87,10 @@ this Helm chart, in one of two ways:
 1. Pre-created ServiceAccounts, created as described in the above AWS documentation.
 This will ensure the proper annotations on the ServiceAccount and the linked OIDC provider.
 1. Chart-generated ServiceAccounts, with annotations defined. We allow for the configuration
-of annoations on ServiceAccounts, both globally and on a per-chart basis.
+of annotations on ServiceAccounts, both globally and on a per-chart basis.
 
 WARNING:
-Using the `backup-utility` as specified in the [backup documenation](../../backup-restore/backup.md)
+Using the `backup-utility` as specified in the [backup documentation](../../backup-restore/backup.md)
 does not properly copy the backup file to the S3 bucket. The `backup-utility` uses
 the `s3cmd` to perform the copy of the backup file and it has a known
 issue of [not supporting OIDC authentication](https://github.com/s3tools/s3cmd/issues/1075).
@@ -135,7 +135,7 @@ gitlab:
 #### Using chart-owned service accounts
 
 The `eks.amazonaws.com/role-arn` annotation can be applied to _all_ ServiceAccounts
-created by GitLab owned charts by configurating `global.serviceAccount.annotations`.
+created by GitLab owned charts by configuring `global.serviceAccount.annotations`.
 
 ```yaml
 global:
@@ -145,7 +145,7 @@ global:
 ```
 
 Annotations can also be added on a per ServiceAccount basis, but adding the matching
-defintion for each chart. These can be the same role, or individual roles.
+definition for each chart. These can be the same role, or individual roles.
 
 ```yaml
 registry:
