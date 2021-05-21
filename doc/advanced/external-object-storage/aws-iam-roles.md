@@ -112,7 +112,6 @@ global:
 
 Fine-grained ServiceAccounts control is also available:
 
-
 ```yaml
 registry:
   serviceAccount:
@@ -167,7 +166,6 @@ gitlab:
       annotations:
         eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/gitlab-task-runner
 ```
-
 
 ## Troubleshooting
 
