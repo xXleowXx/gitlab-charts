@@ -59,6 +59,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.geo.registry.replication.primaryApiUrl" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -714,3 +715,16 @@ smtp:
 {{-   end }}
 {{- end -}}
 {{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}
+
+
+{{/*
+Ensure that when Registry replication is enabled for Geo, a primary API URL is specified.
+*/}}
+{{- define "gitlab.checkConfig.geo.registry.replication.primaryApiUrl" -}}
+{{- if and (eq true .Values.global.geo.enabled) (and (eq .Values.global.geo.role "secondary") (eq true .Values.global.geo.registry.replication.enabled)) -}}
+{{-   if not .Values.global.geo.registry.replication.primaryApiUrl }}
+geo:
+    Registry replication is enabled for GitLab Geo, but no primary API URL is specified. Please specify a value for `global.geo.registry.replication.primaryApiUrl`.
+{{-   end -}}
+{{- end -}}
+{{- end -}}

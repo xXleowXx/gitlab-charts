@@ -469,8 +469,10 @@ global:
         # clientCertificate:
         # serverCA:
     registry:
-      syncEnabled: false
-      ## Consumes global.registry.notificationSecret
+      replication:
+        enabled: false
+        primaryApiUrl:
+        ## Consumes global.registry.notificationSecret
 
   ## https://docs.gitlab.com/charts/charts/gitlab/kas/
   kas:
