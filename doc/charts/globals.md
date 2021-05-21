@@ -1979,15 +1979,5 @@ More detailed examples can be found in the
 
 ## Platform
 
-Platform specific settings to enable features for certain operational
-environments.
-
-```yaml
-global:
-  platform:
-    eksRoleArn:
-```
-
-| Name           | Type   | Default | Description                                                                                            |
-| :---           | :--:   | :------ | :----------                                                                                            |
-| `eksRoleArn`   | String |         | Object storage IAM role. See [Using IAM roles for service accounts](../advanced/external-object-storage/aws-iam-roles.md#using-iam-roles-for-service-accounts) for more information.  |
+The `platform` key is reserved for specific features targeting a specific
+platform like GKE or EKS.
