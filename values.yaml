@@ -641,7 +641,7 @@ global:
   busybox:
     image:
       repository: busybox
-      tag: latest
+      tag: 1.33.1
 
   ## https://docs.gitlab.com/charts/charts/globals#service-accounts
   serviceAccount:
