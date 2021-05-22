@@ -26,6 +26,7 @@ the `helm install` command using the `--set` flag:
 | -------------------------- | ------------------- | ----------------------------------- |
 | `enabled`                  | `true`              | [See Below](#disable-functionality) |
 | `env`                      | `production`        | Rails environment                   |
+| `common.labels`            | `{}`                | Supplemental labels that are applied to all objects created by this chart.  |
 | `podLabels`                |                     | Supplemental Pod labels. Will not be used for selectors. |
 | `annotations`              |                     | Supplemental Pod annotations.       |
 | `image.pullPolicy`         | `Always`            | Gitaly image pull policy            |

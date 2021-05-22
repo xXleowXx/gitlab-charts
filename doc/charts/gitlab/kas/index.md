@@ -40,6 +40,7 @@ the `helm install` command using the `--set` flags.
 | Parameter                   | Default        | Description                      |
 | --------------------------- | -------------- | ---------------------------------|
 | `annotations`               | `{}`           | Pod annotations                  |
+| `common.labels`             | `{}`           | Supplemental labels that are applied to all objects created by this chart.  |
 | `extraContainers`           |                | List of extra containers to include      |
 | `image.repository`          | `registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/kas` | image repository |
 | `image.tag`                 | `v13.7.0`      | Image tag                        |

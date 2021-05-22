@@ -7,6 +7,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.commonLabels" . | nindent 4 }}
 {{- if not .Values.global.operator.enabled }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
@@ -77,7 +78,7 @@ spec:
             secret $certname  $(echo '{{ include "gitlab.application.labels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}' | sed -E 's/=[^ ]*/-/g')
 {{- end }}
           kubectl --namespace=$namespace label --overwrite \
-            secret $certname {{ include "gitlab.standardLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}
+            secret $certname {{ include "gitlab.standardLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }} {{ include "gitlab.commonLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}
           # create CA certificate secret
           kubectl create secret generic ${certname}-ca \
             --from-file=cfssl_ca=/output/ca.pem || true
@@ -86,7 +87,7 @@ spec:
             secret ${certname}-ca  $(echo '{{ include "gitlab.application.labels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}' | sed -E 's/=[^ ]*/-/g')
 {{- end }}
           kubectl --namespace=$namespace label --overwrite \
-            secret ${certname}-ca {{ include "gitlab.standardLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}
+            secret ${certname}-ca {{ include "gitlab.standardLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }} {{ include "gitlab.commonLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}
           # create certificate chain for GitLab Runner
           cat /output/ca.pem /output/wildcard.pem > /tmp/{{ template "gitlab.gitlab.hostname" $ }}.crt
           kubectl create secret generic ${certname}-chain \
@@ -96,7 +97,7 @@ spec:
             secret ${certname}-chain  $(echo '{{ include "gitlab.application.labels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}' | sed -E 's/=[^ ]*/-/g')
 {{- end }}
           kubectl --namespace=$namespace label --overwrite \
-            secret ${certname}-chain {{ include "gitlab.standardLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}
+            secret ${certname}-chain {{ include "gitlab.standardLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }} {{ include "gitlab.commonLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}
         volumeMounts:
         - name: certs-path
           mountPath: /output

@@ -1056,3 +1056,7 @@ gitlab:
 #     enabled: false
 ## https://docs.gitlab.com/charts/charts/gitlab/gitlab-grafana
 #   gitlab-grafana:
+
+# Common Labels for the main application resources
+common:
+  labels: {}
