@@ -374,7 +374,7 @@ redis:
 {{/* END gitlab.checkConfig.hostWhenNoInstall */}}
 
 {{/*
-Ensure that `postgresql.image.tag` is not less than postgres version 11
+Ensure that `postgresql.image.tag` meets current requirements
 */}}
 {{- define "gitlab.checkConfig.postgresql.deprecatedVersion" -}}
 {{-   $imageTag := .Values.postgresql.image.tag -}}
