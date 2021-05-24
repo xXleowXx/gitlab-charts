@@ -379,7 +379,7 @@ Ensure that `postgresql.image.tag` meets current requirements
 {{- define "gitlab.checkConfig.postgresql.deprecatedVersion" -}}
 {{-   $imageTag := .Values.postgresql.image.tag -}}
 {{-   $majorVersion := (split "." (split "-" ($imageTag | toString))._0)._0 | int -}}
-{{-   if or (eq $majorVersion 0) (lt $majorVersion 11) -}}
+{{-   if or (eq $majorVersion 0) (lt $majorVersion 12) -}}
 postgresql:
   Image tag is "{{ $imageTag }}".
 {{-     if (eq $majorVersion 0) }}
