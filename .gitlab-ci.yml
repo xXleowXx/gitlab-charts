@@ -40,6 +40,7 @@ variables:
 
 stages:
   - prepare
+  - preflight
   - review
   - staging
   - canary
@@ -85,7 +86,7 @@ dependency_update:
     <<: *deps_pipeline
 
 lint_package:
-  stage: package
+  stage: preflight
   when: always
   script:
     - helm repo add gitlab https://charts.gitlab.io
@@ -107,7 +108,7 @@ lint_package:
       - *com_auto_deploy_branch_ref
 
 .kubeval:
-  stage: package
+  stage: preflight
   when: always
   script:
     - helm repo add gitlab https://charts.gitlab.io
