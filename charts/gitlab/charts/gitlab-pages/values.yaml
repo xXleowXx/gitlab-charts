@@ -43,6 +43,7 @@ deployment:
 
 ingress:
   annotations: {}
+  configureCertmanager: false
   tls: {}
   path: # /
 
