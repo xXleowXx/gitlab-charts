@@ -86,11 +86,6 @@ ingress:
 
 workerProcesses: 2
 
-unicorn:
-  memory: # in MB units
-    min: 1024
-    max: 1280
-
 puma:
   workerMaxMemory: 1024 # in MB units
   threads:
