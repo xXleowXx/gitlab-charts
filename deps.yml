@@ -61,3 +61,8 @@ dependencies:
         replace_in_files:
         - filename: requirements.yaml
           pattern: 'name: gitlab-runner\n  version: (\S+)'
+      # Kas
+      https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent.git:
+        replace_in_files:
+        - filename: charts/gitlab/charts/kas/Chart.yaml
+          pattern: 'appVersion: (\S+)'
