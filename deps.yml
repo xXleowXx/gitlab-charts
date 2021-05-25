@@ -66,7 +66,7 @@ dependencies:
         replace_in_files:
         - filename: charts/gitlab/charts/kas/Chart.yaml
           pattern: 'appVersion: (\S+)'
-        - filename: doc/charts/kas/index.md
+        - filename: doc/charts/gitlab/kas/index.md
           pattern: '`v(\d+\.\d+\.\d+)`'
           range: '>= 2.x.x'
           prereleases: true
