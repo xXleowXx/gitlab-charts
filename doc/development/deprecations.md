@@ -37,15 +37,15 @@ chart:
 ```
 
 - The `if` statement preceding the message _should not_ trim the newline after it. (`}}` not `-}}`) This ensures the formatting and readability for the user.
-- The message should declare which chart, relative to the global chart, that is affected. This helps the user understand where the property came from in the charts, and configuration properties. Example: `gitlab.unicorn`, `minio`, `registry`.
-- The message should inform the user of the property that has been altered / relocated / deprecated, and what action should be taken. Name the property relative to the affected chart. For example, `gitlab.unicorn.minio.enabled` would be referenced as `minio.enabled` because the chart affected by the deprecation is `gitlab.unicorn`.
+- The message should declare which chart, relative to the global chart, that is affected. This helps the user understand where the property came from in the charts, and configuration properties. Example: `gitlab.puma`, `minio`, `registry`.
+- The message should inform the user of the property that has been altered / relocated / deprecated, and what action should be taken. Name the property relative to the affected chart. For example, `gitlab.puma.minio.enabled` would be referenced as `minio.enabled` because the chart affected by the deprecation is `gitlab.puma`.
 
 Example message:
 
 ```plaintext
 
-gitlab.unicorn:
-    Chart-local configuration of Minio features has been moved to global. Please remove `gitlab.unicorn.minio.enabled` from your properties, and set `global.minio.enabled` instead.
+gitlab.puma:
+    Chart-local configuration of Minio features has been moved to global. Please remove `gitlab.puma.minio.enabled` from your properties, and set `global.minio.enabled` instead.
 ```
 
 ## Activating new deprecations
