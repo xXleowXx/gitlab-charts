@@ -351,6 +351,23 @@ global:
 | `password.secret`  | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
 | `scheme`           | String  | `redis` | The URI scheme to be used to generate Redis URLs. Valid values are `redis`, `rediss`, and `tcp`. If using `rediss` (SSL encrypted connection) scheme, the certificate used by the server should be a part of the system's trusted chains. This can be done by adding them to the [custom certificate authorities](#custom-certificate-authorities) list. |
 
+### Configure Redis chart-specific settings
+
+Settings to configure the [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis)
+directly are located under the `redis` key:
+
+```yaml
+redis:
+  install: true
+  image:
+    registry: registry.example.com
+    repository: example/redis
+    tag: x.y.z
+```
+
+Refer to the [full list of settings](https://artifacthub.io/packages/helm/bitnami/redis/11.3.4#parameters)
+for more information.
+
 ### Redis Sentinel support
 
 The current Redis Sentinel support only supports Sentinels that have
@@ -837,6 +854,8 @@ global:
       enabled: false
       CASecret:
       clientCertificateRequiredHost:
+    sidekiq:
+      routingRules: []
 ```
 
 ### General application settings
@@ -1457,6 +1476,44 @@ global:
 | `sanExtensions`                 | Boolean | `false` | Enable the use of SAN extensions to match users with certificates. |
 | `requiredForGitAccess`          | Boolean | `false` | Require browser session with smartcard sign-in for Git access. |
 
+### Sidekiq routing rules settings
+
+GitLab supports routing a job from a worker to a desired queue before it is
+scheduled. Sidekiq clients match a job against a configured list of routing
+rules. Rules are evaluated from first to last, and as soon as we find a match
+for a given worker we stop processing for that worker (first match wins). If
+the worker doesn't match any rule, it falls back the queue name generated from
+the worker name.
+
+By default, the routing rules are not configured (or denoted with an empty
+array), all the jobs are routed to the queue generated from the worker name.
+
+The routing rules list is an ordered array of tuples of query and
+corresponding queue.
+
+- The query is following
+[worker matching query](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector) syntax.
+
+- The queue_name must be a valid Sidekiq queue name. If the queue name
+is nil, or an empty string, the worker is routed to the queue generated
+by the name of the worker instead.
+
+The query supports wildcard matching `*`, which matches all workers. As a
+result, the wildcard query must stay at the end of the list or the later rules
+are ignored.
+
+```yaml
+global:
+  appConfig:
+    sidekiq:
+      routingRules:
+      - ["resource_boundary=cpu", "cpu_boundary"]
+      - ["feature_category=pages", null]
+      - ["feature_category=search", "search"]
+      - ["feature_category=memory|resource_boundary=memory", "memory-bound"]
+      - ["*", "default"]
+```
+
 ## Configure Rails settings
 
 A large portion of the GitLab suite is based upon Rails. As such, many containers within this project operate with this stack. These settings apply to all of those containers, and provide an easy access method to setting them globally versus individually.
@@ -1922,15 +1979,5 @@ More detailed examples can be found in the
 
 ## Platform
 
-Platform specific settings to enable features for certain operational
-environments.
-
-```yaml
-global:
-  platform:
-    eksRoleArn:
-```
-
-| Name           | Type   | Default | Description                                                                                            |
-| :---           | :--:   | :------ | :----------                                                                                            |
-| `eksRoleArn`   | String |         | Object storage IAM role. See [Using IAM roles for service accounts](../advanced/external-object-storage/aws-iam-roles.md#using-iam-roles-for-service-accounts) for more information.  |
+The `platform` key is reserved for specific features targeting a specific
+platform like GKE or EKS.

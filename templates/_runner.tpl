@@ -24,9 +24,9 @@ Override the runner charts cache secret name to match minio
 {{- end -}}
 
 {{/*
-Override runner charts cache.s3ServerAddress value to match minio
+Provide our own defaults for our cache config
 */}}
-{{- define "gitlab-runner.cache.s3ServerAddress" -}}
+{{- define "gitlab-runner.cache-tpl.s3ServerAddress" -}}
 {{ default ( include "gitlab.minio.hostname" . ) .Values.runners.cache.s3ServerAddress | quote }}
 {{- end -}}
 

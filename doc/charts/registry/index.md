@@ -35,7 +35,7 @@ This chart makes use of two required secrets and one optional:
 
 - `global.registry.certificate.secret`: A global secret that will contain the public
   certificate bundle to verify the authentication tokens provided by the associated
-  GitLab instance(s). See [documentation](https://docs.gitlab.com/ee/administration/container_registry.html#disable-container-registry-but-use-gitlab-as-an-auth-endpoint)
+  GitLab instance(s). See [documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html#use-an-external-container-registry-with-gitlab-as-an-auth-endpoint)
   on using GitLab as an auth endpoint.
 - `global.registry.httpSecret.secret`: A global secret that will contain the
   [shared secret](https://docs.docker.com/registry/configuration/#http) between registry pods.
@@ -63,7 +63,7 @@ registry:
     readOnly:
       enabled: false
   image:
-    tag: 'v3.4.0-gitlab'
+    tag: 'v3.4.1-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -131,6 +131,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `compatiblity`                             |                                              | Configuration of compatibility settings                                                              |
 | `debug`                                    |                                              | Debug port and Prometheus metrics                                                                    |
 | `deployment.terminationGracePeriodSeconds` | `30`                                         | Optional duration in seconds the pod needs to terminate gracefully.                                  |
+| `deployment.strategy`                      | `{}`                                         | Allows one to configure the update strategy utilized by the deployment                               |
 | `draintimeout`                             | `'0'`                                        | Amount of time to wait for HTTP connections to drain after receiving a SIGTERM signal (e.g. `'10s'`) |
 | `relativeurls`                             | `false`                                      | Enable the registry to return relative URLs in Location headers. |
 | `enabled`                                  | `true`                                       | Enable registry flag                                                                                 |
@@ -142,7 +143,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
 | `image.repository`                         | `registry`                                   | Registry image                                                                                       |
-| `image.tag`                                | `v3.4.0-gitlab`                              | Version of the image to use                                                                          |
+| `image.tag`                                | `v3.4.1-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
@@ -194,7 +195,6 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `tokenService`                             | `container_registry`                         | JWT token service                                                                                    |
 | `tokenIssuer`                              | `gitlab-issuer`                              | JWT token issuer                                                                                     |
 | `tolerations`                              | `[]`                                         | Toleration labels for pod assignment                                                                 |
-| `updateStrategy`                           | `{}`                                         | Allows one to configure the update strategy utilized by the deployment                                |
 
 ## Chart configuration examples
 
@@ -262,7 +262,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v3.4.0-gitlab'`
+- `tag: 'v3.4.1-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
@@ -395,7 +395,9 @@ global:
   # If utilising Geo, and wishing to sync the container registry
   geo:
     registry:
-      syncEnabled: true
+      replication:
+        enabled: true
+        primaryApiUrl: <URL to primary registry>
 ```
 
 Ensuring the `secret` value is set to the name of the secret created above

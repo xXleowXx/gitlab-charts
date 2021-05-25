@@ -254,3 +254,8 @@ serviceAccount:
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
   # name:
+
+deployment:
+  strategy:
+    type: Recreate
+    rollingUpdate: null

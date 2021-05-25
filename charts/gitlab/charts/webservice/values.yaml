@@ -70,7 +70,7 @@ service:
   # loadBalancerSourceRanges:
 enabled: true
 ingress:
-  enabled: true
+  enabled: 
   proxyConnectTimeout: 15
   proxyReadTimeout: 600
   proxyBodySize: "512m"
@@ -124,6 +124,7 @@ deployment:
   strategy: {}
 
 workhorse:
+  keywatcher: true
   sentryDSN: ""
   extraArgs: ""
   logFormat: json # valid: (json, structured, text)
@@ -158,7 +159,7 @@ psql: {}
 global:
   # imagePullPolicy: IfNotPresent
   ingress:
-    enabled: true
+    enabled: 
     annotations: {}
     tls: {}
       # secretName:

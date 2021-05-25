@@ -59,18 +59,20 @@ line. This dictionary mirrors the YAML structure of the `values.yaml` file.
 ```ruby
 describe 'some feature' do
   let(:default_values) do
-    { 'certmanager-issuer' => { 'email' => 'test@example.com' } }
+    YAML.safe_load(%(
+      certmanager-issuer:
+        email:
+          test@example.com
+    ))
   end
 
   describe 'global.feature.enabled' do
     let(:values) do
-      {
-        'global' => {
-          'feature' => {
-            'enabled' => true
-          }
-        }
-      }.merge(default_values)
+      YAML.safe_load(%(
+        global:
+          feature:
+            enabled: true
+      )).merge(default_values)
     end
 
     ...

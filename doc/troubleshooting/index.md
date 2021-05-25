@@ -237,3 +237,29 @@ If you encounter the same issue with the `pg_buffercache` extension,
 follow the same steps above to drop and re-create it.
 
 You can find more details about this error in issue [#2469](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469).
+
+## Increased load on `/api/v4/jobs/requests` endpoint
+
+You may face this issue if the option `workhorse.keywatcher` was set to `false` for the deployment servicing `/api/*`.
+Use the following steps to verify:
+
+1. Access the container `gitlab-workhorse` in the pod serving `/api/*`:
+
+   ```shell
+   kubectl exec -it --container=gitlab-workhorse <gitlab_api_pod> -- /bin/bash
+   ```
+
+1. Inspect the file `/srv/gitlab/config/workhorse-config.toml`. The `[redis]` configuration might be missing:
+
+   ```shell
+   cat /srv/gitlab/config/workhorse-config.toml | grep '\[redis\]'
+   ``` 
+   
+If the `[redis]` configuration is not present, the `workhorse.keywatcher` flag was set to `false` during deployment
+thus causing the extra load in the `/api/v4/jobs/requests` endpoint. To fix this, enable the `keywatcher` in the
+`webservice` chart:
+
+```yaml
+workhorse:
+  keywatcher: true
+```
