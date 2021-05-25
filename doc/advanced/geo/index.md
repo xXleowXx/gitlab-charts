@@ -141,7 +141,6 @@ gitlab_rails['geo_node_name'] = 'gitlab-primary.example.com'
 gitlab_rails['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
-unicorn['enable']=false
 puma['enable']=false
 gitlab_workhorse['enable']=false
 nginx['enable']=false
@@ -331,7 +330,6 @@ gitlab_rails['auto_migrate'] = false
 geo_secondary['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
-unicorn['enable']=false
 puma['enable']=false
 gitlab_workhorse['enable']=false
 nginx['enable']=false
