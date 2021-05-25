@@ -32,6 +32,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.registry.updateStrategy" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.omniauth" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.ldap" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.webservice.webServer.unicorn" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.appConfig.ldap.password" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.sidekiq.cronJobs" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.sidekiq.updateStrategy" .) -}}
@@ -366,3 +367,11 @@ geo:
   The configuration of `global.geo.registry.syncEnabled` has moved. Please use `global.geo.registry.replication.enabled` instead.
 {{- end -}}
 {{- end -}}
+
+{{- define "gitlab.deprecate.webservice.webServer.unicorn" -}}
+{{/* WARN: Unicorn is deprecated and is removed in 14.0 */}}
+{{- if eq .Values.gitlab.webservice.webServer "unicorn" -}}
+webservice:
+   Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma by setting `gitlab.webservice.webServer` value to `puma`. Check https://docs.gitlab.com/ee/administration/operations/puma.html for details.
+{{- end }}
+{{- end }}
