@@ -385,7 +385,7 @@ postgresql:
 {{-     if (eq $majorVersion 0) }}
   Image tag is malformed. It should begin with the numeric major version.
 {{-     else if (lt $majorVersion 12) }}
-  PostgreSQL 11 and earlier will no longer be supported in GitLab 14. The minimum required version will be PostgreSQL 12.
+  PostgreSQL 11 and earlier is not supported in GitLab 14. The minimum required version is PostgreSQL 12.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
