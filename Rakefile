@@ -1,9 +1,7 @@
-require_relative 'scripts/update-docker-images.rb'
+# frozen_string_literal: true
 
-namespace :images do
+$LOAD_PATH.unshift('./lib')
 
-  desc 'Sync images between dev and com registries'
-  task :sync, [:edition] do |t, args|
-    CNGImageSync.execute(edition: args[:edition])
-  end
-end
+require 'fileutils'
+
+Rake.add_rakelib 'lib/tasks'
