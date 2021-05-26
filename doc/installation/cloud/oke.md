@@ -7,112 +7,58 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Preparing OKE resources
 
 For a fully functional GitLab instance, you will need a few resources before
-deploying the `gitlab` chart. The following is how these charts are deployed
-and tested within GitLab.
+deploying the `gitlab` chart to [Oracle Container Engine for Kubernetes (OKE)](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengoverview.htm). Check how to [prepare](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengprerequisites.htm) your Oracle Cloud Infrastructure tenancy before creating the OKE cluster.
 
-NOTE:
-Google provides a whitepaper for [deploying production-ready GitLab on
-Google Kubernetes Engine](https://cloud.google.com/solutions/deploying-production-ready-gitlab-on-gke), including all steps and external
-resource configuration. These are alternative to this document, and the
-deployed chart will behave slightly differently. For example, the default
-domain is configured with [nip.io](https://nip.io), which may experience issues due to [rate limiting](https://letsencrypt.org/docs/rate-limits/) with
-Let's Encrypt.
-
-## Creating the GKE cluster
-
-To get started easier, a script is provided to automate the cluster creation.
-Alternatively, a cluster can be created manually as well.
-
-### Scripted cluster creation
-
-A [bootstrap script](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/gke_bootstrap_script.sh)
-has been created to automate much of the setup process for users on GCP/GKE.
-
-The script will:
-
-1. Create a new GKE cluster.
-1. Allow the cluster to modify DNS records.
-1. Setup `kubectl`, and connect it to the cluster.
-1. Initialize Helm and install Tiller.
-
-Google Cloud SDK is a dependency of this script, so make sure it's
-[set up correctly](../tools.md#connecting-to-the-gke-cluster) in order for the script
-to work.
-
-The script reads various parameters from environment variables and an argument
-`up` or `down` for bootstrap and clean up respectively.
-
-The table below describes all variables.
-
-| Variable        | Description                                                                 | Default value                    |
-|-----------------|-----------------------------------------------------------------------------|----------------------------------|
-| REGION          | The region where your cluster lives                                         | `us-central1`                      |
-| ZONE_EXTENSION  | The extension (`a`, `b`, `c`) of the zone name where your cluster instances live | `b`                              |
-| CLUSTER_NAME    | The name of the cluster                                                     | `gitlab-cluster`                   |
-| CLUSTER_VERSION | The version of your GKE cluster                                             | GKE default, check the [GKE release notes](https://cloud.google.com/kubernetes-engine/docs/release-notes) |
-| MACHINE_TYPE    | The cluster instances' type                                                 | `n1-standard-4`                    |
-| NUM_NODES       | The number of nodes required.                                               | 2                                |
-| PROJECT         | The ID of your GCP project                                                  | No defaults, required to be set. |
-| ADMIN_USER      | The user to assign cluster-admin access to during setup                     | current gcloud user              |
-| RBAC_ENABLED    | If you know whether your cluster has RBAC enabled set this variable.        | true                             |
-| PREEMPTIBLE     | Cheaper, clusters live at *most* 24 hrs. No SLA on nodes/disks              | false                            |
-| USE_STATIC_IP   | Create a static IP for GitLab instead of an ephemeral IP with managed DNS   | false                            |
-| INT_NETWORK     | The IP space to use within this cluster                                     | default                          |
-| SUBNETWORK      | The subnetwork to use within this cluster                                   | default                          |
-
-Run the script, by passing in your desired parameters. It can work with the
-default parameters except for `PROJECT` which is required:
-
-```shell
-PROJECT=<gcloud project id> ./scripts/gke_bootstrap_script.sh up
-```
-
-The script can also be used to clean up the created GKE resources:
-
-```shell
-PROJECT=<gcloud project id> ./scripts/gke_bootstrap_script.sh down
-```
-
-With the cluster created, continue to [creating the DNS entry](#dns-entry).
-
-### Manual cluster creation
-
-Two resources need to be created in GCP, a Kubernetes cluster and an external IP.
-
-#### Creating the Kubernetes cluster
+## Creating the OKE cluster
 
 To provision the Kubernetes cluster manually, follow the
-[GKE instructions](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster).
+[OKE instructions](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingclusterusingoke.htm). Check the list of compute [shapes](https://docs.oracle.com/en-us/iaas/Content/ContEng/Reference/contengimagesshapes.htm#shapes) available for worker nodes supported by OKE.
 
-- We recommend a cluster with 8vCPU and 30GB of RAM.
-- Make a note of the cluster's region, it will be needed in the following step.
+A cluster with 4 OCPUs and 30GB of RAM is recommended.
 
-#### Creating the external IP
+### External access to GitLab
 
-An external IP is required so that your cluster can be reachable. The external
-IP needs to be regional and in the same region as the cluster itself. A global
-IP or an IP outside the cluster's region will **not work**.
+By default, the GitLab Chart will deploy an Ingress Controller which creates an
+Oracle Cloud Infrastructure Public Load Balancer with 100Mbps shape. The Load
+Balancer service assigns a floating public IP address which doesn't come from
+the host subnet.
 
-To create a static IP run:
+To change the shape and other configurations (port, SSL, security lists, etc.)
+during the installation of the chart, you can use the following command line argument
+`nginx-ingress.controller.service.annotations`. For example, to specify a
+Load Balancer with a 400Mbps shape:
 
-`gcloud compute addresses create ${CLUSTER_NAME}-external-ip --region $REGION --project $PROJECT`
+```shell
+--set nginx-ingress.controller.service.annotations."service\.beta\.kubernetes\.io/oci-load-balancer-shape"="400Mbps"
+```
 
-To get the address of the newly created IP:
+Once deployed, you can check the annotations associated with the ingress controller service:
 
-`gcloud compute addresses describe ${CLUSTER_NAME}-external-ip --region $REGION --project $PROJECT --format='value(address)'`
+```plaintext
+$ kubectl get service gitlab-nginx-ingress-controller -o yaml
 
-We will use this IP to bind with a DNS name in the next section.
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    ...
+    service.beta.kubernetes.io/oci-load-balancer-shape: 400Mbps
+    ...
+```
 
-## DNS Entry
+Check the [OKE Load Balancer documentation](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingloadbalancer.htm) for more information.
 
-If you created your cluster manually or used the `USE_STATIC_IP` option with the scripted creation,
-you'll need a public domain with an A record wild card DNS entry pointing to the IP we just created.
+## Next steps
 
-Follow the [Google DNS quickstart guide](https://cloud.google.com/dns/docs/quickstart)
-to create the DNS entry.
+Once you have the cluster up and running, continue with the
+[installation of the chart](../deployment.md). Set the DNS domain name via the
+`global.hosts.domain` option, but omit the static IP setting via the
+`global.hosts.externalIP` option.
 
-## Next Steps
+After completing the deployment, you can query the Load Balancer's IP address to associate with the DNS record type:
 
-Continue with the [installation of the chart](../deployment.md) once you have
-the cluster up and running, and the static IP and DNS entry ready.
+```shell
+kubectl get ingress/<RELEASE>-webservice-default -ojsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
 
+`<RELEASE>` should be substituted with the release name used in `helm install <RELEASE>`.
