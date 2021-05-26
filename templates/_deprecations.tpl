@@ -372,6 +372,6 @@ geo:
 {{/* WARN: Unicorn is deprecated and is removed in 14.0 */}}
 {{- if eq .Values.gitlab.webservice.webServer "unicorn" -}}
 webservice:
-   Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma by setting `gitlab.webservice.webServer` value to `puma`. Check https://docs.gitlab.com/ee/administration/operations/puma.html for details.
+   Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma by either setting `gitlab.webservice.webServer` value to `puma` or removing the setting reverting it to default (`puma`). Check https://docs.gitlab.com/ee/administration/operations/puma.html for details.
 {{- end }}
 {{- end }}
