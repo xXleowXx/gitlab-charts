@@ -459,7 +459,6 @@ check_docs_markdown:
     - vale --minAlertLevel error doc
     # Lint Markdown
     - markdownlint --config .markdownlint.json 'doc/**/*.md'
-  retry: 2
   except:
     variables:
       - $DEPS_PIPELINE
@@ -483,7 +482,6 @@ check_docs_links:
     - bundle exec nanoc check internal_links
     # Check the internal anchor links
     - bundle exec nanoc check internal_anchors
-  retry: 2
   except:
     variables:
       - $DEPS_PIPELINE
