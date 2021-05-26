@@ -13,4 +13,4 @@ The following cloud providers are supported:
 - [Azure Kubernetes Service](aks.md)
 - [Google Kubernetes Engine](gke.md)
 - [OpenShift Origin](openshift.md)
-- [Oracle Kubernetes Engine](oke.md)
+- [Oracle Container Engine for Kubernetes](oke.md)
