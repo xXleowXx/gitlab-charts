@@ -32,7 +32,7 @@ Load Balancer with a 400Mbps shape:
 --set nginx-ingress.controller.service.annotations."service\.beta\.kubernetes\.io/oci-load-balancer-shape"="400Mbps"
 ```
 
-Once deployed, you can check the annotations associated with the ingress controller service:
+Once deployed, you can check the annotations associated with the Ingress controller service:
 
 ```plaintext
 $ kubectl get service gitlab-nginx-ingress-controller -o yaml
