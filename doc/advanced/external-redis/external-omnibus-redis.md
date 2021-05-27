@@ -39,6 +39,7 @@ redis['password'] = 'REDIS_PASSWORD'
 ## Disable everything else
 gitlab_rails['enable'] = false
 sidekiq['enable'] = false
+puma['enable']=false
 registry['enable'] = false
 gitaly['enable'] = false
 gitlab_workhorse['enable'] = false
