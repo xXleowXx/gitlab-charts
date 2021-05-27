@@ -37,6 +37,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.sidekiq.cronJobs" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.sidekiq.updateStrategy" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.sidekiq.pods.updateStrategy" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.sidekiq.cluster" .) -}}
+{{- $deprecated := append $deprecated (include "gitlab.deprecate.sidekiq.pods.cluster" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.local.kubectl" .) -}}
 
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.gitlab.gitaly.enabled" .) -}}
@@ -375,3 +377,21 @@ webservice:
    Starting with GitLab 14.0, Unicorn is no longer supported and users must switch to Puma by either setting `gitlab.webservice.webServer` value to `puma` or removing the setting reverting it to default (`puma`). Check https://docs.gitlab.com/ee/administration/operations/puma.html for details.
 {{- end }}
 {{- end }}
+
+{{- define "gitlab.deprecate.sidekiq.cluster" -}}
+{{- if hasKey .Values.gitlab.sidekiq "cluster" -}}
+sidekiq:
+    The configuration of 'gitlab.sidekiq.cluster' should be removed. Sidekiq is now always in cluster mode.
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.sidekiq.cluster */}}
+
+{{- define "gitlab.deprecate.sidekiq.pods.cluster" -}}
+{{- range $index, $pod := .Values.gitlab.sidekiq.pods -}}
+{{-   if hasKey $pod "cluster" -}}
+{{ $pod.name }}:
+    The configuration of 'gitlab.sidekiq.pods[{{ $index }}].cluster' should be removed. Sidekiq is now always in cluster mode.
+{{-   end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.deprecate.sidekiq.pods.cluster */}}

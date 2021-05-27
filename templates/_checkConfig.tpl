@@ -29,7 +29,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.praefect.storageNames" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.cluster" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queueSelector" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.timeout" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.routingRules" .) -}}
@@ -186,40 +186,21 @@ sidekiq: mixed queues
 {{- end -}}
 {{/* END gitlab.checkConfig.sidekiq.queues.mixed */}}
 
-{{/* Check configuration of Sidekiq - queues must be a string when cluster is enabled */}}
-{{- define "gitlab.checkConfig.sidekiq.queues.cluster" -}}
+{{/* Check configuration of Sidekiq - queues must be a string */}}
+{{- define "gitlab.checkConfig.sidekiq.queues" -}}
 {{- if .Values.gitlab.sidekiq.pods -}}
 {{-   range $pod := .Values.gitlab.sidekiq.pods -}}
-{{-     $cluster := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.cluster "local" $pod.cluster "default" true) }}
-{{-     if and $cluster (hasKey $pod "queues") (ne (kindOf $pod.queues) "string") }}
-sidekiq: cluster
-    The pod definition `{{ $pod.name }}` has `cluster` enabled, but `queues` is not a string. (Note that `cluster` is enabled by default since version 4.0 of the GitLab Sidekiq chart.)
-{{-     else if and $cluster (hasKey $pod "negateQueues") (ne (kindOf $pod.negateQueues) "string") }}
-sidekiq: cluster
-    The pod definition `{{ $pod.name }}` has `cluster` enabled, but `negateQueues` is not a string. (Note that `cluster` is enabled by default since version 4.0 of the GitLab Sidekiq chart.)
+{{-     if and (hasKey $pod "queues") (ne (kindOf $pod.queues) "string") }}
+sidekiq:
+    The `queues` in pod definition `{{ $pod.name }}` is not a string.
+{{-     else if and (hasKey $pod "negateQueues") (ne (kindOf $pod.negateQueues) "string") }}
+sidekiq:
+    The `negateQueues` in pod definition `{{ $pod.name }}` is not a string.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.sidekiq.queues.cluster */}}
-
-{{/* Check configuration of Sidekiq - cluster must be enabled for queueSelector to be valid */}}
-{{/* Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646 */}}
-{{- define "gitlab.checkConfig.sidekiq.queueSelector" -}}
-{{- if .Values.gitlab.sidekiq.pods -}}
-{{-   range $pod := .Values.gitlab.sidekiq.pods -}}
-{{-     $cluster := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.cluster "local" $pod.cluster "default" true) }}
-{{-     $queueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.queueSelector "local" $pod.queueSelector "default" false) }}
-{{-     $experimentalQueueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.experimentalQueueSelector "local" $pod.experimentalQueueSelector "default" false) }}
-{{-     $selectorField := ternary "queueSelector" "experimentalQueueSelector" (eq $queueSelector "true") -}}
-{{-     if and (or $queueSelector $experimentalQueueSelector) (not $cluster) }}
-sidekiq: queueSelector
-    The pod definition `{{ $pod.name }}` has `{{ $selectorField }}` enabled, but does not have `cluster` enabled. `{{ $selectorField }}` only works when `cluster` is enabled.
-{{-     end -}}
-{{-   end -}}
-{{- end -}}
-{{- end -}}
-{{/* END gitlab.checkConfig.sidekiq.queueSelector */}}
+{{/* END gitlab.checkConfig.sidekiq.queues */}}
 
 {{/*
 Ensure that Sidekiq timeout is less than terminationGracePeriodSeconds

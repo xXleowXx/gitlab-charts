@@ -15,15 +15,6 @@
 {{- $metricsEnabled := .Values.metrics.enabled -}}
 {{- $metricsPort := .Values.metrics.port -}}
 {{- $metricsAnnotations := .Values.metrics.annotations -}}
-{{- /* The below is an messy attempt to read in, and reflect on the configmap-queues.yaml template. */}}
-{{- $queueConfigList := include (print $.Template.BasePath "/configmap-queue.yaml") . | replace "\r\n" "\n" | split "\n---" }}
-{{- $queues := dict }}
-{{- range $k,$v := $queueConfigList }}
-{{-   $tmpConfig := $v | fromYaml }}
-{{-   $md := $tmpConfig.metadata }}
-{{-   $labels :=  $md.labels }}
-{{-   $_ := set $queues ( $labels.queue_pod_name | quote ) ( $v | quote ) }}
-{{- end }}
 {{- $configMapChecksum := include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 {{- range .Values.pods -}}
 {{-   $queueName := printf "%s-%s" $fullname .name | trunc 63 }}
@@ -63,7 +54,6 @@ spec:
       annotations:
         checksum/configmap: {{ $configMapChecksum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-        checksum/configmap-pod: {{ pluck ( .name | quote ) $queues | last | sha256sum }}
       {{- range $key, $value := $.Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -187,8 +177,6 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
-            - name: SIDEKIQ_CLUSTER
-              value: {{ include "gitlab.boolean.local" (dict "global" $.Values.cluster "local" .cluster "default" true) | quote }}
             - name: SIDEKIQ_QUEUE_SELECTOR
               value: {{ include "gitlab.boolean.local" (dict "global" $.Values.queueSelector "local" .queueSelector "default" false) | quote }}
 {{/* Remove with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646 */}}
@@ -296,8 +284,6 @@ spec:
           sources:
             - configMap:
                 name: {{ $fullname }}
-            - configMap:
-                name: {{ $queueName }}
             {{- if $.Values.global.appConfig.pseudonymizer.configMap }}
             - configMap:
                 name: {{ $.Values.global.appConfig.pseudonymizer.configMap }}
