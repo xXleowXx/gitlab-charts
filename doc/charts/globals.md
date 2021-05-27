@@ -1489,8 +1489,8 @@ global:
 
 GitLab supports routing a job from a worker to a desired queue before it is
 scheduled. Sidekiq clients match a job against a configured list of routing
-rules. Rules are evaluated from first to last, and as soon as we find a match
-for a given worker we stop processing for that worker (first match wins). If
+rules. Rules are evaluated from first to last, and as soon as a match for a
+given worker is found, the processing for that worker is stopped (first match wins). If
 the worker doesn't match any rule, it falls back the queue name generated from
 the worker name.
 
@@ -1498,18 +1498,17 @@ By default, the routing rules are not configured (or denoted with an empty
 array), all the jobs are routed to the queue generated from the worker name.
 
 The routing rules list is an ordered array of tuples of query and
-corresponding queue.
+corresponding queue:
 
-- The query is following
+- The query is following the
 [worker matching query](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector) syntax.
-
-- The queue_name must be a valid Sidekiq queue name. If the queue name
-is nil, or an empty string, the worker is routed to the queue generated
+- The `queue_name` must be a valid Sidekiq queue name. If the queue name
+is `nil`, or an empty string, the worker is routed to the queue generated
 by the name of the worker instead.
 
 The query supports wildcard matching `*`, which matches all workers. As a
 result, the wildcard query must stay at the end of the list or the later rules
-are ignored.
+are ignored:
 
 ```yaml
 global:
