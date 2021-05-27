@@ -165,5 +165,5 @@ Error: failed pre-install: warning: Hook pre-install templates/shared-secrets-rb
 {APIGroups:[""], Resources:["secrets"], Verbs:["get" "list" "create" "patch"]}
 ```
 
-This means that the kubectl context that you are using to connect to the cluster
+This means that the `kubectl` context that you are using to connect to the cluster
 does not have the permissions needed to create RBAC resources.
