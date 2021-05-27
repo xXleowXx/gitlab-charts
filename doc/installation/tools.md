@@ -52,11 +52,8 @@ cluster, use `kubectl config set-cluster minikube` to set the active cluster.
 Helm is the package manager for Kubernetes. The `gitlab` chart is tested and
 supported with Helm v3 (3.0.2 or higher required).
 
-### Getting Helm
-
-You can get Helm from the project's [releases page](https://github.com/helm/helm/releases),
-or follow other options under the official documentation of
-[installing Helm](https://helm.sh/docs/intro/install/).
+Install Helm by picking one of the options listed under the
+[official Helm documentation](https://helm.sh/docs/intro/install/).
 
 ## Next steps
 
