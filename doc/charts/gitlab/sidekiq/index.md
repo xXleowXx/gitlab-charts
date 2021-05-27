@@ -366,8 +366,8 @@ a different pod configuration. It will not add a new pod in addition to the defa
 |:-------------- |:-------:|:------- |:----------- |
 | `concurrency`  | Integer |         | The number of tasks to process simultaneously. If not provided, it will be pulled from the chart-wide default. |
 | `name`         | String  |         | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries. |
-| `queues`       | String / Array |         | [See below](#queues). |
-| `negateQueues` | String / Array |         | [See below](#negatequeues). |
+| `queues`       | String |         | [See below](#queues). |
+| `negateQueues` | String |         | [See below](#negatequeues). |
 | `queueSelector` | Boolean | `false` | Use the [queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector). |
 | `experimentalQueueSelector` | Boolean | `false` | Deprecated version of `queueSelector`. If either this or `queueSelector` is set, the queue selector will be enabled. |
 | `timeout`      | Integer |         | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. This value **must** be less than `terminationGracePeriodSeconds`. |
@@ -428,13 +428,7 @@ pods:
     minReplicas: 2  # defaults to inherited value
     maxReplicas: 10 # defaults to inherited value
     maxUnavailable: 5 # defaults to inherited value
-    queues:
-    - [post_receive, 5]
-    - [merge, 5]
-    - [update_merge_requests, 3]
-    - [process_commit, 3]
-    - [new_note, 2]
-    - [new_issue, 2]
+    queues: merge,post_receive,process_commit
     extraVolumeMounts: |
       - name: example-volume-mount
         mountPath: /etc/example
