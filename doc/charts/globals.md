@@ -1502,9 +1502,9 @@ corresponding queue:
 
 - The query is following the
 [worker matching query](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector) syntax.
-- The `queue_name` must be a valid Sidekiq queue name. If the queue name
-is `nil`, or an empty string, the worker is routed to the queue generated
-by the name of the worker instead.
+- The `<queue_name>` must be a valid Sidekiq queue name. If the queue name
+  is `nil`, or an empty string, the worker is routed to the queue generated
+  by the name of the worker instead.
 
 The query supports wildcard matching `*`, which matches all workers. As a
 result, the wildcard query must stay at the end of the list or the later rules
