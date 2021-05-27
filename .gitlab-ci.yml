@@ -506,8 +506,8 @@ check_docs_links:
     GIT_STRATEGY: none
     DOCS_REVIEW_APPS_DOMAIN: 178.62.207.141.nip.io
     DOCS_GITLAB_REPO_SUFFIX: charts
-    # By default, deploy the Review App using the `master` branch of the `gitlab-org/gitlab-docs` project
-    DOCS_BRANCH: master
+    # By default, deploy the Review App using the `maing` branch of the `gitlab-org/gitlab-docs` project
+    DOCS_BRANCH: main
   when: manual
   except:
     - triggers
