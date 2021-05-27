@@ -204,17 +204,14 @@ sidekiq: cluster
 {{/* END gitlab.checkConfig.sidekiq.queues.cluster */}}
 
 {{/* Check configuration of Sidekiq - cluster must be enabled for queueSelector to be valid */}}
-{{/* Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646 */}}
 {{- define "gitlab.checkConfig.sidekiq.queueSelector" -}}
 {{- if .Values.gitlab.sidekiq.pods -}}
 {{-   range $pod := .Values.gitlab.sidekiq.pods -}}
 {{-     $cluster := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.cluster "local" $pod.cluster "default" true) }}
 {{-     $queueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.queueSelector "local" $pod.queueSelector "default" false) }}
-{{-     $experimentalQueueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.experimentalQueueSelector "local" $pod.experimentalQueueSelector "default" false) }}
-{{-     $selectorField := ternary "queueSelector" "experimentalQueueSelector" (eq $queueSelector "true") -}}
-{{-     if and (or $queueSelector $experimentalQueueSelector) (not $cluster) }}
+{{-     if and ($queueSelector) (not $cluster) }}
 sidekiq: queueSelector
-    The pod definition `{{ $pod.name }}` has `{{ $selectorField }}` enabled, but does not have `cluster` enabled. `{{ $selectorField }}` only works when `cluster` is enabled.
+    The pod definition `{{ $pod.name }}` has `queueSelector` enabled, but does not have `cluster` enabled. `queueSelector` only works when `cluster` is enabled.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}

@@ -204,36 +204,33 @@ describe 'checkConfig template' do
   end
 
   describe 'sidekiq.queues.queueSelector' do
-    # Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646
-    ['queueSelector', 'experimentalQueueSelector'].each do |config|
-      let(:success_values) do
-        YAML.safe_load(%(
+    let(:success_values) do
+      YAML.safe_load(%(
           gitlab:
             sidekiq:
               pods:
               - name: valid-1
                 cluster: true
-                #{config}: true
+                queueSelector: true
         )).merge(default_required_values)
-      end
+    end
 
-      let(:error_values) do
-        YAML.safe_load(%(
+    let(:error_values) do
+      YAML.safe_load(%(
           gitlab:
             sidekiq:
               pods:
               - name: valid-1
                 cluster: false
-                #{config}: true
+                queueSelector: true
         )).merge(default_required_values)
-      end
-
-      let(:error_output) { "`#{config}` only works when `cluster` is enabled" }
-
-      include_examples 'config validation',
-                       success_description: "when Sidekiq pods use #{config} with cluster enabled",
-                       error_description: "when Sidekiq pods use #{config} without cluster enabled"
     end
+
+    let(:error_output) { "`queueSelector` only works when `cluster` is enabled" }
+
+    include_examples 'config validation',
+                     success_description: "when Sidekiq pods use queueSelector with cluster enabled",
+                     error_description: "when Sidekiq pods use queueSelector without cluster enabled"
   end
 
   describe 'database.externaLoadBalancing' do
