@@ -18,17 +18,6 @@ WARNING: The Container Registry online garbage collection has been enabled. Plea
 WARNING: The Praefect chart has been enabled. Please note that it is still under development and not ready for production use. Usage may require significant manual intervention during upgrades.
 {{- end }}
 
-{{/* Resource request changes */}}
-NOTICE: The resource requests have increased for the Webservice and Sidekiq charts.
-    For more information on Webservice resources, see https://docs.gitlab.com/charts/charts/gitlab/webservice/index.html#resources
-    For more information on Sidekiq resources, see https://docs.gitlab.com/charts/charts/gitlab/sidekiq/index.html#resource
-    Related merge request: https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/1634
-
-    To restore the original resource specifications:
-    --set gitlab.sidekiq.resources.requests.cpu=50m
-    --set gitlab.sidekiq.resources.requests.memory=650M
-    --set gitlab.webservice.resources.requests.memory=1.5G
-
 {{/* If shared-secrets is disable, manual secret creation will be needed */}}
 {{- if not (index .Values "shared-secrets").enabled }}
 NOTICE: The automatic generation of secrets has been disabled.
