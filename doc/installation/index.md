@@ -39,10 +39,11 @@ Kubernetes features.
 Follow the instructions to create and connect to the Kubernetes cluster of your
 choice:
 
-- [Google Kubernetes Engine](cloud/gke.md)
 - [Amazon EKS](cloud/eks.md)
-- [OpenShift Origin](cloud/openshift.md)
 - [Azure Kubernetes Service](cloud/aks.md)
+- [Google Kubernetes Engine](cloud/gke.md)
+- [OpenShift Origin](cloud/openshift.md)
+- [Oracle Container Engine for Kubernetes](cloud/oke.md)
 - VMware Tanzu - Documentation to be added.
 - On-Premises solutions - Documentation to be added.
 
@@ -56,7 +57,7 @@ the [deployment of GitLab](deployment.md).
 If you are upgrading an existing Kubernetes installation, follow the
 [upgrade documentation](upgrade.md) instead.
 
-## Migrating from Omnibus GitLab to Kubernetes
+## Migrate from or to the GitLab Helm chart
 
-To migrate your existing Omnibus GitLab instance to your Kubernetes cluster,
-follow the [migration documentation](migration/index.md).
+To migrate your existing GitLab Linux package installation to your Kubernetes cluster,
+or vice versa, follow the [migration documentation](migration/index.md).

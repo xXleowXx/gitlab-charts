@@ -141,7 +141,6 @@ gitlab_rails['geo_node_name'] = 'gitlab-primary.example.com'
 gitlab_rails['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
-unicorn['enable']=false
 puma['enable']=false
 gitlab_workhorse['enable']=false
 nginx['enable']=false
@@ -331,7 +330,6 @@ gitlab_rails['auto_migrate'] = false
 geo_secondary['auto_migrate'] = false
 ## turn off everything but the DB
 sidekiq['enable']=false
-unicorn['enable']=false
 puma['enable']=false
 gitlab_workhorse['enable']=false
 nginx['enable']=false
@@ -551,10 +549,6 @@ In order to deploy this chart as a Geo Secondary, we'll start [from this example
    ```shell
    helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
    ```
-
-   NOTE:
-   With Helm v2, one may need to specify the namespace that the release was
-   deployed to with the `--namespace <namespace>` option.
 
 1. Wait for the deployment to complete, and the application to come online.
 

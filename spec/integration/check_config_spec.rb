@@ -732,35 +732,6 @@ describe 'checkConfig template' do
                      error_description: 'when Redis is set to install with multiple Redis instances'
   end
 
-  describe 'dependencyProxy.puma' do
-    let(:success_values) do
-      YAML.safe_load(%(
-        global:
-          appConfig:
-            dependencyProxy:
-              enabled: true
-      )).merge(default_required_values)
-    end
-
-    let(:error_values) do
-      YAML.safe_load(%(
-        global:
-          appConfig:
-            dependencyProxy:
-              enabled: true
-        gitlab:
-          webservice:
-            webServer: unicorn
-      )).merge(default_required_values)
-    end
-
-    let(:error_output) { 'You must be using the Puma webservice in order to use Dependency Proxy.' }
-
-    include_examples 'config validation',
-                     success_description: 'when dependencyProxy is enabled with a default install',
-                     error_description: 'when dependencyProxy is enabled with the unicorn webservice'
-  end
-
   describe 'webserviceTermination' do
     let(:success_values) do
       YAML.safe_load(%(

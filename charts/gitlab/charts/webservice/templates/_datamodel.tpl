@@ -96,8 +96,6 @@ resources: # resources for `webservice` container
   {{- .Values.resources | toYaml | nindent 2 }}
 workhorse:
   {{- .Values.workhorse | toYaml | nindent 2 }}
-unicorn:
-  {{- .Values.unicorn | toYaml | nindent 2 }}
 extraEnv:
   {{- .Values.extraEnv | toYaml | nindent 2 }}
 puma:

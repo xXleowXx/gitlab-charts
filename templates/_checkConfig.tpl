@@ -52,7 +52,6 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.database" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.gc" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.migration" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
@@ -602,16 +601,6 @@ registry:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.gc */}}
-
-{{/*
-Ensure Puma is used when the dependency proxy is enabled
-*/}}
-{{- define "gitlab.checkConfig.dependencyProxy.puma" -}}
-{{- if and $.Values.global.appConfig.dependencyProxy.enabled (ne .Values.gitlab.webservice.webServer "puma") }}
-You must be using the Puma webservice in order to use Dependency Proxy. Set `gitlab.webservice.webServer` to `puma`.
-{{  end -}}
-{{- end -}}
-{{/* END gitlab.checkConfig.dependencyProxy.puma */}}
 
 {{/*
 Ensure terminationGracePeriodSeconds is longer than blackoutSeconds

@@ -2,6 +2,14 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.12.2 (2021-06-01)
+
+No changes.
+
+## 4.12.1 (2021-05-25)
+
+No changes.
+
 ## 4.12.0 (2021-05-21)
 
 ### Added (2 changes)
@@ -33,6 +41,10 @@ entry.
 
 - [Refactor a yaml indentation inconsistency](gitlab-org/charts/gitlab@e43cbb7f3b75ef88ef6a478ef809826b7e51bfbe) ([merge request](gitlab-org/charts/gitlab!1978))
 - [Support using PAGES_UPDATE_LEGACY_STORAGE env variable to enable Pages disk access](gitlab-org/charts/gitlab@ba72fead4cc4af5268a258b7a4bdbac85665f15c) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/1938))
+
+## 4.11.5 (2021-06-01)
+
+No changes.
 
 ## 4.11.4 (2021-05-14)
 
@@ -80,6 +92,10 @@ No changes.
 - Add Microsoft Graph config support for MailRoom. !1929
 - Added support for IAM roles in EKS. !1940
 
+
+## 4.10.5 (2021-06-01)
+
+No changes.
 
 ## 4.10.4 (2021-04-27)
 
