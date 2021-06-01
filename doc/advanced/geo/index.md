@@ -550,10 +550,6 @@ In order to deploy this chart as a Geo Secondary, we'll start [from this example
    helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
    ```
 
-   NOTE:
-   With Helm v2, one may need to specify the namespace that the release was
-   deployed to with the `--namespace <namespace>` option.
-
 1. Wait for the deployment to complete, and the application to come online.
 
 ## Add Secondary Geo instance via Primary
