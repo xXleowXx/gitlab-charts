@@ -309,9 +309,6 @@ helm repo add gitlab https://charts.gitlab.io/
 helm search repo -l gitlab/gitlab
 ```
 
-NOTE:
-With Helm v2, the search command should be `helm search -l gitlab/gitlab`.
-
 You will receive an output similar to:
 
 ```plaintext

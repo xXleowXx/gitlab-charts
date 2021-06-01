@@ -18,9 +18,6 @@ should first purge the failed install before installing again.
 helm uninstall <release-name>
 ```
 
-NOTE:
-With Helm v2, the uninstall command would be `helm delete --purge <release-name>`.
-
 If instead, the initial install command timed out, but GitLab still came up successfully,
 you can add the `--force` flag to the `helm upgrade` command to ignore the error
 and attempt to update the release.
@@ -40,10 +37,6 @@ example, `Test Username` is the culprit:
 ```shell
 helm upgrade gitlab gitlab/gitlab --timeout 600s --set global.email.display_name=Test Username ...
 ```
-
-NOTE:
-If using Helm v2, please see notes about the `--timeout` option
-in the [Deployment documentation](../installation/deployment.md#deploy-using-helm).
 
 To fix it, pass the parameters in single quotes:
 
@@ -253,8 +246,8 @@ Use the following steps to verify:
 
    ```shell
    cat /srv/gitlab/config/workhorse-config.toml | grep '\[redis\]'
-   ``` 
-   
+   ```
+
 If the `[redis]` configuration is not present, the `workhorse.keywatcher` flag was set to `false` during deployment
 thus causing the extra load in the `/api/v4/jobs/requests` endpoint. To fix this, enable the `keywatcher` in the
 `webservice` chart:
