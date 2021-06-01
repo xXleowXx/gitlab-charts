@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 4.11.5 (2021-06-01)
+
+No changes.
+
 ## 4.11.4 (2021-05-14)
 
 No changes.
