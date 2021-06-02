@@ -235,7 +235,7 @@ You can find more details about this error in issue [#2469](https://gitlab.com/g
 
 The following error message may appear in the bundled PostgreSQL pod after upgrading to a new version of the GitLab Helm chart:
 
-```
+```plaintext
 gitlab-postgresql FATAL:  database files are incompatible with server
 gitlab-postgresql DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 12.7.
 ```
