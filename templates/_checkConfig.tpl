@@ -373,18 +373,18 @@ redis:
 {{/* END gitlab.checkConfig.hostWhenNoInstall */}}
 
 {{/*
-Ensure that `postgresql.image.tag` is not less than postgres version 11
+Ensure that `postgresql.image.tag` meets current requirements
 */}}
 {{- define "gitlab.checkConfig.postgresql.deprecatedVersion" -}}
 {{-   $imageTag := .Values.postgresql.image.tag -}}
 {{-   $majorVersion := (split "." (split "-" ($imageTag | toString))._0)._0 | int -}}
-{{-   if or (eq $majorVersion 0) (lt $majorVersion 11) -}}
+{{-   if or (eq $majorVersion 0) (lt $majorVersion 12) -}}
 postgresql:
   Image tag is "{{ $imageTag }}".
 {{-     if (eq $majorVersion 0) }}
   Image tag is malformed. It should begin with the numeric major version.
-{{-     else if (lt $majorVersion 11) }}
-  PostgreSQL 10 and earlier will no longer be supported in GitLab 13. The minimum required version will be PostgreSQL 11.
+{{-     else if (lt $majorVersion 12) }}
+  PostgreSQL 11 and earlier is not supported in GitLab 14. The minimum required version is PostgreSQL 12.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}

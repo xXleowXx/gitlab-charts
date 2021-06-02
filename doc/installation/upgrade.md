@@ -65,13 +65,13 @@ The following are the steps to upgrade GitLab to a newer version:
 During a major database upgrade, we ask you to set `gitlab.migrations.enabled` set to `false`.
 Ensure that you explicitly set it back to `true` for future updates.
 
-## Upgrade the bundled PostgreSQL to version 12 (optional)
+## Upgrade the bundled PostgreSQL to version 12
 
 NOTE:
 If you aren't using the bundled PostgreSQL chart (`postgresql.install` is false), you do not need to
 perform this step.
 
-Upgrading to PostgreSQL 12 for GitLab 13.x is optional. PostgreSQL 12 is supported by GitLab 13.4 and later. PostgreSQL 12 will become the minimum required PostgreSQL version in [GitLab 14.0, scheduled for April 2021](https://gitlab.com/groups/gitlab-org/-/epics/2374#phased-plan). [PostgreSQL 12 brings significant performance improvements](https://www.postgresql.org/about/news/postgresql-12-released-1976/).
+Upgrading to PostgreSQL 12 for GitLab 14.x is required. PostgreSQL 12 is supported by GitLab 13.4 and later. [PostgreSQL 12 brings significant performance improvements](https://www.postgresql.org/about/news/postgresql-12-released-1976/).
 
 To upgrade the bundled PostgreSQL to version 12, the following steps are required:
 
