@@ -83,7 +83,7 @@ To upgrade the bundled PostgreSQL to version 12, the following steps are require
 
 ## Upgrade the bundled PostgreSQL chart
 
-As part of the `5.0.0` release of this chart, we upgraded the bundled PostgreSQL version from `11.7` to `12.7`. This is
+As part of the `5.0.0` release of this chart, we upgraded the bundled PostgreSQL version from `11.9.0` to `12.7.0`. This is
  not a drop in replacement. Manual steps need to be performed to upgrade the database.
 The steps have been documented in the [5.0 upgrade steps](#upgrade-steps-for-50-release).
 
