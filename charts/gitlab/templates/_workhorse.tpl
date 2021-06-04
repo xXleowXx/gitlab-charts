@@ -32,5 +32,5 @@ to the service name
 {{- define "gitlab.workhorse.shutdownTimeout" -}}
 {{- $timeout := add 1 $.Values.global.webservice.workerTimeout -}}
 {{- $shutdownTimeout := duration ($timeout | toString) -}}
-{{- coalesce .Values.workhorse.shutdownTimeout $shutdownTimeout -}}
+{{- coalesce $.Values.workhorse.shutdownTimeout $shutdownTimeout -}}
 {{- end -}}

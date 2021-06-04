@@ -36,4 +36,25 @@ describe 'Workhorse configuration' do
     end
     expect(found).to eq(true)
   end
+
+  context 'with custom values' do
+    let(:custom_values) do
+      YAML.safe_load(%(
+        gitlab:
+          webservice:
+            workhorse:
+              shutdownTimeout: "30s"
+        certmanager-issuer:
+          email: test@example.com
+     ))
+    end
+
+    let(:template) { HelmTemplate.new(custom_values) }
+
+    it 'renders a TOML configuration file' do
+      raw_toml = template.dig('ConfigMap/test-workhorse-default', 'data', 'workhorse-config.toml.erb')
+
+      expect(raw_toml).to match /^shutdown_timeout = "30s"/
+    end
+  end
 end
