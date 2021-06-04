@@ -165,6 +165,7 @@ data:
   installation_type: |
     gitlab-helm-chart
   workhorse-config.toml.erb: |
+    shutdown_timeout = "{{ template "gitlab.workhorse.shutdownTimeout" $ }}"
     {{- if .workhorse.keywatcher }}
     [redis]
     {{- if not $.Values.global.redis.sentinels }}

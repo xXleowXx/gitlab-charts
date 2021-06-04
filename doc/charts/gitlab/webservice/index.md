@@ -105,6 +105,7 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.logFormat`            | `json`                | Logging format. Valid formats: `json`, `structured`, `text` |
 | `workerProcesses`                | `2`                   | Webservice number of workers                      |
 | `workhorse.keywatcher`           | `true`                | Subscribe workhorse to Redis. This is **required** by any deployment servicing request to `/api/*`, but can be safely disabled for other deployments |
+| `workhorse.shutdownTimeout`                    | `gitlab.webservice.workerTimeout + 1` (seconds) | Time to wait for all Web requests to clear from Workhorse. Examples: `1min`, `65s`. |
 | `workhorse.livenessProbe.initialDelaySeconds`  | 20      | Delay before liveness probe is initiated       |
 | `workhorse.livenessProbe.periodSeconds`        | 60      | How often to perform the liveness probe        |
 | `workhorse.livenessProbe.timeoutSeconds`       | 30      | When the liveness probe times out              |
