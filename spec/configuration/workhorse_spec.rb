@@ -15,7 +15,7 @@ describe 'Workhorse configuration' do
   it 'renders a TOML configuration file' do
     raw_toml = template.dig('ConfigMap/test-workhorse-default', 'data', 'workhorse-config.toml.erb')
 
-    expect(raw_toml).to match /^shutdown_timeout = "1m1s"/
+    expect(raw_toml).to match /^shutdown_timeout = "61s"/
   end
 
   it 'disabled archive cache' do
