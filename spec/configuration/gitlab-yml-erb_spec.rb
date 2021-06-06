@@ -12,13 +12,13 @@ describe 'gitlab.yml.erb configuration' do
   end
 
   context 'when CSP is disabled' do
-    it 'does not populate the gitlab.yml.erb' do
+    it 'populates the gitlab.yml.erb' do
       t = HelmTemplate.new(default_values)
       expect(t.dig(
         'ConfigMap/test-webservice',
         'data',
         'gitlab.yml.erb'
-      )).not_to include('content_security_policy')
+      )).to match(/content_security_policy:\s+enabled: false/)
     end
   end
 
@@ -56,7 +56,8 @@ describe 'gitlab.yml.erb configuration' do
         'ConfigMap/test-webservice',
         'data',
         'gitlab.yml.erb'
-      )).to include('content_security_policy')
+      )).to match(/content_security_policy:\s+enabled: true\s+report_only: false\s+directives:/)
+        .and include('unsafe-inline')
     end
 
     it 'fails when we are missing a required value' do
