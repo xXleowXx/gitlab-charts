@@ -96,7 +96,7 @@ lint_package:
     - mkdir -p build
     - helm package -d build .
   artifacts:
-    expire_in: 5d
+    expire_in: 3d
     paths:
     - build
   except:
@@ -214,6 +214,7 @@ review_eks:
   variables:
     GIT_CHECKOUT: "false"
   before_script: []
+  dependencies: []
   script:
     - git checkout master
     - source scripts/ci/autodevops.sh
