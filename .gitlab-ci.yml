@@ -96,7 +96,7 @@ lint_package:
     - mkdir -p build
     - helm package -d build .
   artifacts:
-    expire_in: 3d
+    expire_in: 5d
     paths:
     - build
   except:
