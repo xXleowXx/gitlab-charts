@@ -936,7 +936,7 @@ shared-secrets:
       tag: 1.2
     keyAlgorithm: "rsa"
     keySize: "4096"
-    expiry: "365d"
+    expiry: "3650d"
     caSubject: "GitLab Helm Chart"
     pullSecrets: []
   env: production
