@@ -18,9 +18,6 @@ should first purge the failed install before installing again.
 helm uninstall <release-name>
 ```
 
-NOTE:
-With Helm v2, the uninstall command would be `helm delete --purge <release-name>`.
-
 If instead, the initial install command timed out, but GitLab still came up successfully,
 you can add the `--force` flag to the `helm upgrade` command to ignore the error
 and attempt to update the release.
@@ -40,10 +37,6 @@ example, `Test Username` is the culprit:
 ```shell
 helm upgrade gitlab gitlab/gitlab --timeout 600s --set global.email.display_name=Test Username ...
 ```
-
-NOTE:
-If using Helm v2, please see notes about the `--timeout` option
-in the [Deployment documentation](../installation/deployment.md#deploy-using-helm).
 
 To fix it, pass the parameters in single quotes:
 
@@ -238,6 +231,17 @@ follow the same steps above to drop and re-create it.
 
 You can find more details about this error in issue [#2469](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469).
 
+## Bundled PostgreSQL pod fails to start: `database files are incompatible with server`
+
+The following error message may appear in the bundled PostgreSQL pod after upgrading to a new version of the GitLab Helm chart:
+
+```plaintext
+gitlab-postgresql FATAL:  database files are incompatible with server
+gitlab-postgresql DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 12.7.
+```
+
+To address this, perform a [Helm rollback](https://helm.sh/docs/helm/helm_rollback) to the previous version of the chart and then follow the steps in the [upgrade guide](../installation/upgrade.md) to upgrade the bundled PostgreSQL version. Once PostgreSQL is properly upgraded, try the GitLab Helm chart upgrade again.
+
 ## Increased load on `/api/v4/jobs/requests` endpoint
 
 You may face this issue if the option `workhorse.keywatcher` was set to `false` for the deployment servicing `/api/*`.
@@ -253,8 +257,8 @@ Use the following steps to verify:
 
    ```shell
    cat /srv/gitlab/config/workhorse-config.toml | grep '\[redis\]'
-   ``` 
-   
+   ```
+
 If the `[redis]` configuration is not present, the `workhorse.keywatcher` flag was set to `false` during deployment
 thus causing the extra load in the `/api/v4/jobs/requests` endpoint. To fix this, enable the `keywatcher` in the
 `webservice` chart:
