@@ -189,7 +189,6 @@ sidekiq: mixed queues
 {{- define "gitlab.checkConfig.sidekiq.queues" -}}
 {{- if .Values.gitlab.sidekiq.pods -}}
 {{-   range $pod := .Values.gitlab.sidekiq.pods -}}
-<<<<<<< templates/_checkConfig.tpl
 {{-     if and (hasKey $pod "queues") (ne (kindOf $pod.queues) "string") }}
 sidekiq:
     The `queues` in pod definition `{{ $pod.name }}` is not a string.
@@ -201,20 +200,6 @@ sidekiq:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.sidekiq.queues */}}
-
-{{/* Check configuration of Sidekiq - cluster must be enabled for queueSelector to be valid */}}
-{{- define "gitlab.checkConfig.sidekiq.queueSelector" -}}
-{{- if .Values.gitlab.sidekiq.pods -}}
-{{-   range $pod := .Values.gitlab.sidekiq.pods -}}
-{{-     $cluster := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.cluster "local" $pod.cluster "default" true) }}
-{{-     $queueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.queueSelector "local" $pod.queueSelector "default" false) }}
-{{-     if and ($queueSelector) (not $cluster) }}
-sidekiq: queueSelector
-    The pod definition `{{ $pod.name }}` has `queueSelector` enabled, but does not have `cluster` enabled. `queueSelector` only works when `cluster` is enabled.
-{{-     end -}}
-{{-   end -}}
-{{- end -}}
-{{- end -}}
 
 {{/*
 Ensure that Sidekiq timeout is less than terminationGracePeriodSeconds

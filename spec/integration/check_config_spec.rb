@@ -199,36 +199,6 @@ describe 'checkConfig template' do
                      error_description: 'when Sidekiq pods use cluster with array queues'
   end
 
-  describe 'sidekiq.queues.queueSelector' do
-    let(:success_values) do
-      YAML.safe_load(%(
-          gitlab:
-            sidekiq:
-              pods:
-              - name: valid-1
-                cluster: true
-                queueSelector: true
-        )).merge(default_required_values)
-    end
-
-    let(:error_values) do
-      YAML.safe_load(%(
-          gitlab:
-            sidekiq:
-              pods:
-              - name: valid-1
-                cluster: false
-                queueSelector: true
-        )).merge(default_required_values)
-    end
-
-    let(:error_output) { "`queueSelector` only works when `cluster` is enabled" }
-
-    include_examples 'config validation',
-                     success_description: "when Sidekiq pods use queueSelector with cluster enabled",
-                     error_description: "when Sidekiq pods use queueSelector without cluster enabled"
-  end
-
   describe 'database.externaLoadBalancing' do
     let(:success_values) do
       YAML.safe_load(%(
