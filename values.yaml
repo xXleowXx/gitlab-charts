@@ -900,7 +900,7 @@ postgresql:
   install: true
   postgresqlDatabase: gitlabhq_production
   image:
-    tag: 11.9.0
+    tag: 12.7.0
   usePasswordFile: true
   existingSecret: 'bogus'
   initdbScriptsConfigMap: 'bogus'
@@ -936,7 +936,7 @@ shared-secrets:
       tag: 1.2
     keyAlgorithm: "rsa"
     keySize: "4096"
-    expiry: "365d"
+    expiry: "3650d"
     caSubject: "GitLab Helm Chart"
     pullSecrets: []
   env: production
