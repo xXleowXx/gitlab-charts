@@ -110,6 +110,9 @@ generate_secret_if_needed {{ template "oauth.gitlab-pages.secret" . }} --from-li
 {{ if .Values.global.kas.enabled -}}
 # Gitlab-kas secret
 generate_secret_if_needed {{ template "gitlab.kas.secret" . }} --from-literal={{ template "gitlab.kas.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
+
+# Gitlab-kas private API secret
+generate_secret_if_needed {{ template "gitlab.kas.privateApi.secret" . }} --from-literal={{ template "gitlab.kas.privateApi.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
 {{ end }}
 
 # Registry certificates

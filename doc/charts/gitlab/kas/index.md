@@ -47,6 +47,8 @@ the `helm install` command using the `--set` flags.
 | `ingress.enabled`           |  `true` if `global.kas.enabled=true` | You can use `kas.ingress.enabled` to explicitly turn it on or off. If not set, you can optionally use `global.ingress.enabled` for the same purpose. |
 | `ingress.annotations`       | `{}`           | Ingress annotations              |
 | `ingress.tls`               | `{}`           | Ingress TLS configuration        |
+| `ingress.agentPath`         | `/`            | Ingress path for the agent API endpoint |
+| `ingress.k8sApiPath`        | `/k8s-proxy/`  | Ingress path for Kubernetes API endpoint |
 | `metrics.enabled`           | `true`         | Toggle Prometheus metrics exporter |
 | `metrics.port`              | `8151`         | Port number to use for the metrics exporter |
 | `metrics.path`              | `/metrics`     | Path to use for the metrics exporter |
@@ -66,6 +68,8 @@ the `helm install` command using the `--set` flags.
 | `service.apiInternalPort`   | `8153`         | Internal port for the internal API (for GitLab backend) |
 | `service.loadBalancerIP`    | `nil`          | A custom load balancer IP when `service.type` is `LoadBalancer` |
 | `service.loadBalancerSourceRanges` | `nil`   | A list of custom load balancer source ranges when `service.type` is `LoadBalancer` |
+| `service.kubernetesApiPort` | `8154`         | External port to expose proxied Kubernetes API on |
+| `service.privateApiPort`    | `8155`         | Internal port to expose `kas`' private API on (for `kas` -> `kas` communication) |
 | `global.kas.service.apiExternalPort` | `8153` | External port for the internal API (for GitLab backend) |
 | `service.type`              | `ClusterIP`    | Service type                     |
 | `tolerations`               | `[]`           | Toleration labels for pod assignment     |
