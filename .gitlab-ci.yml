@@ -214,6 +214,7 @@ review_eks:
   variables:
     GIT_CHECKOUT: "false"
   before_script: []
+  dependencies: []
   script:
     - git checkout master
     - source scripts/ci/autodevops.sh
