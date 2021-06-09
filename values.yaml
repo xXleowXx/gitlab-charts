@@ -65,6 +65,7 @@ global:
   ## https://docs.gitlab.com/charts/charts/globals#configure-ingress-settings
   ingress:
     configureCertmanager: true
+    provider: nginx
     annotations: {}
     enabled: true
     tls: {}
