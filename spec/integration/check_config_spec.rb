@@ -167,18 +167,16 @@ describe 'checkConfig template' do
                      error_description: 'when Sidekiq pods use both queues and negateQueues'
   end
 
-  describe 'sidekiq.queues.cluster' do
+  describe 'sidekiq.queues' do
     let(:success_values) do
       YAML.safe_load(%(
         gitlab:
           sidekiq:
             pods:
             - name: valid-1
-              cluster: true
               queues: merge,post_receive
             - name: valid-2
-              cluster: false
-              negateQueues: [merge, post_receive]
+              negateQueues: merge,post_receive
       )).merge(default_required_values)
     end
 
@@ -188,49 +186,17 @@ describe 'checkConfig template' do
           sidekiq:
             pods:
             - name: invalid-1
-              cluster: true
               queues: [merge]
             - name: invalid-2
-              cluster: true
               negateQueues: [merge]
       )).merge(default_required_values)
     end
 
-    let(:error_output) { '`queues` is not a string' }
+    let(:error_output) { 'not a string' }
 
     include_examples 'config validation',
                      success_description: 'when Sidekiq pods use cluster with string queues',
                      error_description: 'when Sidekiq pods use cluster with array queues'
-  end
-
-  describe 'sidekiq.queues.queueSelector' do
-    let(:success_values) do
-      YAML.safe_load(%(
-          gitlab:
-            sidekiq:
-              pods:
-              - name: valid-1
-                cluster: true
-                queueSelector: true
-        )).merge(default_required_values)
-    end
-
-    let(:error_values) do
-      YAML.safe_load(%(
-          gitlab:
-            sidekiq:
-              pods:
-              - name: valid-1
-                cluster: false
-                queueSelector: true
-        )).merge(default_required_values)
-    end
-
-    let(:error_output) { "`queueSelector` only works when `cluster` is enabled" }
-
-    include_examples 'config validation',
-                     success_description: "when Sidekiq pods use queueSelector with cluster enabled",
-                     error_description: "when Sidekiq pods use queueSelector without cluster enabled"
   end
 
   describe 'database.externaLoadBalancing' do
@@ -919,7 +885,6 @@ describe 'checkConfig template' do
             sidekiq:
               pods:
                 - name: 'valid-1'
-                  cluster: false
                   timeout: 10
         )).deep_merge(default_required_values)
       end
@@ -930,7 +895,6 @@ describe 'checkConfig template' do
             sidekiq:
               pods:
                 - name: 'valid-1'
-                  cluster: false
                   timeout: 50
         )).deep_merge(default_required_values)
       end
@@ -949,7 +913,6 @@ describe 'checkConfig template' do
             sidekiq:
               pods:
                 - name: 'valid-1'
-                  cluster: false
                   terminationGracePeriodSeconds: 50
         )).deep_merge(default_required_values)
       end
@@ -960,7 +923,6 @@ describe 'checkConfig template' do
             sidekiq:
               pods:
                 - name: 'valid-1'
-                  cluster: false
                   terminationGracePeriodSeconds: 1
         )).deep_merge(default_required_values)
       end
@@ -979,7 +941,6 @@ describe 'checkConfig template' do
             sidekiq:
               pods:
                 - name: 'valid-1'
-                  cluster: false
                   terminationGracePeriodSeconds: 50
                   timeout: 10
         )).deep_merge(default_required_values)
@@ -991,7 +952,6 @@ describe 'checkConfig template' do
             sidekiq:
               pods:
                 - name: 'valid-1'
-                  cluster: false
                   terminationGracePeriodSeconds: 50
                   timeout: 60
         )).deep_merge(default_required_values)
