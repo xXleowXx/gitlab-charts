@@ -21,7 +21,7 @@ class HelmTemplate
 
   # This is the most common "default" as it is a hard requirement within defaults.
   def self.certmanager_issuer
-    {"certmanager-issuer"=>{"email"=>"test@example.com"}}
+    { "certmanager-issuer" => { "email" => "test@example.com" } }
   end
 
   attr_reader :mapped
