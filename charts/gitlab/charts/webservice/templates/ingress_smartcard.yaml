@@ -13,7 +13,7 @@ metadata:
     {{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
-     {{- if $.Values.global.ingress.provider }}
+    {{- if $.Values.global.ingress.provider }}
     kubernetes.io/ingress.provider: {{ $.Values.global.ingress.provider }}
     {{- end }}
     {{- if eq "nginx" $.Values.global.ingress.provider }}
