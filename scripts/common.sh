@@ -49,6 +49,14 @@ function validate_tools(){
 
       gcloud container clusters list --project $PROJECT >/dev/null 2>&1 || { echo >&2 "Gcloud seems to be configured incorrectly or authentication is unsuccessfull"; exit 1; }
     fi
+
+    # Additional check if validating Helm
+    if [ "$tool" == 'helm' ]; then
+      if ! helm version --short --client | grep -q '^v3\.[0-9]\{1,\}'; then
+        echo "Helm 3+ is required.";
+        exit 1
+      fi
+    fi
   done
 }
 
