@@ -245,6 +245,7 @@ deployments:
     ingress:
       path: # Does not inherit or default. Leave blank to disable Ingress.
       pathType: Prefix
+      provider: nginx
       annotations:
         # inherits `ingress.anntoations`
       proxyConnectTimeout: # inherits `ingress.proxyConnectTimeout`
