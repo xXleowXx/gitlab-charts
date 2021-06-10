@@ -37,6 +37,7 @@ for more information on how the global variables work.
 - [extraEnv](#extraenv)
 - [OAuth](#configure-oauth-settings)
 - [Outgoing email](#outgoing-email)
+- [Platform](#platform)
 
 ## Configure Host settings
 
@@ -88,6 +89,7 @@ global:
 | `registry.servicePort` | String  | `registry`    | The named port of the `service` where the Registry server can be reached. |
 | `smartcard.name`       | String  | `smartcard`   | The hostname for smartcard authentication. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `kas.name`             | String  | `kas`         | The hostname for the KAS. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
+| `kas.https`            | Boolean | `false`       | If `hosts.https` or `kas.https` are `true`, the KAS external URL will use `wss://` instead of `ws://`. |
 | `pages.name`           | String  | `pages`       | The hostname for GitLab Pages. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `pages.https`          | String  |               | If `global.pages.https` or `global.hosts.pages.https` or `global.hosts.https` are `true`, then URL for GitLab Pages in the Project settings UI will use `https://` instead of `http://`. |
 
@@ -119,8 +121,9 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 | `enabled`                      | Boolean | `true`         | Global setting that controls whether to create Ingress objects for services that support them. |
 | `tls.enabled`                  | Boolean | `true`         | When set to `false`, this disables TLS in GitLab. This is useful for cases in which you cannot use TLS termination of Ingresses, such as when you have a TLS-terminating proxy before the Ingress Controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#configure-host-settings). |
 | `tls.secretName`               | String  |                | The name of the [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) that contains a **wildcard** certificate and key for the domain used in `global.hosts.domain`. |
-| `hostnameOverride`             | String  |                | Override the hostname used in Ingress configuration of the Webservice. Useful if GitLab has to be reachable behind a WAF that rewrites the Hostname to an internal hostname (e.g.: `gitlab.example.com` --> `gitlab.cluster.local`). |
 | `path`                         | String  | `/`            | Default for `path` entries in [Ingress objects](https://kubernetes.io/docs/concepts/services-networking/ingress/) |
+| `pathType`                     | String  | `Prefix`       | A [Path Type](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) allows you to specify how a path should be matched. Our current default is `Prefix` but you can use `ImplementationSpecific` or `Exact` depending on your use case. |
+| `provider`                     | String  | `nginx`       | Global setting that defines the Ingress provider to use. `nginx` is used as the default provider.  |
 
 ### Ingress Path
 
@@ -135,7 +138,7 @@ The only exception is when populating the [`gitlab/webservice` deployments setti
 
 ### Cloud provider LoadBalancers
 
-Various cloud providers' LoadBalancer implementations have an impact on how this the Ingress resources, and NGINX itself are configured as a part of this chart. The below table provides examples.
+Various cloud providers' LoadBalancer implementations have an impact on configuration of the Ingress resources and NGINX controller deployed as part of this chart. The next table provides examples.
 
 | Provider | Layer | Example snippet |
 | :-- | --: | :-- |
@@ -349,6 +352,23 @@ global:
 | `password.secret`  | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
 | `scheme`           | String  | `redis` | The URI scheme to be used to generate Redis URLs. Valid values are `redis`, `rediss`, and `tcp`. If using `rediss` (SSL encrypted connection) scheme, the certificate used by the server should be a part of the system's trusted chains. This can be done by adding them to the [custom certificate authorities](#custom-certificate-authorities) list. |
 
+### Configure Redis chart-specific settings
+
+Settings to configure the [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis)
+directly are located under the `redis` key:
+
+```yaml
+redis:
+  install: true
+  image:
+    registry: registry.example.com
+    repository: example/redis
+    tag: x.y.z
+```
+
+Refer to the [full list of settings](https://artifacthub.io/packages/helm/bitnami/redis/11.3.4#parameters)
+for more information.
+
 ### Redis Sentinel support
 
 The current Redis Sentinel support only supports Sentinels that have
@@ -397,8 +417,8 @@ continue to apply with the Sentinel support unless re-specified in the table abo
 ### Multiple Redis support
 
 The GitLab chart includes support for running with separate Redis instances
-for different persistence classes, currently: `cache`, `queues`, `shared_state` and
-`actioncable`
+for different persistence classes, currently: `cache`, `queues`, `shared_state`,
+`actioncable` and `trace_chunks`.
 
 | Instance     | Purpose                                             |
 |:-------------|:----------------------------------------------------|
@@ -406,6 +426,7 @@ for different persistence classes, currently: `cache`, `queues`, `shared_state` 
 | `queues`       | Store Sidekiq background jobs                       |
 | `shared_state` | Store session-related and other persistent data     |
 | `actioncable`  | Pub/Sub queue backend for ActionCable               |
+| `trace_chunks`  | Store job traces temporarily                       |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -451,6 +472,13 @@ global:
         enabled: true
         secret: cable-secret
         key: cable-password
+    trace_chunks:
+      host: trace_chunks.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: trace_chunks-secret
+        key: trace_chunks-password
 ```
 
 The following table describes the attributes for each dictionary of the
@@ -501,10 +529,11 @@ global:
     bucket: registry
     certificate:
     httpSecret:
+    notificationSecret:
     notifications: {}
 ```
 
-For more details on `bucket`, `certificate`, and `httpSecret` settings, see the documentation within the [registry chart](registry/index.md).
+For more details on `bucket`, `certificate`, `httpSecret`, and `notificationSecret` settings, see the documentation within the [registry chart](registry/index.md).
 
 ### notifications
 
@@ -797,6 +826,11 @@ global:
         key: password
       mailbox: inbox
       idleTimeout: 60
+      inboxMethod: "imap"
+      clientSecret:
+        key: secret
+      pollInterval: 60
+
     serviceDeskEmail:
       enabled: false
       address: ""
@@ -810,6 +844,11 @@ global:
         key: password
       mailbox: inbox
       idleTimeout: 60
+      inboxMethod: "imap"
+      clientSecret:
+        key: secret
+      pollInterval: 60
+
     pseudonymizer:
       configMap:
       bucket: gitlab-pseudo
@@ -824,6 +863,8 @@ global:
       enabled: false
       CASecret:
       clientCertificateRequiredHost:
+    sidekiq:
+      routingRules: []
 ```
 
 ### General application settings
@@ -848,7 +889,7 @@ application are described below:
 #### Content Security Policy
 
 Setting a Content Security Policy (CSP) can help thwart JavaScript cross-site
-scripting (XSS) attacks. See GitLab documentation for configuration details. [Content Security Policy Documentation](h1ttps://docs.gitlab.com/omnibus/settings/configuration.html#content-security-policy)
+scripting (XSS) attacks. See GitLab documentation for configuration details. [Content Security Policy Documentation](https://docs.gitlab.com/omnibus/settings/configuration.html#content-security-policy)
 
 Note that when enabled, the `directives` MUST be configured. Sane example
 configuration below:
@@ -1068,6 +1109,8 @@ The incoming email settings are explained in the [command line options page](../
 
 ### KAS settings
 
+#### Custom secret
+
 One can optionally customize the KAS `secret` name as well and `key`, either by
 using Helm's `--set variable` option:
 
@@ -1076,7 +1119,7 @@ using Helm's `--set variable` option:
 --set global.appConfig.gitlab_kas.key=custom-secret-key \
 ```
 
-or by configuring your `values.yml`.
+or by configuring your `values.yml`:
 
 ```yaml
 global:
@@ -1087,6 +1130,49 @@ global:
 ```
 
 If you'd like to customize the secret value, refer to the [secrets documentation](../installation/secrets.md#gitlab-kas-secret).
+
+#### Custom URLs
+
+The URLs used for KAS by the GitLab backend can be customized
+using Helm's `--set variable` option:
+
+```shell
+--set global.appConfig.gitlab_kas.externalUrl="wss://custom-kas-url.example.com" \
+--set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
+```
+
+or by configuring your `values.yml`:
+
+```yaml
+global:
+  appConfig:
+    gitlab_kas:
+      externalUrl: "wss://custom-kas-url.example.com"
+      internalUrl: "grpc://custom-internal-url"
+```
+
+#### External KAS
+
+The GitLab backend can be made aware of an external KAS server (i.e. not
+managed by the chart) by explicitly enabling it and configuring the required
+URLs. You can do so using Helm's `--set variable` option:
+
+```shell
+--set global.appConfig.gitlab_kas.enabled=true \
+--set global.appConfig.gitlab_kas.externalUrl="wss://custom-kas-url.example.com" \
+--set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
+```
+
+or by configuring your `values.yml`:
+
+```yaml
+global:
+  appConfig:
+    gitlab_kas:
+      enabled: true
+      externalUrl: "wss://custom-kas-url.example.com"
+      internalUrl: "grpc://custom-internal-url"
+```
 
 ### LDAP
 
@@ -1228,6 +1314,19 @@ app_secret: 'APP SECRET'
 args:
   access_type: offline
   approval_prompt: ''
+```
+
+SAML configuration example:
+
+```yaml
+name: saml
+label: 'SAML'
+args:
+  assertion_consumer_service_url: 'https://gitlab.example.com/users/auth/saml/callback'
+  idp_cert_fingerprint: 'xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx'
+  idp_sso_target_url: 'https://SAML_IDP/app/xxxxxxxxx/xxxxxxxxx/sso/saml'
+  issuer: 'https://gitlab.example.com'
+  name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
 ```
 
 This content can be saved as `provider.yaml`, and then a secret created from it:
@@ -1386,6 +1485,44 @@ global:
 | `sanExtensions`                 | Boolean | `false` | Enable the use of SAN extensions to match users with certificates. |
 | `requiredForGitAccess`          | Boolean | `false` | Require browser session with smartcard sign-in for Git access. |
 
+### Sidekiq routing rules settings
+
+GitLab supports routing a job from a worker to a desired queue before it is
+scheduled. Sidekiq clients match a job against a configured list of routing
+rules. Rules are evaluated from first to last, and as soon as we find a match
+for a given worker we stop processing for that worker (first match wins). If
+the worker doesn't match any rule, it falls back the queue name generated from
+the worker name.
+
+By default, the routing rules are not configured (or denoted with an empty
+array), all the jobs are routed to the queue generated from the worker name.
+
+The routing rules list is an ordered array of tuples of query and
+corresponding queue.
+
+- The query is following
+[worker matching query](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector) syntax.
+
+- The queue_name must be a valid Sidekiq queue name. If the queue name
+is nil, or an empty string, the worker is routed to the queue generated
+by the name of the worker instead.
+
+The query supports wildcard matching `*`, which matches all workers. As a
+result, the wildcard query must stay at the end of the list or the later rules
+are ignored.
+
+```yaml
+global:
+  appConfig:
+    sidekiq:
+      routingRules:
+      - ["resource_boundary=cpu", "cpu_boundary"]
+      - ["feature_category=pages", null]
+      - ["feature_category=search", "search"]
+      - ["feature_category=memory|resource_boundary=memory", "memory-bound"]
+      - ["*", "default"]
+```
+
 ## Configure Rails settings
 
 A large portion of the GitLab suite is based upon Rails. As such, many containers within this project operate with this stack. These settings apply to all of those containers, and provide an easy access method to setting them globally versus individually.
@@ -1481,7 +1618,7 @@ nginx-ingress:
 You can enable handling [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/) on the SSH Ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header.
 By doing so, this will prevent SSH from receiving the additional headers and not break SSH.
 
-One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [AWS layer 4 loadbalancer example](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/aws/elb-layer4-loadbalancer.yml) to properly set it up.
+One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [AWS layer 4 loadbalancer example](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/aws/elb-layer4-loadbalancer.yaml) to properly set it up.
 
 ```yaml
 global:
@@ -1680,7 +1817,64 @@ global:
       environment: production
 ```
 
+## Node Selector
+
+Custom `nodeSelector`s can be applied to all components globally. Any global defaults
+can also be overridden on each subchart individually.
+
+```yaml
+global:
+  nodeSelector:
+    disktype: ssd
+```
+
+> **Note**: charts that are maintained externally do not respect the `global.nodeSelector`
+> at this time and may need to be configured separately based on available chart values.
+> This includes Prometheus, cert-manager, Redis, etc.
+
 ## Labels
+
+### Common Labels
+
+Labels can be applied to nearly all objects that are created by various objects
+by using the configuration `common.labels`. This can be applied under the
+`global` key, or under a specific charts' configuration. Example:
+
+```yaml
+global:
+  common:
+    labels:
+      environment: production
+gitlab:
+  gitlab-shell:
+    common:
+      labels:
+        foo: bar
+```
+
+With the above example configuration, nearly all components deployed by the Helm
+chart will be provided the label set `environment: production`. All components
+of the GitLab Shell chart will receive the label set `foo: bar`. Some charts
+allow for additional nesting. For example, the Sidekiq and Webservices charts
+allow for additional deployments depending on your configuration needs:
+
+```yaml
+gitlab:
+  sidekiq:
+    pods:
+      - name: pod-0
+        common:
+          labels:
+            baz: bat
+```
+
+In the above example, all components associated with the `pod-0` Sidekiq
+deployment will also recieve the label set `baz: bat`. Refer to the Sidekiq and
+Webservice charts for additional details.
+
+Some charts that we depend on are excluded from this label configuration. Only
+the [GitLab component sub-charts](gitlab/index.md) will receive these
+extra labels.
 
 ### Pod
 
@@ -1791,3 +1985,8 @@ More information on the available configuration options is available in the
 
 More detailed examples can be found in the
 [Omnibus SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).
+
+## Platform
+
+The `platform` key is reserved for specific features targeting a specific
+platform like GKE or EKS.

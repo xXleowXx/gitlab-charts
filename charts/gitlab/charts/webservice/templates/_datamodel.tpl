@@ -49,11 +49,15 @@ This is output as YAML, it can be read back in as a dict via `toYaml`.
 {{- define "webservice.datamodel.blank" -}}
 ingress:
   path: # intentionally not setting a value. User must set.
+  pathType: Prefix
+  provider: nginx
   annotations:
     {{- .Values.ingress.annotations | toYaml | nindent 4 }}
   proxyConnectTimeout: {{ .Values.ingress.proxyConnectTimeout }}
   proxyReadTimeout: {{ .Values.ingress.proxyReadTimeout }}
   proxyBodySize: {{ .Values.ingress.proxyBodySize | quote }}
+common:
+  labels: {}
 deployment:
   annotations:
     {{- if .Values.deployment.annotations }}
@@ -70,10 +74,10 @@ pod:
 service:
   labels: # additional labels to .serviceLabels
   type: {{ .Values.service.type }}
-  {{- if .Values.service.loadBalancerIP -}}
+  {{- if .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}
-  {{- if .Values.service.loadBalancerSourceRanges -}}
+  {{- if .Values.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
     {{- range .Values.service.loadBalancerSourceRanges }}
     - {{ . | quote }}
@@ -93,8 +97,6 @@ resources: # resources for `webservice` container
   {{- .Values.resources | toYaml | nindent 2 }}
 workhorse:
   {{- .Values.workhorse | toYaml | nindent 2 }}
-unicorn:
-  {{- .Values.unicorn | toYaml | nindent 2 }}
 extraEnv:
   {{- .Values.extraEnv | toYaml | nindent 2 }}
 puma:

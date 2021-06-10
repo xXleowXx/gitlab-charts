@@ -11,13 +11,13 @@ metadata:
     {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas | int }}
-  strategy:
-    rollingUpdate: null
-    type: Recreate
   selector:
     matchLabels:
       app: {{ template "name" . }}
       release: {{ .Release.Name }}
+  {{- if .Values.deployment.strategy }}
+  strategy: {{ .Values.deployment.strategy | toYaml | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:
@@ -213,6 +213,7 @@ spec:
               items:
                 - key: registry-auth.key
                   path: registry/gitlab-registry.key
+          {{- include "gitlab.registry.notificationSecret.mount" $ | nindent 10 -}}
           {{- if or .Values.backups.objectStorage.config (not (or .Values.global.minio.enabled .Values.global.appConfig.object_store.enabled)) }}
           - secret:
               name: {{ required "A valid backups.objectStorage.config.secret is needed!" .Values.backups.objectStorage.config.secret }}
@@ -266,8 +267,5 @@ spec:
         emptyDir:
           medium: "Memory"
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
-    {{- if .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
-    {{- end }}
+      {{- include "gitlab.nodeSelector" . | nindent 6 }}
 {{- end }}

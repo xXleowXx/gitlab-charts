@@ -37,6 +37,7 @@ configurations that can be supplied to the `helm install` command using the
 | ----------------------------------------- | ----------------- | -------------------------------------------------------- |
 | `annotations`                             |                   | Pod annotations                                          |
 | `common.labels`                           | `{}`              | Supplemental labels that are applied to all objects created by this chart. |
+| `deployment.strategy`                     | `{}`              | Allows one to configure the update strategy used by the deployment. When not provided, the cluster default is used. |
 | `extraEnv`                                |                   | List of extra environment variables to expose            |
 | `image.pullPolicy`                        | `IfNotPresent`    | GitLab image pull policy                                 |
 | `image.pullSecrets`                       |                   | Secrets for the image repository                         |
@@ -68,6 +69,8 @@ configurations that can be supplied to the `helm install` command using the
 | `artifactsServerTimeout`         | `10`                  | Timeout (in seconds) for a proxied request to the artifacts server |
 | `artifactsServerUrl`             |                       | API URL to proxy artifact requests to                |
 | `domainConfigSource`             | `gitlab`              | Domain configuration source                          |
+| `extraVolumeMounts`              |                       | List of extra volumes mounts to add                  |
+| `extraVolumes`                   |                       | List of extra volumes to create                      |
 | `gitlabClientHttpTimeout`        |                       | GitLab API HTTP client connection timeout in seconds |
 | `gitlabClientJwtExpiry`          |                       | JWT Token expiry time in seconds                     |
 | `gitlabServer`                   |                       | GitLab server FQDN                                   |
@@ -85,3 +88,42 @@ configurations that can be supplied to the `helm install` command using the
 | `tls.minVersion`                 |                       | Specifies the minimum SSL/TLS version                |
 | `tls.maxVersion`                 |                       | Specifies the maximum SSL/TLS version                |
 | `useHttp2`                       | `true`                | Enable HTTP2 support                                 |
+
+### Configuring the `ingress`
+
+This section controls the GitLab Pages Ingress.
+
+| Name                   | Type    | Default | Description |
+|:---------------------- |:-------:|:------- |:----------- |
+| `annotations`          | String  |         | This field is an exact match to the standard `annotations` for [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). |
+| `configureCertmanager` | Boolean | `false` | Toggles Ingress annotation `certmanager.k8s.io/issuer`. The acquisition of a TLS certificate for GitLab Pages via cert-manager is disabled because a wildcard certificate acquisition requires a cert-manager Issuer with a [DNS01 solver](https://cert-manager.io/docs/configuration/acme/dns01/), and the Issuer deployed by this chart only provides a [HTTP01 solver](https://cert-manager.io/docs/configuration/acme/http01/). For more information see the [TLS requirement for GitLab Pages](../../../installation/tls.md). |
+| `enabled`              | Boolean |         | Setting that controls whether to create Ingress objects for services that support them. When not set, the `global.ingress.enabled` setting is used. |
+| `tls.enabled`          | Boolean |         | When set to `false`, you disable TLS for the Registry subchart. This is mainly useful for cases in which you cannot use TLS termination at `ingress-level`, like when you have a TLS-terminating proxy before the Ingress Controller. |
+| `tls.secretName`       | String  |         | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the registry URL. When not set, the `global.ingress.tls.secretName` is used instead. Defaults to not being set. |
+
+## Chart configuration examples
+
+### extraVolumes
+
+`extraVolumes` allows you to configure extra volumes chart-wide.
+
+Below is an example use of `extraVolumes`:
+
+```yaml
+extraVolumes: |
+  - name: example-volume
+    persistentVolumeClaim:
+      claimName: example-pvc
+```
+
+### extraVolumeMounts
+
+`extraVolumeMounts` allows you to configure extra volumeMounts on all containers chart-wide.
+
+Below is an example use of `extraVolumeMounts`:
+
+```yaml
+extraVolumeMounts: |
+  - name: example-volume
+    mountPath: /etc/example
+```

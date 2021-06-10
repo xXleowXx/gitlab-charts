@@ -10,13 +10,41 @@ The table below maps some of the key previous chart versions and GitLab versions
 
 | Chart version | GitLab version |
 |---------------|----------------|
+| 4.12.3 | 13.12.3 |
+| 4.12.2 | 13.12.2 |
+| 4.12.1 | 13.12.1 |
+| 4.12.0 | 13.12.0 |
+| 4.11.5 | 13.11.5 |
+| 4.11.4 | 13.11.4 |
+| 4.11.3 | 13.11.3 |
+| 4.11.2 | 13.11.2 |
+| 4.11.1 | 13.11.1 |
+| 4.11.0 | 13.11.0 |
+| 4.10.5 | 13.10.5 |
+| 4.10.4 | 13.10.4 |
+| 4.10.3 | 13.10.3 |
+| 4.10.2 | 13.10.2 |
+| 4.10.1 | 13.10.1 |
+| 4.10.0 | 13.10.0 |
+| 4.9.7 | 13.9.7 |
+| 4.9.6 | 13.9.6 |
+| 4.9.5 | 13.9.5 |
+| 4.9.4 | 13.9.4 |
+| 4.9.3 | 13.9.3 |
+| 4.9.2 | 13.9.2 |
 | 4.9.1 | 13.9.1 |
 | 4.9.0 | 13.9.0 |
+| 4.8.8 | 13.8.8 |
+| 4.8.7 | 13.8.7 |
+| 4.8.6 | 13.8.6 |
+| 4.8.5 | 13.8.5 |
 | 4.8.4 | 13.8.4 |
 | 4.8.3 | 13.8.3 |
 | 4.8.2 | 13.8.2 |
 | 4.8.1 | 13.8.1 |
 | 4.8.0 | 13.8.0 |
+| 4.7.9 | 13.7.9 |
+| 4.7.8 | 13.7.8 |
 | 4.7.7 | 13.7.7 |
 | 4.7.6 | 13.7.6 |
 | 4.7.5 | 13.7.5 |
@@ -284,9 +312,6 @@ To see the full list, you can issue the following command with Helm:
 helm repo add gitlab https://charts.gitlab.io/
 helm search repo -l gitlab/gitlab
 ```
-
-NOTE:
-With Helm v2, the search command should be `helm search -l gitlab/gitlab`.
 
 You will receive an output similar to:
 

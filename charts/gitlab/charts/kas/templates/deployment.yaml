@@ -14,6 +14,9 @@ spec:
     matchLabels:
       app: {{ template "name" . }}
       release: {{ .Release.Name }}
+  {{- if .Values.deployment.strategy }}
+  strategy: {{ .Values.deployment.strategy | toYaml | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:
@@ -34,6 +37,7 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+      {{- include "gitlab.nodeSelector" . | nindent 6 }}
       {{- if .Values.tolerations }}
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}
@@ -46,6 +50,7 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         runAsGroup: {{ .Values.securityContext.runAsGroup }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
+      {{- include "pullsecrets" $.Values.image | nindent 6 }}
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ template "name" . }}
@@ -91,8 +96,4 @@ spec:
             {{- if .Values.redis.enabled -}}
             {{- include "gitlab.redis.secrets" . | nindent 12 }}
             {{- end }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
-      {{- end }}
 {{- end }}

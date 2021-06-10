@@ -51,7 +51,7 @@ function bootstrap(){
     --enable-ip-alias \
     --network $INT_NETWORK \
     --subnetwork $SUBNETWORK \
-    --project $PROJECT --enable-basic-auth $EXTRA_CREATE_ARGS;
+    --project $PROJECT $EXTRA_CREATE_ARGS;
 
   if ${USE_STATIC_IP}; then
     gcloud compute addresses create $external_ip_name --region $REGION --project $PROJECT;
@@ -68,14 +68,16 @@ function bootstrap(){
 
   gcloud container clusters get-credentials $CLUSTER_NAME --zone $ZONE --project $PROJECT;
 
+  echo "Wait for APIs to be responding"
+  kubectl --namespace=kube-system wait --for=condition=Available --timeout=5m apiservices/v1.
+
   # Create roles for RBAC Helm
   if $RBAC_ENABLED; then
-    kubectl config set-credentials ${CLUSTER_NAME}-admin-user --username=admin --password=$(cluster_admin_password_gke)
     if [ -z "${ADMIN_USER}" ]; then
       ADMIN_USER=$(gcloud config list account --format "value(core.account)" 2> /dev/null)
     fi
 
-    kubectl --dry-run --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $ADMIN_USER 2> /dev/null | kubectl --user=${CLUSTER_NAME}-admin-user apply -f -
+    kubectl --dry-run --output=yaml create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $ADMIN_USER 2> /dev/null | kubectl apply -f -
 
     if [ ! $IS_HELM_3 -eq 0 ]; then
       status_code=$(curl -L -w '%{http_code}' -o rbac-config.yaml -s "https://gitlab.com/gitlab-org/charts/gitlab/raw/master/doc/installation/examples/rbac-config.yaml");
@@ -84,7 +86,7 @@ function bootstrap(){
         exit 1;
       fi
 
-      kubectl --user=${CLUSTER_NAME}-admin-user create -f rbac-config.yaml;
+      kubectl create -f rbac-config.yaml;
     fi
   fi
 

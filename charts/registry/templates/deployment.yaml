@@ -15,9 +15,9 @@ spec:
     matchLabels:
       app: {{ template "name" . }}
       release: {{ .Release.Name }}
-{{- if .Values.updateStrategy }}
-  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
-{{- end }}
+  {{- if .Values.deployment.strategy }}
+  strategy: {{ .Values.deployment.strategy | toYaml | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:
@@ -39,6 +39,7 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
+      {{- include "gitlab.nodeSelector" . | nindent 6 }}
       {{- if .Values.tolerations }}
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}
@@ -46,10 +47,6 @@ spec:
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
-      {{- end }}
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
         podAntiAffinity:
@@ -87,11 +84,29 @@ spec:
               mountPath: /registry
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
+          env:
+          {{- include "gitlab.extraEnv" . | nindent 10 }}
+        {{- if .Values.database.enabled }}
+        - name: dependencies
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
+          command: ["/scripts/wait-for-deps"]
+          volumeMounts:
+            - name: registry-server-config
+              mountPath: /etc/docker/registry/
+              readOnly: true
+          resources:
+            {{- toYaml .Values.init.resources | nindent 12 }}
+          env:
+          {{- include "gitlab.extraEnv" . | nindent 10 }}
+        {{- end }}
       {{- include "pullsecrets" .Values.image | indent 6 }}
       containers:
         - name: registry
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
+          env:
+          {{- include "gitlab.extraEnv" . | nindent 10 }}
           volumeMounts:
           - name: registry-server-config
             mountPath: /etc/docker/registry/
@@ -166,5 +181,9 @@ spec:
                   path: profiling-key.json
           {{- end }}
           {{- include "registry.notifications.secrets" $ | nindent 10 }}
+          {{- if .Values.database.enabled -}}
+          {{-   include "gitlab.registry.database.password.projectedVolume" . | nindent 10 }}
+          {{-   include "gitlab.registry.psql.ssl" . | nindent 10 }}
+          {{- end -}}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end -}}

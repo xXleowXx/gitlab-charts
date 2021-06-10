@@ -31,6 +31,7 @@ monitoring:
 shutdown:
   blackoutSeconds: 10
 
+extraEnv: {}
 
 annotations: {}
 
@@ -69,7 +70,7 @@ service:
   # loadBalancerSourceRanges:
 enabled: true
 ingress:
-  enabled: true
+  enabled: 
   proxyConnectTimeout: 15
   proxyReadTimeout: 600
   proxyBodySize: "512m"
@@ -79,15 +80,11 @@ ingress:
     # enabled: true
   annotations:
     nginx.ingress.kubernetes.io/service-upstream: "true"
+  configureCertmanager:
   # Use this in combination of .deployments below
   requireBasePath: true
 
 workerProcesses: 2
-
-unicorn:
-  memory: # in MB units
-    min: 1024
-    max: 1280
 
 puma:
   workerMaxMemory: 1024 # in MB units
@@ -122,6 +119,7 @@ deployment:
   strategy: {}
 
 workhorse:
+  keywatcher: true
   sentryDSN: ""
   extraArgs: ""
   logFormat: json # valid: (json, structured, text)
@@ -129,6 +127,7 @@ workhorse:
     requests:
       cpu: 100m
       memory: 100M
+  # shutdownTimeout:
   # image: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee
   livenessProbe:
     initialDelaySeconds: 20
@@ -156,7 +155,7 @@ psql: {}
 global:
   # imagePullPolicy: IfNotPresent
   ingress:
-    enabled: true
+    enabled: 
     annotations: {}
     tls: {}
       # secretName:

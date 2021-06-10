@@ -62,10 +62,39 @@ class HelmTemplate
     @mapped.dig(item,'spec','template','spec','volumes')
   end
 
+  def labels(item)
+    @mapped.dig(item,'metadata','labels')
+  end
+
+  def template_labels(item)
+    # only one of the following should return results
+    @mapped.dig(item, 'spec', 'template', 'metadata', 'labels') ||
+      @mapped.dig(item, 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'labels')
+  end
+
+  def annotations(item)
+    @mapped.dig(item, 'metadata', 'annotations')
+  end
+
+  def template_annotations(item)
+    # only one of the following should return results
+    @mapped.dig(item, 'spec', 'template', 'metadata', 'annotations') ||
+      @mapped.dig(item, 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'annotations')
+  end
+
   def find_volume(item, volume_name)
     volumes = volumes(item)
     volumes.keep_if { |volume| volume['name'] == volume_name }
     volumes[0]
+  end
+
+  def find_projected_secret(item, mount, secret)
+    secrets = find_volume(item,mount)
+    secrets['projected']['sources'].keep_if do |s|
+      s['secret']['name'] == secret
+    end
+
+    secrets['projected']['sources'].length == 1
   end
 
   def find_volume_mount(item, container_name, volume_name, init = false)

@@ -35,15 +35,14 @@ can do one of three things:
   sudo gcloud components update
   ```
 
-- Install directly from the [Google Storage APIs](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-via-curl).
-- Install with the appropriate package management system:
-  - Linux: your package manager of choice, or Snap.
-  - [macOS](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-homebrew-on-macos)
-  - [Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-chocolatey-on-windows)
+- Install with cURL or with the appropriate package management system for each OS:
+  - [Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+  - [macOS](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/#install-with-homebrew-on-macos)
+  - [Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/#install-on-windows-using-chocolatey-or-scoop)
 
 ### Installing Minikube
 
-See the [Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/install-minikube/)
+See the [Kubernetes documentation](https://minikube.sigs.k8s.io/docs/start/)
 where they suggest directly installing from the [releases on GitHub](https://github.com/kubernetes/minikube/releases).
 
 ### Choosing a VM driver
@@ -150,16 +149,6 @@ You can find the URL for the dashboard by calling:
 minikube dashboard --url
 ```
 
-## Hooking Helm to Minikube
-
-If you are using Helm v2, then once your Minikube is up and running, you
-can initialize Helm with the command `helm init`.
-
-Using Helm v3 does not require any initialization commands and will work
-out of the box.
-
-For further details on Helm, see [Developing for Helm](../../installation/tools.md#helm).
-
 ## Deploying the chart
 
 When deploying this chart into Minikube, some chart resources need to be reduced or disabled.
@@ -198,10 +187,6 @@ helm upgrade --install gitlab . \
   -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube.yaml
 ```
 
-NOTE:
-If using Helm v2, please see notes about the `--timeout` option
-in the [Deployment documentation](../../installation/deployment.md#deploy-using-helm).
-
 ### Deploying GitLab with minimal settings
 
 If using _absolute minimum_ resources, 3 CPU and 6GB of RAM, you must reduce all replicas
@@ -215,10 +200,6 @@ helm upgrade --install gitlab . \
   --timeout 600s \
   -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml
 ```
-
-NOTE:
-If using Helm v2, please see notes about the `--timeout` option
-in the [Deployment documentation](../../installation/deployment.md#deploy-using-helm).
 
 If the output of `minikube ip` was not `192.168.99.100`, add these arguments to override the IP endpoints in the example configuration files:
 

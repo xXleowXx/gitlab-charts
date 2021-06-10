@@ -106,6 +106,11 @@ helm upgrade gitlab gitlab/gitlab -f gitlab.yaml
 
 For more detailed information see [Upgrading](installation/upgrade.md).
 
+NOTE:
+**Zero-downtime upgrades** are not available with the GitLab charts.
+Ongoing work to support this feature can be tracked via
+[GitLab Epic 3444](https://gitlab.com/groups/gitlab-org/-/epics/3444).
+
 ## Uninstall
 
 To uninstall the GitLab Chart, run the following:
@@ -113,9 +118,6 @@ To uninstall the GitLab Chart, run the following:
 ```shell
 helm uninstall gitlab
 ```
-
-NOTE:
-With Helm v2, you need to use the command `helm delete --purge gitlab`.
 
 For the purposes of continuity, these charts have some Kubernetes objects that
 are not removed when performing `helm uninstall`. These are items we require you to
@@ -194,9 +196,6 @@ they map to, issue the following command with [Helm](installation/tools.md#helm)
 helm repo add gitlab https://charts.gitlab.io/
 helm search repo -l gitlab/gitlab
 ```
-
-NOTE:
-With Helm v2, the search command would be `helm search -l gitlab/gitlab`
 
 For more information, visit the [version mappings docs](installation/version_mappings.md).
 

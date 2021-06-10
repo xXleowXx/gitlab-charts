@@ -16,7 +16,8 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
     {{- include "gitlab.commonLabels" $ | nindent 4 }}
-    {{- include "webservice.labels" . | nindent 4}}
+    {{- include "webservice.labels" . | nindent 4 }}
+    {{- include "webservice.commonLabels" (dict "deployment" .common.labels "webservice" $.Values.common.labels) | nindent 4 }}
     {{- if .deployment.labels -}}
     {{-   toYaml .deployment.labels | nindent 4 }}
     {{- end }}
@@ -42,15 +43,12 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "name" $ }}
-        release: {{ $.Release.Name }}
         {{- include "gitlab.standardLabels" $ | nindent 8 }}
         {{- include "gitlab.commonLabels" $ | nindent 8 }}
-        {{- include "gitlab.podLabels" $ | nindent 8 }}
         {{- include "webservice.labels" . | nindent 8 }}
-        {{- if .pod.labels -}}
-        {{-   toYaml .pod.labels | nindent 8 }}
-        {{- end }}
+        {{- include "gitlab.podLabels" $ | nindent 8 }}
+        {{- include "webservice.commonLabels" (dict "deployment" .common.labels "webservice" $.Values.common.labels) | nindent 8 }}
+        {{- include "webservice.podLabels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yml") $ | sha256sum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
@@ -65,6 +63,8 @@ spec:
       tolerations:
         {{- toYaml .tolerations | nindent 8 }}
       {{- end }}
+      {{- $nodeSelectors := dict "Values" (dict "global" (dict "nodeSelector" $.Values.global.nodeSelector) "nodeSelector" .nodeSelector) -}}
+      {{- include "gitlab.nodeSelector" $nodeSelectors | nindent 6 }}
       {{- if $.Values.priorityClassName }}
       priorityClassName: {{ $.Values.priorityClassName }}
       {{- end }}
@@ -209,12 +209,9 @@ spec:
               value: "{{ .puma.workerMaxMemory }}"
             - name: DISABLE_PUMA_WORKER_KILLER
               value: "{{ .puma.disableWorkerKiller }}"
-            {{- else }}
-            - name: UNICORN_MEMORY_MIN
-              value: "{{ .unicorn.memory.min }}"
-            - name: UNICORN_MEMORY_MAX
-              value: "{{ .unicorn.memory.max }}"
             {{- end }}
+            - name: SHUTDOWN_BLACKOUT_SECONDS
+              value: "{{ .shutdown.blackoutSeconds }}"
             {{- include "gitlab.tracing.env" $ | nindent 12 }}
             - name: GITLAB_TRACING_URL
               value: {{ $.Values.global.tracing.urlTemplate | quote }}
@@ -274,11 +271,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                {{- if eq (lower $.Values.webServer) "unicorn" }}
-                command: ["/bin/bash", "-c", "pkill -SIGQUIT -f 'unicorn master'"]
-                {{- else }}
                 command: ["/bin/bash", "-c", "pkill -SIGINT -o ruby"]
-                {{- end }}
           resources:
             {{- toYaml .resources | nindent 12 }}
         - name: gitlab-workhorse
@@ -363,7 +356,7 @@ spec:
           name: {{ .fullname }}
       - name: workhorse-config
         configMap:
-            name: {{ $.Release.Name }}-workhorse-config
+            name: {{ $.Release.Name }}-workhorse-{{ .name }}
       - name: init-webservice-secrets
         projected:
           defaultMode: 0400
@@ -393,6 +386,7 @@ spec:
               items:
                 - key: registry-auth.key
                   path: registry/gitlab-registry.key
+          {{- include "gitlab.registry.notificationSecret.mount" $ | nindent 10 }}
           - secret:
               name: {{ template "gitlab.workhorse.secret" $ }}
               items:
@@ -445,9 +439,5 @@ spec:
       - name: shared-upload-directory
         emptyDir: {}
       {{- include "gitlab.certificates.volumes" $ | nindent 6 }}
-    {{- if .nodeSelector }}
-      nodeSelector:
-        {{- toYaml .nodeSelector | nindent 8 }}
-    {{- end }}
 {{- end }}{{/* END range deployments */}}
 {{- end }}

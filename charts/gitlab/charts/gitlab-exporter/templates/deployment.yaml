@@ -15,6 +15,9 @@ spec:
     matchLabels:
       app: {{ template "name" . }}
       release: {{ .Release.Name }}
+  {{- if .Values.deployment.strategy }}
+  strategy: {{ .Values.deployment.strategy | toYaml | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       labels:
@@ -136,10 +139,7 @@ spec:
         emptyDir:
           medium: "Memory"
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
-    {{- if .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml .Values.nodeSelector | nindent 8 }}
-    {{- end }}
+      {{- include "gitlab.nodeSelector" . | nindent 6 }}
     {{- if .Values.tolerations }}
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}

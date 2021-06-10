@@ -61,11 +61,14 @@ the `helm install` command using the `--set` flags.
 | `redis.enabled`             | `true`         | Allows opting-out of using Redis for KAS features. Warnings: Redis will become a hard dependency soon, so this key is already deprecated. |
 | `resources.requests.cpu`    | `75m`                 | GitLab Exporter minimum CPU                    |
 | `resources.requests.memory` | `100M`                | GitLab Exporter minimum memory                 |
-| `service.externalPort`      | `8150`         | External port                    |
-| `service.internalPort`      | `8150`         | Internal port                    |
+| `service.externalPort`      | `8150`         | External port (for agentk connections) |
+| `service.internalPort`      | `8150`         | Internal port (for agentk connections) |
+| `service.apiInternalPort`   | `8153`         | Internal port for the internal API (for GitLab backend) |
+| `global.kas.service.apiExternalPort` | `8153` | External port for the internal API (for GitLab backend) |
 | `service.type`              | `ClusterIP`    | Service type                     |
 | `tolerations`               | `[]`           | Toleration labels for pod assignment     |
 | `customConfig`              | `{}`           | When given, merges the default `kas` configuration with these values giving precedence to those defined here. |
+| `deployment.strategy`       | `{}`           | Allows one to configure the update strategy utilized by the deployment |
 
 ## Development (how to manual QA)
 

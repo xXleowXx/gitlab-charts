@@ -91,11 +91,14 @@ helm install gitlab gitlab/gitlab \
   --set minio.ingress.tls.secretName=RELEASE-minio-tls
 ```
 
+NOTE:
+If you are configuring your GitLab instance to talk with other services, it may be necessary to [provide the certificate chains](../charts/globals.md#custom-certificate-authorities) for those services to GitLab through the Helm chart as well.
+
 ## Option 4: Use auto-generated self-signed wildcard certificate
 
 These charts also provide the capability to provide a auto-generated self-signed wildcard certificate.
 This can be useful in environments where Let's Encrypt is not an option, but security via SSL is still
-desired. This functionality is provided by the [shared-secrets](../charts/shared-secrets/index.md) chart.
+desired. This functionality is provided by the [shared-secrets](../charts/shared-secrets.md) job.
 
 > **Note**: The `gitlab-runner` chart does not function properly with self-signed certificates. We recommend
 disabling it, as shown below.
@@ -107,22 +110,29 @@ helm install gitlab gitlab/gitlab \
   --set gitlab-runner.install=false
 ```
 
-The `shared-secrets` chart will then produce a CA certificate and wildcard certificate for use by all externally
-accessible services. The secrets containing these will be `RELEASE-wildcard-tls` and `RELEASE-wildcard-tls-ca`.
-The `RELEASE-wildcard-tls-ca` contains the public CA certificate that can be distributed to users and systems that
-will access the deployed GitLab instance.
+The `shared-secrets` job will then produce a CA certificate, wildcard certificate, and a certificate chain
+for use by all externally accessible services. The secrets containing these will be `RELEASE-wildcard-tls`,
+`RELEASE-wildcard-tls-ca`, and `RELEASE-wildcard-tls-chain`. The `RELEASE-wildcard-tls-ca` contains the public
+CA certificate that can be distributed to users and systems that will access the deployed GitLab instance.
+The `RELEASE-wildcard-tls-chain` contains both the CA certificate and the wildcard certificate which you can
+also use directly for GitLab Runner via `gitlab-runner.certsSecretName=RELEASE-wildcard-tls-chain`.
 
 ## TLS requirement for GitLab Pages
 
 For [GitLab Pages with TLS support](https://docs.gitlab.com/ee/administration/pages/#wildcard-domains-with-tls-support),
 a wildcard certificate applicable for `*.<pages domain>` (default value of
-`<pages domain>` is `pages.<base domain>`) is required. Because a wild card
-certificate is required, it can not be automatically created by cert-manager and
-Let's Encrypt, and users will have to bring one on their own.
+`<pages domain>` is `pages.<base domain>`) is required.
 
-By default, name of this secret is `<RELEASE>-pages-tls`. A different name can
-be specified using the `gitlab.gitlab-pages.ingress.tls.secretName` setting as
-shown below.
+Because a wild card certificate is required, it can not be automatically created
+by cert-manager and Let's Encrypt. cert-manager is therefore by default disabled
+for GitLab Pages (via `gitlab-pages.ingress.configureCertmanager`), so you will
+have to provide your own k8s Secret containing a wild card certificate. If you
+have an external cert-manager configured using `global.ingress.annotations`, you
+probably also want to override such annotations in
+`gitlab-pages.ingress.annotations`.
+
+By default, the name of this secret is `<RELEASE>-pages-tls`. A different name
+can be specified using the `gitlab.gitlab-pages.ingress.tls.secretName` setting:
 
 ```shell
 helm install gitlab gitlab/gitlab \

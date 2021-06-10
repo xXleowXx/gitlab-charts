@@ -46,4 +46,5 @@ registry:
   api_url: {{ default "http" .Values.registry.api.protocol }}://{{ template "gitlab.registry.api.host" . }}:{{ default 5000 .Values.registry.api.port }}
   key: /etc/gitlab/registry/gitlab-registry.key
   issuer: {{ .Values.registry.tokenIssuer }}
+  notification_secret: <%= YAML.load_file("/etc/gitlab/registry/notificationSecret").flatten.first %>
 {{- end -}}{{/* "gitlab.appConfig.registry.configuration" */}}

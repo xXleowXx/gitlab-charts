@@ -21,6 +21,7 @@ data:
   {{- include "gitlab.rails.redis.sharedState" . | nindent 2 }}
   {{- include "gitlab.rails.redis.queues" . | nindent 2 }}
   {{- include "gitlab.rails.redis.cable" . | nindent 2 }}
+  {{- include "gitlab.rails.redis.traceChunks" . | nindent 2 }}
   gitlab.yml.erb: |
     production: &base
       gitlab:
@@ -77,6 +78,7 @@ data:
       {{- include "gitlab.appConfig.terraformState.configuration" (dict "config" $.Values.global.appConfig.terraformState "context" $) | nindent 6 }}
       {{- include "gitlab.appConfig.dependencyProxy.configuration" (dict "config" $.Values.global.appConfig.dependencyProxy "context" $) | nindent 6 }}
       {{- include "gitlab.appConfig.pseudonymizer.configuration" $ | nindent 6 }}
+      {{- include "gitlab.appConfig.sidekiq.configuration" $ | nindent 6 }}
       {{- include "gitlab.geo.config" $ | nindent 6 }}
       {{- include "gitlab.pages.config" $ | nindent 6 }}
       mattermost:

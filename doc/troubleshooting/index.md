@@ -18,9 +18,6 @@ should first purge the failed install before installing again.
 helm uninstall <release-name>
 ```
 
-NOTE:
-With Helm v2, the uninstall command would be `helm delete --purge <release-name>`.
-
 If instead, the initial install command timed out, but GitLab still came up successfully,
 you can add the `--force` flag to the `helm upgrade` command to ignore the error
 and attempt to update the release.
@@ -40,10 +37,6 @@ example, `Test Username` is the culprit:
 ```shell
 helm upgrade gitlab gitlab/gitlab --timeout 600s --set global.email.display_name=Test Username ...
 ```
-
-NOTE:
-If using Helm v2, please see notes about the `--timeout` option
-in the [Deployment documentation](../installation/deployment.md#deploy-using-helm).
 
 To fix it, pass the parameters in single quotes:
 
@@ -209,3 +202,68 @@ and specify a compatible version of the `gitlab/gitlab` chart in your `helm` com
 
 This is a known issue. After migrating a Helm 2 release to Helm 3, the subsequent upgrades may fail.
 You can find the full explanation and workaround in [Migrating from Helm v2 to Helm v3](../installation/migration/helm.md#known-issues).
+
+## Restoration failure: `ERROR:  cannot drop view pg_stat_statements because extension pg_stat_statements requires it`
+
+You may face this error when restoring a backup on your Helm chart instance. Use the following steps as a workaround:
+
+1. Inside your `task-runner` pod open the DB console:
+
+   ```shell
+   /srv/gitlab/bin/rails dbconsole -p
+   ```
+
+1. Drop the extension:
+
+   ```shell
+   DROP EXTENSION pg_stat_statements
+   ```
+
+1. Perform the restoration process.
+1. After the restoration is complete, re-create the extension in the DB console:
+
+   ```shell
+   CREATE EXTENSION pg_stat_statements
+   ```
+
+If you encounter the same issue with the `pg_buffercache` extension,
+follow the same steps above to drop and re-create it.
+
+You can find more details about this error in issue [#2469](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469).
+
+## Bundled PostgreSQL pod fails to start: `database files are incompatible with server`
+
+The following error message may appear in the bundled PostgreSQL pod after upgrading to a new version of the GitLab Helm chart:
+
+```plaintext
+gitlab-postgresql FATAL:  database files are incompatible with server
+gitlab-postgresql DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 12.7.
+```
+
+To address this, perform a [Helm rollback](https://helm.sh/docs/helm/helm_rollback) to the previous version of the chart and then follow the steps in the [upgrade guide](../installation/upgrade.md) to upgrade the bundled PostgreSQL version. Once PostgreSQL is properly upgraded, try the GitLab Helm chart upgrade again.
+
+## Increased load on `/api/v4/jobs/requests` endpoint
+
+You may face this issue if the option `workhorse.keywatcher` was set to `false` for the deployment servicing `/api/*`.
+Use the following steps to verify:
+
+1. Access the container `gitlab-workhorse` in the pod serving `/api/*`:
+
+   ```shell
+   kubectl exec -it --container=gitlab-workhorse <gitlab_api_pod> -- /bin/bash
+   ```
+
+1. Inspect the file `/srv/gitlab/config/workhorse-config.toml`. The `[redis]` configuration might be missing:
+
+   ```shell
+   cat /srv/gitlab/config/workhorse-config.toml | grep '\[redis\]'
+   ```
+
+If the `[redis]` configuration is not present, the `workhorse.keywatcher` flag was set to `false` during deployment
+thus causing the extra load in the `/api/v4/jobs/requests` endpoint. To fix this, enable the `keywatcher` in the
+`webservice` chart:
+
+```yaml
+workhorse:
+  keywatcher: true
+```

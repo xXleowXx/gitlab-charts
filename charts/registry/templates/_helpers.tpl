@@ -70,15 +70,18 @@ Returns the nginx ingress class
 Populate registry notifications
 */}}
 {{- define "registry.notifications.config" -}}
-{{- if $.Values.global.registry.notifications }}
+{{- $geoNotifier := include "global.geo.registry.syncNotifier" . | fromYaml -}}
+{{- $notifications := merge $.Values.global.registry.notifications $geoNotifier -}}
+{{- if $notifications }}
 notifications:
-  {{- if $.Values.global.registry.notifications.events }}
+  {{- if $notifications.events }}
   events:
     {{- toYaml $.Values.global.registry.notifications.events | nindent 4 }}
   {{- end -}}
-  {{- if $.Values.global.registry.notifications.endpoints }}
+  {{- $endpoints := concat (list) $notifications.endpoints $geoNotifier.endpoints | uniq -}}
+  {{- if $endpoints }}
   endpoints:
-    {{- range $endpoint := $.Values.global.registry.notifications.endpoints -}}
+    {{- range $endpoint := $endpoints -}}
       {{- if $endpoint.name -}}
         {{- $headers := pluck "headers" $endpoint | first -}}
         {{- $endpoint = omit $endpoint "headers" }}
@@ -122,9 +125,12 @@ Usage:
 Sensitive registry notification headers mounted as secrets
 */}}
 {{- define "registry.notifications.secrets" -}}
-{{- if $.Values.global.registry.notifications }}
+{{- $geoNotifier := include "global.geo.registry.syncNotifier" . | fromYaml -}}
+{{- $notifications := merge $.Values.global.registry.notifications $geoNotifier -}}
+{{- if $notifications }}
   {{- $uniqSecrets := list -}}
-  {{- range $endpoint := $.Values.global.registry.notifications.endpoints -}}
+  {{- $endpoints := concat (list) $notifications.endpoints $geoNotifier.endpoints | uniq -}}
+  {{- range $endpoint := $endpoints -}}
     {{- if and $endpoint.name $endpoint.headers -}}
       {{- range $header, $value := $endpoint.headers -}}
         {{- if kindIs "map" $value -}}
@@ -162,4 +168,14 @@ Failing that a serviceAccount will be generated automatically
 */}}
 {{- define "registry.serviceAccount.name" -}}
 {{- coalesce .Values.serviceAccount.name .Values.global.serviceAccount.name ( include "registry.fullname" . ) -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified job name.
+Due to the job only being allowed to run once, we add the chart revision so Helm
+upgrades don't cause errors trying to create the already ran job.
+*/}}
+{{- define "registry.migrations.jobname" -}}
+{{- $name := include "registry.fullname" . | trunc 55 | trimSuffix "-" -}}
+{{- printf "%s-migrations-%d" $name .Release.Revision | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

@@ -1,6 +1,6 @@
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
-  tag: 'v3.0.0-gitlab'
+  tag: 'v3.4.1-gitlab'
   pullPolicy: 'IfNotPresent'
   pullSecrets: []
 
@@ -26,6 +26,12 @@ deployment:
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 3
+
+  # strategy is utilized to configure the desired upgrade approach and
+  # configuration for the deployment.  See the Kubernetes documentation
+  # related to this subject.
+  # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
 
 podLabels: {}
 common:
@@ -66,7 +72,7 @@ networkpolicy:
   annotations: {}
 
 ingress:
-  enabled: true
+  enabled: 
   proxyReadTimeout: 900
   proxyBodySize: "0"
   proxyBuffering: "off"
@@ -74,11 +80,12 @@ ingress:
     # secretName:
     # enabled: true
   annotations: {}
+  configureCertmanager:
   path: # /
 
 global:
   ingress:
-    enabled: true
+    enabled: 
     annotations: {}
     tls: {}
       # secretName:
@@ -104,6 +111,8 @@ global:
   registry:
     certificate: {}
     httpSecret: {}
+  psql:
+    ssl: {}
 
 ## Control the InitContainer behaviors.
 init:
@@ -155,6 +164,16 @@ init:
     if [ -f /config/profiling-key.json ]; then
       cp /config/profiling-key.json /registry/profiling-key.json
     fi
+    # Insert Database password, if enabled
+    if [ -f /config/database_password ] ; then
+      sed -i -e 's@DB_PASSWORD_FILE@'"$(cat /config/database_password)"'@' /registry/config.yml
+    fi
+    # Copy the database TLS connection files to the expected location and set permissions
+    if [ -d /config/ssl ]; then
+      cp -r /config/ssl/ /registry/ssl
+      chmod 700 /registry/ssl
+      chmod 600 /registry/ssl/*.pem
+    fi
 
 # define some sane resource requests and limitations
 resources:
@@ -179,12 +198,6 @@ tokenIssuer: 'gitlab-issuer'
 authAutoRedirect: false
 
 maxUnavailable: 1
-
-# updateStrategy is utilized to configure the desired upgrade approach and
-# configuration for the deployment.  See the Kubernetes documentation
-# related to this subject.
-# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-updateStrategy: {}
 
 # if minReplicas is >1, shared storage MUST be used.
 hpa:
@@ -265,3 +278,32 @@ profiling:
 
 serviceAccount:
   create: false
+
+# Disable metadata database by default
+# NOTE: This is an experimental feature and must not be used in production.
+# https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database
+database:
+  enabled: false
+  user: registry
+  password: {}
+    # secret: RELEASE_NAME-registry-database-password
+    # key: password
+  name: registry
+  sslmode: disable
+  ssl: {}
+  migrations:
+    enabled: true
+    activeDeadlineSeconds: 3600
+    backoffLimit: 6
+
+# Configuration settings to support the migration of large registries to the metadata database.
+# NOTE: This is an experimental feature and must not be used in production.
+# https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#migration
+migration:
+  disablemirrorfs: false
+
+# Disable online garbage collection by default.
+# NOTE: This is an experimental feature and must not be used in production.
+# https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc
+gc:
+  disabled: true

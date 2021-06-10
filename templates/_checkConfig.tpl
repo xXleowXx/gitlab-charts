@@ -25,11 +25,13 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages := list -}}
 {{/* add templates here */}}
 {{- $messages = append $messages (include "gitlab.checkConfig.contentSecurityPolicy" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.gitaly.storageNames" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.praefect.storageNames" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.mixed" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues.cluster" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queueSelector" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.queues" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.timeout" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.sidekiq.routingRules" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.appConfig.maxRequestDurationSeconds" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.extern.repos" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.geo.database" .) -}}
@@ -40,17 +42,22 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.postgresql.deprecatedVersion" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.postgresql.noPasswordFile" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.database.externalLoadBalancing" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.incomingEmail.microsoftGraph" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.serviceDesk" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.serviceDesk.microsoftGraph" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.dependencyProxy.puma" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.database" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.gc" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.registry.migration" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.geo.registry.replication.primaryApiUrl" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -75,6 +82,38 @@ contentSecurityPolicy:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.contentSecurityPolicy */}}
+
+{{/*
+Protect against problems in storage names within repositories configuration.
+- Ensure that one (and only one) storage is named 'default'.
+- Ensure no duplicates
+
+Collects the list of storage names by rendering the 'gitlab.appConfig.repositories'
+template, and grabbing any lines that start with exactly 4 spaces.
+*/}}
+{{- define "gitlab.checkConfig.gitaly.storageNames" -}}
+{{- $errorMsg := list -}}
+{{- $config := include "gitlab.appConfig.repositories" $ -}}
+{{- $storages := list }}
+{{- range (splitList "\n" $config) -}}
+{{-   if (regexMatch "^    [^ ]" . ) -}}
+{{-     $storages = append $storages (trim . | trimSuffix ":") -}}
+{{-   end }}
+{{- end }}
+{{- if gt (len $storages) (len (uniq $storages)) -}}
+{{-   $errorMsg = append $errorMsg (printf "Each storage name must be unique. Current storage names: %s" $storages | sortAlpha | join ", ") -}}
+{{- end -}}
+{{- if not (has "default" $storages) -}}
+{{-   $errorMsg = append $errorMsg ("There must be one (and only one) storage named 'default'.") -}}
+{{- end }}
+{{- if not (empty $errorMsg) }}
+gitaly:
+{{- range $msg := $errorMsg }}
+    {{ $msg }}
+{{- end }}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.gitaly.storageNames -}}
 
 {{/*
 Ensure that if a user is migrating to Praefect, none of the Praefect virtual storage
@@ -146,40 +185,68 @@ sidekiq: mixed queues
 {{- end -}}
 {{/* END gitlab.checkConfig.sidekiq.queues.mixed */}}
 
-{{/* Check configuration of Sidekiq - queues must be a string when cluster is enabled */}}
-{{- define "gitlab.checkConfig.sidekiq.queues.cluster" -}}
+{{/* Check configuration of Sidekiq - queues must be a string */}}
+{{- define "gitlab.checkConfig.sidekiq.queues" -}}
 {{- if .Values.gitlab.sidekiq.pods -}}
 {{-   range $pod := .Values.gitlab.sidekiq.pods -}}
-{{-     $cluster := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.cluster "local" $pod.cluster "default" true) }}
-{{-     if and $cluster (hasKey $pod "queues") (ne (kindOf $pod.queues) "string") }}
-sidekiq: cluster
-    The pod definition `{{ $pod.name }}` has `cluster` enabled, but `queues` is not a string. (Note that `cluster` is enabled by default since version 4.0 of the GitLab Sidekiq chart.)
-{{-     else if and $cluster (hasKey $pod "negateQueues") (ne (kindOf $pod.negateQueues) "string") }}
-sidekiq: cluster
-    The pod definition `{{ $pod.name }}` has `cluster` enabled, but `negateQueues` is not a string. (Note that `cluster` is enabled by default since version 4.0 of the GitLab Sidekiq chart.)
+{{-     if and (hasKey $pod "queues") (ne (kindOf $pod.queues) "string") }}
+sidekiq:
+    The `queues` in pod definition `{{ $pod.name }}` is not a string.
+{{-     else if and (hasKey $pod "negateQueues") (ne (kindOf $pod.negateQueues) "string") }}
+sidekiq:
+    The `negateQueues` in pod definition `{{ $pod.name }}` is not a string.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.sidekiq.queues.cluster */}}
+{{/* END gitlab.checkConfig.sidekiq.queues */}}
 
-{{/* Check configuration of Sidekiq - cluster must be enabled for queueSelector to be valid */}}
-{{/* Simplify with https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/646 */}}
-{{- define "gitlab.checkConfig.sidekiq.queueSelector" -}}
-{{- if .Values.gitlab.sidekiq.pods -}}
-{{-   range $pod := .Values.gitlab.sidekiq.pods -}}
-{{-     $cluster := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.cluster "local" $pod.cluster "default" true) }}
-{{-     $queueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.queueSelector "local" $pod.queueSelector "default" false) }}
-{{-     $experimentalQueueSelector := include "gitlab.boolean.local" (dict "global" $.Values.gitlab.sidekiq.experimentalQueueSelector "local" $pod.experimentalQueueSelector "default" false) }}
-{{-     $selectorField := ternary "queueSelector" "experimentalQueueSelector" (eq $queueSelector "true") -}}
-{{-     if and (or $queueSelector $experimentalQueueSelector) (not $cluster) }}
-sidekiq: queueSelector
-    The pod definition `{{ $pod.name }}` has `{{ $selectorField }}` enabled, but does not have `cluster` enabled. `{{ $selectorField }}` only works when `cluster` is enabled.
+{{/*
+Ensure that Sidekiq timeout is less than terminationGracePeriodSeconds
+*/}}
+{{- define "gitlab.checkConfig.sidekiq.timeout" -}}
+{{-   range $i, $pod := $.Values.gitlab.sidekiq.pods -}}
+{{-     $activeTimeout := int (default $.Values.gitlab.sidekiq.timeout $pod.timeout) }}
+{{-     $activeTerminationGracePeriodSeconds := int (default $.Values.gitlab.sidekiq.deployment.terminationGracePeriodSeconds $pod.terminationGracePeriodSeconds) }}
+{{-     if gt $activeTimeout $activeTerminationGracePeriodSeconds }}
+sidekiq:
+  You must set `terminationGracePeriodSeconds` ({{ $activeTerminationGracePeriodSeconds }}) longer than `timeout` ({{ $activeTimeout }}) for pod `{{ $pod.name }}`.
+{{-     end }}
+{{-   end }}
+{{- end -}}
+{{/* END gitlab.checkConfig.sidekiq.timeout */}}
+
+{{/*
+Ensure that Sidekiq routingRules configuration is in a valid format
+*/}}
+{{- define "gitlab.checkConfig.sidekiq.routingRules" -}}
+{{- $validRoutingRules := true -}}
+{{- with $.Values.global.appConfig.sidekiq.routingRules }}
+{{-   if not (kindIs "slice" .) }}
+{{-     $validRoutingRules = false }}
+{{-   else -}}
+{{-     range $rule := . }}
+{{-       if (not (kindIs "slice" $rule)) }}
+{{-         $validRoutingRules = false }}
+{{-       else if (ne (len $rule) 2) }}
+{{-         $validRoutingRules = false }}
+{{/*      The first item (routing query) must be a string */}}
+{{-       else if not (kindIs "string" (index $rule 0)) }}
+{{-         $validRoutingRules = false }}
+{{/*      The second item (queue name) must be either a string or null */}}
+{{-       else if not (or (kindIs "invalid" (index $rule 1)) (kindIs "string" (index $rule 1))) -}}
+{{-         $validRoutingRules = false }}
+{{-       end -}}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
+{{- if eq false $validRoutingRules }}
+sidekiq:
+    The Sidekiq's routing rules list must be an ordered array of tuples of query and corresponding queue.
+    See https://docs.gitlab.com/charts/charts/globals.html#sidekiq-routing-rules-settings
 {{- end -}}
-{{/* END gitlab.checkConfig.sidekiq.queueSelector */}}
+{{- end -}}
+{{/* END gitlab.checkConfig.sidekiq.routingRules */}}
 
 {{/*
 Ensure a database is configured when using Geo
@@ -286,18 +353,18 @@ redis:
 {{/* END gitlab.checkConfig.hostWhenNoInstall */}}
 
 {{/*
-Ensure that `postgresql.image.tag` is not less than postgres version 11
+Ensure that `postgresql.image.tag` meets current requirements
 */}}
 {{- define "gitlab.checkConfig.postgresql.deprecatedVersion" -}}
 {{-   $imageTag := .Values.postgresql.image.tag -}}
 {{-   $majorVersion := (split "." (split "-" ($imageTag | toString))._0)._0 | int -}}
-{{-   if or (eq $majorVersion 0) (lt $majorVersion 11) -}}
+{{-   if or (eq $majorVersion 0) (lt $majorVersion 12) -}}
 postgresql:
   Image tag is "{{ $imageTag }}".
 {{-     if (eq $majorVersion 0) }}
   Image tag is malformed. It should begin with the numeric major version.
-{{-     else if (lt $majorVersion 11) }}
-  PostgreSQL 10 and earlier will no longer be supported in GitLab 13. The minimum required version will be PostgreSQL 11.
+{{-     else if (lt $majorVersion 12) }}
+  PostgreSQL 11 and earlier is not supported in GitLab 14. The minimum required version is PostgreSQL 12.
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
@@ -369,6 +436,27 @@ postgresql:
 {{/* END gitlab.checkConfig.database.externalLoadBalancing */}}
 
 {{/*
+Ensure that tenantId and clientId are set if Microsoft Graph settings are used in incomingEmail
+*/}}
+{{- define "gitlab.checkConfig.incomingEmail.microsoftGraph" -}}
+{{- with $.Values.global.appConfig.incomingEmail }}
+{{-   if (and .enabled (eq .inboxMethod "microsoft_graph")) }}
+{{-     if not .tenantId }}
+incomingEmail:
+    When configuring incoming email with Microsoft Graph, be sure to specify the tenant ID.
+    See https://docs.gitlab.com/ee/administration/incoming_email.html#microsoft-graph
+{{-     end -}}
+{{-     if not .clientId }}
+incomingEmail:
+    When configuring incoming email with Microsoft Graph, be sure to specify the client ID.
+    See https://docs.gitlab.com/ee/administration/incoming_email.html#microsoft-graph
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.incomingEmail.microsoftGraph */}}
+
+{{/*
 Ensure that incomingEmail is enabled too if serviceDesk is enabled
 */}}
 {{- define "gitlab.checkConfig.serviceDesk" -}}
@@ -386,6 +474,27 @@ serviceDesk:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.serviceDesk */}}
+
+{{/*
+Ensure that tenantId and clientId are set if Microsoft Graph settings are used in serviceDesk
+*/}}
+{{- define "gitlab.checkConfig.serviceDesk.microsoftGraph" -}}
+{{- with $.Values.global.appConfig.serviceDesk }}
+{{-   if (and .enabled (eq .inboxMethod "microsoft_graph")) }}
+{{-     if not .tenantId }}
+incomingEmail:
+    When configuring Service Desk with Microsoft Graph, be sure to specify the tenant ID.
+    See https://docs.gitlab.com/ee/user/project/service_desk.html#microsoft-graph
+{{-     end -}}
+{{-     if not .clientId }}
+incomingEmail:
+    When configuring Service Desk with Microsoft Graph, be sure to specify the client ID.
+    See https://docs.gitlab.com/ee/user/project/service_desk.html#microsoft-graph
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.serviceDesk.microsoftGraph */}}
 
 {{/*
 Ensure that sentry has a DSN configured if enabled
@@ -426,14 +535,52 @@ Registry: Notifications should be defined in the global scope. Use `global.regis
 {{/* END gitlab.checkConfig.registry.notifications */}}
 
 {{/*
-Ensure Puma is used when the dependency proxy is enabled
+Ensure Registry database is configured properly and dependencies are met
 */}}
-{{- define "gitlab.checkConfig.dependencyProxy.puma" -}}
-{{- if and $.Values.global.appConfig.dependencyProxy.enabled (ne .Values.gitlab.webservice.webServer "puma") }}
-You must be using the Puma webservice in order to use Dependency Proxy. Set `gitlab.webservice.webServer` to `puma`.
-{{  end -}}
+{{- define "gitlab.checkConfig.registry.database" -}}
+{{-   if $.Values.registry.database.enabled }}
+{{-     $validSSLModes := list "require" "disable" "allow" "prefer" "require" "verify-ca" "verify-full" -}}
+{{-     if not (has $.Values.registry.database.sslmode $validSSLModes) }}
+registry:
+    Invalid SSL mode "{{ .Values.registry.database.sslmode }}".
+    Valid values are: {{ join ", " $validSSLModes }}.
+    See https://docs.gitlab.com/charts/charts/registry#database
+{{-     end -}}
+{{-     $pgImageTag := .Values.postgresql.image.tag -}}
+{{-     $pgMajorVersion := (split "." (split "-" ($pgImageTag | toString))._0)._0 | int -}}
+{{-     if lt $pgMajorVersion 12 -}}
+registry:
+    Invalid PostgreSQL version "{{ $pgImageTag }}".
+    PostgreSQL 12 is the minimum required version for the registry database.
+    See https://docs.gitlab.com/charts/charts/registry#database
+{{-     end -}}
+{{-   end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.dependencyProxy.puma */}}
+{{/* END gitlab.checkConfig.registry.database */}}
+
+{{/*
+Ensure Registry migration is configured properly and dependencies are met
+*/}}
+{{- define "gitlab.checkConfig.registry.migration" -}}
+{{-   if and $.Values.registry.migration.disablemirrorfs (not $.Values.registry.database.enabled) }}
+registry:
+    Disabling filesystem metadata requires the metadata database to be enabled.
+    See https://docs.gitlab.com/charts/charts/registry#migration
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.migration */}}
+
+{{/*
+Ensure Registry online garbage collection is configured properly and dependencies are met
+*/}}
+{{- define "gitlab.checkConfig.registry.gc" -}}
+{{-   if not (or $.Values.registry.gc.disabled $.Values.registry.database.enabled) }}
+registry:
+    Enabling online garbage collection requires the metadata database to be enabled.
+    See https://docs.gitlab.com/charts/charts/registry#gc
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.gc */}}
 
 {{/*
 Ensure terminationGracePeriodSeconds is longer than blackoutSeconds
@@ -537,3 +684,16 @@ smtp:
 {{-   end }}
 {{- end -}}
 {{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}
+
+
+{{/*
+Ensure that when Registry replication is enabled for Geo, a primary API URL is specified.
+*/}}
+{{- define "gitlab.checkConfig.geo.registry.replication.primaryApiUrl" -}}
+{{- if and (eq true .Values.global.geo.enabled) (and (eq .Values.global.geo.role "secondary") (eq true .Values.global.geo.registry.replication.enabled)) -}}
+{{-   if not .Values.global.geo.registry.replication.primaryApiUrl }}
+geo:
+    Registry replication is enabled for GitLab Geo, but no primary API URL is specified. Please specify a value for `global.geo.registry.replication.primaryApiUrl`.
+{{-   end -}}
+{{- end -}}
+{{- end -}}

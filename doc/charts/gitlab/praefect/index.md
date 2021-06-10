@@ -4,12 +4,12 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Using the Praefect chart
-
-The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) inside a GitLab installment deployed with the Helm charts.
+# Using the Praefect chart (alpha)
 
 WARNING:
-The Praefect chart is still under development. It is not yet suitable for production use. Upgrades may require significant manual intervention.
+The Praefect chart is still under development. The alpha version is not yet suitable for production use. Upgrades may require significant manual intervention.
+
+The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) inside a GitLab installment deployed with the Helm charts.
 
 ## Known limitations and issues
 
@@ -169,7 +169,7 @@ there will be some variation in how you connect.
 
 1. Set the database user password.
 
-   By default, the `shared-secrets` chart will generate a secret for you.
+   By default, the `shared-secrets` Job will generate a secret for you.
 
    1. Fetch the password:
 
@@ -274,3 +274,4 @@ the `helm install` command using the `--set` flags.
 | securityContext.runAsUser      | 1000                                              |                                                                                                         |
 | securityContext.fsGroup        | 1000                                              |                                                                                                         |
 | serviceLabels                  | `{}`                                              | Supplemental service labels                                                                             |
+| statefulset.strategy           | `{}`                                              | Allows one to configure the update strategy utilized by the statefulset                                 |

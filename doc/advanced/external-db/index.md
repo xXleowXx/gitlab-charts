@@ -8,13 +8,13 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This document assumes you already have your own PostgreSQL database.
 
-If you do not have one, consider a cloud provided solution like [AWS Aurora](https://aws.amazon.com/rds/aurora/) or [GCP Cloud SQL](https://cloud.google.com/sql/). For on-premise or deployment to VM, consider our [Omnibus GitLab package](external-omnibus-psql.md).
+If you do not have one, consider a cloud provided solution like [AWS RDS PostgreSQL](https://aws.amazon.com/rds/postgresql/) or [GCP Cloud SQL](https://cloud.google.com/sql/). For on-premise or deployment to VM, consider our [Omnibus GitLab package](external-omnibus-psql.md).
 
 ## External database requirements
 
 To use an external database with the `gitlab` chart, there are a few prerequisites.
 
-1. GitLab requires PostgreSQL 11.x or newer
+1. GitLab requires PostgreSQL 12.x or newer
 1. An empty database to use, named by default: `gitlabhq_production`. See below how to change the default name.
 1. The `pg_trgm` and `btree_gist` extensions must be available. GitLab will
    attempt to load both extensions if not present. If not providing an account with
