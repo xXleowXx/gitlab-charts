@@ -330,7 +330,7 @@ describe 'kas configuration' do
 
     describe 'templates/service.yaml' do
       context 'when type is LoadBalancer' do
-        subject(:service) { kas_enabled_template.dig('Service/test-kas') }
+        subject(:service) { kas_enabled_template.resources_by_kind('Service')['Service/test-kas'] }
 
         let(:service_values) { {} }
 
