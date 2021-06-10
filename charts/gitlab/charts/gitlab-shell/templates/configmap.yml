@@ -55,7 +55,7 @@ data:
       host_key_files:
       - /etc/ssh/ssh_host_dsa_key
       - /etc/ssh/ssh_host_ecdsa_key
-      - /etc/ssh_host_ed25519_key
-      - /etc/ssh_host_rsa_key
+      - /etc/ssh/ssh_host_ed25519_key
+      - /etc/ssh/ssh_host_rsa_key
 # Leave this here - This line denotes end of block to the parser.
 {{- end }}
