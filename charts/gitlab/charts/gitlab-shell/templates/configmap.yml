@@ -53,9 +53,8 @@ data:
       concurrent_sessions_limit: {{ .Values.config.maxStartups.full }}
       # SSH host key files. 
       host_key_files:
-      - /etc/ssh/ssh_host_dsa_key
-      - /etc/ssh/ssh_host_ecdsa_key
-      - /etc/ssh/ssh_host_ed25519_key
-      - /etc/ssh/ssh_host_rsa_key
+      <% Dir["/etc/ssh/*"].each -%>
+      # some server
+      <% end -%>
 # Leave this here - This line denotes end of block to the parser.
 {{- end }}
