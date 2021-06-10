@@ -103,6 +103,8 @@ spec:
               value: '/srv/gitlab-shell'
             - name: KEYS_DIRECTORY
               value: '/etc/gitlab-secrets/ssh'
+            - name: SSH_DAEMON
+              value: 'gitlab-sshd'
             {{- include "gitlab.extraEnv" . | nindent 12 }}
           volumeMounts:
             - name: shell-config
