@@ -42,6 +42,8 @@ service:
   internalPort: 8150
   apiInternalPort: 8153
   type: ClusterIP
+  # loadBalancerIP:
+  # loadBalancerSourceRanges:
 metrics:
   enabled: true
   port: 8151

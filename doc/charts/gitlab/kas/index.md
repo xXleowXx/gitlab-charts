@@ -64,6 +64,8 @@ the `helm install` command using the `--set` flags.
 | `service.externalPort`      | `8150`         | External port (for agentk connections) |
 | `service.internalPort`      | `8150`         | Internal port (for agentk connections) |
 | `service.apiInternalPort`   | `8153`         | Internal port for the internal API (for GitLab backend) |
+| `service.loadBalancerIP`    | `nil`          | A custom load balancer IP when `service.type` is `LoadBalancer` |
+| `service.loadBalancerSourceRanges` | `nil`   | A list of custom load balancer source ranges when `service.type` is `LoadBalancer` |
 | `global.kas.service.apiExternalPort` | `8153` | External port for the internal API (for GitLab backend) |
 | `service.type`              | `ClusterIP`    | Service type                     |
 | `tolerations`               | `[]`           | Toleration labels for pod assignment     |
