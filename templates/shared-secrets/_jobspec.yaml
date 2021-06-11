@@ -31,9 +31,7 @@ spec:
       securityContext:
         runAsUser: {{ $sharedSecretValues.securityContext.runAsUser }}
         fsGroup: {{ $sharedSecretValues.securityContext.fsGroup }}
-      {{- if $sharedSecretValues.rbac.create }}
       serviceAccountName: {{ template "shared-secrets.serviceAccountName" . }}
-      {{- end }}
       restartPolicy: Never
       {{- include "pullsecrets" .Values.global.kubectl.image | nindent 6 }}
       containers:
