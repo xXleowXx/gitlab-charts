@@ -11,7 +11,7 @@ must have installed locally.
 
 ## kubectl
 
-kubectl is the tool that talks to the Kubernetes API. kubectl 1.13 or higher is
+kubectl is the tool that talks to the Kubernetes API. kubectl 1.16.14 or higher is
 required and it needs to be compatible with your cluster
 ([+/- 1 minor release from your cluster](https://kubernetes.io/docs/tasks/tools/)).
 
@@ -50,7 +50,7 @@ cluster, use `kubectl config set-cluster minikube` to set the active cluster.
 ## Helm
 
 Helm is the package manager for Kubernetes. The `gitlab` chart is tested and
-supported with Helm v3 (3.0.2 or higher required).
+supported with Helm v3 (3.3.1 or higher required).
 
 Install Helm by picking one of the options listed under the
 [official Helm documentation](https://helm.sh/docs/intro/install/).
