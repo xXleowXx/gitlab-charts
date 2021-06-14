@@ -11,7 +11,7 @@ must have installed locally.
 
 ## kubectl
 
-kubectl is the tool that talks to the Kubernetes API. kubectl 1.16.14 or higher is
+kubectl is the tool that talks to the Kubernetes API. kubectl 1.16 or higher is
 required and it needs to be compatible with your cluster
 ([+/- 1 minor release from your cluster](https://kubernetes.io/docs/tasks/tools/)).
 
