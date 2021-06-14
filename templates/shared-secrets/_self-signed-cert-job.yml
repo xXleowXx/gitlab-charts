@@ -31,7 +31,9 @@ spec:
       securityContext:
         runAsUser: {{ $sharedSecretValues.securityContext.runAsUser }}
         fsGroup: {{ $sharedSecretValues.securityContext.fsGroup }}
+      {{- if or $sharedSecretValues.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ template "shared-secrets.serviceAccountName" . }}
+      {{- end }}
       restartPolicy: Never
       {{- include "pullsecrets" $sharedSecretValues.selfsign.image | nindent 6 }}
       initContainers:
