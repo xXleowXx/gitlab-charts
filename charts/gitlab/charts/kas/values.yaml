@@ -67,8 +67,8 @@ workhorse: {}
 customConfig: {}
 
 privateApi: {}
-  # secretValue:
-  # secretKey:
+  # secret:
+  # key:
 
 deployment:
   strategy: {}

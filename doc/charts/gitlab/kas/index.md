@@ -48,7 +48,7 @@ the `helm install` command using the `--set` flags.
 | `ingress.annotations`       | `{}`           | Ingress annotations              |
 | `ingress.tls`               | `{}`           | Ingress TLS configuration        |
 | `ingress.agentPath`         | `/`            | Ingress path for the agent API endpoint |
-| `ingress.k8sApiPath`        | `/k8s-proxy/`  | Ingress path for Kubernetes API endpoint |
+| `ingress.k8sApiPath`        | `/k8s-proxy`  | Ingress path for Kubernetes API endpoint |
 | `metrics.enabled`           | `true`         | Toggle Prometheus metrics exporter |
 | `metrics.port`              | `8151`         | Port number to use for the metrics exporter |
 | `metrics.path`              | `/metrics`     | Path to use for the metrics exporter |
