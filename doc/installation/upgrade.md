@@ -168,19 +168,19 @@ Note the following:
    kubectl rollout status -w deployment/RELEASE_NAME-task-runner
    ```
 
-1. After the Task Runner pod is deployed successfully, run the `post` steps:
-
-   This step will do the following:
-
-   1. Set replicas to 0 for the `webservice`, `sidekiq`, and `gitlab-exporter` deployments. This will prevent any other application from altering the database while the backup is being restored.
-   1. Restore the database from the backup created in the pre stage.
-   1. Run database migrations for the new version.
-   1. Resume the deployments from the first step.
+1. After the Task Runner pod is deployed successfully, run the `post` step:
 
    ```shell
    # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v5.0.0
    curl -s "https://gitlab.com/gitlab-org/charts/gitlab/-/raw/${GITLAB_RELEASE}/scripts/database-upgrade" | bash -s post
    ```
+
+   This step will do all of the following:
+
+   1. Set replicas to 0 for the `webservice`, `sidekiq`, and `gitlab-exporter` deployments. This will prevent any other application from altering the database while the backup is being restored.
+   1. Restore the database from the backup created in the pre stage.
+   1. Run database migrations for the new version.
+   1. Resume the deployments from the first step.
 
 ### Troubleshooting 5.0 release upgrade process
 
