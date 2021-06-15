@@ -44,7 +44,7 @@ the `helm install` command using the `--set` flag:
 | `selfsign.keySize`         | `4096`              | selfsign cert key size              |
 | `serviceAccount.enabled`   | `true`              | Define serviceAccountName on job(s) |
 | `serviceAccount.create`    | `true`              | Create ServiceAccount               |
-| `serviceAccount.name`      | `RELEASE_NAME-shared-secrets` | Service account name to specify on job(s) |
+| `serviceAccount.name`      | `RELEASE_NAME-shared-secrets` | Service account name to specify on job(s) (and on the serviceAccount itself if `serviceAccount.create=true`) |
 | `tolerations`              | `[]`                | Toleration labels for pod assignment|
 
 ## Job configuration examples
