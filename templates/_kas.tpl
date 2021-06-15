@@ -17,21 +17,21 @@ Return the gitlab-kas private API secret
 */}}
 
 {{- define "gitlab.kas.privateApi.secret" -}}
-{{- $secret := printf "%s-kas-private-api" .Release.Name -}}
+{{- $secret := "" -}}
 {{- if eq .Chart.Name "kas" -}}
 {{-    $secret = .Values.privateApi.secret -}}
 {{- else -}}
 {{-    $secret = .Values.gitlab.kas.privateApi.secret -}}
 {{- end -}}
-{{- $secret | quote -}}
+{{- default (printf "%s-kas-private-api" .Release.Name) $secret | quote -}}
 {{- end -}}
 
 {{- define "gitlab.kas.privateApi.key" -}}
-{{- $key := "kas_private_api_secret" -}}
+{{- $key := "" -}}
 {{- if eq .Chart.Name "kas" -}}
 {{-    $key = .Values.privateApi.key -}}
 {{- else -}}
 {{-    $key = .Values.gitlab.kas.privateApi.key -}}
 {{- end -}}
-{{- $key | quote -}}
+{{- default "kas_private_api_secret" $key | quote -}}
 {{- end -}}
