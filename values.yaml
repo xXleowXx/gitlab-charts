@@ -942,6 +942,7 @@ shared-secrets:
     pullSecrets: []
   env: production
   serviceAccount:
+    enabled: true
     create: true
     name: # Specify a pre-existing ServiceAccount name
   resources:
