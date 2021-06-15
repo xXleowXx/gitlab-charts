@@ -47,6 +47,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.commonLabels" . | nindent 4 }}
 data:
   template: |-
     {{- include (print $.Template.BasePath "/_jobspec.yaml") . | nindent 4 }}
