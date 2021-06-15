@@ -168,7 +168,7 @@ Note the following:
    kubectl rollout status -w deployment/RELEASE_NAME-task-runner
    ```
 
-1. After the Task Runner pod is deployed successfully, run the `post` steps:
+1. After the Task Runner pod is deployed successfully, run the `post` step:
 
    ```shell
    # GITLAB_RELEASE should be the version of the chart you are installing, starting with 'v': v5.0.0
