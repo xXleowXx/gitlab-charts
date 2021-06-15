@@ -32,6 +32,10 @@ spec:
       targetPort: {{ .Values.service.apiInternalPort }}
       protocol: TCP
       name: tcp-{{ template "name" . }}-internal-api
+    - port: {{ .Values.service.kubernetesApiPort }}
+      targetPort: {{ .Values.service.kubernetesApiPort }}
+      protocol: TCP
+      name: tcp-{{ template "name" . }}-k8s-api
   selector:
     app: {{ template "name" . }}
     release: {{ .Release.Name }}
