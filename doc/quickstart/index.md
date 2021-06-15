@@ -53,7 +53,7 @@ Google's documentation:
 
 ### Installing Helm v3
 
-For this guide, we'll make use of the latest release of Helm v3 (v3.0.2 or newer).
+For this guide, we'll make use of the latest release of Helm v3 (v3.3.1 or newer).
 [Official installation instructions](https://helm.sh/docs/intro/install/)
 exist, and are sound, so we'll let you follow those.
 
