@@ -501,5 +501,9 @@ Create the name of the service account to use for shared-secrets job
 */}}
 {{- define "shared-secrets.serviceAccountName" -}}
 {{- $sharedSecretValues := index .Values "shared-secrets" -}}
-{{- coalesce $sharedSecretValues.serviceAccount.name ( include "shared-secrets.fullname" . ) .Values.global.serviceAccount.name  -}}
+{{- if $sharedSecretValues.serviceAccount.create -}}
+    {{ default (include "shared-secrets.fullname" .) $sharedSecretValues.serviceAccount.name }}
+{{- else -}}
+    {{ coalesce $sharedSecretValues.serviceAccount.name .Values.global.serviceAccount.name "default" }}
+{{- end -}}
 {{- end -}}
