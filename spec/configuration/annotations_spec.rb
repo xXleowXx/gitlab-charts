@@ -21,8 +21,9 @@ describe 'Annotations configuration' do
 
   let(:ignored_charts) do
     [
-      'Deployment/test-cainjector',
-      'Deployment/test-cert-manager',
+      'Deployment/test-certmanager-cainjector',
+      'Deployment/test-certmanager-webhook',
+      'Deployment/test-certmanager',
       'Deployment/test-gitlab-runner',
       'Deployment/test-prometheus-server'
     ]
