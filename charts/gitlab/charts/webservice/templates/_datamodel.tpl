@@ -57,7 +57,7 @@ ingress:
   proxyReadTimeout: {{ .Values.ingress.proxyReadTimeout }}
   proxyBodySize: {{ .Values.ingress.proxyBodySize | quote }}
 common:
-  labels: {}
+  labels: {{ mergeOverwrite (deepCopy .Values.global.common.labels) (deepCopy .Values.common.labels) | toYaml | nindent 4 }}
 deployment:
   annotations:
     {{- if .Values.deployment.annotations }}
