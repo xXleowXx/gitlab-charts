@@ -52,6 +52,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.psql.pool" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.appConfig.extra.piwik" .) -}}
 {{- $deprecated := append $deprecated (include "gitlab.deprecate.global.geo.registry.syncEnabled" .) -}}
+{{- $deprecated := append $deprecated (include "certmanager.createCustomResource" .) -}}
 
 {{- /* prepare output */}}
 {{- $deprecated := without $deprecated "" -}}
@@ -395,3 +396,11 @@ sidekiq:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.sidekiq.pods.cluster */}}
+
+{{- define "certmanager.createCustomResource" -}}
+{{- if hasKey .Values.certmanager "createCustomResource" -}}
+certmanager:
+    The configuration of 'certmanager.createCustomResource' has been renamed. Please use `certmanager.installCRDs` instead.
+{{- end -}}
+{{- end -}}
+{{/* END certmanager.createCustomResource */}}
