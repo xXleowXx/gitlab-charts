@@ -189,6 +189,7 @@ Note the following:
   ```shell
   kubectl get pods -lrelease=RELEASE,app=gitlab
   kubectl describe pod <gitlab-upgrade-check-pod-full-name>
+  ```
 
 ## Upgrade steps for 4.0 release
 
