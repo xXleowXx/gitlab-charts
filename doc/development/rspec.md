@@ -72,7 +72,7 @@ describe 'some feature' do
         global:
           feature:
             enabled: true
-      )).merge(default_values)
+      )).deep_merge(default_values)
     end
 
     ...
@@ -84,6 +84,79 @@ The above snippet demonstrates a common pattern of setting a number of default
 values that are common across multiple tests that are then merged into the
 final values that are used in the `HelmTemplate` constructor for a specific
 set of tests.
+
+### Using property merge patterns
+
+Throughout the RSpec of this project, you will find different forms of `merge`. There are a few guidelines and considerations to take into account when choosing which to make use of.
+
+Helm merges / coalesces configuration properties via [coalesceValues function](https://github.com/helm/helm/blob/a499b4b179307c267bdf3ec49b880e3dbd2a5591/pkg/chartutil/coalesce.go#L145-L148), which has some distinctly different behaviors to `deep_merge` as implemented here. We continue to refine how this functions within our RSpec.
+
+Ruby's native `Hash.merge` will _replace_ keys in the destination, it will not deeply walk an
+object. This means that all properties under a tree will be removed if the source has a matching entry.
+
+```
+2.7.2 :002 > require 'yaml'
+ => true 
+2.7.2 :003"> example = YAML.safe_load(%(
+2.7.2 :004">   a:
+2.7.2 :005">     b: 1
+2.7.2 :006">     c: [ 1, 2, 3]
+2.7.2 :007 >  ))
+ => {"a"=>{"b"=>1, "c"=>[1, 2, 3]}} 
+2.7.2 :008"> source = YAML.safe_load(%(
+2.7.2 :009">   a:
+2.7.2 :010">     d: "whee"
+2.7.2 :011 >  ))
+ => {"a"=>{"d"=>"whee"}} 
+2.7.2 :012 > example.merge(source)
+ => {"a"=>{"d"=>"whee"}}
+```
+
+In an attempt to address, this we've been using the [hash-deep-merge](https://rubygems.org/gems/hash-deep-merge/) gem to perform naive deep merge of YAML documents. When _adding_ properites, this has worked well. The drawback is that this does not provide a means to cause overwrite of nested structures.
+
+```
+2.7.2 :013 > require 'hash_deep_merge'
+2.7.2 :014 > example = {"a"=>{"b"=>1, "c"=>[1, 2, 3]}}
+ => {"a"=>{"b"=>1, "c"=>[1, 2, 3]}} 
+2.7.2 :015 > source = {"a"=>{"b"=> 2, "d"=>"whee"}} 
+ => {"a"=>{"b"=>2, "d"=>"whee"}}
+2.7.2 :016 > example.deep_merge(source)
+ => {"a"=>{"b"=>2, "c"=>[1, 2, 3], "d"=>"whee"}}
+```
+
+The problem of the difference between `deep_merge` and `coasleceValues` within Helm can be seen with the below example. In Helm, the merge of `removeSecurityContext` would result in `securityContext` being empty. The desired behavior is the equavilent of [merge.WithOverride](https://github.com/imdario/mergo#usage) from `github.com/imdario/mergo` Go module as used within Helm and Sprig.
+
+```
+2.7.2 :049"> securityContext = YAML.safe_load(%(
+2.7.2 :050">   gitlab:
+2.7.2 :051">     gitaly:
+2.7.2 :052">       securityContext:
+2.7.2 :053">         fsGroup: 1000
+2.7.2 :054">         user:    1000
+2.7.2 :055 >             ))
+ => {"gitlab"=>{"gitaly"=>{"securityContext"=>{"fsGroup"=>1000, "user"=>1000}}}} 
+2.7.2 :056"> noUser = YAML.safe_load(%(
+2.7.2 :057">   gitlab:
+2.7.2 :058">     gitaly:
+2.7.2 :059">       securityContext:
+2.7.2 :060">         user: null
+2.7.2 :061 >           ))
+ => {"gitlab"=>{"gitaly"=>{"securityContext"=>{"user"=>nil}}}}
+2.7.2 :062"> removeSecurityContext = YAML.safe_load(%(
+2.7.2 :063">   gitlab:
+2.7.2 :064">     gitaly:
+2.7.2 :065">       securityContext: {}
+2.7.2 :066 >         ))
+2.7.2 :067 > securityContext.deep_merge(removeSecurityContext)
+ => {"gitlab"=>{"gitaly"=>{"securityContext"=>{"fsGroup"=>1000, "user"=>1000}}}}
+```
+
+General guidelines:
+
+1. Be aware of and wary of the behavior of `Hash.merge`.
+1. Be aware of and wary of the behavior of `Hash.deep_merge` offered by `hash-deep-merge` gem.
+1. When you need to overwrite a specific key, do so explicitly.
+1. Do not use imperative forms (`merge!`) unless expressly needed. When doing so, comment why.
 
 ## Testing the results
 
