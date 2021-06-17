@@ -124,7 +124,7 @@ In an attempt to address, this we've been using the [hash-deep-merge](https://ru
  => {"a"=>{"b"=>2, "c"=>[1, 2, 3], "d"=>"whee"}}
 ```
 
-The problem of the difference between `deep_merge` and `coasleceValues` within Helm can be seen with the below example. In Helm, the merge of `removeSecurityContext` would result in `securityContext` being empty. The desired behavior is the equavilent of [merge.WithOverride](https://github.com/imdario/mergo#usage) from `github.com/imdario/mergo` Go module as used within Helm and Sprig.
+The problem of the difference between `deep_merge` and `coasleceValues` within Helm can be seen with the below example. In Helm, the merge of `removeSecurityContext` would result in `securityContext` being empty. The desired behavior is the equavilent of [`merge.WithOverride`](https://github.com/imdario/mergo#usage) from `github.com/imdario/mergo` Go module as used within Helm and Sprig.
 
 ```
 2.7.2 :049"> securityContext = YAML.safe_load(%(
