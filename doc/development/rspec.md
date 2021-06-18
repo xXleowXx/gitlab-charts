@@ -94,7 +94,7 @@ Helm merges / coalesces configuration properties via [coalesceValues function](h
 Ruby's native `Hash.merge` will _replace_ keys in the destination, it will not deeply walk an
 object. This means that all properties under a tree will be removed if the source has a matching entry.
 
-```text
+```plaintext
 2.7.2 :002 > require 'yaml'
  => true 
 2.7.2 :003"> example = YAML.safe_load(%(
@@ -114,7 +114,7 @@ object. This means that all properties under a tree will be removed if the sourc
 
 In an attempt to address, this we've been using the [hash-deep-merge](https://rubygems.org/gems/hash-deep-merge/) gem to perform naive deep merge of YAML documents. When _adding_ properites, this has worked well. The drawback is that this does not provide a means to cause overwrite of nested structures.
 
-```text
+```plaintext
 2.7.2 :013 > require 'hash_deep_merge'
 2.7.2 :014 > example = {"a"=>{"b"=>1, "c"=>[1, 2, 3]}}
  => {"a"=>{"b"=>1, "c"=>[1, 2, 3]}} 
@@ -126,7 +126,7 @@ In an attempt to address, this we've been using the [hash-deep-merge](https://ru
 
 The problem of the difference between `deep_merge` and `coasleceValues` within Helm can be seen with the below example. In Helm, the merge of `removeSecurityContext` would result in `securityContext` being empty. The desired behavior is the equavilent of [`merge.WithOverride`](https://github.com/imdario/mergo#usage) from `github.com/imdario/mergo` Go module as used within Helm and Sprig.
 
-```text
+```plaintext
 2.7.2 :049"> securityContext = YAML.safe_load(%(
 2.7.2 :050">   gitlab:
 2.7.2 :051">     gitaly:
