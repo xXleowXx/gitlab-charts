@@ -40,12 +40,12 @@ spec:
             pathType: {{ default "Prefix" $.Values.global.ingress.pathType }}
             backend:
               service:
-                  name: {{ template "fullname" . }}
+                  name: {{ template "fullname" . }}-default
                   port:
                     number: {{ .Values.service.workhorseExternalPort }}
             {{- else -}}
             backend:
-              serviceName: {{ template "fullname" . }}
+              serviceName: {{ template "fullname" . }}-default
               servicePort: {{ .Values.service.workhorseExternalPort }}
             {{- end -}}
   {{- if (and $tlsSecret (eq (include "gitlab.ingress.tls.enabled" $) "true" )) }}
