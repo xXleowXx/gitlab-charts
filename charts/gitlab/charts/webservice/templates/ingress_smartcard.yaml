@@ -5,6 +5,7 @@
 {{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
 {{- range $.Values.deployments -}}
+{{-   if .ingress.path -}}{{/* SET .ingress.path */}}
 {{/*
 From here on:
 - `.` is `.deployments.xyz` value
@@ -66,4 +67,5 @@ spec:
   {{- end }}
 {{- end -}}
 {{- end -}}
+{{- end -}}{{/* SET .ingress.path */}}
 {{- end -}}

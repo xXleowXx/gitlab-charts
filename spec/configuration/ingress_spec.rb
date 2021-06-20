@@ -21,7 +21,7 @@ describe 'GitLab Ingress configuration(s)' do
       test-gitlab-pages
       test-kas
       test-webservice-default
-      test-webservice-smartcard
+      test-webservice-default-smartcard
       test-minio
       test-registry
     ]
