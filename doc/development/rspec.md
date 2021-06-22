@@ -233,12 +233,11 @@ complex:
   hash: {}
 ```
 
-
 **General guidelines:**
 
 1. Be aware of and wary of the behavior of `Hash.merge`.
 1. Be aware of and wary of the behavior of `Hash.deep_merge` offered by `hash-deep-merge` gem.
-1. When you need to overwrite a specific key, do so explicitly.
+1. When you need to overwrite a specific key, do so explicitly with _non-empty_ content.
 1. When you need to remove a specific key, set it to `null`.
 1. Do not use imperative forms (`merge!`) unless expressly needed. When doing so, comment why.
 
