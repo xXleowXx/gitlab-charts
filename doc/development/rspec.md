@@ -124,38 +124,122 @@ In an attempt to address, this we've been using the [hash-deep-merge](https://ru
  => {"a"=>{"b"=>2, "c"=>[1, 2, 3], "d"=>"whee"}}
 ```
 
-The problem of the difference between `deep_merge` and `coasleceValues` within Helm can be seen with the below example. In Helm, the merge of `removeSecurityContext` would result in `securityContext` being empty. The desired behavior is the equavilent of [`merge.WithOverride`](https://github.com/imdario/mergo#usage) from `github.com/imdario/mergo` Go module as used within Helm and Sprig.
+Let's compare the output of Ruby's `values.deep_merge(xyz)` and that of Helm's `helm template . -f xyz.yaml`, so that we can examing the differences between `deep_merge` and `coalesceValues` within Helm. The desired behavior is the equavilent of [`merge.WithOverride`](https://github.com/imdario/mergo#usage) from `github.com/imdario/mergo` Go module as used within Helm and Sprig.
 
-```plaintext
-2.7.2 :049"> securityContext = YAML.safe_load(%(
-2.7.2 :050">   gitlab:
-2.7.2 :051">     gitaly:
-2.7.2 :052">       securityContext:
-2.7.2 :053">         fsGroup: 1000
-2.7.2 :054">         user:    1000
-2.7.2 :055 >             ))
- => {"gitlab"=>{"gitaly"=>{"securityContext"=>{"fsGroup"=>1000, "user"=>1000}}}} 
-2.7.2 :056"> noUser = YAML.safe_load(%(
-2.7.2 :057">   gitlab:
-2.7.2 :058">     gitaly:
-2.7.2 :059">       securityContext:
-2.7.2 :060">         user: null
-2.7.2 :061 >           ))
- => {"gitlab"=>{"gitaly"=>{"securityContext"=>{"user"=>nil}}}}
-2.7.2 :062"> removeSecurityContext = YAML.safe_load(%(
-2.7.2 :063">   gitlab:
-2.7.2 :064">     gitaly:
-2.7.2 :065">       securityContext: {}
-2.7.2 :066 >         ))
-2.7.2 :067 > securityContext.deep_merge(removeSecurityContext)
- => {"gitlab"=>{"gitaly"=>{"securityContext"=>{"fsGroup"=>1000, "user"=>1000}}}}
+The Ruby code for this is effectively:
+
+```ruby
+require 'yaml'
+require 'hash_deep_merge'
+
+values = YAML.safe_load(File.read('values.yaml'))
+xyz = YAML.safe_load(File.read('xyz.yaml'))
+
+puts values.deep_merge(xyz).to_yaml
 ```
 
-General guidelines:
+```yaml
+---
+file: values.yaml
+gitlab:
+  gitaly:
+    securityContext:
+      user: 1000
+      group: 1000
+---
+file: empty.yaml     # sets `securityContext: {}`
+gitlab:
+  gitaly:
+    securityContext:
+      user: 1000
+      group: 1000
+---
+file: null.yaml      # sets `securityContext: null`
+gitlab:
+  gitaly:
+    securityContext:
+---
+file: null_user.yaml # sets `securityContext.user: null`
+gitlab:
+  gitaly:
+    securityContext:
+      user:
+      group: 1000
+```
+
+The Helm template contains only `{{ .Values | toYaml }}`
+
+```yaml
+---
+# Source: example/templates/output.yaml
+file: values.yaml
+gitlab:
+  gitaly:
+    securityContext:
+      group: 1000
+      user: 1000
+---
+# Source: example/templates/output.yaml
+file: empty.yaml     # sets `securityContext: {}`
+gitlab:
+  gitaly:
+    securityContext:
+      group: 1000
+      user: 1000
+---
+# Source: example/templates/output.yaml
+file: null.yaml      # sets `securityContext: null`
+gitlab:
+  gitaly: {}
+---
+# Source: example/templates/output.yaml
+file: null_user.yaml # sets `securityContext.user: null`
+gitlab:
+  gitaly:
+    securityContext:
+      group: 1000
+```
+
+First observation: When we set an "empty" hash (`{}`), both Ruby and Helm patterns result in no change. This is because the base value, and the "new" value are both the same type.
+
+Second observation: This is a stark difference. When we set the hash to `null` in the YAML, we get slightly different results. Helm removes the entire key, but leaves the parent type intact. Ruby leaves the key present, but with `nil` value. Similar can be seen when we change an individual key. Helm removes this key while Ruby retains it in a `nil` state.
+
+Last, but not least! Do not confuse scalars with maps. The following YAML, when merged in Ruby or Helm, will result in the array being `[]`. Neither `deep_merge` or `coalesceValues` walks into arrays. Scalar data _will be overwritten_.
+
+```yaml
+---
+complex:
+  array: [1,2,3]
+  hash:
+    item: 1
+---
+complex:
+  array: []
+  hash:
+    item:
+```
+
+```yaml
+---
+# Ruby: puts values.deep_merge(xyz).to_yaml
+complex:
+  array: []
+  hash:
+    item:
+---
+# Source: example/templates/output.yaml
+complex:
+  array: []
+  hash: {}
+```
+
+
+**General guidelines:**
 
 1. Be aware of and wary of the behavior of `Hash.merge`.
 1. Be aware of and wary of the behavior of `Hash.deep_merge` offered by `hash-deep-merge` gem.
 1. When you need to overwrite a specific key, do so explicitly.
+1. When you need to remove a specific key, set it to `null`.
 1. Do not use imperative forms (`merge!`) unless expressly needed. When doing so, comment why.
 
 ## Testing the results
