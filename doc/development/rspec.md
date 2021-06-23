@@ -85,14 +85,28 @@ values that are common across multiple tests that are then merged into the
 final values that are used in the `HelmTemplate` constructor for a specific
 set of tests.
 
-### Using property merge patterns
+## Using property merge patterns
 
 Throughout the RSpec of this project, you will find different forms of `merge`. There are a few guidelines and considerations to take into account when choosing which to make use of.
 
+Ruby's native `Hash.merge` will _replace_ keys in the destination, it will not deeply walk an object.
+This means that all properties under a tree will be removed if the source has a matching entry.
+In an attempt to address, this we've been using the [hash-deep-merge](https://rubygems.org/gems/hash-deep-merge/) gem to perform naive deep merge of YAML documents.
+When _adding_ properites, this has worked well. The drawback is that this does not provide a means to cause the overwrite of nested structures.
+
 Helm merges / coalesces configuration properties via [coalesceValues function](https://github.com/helm/helm/blob/a499b4b179307c267bdf3ec49b880e3dbd2a5591/pkg/chartutil/coalesce.go#L145-L148), which has some distinctly different behaviors to `deep_merge` as implemented here. We continue to refine how this functions within our RSpec.
 
-Ruby's native `Hash.merge` will _replace_ keys in the destination, it will not deeply walk an
-object. This means that all properties under a tree will be removed if the source has a matching entry.
+**General guidelines:**
+
+1. Be aware of and wary of the behavior of `Hash.merge`.
+1. Be aware of and wary of the behavior of `Hash.deep_merge` as offered by `hash-deep-merge` gem.
+1. When you need to overwrite a specific key, do so explicitly with _non-empty_ content.
+1. When you need to remove a specific key, set it to `null`.
+1. Do not use imperative forms (`merge!`) unless expressly needed. When doing so, comment why.
+
+### Breakdown of considerations for merge operations
+
+Here is a direct comparison of Ruby's `Hash.merge` versus `Hash.deep_merge` from the `hash-deep-merge` gem.
 
 ```plaintext
 2.7.2 :002 > require 'yaml'
@@ -112,8 +126,6 @@ object. This means that all properties under a tree will be removed if the sourc
  => {"a"=>{"d"=>"whee"}}
 ```
 
-In an attempt to address, this we've been using the [hash-deep-merge](https://rubygems.org/gems/hash-deep-merge/) gem to perform naive deep merge of YAML documents. When _adding_ properites, this has worked well. The drawback is that this does not provide a means to cause overwrite of nested structures.
-
 ```plaintext
 2.7.2 :013 > require 'hash_deep_merge'
 2.7.2 :014 > example = {"a"=>{"b"=>1, "c"=>[1, 2, 3]}}
@@ -124,7 +136,7 @@ In an attempt to address, this we've been using the [hash-deep-merge](https://ru
  => {"a"=>{"b"=>2, "c"=>[1, 2, 3], "d"=>"whee"}}
 ```
 
-Let's compare the output of Ruby's `values.deep_merge(xyz)` and that of Helm's `helm template . -f xyz.yaml`, so that we can examing the differences between `deep_merge` and `coalesceValues` within Helm. The desired behavior is the equavilent of [`merge.WithOverride`](https://github.com/imdario/mergo#usage) from `github.com/imdario/mergo` Go module as used within Helm and Sprig.
+Let us compare the output of Ruby's `values.deep_merge(xyz)` and that of Helm's `helm template . -f xyz.yaml`, so that we can examine the differences between `deep_merge` and `coalesceValues` within Helm. The desired behavior is the equavilent of [`merge.WithOverride`](https://github.com/imdario/mergo#usage) from `github.com/imdario/mergo` Go module as used within Helm and Sprig.
 
 The Ruby code for this is effectively:
 
@@ -200,7 +212,7 @@ gitlab:
       group: 1000
 ```
 
-First observation: When we set an "empty" hash (`{}`), both Ruby and Helm patterns result in no change. This is because the base value, and the "new" value are both the same type.
+First observation: When we set an "empty" hash (`{}`), both Ruby and Helm patterns result in no change. This is because the base value, and the "new" value are both the same type. To _remove_ a hash, you must set it to `null`.
 
 Second observation: This is a stark difference. When we set the hash to `null` in the YAML, we get slightly different results. Helm removes the entire key, but leaves the parent type intact. Ruby leaves the key present, but with `nil` value. Similar can be seen when we change an individual key. Helm removes this key while Ruby retains it in a `nil` state.
 
@@ -232,14 +244,6 @@ complex:
   array: []
   hash: {}
 ```
-
-**General guidelines:**
-
-1. Be aware of and wary of the behavior of `Hash.merge`.
-1. Be aware of and wary of the behavior of `Hash.deep_merge` offered by `hash-deep-merge` gem.
-1. When you need to overwrite a specific key, do so explicitly with _non-empty_ content.
-1. When you need to remove a specific key, set it to `null`.
-1. Do not use imperative forms (`merge!`) unless expressly needed. When doing so, comment why.
 
 ## Testing the results
 
