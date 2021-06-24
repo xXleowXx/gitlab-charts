@@ -559,7 +559,7 @@ the Primary that the Secondary exists:
 
 1. Visit the **primary** instance, and on the top bar, select
    **Menu >** **{admin}** **Admin**.
-1. On the left sidebar, select **Geo** (`/admin/geo/nodes`) in your browser.
+1. On the left sidebar, select **Geo**.
 1. Select **New node**.
 1. Add the **secondary** instance. Use the full URL for the URL.
    **Do not** select the **This is a primary node** checkbox.
