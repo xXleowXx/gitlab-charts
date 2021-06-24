@@ -5,7 +5,7 @@
 {{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
 {{- range $.Values.deployments -}}
-{{-   if .ingress.path -}}{{/* SET .ingress.path */}}
+{{- if has .ingress.path (list "/" "/*") }}
 {{/*
 From here on:
 - `.` is `.deployments.xyz` value
