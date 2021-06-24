@@ -187,7 +187,7 @@ Returns a list of _common_ labels to be shared across all
 Webservice deployments and other shared objects.
 */}}
 {{- define "webservice.commonLabels" -}}
-{{- $commonLabels := merge (default (dict) .deployment) (default (dict) .webservice) -}}
+{{- $commonLabels := default (dict) .common.labels -}}
 {{- if $commonLabels }}
 {{-   range $key, $value := $commonLabels }}
 {{ $key }}: {{ $value }}
