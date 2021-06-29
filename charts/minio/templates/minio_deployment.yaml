@@ -23,9 +23,13 @@ spec:
       name: {{ template "minio.fullname" . }}
       labels:
 <<<<<<< HEAD
+<<<<<<< HEAD
         component: app
 =======
 >>>>>>> Updating label duplicates
+=======
+        component: app
+>>>>>>> Adding label back to mino deployment
         {{- include "gitlab.standardLabels" . | nindent 8 }}
         {{- include "gitlab.commonLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
