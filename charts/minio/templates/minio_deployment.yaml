@@ -22,7 +22,10 @@ spec:
     metadata:
       name: {{ template "minio.fullname" . }}
       labels:
+<<<<<<< HEAD
         component: app
+=======
+>>>>>>> Updating label duplicates
         {{- include "gitlab.standardLabels" . | nindent 8 }}
         {{- include "gitlab.commonLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
