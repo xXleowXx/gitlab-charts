@@ -507,3 +507,15 @@ Create the name of the service account to use for shared-secrets job
     {{ coalesce $sharedSecretValues.serviceAccount.name .Values.global.serviceAccount.name "default" }}
 {{- end -}}
 {{- end -}}
+
+
+{{/*
+Append a suffix to a path if it's doesn't end with it already.
+*/}}
+{{- define "path.ensure-suffix" -}}
+{{- if or (hasSuffix .suffix .path) (hasSuffix "/*" .path) -}}
+{{- .path -}}
+{{- else -}}
+{{- trimSuffix "/" .path -}}/{{- trimPrefix "/" .suffix -}}
+{{- end -}}
+{{- end -}}

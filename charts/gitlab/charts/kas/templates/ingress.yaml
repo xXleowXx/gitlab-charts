@@ -24,7 +24,7 @@ spec:
     - host: {{ $hostname }}
       http:
         paths:
-          - path: "{{ trimSuffix "/" $.Values.ingress.agentPath }}{{ $.Values.global.ingress.path }}"
+          - path: "{{ include "path.ensure-suffix" (dict "path" $.Values.ingress.agentPath "suffix" $.Values.global.ingress.path) }}"
             {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
             pathType: {{ default "Prefix" $.Values.global.ingress.pathType }}
             backend:
@@ -37,7 +37,7 @@ spec:
               serviceName: {{ template "gitlab.kas.serviceName" . }}
               servicePort: {{ .Values.service.externalPort }}
             {{- end }}
-          - path: "{{ trimSuffix "/" $.Values.ingress.k8sApiPath }}{{ $.Values.global.ingress.path }}"
+          - path: "{{ include "path.ensure-suffix" (dict "path" $.Values.ingress.k8sApiPath "suffix" $.Values.global.ingress.path) }}"
             {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
             pathType: {{ default "Prefix" $.Values.global.ingress.pathType }}
             backend:

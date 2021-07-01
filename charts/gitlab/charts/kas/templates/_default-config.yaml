@@ -5,7 +5,7 @@ agent:
   kubernetes_api:
     listen:
       address: ":{{ .Values.service.kubernetesApiPort }}"
-    url_path_prefix: "{{ .Values.ingress.k8sApiPath }}"
+    url_path_prefix: "{{ trimSuffix "*" .Values.ingress.k8sApiPath }}"
 gitlab:
   address: "{{ template "gitlab.workhorse.url" . }}"
   authentication_secret_file: "/etc/kas/.gitlab_kas_secret"
