@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.0.2 (2021-07-01)
+
+No changes.
+
 ## 5.0.1 (2021-06-24)
 
 No changes.
@@ -46,6 +50,10 @@ No changes.
 - [Remove deprecated `experimentalQueueSelector` option for Sidekiq](gitlab-org/charts/gitlab@007788f0ba373f7d3fc51623ea5b70021b62ca5b) ([merge request](gitlab-org/charts/gitlab!2023))
 - [Remove the old resouce changes notices](gitlab-org/charts/gitlab@1755275b75dfe669c038e44dd2d218e3aa62c2e6) ([merge request](gitlab-org/charts/gitlab!2028))
 - [Remove ability to disable cluster from sidekiq values](gitlab-org/charts/gitlab@0de93fe181cd8c514aec013bf7e1541e1b41660b) ([merge request](gitlab-org/charts/gitlab!2024))
+
+## 4.12.6 (2021-07-01)
+
+No changes.
 
 ## 4.12.5 (2021-06-21)
 
@@ -98,6 +106,10 @@ No changes.
 
 - [Refactor a yaml indentation inconsistency](gitlab-org/charts/gitlab@e43cbb7f3b75ef88ef6a478ef809826b7e51bfbe) ([merge request](gitlab-org/charts/gitlab!1978))
 - [Support using PAGES_UPDATE_LEGACY_STORAGE env variable to enable Pages disk access](gitlab-org/charts/gitlab@ba72fead4cc4af5268a258b7a4bdbac85665f15c) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/1938))
+
+## 4.11.6 (2021-07-01)
+
+No changes.
 
 ## 4.11.5 (2021-06-01)
 
