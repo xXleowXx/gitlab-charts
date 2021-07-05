@@ -63,7 +63,6 @@ prometheus['enable'] = false
 # node_exporter['enable'] = false
 
 # Prevent database connections during 'gitlab-ctl reconfigure'
-gitlab_rails['rake_cache_clear'] = false
 gitlab_rails['auto_migrate'] = false
 
 # Configure the gitlab-shell API callback URL. Without this, `git push` will
