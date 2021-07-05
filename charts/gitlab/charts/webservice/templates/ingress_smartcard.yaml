@@ -2,7 +2,6 @@
 {{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
 {{- $smartcardHostname := include "gitlab.smartcard.hostname" . -}}
 {{- $tlsSecret := include "smartcard.tlsSecret" . -}}
-{{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
 {{- range $.Values.deployments -}}
 {{- if has .ingress.path (list "/" "/*") }}
