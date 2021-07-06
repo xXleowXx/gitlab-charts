@@ -30,7 +30,7 @@ To grab it from the Sidekiq pod:
    kubectl exec <sidekiq pod name> -- cat /srv/gitlab/config/gitlab.yml
    ```
 
-1. In the `gitlab.yml` file, there will be a section for uploads with details of
+1. In the `gitlab.yml` file, there is a section for uploads with details of
    object storage connection. Something similar to the following:
 
    ```yaml
