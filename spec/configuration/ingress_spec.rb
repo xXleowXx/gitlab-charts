@@ -130,7 +130,7 @@ describe 'GitLab Ingress configuration(s)' do
         template = HelmTemplate.new(smartcard)
         expect(template.exit_code).to eq(0)
 
-        expect(template.dig("test-webservice-default-smartcard")).to be_falsey
+        expect(template.dig("test-webservice-default-smartcard", 'spec')).to be_falsey
       end
 
       it 'uses the Webservice deployment with the root path as the backend service' do
