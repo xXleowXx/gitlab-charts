@@ -461,7 +461,7 @@ check_docs_markdown:
     # Lint prose
     - vale --minAlertLevel error doc
     # Lint Markdown
-    - markdownlint --config .markdownlint.json 'doc/**/*.md'
+    - markdownlint --config .markdownlint.yml 'doc/**/*.md'
   except:
     variables:
       - $DEPS_PIPELINE
