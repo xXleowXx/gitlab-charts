@@ -106,7 +106,7 @@ describe 'GitLab Ingress configuration(s)' do
         expect(template.exit_code).not_to eq(0)
       end
     end
-    
+
     context 'smartcard' do
       let(:smartcard) do
         default_values.deep_merge(YAML.safe_load(%(
@@ -125,18 +125,18 @@ describe 'GitLab Ingress configuration(s)' do
                     path: /
         )))
       end
-  
+
       it 'does not create a smartcard ingress for non-root path' do
         template = HelmTemplate.new(smartcard)
         expect(template.exit_code).to eq(0)
-  
+
         expect(template.dig("test-webservice-default-smartcard")).to be_falsey
       end
-  
+
       it 'uses the Webservice deployment with the root path as the backend service' do
         template = HelmTemplate.new(smartcard)
         expect(template.exit_code).to eq(0)
-  
+
         paths = get_paths(template, "test-webservice-root-smartcard")
         paths.each do |p|
           expect(p["backend"]["serviceName"]).to eq("test-webservice-root")
