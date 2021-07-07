@@ -10,8 +10,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: {{ template "name" . }}
-      release: {{ $.Release.Name }}
+      {{- include "gitlab.selectorLabels" . | nindent 6 }} 
   serviceName: {{ template "gitlab.praefect.serviceName" $ }}
   replicas: {{ $.Values.replicas }}
   podManagementPolicy: Parallel
@@ -37,8 +36,7 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }} 
       {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
       affinity:
         podAntiAffinity:
@@ -48,8 +46,7 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }} 
       {{- end }}
       {{- include "gitlab.nodeSelector" . | nindent 6 }}
       {{- if .Values.tolerations }}
