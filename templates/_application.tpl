@@ -14,11 +14,10 @@ heritage: {{ .Release.Service }}
 {{- end -}}
 {{- end -}}
 
-{{- define "gitlab.immutableLabels" -}}
+
+{{- define "gitlab.selectorLabels" -}}
 app: {{ template "name" . }}
-chart: {{ .Chart.Name }}
 release: {{ .Release.Name }}
-heritage: {{ .Release.Service }}
 {{ if .Values.global.application.create -}}
 {{ include "gitlab.application.labels" . }}
 {{- end -}}
