@@ -24,7 +24,7 @@ spec:
     - host: {{ $hostname }}
       http:
         paths:
-          - path: "{{ trimSuffix "/" $.Values.ingress.agentPath }}{{ $.Values.global.ingress.path }}"
+          - path: {{ $.Values.ingress.agentPath | quote }}
             {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
             pathType: {{ default "Prefix" $.Values.global.ingress.pathType }}
             backend:
