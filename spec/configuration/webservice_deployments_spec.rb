@@ -99,7 +99,7 @@ describe 'Webservice Deployments configuration' do
       expect(t.template_labels('Deployment/test-webservice-default')).to include('ws_pod' => true)
 
       expect(t.labels('Ingress/test-webservice-default')).to include('global' => 'webservice')
-      expect(t.labels('Ingress/test-webservice-smartcard')).to include('global' => 'webservice')
+      expect(t.labels('Ingress/test-webservice-default-smartcard')).to include('global' => 'webservice')
 
       expect(t.labels('Service/test-webservice-default')).to include('global' => 'webservice')
       expect(t.labels('Service/test-webservice-default')).to include('global_service' => true)
