@@ -21,8 +21,7 @@ spec:
   maxUnavailable: {{ .pdb.maxUnavailable }}
   selector:
     matchLabels:
-      app: {{ template "name" $ }}
-      release: {{ $.Release.Name }}
+      {{- include "gitlab.selectorLabels" $ | nindent 6 }}
       {{ include "webservice.labels" . | nindent 6 }}
 {{- end }}
 {{/* END range deployments */}}

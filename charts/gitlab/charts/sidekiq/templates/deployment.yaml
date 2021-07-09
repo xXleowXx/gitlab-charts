@@ -38,8 +38,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      app: {{ $name }}
-      release: {{ $releaseName }}
+      {{- include "gitlab.selectorLabels" $ | nindent 6 }}
       queue-pod-name: {{ .name }}
   {{- if or $.Values.deployment.strategy .strategy}}
   strategy: {{ default $.Values.deployment.strategy .strategy | toYaml | nindent 4 }}
@@ -78,8 +77,7 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ $name }}
-                  release: {{ $releaseName }}
+                  {{- include "gitlab.selectorLabels" $ | nindent 18 }}
       {{- else if eq (default $.Values.global.antiAffinity .antiAffinity) "soft" }}
       affinity:
         podAntiAffinity:
@@ -89,8 +87,7 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: {{ $name }}
-                  release: {{ $releaseName }}
+                  {{- include "gitlab.selectorLabels" $ | nindent 18 }}
       {{- end }}
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" $ }}
