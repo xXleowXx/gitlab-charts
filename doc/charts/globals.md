@@ -127,13 +127,13 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 
 ### Ingress Path
 
-This chart employs `global.ingress.path` as means to assist those users which need to alter the defintion of `path` entries for their Ingress objects.
-Many users will have no need for this setting, and _should not configure it_.
+This chart employs `global.ingress.path` as a means to assist those users that need to alter the definition of `path` entries for their Ingress objects.
+Many users have no need for this setting, and _should not configure it_.
 
 For those users who need to have their `path` definitions end in `/*` to match their load balancer / proxy behaviors, such as when using `ingress.class: gce` in GCP,
 `ingress.class: alb` in AWS, or another such provider.
 
-This setting will ensure that all `path` entries in Ingress resources throughout this chart will be rendered with this.
+This setting ensures that all `path` entries in Ingress resources throughout this chart are rendered with this.
 The only exception is when populating the [`gitlab/webservice` deployments settings](gitlab/webservice/index.md#deployments-settings), where `path` must be specified.
 
 ### Cloud provider LoadBalancers
