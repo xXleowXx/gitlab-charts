@@ -194,6 +194,11 @@ global:
     applicationName:
     preparedStatements: false
     connectTimeout:
+    keepalives:
+    keepalivesIdle:
+    keepalivesInterval:
+    keepalivesCount:
+    tcpUserTimeout:
     password:
       useSecret: true
       secret: gitlab-postgres
@@ -214,6 +219,11 @@ global:
 | `username`           | String    | `gitlab`               | The username with which to authenticate to the database.                                                                                                                                       |
 | `preparedStatements` | Boolean      | `false`                | If prepared statements should be used when communicating with the PostgreSQL server.                                                                                                           |
 | `connectTimeout`     | Integer   |                        | The number of seconds to wait for a database connection.                                                                                                                                       |
+| `keepalives`         | Integer   |                        | Controls whether client-side TCP keepalives are used (1, meaning on, 0, meaning off).                                                                                                          |
+| `keepalivesIdle`     | Integer   |                        | The number of seconds of inactivity after which TCP should send a keepalive message to the server. A value of zero uses the system default.                                                    |
+| `keepalivesInterval` | Integer   |                        | The number of seconds after which a TCP keepalive message that is not acknowledged by the server should be retransmitted. A value of zero uses the system default.                             |
+| `keepalivesCount`    | Integer   |                        | The number of TCP keepalives that can be lost before the client's connection to the server is considered dead. A value of zero uses the system default.                                        |
+| `tcpUserTimeout`     | Integer   |                        | The number of milliseconds that transmitted data may remain unacknowledged before a connection is forcibly closed. A value of zero uses the system default.                                    |
 | `applicationName`    | String    |                        | The name of the application connecting to the database. Set to a blank string (`""`) to disable. By default, this will be set to the name of the running process (e.g. `sidekiq`, `puma`).     |
 
 ### PostgreSQL per chart
