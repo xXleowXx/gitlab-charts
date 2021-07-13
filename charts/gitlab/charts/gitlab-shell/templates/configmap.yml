@@ -53,8 +53,8 @@ data:
       concurrent_sessions_limit: {{ .Values.config.maxStartups.full }}
       # SSH host key files. 
       host_key_files:
-      <% Dir["/etc/ssh/*"].each -%>
-      # some server
-      <% end -%>
+      <% Dir["/etc/ssh/ssh_host_*_key"].each do |file| %>
+      <%= "- #{file}" %>
+      <% end %>
 # Leave this here - This line denotes end of block to the parser.
 {{- end }}
