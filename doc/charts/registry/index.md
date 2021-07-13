@@ -63,7 +63,7 @@ registry:
     readOnly:
       enabled: false
   image:
-    tag: 'v3.5.1-gitlab'
+    tag: 'v3.5.2-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
