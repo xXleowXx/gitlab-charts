@@ -110,14 +110,16 @@ spec:
             - name: shell-secrets
               mountPath: '/etc/gitlab-secrets'
               readOnly: true
+            {{- if eq .Values.sshDaemon "openssh" }}
             - name: sshd-config
               mountPath: /etc/ssh/sshd_config
               subPath: sshd_config
               readOnly: true
+            {{- end }}
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
             {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
           livenessProbe:
-            {{- if eq .Values.sshDaemon "gitlab-sshd"}}
+            {{- if eq .Values.sshDaemon "gitlab-sshd" }}
             httpGet:
               port: 9122
               path: /metrics
@@ -155,9 +157,11 @@ spec:
       - name: shell-config
         configMap:
           name: {{ template "fullname" . }}
+      {{- if eq .Values.sshDaemon "openssh" }}
       - name: sshd-config
         configMap:
           name: {{ template "fullname" . }}-sshd
+      {{- end }}
       - name: shell-init-secrets
         projected:
           defaultMode: 0440
