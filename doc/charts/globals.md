@@ -127,13 +127,13 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 
 ### Ingress Path
 
-This chart employs `global.ingress.path` as means to assist those users which need to alter the defintion of `path` entries for their Ingress objects.
-Many users will have no need for this setting, and _should not configure it_.
+This chart employs `global.ingress.path` as a means to assist those users that need to alter the definition of `path` entries for their Ingress objects.
+Many users have no need for this setting, and _should not configure it_.
 
 For those users who need to have their `path` definitions end in `/*` to match their load balancer / proxy behaviors, such as when using `ingress.class: gce` in GCP,
 `ingress.class: alb` in AWS, or another such provider.
 
-This setting will ensure that all `path` entries in Ingress resources throughout this chart will be rendered with this.
+This setting ensures that all `path` entries in Ingress resources throughout this chart are rendered with this.
 The only exception is when populating the [`gitlab/webservice` deployments settings](gitlab/webservice/index.md#deployments-settings), where `path` must be specified.
 
 ### Cloud provider LoadBalancers
@@ -1489,8 +1489,8 @@ global:
 
 GitLab supports routing a job from a worker to a desired queue before it is
 scheduled. Sidekiq clients match a job against a configured list of routing
-rules. Rules are evaluated from first to last, and as soon as we find a match
-for a given worker we stop processing for that worker (first match wins). If
+rules. Rules are evaluated from first to last, and as soon as a match for a
+given worker is found, the processing for that worker is stopped (first match wins). If
 the worker doesn't match any rule, it falls back the queue name generated from
 the worker name.
 
@@ -1498,18 +1498,17 @@ By default, the routing rules are not configured (or denoted with an empty
 array), all the jobs are routed to the queue generated from the worker name.
 
 The routing rules list is an ordered array of tuples of query and
-corresponding queue.
+corresponding queue:
 
-- The query is following
-[worker matching query](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector) syntax.
-
-- The queue_name must be a valid Sidekiq queue name. If the queue name
-is nil, or an empty string, the worker is routed to the queue generated
-by the name of the worker instead.
+- The query is following the
+  [worker matching query](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector) syntax.
+- The `<queue_name>` must be a valid Sidekiq queue name. If the queue name
+  is `nil`, or an empty string, the worker is routed to the queue generated
+  by the name of the worker instead.
 
 The query supports wildcard matching `*`, which matches all workers. As a
 result, the wildcard query must stay at the end of the list or the later rules
-are ignored.
+are ignored:
 
 ```yaml
 global:

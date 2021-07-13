@@ -11,27 +11,24 @@ describe 'Certificates configuration' do
       'gitlab-runner',
       # cert-manager Pods (2)
       'cainjector',
-      'cert-manager',
+      'cert-manager', 'certmanager',
       'prometheus'
     ]
   end
 
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
-    ))
+    HelmTemplate.certmanager_issuer
   end
 
   context 'Custom CA certificates' do
     context 'When present' do
       let(:single_ca) do
-        YAML.safe_load(%(
+        default_values.deep_merge(YAML.safe_load(%(
           global:
             certificates:
               customCAs:
               - secret: rspec-custom-ca
-        )).deep_merge(default_values)
+        )))
       end
 
       subject(:present) { HelmTemplate.new(single_ca) }

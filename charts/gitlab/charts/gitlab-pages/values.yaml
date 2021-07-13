@@ -67,7 +67,6 @@ extraEnv: {}
 
 maxUnavailable: 1
 
-podLabels: {}
 resources:
   requests:
     cpu: 900m

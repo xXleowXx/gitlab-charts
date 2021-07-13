@@ -134,7 +134,7 @@ imagePullPolicy: {{ coalesce $imageObj.pullPolicy .Values.global.imagePullPolicy
 
 {{- define "gitlab.certmanager_annotations" -}}
 {{- if (pluck "configureCertmanager" .Values.ingress .Values.global.ingress (dict "configureCertmanager" false) | first) -}}
-certmanager.k8s.io/issuer: "{{ .Release.Name }}-issuer"
+cert-manager.io/issuer: "{{ .Release.Name }}-issuer"
 {{- end -}}
 {{- end -}}
 
@@ -504,6 +504,6 @@ Create the name of the service account to use for shared-secrets job
 {{- if $sharedSecretValues.serviceAccount.create -}}
     {{ default (include "shared-secrets.fullname" .) $sharedSecretValues.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" $sharedSecretValues.serviceAccount.name }}
+    {{ coalesce $sharedSecretValues.serviceAccount.name .Values.global.serviceAccount.name "default" }}
 {{- end -}}
 {{- end -}}

@@ -191,6 +191,31 @@ steps:
 
 1. Perform an upgrade via Helm.
 
+### cannot patch "RELEASE-NAME-cert-manager" with kind Deployment
+
+Upgrading from **CertManager** version `0.10` introduced a number of
+breaking changes. The old Custom Resource Definitions must be uninstalled
+and removed from Helm's tracking and then re-installed.
+
+The Helm chart attempts to do this by default but if you encounter this error
+you may need to take manual action.
+
+If this error message was encountered, then upgrading requires one more step
+than normal in order to ensure the new Custom Resource Definitions are
+actually applied to the deployment.
+
+1. Remove the old **CertManager** Deployment.
+
+    ```shell
+    kubectl delete deployments -l app=cert-manager --cascade
+    ```
+
+1. Run the upgrade again. This time install the new Custom Resource Definitions
+
+    ```shell
+    helm upgrade --install --values - YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
+    ```
+
 ## `ImagePullBackOff`, `Failed to pull image` and `manifest unknown` errors
 
 If you are using [`global.gitlabVersion`](../charts/globals.md#gitlab-version),
@@ -240,7 +265,10 @@ gitlab-postgresql FATAL:  database files are incompatible with server
 gitlab-postgresql DETAIL:  The data directory was initialized by PostgreSQL version 11, which is not compatible with this version 12.7.
 ```
 
-To address this, perform a [Helm rollback](https://helm.sh/docs/helm/helm_rollback) to the previous version of the chart and then follow the steps in the [upgrade guide](../installation/upgrade.md) to upgrade the bundled PostgreSQL version. Once PostgreSQL is properly upgraded, try the GitLab Helm chart upgrade again.
+To address this, perform a [Helm rollback](https://helm.sh/docs/helm/helm_rollback/) to the previous
+version of the chart and then follow the steps in the [upgrade guide](../installation/upgrade.md) to
+upgrade the bundled PostgreSQL version. Once PostgreSQL is properly upgraded, try the GitLab Helm
+chart upgrade again.
 
 ## Increased load on `/api/v4/jobs/requests` endpoint
 

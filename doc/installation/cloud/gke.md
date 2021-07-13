@@ -33,7 +33,6 @@ The script will:
 1. Create a new GKE cluster.
 1. Allow the cluster to modify DNS records.
 1. Setup `kubectl`, and connect it to the cluster.
-1. Initialize Helm and install Tiller.
 
 Google Cloud SDK is a dependency of this script, so make sure it's
 [set up correctly](../tools.md#gke) in order for the script
@@ -84,7 +83,7 @@ Two resources need to be created in GCP, a Kubernetes cluster and an external IP
 To provision the Kubernetes cluster manually, follow the
 [GKE instructions](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster).
 
-- We recommend a cluster with 2 nodes, each with 8vCPU and 30GB of RAM.
+- We recommend a cluster with at least 2 nodes, each with 4vCPU and 15GB of RAM.
 - Make a note of the cluster's region, it will be needed in the following step.
 
 #### Creating the external IP

@@ -3,26 +3,26 @@
 require 'spec_helper'
 require 'helm_template_helper'
 require 'yaml'
+require 'hash_deep_merge'
 
 describe 'Annotations configuration' do
   let(:default_values) do
-    YAML.safe_load(%(
+    HelmTemplate.certmanager_issuer.deep_merge(YAML.safe_load(%(
       global:
         deployment:
           annotations:
             environment: development
-      certmanager-issuer:
-        email: test@example.com
       gitlab:
         kas:
           enabled: true  # DELETE THIS WHEN KAS BECOMES ENABLED BY DEFAULT
-    ))
+    )))
   end
 
   let(:ignored_charts) do
     [
-      'Deployment/test-cainjector',
-      'Deployment/test-cert-manager',
+      'Deployment/test-certmanager-cainjector',
+      'Deployment/test-certmanager-webhook',
+      'Deployment/test-certmanager',
       'Deployment/test-gitlab-runner',
       'Deployment/test-prometheus-server'
     ]

@@ -28,14 +28,14 @@ image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-ba
 
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
-  KUBECTL_VERSION: "v1.14.10"
+  KUBECTL_VERSION: "v1.16.15"
   STABLE_REPO_URL: "https://charts.helm.sh/stable"
   GOOGLE_APPLICATION_CREDENTIALS: ${CI_PROJECT_DIR}/.google_keyfile.json
   # AUTO_DEVOPS_DOMAIN is the application deployment domain and should be set as a variable at the group or project level.
   # AUTO_DEVOPS_DOMAIN: domain.example.com
   GIT_CLONE_PATH: $CI_BUILDS_DIR/gitlab
   HELM_MAX_HISTORY: 20
-  TEST_BACKUP_PREFIX: 13.5.0-pre
+  TEST_BACKUP_PREFIX: "14.0.5"
   NAMESPACE: $KUBE_NAMESPACE
 
 stages:
@@ -123,15 +123,17 @@ lint_package:
       - /(^docs[\/-].+|.+-docs$)/
       - *com_auto_deploy_branch_ref
 
-"Validate 1.13.11":
+"Validate 1.16.15":
   extends: .kubeval
   variables:
-    KUBE_VERSION: "1.13.11"
+    KUBE_VERSION: "1.16.15"
+    KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
 
-"Validate 1.18.1":
+"Validate 1.20.7":
   extends: .kubeval
   variables:
-    KUBE_VERSION: "1.18.1"
+    KUBE_VERSION: "1.20.7"
+    KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
 
 .review_template:
   stage: review
@@ -459,7 +461,7 @@ check_docs_markdown:
     # Lint prose
     - vale --minAlertLevel error doc
     # Lint Markdown
-    - markdownlint --config .markdownlint.json 'doc/**/*.md'
+    - markdownlint --config .markdownlint.yml 'doc/**/*.md'
   except:
     variables:
       - $DEPS_PIPELINE
@@ -697,7 +699,7 @@ production_specs_eks:
     - source "${VARIABLES_FILE}"
     - app_version=$(ruby -e "require 'yaml'; puts YAML.safe_load(File.read('Chart.yaml'))['appVersion']")
     - qa_version="nightly"
-    - if [ "$app_version" != "master"  ]; then
+    - if [ "$app_version" != "master" && "$app_version" != "main" ]; then
     -   qa_version="${app_version}-ee"
     - fi
     - SIGNUP_DISABLED=true QA_DEBUG=true GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD GITLAB_ADMIN_USERNAME=root GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD EE_LICENSE=$REVIEW_APPS_EE_LICENSE gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL -- $TEST_SUITE
