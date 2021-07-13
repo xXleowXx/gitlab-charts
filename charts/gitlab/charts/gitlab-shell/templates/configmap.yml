@@ -30,7 +30,11 @@ data:
 
     # Log file.
     # Default is gitlab-shell.log in the root directory.
+    {{- if eq .Values.sshDaemon "gitlab-sshd"}}
     log_file: "/dev/stdout"
+    {{- else }}
+    log_file: "/var/log/gitlab-shell/gitlab-shell.log"
+    {{- end }}
 
     log_format: {{ .Values.logging.format }}
 
@@ -43,6 +47,7 @@ data:
     gitlab_tracing: {{ .Values.global.tracing.connection.string }}
     {{ end }}
 
+    {{- if eq .Values.sshDaemon "gitlab-sshd"}}
     # This section configures the built-in SSH server. Ignored when running on OpenSSH.
     sshd:
       # Address which the SSH server listens on. Defaults to [::]:22.
@@ -56,5 +61,6 @@ data:
       <% Dir["/etc/ssh/ssh_host_*_key"].each do |file| %>
       <%= "- #{file}" %>
       <% end %>
+    {{- end }}
 # Leave this here - This line denotes end of block to the parser.
 {{- end }}

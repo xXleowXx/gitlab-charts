@@ -348,5 +348,12 @@
       "service",
       "workhorse"
     ]
+  },
+  "sshDaemon": {
+    "title": "SSH daemon that would be executed inside container",
+    "enum": [
+      "openssh",
+      "gitlab-sshd"
+    ]
   }
 }
