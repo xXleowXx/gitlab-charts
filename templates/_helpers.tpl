@@ -267,6 +267,52 @@ Defaults to nil
 {{- $local := pluck "psql" $.Values | first -}}
 {{ pluck "connectTimeout" $local .Values.global.psql | first -}}
 {{- end -}}
+
+{{/*
+Return keepalives value
+Defaults to nil
+*/}}
+{{- define "gitlab.psql.keepalives" -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{ pluck "keepalives" $local .Values.global.psql | first -}}
+{{- end -}}
+
+{{/*
+Return keepalives_idle value
+Defaults to nil
+*/}}
+{{- define "gitlab.psql.keepalivesIdle" -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{ pluck "keepalivesIdle" $local .Values.global.psql | first -}}
+{{- end -}}
+
+{{/*
+Return keepalives_interval value
+Defaults to nil
+*/}}
+{{- define "gitlab.psql.keepalivesInterval" -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{ pluck "keepalivesInterval" $local .Values.global.psql | first -}}
+{{- end -}}
+
+{{/*
+Return keepalives_count value
+Defaults to nil
+*/}}
+{{- define "gitlab.psql.keepalivesCount" -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{ pluck "keepalivesCount" $local .Values.global.psql | first -}}
+{{- end -}}
+
+{{/*
+Return tcp_user_timeout value
+Defaults to nil
+*/}}
+{{- define "gitlab.psql.tcpUserTimeout" -}}
+{{- $local := pluck "psql" $.Values | first -}}
+{{ pluck "tcpUserTimeout" $local .Values.global.psql | first -}}
+{{- end -}}
+
 {{/* ######### ingress templates */}}
 
 {{/*
