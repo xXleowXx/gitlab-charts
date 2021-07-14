@@ -109,7 +109,7 @@ For more detailed information see [Upgrading](installation/upgrade.md).
 NOTE:
 **Zero-downtime upgrades** are not available with the GitLab charts.
 Ongoing work to support this feature can be tracked via
-[GitLab Epic 3444](https://gitlab.com/groups/gitlab-org/-/epics/3444).
+[the GitLab Operator issue](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/59).
 
 ## Uninstall
 
