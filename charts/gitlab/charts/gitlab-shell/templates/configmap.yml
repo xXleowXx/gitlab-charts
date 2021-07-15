@@ -53,7 +53,7 @@ data:
       # Address which the SSH server listens on. Defaults to [::]:22.
       listen: "[::]:{{ .Values.service.internalPort }}"
       # Address which the server listens on HTTP for monitoring/health checks. Defaults to localhost:9122.
-      web_listen: "0.0.0.0:9122"
+      web_listen: "0.0.0.0:{{ .Values.metrics.port }}"
       # Maximum number of concurrent sessions allowed on a single SSH connection. Defaults to 10.
       concurrent_sessions_limit: {{ .Values.config.maxStartups.full }}
       # SSH host key files. 

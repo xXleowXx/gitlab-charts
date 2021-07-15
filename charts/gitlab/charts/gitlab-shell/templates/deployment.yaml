@@ -30,6 +30,9 @@ spec:
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
+      {{- if .Values.metrics.enabled }}
+        {{- toYaml $.Values.metrics.annotations | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.tolerations }}
       tolerations:
@@ -121,7 +124,7 @@ spec:
           livenessProbe:
             {{- if eq .Values.sshDaemon "gitlab-sshd" }}
             httpGet:
-              port: 9122
+              port: {{ .Values.metrics.port }}
               path: /metrics
             {{- else }}
             exec:
@@ -136,7 +139,7 @@ spec:
           readinessProbe:
             {{- if eq .Values.sshDaemon "gitlab-sshd"}}
             httpGet:
-              port: 9122
+              port: {{ .Values.metrics.port }}
               path: /metrics
             {{- else }}
             tcpSocket:

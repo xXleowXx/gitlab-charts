@@ -233,6 +233,22 @@
       "title": "Minimum number of pod replicas",
       "type": "number"
     },
+    "metrics": {
+      "properties": {
+        "enabled": {
+          "title": "Enable generation of metrics annotations",
+          "type": "boolean"
+        },
+        "port": {
+          "title": "Metrics port",
+          "type": "integer"
+        },
+        "annotations": {
+          "title": "Metrics annotations",
+          "type": "object" 
+        }
+      }
+    },
     "resources": {
       "properties": {
         "requests": {
@@ -302,6 +318,13 @@
       "title": "GitLab Shell Kubernetes Service details",
       "type": "object"
     },
+    "sshDaemon": {
+      "title": "SSH daemon that would be executed inside container",
+      "enum": [
+        "openssh",
+        "gitlab-sshd"
+      ]
+    },
     "tolerations": {
       "title": "Tolerations labels for pod assignment",
       "type": "array"
@@ -347,13 +370,6 @@
       "maxReplicas",
       "service",
       "workhorse"
-    ]
-  },
-  "sshDaemon": {
-    "title": "SSH daemon that would be executed inside container",
-    "enum": [
-      "openssh",
-      "gitlab-sshd"
     ]
   }
 }

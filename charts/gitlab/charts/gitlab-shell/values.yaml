@@ -103,6 +103,17 @@ serviceAccount:
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
   # name:
 
+metrics:
+  enabled: true
+  port: 9122
+  annotations:
+    gitlab.com/prometheus_scrape: "true"
+    gitlab.com/prometheus_port: "9122"
+    gitlab.com/prometheus_path: "/metrics"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9122"
+    prometheus.io/path: "/metrics"
+
 networkpolicy:
   enabled: false
   egress:
