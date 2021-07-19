@@ -170,7 +170,7 @@ gitlab:
 ## Troubleshooting
 
 You can test if the IAM role is correctly set up and that GitLab is accessing
-S3 using the IAM role by logging into the `taskrunner` pod and installing the
+S3 using the IAM role by logging into the `toolbox` pod and installing the
 `awscli` Python package:
 
 ```shell
@@ -192,7 +192,7 @@ full path to execute the command.
 A normal response showing the temporary user ID, account number and IAM
 ARN (this will not be the IAM ARN for the role used to access S3) will be
 returned if connection to the AWS API was successful. An unsuccessful
-connection will require more troubleshooting to determine why the `taskrunner`
+connection will require more troubleshooting to determine why the `toolbox`
 pod is not able to communicate with the AWS APIs.
 
 If connecting to the AWS APIs is successful, then the following command

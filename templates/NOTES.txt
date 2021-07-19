@@ -99,8 +99,8 @@ Help us improve the installation experience, let us know how we did with a 1 min
 {{-   $_ := set $envValues "gitlab.webservice" (default false .Values.gitlab.webservice.extraEnv.PAGES_UPDATE_LEGACY_STORAGE) }}
 {{-   $_ := set $envValues "gitlab.sidekiq" (default false .Values.gitlab.sidekiq.extraEnv.PAGES_UPDATE_LEGACY_STORAGE) }}
 {{-   $_ := set $envValues "global" (default false .Values.global.extraEnv.PAGES_UPDATE_LEGACY_STORAGE) }}
-{{-   $taskrunnerExtraEnv := index .Values.gitlab "toolbox" "extraEnv" }}
-{{-   $_ := set $envValues "gitlab.toolbox" (default false $taskrunnerExtraEnv.PAGES_UPDATE_LEGACY_STORAGE) }}
+{{-   $toolboxExtraEnv := index .Values.gitlab "toolbox" "extraEnv" }}
+{{-   $_ := set $envValues "gitlab.toolbox" (default false $toolboxExtraEnv.PAGES_UPDATE_LEGACY_STORAGE) }}
 {{-   range $component, $value := $envValues }}
 {{-     if eq $value true }}
 WARNING: GitLab Pages configured to use disk storage via `{{ $component }}.extraEnv.PAGES_UPDATE_LEGACY_STORAGE`.
