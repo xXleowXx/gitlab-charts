@@ -108,7 +108,7 @@ credentials are configured for your bucket.
 
 The command depends on the cloud service provider:
 
-- For AWS S3, the credentials are stored on the task runner pod in `~/.s3cfg`. Run:
+- For AWS S3, the credentials are stored on the toolbox pod in `~/.s3cfg`. Run:
 
   ```shell
   s3cmd ls

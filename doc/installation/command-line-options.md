@@ -346,7 +346,7 @@ GitLab external URL                                              |
 | `gitlab.sidekiq.securityContext.fsGroup`                       | Group ID under which the pod should be started                       | `1000`                                                           |
 | `gitlab.sidekiq.securityContext.runAsUser`                     | User ID under which the pod should be started                        | `1000`                                                           |
 | `gitlab.sidekiq.timeout`                                       | Sidekiq job timeout                                                  | `5`                                                              |
-| `gitlab.toolbox.annotations`                               | Annotations to add to the task runner                                | {}                                                               |
+| `gitlab.toolbox.annotations`                               | Annotations to add to the toolbox                                    | {}                                                               |
 | `gitlab.toolbox.backups.cron.enabled`                      | Backup CronJob enabled flag                                          | false                                                            |
 | `gitlab.toolbox.backups.cron.extraArgs`                    | String of arguments to pass to the backup utility                    |                                                                  |
 | `gitlab.toolbox.backups.cron.persistence.accessMode`       | Backup cron persistence access mode                                  | `ReadWriteOnce`                                                  |

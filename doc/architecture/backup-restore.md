@@ -8,9 +8,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This document explains the technical implementation of the backup and restore into/from CNG.
 
-## Task runner pod
+## Toolbox pod
 
-The [task runner chart](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/charts/gitlab/charts/toolbox) deploys a pod into the cluster. This pod will act as an entry point for interaction with other containers in the cluster.
+The [toolbox chart](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/charts/gitlab/charts/toolbox) deploys a pod into the cluster. This pod will act as an entry point for interaction with other containers in the cluster.
 
 Using this pod user can run commands using `kubectl exec -it <pod name> -- <arbitrary command>`
 
@@ -21,7 +21,7 @@ The image contains some custom scripts that are to be called as commands by the 
 ## Backup utility
 
 [Backup utility](https://gitlab.com/gitlab-org/build/CNG/blob/master/gitlab-toolbox/scripts/bin/backup-utility) is one of the scripts
-in the task runner container and as the name suggests it is a script used for doing backups but also handles restoring of an existing backup.
+in the toolbox container and as the name suggests it is a script used for doing backups but also handles restoring of an existing backup.
 
 ### Backups
 
