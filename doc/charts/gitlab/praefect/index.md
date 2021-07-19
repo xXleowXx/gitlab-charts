@@ -201,11 +201,11 @@ To run Praefect over TLS follow these steps:
    Subject Alternate Name (SAN) to the certificate or alternatively, you can use wildcards.
 
    To know the hostnames to use, check the file `/srv/gitlab/config/gitlab.yml`
-   file in the Task Runner Pod and check the various `gitaly_address` fields specified
+   file in the Toolbox Pod and check the various `gitaly_address` fields specified
    under `repositories.storages` key within it.
 
    ```shell
-   kubectl exec -it <Task Runner Pod> -- grep gitaly_address /srv/gitlab/config/gitlab.yml
+   kubectl exec -it <Toolbox Pod> -- grep gitaly_address /srv/gitlab/config/gitlab.yml
    ```
 
 NOTE:

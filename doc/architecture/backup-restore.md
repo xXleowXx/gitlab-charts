@@ -14,7 +14,7 @@ The [toolbox chart](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/char
 
 Using this pod user can run commands using `kubectl exec -it <pod name> -- <arbitrary command>`
 
-The Task Runner runs a container from the [Task Runner image](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-toolbox).
+The Toolbox runs a container from the [Toolbox image](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-toolbox).
 
 The image contains some custom scripts that are to be called as commands by the user, these scripts can be found [here](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-toolbox/scripts). These scripts are for running Rake tasks, backup, restore, and some helper scripts for interacting with object storage.
 

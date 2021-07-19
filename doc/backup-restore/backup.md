@@ -6,10 +6,10 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Backing up a GitLab installation
 
-GitLab backups are taken by running the `backup-utility` command in the Task Runner pod provided in the chart. Backups can also be automated by enabling the [Cron based backup](#cron-based-backup) functionality of this chart.
+GitLab backups are taken by running the `backup-utility` command in the Toolbox pod provided in the chart. Backups can also be automated by enabling the [Cron based backup](#cron-based-backup) functionality of this chart.
 
 Before running the backup for the first time, you should ensure the
-[Task Runner is properly configured](../charts/gitlab/toolbox/index.md#configuration)
+[Toolbox is properly configured](../charts/gitlab/toolbox/index.md#configuration)
 for access to [object storage](index.md#object-storage)
 
 Follow these steps for backing up a GitLab Helm chart based installation
@@ -25,7 +25,7 @@ Follow these steps for backing up a GitLab Helm chart based installation
 1. Run the backup utility
 
    ```shell
-   kubectl exec <Task Runner pod name> -it backup-utility
+   kubectl exec <Toolbox pod name> -it backup-utility
    ```
 
 1. Visit the `gitlab-backups` bucket in the object storage service and ensure a tarball has been added. It will be named in `<timestamp>_<version>_gitlab_backup.tar` format.
@@ -47,7 +47,7 @@ You need to set the following parameters:
 The backup utility can take some extra arguments. See what those are with:
 
 ```shell
-kubectl exec <Task Runner pod name> -it backup-utility --help
+kubectl exec <Toolbox pod name> -it backup-utility --help
 ```
 
 ## Backup the secrets

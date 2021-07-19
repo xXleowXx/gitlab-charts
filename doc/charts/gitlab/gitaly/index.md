@@ -276,11 +276,11 @@ Follow the steps to run Gitaly over TLS:
    added as a Subject Alternate Name (SAN) to the certificate.
 
    To know the hostnames to use, check the file `/srv/gitlab/config/gitlab.yml`
-   file in the Task Runner pod and check the various
+   file in the Toolbox pod and check the various
    `gitaly_address` fields specified under `repositories.storages` key within it.
 
    ```shell
-   kubectl exec -it <Task Runner pod> -- grep gitaly_address /srv/gitlab/config/gitlab.yml
+   kubectl exec -it <Toolbox pod> -- grep gitaly_address /srv/gitlab/config/gitlab.yml
    ```
 
 NOTE:
