@@ -322,7 +322,7 @@ GitLab external URL                                              |
 | `gitlab.migrations.bootsnap.enabled`                           | Migrations Bootsnap enable flag                                      | true                                                             |
 | `gitlab.migrations.enabled`                                    | Migrations enable flag                                               | true                                                             |
 | `gitlab.migrations.image.pullPolicy`                           | Migrations pull policy                                               |                                                                  |
-| `gitlab.migrations.image.repository`                           | Migrations image repository                                          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task_runner-ee` |
+| `gitlab.migrations.image.repository`                           | Migrations image repository                                          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee`     |
 | `gitlab.migrations.image.tag`                                  | Migrations image tag                                                 | `master`                                                         |
 | `gitlab.migrations.psql.password.key`                          | key to psql password in psql secret                                  | `psql-password`                                                  |
 | `gitlab.migrations.psql.password.secret`                       | psql secret                                                          | `gitlab-postgres`                                                |

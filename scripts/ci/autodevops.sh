@@ -252,7 +252,7 @@ function wait_for_deploy {
   echo ""
 }
 
-function restart_task_runner() {
+function restart_toolbox() {
   # restart the toolbox pods, by deleting them
   # the ReplicaSet of the Deployment will re-create them
   # this ensure we run up-to-date on tags like `master` when there
