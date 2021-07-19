@@ -232,7 +232,7 @@ You can find the full explanation and workaround in [Migrating from Helm v2 to H
 
 You may face this error when restoring a backup on your Helm chart instance. Use the following steps as a workaround:
 
-1. Inside your `task-runner` pod open the DB console:
+1. Inside your `toolbox` pod open the DB console:
 
    ```shell
    /srv/gitlab/bin/rails dbconsole -p

@@ -80,7 +80,7 @@ Note the following:
 1. Wait for the upgrade to complete for the Task Runner pod. RELEASE_NAME should be the name of the GitLab release from `helm list`
 
    ```shell
-   kubectl rollout status -w deployment/RELEASE_NAME-task-runner
+   kubectl rollout status -w deployment/RELEASE_NAME-toolbox
    ```
 
 1. After the Task Runner pod is deployed successfully, run the `post` steps:

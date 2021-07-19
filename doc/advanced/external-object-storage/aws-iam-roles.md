@@ -62,7 +62,7 @@ region: us-east-1
 The Task Runner configuration allows for annotations to be set to upload backups to S3:
 
 ```shell
---set gitlab.task-runner.annotations."iam\.amazonaws\.com/role"=<role name>
+--set gitlab.toolbox.annotations."iam\.amazonaws\.com/role"=<role name>
 ```
 
 The [`s3cmd.config`](index.md#backups-storage-example) secret is to be created without the access and secret keys:
@@ -126,10 +126,10 @@ gitlab:
     serviceAccount:
       create: false
       name: gitlab-sidekiq
-  task-runner:
+  toolbox:
     serviceAccount:
       create: false
-      name: gitlab-task-runner
+      name: gitlab-toolbox
 ```
 
 #### Using chart-owned service accounts
@@ -161,10 +161,10 @@ gitlab:
     serviceAccount:
       annotations:
         eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/gitlab
-  task-runner:
+  toolbox:
     serviceAccount:
       annotations:
-        eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/gitlab-task-runner
+        eks.amazonaws.com/role-arn: arn:aws:iam::xxxxxxxxxxxx:role/gitlab-toolbox
 ```
 
 ## Troubleshooting

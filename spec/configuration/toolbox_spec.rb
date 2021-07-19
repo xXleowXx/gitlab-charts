@@ -3,13 +3,13 @@ require 'helm_template_helper'
 require 'yaml'
 require 'hash_deep_merge'
 
-describe 'task-runner configuration' do
+describe 'toolbox configuration' do
   let(:default_values) do
     YAML.safe_load(%(
       certmanager-issuer:
         email: test@example.com
       gitlab:
-        task-runner:
+        toolbox:
           backups:
             cron:
               enabled: true
@@ -36,11 +36,11 @@ describe 'task-runner configuration' do
             labels:
               global_pod: true
         gitlab:
-          task-runner:
+          toolbox:
             common:
               labels:
-                global: task-runner
-                task-runner: task-runner
+                global: toolbox
+                toolbox: toolbox
             networkpolicy:
               enabled: true
             podLabels:
@@ -51,18 +51,18 @@ describe 'task-runner configuration' do
     it 'Populates the additional labels in the expected manner' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-      expect(t.dig('ConfigMap/test-task-runner', 'metadata', 'labels')).to include('global' => 'task-runner')
-      expect(t.dig('CronJob/test-task-runner-backup', 'metadata', 'labels')).to include('global' => 'task-runner')
-      expect(t.dig('CronJob/test-task-runner-backup', 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'task-runner')
-      expect(t.dig('Deployment/test-task-runner', 'metadata', 'labels')).to include('foo' => 'global')
-      expect(t.dig('Deployment/test-task-runner', 'metadata', 'labels')).to include('global' => 'task-runner')
-      expect(t.dig('Deployment/test-task-runner', 'metadata', 'labels')).not_to include('global' => 'global')
-      expect(t.dig('Deployment/test-task-runner', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
-      expect(t.dig('Deployment/test-task-runner', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
-      expect(t.dig('Deployment/test-task-runner', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
-      expect(t.dig('PersistentVolumeClaim/test-task-runner-tmp', 'metadata', 'labels')).to include('global' => 'task-runner')
-      expect(t.dig('PersistentVolumeClaim/test-task-runner-backup-tmp', 'metadata', 'labels')).to include('global' => 'task-runner')
-      expect(t.dig('ServiceAccount/test-task-runner', 'metadata', 'labels')).to include('global' => 'task-runner')
+      expect(t.dig('ConfigMap/test-toolbox', 'metadata', 'labels')).to include('global' => 'toolbox')
+      expect(t.dig('CronJob/test-toolbox-backup', 'metadata', 'labels')).to include('global' => 'toolbox')
+      expect(t.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'toolbox')
+      expect(t.dig('Deployment/test-toolbox', 'metadata', 'labels')).to include('foo' => 'global')
+      expect(t.dig('Deployment/test-toolbox', 'metadata', 'labels')).to include('global' => 'toolbox')
+      expect(t.dig('Deployment/test-toolbox', 'metadata', 'labels')).not_to include('global' => 'global')
+      expect(t.dig('Deployment/test-toolbox', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+      expect(t.dig('Deployment/test-toolbox', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+      expect(t.dig('Deployment/test-toolbox', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
+      expect(t.dig('PersistentVolumeClaim/test-toolbox-tmp', 'metadata', 'labels')).to include('global' => 'toolbox')
+      expect(t.dig('PersistentVolumeClaim/test-toolbox-backup-tmp', 'metadata', 'labels')).to include('global' => 'toolbox')
+      expect(t.dig('ServiceAccount/test-toolbox', 'metadata', 'labels')).to include('global' => 'toolbox')
     end
   end
 end

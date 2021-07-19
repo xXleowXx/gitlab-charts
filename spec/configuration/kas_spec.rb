@@ -382,7 +382,7 @@ describe 'kas configuration' do
       )['production']['gitlab_kas']
     end
 
-    %w[webservice task-runner sidekiq].each do |chart|
+    %w[webservice toolbox sidekiq].each do |chart|
       context "for #{chart}" do
         it 'has the correct defaults' do
           expect(gitlab_yml(chart)).to include(YAML.safe_load(%(

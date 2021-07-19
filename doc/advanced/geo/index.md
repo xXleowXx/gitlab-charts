@@ -262,19 +262,19 @@ this as the Primary instance. We will do this via the Task Runner Pod.
 1. Find the Task Runner Pod
 
    ```shell
-   kubectl --namespace gitlab get pods -lapp=task-runner
+   kubectl --namespace gitlab get pods -lapp=toolbox
    ```
 
 1. Run `gitlab-rake geo:set_primary_node` with `kubectl exec`
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rake geo:set_primary_node
    ```
 
 1. Check the status of Geo configuration
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rake gitlab:geo:check
    ```
 
    You should see output similar to below:
@@ -581,13 +581,13 @@ configured, via the Task Runner Pod.
 1. Find the Task Runner Pod
 
    ```shell
-   kubectl --namespace gitlab get pods -lapp=task-runner
+   kubectl --namespace gitlab get pods -lapp=toolbox
    ```
 
 1. Attach to the Pod with `kubectl exec`
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- bash -l
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- bash -l
    ```
 
 1. Check the status of Geo configuration

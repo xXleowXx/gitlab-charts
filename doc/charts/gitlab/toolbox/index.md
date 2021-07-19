@@ -17,8 +17,8 @@ Task Runner chart:
 
 ```yaml
 gitlab:
-  ## doc/charts/gitlab/task-runner
-  task-runner:
+  ## doc/charts/gitlab/toolbox
+  toolbox:
     enabled: true
     replicas: 1
     backups:
@@ -81,7 +81,7 @@ gitlab:
 | `extra`                                     | YAML block for [extra `gitlab.yml` configuration](https://gitlab.com/gitlab-org/gitlab/-/blob/8d2b59dbf232f17159d63f0359fa4793921896d5/config/gitlab.yml.example#L1193-1199) | {}                          |
 | `image.pullPolicy`                          | Task Runner image pull policy                | `IfNotPresent`               |
 | `image.pullSecrets`                         | Task Runner image pull secrets               |                              |
-| `image.repository`                          | Task Runner image repository                 | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee` |
+| `image.repository`                          | Task Runner image repository                 | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee` |
 | `image.tag`                                 | Task Runner image tag                        | `master`                     |
 | `init.image.repository`                     | Task Runner init image repository            |                              |
 | `init.image.tag`                            | Task Runner init image tag                   |                              |
@@ -175,7 +175,7 @@ the Rails console:
 
 ```shell
 # locate the Task Runner pod
-kubectl get pods -lapp=task-runner
+kubectl get pods -lapp=toolbox
 
 # Launch a shell inside the pod
 kubectl exec -it <Task Runner pod name> bash

@@ -68,7 +68,7 @@ need to be restarted. The safest way to restart those pods is to run:
 ```shell
 kubectl delete pods -lapp=sidekiq,release=<helm release name>
 kubectl delete pods -lapp=webservice,release=<helm release name>
-kubectl delete pods -lapp=task-runner,release=<helm release name>
+kubectl delete pods -lapp=toolbox,release=<helm release name>
 ```
 
 ## Restoring the backup file
@@ -78,7 +78,7 @@ The steps for restoring a GitLab installation are
 1. Make sure you have a running GitLab instance by deploying the charts. Ensure the Task Runner pod is enabled and running by executing the following command
 
    ```shell
-   kubectl get pods -lrelease=RELEASE_NAME,app=task-runner
+   kubectl get pods -lrelease=RELEASE_NAME,app=toolbox
    ```
 
 1. Get the tarball ready in any of the above locations. Make sure it is named in the `<timestamp>_<version>_gitlab_backup.tar` format.
@@ -102,7 +102,7 @@ The steps for restoring a GitLab installation are
 NOTE:
 During restoration, the backup tarball needs to be extracted to disk.
 This means the Task Runner pod should have disk of necessary size available.
-For more details and configuration please see the [Task Runner documentation](../charts/gitlab/task-runner/index.md#persistence-configuration).
+For more details and configuration please see the [Task Runner documentation](../charts/gitlab/toolbox/index.md#persistence-configuration).
 
 ### Restore the runner registration token
 
@@ -117,7 +117,7 @@ If the restored backup was not from an existing installation of the chart, you w
 1. Find your Task Runner pod by executing the following command
 
    ```shell
-   kubectl get pods -lrelease=RELEASE_NAME,app=task-runner
+   kubectl get pods -lrelease=RELEASE_NAME,app=toolbox
    ```
 
 1. Run the instance setup script to enable the necessary features
