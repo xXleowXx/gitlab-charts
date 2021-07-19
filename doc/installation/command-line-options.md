@@ -365,25 +365,25 @@ GitLab external URL                                              |
 | `gitlab.toolbox.backups.objectStorage.config.key`          | key containing credentials in secret                                 | ""                                                               |
 | `gitlab.toolbox.backups.objectStorage.config.secret`       | Object storage credentials secret                                    | ""                                                               |
 | `gitlab.toolbox.backups.objectStorage.config`              | Authentication information for object storage                        | {}                                                               |
-| `gitlab.toolbox.bootsnap.enabled`                          | Enable Bootsnap cache in Task runner                                 | true                                                             |
-| `gitlab.toolbox.enabled`                                   | Task runner enabled flag                                             | true                                                             |
-| `gitlab.toolbox.image.pullPolicy`                          | Task runner image pull policy                                        | `IfNotPresent`                                                   |
-| `gitlab.toolbox.image.repository`                          | Task runner image repository                                         | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee` |
-| `gitlab.toolbox.image.tag`                                 | Task runner image tag                                                | `master`                                                         |
-| `gitlab.toolbox.init.image.repository`                     | Task runner init image repository                                    |                                                                  |
-| `gitlab.toolbox.init.image.tag`                            | Task runner init image tag                                           |                                                                  |
-| `gitlab.toolbox.init.resources.requests.cpu`               | Task runner init minimum needed CPU                                  | `50m`                                                            |
-| `gitlab.toolbox.persistence.accessMode`                    | Task runner persistence access mode                                  | `ReadWriteOnce`                                                  |
-| `gitlab.toolbox.persistence.enabled`                       | Task runner enable persistence flag                                  | false                                                            |
+| `gitlab.toolbox.bootsnap.enabled`                          | Enable Bootsnap cache in Toolbox                                     | true                                                             |
+| `gitlab.toolbox.enabled`                                   | Toolbox enabled flag                                                 | true                                                             |
+| `gitlab.toolbox.image.pullPolicy`                          | Toolbox image pull policy                                            | `IfNotPresent`                                                   |
+| `gitlab.toolbox.image.repository`                          | Toolbox image repository                                             | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee` |
+| `gitlab.toolbox.image.tag`                                 | Toolbox image tag                                                    | `master`                                                         |
+| `gitlab.toolbox.init.image.repository`                     | Toolbox init image repository                                        |                                                                  |
+| `gitlab.toolbox.init.image.tag`                            | Toolbox init image tag                                               |                                                                  |
+| `gitlab.toolbox.init.resources.requests.cpu`               | Toolbox init minimum needed CPU                                      | `50m`                                                            |
+| `gitlab.toolbox.persistence.accessMode`                    | Toolbox persistence access mode                                      | `ReadWriteOnce`                                                  |
+| `gitlab.toolbox.persistence.enabled`                       | Toolbox enable persistence flag                                      | false                                                            |
 | `gitlab.toolbox.persistence.matchExpressions`              | Label-expression matches to bind                                     |                                                                  |
 | `gitlab.toolbox.persistence.matchLabels`                   | Label-value matches to bind                                          |                                                                  |
-| `gitlab.toolbox.persistence.size`                          | Task runner persistence volume size                                  | `10Gi`                                                           |
+| `gitlab.toolbox.persistence.size`                          | Toolbox persistence volume size                                      | `10Gi`                                                           |
 | `gitlab.toolbox.persistence.storageClass`                  | storageClassName for provisioning                                    |                                                                  |
-| `gitlab.toolbox.persistence.subPath`                       | Task runner persistence volume mount path                            |                                                                  |
+| `gitlab.toolbox.persistence.subPath`                       | Toolbox persistence volume mount path                                |                                                                  |
 | `gitlab.toolbox.persistence.volumeName`                    | Existing persistent volume name                                      |                                                                  |
 | `gitlab.toolbox.psql.port`                                 | Set PostgreSQL server port. Takes precedence over `global.psql.port` |                                                                  |
-| `gitlab.toolbox.resources.requests.cpu`                    | Task runner minimum needed CPU                                       | `50m`                                                            |
-| `gitlab.toolbox.resources.requests.memory`                 | Task runner minimum needed memory                                    | `350M`                                                           |
+| `gitlab.toolbox.resources.requests.cpu`                    | Toolbox minimum needed CPU                                           | `50m`                                                            |
+| `gitlab.toolbox.resources.requests.memory`                 | Toolbox minimum needed memory                                        | `350M`                                                           |
 | `gitlab.toolbox.securityContext.fsGroup`                   | Group ID under which the pod should be started                       | `1000`                                                           |
 | `gitlab.toolbox.securityContext.runAsUser`                 | User ID under which the pod should be started                        | `1000`                                                           |
 | `gitlab.webservice.enabled`                                    | webservice enabled flag                                              | true                                                             |
