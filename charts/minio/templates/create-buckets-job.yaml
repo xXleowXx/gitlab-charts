@@ -12,8 +12,6 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "minio.name" . }}
-        release: {{ .Release.Name }}
         component: create-buckets
         {{- include "gitlab.standardLabels" . | nindent 8 }}
         {{- include "gitlab.commonLabels" . | nindent 8 }}
