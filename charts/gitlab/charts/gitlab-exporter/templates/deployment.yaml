@@ -13,16 +13,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ template "name" . }}
-      release: {{ .Release.Name }}
+      {{- include "gitlab.selectorLabels" . | nindent 6 }} 
   {{- if .Values.deployment.strategy }}
   strategy: {{ .Values.deployment.strategy | toYaml | nindent 4 }}
   {{- end }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
-        release: {{ .Release.Name }}
         {{- include "gitlab.standardLabels" . | nindent 8 }}
         {{- include "gitlab.commonLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
@@ -42,8 +39,7 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }} 
       {{- else if eq (default .Values.global.antiAffinity .antiAffinity) "soft" }}
       affinity:
         podAntiAffinity:
@@ -53,8 +49,7 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }} 
       {{- end }}
       {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}

@@ -14,11 +14,10 @@ heritage: {{ .Release.Service }}
 {{- end -}}
 {{- end -}}
 
-{{- define "gitlab.immutableLabels" -}}
+
+{{- define "gitlab.selectorLabels" -}}
 app: {{ template "name" . }}
-chart: {{ .Chart.Name }}
 release: {{ .Release.Name }}
-heritage: {{ .Release.Service }}
 {{ if .Values.global.application.create -}}
 {{ include "gitlab.application.labels" . }}
 {{- end -}}
@@ -32,6 +31,18 @@ heritage: {{ .Release.Service }}
 {{-   end }}
 {{- end -}}
 {{- end -}}
+
+{{/* Deprecated, do not use these labels.*/}}
+{{- define "gitlab.immutableLabels" -}}
+app: {{ template "name" . }}
+chart: {{ .Chart.Name }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
+{{ if .Values.global.application.create -}}
+{{ include "gitlab.application.labels" . }}
+{{- end -}}
+{{- end -}}
+
 
 {{- define "gitlab.nodeSelector" -}}
 {{- $nodeSelector := default .Values.global.nodeSelector .Values.nodeSelector -}}
