@@ -17,12 +17,12 @@ spec:
   selector:
     matchLabels:
       component: operator
-      {{- include "gitlab.selectorLabels" . | nindent 6 }}
+      {{- include "gitlab.immutableLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         component: operator
-        {{- include "gitlab.selectorLabels" . | nindent 8 }}
+        {{- include "gitlab.immutableLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
     spec:
       {{- include "gitlab.nodeSelector" . | nindent 6 }}
