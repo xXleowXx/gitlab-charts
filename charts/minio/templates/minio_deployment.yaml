@@ -22,10 +22,6 @@ spec:
     metadata:
       name: {{ template "minio.fullname" . }}
       labels:
-        app: {{ template "minio.name" . }}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        release: "{{ .Release.Name }}"
-        heritage: "{{ .Release.Service }}"
         component: app
         {{- include "gitlab.standardLabels" . | nindent 8 }}
         {{- include "gitlab.commonLabels" . | nindent 8 }}
@@ -35,6 +31,7 @@ spec:
 {{ toYaml .Values.podAnnotations | trimSuffix "\n" | indent 8 }}
 {{- end }}
     spec:
+      automountServiceAccountToken: false
       {{- include "gitlab.nodeSelector" . | nindent 6 }}
       {{- if .Values.tolerations }}
       tolerations:
