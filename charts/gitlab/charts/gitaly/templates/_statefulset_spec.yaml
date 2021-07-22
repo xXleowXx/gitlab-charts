@@ -1,8 +1,7 @@
 spec:
   selector:
     matchLabels:
-      app: {{ template "name" . }}
-      release: {{ .Release.Name }}
+      {{- include "gitlab.selectorLabels" . | nindent 6 }} 
       {{- if .storage }}
       storage: {{ .storage.name }}
       {{- end }}
@@ -99,8 +98,7 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }} 
                   {{- if .storage }}
                   storage: {{ .storage.name }}
                   {{- end }}
@@ -113,8 +111,7 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }} 
                   {{- if .storage }}
                   storage: {{ .storage.name }}
                   {{- end }}
@@ -122,6 +119,7 @@ spec:
       {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
       {{- end }}
+      automountServiceAccountToken: false
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}

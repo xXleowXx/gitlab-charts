@@ -12,6 +12,11 @@ production:
   host: {{ include "gitlab.psql.host" . | quote }}
   port: {{ template "gitlab.psql.port" . }}
   connect_timeout: {{ template "gitlab.psql.connectTimeout" . }}
+  keepalives: {{ template "gitlab.psql.keepalives" . }}
+  keepalives_idle: {{ template "gitlab.psql.keepalivesIdle" . }}
+  keepalives_interval: {{ template "gitlab.psql.keepalivesInterval" . }}
+  keepalives_count: {{ template "gitlab.psql.keepalivesCount" . }}
+  tcp_user_timeout: {{ template "gitlab.psql.tcpUserTimeout" . }}
   application_name: {{ template "gitlab.psql.applicationName" . }}
   prepared_statements: {{ template "gitlab.psql.preparedStatements" . }}
   {{- include "gitlab.database.loadBalancing" . | nindent 2 }}

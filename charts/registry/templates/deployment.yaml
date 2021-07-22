@@ -71,6 +71,7 @@ spec:
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "registry.serviceAccount.name" $ }}
       {{- end }}
+      automountServiceAccountToken: false
       initContainers:
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
         - name: configure
