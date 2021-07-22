@@ -553,3 +553,18 @@ Create the name of the service account to use for shared-secrets job
     {{ coalesce $sharedSecretValues.serviceAccount.name .Values.global.serviceAccount.name "default" }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return a emptyDir definition for Volume declarations
+
+Scope is the configuration of that emptyDir.
+Only accepts sizeLimit and/or medium
+*/}}
+{{- define "gitlab.volume.emptyDir" -}}
+{{- $values := pick . "sizeLimit" "medium" -}}
+{{- if not $values -}}
+emptyDir: {}
+{{- else -}}
+emptyDir: {{ toYaml $values | nindent 2 }}
+{{- end -}}
+{{- end -}}
