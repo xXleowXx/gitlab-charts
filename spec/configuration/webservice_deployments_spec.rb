@@ -189,6 +189,13 @@ describe 'Webservice Deployments configuration' do
       expect(chart_defaults.dig(item_key('Deployment', 'default'))).to be_truthy
       expect(chart_defaults.dig(item_key('Deployment', 'other'))).to be_falsey
     end
+
+    it 'creates a default set of volume mounts' do
+      volume_template_spec = chart_defaults.dig('Deployment/test-webservice-default', 'spec', 'template', 'spec', 'volumes')
+
+      expect(volume_template_spec).to include({ 'name' => 'shared-tmp', 'emptyDir' => {} })
+      expect(volume_template_spec).to include({ 'name' => 'shared-upload-directory', 'emptyDir' => {} })
+    end
   end
 
   context 'gitlab.webservice.deployments has entries' do
@@ -543,6 +550,32 @@ describe 'Webservice Deployments configuration' do
       expect(workhorse_config['default']).not_to include("[redis]")
       expect(workhorse_config['api']).to include("[redis]")
       expect(workhorse_config['git']).not_to include("[redis]")
+    end
+  end
+
+  context 'when emptyDir is customized' do
+    let(:deployments_values) do
+      YAML.safe_load(%(
+        gitlab:
+          webservice:
+            sharedTmpDir:
+              sizeLimit: 1G
+              medium: Memory
+            sharedUploadDir:
+              sizeLimit: 2G
+              medium: Memory
+      )).deep_merge(default_values)
+    end
+
+    it 'properly sets values' do
+      t = HelmTemplate.new(deployments_values)
+      expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+      # Read ConfigMaps from the rendered template
+      volume_template_spec = t.dig('Deployment/test-webservice-default', 'spec', 'template', 'spec', 'volumes')
+
+      expect(volume_template_spec).to include({ "name" => "shared-tmp", "emptyDir" => { "sizeLimit" => "1G", "medium" => "Memory" } })
+      expect(volume_template_spec).to include({ "name" => "shared-upload-directory", "emptyDir" => { "sizeLimit" => "2G", "medium" => "Memory" } })
     end
   end
 end
