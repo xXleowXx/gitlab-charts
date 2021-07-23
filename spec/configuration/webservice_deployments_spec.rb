@@ -191,10 +191,10 @@ describe 'Webservice Deployments configuration' do
     end
 
     it 'creates a default set of volume mounts' do
-      volume_template_spec = chart_defaults.dig('Deployment/test-webservice-default', 'spec', 'template', 'spec', 'volumes')
+      volumes = chart_defaults.dig('Deployment/test-webservice-default', 'spec', 'template', 'spec', 'volumes')
 
-      expect(volume_template_spec).to include({ 'name' => 'shared-tmp', 'emptyDir' => {} })
-      expect(volume_template_spec).to include({ 'name' => 'shared-upload-directory', 'emptyDir' => {} })
+      expect(volumes).to include({ 'name' => 'shared-tmp', 'emptyDir' => {} })
+      expect(volumes).to include({ 'name' => 'shared-upload-directory', 'emptyDir' => {} })
     end
   end
 
@@ -571,11 +571,10 @@ describe 'Webservice Deployments configuration' do
       t = HelmTemplate.new(deployments_values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
-      # Read ConfigMaps from the rendered template
-      volume_template_spec = t.dig('Deployment/test-webservice-default', 'spec', 'template', 'spec', 'volumes')
+      volumes = t.dig('Deployment/test-webservice-default', 'spec', 'template', 'spec', 'volumes')
 
-      expect(volume_template_spec).to include({ "name" => "shared-tmp", "emptyDir" => { "sizeLimit" => "1G", "medium" => "Memory" } })
-      expect(volume_template_spec).to include({ "name" => "shared-upload-directory", "emptyDir" => { "sizeLimit" => "2G", "medium" => "Memory" } })
+      expect(volumes).to include({ "name" => "shared-tmp", "emptyDir" => { "sizeLimit" => "1G", "medium" => "Memory" } })
+      expect(volumes).to include({ "name" => "shared-upload-directory", "emptyDir" => { "sizeLimit" => "2G", "medium" => "Memory" } })
     end
   end
 end
