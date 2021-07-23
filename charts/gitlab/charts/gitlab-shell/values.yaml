@@ -104,7 +104,7 @@ serviceAccount:
   # name:
 
 metrics:
-  enabled: true
+  enabled: false
   port: 9122
   annotations:
     gitlab.com/prometheus_scrape: "true"
