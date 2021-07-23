@@ -5,6 +5,7 @@ image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee
+  tag: rename-task-runner-to-toolbox # TODO: remove before merge
   # tag: master
 
 init:
