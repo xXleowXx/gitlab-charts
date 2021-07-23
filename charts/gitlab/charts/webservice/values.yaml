@@ -129,7 +129,6 @@ workhorse:
       memory: 100M
   # shutdownTimeout:
   # image: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee
-  tag: rename-task-runner-to-toolbox # TODO: remove before merge
   livenessProbe:
     initialDelaySeconds: 20
     periodSeconds: 60
