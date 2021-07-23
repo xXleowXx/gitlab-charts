@@ -1,7 +1,8 @@
 image:
   pullSecrets: []
   # pullPolicy: IfNotPresent
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee
+  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee
+  tag: rename-task-runner-to-toolbox # TODO: remove before merge
   # tag: master
 
 init:
