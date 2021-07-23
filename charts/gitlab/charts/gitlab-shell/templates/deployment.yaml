@@ -140,7 +140,7 @@ spec:
             {{- if eq .Values.sshDaemon "gitlab-sshd"}}
             httpGet:
               port: {{ .Values.metrics.port }}
-              path: /metrics
+              path: /start
             {{- else }}
             tcpSocket:
               port: {{ .Values.service.internalPort }}
