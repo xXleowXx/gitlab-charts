@@ -125,7 +125,7 @@ spec:
             {{- if eq .Values.sshDaemon "gitlab-sshd" }}
             httpGet:
               port: {{ .Values.metrics.port }}
-              path: /metrics
+              path: /health
             {{- else }}
             exec:
               command:
