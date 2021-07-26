@@ -560,7 +560,6 @@ describe 'Webservice Deployments configuration' do
           webservice:
             sharedTmpDir:
               sizeLimit: 1G
-              medium: Memory
             sharedUploadDir:
               sizeLimit: 2G
               medium: Memory
@@ -573,7 +572,7 @@ describe 'Webservice Deployments configuration' do
 
       volumes = t.dig('Deployment/test-webservice-default', 'spec', 'template', 'spec', 'volumes')
 
-      expect(volumes).to include({ "name" => "shared-tmp", "emptyDir" => { "sizeLimit" => "1G", "medium" => "Memory" } })
+      expect(volumes).to include({ "name" => "shared-tmp", "emptyDir" => { "sizeLimit" => "1G" } })
       expect(volumes).to include({ "name" => "shared-upload-directory", "emptyDir" => { "sizeLimit" => "2G", "medium" => "Memory" } })
     end
   end
