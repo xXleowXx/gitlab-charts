@@ -120,6 +120,8 @@ deployment:
 
 workhorse:
   keywatcher: true
+  # trustedCIDRsForPropagation: ["127.0.0.1/32"]
+  # trustedCIDRsForXForwardedFor: ["127.0.0.1/32"]
   sentryDSN: ""
   extraArgs: ""
   logFormat: json # valid: (json, structured, text)
@@ -155,7 +157,7 @@ psql: {}
 global:
   # imagePullPolicy: IfNotPresent
   ingress:
-    enabled: 
+    enabled:
     annotations: {}
     tls: {}
       # secretName:
