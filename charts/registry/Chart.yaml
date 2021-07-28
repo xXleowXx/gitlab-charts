@@ -10,10 +10,10 @@ keywords:
 - container
 - docker
 - gitlab
-home: https://hub.docker.com/_/registry/
+home: https://docs.gitlab.com/ee/user/packages/container_registry
 icon: https://hub.docker.com/public/images/logos/mini-logo.svg
 sources:
-- https://github.com/docker/distribution-library-image
+- https://gitlab.com/gitlab-org/container-registry
 - https://gitlab.com/gitlab-org/charts/gitlab/charts/registry
 maintainers:
 - name: GitLab Inc.
