@@ -188,7 +188,9 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `gc.manifests.disabled`                    | `false`                                      | When set to `true`, the GC worker for manifests is disabled. |
 | `gc.manifests.interval`                    | `5s`                                         | The initial sleep interval between each worker run. |
 | `gc.reviewafter`                           | `24h`                                        | The minimum amount of time after which the garbage collector should pick up a record for review. `-1` means no wait. |
+| `migration.enabled`                | `false`                                      | When set to `true`, migration mode is enabled. New repositories will be added to the database, while existing repositories will continue to use the filesystem. This is an experimental feature and must not be used in production environments. |
 | `migration.disablemirrorfs`                | `false`                                      | When set to `true`, the registry does not write metadata to the filesystem. Must be used in combination with the metadata database. This is an experimental feature and must not be used in production environments. |
+| `migration.rootdirectory`                |                                              | Allows repositories that have been migrated to the database to use separate storage paths. Using a distinct root directory from the main storage driver configuration allows online migrations. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
 | `serviceLabels`                            | `{}`                                         | Supplemental service labels                                                                          |
@@ -737,7 +739,9 @@ This feature requires the [metadata database](#database) to be enabled.
 
 ```yaml
 migration:
+  enabled: true
   disablemirrorfs: true
+  rootdirectory: gitlab
 ```
 
 ### gc
