@@ -95,6 +95,8 @@ pdb:
   maxUnavailable: {{ .Values.maxUnavailable }} # defaults to .maxUnavailable
 resources: # resources for `webservice` container
   {{- .Values.resources | toYaml | nindent 2 }}
+sharedTmpDir: {{ .Values.sharedTmpDir | toYaml | nindent 2 }}
+sharedUploadDir: {{ .Values.sharedUploadDir | toYaml | nindent 2 }}
 workhorse:
   {{- .Values.workhorse | toYaml | nindent 2 }}
 extraEnv:

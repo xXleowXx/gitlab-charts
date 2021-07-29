@@ -29,6 +29,9 @@ spec:
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
+      {{- if .Values.metrics.enabled }}
+        {{- toYaml $.Values.metrics.annotations | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.tolerations }}
       tolerations:
@@ -99,6 +102,8 @@ spec:
               value: '/srv/gitlab-shell'
             - name: KEYS_DIRECTORY
               value: '/etc/gitlab-secrets/ssh'
+            - name: SSH_DAEMON
+              value: {{ .Values.sshDaemon | quote }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
           volumeMounts:
             - name: shell-config
@@ -106,24 +111,38 @@ spec:
             - name: shell-secrets
               mountPath: '/etc/gitlab-secrets'
               readOnly: true
+            {{- if eq .Values.sshDaemon "openssh" }}
             - name: sshd-config
               mountPath: /etc/ssh/sshd_config
               subPath: sshd_config
               readOnly: true
+            {{- end }}
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
             {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
           livenessProbe:
+            {{- if eq .Values.sshDaemon "gitlab-sshd" }}
+            httpGet:
+              port: {{ .Values.metrics.port }}
+              path: /health
+            {{- else }}
             exec:
               command:
               - /scripts/healthcheck
+            {{- end }}
             initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
           readinessProbe:
+            {{- if eq .Values.sshDaemon "gitlab-sshd"}}
+            httpGet:
+              port: {{ .Values.metrics.port }}
+              path: /start
+            {{- else }}
             tcpSocket:
               port: {{ .Values.service.internalPort }}
+            {{- end }}
             initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
@@ -139,9 +158,11 @@ spec:
       - name: shell-config
         configMap:
           name: {{ template "fullname" . }}
+      {{- if eq .Values.sshDaemon "openssh" }}
       - name: sshd-config
         configMap:
           name: {{ template "fullname" . }}-sshd
+      {{- end }}
       - name: shell-init-secrets
         projected:
           defaultMode: 0440
