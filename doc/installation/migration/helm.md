@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Migrating from Helm v2 to Helm v3
+# Migrating from Helm v2 to Helm v3 **(FREE SELF)**
 
 You can use [Helm 2to3 plugin](https://github.com/helm/helm-2to3) to migrate Helm 2 GitLab releases to
 Helm 3:

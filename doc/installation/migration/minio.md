@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Use the built-in MinIO service for object storage
+# Use the built-in MinIO service for object storage **(FREE SELF)**
 
 This migration guide is for when you migrate from a
 [package-based installation](package_to_helm.md) to the Helm chart and you want
