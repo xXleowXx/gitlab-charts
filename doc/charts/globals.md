@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Configure Charts using Globals
 
 To reduce configuration duplication when installing our wrapper Helm chart, several
-configuration settings are available to be set in the `global` section of `values.yml`.
+configuration settings are available to be set in the `global` section of `values.yaml`.
 These global settings are used across several charts, while all other settings are scoped
 within their chart. See the [Helm documentation on globals](https://helm.sh/docs/chart_template_guide/subcharts_and_globals/#global-chart-values)
 for more information on how the global variables work.
@@ -574,7 +574,7 @@ global:
 ```
 
 In this example, the header `X-Random-Config` is a regular header and its value
-can be provided in plaintext in the `values.yml` file or via `--set` flag.
+can be provided in plaintext in the `values.yaml` file or via `--set` flag.
 However, the header `Authorization` is a sensitive one, so mounting it from a
 Kubernetes secret is preferred. For details regarding the structure of the
 secret, refer the [secrets documentation](../installation/secrets.md#registry-sensitive-notification-headers)
@@ -1129,7 +1129,7 @@ using Helm's `--set variable` option:
 --set global.appConfig.gitlab_kas.key=custom-secret-key \
 ```
 
-or by configuring your `values.yml`:
+or by configuring your `values.yaml`:
 
 ```yaml
 global:
@@ -1151,7 +1151,7 @@ using Helm's `--set variable` option:
 --set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
 ```
 
-or by configuring your `values.yml`:
+or by configuring your `values.yaml`:
 
 ```yaml
 global:
@@ -1173,7 +1173,7 @@ URLs. You can do so using Helm's `--set variable` option:
 --set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
 ```
 
-or by configuring your `values.yml`:
+or by configuring your `values.yaml`:
 
 ```yaml
 global:
