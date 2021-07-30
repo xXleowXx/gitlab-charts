@@ -123,7 +123,7 @@ This can happen when you have TLS termination before the NGINX Ingress, and the 
    Via a values file:
 
    ```yaml
-   # values.yml
+   # values.yaml
    global:
      ingress:
        annotations:
