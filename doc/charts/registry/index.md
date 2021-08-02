@@ -66,7 +66,7 @@ registry:
       enabled: true
       age: 168h
       interval: 24h
-      dryRun: false
+      dryrun: false
   image:
     tag: 'v3.6.2-gitlab'
     pullPolicy: IfNotPresent
@@ -157,7 +157,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `maintenance.uploadpurging.enabled`        | `true`                                       | Enable upload purging
 | `maintenance.uploadpurging.age`            | `168h`                                       | Purge uploads older than the specified age
 | `maintenance.uploadpurging.interval`       | `24h`                                        | Frequency at which upload purging is performed
-| `maintenance.uploadpurging.dryRun`         | `false`                                      | Only list which uploads will be purged without deleting
+| `maintenance.uploadpurging.dryrun`         | `false`                                      | Only list which uploads will be purged without deleting
 | `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
 | `reporting.sentry.dsn`                     |                                              | The Sentry DSN (Data Source Name)                                                                    |
 | `reporting.sentry.environment`             |                                              | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/environments/)                 |

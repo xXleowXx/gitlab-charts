@@ -80,7 +80,7 @@ data:
         enabled: {{ .Values.maintenance.uploadPurging.enabled }}
         age: {{ .Values.maintenance.uploadPurging.age }}
         interval: {{ .Values.maintenance.uploadPurging.interval }}
-        dryRun: {{ .Values.maintenance.uploadPurging.dryRun }}
+        dryrun: {{ .Values.maintenance.uploadPurging.dryRun }}
       {{- if .Values.storage }}
       {{- with .Values.storage.redirect }}
       redirect:

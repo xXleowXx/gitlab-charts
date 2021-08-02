@@ -62,7 +62,7 @@ maintenance:
     enabled: true
     age: 168h
     interval: 24h
-    dryRun: false
+    dryrun: false
 
 annotations: {}
 
