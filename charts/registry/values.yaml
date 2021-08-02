@@ -58,11 +58,11 @@ maintenance:
   readOnly:
     ## Enable read-only mode for Registry
     enabled: false
-  uploadpurging:
+  uploadPurging:
     enabled: true
     age: 168h
     interval: 24h
-    dryrun: false
+    dryRun: false
 
 annotations: {}
 
