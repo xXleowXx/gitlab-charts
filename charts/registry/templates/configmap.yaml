@@ -76,7 +76,7 @@ data:
       maintenance:
         readonly:
           enabled: {{ .Values.maintenance.readOnly.enabled }}
-      uploadPurging:
+      uploadpurging:
         enabled: {{ .Values.maintenance.uploadPurging.enabled }}
         age: {{ .Values.maintenance.uploadPurging.age }}
         interval: {{ .Values.maintenance.uploadPurging.interval }}

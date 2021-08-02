@@ -62,7 +62,7 @@ registry:
   maintenance:
     readOnly:
       enabled: false
-    uploadPurging:
+    uploadpurging:
       enabled: true
       age: 168h
       interval: 24h
@@ -154,10 +154,10 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
 | `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
-| `maintenance.uploadPurging.enabled`        | `true`                                       | Enable upload purging
-| `maintenance.uploadPurging.age`            | `168h`                                       | Purge uploads older than the specified age
-| `maintenance.uploadPurging.interval`       | `24h`                                        | Frequency at which upload purging is performed
-| `maintenance.uploadPurging.dryRun`         | `false`                                      | Only list which uploads will be purged without deleting
+| `maintenance.uploadpurging.enabled`        | `true`                                       | Enable upload purging
+| `maintenance.uploadpurging.age`            | `168h`                                       | Purge uploads older than the specified age
+| `maintenance.uploadpurging.interval`       | `24h`                                        | Frequency at which upload purging is performed
+| `maintenance.uploadpurging.dryRun`         | `false`                                      | Only list which uploads will be purged without deleting
 | `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
 | `reporting.sentry.dsn`                     |                                              | The Sentry DSN (Data Source Name)                                                                    |
 | `reporting.sentry.environment`             |                                              | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/environments/)                 |

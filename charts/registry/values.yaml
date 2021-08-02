@@ -58,7 +58,7 @@ maintenance:
   readOnly:
     ## Enable read-only mode for Registry
     enabled: false
-  uploadPurging:
+  uploadpurging:
     enabled: true
     age: 168h
     interval: 24h
