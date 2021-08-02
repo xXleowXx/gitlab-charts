@@ -1,6 +1,6 @@
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
-  tag: 'v3.6.1-gitlab'
+  tag: 'v3.6.2-gitlab'
   pullPolicy: 'IfNotPresent'
   pullSecrets: []
 
@@ -72,7 +72,7 @@ networkpolicy:
   annotations: {}
 
 ingress:
-  enabled: 
+  enabled:
   proxyReadTimeout: 900
   proxyBodySize: "0"
   proxyBuffering: "off"
@@ -85,7 +85,7 @@ ingress:
 
 global:
   ingress:
-    enabled: 
+    enabled:
     annotations: {}
     tls: {}
       # secretName:
@@ -300,7 +300,9 @@ database:
 # NOTE: This is an experimental feature and must not be used in production.
 # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#migration
 migration:
+  enabled: false
   disablemirrorfs: false
+  # rootdirectory:
 
 # Disable online garbage collection by default.
 # NOTE: This is an experimental feature and must not be used in production.

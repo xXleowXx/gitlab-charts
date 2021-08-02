@@ -178,7 +178,7 @@ the Rails console:
 kubectl get pods -lapp=toolbox
 
 # Launch a shell inside the pod
-kubectl exec -it <Toolbox pod name> bash
+kubectl exec -it <Toolbox pod name> -- bash
 
 # open Rails console
 gitlab-rails console -e production

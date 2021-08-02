@@ -23,7 +23,7 @@ to first update to the latest `3.3.x` patch release in order for the upgrade to 
 The [4.0 release notes](../releases/4_0.md) describe the supported upgrade path.
 
 We also recommend that you take a [backup](../backup-restore/index.md) first. Also note that you
-must provide all values using `helm upgrade --set key=value` syntax or `-f values.yml` instead of
+must provide all values using `helm upgrade --set key=value` syntax or `-f values.yaml` instead of
 using `--reuse-values`, because some of the current values might be deprecated.
 
 You can retrieve your previous `--set` arguments cleanly, with

@@ -142,7 +142,7 @@ The restoration process does not update the `gitlab-initial-root-password` secre
 1. Attach to the Webservice pod by executing the command
 
    ```shell
-   kubectl exec <Webservice pod name> -it bash
+   kubectl exec <Webservice pod name> -it -- bash
    ```
 
 1. Run the following command to reset the password of `root` user. Replace `#{password}` with a password of your choice
