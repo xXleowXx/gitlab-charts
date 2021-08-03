@@ -60,13 +60,13 @@ from the parent chart, these values will be:
 registry:
   enabled:
   maintenance:
-    readOnly:
+    readonly:
       enabled: false
-    uploadPurging:
+    uploadpurging:
       enabled: true
       age: 168h
       interval: 24h
-      dryRun: false
+      dryrun: false
   image:
     tag: 'v3.6.2-gitlab'
     pullPolicy: IfNotPresent
@@ -153,11 +153,11 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
-| `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
-| `maintenance.uploadPurging.enabled`        | `true`                                       | Enable upload purging
-| `maintenance.uploadPurging.age`            | `168h`                                       | Purge uploads older than the specified age
-| `maintenance.uploadPurging.interval`       | `24h`                                        | Frequency at which upload purging is performed
-| `maintenance.uploadPurging.dryRun`         | `false`                                      | Only list which uploads will be purged without deleting
+| `maintenance.readonly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
+| `maintenance.uploadpurging.enabled`        | `true`                                       | Enable upload purging
+| `maintenance.uploadpurging.age`            | `168h`                                       | Purge uploads older than the specified age
+| `maintenance.uploadpurging.interval`       | `24h`                                        | Frequency at which upload purging is performed
+| `maintenance.uploadpurging.dryrun`         | `false`                                      | Only list which uploads will be purged without deleting
 | `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
 | `reporting.sentry.dsn`                     |                                              | The Sentry DSN (Data Source Name)                                                                    |
 | `reporting.sentry.environment`             |                                              | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/environments/)                 |
