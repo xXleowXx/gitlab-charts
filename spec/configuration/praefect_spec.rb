@@ -216,15 +216,15 @@ describe 'Praefect configuration' do
         expect(t.dig('PodDisruptionBudget/test-praefect', 'metadata', 'labels')).to include('global' => 'praefect')
         expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('global' => 'service')
         expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('foo' => 'global')
-        expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('global_service' => true)
-        expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('service' => true)
+        expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('global_service' => 'true')
+        expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('service' => 'true')
         expect(t.dig('Service/test-praefect', 'metadata', 'labels')).not_to include('global' => 'global')
         expect(t.dig('StatefulSet/test-praefect', 'metadata', 'labels')).to include('foo' => 'global')
         expect(t.dig('StatefulSet/test-praefect', 'metadata', 'labels')).to include('global' => 'praefect')
         expect(t.dig('StatefulSet/test-praefect', 'metadata', 'labels')).not_to include('global' => 'global')
         expect(t.dig('StatefulSet/test-praefect', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
-        expect(t.dig('StatefulSet/test-praefect', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => true)
-        expect(t.dig('StatefulSet/test-praefect', 'spec', 'template', 'metadata', 'labels')).to include('pod' => true)
+        expect(t.dig('StatefulSet/test-praefect', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => 'true')
+        expect(t.dig('StatefulSet/test-praefect', 'spec', 'template', 'metadata', 'labels')).to include('pod' => 'true')
       end
     end
   end

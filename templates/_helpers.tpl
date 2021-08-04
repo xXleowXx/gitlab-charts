@@ -367,7 +367,7 @@ Handles merging a set of non-selector labels
 {{- $allLabels := merge (default (dict) .Values.podLabels) .Values.global.pod.labels -}}
 {{- if $allLabels -}}
 {{-   range $key, $value := $allLabels }}
-{{ $key }}: {{ $value }}
+{{ $key }}: {{ $value | quote }}
 {{-   end }}
 {{- end -}}
 {{- end -}}
@@ -379,7 +379,7 @@ Handles merging a set of labels for services
 {{- $allLabels := merge (default (dict) .Values.serviceLabels) .Values.global.service.labels -}}
 {{- if $allLabels -}}
 {{-   range $key, $value := $allLabels }}
-{{ $key }}: {{ $value }}
+{{ $key }}: {{ $value | quote }}
 {{-   end }}
 {{- end -}}
 {{- end -}}

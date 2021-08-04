@@ -27,7 +27,7 @@ release: {{ .Release.Name }}
 {{- $commonLabels := merge (pluck "labels" (default (dict) .Values.common) | first) .Values.global.common.labels}}
 {{- if $commonLabels }}
 {{-   range $key, $value := $commonLabels }}
-{{ $key }}: {{ $value }}
+{{ $key }}: {{ $value | quote }}
 {{-   end }}
 {{- end -}}
 {{- end -}}
