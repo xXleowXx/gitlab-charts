@@ -427,16 +427,16 @@ continue to apply with the Sentinel support unless re-specified in the table abo
 ### Multiple Redis support
 
 The GitLab chart includes support for running with separate Redis instances
-for different persistence classes, currently: `cache`, `queues`, `shared_state`,
-`actioncable` and `trace_chunks`.
+for different persistence classes, currently: `cache`, `queues`, `sharedState`,
+`actioncable` and `traceChunks`.
 
 | Instance     | Purpose                                             |
 |:-------------|:----------------------------------------------------|
 | `cache`        | Store cached data                                   |
 | `queues`       | Store Sidekiq background jobs                       |
-| `shared_state` | Store session-related and other persistent data     |
+| `sharedState`  | Store session-related and other persistent data     |
 | `actioncable`  | Pub/Sub queue backend for ActionCable               |
-| `trace_chunks`  | Store job traces temporarily                       |
+| `traceChunks`  | Store job traces temporarily                        |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -482,13 +482,13 @@ global:
         enabled: true
         secret: cable-secret
         key: cable-password
-    trace_chunks:
-      host: trace_chunks.redis.example
+    traceChunks:
+      host: traceChunks.redis.example
       port: 6379
       password:
         enabled: true
-        secret: trace_chunks-secret
-        key: trace_chunks-password
+        secret: traceChunks-secret
+        key: traceChunks-password
 ```
 
 The following table describes the attributes for each dictionary of the
