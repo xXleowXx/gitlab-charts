@@ -15,7 +15,6 @@ describe 'Praefect configuration' do
     [
       'Service/test-praefect',
       'ConfigMap/test-praefect',
-      'ConfigMap/test-praefect-scripts',
       'PodDisruptionBudget/test-praefect',
       'StatefulSet/test-praefect'
     ]
@@ -212,7 +211,6 @@ describe 'Praefect configuration' do
         t = HelmTemplate.new(values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
         expect(t.dig('ConfigMap/test-praefect', 'metadata', 'labels')).to include('global' => 'praefect')
-        expect(t.dig('ConfigMap/test-praefect-scripts', 'metadata', 'labels')).to include('global' => 'praefect')
         expect(t.dig('PodDisruptionBudget/test-praefect', 'metadata', 'labels')).to include('global' => 'praefect')
         expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('global' => 'service')
         expect(t.dig('Service/test-praefect', 'metadata', 'labels')).to include('foo' => 'global')
