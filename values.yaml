@@ -40,7 +40,7 @@ global:
   edition: ee
 
   ## https://docs.gitlab.com/charts/charts/globals#gitlab-version
-  gitlabVersion: rename-task-runner-to-toolbox #TODO: remove before merge
+  # gitlabVersion:
 
   ## https://docs.gitlab.com/charts/charts/globals#application-resource
   application:
