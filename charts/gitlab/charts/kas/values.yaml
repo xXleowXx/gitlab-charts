@@ -16,7 +16,7 @@ global:
     # kas:
       # name: kas.example.com
       # https: true
-  # imagePullPolicy: IfNotPresent
+
 hpa:
   targetAverageValue: 100m
 image:

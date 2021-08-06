@@ -70,7 +70,7 @@ spec:
           {{- else }}
             - /scripts/db-migrate
           {{- end}}
-          {{ template "gitlab.imagePullPolicy" . }}
+          {{ template "gitlab.image.pullPolicy" . }}
           env:
             - name: CONFIG_TEMPLATE_DIRECTORY
               value: '/var/opt/gitlab/templates'

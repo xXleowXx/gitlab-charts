@@ -25,7 +25,8 @@ describe 'kas configuration' do
       global:
         kas:
           enabled: true
-        imagePullPolicy: Always
+        image:
+          pullPolicy: Always
         appConfig:
           gitlab_kas:
             key: #{custom_secret_key}
