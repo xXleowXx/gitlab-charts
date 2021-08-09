@@ -120,6 +120,8 @@ deployment:
 
 workhorse:
   keywatcher: true
+  # trustedCIDRsForPropagation: ["127.0.0.1/32"]
+  # trustedCIDRsForXForwardedFor: ["127.0.0.1/32"]
   sentryDSN: ""
   extraArgs: ""
   logFormat: json # valid: (json, structured, text)
@@ -155,7 +157,7 @@ psql: {}
 global:
   # imagePullPolicy: IfNotPresent
   ingress:
-    enabled: 
+    enabled:
     annotations: {}
     tls: {}
       # secretName:
@@ -333,6 +335,19 @@ helmTests:
   enabled: true
 
 webServer: puma
+
+## Configuration of shared emptyDir(s) between Webservice and Workhorse
+#  NOTICE:
+#    Be very wary of these settings.
+#    DO NOT alter these unless you have explicit reason.
+## mount: /tmp
+sharedTmpDir: {}
+#  sizeLimit:
+#  medium:
+## mount: `/srv/gitlab/public/uploads/tmp`
+sharedUploadDir: {}
+#  sizeLimit:
+#  medium:
 
 ## Allow to overwrite under which User and Group we're running.
 securityContext:

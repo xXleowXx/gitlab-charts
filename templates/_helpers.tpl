@@ -367,7 +367,7 @@ Handles merging a set of non-selector labels
 {{- $allLabels := merge (default (dict) .Values.podLabels) .Values.global.pod.labels -}}
 {{- if $allLabels -}}
 {{-   range $key, $value := $allLabels }}
-{{ $key }}: {{ $value }}
+{{ $key }}: {{ $value | quote }}
 {{-   end }}
 {{- end -}}
 {{- end -}}
@@ -379,7 +379,7 @@ Handles merging a set of labels for services
 {{- $allLabels := merge (default (dict) .Values.serviceLabels) .Values.global.service.labels -}}
 {{- if $allLabels -}}
 {{-   range $key, $value := $allLabels }}
-{{ $key }}: {{ $value }}
+{{ $key }}: {{ $value | quote }}
 {{-   end }}
 {{- end -}}
 {{- end -}}
@@ -551,5 +551,20 @@ Create the name of the service account to use for shared-secrets job
     {{ default (include "shared-secrets.fullname" .) $sharedSecretValues.serviceAccount.name }}
 {{- else -}}
     {{ coalesce $sharedSecretValues.serviceAccount.name .Values.global.serviceAccount.name "default" }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return a emptyDir definition for Volume declarations
+
+Scope is the configuration of that emptyDir.
+Only accepts sizeLimit and/or medium
+*/}}
+{{- define "gitlab.volume.emptyDir" -}}
+{{- $values := pick . "sizeLimit" "medium" -}}
+{{- if not $values -}}
+emptyDir: {}
+{{- else -}}
+emptyDir: {{ toYaml $values | nindent 2 }}
 {{- end -}}
 {{- end -}}

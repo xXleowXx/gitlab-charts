@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Preparing EKS resources
+# Preparing EKS resources **(FREE SELF)**
 
 For a fully functional GitLab instance, you will need a few resources before
 deploying the `gitlab` chart.

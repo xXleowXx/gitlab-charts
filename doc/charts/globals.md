@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Configure Charts using Globals
 
 To reduce configuration duplication when installing our wrapper Helm chart, several
-configuration settings are available to be set in the `global` section of `values.yml`.
+configuration settings are available to be set in the `global` section of `values.yaml`.
 These global settings are used across several charts, while all other settings are scoped
 within their chart. See the [Helm documentation on globals](https://helm.sh/docs/chart_template_guide/subcharts_and_globals/#global-chart-values)
 for more information on how the global variables work.
@@ -427,16 +427,16 @@ continue to apply with the Sentinel support unless re-specified in the table abo
 ### Multiple Redis support
 
 The GitLab chart includes support for running with separate Redis instances
-for different persistence classes, currently: `cache`, `queues`, `shared_state`,
-`actioncable` and `trace_chunks`.
+for different persistence classes, currently: `cache`, `queues`, `sharedState`,
+`actioncable` and `traceChunks`.
 
 | Instance     | Purpose                                             |
 |:-------------|:----------------------------------------------------|
 | `cache`        | Store cached data                                   |
 | `queues`       | Store Sidekiq background jobs                       |
-| `shared_state` | Store session-related and other persistent data     |
+| `sharedState`  | Store session-related and other persistent data     |
 | `actioncable`  | Pub/Sub queue backend for ActionCable               |
-| `trace_chunks`  | Store job traces temporarily                       |
+| `traceChunks`  | Store job traces temporarily                        |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -482,13 +482,13 @@ global:
         enabled: true
         secret: cable-secret
         key: cable-password
-    trace_chunks:
-      host: trace_chunks.redis.example
+    traceChunks:
+      host: traceChunks.redis.example
       port: 6379
       password:
         enabled: true
-        secret: trace_chunks-secret
-        key: trace_chunks-password
+        secret: traceChunks-secret
+        key: traceChunks-password
 ```
 
 The following table describes the attributes for each dictionary of the
@@ -574,7 +574,7 @@ global:
 ```
 
 In this example, the header `X-Random-Config` is a regular header and its value
-can be provided in plaintext in the `values.yml` file or via `--set` flag.
+can be provided in plaintext in the `values.yaml` file or via `--set` flag.
 However, the header `Authorization` is a sensitive one, so mounting it from a
 Kubernetes secret is preferred. For details regarding the structure of the
 secret, refer the [secrets documentation](../installation/secrets.md#registry-sensitive-notification-headers)
@@ -1129,7 +1129,7 @@ using Helm's `--set variable` option:
 --set global.appConfig.gitlab_kas.key=custom-secret-key \
 ```
 
-or by configuring your `values.yml`:
+or by configuring your `values.yaml`:
 
 ```yaml
 global:
@@ -1151,7 +1151,7 @@ using Helm's `--set variable` option:
 --set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
 ```
 
-or by configuring your `values.yml`:
+or by configuring your `values.yaml`:
 
 ```yaml
 global:
@@ -1173,7 +1173,7 @@ URLs. You can do so using Helm's `--set variable` option:
 --set global.appConfig.gitlab_kas.internalUrl="grpc://custom-internal-url" \
 ```
 
-or by configuring your `values.yml`:
+or by configuring your `values.yaml`:
 
 ```yaml
 global:
