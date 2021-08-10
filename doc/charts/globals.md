@@ -266,6 +266,16 @@ global:
 | `clientKey`         | String  |         | Name of the key within the `Secret` containing the client certificate's key file. |
 | `serverCA`          | String  |         | Name of the key within the `Secret` containing the certificate authority for the server. |
 
+You may also need to set ```extraEnv``` values to export environment vvalues to point to the correct keys.
+
+```yaml
+global:
+  extraEnv:
+      PGSSLCERT: '/etc/gitlab/postgres/ssl/client-certificate.pem'
+      PGSSLKEY: '/etc/gitlab/postgres/ssl/client-key.pem
+      PGSSLROOTCERT: '/etc/gitlab/postgres/ssl/server-ca.pem
+```
+
 ### PostgreSQL load balancing
 
 This feature requires the use of an
