@@ -32,6 +32,7 @@ helm inspect values gitlab/gitlab
 | `global.hosts.ssh`                             | Domain name that will be used for Git SSH access                                            | `gitlab.{global.hosts.domain}`                |
 | `global.imagePullPolicy`                       | DEPRECATED: Use `global.image.pullPolicy` instead                                           | `IfNotPresent`                                |
 | `global.image.pullPolicy`                      | Set a default imagePullPolicy for all charts                                                | `IfNotPresent`                                |
+| `global.image.pullSecrets`                     | Set a default imagePullSecrets for all charts                                               | `[]`                                          |
 | `global.minio.enabled`                         | MinIO enable flag                                                                           | `true`                                        |
 | `global.psql.host`                             | Global hostname of an external psql, overrides subcharts' psql configuration                | _Uses in-cluster non-production PostgreSQL_   |
 | `global.psql.password.key`                     | Key pointing to the psql password in the psql secret                                        | _Uses in-cluster non-production PostgreSQL_   |

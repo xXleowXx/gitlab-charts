@@ -23,7 +23,7 @@ spec:
       serviceAccountName: {{ template "fullname" . }}
       {{- end }}
       restartPolicy: OnFailure
-{{- include "gitlab.image.pullSecrets" .Values.global.kubectl.image | indent 6}}
+{{- include "gitlab.image.pullSecrets" (dict "global" .Values.global.image "local" .Values.global.kubectl.image) | indent 6}}
       containers:
         - name: create-issuer
           image: {{ include "gitlab.kubectl.image" . | quote }}

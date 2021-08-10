@@ -109,11 +109,19 @@ Returns the minio url.
 
 {{/*
   A helper template to collect and insert the registry pull secrets for a component.
+
+  It expects a dictionary with two entries:
+    - `global` which contains global image settings, e.g. .Values.global.image
+    - `local` which contains local image settings
 */}}
 {{- define "gitlab.image.pullSecrets" -}}
-{{- if .pullSecrets }}
+{{- $pullSecrets := default (list) .global.pullSecrets -}}
+{{- if .local.pullSecrets -}}
+{{-   $pullSecrets = concat $pullSecrets .local.pullSecrets -}}
+{{- end -}}
+{{- if $pullSecrets }}
 imagePullSecrets:
-{{-   range $index, $entry := .pullSecrets }}
+{{-   range $index, $entry := $pullSecrets }}
 - name: {{$entry.name}}
 {{-   end }}
 {{- end }}
