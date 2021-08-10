@@ -42,7 +42,6 @@ init:
       cpu: 50m
 
 global:
-  # imagePullPolicy: IfNotPresent
   redis:
     password: {}
 
