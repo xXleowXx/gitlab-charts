@@ -272,8 +272,8 @@ You may also need to set ```extraEnv``` values to export environment values to p
 global:
   extraEnv:
       PGSSLCERT: '/etc/gitlab/postgres/ssl/client-certificate.pem'
-      PGSSLKEY: '/etc/gitlab/postgres/ssl/client-key.pem
-      PGSSLROOTCERT: '/etc/gitlab/postgres/ssl/server-ca.pem
+      PGSSLKEY: '/etc/gitlab/postgres/ssl/client-key.pem'
+      PGSSLROOTCERT: '/etc/gitlab/postgres/ssl/server-ca.pem'
 ```
 
 ### PostgreSQL load balancing
