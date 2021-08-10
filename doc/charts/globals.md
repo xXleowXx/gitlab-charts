@@ -266,7 +266,7 @@ global:
 | `clientKey`         | String  |         | Name of the key within the `Secret` containing the client certificate's key file. |
 | `serverCA`          | String  |         | Name of the key within the `Secret` containing the certificate authority for the server. |
 
-You may also need to set ```extraEnv``` values to export environment vvalues to point to the correct keys.
+You may also need to set ```extraEnv``` values to export environment values to point to the correct keys.
 
 ```yaml
 global:
