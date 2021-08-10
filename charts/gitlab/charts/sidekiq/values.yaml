@@ -78,7 +78,6 @@ readinessProbe:
   failureThreshold: 3
 
 global:
-  # imagePullPolicy: IfNotPresent
   hosts:
     domain: example.com
     hostSuffix:

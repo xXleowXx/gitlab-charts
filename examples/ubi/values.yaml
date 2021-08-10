@@ -35,7 +35,8 @@ global:
   grafana:
     enabled: false
 
-  imagePullPolicy: Always  # You can drop this if you're using release tags.
+  image:
+    pullPolicy: Always  # You can drop this if you're using release tags.
 
   kubectl:
     image:
