@@ -34,7 +34,6 @@ psql: {}
   # port: 5432
 
 global:
-  # imagePullPolicy: IfNotPresent
   hosts:
     domain: example.com
     hostSuffix:

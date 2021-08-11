@@ -190,7 +190,7 @@ Webservice deployments and other shared objects.
 {{- $commonLabels := default (dict) .common.labels -}}
 {{- if $commonLabels }}
 {{-   range $key, $value := $commonLabels }}
-{{ $key }}: {{ $value }}
+{{ $key }}: {{ $value | quote }}
 {{-   end }}
 {{- end -}}
 {{- end -}}
@@ -201,7 +201,7 @@ Webservice deployments.
 */}}
 {{- define "webservice.podLabels" -}}
 {{- range $key, $value := .pod.labels }}
-{{ $key }}: {{ $value }}
+{{ $key }}: {{ $value | quote }}
 {{- end }}
 {{- end -}}
 

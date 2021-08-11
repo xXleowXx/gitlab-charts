@@ -8,7 +8,7 @@ global:
   # hosts:
     # pages:
       # name: pages.example.com
-  # imagePullPolicy: IfNotPresent
+
 hpa:
   maxReplicas: 10
   minReplicas: 1

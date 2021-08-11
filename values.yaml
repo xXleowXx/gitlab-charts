@@ -26,6 +26,10 @@
 global:
   common:
     labels: {}
+
+  image: {}
+    # pullPolicy: IfNotPresent
+
   ## GitLab operator is DEPRECATED. DO NOT USE.
   operator:
     enabled: false
@@ -645,7 +649,7 @@ global:
       fsGroup: 65534
   busybox:
     image:
-      repository: busybox
+      repository: registry.gitlab.com/gitlab-org/cloud-native/mirror/images/busybox
       tag: latest
 
   ## https://docs.gitlab.com/charts/charts/globals#service-accounts

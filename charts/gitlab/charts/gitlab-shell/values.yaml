@@ -31,7 +31,6 @@ init:
 tolerations: []
 
 global: {}
-  # imagePullPolicy: IfNotPresent
 
 enabled: true
 annotations: {}

@@ -53,7 +53,7 @@ spec:
         - name: run-check
           image: {{ include "gitlab.busybox.image" (dict "local" .Values.upgradeCheck "global" $.Values.global.busybox) | quote }}
           command: ['/bin/sh', '/scripts/runcheck']
-          {{ template "gitlab.imagePullPolicy" . }}
+          {{ template "gitlab.image.pullPolicy" . }}
           env:
             - name: GITLAB_VERSION
               value: '{{ coalesce .Values.global.gitlabVersion .Chart.AppVersion }}'

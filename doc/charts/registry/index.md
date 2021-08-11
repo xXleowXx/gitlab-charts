@@ -60,10 +60,15 @@ from the parent chart, these values will be:
 registry:
   enabled:
   maintenance:
-    readOnly:
+    readonly:
       enabled: false
+    uploadpurging:
+      enabled: true
+      age: 168h
+      interval: 24h
+      dryrun: false
   image:
-    tag: 'v3.6.2-gitlab'
+    tag: 'v3.7.0-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -143,12 +148,16 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
 | `image.repository`                         | `registry`                                   | Registry image                                                                                       |
-| `image.tag`                                | `v3.6.2-gitlab`                              | Version of the image to use                                                                          |
+| `image.tag`                                | `v3.7.0-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
 | `log`                                      | `{level: info, fields: {service: registry}}` | Configure the logging options                                                                        |
 | `minio.bucket`                             | `global.registry.bucket`                     | Legacy registry bucket name                                                                          |
-| `maintenance.readOnly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
+| `maintenance.readonly.enabled`             | `false`                                      | Enable registry's read-only mode                                                                     |
+| `maintenance.uploadpurging.enabled`        | `true`                                       | Enable upload purging
+| `maintenance.uploadpurging.age`            | `168h`                                       | Purge uploads older than the specified age
+| `maintenance.uploadpurging.interval`       | `24h`                                        | Frequency at which upload purging is performed
+| `maintenance.uploadpurging.dryrun`         | `false`                                      | Only list which uploads will be purged without deleting
 | `reporting.sentry.enabled`                 | `false`                                      | Enable reporting using Sentry                                                                        |
 | `reporting.sentry.dsn`                     |                                              | The Sentry DSN (Data Source Name)                                                                    |
 | `reporting.sentry.environment`             |                                              | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/environments/)                 |
@@ -264,7 +273,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v3.6.2-gitlab'`
+- `tag: 'v3.7.0-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`

@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.1.2 (2021-08-03)
+
+No changes.
+
 ## 5.1.1 (2021-07-28)
 
 No changes.
@@ -26,6 +30,10 @@ No changes.
 ### Security (1 change)
 
 - [Do not automount SA token when not needed](gitlab-org/charts/gitlab@108af40ae28e55c882feae66eaecd3a0d0f45996) ([merge request](gitlab-org/charts/gitlab!2093))
+
+## 5.0.7 (2021-08-03)
+
+No changes.
 
 ## 5.0.6 (2021-07-20)
 
@@ -91,6 +99,14 @@ No changes.
 - [Remove deprecated `experimentalQueueSelector` option for Sidekiq](gitlab-org/charts/gitlab@007788f0ba373f7d3fc51623ea5b70021b62ca5b) ([merge request](gitlab-org/charts/gitlab!2023))
 - [Remove the old resouce changes notices](gitlab-org/charts/gitlab@1755275b75dfe669c038e44dd2d218e3aa62c2e6) ([merge request](gitlab-org/charts/gitlab!2028))
 - [Remove ability to disable cluster from sidekiq values](gitlab-org/charts/gitlab@0de93fe181cd8c514aec013bf7e1541e1b41660b) ([merge request](gitlab-org/charts/gitlab!2024))
+
+## 4.12.10 (2021-08-10)
+
+No changes.
+
+## 4.12.9 (2021-08-03)
+
+No changes.
 
 ## 4.12.8 (2021-07-07)
 

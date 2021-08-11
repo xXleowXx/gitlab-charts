@@ -88,7 +88,7 @@ spec:
         {{- include "gitlab.extraContainers" . | nindent 6 }}
       - name: {{ $.Chart.Name }}
         image: "{{ $.Values.image.repository }}:{{ coalesce $.Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" $.Chart.AppVersion "prepend" "true")) }}"
-        {{ template "gitlab.imagePullPolicy" . }}
+        {{ template "gitlab.image.pullPolicy" . }}
         ports:
           - containerPort: {{ include "gitlab.praefect.internalPort" $ }}
         {{- if $.Values.global.praefect.tls.enabled }}
@@ -108,9 +108,12 @@ spec:
           value: '/etc/ssl/certs'
         - name: PRAEFECT_PROMETHEUS_LISTEN_ADDR
           value: ':{{ .Values.metrics.port }}'
+        - name: USE_PRAEFECT_SERVICE
+          value: '1'
+        - name: PRAEFECT_AUTO_MIGRATE
+          value: '{{ .Values.global.praefect.autoMigrate | int }}'
         {{- include "gitlab.tracing.env" . | nindent 8 }}
         {{- include "gitlab.extraEnv" . | nindent 8 }}
-        args: [ "sh", "/scripts/praefect/praefect-start" ]
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         terminationMessagePath: /dev/termination-log
@@ -123,8 +126,6 @@ spec:
             readOnly: true
           - name: praefect-config
             mountPath: /etc/gitaly/templates
-          - name: praefect-scripts
-            mountPath: /scripts/praefect
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
@@ -133,10 +134,6 @@ spec:
           defaultMode: 420
           name: {{ template "fullname" . }}
         name: praefect-config
-      - configMap:
-          defaultMode: 420
-          name: {{ template "fullname" . }}-scripts
-        name: praefect-scripts
       - emptyDir:
           medium: Memory
         name: praefect-secrets

@@ -79,6 +79,6 @@ spec:
       containers:
       - name: pause-task
         image: {{ include "gitlab.kubectl.image" . | quote }}
-        {{ template "gitlab.imagePullPolicy" }}
+        {{ template "gitlab.image.pullPolicy" . }}
         command: ["sh", "-c", "/usr/local/bin/kubectl -n {{ $.Release.Namespace }} get deployment -l 'app=sidekiq,release={{$.Release.Name}}' -o name | xargs /usr/local/bin/kubectl -n {{ $.Release.Namespace }} rollout pause || true"]
 {{- end }}

@@ -4,7 +4,7 @@
 {{- $releaseName := .Release.Name -}}
 {{- $releaseService := .Release.Service -}}
 {{- $fullname := printf "%s-%s" $releaseName $name | trunc 63 | trimSuffix "-" -}}
-{{- $image := printf "%s:%s" (coalesce .Values.image.repository (include "image.repository" .)) (coalesce .Values.image.tag (include "gitlab.versionTag" . )) -}}
+{{- $image := printf "%s:%s" (coalesce .Values.image.repository (include "image.repository" .)) (coalesce .Values.image.tag (include "gitlab.versionTag" . ) | toString) -}}
 {{- $concurrency := .Values.concurrency -}}
 {{- $timeout := .Values.timeout -}}
 {{- $resources := .Values.resources -}}
@@ -120,7 +120,7 @@ spec:
             {{- toYaml $.Values.init.resources | nindent 12 }}
         - name: dependencies
           image: "{{ $image }}"
-          {{ template "gitlab.imagePullPolicy" $ }}
+          {{ template "gitlab.image.pullPolicy" $ }}
           args:
             - /scripts/wait-for-deps
           env:
@@ -163,7 +163,7 @@ spec:
         {{- include "gitlab.extraContainers" $ | nindent 8 }}
         - name: {{ $name }}
           image: "{{ $image }}"
-          {{ template "gitlab.imagePullPolicy" $ }}
+          {{ template "gitlab.image.pullPolicy" $ }}
           env:
 {{- if $metricsEnabled }}
             - name: prometheus_multiproc_dir

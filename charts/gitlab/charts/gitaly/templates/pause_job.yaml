@@ -81,7 +81,7 @@ spec:
       containers:
       - name: pause-task
         image: {{ include "gitlab.kubectl.image" . | quote }}
-        {{ template "gitlab.imagePullPolicy" }}
+        {{ template "gitlab.image.pullPolicy" }}
         command:
         - "sh"
         - "-c"

@@ -82,7 +82,7 @@ spec:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag .Chart.AppVersion }}"
-          {{ template "gitlab.imagePullPolicy" . }}
+          {{ template "gitlab.image.pullPolicy" . }}
           env:
             - name: CONFIG_TEMPLATE_DIRECTORY
               value: '/var/opt/gitlab-exporter/templates'

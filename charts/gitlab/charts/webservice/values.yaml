@@ -155,7 +155,6 @@ psql: {}
   # port: 5432
 
 global:
-  # imagePullPolicy: IfNotPresent
   ingress:
     enabled:
     annotations: {}

@@ -22,7 +22,6 @@ common:
   labels: {}
 
 global:
-  # imagePullPolicy: IfNotPresent
   redis:
     password: {}
   appConfig:

@@ -7,7 +7,7 @@
 {{- $certmanagerDisabled := not (or $.Values.global.ingress.configureCertmanager $.Values.global.ingress.tls) }}
 - name: certificates
   image: "{{ .Values.global.certificates.image.repository }}:{{ .Values.global.certificates.image.tag }}"
-  {{ template "gitlab.imagePullPolicy" . }}
+  {{ template "gitlab.image.pullPolicy" . }}
   env:
   {{- include "gitlab.extraEnv" . | nindent 2 }}
   volumeMounts:
