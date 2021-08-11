@@ -5,3 +5,6 @@ global:
     ci:
       host: bar
       database: gitlab_ci
+      password:
+        secret: gitlab-psql-ci
+        key: psql-password
