@@ -130,9 +130,9 @@ spec:
         projected:
           defaultMode: 0400
           sources:
-          {{- range $.Values.local.psql -}}
+          {{- range $.Values.local.psql }}
           {{-   include "gitlab.psql.secret" . | nindent 10 }}
-          {{- end -}}
+          {{- end }}
           {{- include "gitlab.redis.secret" . | nindent 10 }}
       - name: gitlab-exporter-secrets
         emptyDir:
