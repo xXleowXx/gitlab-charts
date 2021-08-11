@@ -5,7 +5,7 @@ database.datamodel.blank
 
 Called with context of `.Values[.global].psql`.
 
-Returns a deepCopy of context, with some keys removed
+Returns a deepCopy of context, with some keys removed.
 
 Removed:
   - all .knownDecompositions [main, ci, ...]
@@ -24,7 +24,8 @@ database.datamodel.prepare
 
 Result:
   `.Values.local.psql` contains a fully composed datamodel of psql properties
-  to be passed as the context to other helpers.
+  to be passed as the context to other helpers. Which Schema you are in can
+  be found via `.Schema`.
 
 How:
   - mergeOverwrite `.global.psql` `.global.psql.x`
@@ -35,12 +36,14 @@ Example object -
   local:
     psql:
       main:
+        Schema: main
         Release: # pointer to $.Release
         Values:
           global:
             psql: # mirrored from .Values.global.psql
           psql:   # mirrored from .Values.psql
       ci:
+        Schema: ci
         Release: # pointer to $.Release
         Values:
           global:
@@ -58,7 +61,7 @@ Example object -
 {{-   if or (hasKey $.Values.global.psql $decomposedDatabase) (hasKey $.Values.psql $decomposedDatabase) -}}
 {{-     $globalSchema := mergeOverwrite (deepCopy $globalBlank) (get $.Values.global.psql $decomposedDatabase | default (dict)) -}}
 {{-     $localSchema := mergeOverwrite (deepCopy $localBlank) (get $.Values.psql $decomposedDatabase | default (dict)) -}}
-{{-     $context := dict "Release" $.Release "Values" (dict "global" (dict "psql" $globalSchema) "psql" ($localSchema) ) -}}
+{{-     $context := dict "Schema" $decomposedDatabase "Release" $.Release "Values" (dict "global" (dict "psql" $globalSchema) "psql" ($localSchema) ) -}}
 {{-     $_ := set $.Values.local.psql $decomposedDatabase $context -}}
 {{-   end -}}
 {{- end -}}
