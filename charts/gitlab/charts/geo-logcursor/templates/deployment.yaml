@@ -184,7 +184,9 @@ spec:
                 - key: secrets.yml
                   path: rails-secrets/secrets.yml
           {{- include "gitlab.redis.secrets" . | nindent 10 }}
-          {{- include "gitlab.psql.secret" . | nindent 10 }}
+          {{- range $.Values.local.psql -}}
+          {{-   include "gitlab.psql.secret" . | nindent 10 }}
+          {{- end -}}
           - secret:
               name: {{ template "gitlab.geo.psql.password.secret" . }}
               items:

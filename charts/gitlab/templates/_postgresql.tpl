@@ -69,7 +69,7 @@ Returns the K8s Secret definition for the PostgreSQL password.
     name: {{ template "gitlab.psql.password.secret" . }}
     items:
       - key: {{ template "gitlab.psql.password.key" . }}
-        path: postgres/psql-password
+        path: postgres/psql-password-{{ .Schema }}
 {{- end -}}
 {{- end -}}
 
@@ -81,6 +81,6 @@ Returns the quoted path to the file where the PostgreSQL password is stored.
 {{- if not $useSecret -}}
 {{- pluck "file" (index .Values.psql "password") (.Values.global.psql.password) | first | quote -}}
 {{- else -}}
-{{- "/etc/gitlab/postgres/psql-password" | quote -}}
+{{- printf "/etc/gitlab/postgres/psql-password-%s" .Schema | quote -}}
 {{- end -}}
 {{- end -}}
