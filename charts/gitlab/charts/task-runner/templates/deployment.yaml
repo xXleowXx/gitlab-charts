@@ -1,4 +1,5 @@
 {{- if .Values.enabled }}
+{{- include "database.datamodel.prepare" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

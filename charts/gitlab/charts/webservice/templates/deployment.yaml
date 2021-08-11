@@ -1,4 +1,5 @@
 {{- if $.Values.enabled }}
+{{- include "database.datamodel.prepare" $ -}}
 {{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
 {{- range $.Values.deployments -}}
