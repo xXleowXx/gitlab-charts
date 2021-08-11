@@ -6,8 +6,6 @@ image:
   # pullPolicy: IfNotPresent
   # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee
   # tag: master
-  # TODO: remove after testing
-  tag: rename-task-runner-to-toolbox
 
 init:
   image: {}
