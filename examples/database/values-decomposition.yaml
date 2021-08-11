@@ -1,0 +1,7 @@
+global:
+  psql:
+    main:
+      host: foo
+    ci:
+      host: bar
+      database: gitlab_ci

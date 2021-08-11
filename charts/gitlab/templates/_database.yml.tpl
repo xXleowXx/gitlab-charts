@@ -3,10 +3,28 @@
 Returns the contents of the `database.yml` blob for Rails pods
 */}}
 {{- define "gitlab.database.yml" -}}
+{{- include "database.datamodel.prepare" . -}}
 production:
-    {{- include "database.datamodel.prepare" . | nindent 4 }}
-    {{- include "gitlab.database.loadBalancing" . | nindent 4 }}
-    {{- include "gitlab.psql.ssl.config" . | nindent 4 }}
+{{- range $database, $context  := .Values.local.psql }}
+  {{ $database }}:
+    adapter: postgresql
+    encoding: unicode
+    database: {{ template "gitlab.psql.database" $context }}
+    username: {{ template "gitlab.psql.username" $context }}
+    password: "<%= File.read({{ template "gitlab.psql.password.file" $context }}).strip.dump[1..-2] %>"
+    host: {{ include "gitlab.psql.host" $context | quote }}
+    port: {{ template "gitlab.psql.port" $context }}
+    connect_timeout: {{ template "gitlab.psql.connectTimeout" $context }}
+    keepalives: {{ template "gitlab.psql.keepalives" $context }}
+    keepalives_idle: {{ template "gitlab.psql.keepalivesIdle" $context }}
+    keepalives_interval: {{ template "gitlab.psql.keepalivesInterval" $context }}
+    keepalives_count: {{ template "gitlab.psql.keepalivesCount" $context }}
+    tcp_user_timeout: {{ template "gitlab.psql.tcpUserTimeout" $context }}
+    application_name: {{ template "gitlab.psql.applicationName" $context }}
+    prepared_statements: {{ template "gitlab.psql.preparedStatements" $context }}
+    {{- include "gitlab.database.loadBalancing" $context | nindent 4 }}
+    {{- include "gitlab.psql.ssl.config" $context | nindent 4 }}
+{{- end }}
 {{- end -}}
 
 {{/*

@@ -2,51 +2,64 @@
 
 {{/*
 database.datamodel.blank
+
+Called with context of `.Values[.global].psql`.
+
+Returns a deepCopy of context, with some keys removed
+
+Removed:
+  - all .knownDecompositions [main, ci, ...]
 */}}
 {{- define "database.datamodel.blank" -}}
-{{ $psql := deepCopy $.Values.global.psql }}
-{{ $_ := unset $psql "knownDecompositions" }}
-{{- range $decomposedDatabase := $.Values.global.psql.knownDecompositions }}
-{{ $_ := unset $psql $decomposedDatabase }}
+{{- $psql := deepCopy . -}}
+{{- $_ := unset $psql "knownDecompositions" -}}
+{{- range $decomposedDatabase := .knownDecompositions -}}
+{{-   $_ := unset $psql $decomposedDatabase -}}
 {{- end -}}
 {{ $psql | toYaml }}
 {{- end -}}
 
-{{- define "database.datamodel.configuration" -}}
-adapter: postgresql
-encoding: unicode
-database: {{ template "gitlab.psql.database" . }}
-username: {{ template "gitlab.psql.username" . }}
-password: "<%= File.read({{ template "gitlab.psql.password.file" . }}).strip.dump[1..-2] %>"
-host: {{ include "gitlab.psql.host" . | quote }}
-port: {{ template "gitlab.psql.port" . }}
-connect_timeout: {{ template "gitlab.psql.connectTimeout" . }}
-keepalives: {{ template "gitlab.psql.keepalives" . }}
-keepalives_idle: {{ template "gitlab.psql.keepalivesIdle" . }}
-keepalives_interval: {{ template "gitlab.psql.keepalivesInterval" . }}
-keepalives_count: {{ template "gitlab.psql.keepalivesCount" . }}
-tcp_user_timeout: {{ template "gitlab.psql.tcpUserTimeout" . }}
-application_name: {{ template "gitlab.psql.applicationName" . }}
-prepared_statements: {{ template "gitlab.psql.preparedStatements" . }}
-{{- end -}}
-
 {{/*
 database.datamodel.prepare
-*/}}
 
+Result:
+  `.Values.local.psql` contains a fully composed datamodel of psql properties
+  to be passed as the context to other helpers.
+
+How:
+  - mergeOverwrite `.global.psql` `.global.psql.x`
+  - mergeOverwrite `.psql` `.psql.x`
+  - build $context dict, with .Release .Values.global.psql .Values.psql 
+
+Example object -
+  local:
+    psql:
+      main:
+        Release: # pointer to $.Release
+        Values:
+          global:
+            psql: # mirrored from .Values.global.psql
+          psql:   # mirrored from .Values.psql
+      ci:
+        Release: # pointer to $.Release
+        Values:
+          global:
+            psql: # mirrored from .Values.global.psql
+          psql:   # mirrored from .Values.psql
+*/}}
 {{- define "database.datamodel.prepare" -}}
-{{- $blank := fromYaml (include "database.datamodel.blank" $) -}}
-{{- if not $.Values.global.psql.main -}}
-{{-   $_ := set $.Values.global.psql "main" (deepCopy $blank) -}}
+{{- $globalBlank := fromYaml (include "database.datamodel.blank" $.Values.global.psql) -}}
+{{- $_ := set $.Values.global.psql "main" (default (deepCopy $globalBlank) (get $.Values.global.psql "main")) -}}
+{{- $_ := set $.Values.psql "knownDecompositions" $.Values.global.psql.knownDecompositions -}}
+{{- $localBlank := fromYaml (include "database.datamodel.blank" $.Values.psql) -}}
+{{- $_ := set $.Values.psql "main" (default (deepCopy $localBlank) (get $.Values.psql "main")) -}}
+{{- $_ := set $.Values "local" ($.Values.local | default (dict "psql" (dict))) -}}
+{{- range $decomposedDatabase := $.Values.global.psql.knownDecompositions -}}
+{{-   if or (hasKey $.Values.global.psql $decomposedDatabase) (hasKey $.Values.psql $decomposedDatabase) -}}
+{{-     $globalSchema := mergeOverwrite (deepCopy $globalBlank) (get $.Values.global.psql $decomposedDatabase | default (dict)) -}}
+{{-     $localSchema := mergeOverwrite (deepCopy $localBlank) (get $.Values.psql $decomposedDatabase | default (dict)) -}}
+{{-     $context := dict "Release" $.Release "Values" (dict "global" (dict "psql" $globalSchema) "psql" ($localSchema) ) -}}
+{{-     $_ := set $.Values.local.psql $decomposedDatabase $context -}}
+{{-   end -}}
 {{- end -}}
-{{- range $decomposedDatabase := $.Values.global.psql.knownDecompositions }}
-{{/* Now we know we are in main, ci, etc */}}
-{{- $globalSchema := get $.Values.global.psql $decomposedDatabase }}
-{{- $localSchema := get $.Values.psql $decomposedDatabase | default (dict) }}
-{{- $mergedSchema := mergeOverwrite (deepCopy $blank) (deepCopy $globalSchema) (deepCopy $localSchema) }}
-{{ $context := dict "Release" $.Release "Values" (dict "global" (dict "psql" $mergedSchema) "psql" (dict) ) }}
-{{ $decomposedDatabase -}}:
-{{/* $context | toYaml | nindent 2 */}}
-{{ include "database.datamodel.configuration" $context | nindent 2 }}
-{{- end }}
 {{- end -}}
