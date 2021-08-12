@@ -1,0 +1,81 @@
+certmanager-issuer:
+  email: test@example.com
+
+global:
+  init:
+    image:
+      pullPolicy: pp-global-init
+  image:
+    pullPolicy: pp-global
+    pullSecrets:
+    - name: ps-global
+  kubectl:
+    image:
+      pullSecrets:
+      - name: ps-kubectl
+gitlab:
+  gitaly:
+    image:
+      pullPolicy: pp-gitaly
+      pullSecrets:
+      - name: ps-gitaly
+  gitlab-exporter:
+    image:
+      pullPolicy: pp-gitlab-exporter
+      pullSecrets:
+      - name: ps-gitlab-exporter
+  gitlab-pages:
+    image:
+      pullPolicy: pp-gitlab-pages
+      pullSecrets:
+      - name: ps-gitlab-pages
+  gitlab-shell:
+    image:
+      pullPolicy: Never
+      pullSecrets:
+      - name: ps-gitlab-shell
+  mailroom:
+    image:
+      pullPolicy: pp-mailroom
+      pullSecrets:
+      - name: ps-mailroom
+  migrations:
+    image:
+      pullPolicy: pp-migrations
+      pullSecrets:
+      - name: ps-migrations
+  sidekiq:
+    image:
+      pullPolicy: pp-sidekiq
+      pullSecrets:
+      - name: ps-sidekiq
+  task-runner:
+    image:
+      pullPolicy: pp-task-runner
+      pullSecrets:
+      - name: ps-task-runner
+  webservice:
+    image:
+      pullPolicy: pp-webservice
+      pullSecrets:
+      - name: ps-webservice
+upgradeCheck:
+  image:
+    pullPolicy: pp-gitlab
+    pullSecrets:
+    - name: ps-gitlab
+registry:
+  init:
+    image:
+      pullPolicy: pp-registry-init
+  image:
+    pullPolicy: pp-registry
+    pullSecrets:
+    - name: ps-registry
+minio:
+  imagePullPolicy: pp-minio
+  pullSecrets:
+  - name: ps-minio
+  init:
+    image:
+      pullPolicy: pp-minio-init

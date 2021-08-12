@@ -1,0 +1,15 @@
+certmanager-issuer:
+  email: test@example.com
+
+global:
+  init:
+    image:
+      pullPolicy: pp-global-init
+  image:
+    pullPolicy: pp-global
+    pullSecrets:
+    - name: ps-global
+  kubectl:
+    image:
+      pullSecrets:
+      - name: ps-kubectl
