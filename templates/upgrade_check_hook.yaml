@@ -48,7 +48,7 @@ spec:
         runAsUser: {{ .Values.upgradeCheck.securityContext.runAsUser }}
         fsGroup: {{ .Values.upgradeCheck.securityContext.fsGroup }}
       restartPolicy: Never
-      {{- include "pullsecrets" .Values.upgradeCheck.image | nindent 6}}
+      {{- include "gitlab.image.pullSecrets" .Values.upgradeCheck.image | nindent 6}}
       containers:
         - name: run-check
           image: {{ include "gitlab.busybox.image" (dict "local" .Values.upgradeCheck "global" $.Values.global.busybox) | quote }}
