@@ -37,6 +37,7 @@ for more information on how the global variables work.
 - [extraEnv](#extraenv)
 - [extraEnvFrom](#extraenvfrom)
 - [OAuth](#configure-oauth-settings)
+- [Kerberos](#kerberos)
 - [Outgoing email](#outgoing-email)
 - [Platform](#platform)
 - [Affinity](#affinity)
@@ -2109,6 +2110,39 @@ global:
 | `authScope`    | String | `api`   | Scope used for authentication with GitLab API.                                                         |
 
 Check the [secrets documentation](../installation/secrets.md#oauth-integration) for more details on the secret.
+
+## Kerberos
+
+Kerberos integration is enabled by setting
+`global.appConfig.kerberos.enabled` to `true`.
+
+You must provide a secret containing a keytab with
+`global.appConfig.kerberos.keytab.secret`
+
+You may want to provide your Kerberos configuration in
+`global.appConfig.kerberos.krb5Config`.
+
+```yaml
+global:
+  appConfig:
+    kerberos:
+      enabled: true
+      keytab:
+        secret: gitlab-keytab
+        key: keytab
+      servicePrincipalName: HTTP/gitlab.example.com@EXAMPLE.COM
+      krb5Config: |
+        [libdefaults]
+            default_realm = EXAMPLE.COM
+      dedicatedPort:
+        enabled: true
+        port: 8443
+        https: true
+      simpleLdapLinkingAllowedRealms:
+        - example.com
+```
+
+Check the [Kerberos documentation](https://docs.gitlab.com/ee/integration/kerberos.html) for more details.
 
 ## Outgoing email
 

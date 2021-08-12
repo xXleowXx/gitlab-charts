@@ -246,6 +246,10 @@ spec:
             mountPath: /srv/gitlab/config/secrets.yml
             subPath: rails-secrets/secrets.yml
           - name: sidekiq-config
+            mountPath: '/etc/krb5.conf'
+            subPath: krb5.conf
+          {{- include "gitlab.appConfig.kerberos.volumeMount" $ | nindent 10 }}
+          - name: sidekiq-config
             mountPath: '/srv/gitlab/config/initializers/smtp_settings.rb'
             subPath: smtp_settings.rb
           - name: sidekiq-config
@@ -286,6 +290,7 @@ spec:
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       {{- include "gitlab.psql.ssl.volume" $ | nindent 6 }}
       {{- include "gitlab.geo.psql.ssl.volume" $ | nindent 6 }}
+      {{- include "gitlab.appConfig.kerberos.volume" $ | nindent 6 }}
     {{- if $metricsEnabled }}
       - name: sidekiq-metrics
         emptyDir:
