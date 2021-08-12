@@ -1,5 +1,6 @@
 {{- $sharedSecretValues := index .Values "shared-secrets" -}}
 {{- if not (or .Values.global.ingress.configureCertmanager .Values.global.ingress.tls) -}}
+{{- $imageCfg := dict "global" .Values.global.image "local" $sharedSecretValues.selfsign.image -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -36,7 +37,7 @@ spec:
       serviceAccountName: {{ template "shared-secrets.serviceAccountName" . }}
       {{- end }}
       restartPolicy: Never
-      {{- include "gitlab.image.pullSecrets" (dict "global" .Values.global.image "local" $sharedSecretValues.selfsign.image) | nindent 6 }}
+      {{- include "gitlab.image.pullSecrets" $imageCfg | nindent 6 }}
       initContainers:
       - name: cfssl-self-sign
         image: "{{ $sharedSecretValues.selfsign.image.repository }}:{{ $sharedSecretValues.selfsign.image.tag }}"
@@ -65,6 +66,7 @@ spec:
       containers:
       - name: kubectl
         image: {{ include "gitlab.kubectl.image" . | quote }}
+        {{- include "gitlab.image.pullPolicy" $imageCfg | indent 8 }}
         command:
         - /bin/bash
         - -exc

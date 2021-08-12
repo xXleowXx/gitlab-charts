@@ -634,6 +634,8 @@ global:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/alpine-certificates
       tag: 20191127-r2
+      # pullPolicy: IfNotPresent
+      # pullSecrets: []
     customCAs: []
     # - secret: custom-CA
     # - secret: more-custom-CAs
@@ -653,6 +655,8 @@ global:
     image:
       repository: registry.gitlab.com/gitlab-org/cloud-native/mirror/images/busybox
       tag: latest
+      # pullPolicy: IfNotPresent
+      # pullSecrets: []
 
   ## https://docs.gitlab.com/charts/charts/globals#service-accounts
   serviceAccount:
