@@ -28,6 +28,7 @@ Result:
   be found via `.Schema`.
 
 How:
+  - pluck `main`, or provide one base on `database.datamodel.blank`
   - mergeOverwrite `.global.psql` `.global.psql.x`
   - mergeOverwrite `.psql` `.psql.x`
   - build $context dict, with .Release .Values.global.psql .Values.psql 
