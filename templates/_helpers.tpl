@@ -110,7 +110,7 @@ Returns the minio url.
 {{/*
   A helper template to collect and insert the registry pull secrets for a component.
 */}}
-{{- define "pullsecrets" -}}
+{{- define "gitlab.image.pullSecrets" -}}
 {{- if .pullSecrets }}
 imagePullSecrets:
 {{-   range $index, $entry := .pullSecrets }}
