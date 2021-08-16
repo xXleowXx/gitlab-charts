@@ -39,7 +39,7 @@ describe 'Database configuration' do
   end
 
   describe 'No decomposition' do
-    context 'default configuration' do
+    context 'With default configuration' do
       it '`database.yml` Provides only `main` stanza and uses in-chart postgresql service' do
         t = HelmTemplate.new(default_values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
@@ -49,7 +49,7 @@ describe 'Database configuration' do
       end
     end
 
-    context '`main` is provided' do
+    context 'When `main` is provided' do
       it 'inherits settings from x.psql where not provided, uses own' do
         t = HelmTemplate.new(default_values.deep_merge(YAML.safe_load(%(
           global:
@@ -115,12 +115,12 @@ describe 'Database configuration' do
       )))
     end
 
-    context 'minimal configuration' do
+    context 'With minimal configuration' do
       it 'Provides `main` and `ci` stanzas' do
         t = HelmTemplate.new(decompose_ci)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
         db_config = database_config(t, 'webservice')
-        expect(db_config['production'].keys).to include('main', 'ci')
+        expect(db_config['production'].keys).to contain_exactly('main', 'ci')
         expect(db_config['production'].dig('main', 'host')).to eq('test-postgresql.default.svc')
         expect(db_config['production'].dig('ci', 'host')).to eq('test-postgresql.default.svc')
       end
@@ -130,6 +130,66 @@ describe 'Database configuration' do
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
         database_yml = database_yml(t, 'webservice')
         expect(database_yml).to include('/etc/gitlab/postgres/psql-password-main', '/etc/gitlab/postgres/psql-password-ci')
+      end
+    end
+
+    context 'With complex configuration' do
+      # This test shows using different user/password/application, inheriting load_balancing.
+      let(:complex_ci) do
+        decompose_ci.deep_merge(YAML.safe_load(%(
+          global:
+            psql:
+              host: global-server
+              password:
+                secret: global-psql
+              load_balancing:
+                hosts:
+                - a.secondary.global
+                - b.secondary.global
+              main:
+                username: main-user
+                password:
+                  secret: main-password
+                applicationName: main
+              ci:
+                username: ci-user
+                password:
+                  secret: ci-password
+                applicationName: ci
+          postgresql:
+            install: false
+        )))
+      end
+
+      it 'Templates each group according to overrides' do
+        t = HelmTemplate.new(complex_ci)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        db_config = database_config(t, 'webservice')
+        expect(db_config['production'].keys).to contain_exactly('main', 'ci')
+
+        # check `main` stanza
+        main_config = db_config['production']['main']
+        expect(main_config['host']).to eq('global-server')
+        expect(main_config['port']).to eq(5432)
+        expect(main_config['username']).to eq('main-user')
+        expect(main_config['application_name']).to eq('main')
+        expect(main_config['load_balancing']).to eq({ 'hosts' => ['a.secondary.global', 'b.secondary.global'] })
+
+        # check `ci` stanza
+        ci_config = db_config['production']['ci']
+        expect(ci_config['host']).to eq('global-server')
+        expect(ci_config['port']).to eq(5432)
+        expect(ci_config['username']).to eq('ci-user')
+        expect(ci_config['application_name']).to eq('ci')
+        expect(ci_config['load_balancing']).to eq({ 'hosts' => ['a.secondary.global', 'b.secondary.global'] })
+
+        # Check the secret mounts
+        webservice_secret_mounts = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets').select do |item|
+          item['secret']['items'][0]['key'] == 'postgresql-password'
+        end
+        psql_secret_mounts = webservice_secret_mounts.map { |x| x['secret']['name'] }
+        expect(psql_secret_mounts).to contain_exactly('main-password', 'ci-password')
       end
     end
   end
