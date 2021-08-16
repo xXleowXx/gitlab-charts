@@ -53,6 +53,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.global.geo.registry.syncEnabled" .) -}}
 {{- $deprecated = append $deprecated (include "certmanager.createCustomResource" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.global.imagePullPolicy" .) -}}
+{{- $deprecated = append $deprecated (include "gitlab.deprecate.task-runner" .) -}}
 
 {{- /* prepare output */}}
 {{- $deprecated = without $deprecated "" -}}
@@ -413,4 +414,13 @@ global.imagePullPolicy:
 {{- end -}}
 
 {{- end -}}
+
+{{/* Deprecation behaviors for task-runner rename to toolbox */}}
+{{- define "gitlab.deprecate.task-runner" -}}
+{{-   if index .Values.gitlab "task-runner" }}
+gitlab.task-runner:
+    The configuration of `gitlab.task-runner` has been renamed. Please use `gitlab.toolbox` instead.
+{{-   end -}}
+{{- end -}}
+
 {{/* END gitlab.deprecate.local.kubectl */}}
