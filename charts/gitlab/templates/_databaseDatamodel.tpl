@@ -29,6 +29,7 @@ Result:
 
 How:
   - pluck `main`, or provide one base on `database.datamodel.blank`
+  - mergeOverwrite `main` into `x.psql`, so that `main` is the base of future blank
   - mergeOverwrite `.global.psql` `.global.psql.x`
   - mergeOverwrite `.psql` `.psql.x`
   - build $context dict, with .Release .Values.global.psql .Values.psql 
@@ -54,9 +55,11 @@ Example object -
 {{- define "database.datamodel.prepare" -}}
 {{- $globalBlank := fromYaml (include "database.datamodel.blank" $.Values.global.psql) -}}
 {{- $_ := set $.Values.global.psql "main" (default (deepCopy $globalBlank) (get $.Values.global.psql "main")) -}}
+{{- $_ := mergeOverwrite $.Values.global.psql $.Values.global.psql.main -}}
 {{- $_ := set $.Values.psql "knownDecompositions" $.Values.global.psql.knownDecompositions -}}
 {{- $localBlank := fromYaml (include "database.datamodel.blank" $.Values.psql) -}}
 {{- $_ := set $.Values.psql "main" (default (deepCopy $localBlank) (get $.Values.psql "main")) -}}
+{{- $_ := mergeOverwrite $.Values.psql $.Values.psql.main -}}
 {{- $_ := set $.Values "local" ($.Values.local | default (dict "psql" (dict))) -}}
 {{- range $decomposedDatabase := $.Values.global.psql.knownDecompositions -}}
 {{-   if or (hasKey $.Values.global.psql $decomposedDatabase) (hasKey $.Values.psql $decomposedDatabase) -}}

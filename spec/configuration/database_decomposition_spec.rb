@@ -105,6 +105,46 @@ describe 'Database configuration' do
     end
   end
 
+  describe 'Stanzas inherit from `main` when present, `psql` when not in `main`' do
+    let(:decompose_inherit) do
+      default_values.deep_merge(YAML.safe_load(%(
+        global:
+          psql:
+            username: global-user
+            applicationName: global-application
+            main:
+              host: main-server
+              port: 9999
+            ci:
+              username: ci-user
+      )))
+    end
+
+    context 'database.yml' do
+      it 'Settings inherited per expectation: host from main, user from global' do
+        t = HelmTemplate.new(decompose_inherit)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        db_config = database_config(t, 'webservice')
+        expect(db_config['production'].keys).to contain_exactly('main', 'ci')
+
+        # check `main` stanza
+        main_config = db_config['production']['main']
+        expect(main_config['host']).to eq('main-server')
+        expect(main_config['port']).to eq(9999)
+        expect(main_config['username']).to eq('global-user')
+        expect(main_config['application_name']).to eq('global-application')
+
+        # check `ci` stanza
+        ci_config = db_config['production']['ci']
+        expect(ci_config['host']).to eq('main-server')
+        expect(ci_config['port']).to eq(9999)
+        expect(ci_config['username']).to eq('ci-user')
+        expect(ci_config['application_name']).to eq('global-application')
+      end
+    end
+  end
+
   describe 'CI is decomposed (x.psql.ci)' do
     let(:decompose_ci) do
       default_values.deep_merge(YAML.safe_load(%(
