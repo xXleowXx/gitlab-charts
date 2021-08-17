@@ -29,6 +29,7 @@ global:
 
   image: {}
     # pullPolicy: IfNotPresent
+    # pullSecrets: []
 
   ## GitLab operator is DEPRECATED. DO NOT USE.
   operator:
@@ -642,7 +643,8 @@ global:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
       tag: 1.16.15
-      pullSecrets: []
+      # pullPolicy: IfNotPresent
+      # pullSecrets: []
     securityContext:
       # in most base images, this is `nobody:nogroup`
       runAsUser: 65534
@@ -678,6 +680,8 @@ upgradeCheck:
   image: {}
     # repository:
     # tag:
+    # pullPolicy: IfNotPresent
+    # pullSecrets: []    
   securityContext:
     # in alpine/debian/busybox based images, this is `nobody:nogroup`
     runAsUser: 65534
@@ -939,13 +943,14 @@ shared-secrets:
     create: true
   selfsign:
     image:
+      # pullPolicy: IfNotPresent
+      # pullSecrets: []
       repository: registry.gitlab.com/gitlab-org/build/cng/cfssl-self-sign
       tag: 1.2
     keyAlgorithm: "rsa"
     keySize: "4096"
     expiry: "3650d"
     caSubject: "GitLab Helm Chart"
-    pullSecrets: []
   env: production
   serviceAccount:
     enabled: true

@@ -36,7 +36,7 @@ spec:
       serviceAccountName: {{ template "shared-secrets.serviceAccountName" . }}
       {{- end }}
       restartPolicy: Never
-      {{- include "gitlab.image.pullSecrets" $sharedSecretValues.selfsign.image | nindent 6 }}
+      {{- include "gitlab.image.pullSecrets" (dict "global" .Values.global.image "local" $sharedSecretValues.selfsign.image) | nindent 6 }}
       initContainers:
       - name: cfssl-self-sign
         image: "{{ $sharedSecretValues.selfsign.image.repository }}:{{ $sharedSecretValues.selfsign.image.tag }}"
