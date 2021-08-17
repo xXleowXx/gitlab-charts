@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.1.3 (2021-08-17)
+
+### Fixed (1 change)
+
+- [Fix labels boolean value not being escaped bug](gitlab-org/charts/gitlab@0714357dd8f46874f8abbba6e805ba98e3e30c4b) ([merge request](gitlab-org/charts/gitlab!2121))
+
 ## 5.1.2 (2021-08-03)
 
 No changes.
