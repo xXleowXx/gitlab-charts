@@ -3,8 +3,8 @@
 # Declare variables to be passed into your templates.
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-shell
-  pullSecrets: []
   # pullPolicy: IfNotPresent
+  # pullSecrets: []
   # tag: master
 service:
   name: gitlab-shell

@@ -20,8 +20,8 @@ gitaly: {}
 internal: {}
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitaly
-  pullSecrets: []
   # pullPolicy: IfNotPresent
+  # pullSecrets: []
   # tag: master
 service:
   tls: {}
