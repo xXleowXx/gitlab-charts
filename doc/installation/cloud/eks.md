@@ -17,7 +17,7 @@ Alternatively, a cluster can be created manually as well.
 ### Scripted cluster creation
 
 A [bootstrap script](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/eks_bootstrap_script)
-has been created to automate much of the setup process for users on EKS. You will require to clone this repository before executing the script.
+has been created to automate much of the setup process for users on EKS. You will need to clone this repository before executing the script.
 
 The script will:
 
