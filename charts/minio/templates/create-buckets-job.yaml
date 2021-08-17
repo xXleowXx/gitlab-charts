@@ -32,7 +32,7 @@ spec:
                 name: {{ template "minio.fullname" . }}-config-cm
             - secret:
                 name: {{ template "gitlab.minio.credentials.secret" . }}
-{{- include "gitlab.image.pullSecrets" .Values | indent 6}}
+{{- include "gitlab.image.pullSecrets" (dict "global" .Values.global.image "local" .Values) | indent 6}}
       containers:
       - name: minio-mc
         image: {{ .Values.minioMc.image }}:{{ .Values.minioMc.tag }}

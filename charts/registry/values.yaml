@@ -1,8 +1,8 @@
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
   tag: 'v3.7.0-gitlab'
-  pullPolicy: 'IfNotPresent'
-  pullSecrets: []
+  # pullPolicy: IfNotPresent
+  # pullSecrets: []
 
 deployment:
   terminationGracePeriodSeconds: 30
@@ -124,7 +124,7 @@ init:
   image:
     # repository:
     # tag:
-    pullPolicy: "IfNotPresent"
+    pullPolicy: IfNotPresent
   resources:
     requests:
       cpu: 50m
