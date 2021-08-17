@@ -31,8 +31,8 @@ helm inspect values gitlab/gitlab
 | `global.hosts.externalIP`                      | Static IP to assign to NGINX Ingress Controller                                             | Required                                      |
 | `global.hosts.ssh`                             | Domain name that will be used for Git SSH access                                            | `gitlab.{global.hosts.domain}`                |
 | `global.imagePullPolicy`                       | DEPRECATED: Use `global.image.pullPolicy` instead                                           | `IfNotPresent`                                |
-| `global.image.pullPolicy`                      | Set a default imagePullPolicy for all charts                                                | `IfNotPresent`                                |
-| `global.image.pullSecrets`                     | Set a default imagePullSecrets for all charts                                               | `[]`                                          |
+| `global.image.pullPolicy`                      | Set default imagePullPolicy for all charts                                                  | _none_ (default behavior is `IfNotPresent`)   |
+| `global.image.pullSecrets`                     | Set default imagePullSecrets for all charts (use a list of `name` and value pairs)          | _none_                                        |
 | `global.minio.enabled`                         | MinIO enable flag                                                                           | `true`                                        |
 | `global.psql.host`                             | Global hostname of an external psql, overrides subcharts' psql configuration                | _Uses in-cluster non-production PostgreSQL_   |
 | `global.psql.password.key`                     | Key pointing to the psql password in the psql secret                                        | _Uses in-cluster non-production PostgreSQL_   |
