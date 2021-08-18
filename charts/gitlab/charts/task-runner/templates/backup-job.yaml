@@ -1,4 +1,5 @@
 {{- if and .Values.enabled .Values.backups.cron.enabled }}
+{{- include "database.datamodel.prepare" . -}}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -161,7 +162,9 @@ spec:
                         path: shell/.gitlab_shell_secret
                 {{- include "gitlab.gitaly.clientSecrets" . | nindent 16 }}
                 {{- include "gitlab.redis.secrets" . | nindent 16 }}
+                {{- range $.Values.local.psql }}
                 {{- include "gitlab.psql.secret" . | nindent 16 }}
+                {{- end }}
                 - secret:
                     name: {{ template "gitlab.registry.certificate.secret" . }}
                     items:
