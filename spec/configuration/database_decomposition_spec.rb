@@ -26,7 +26,6 @@ describe 'Database configuration' do
           password:
             secret: ''
             key: ''
-          load_balancing: {}
           connectTimeout: nil
           keepalives: nil
           keepalivesIdle: nil
@@ -120,6 +119,21 @@ describe 'Database configuration' do
       )))
     end
 
+    let(:sidekiq_override) do
+      decompose_inherit.deep_merge(YAML.safe_load(%(
+        gitlab:
+          sidekiq:
+            psql:
+              main:
+                load_balancing:
+                  hosts:
+                    - a.sidekiq.global
+                    - b.sidekiq.global
+        postgresql: # must disable for load_balancing
+          install: false
+      )))
+    end
+
     context 'database.yml' do
       it 'Settings inherited per expectation: host from main, user from global' do
         t = HelmTemplate.new(decompose_inherit)
@@ -141,6 +155,21 @@ describe 'Database configuration' do
         expect(ci_config['port']).to eq(9999)
         expect(ci_config['username']).to eq('ci-user')
         expect(ci_config['application_name']).to eq('global-application')
+      end
+    end
+
+    describe 'Sidekiq overrides psql.main.load_balancing' do
+      it 'Uses local settings for load_balancing' do
+        t = HelmTemplate.new(sidekiq_override)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        sidekiq_config = database_config(t, 'sidekiq')
+        sidekiq_config = sidekiq_config['production']['main']
+        expect(sidekiq_config).to include('load_balancing')
+
+        webservice_config = database_config(t, 'webservice')
+        webservice_config = webservice_config['production']['main']
+        expect(webservice_config).not_to include('load_balancing')
       end
     end
   end
