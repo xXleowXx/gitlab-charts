@@ -4,6 +4,11 @@ Returns the contents of the `database.yml` blob for Rails pods
 */}}
 {{- define "gitlab.database.yml" -}}
 {{- include "database.datamodel.prepare" . -}}
+{{- if .Values.global.debugDatabaseDatamodel }}
+# global.debugDatabaseDatamodel=true
+# helm template . -f test_values.yml | yq -r '.data."database.yml.erb" | select(. != null)'
+datamodel: {{ .Values.local | toYaml | nindent 4 }}
+{{- end }}
 production:
 {{- range $database, $context  := .Values.local.psql }}
   {{ $database }}:
