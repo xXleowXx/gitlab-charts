@@ -1,3 +1,1 @@
 #!/bin/bash
-
-helm dependencies update
