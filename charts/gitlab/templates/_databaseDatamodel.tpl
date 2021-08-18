@@ -28,8 +28,8 @@ Result:
   be found via `.Schema`.
 
 How:
-  - pluck `main`, or provide one base on `database.datamodel.blank`
-  - mergeOverwrite `main` into `x.psql`, so that `main` is the base of future blank
+  - mergeOverwrite `main` into `x.psql` (if present), so that `main` is the base of future blank
+  - ensure `main` exists in both global and local, if not present.
   - mergeOverwrite `.global.psql` `.global.psql.x`
   - mergeOverwrite `.psql` `.psql.x`
   - build $context dict, with .Release .Values.global.psql .Values.psql 
@@ -53,20 +53,21 @@ Example object -
           psql:   # mirrored from .Values.psql
 */}}
 {{- define "database.datamodel.prepare" -}}
-{{- $globalBlank := fromYaml (include "database.datamodel.blank" $.Values.global.psql) -}}
-{{- $_ := set $.Values.global.psql "main" (default (deepCopy $globalBlank) (get $.Values.global.psql "main")) -}}
-{{- $_ := mergeOverwrite $.Values.global.psql $.Values.global.psql.main -}}
-{{- $_ := set $.Values.psql "knownDecompositions" $.Values.global.psql.knownDecompositions -}}
-{{- $localBlank := fromYaml (include "database.datamodel.blank" $.Values.psql) -}}
-{{- $_ := set $.Values.psql "main" (default (deepCopy $localBlank) (get $.Values.psql "main")) -}}
-{{- $_ := mergeOverwrite $.Values.psql $.Values.psql.main -}}
-{{- $_ := set $.Values "local" ($.Values.local | default (dict "psql" (dict))) -}}
-{{- range $decomposedDatabase := $.Values.global.psql.knownDecompositions -}}
-{{-   if or (hasKey $.Values.global.psql $decomposedDatabase) (hasKey $.Values.psql $decomposedDatabase) -}}
-{{-     $globalSchema := mergeOverwrite (deepCopy $globalBlank) (get $.Values.global.psql $decomposedDatabase | default (dict)) -}}
-{{-     $localSchema := mergeOverwrite (deepCopy $localBlank) (get $.Values.psql $decomposedDatabase | default (dict)) -}}
-{{-     $context := dict "Schema" $decomposedDatabase "Release" $.Release "Values" (dict "global" (dict "psql" $globalSchema) "psql" ($localSchema) ) -}}
-{{-     $_ := set $.Values.local.psql $decomposedDatabase $context -}}
+{{- if not (hasKey (get $.Values "local" | default (dict)) "psql") -}}
+{{-   $_ := set $.Values "local" (dict "psql" (dict)) -}}
+{{-   $global := mergeOverwrite (deepCopy $.Values.global.psql) (deepCopy (get $.Values.global.psql "main" | default (dict))) -}}
+{{-   $globalBlank := fromYaml (include "database.datamodel.blank" $global) -}}
+{{-   $_ := set $global "main" (deepCopy (get $.Values.global.psql "main" | default $globalBlank)) -}}
+{{-   $local  := mergeOverwrite (deepCopy $.Values.psql) (deepCopy (get $.Values.psql "main") | default (dict)) -}}
+{{-   $localBlank := fromYaml (include "database.datamodel.blank" $local) -}}
+{{-   $_ := set $local "main" (deepCopy (get $.Values.psql "main" | default $localBlank))  -}}
+{{-   range $decomposedDatabase := $global.knownDecompositions -}}
+{{-     if or (hasKey $global $decomposedDatabase) (hasKey $local $decomposedDatabase) -}}
+{{-       $globalSchema := mergeOverwrite (deepCopy $globalBlank) (get $global $decomposedDatabase | default (dict)) -}}
+{{-       $localSchema := mergeOverwrite (deepCopy $localBlank) (get $local $decomposedDatabase | default (dict)) -}}
+{{-       $context := dict "Schema" $decomposedDatabase "Release" $.Release "Values" (dict "global" (dict "psql" $globalSchema) "psql" ($localSchema) ) -}}
+{{-       $_ := set $.Values.local.psql $decomposedDatabase $context -}}
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{- end -}}
