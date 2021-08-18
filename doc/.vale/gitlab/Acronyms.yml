@@ -70,6 +70,7 @@ exceptions:
   - HDD
   - HEAD
   - HIPAA
+  - HLL
   - HTML
   - HTTP
   - HTTPS
@@ -115,8 +116,10 @@ exceptions:
   - PGP
   - PHP
   - PNG
+  - POSIX
   - POST
   - PUT
+  - RAID
   - RAM
   - RBAC
   - RDP
