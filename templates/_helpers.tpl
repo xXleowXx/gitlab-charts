@@ -108,11 +108,11 @@ Returns the minio url.
 {{- end -}}
 
 {{/*
-  A helper template to collect and insert the registry pull secrets for a component.
+  A helper template for collecting and inserting the imagePullSecrets.
 
   It expects a dictionary with two entries:
     - `global` which contains global image settings, e.g. .Values.global.image
-    - `local` which contains local image settings
+    - `local` which contains local image settings, e.g. .Values.image
 */}}
 {{- define "gitlab.image.pullSecrets" -}}
 {{- $pullSecrets := default (list) .global.pullSecrets -}}
@@ -122,19 +122,22 @@ Returns the minio url.
 {{- if $pullSecrets }}
 imagePullSecrets:
 {{-   range $index, $entry := $pullSecrets }}
-- name: {{$entry.name}}
+- name: {{ $entry.name }}
 {{-   end }}
 {{- end }}
 {{- end -}}
 
 {{/*
-Global gitlab imagePullPolicy
-*/}}
+  A helper template for inserting imagePullPolicy.
 
+  It expects a dictionary with two entries:
+    - `global` which contains global image settings, e.g. .Values.global.image
+    - `local` which contains local image settings, e.g. .Values.image
+*/}}
 {{- define "gitlab.image.pullPolicy" -}}
-{{- $imageObj := default (dict) .Values.image -}}
-{{- if or $imageObj.pullPolicy .Values.global.image.pullPolicy -}}
-imagePullPolicy: {{ coalesce $imageObj.pullPolicy .Values.global.image.pullPolicy | quote }}
+{{- $pullPolicy := coalesce .local.pullPolicy .global.pullPolicy -}}
+{{- if $pullPolicy }}
+imagePullPolicy: {{ $pullPolicy | quote }}
 {{- end -}}
 {{- end -}}
 
