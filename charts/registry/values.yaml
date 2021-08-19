@@ -121,10 +121,10 @@ global:
 
 ## Control the InitContainer behaviors.
 init:
-  image:
+  image: {}
     # repository:
     # tag:
-    pullPolicy: IfNotPresent
+    # pullPolicy: IfNotPresent
   resources:
     requests:
       cpu: 50m
