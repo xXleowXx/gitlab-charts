@@ -1670,6 +1670,9 @@ global:
       connection: {}
         secret:
         key:
+    localStore:
+      enabled: false
+      path:
     apiSecret: {}
       secret:
       key:
@@ -1690,6 +1693,8 @@ global:
 | `objectStore.bucket`            | String    | `gitlab-pages`             | Bucket to be used to store content related to Pages |
 | `objectStore.connection.secret` | String    |                            | Secret containing connection details for object storage. |
 | `objectStore.connection.key`    | String    |                            | Key within the connection secret where connection details are stored. |
+| `localStore.enabled`            | Boolean   | False                      | Enable using local storage for content related to Pages (as opposed to objectStore) |
+| `localStore.path`               | String    | `/srv/gitlab/shared/pages` | Path where pages files will be stored; only used if localStore is set to true. |
 | `apiSecret.secret`              | String    |                            | Secret containing 32 bit API key in Base64 encoded form. |
 | `apiSecret.key`                 | String    |                            | Key within the API key secret where the API key is stored. |
 

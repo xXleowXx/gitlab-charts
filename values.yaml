@@ -548,6 +548,9 @@ global:
     externalHttp: []
     externalHttps: []
     artifactsServer: true
+    localStore:
+      enabled: false
+      # path: /srv/gitlab/shared/pages
     objectStore:
       enabled: true
       bucket: gitlab-pages
