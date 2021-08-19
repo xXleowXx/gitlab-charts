@@ -210,7 +210,7 @@ spec:
             - name: SHUTDOWN_BLACKOUT_SECONDS
               value: "{{ .shutdown.blackoutSeconds }}"
             {{- include "gitlab.tracing.env" $ | nindent 12 }}
-            {{- if .Values.global.tracing.urlTemplate }}
+            {{- if $.Values.global.tracing.urlTemplate }}
             - name: GITLAB_TRACING_URL
               {{ $.Values.global.tracing.urlTemplate | quote }}
             {{- end }}
