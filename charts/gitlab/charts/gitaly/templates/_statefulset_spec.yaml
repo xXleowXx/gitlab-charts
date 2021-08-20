@@ -130,8 +130,10 @@ spec:
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ coalesce .Values.service.internalPort .Values.global.gitaly.service.internalPort }}
+              name: grcp-gitaly
            {{- if .Values.metrics.enabled }}
             - containerPort: {{ .Values.metrics.metricsPort }}
+              name: metrics
            {{- end }}
           env:
             - name: CONFIG_TEMPLATE_DIRECTORY
