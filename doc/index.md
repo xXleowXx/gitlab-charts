@@ -185,7 +185,7 @@ under [development](development/index.md).
 ### GitLab version mappings
 
 The GitLab chart doesn't have the same version number as GitLab itself.
-Breaking changes are anticipated that may need to be introduced to the chart
+Breaking changes are anticipated that may have to be introduced to the chart
 that would warrant a major version bump, and the requirement for these changes
 could completely block other development on these charts until completed.
 
