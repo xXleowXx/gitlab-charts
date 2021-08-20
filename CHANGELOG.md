@@ -2,6 +2,42 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.2.0 (2021-08-20)
+
+### Added (4 changes)
+
+- [Support many database configuration](gitlab-org/charts/gitlab@2036b4687bf7e507540bc06b27d5862f496c547c) ([merge request](gitlab-org/charts/gitlab!2122))
+- [Registry: add upload purging to maintenance stanza](gitlab-org/charts/gitlab@aae3afb76daf5b8bae04796307f21d7cf26bb6da) ([merge request](gitlab-org/charts/gitlab!2116))
+- [Support Workhorse config options for propagating correlation IDs](gitlab-org/charts/gitlab@53351d219e8a85423fe1b1922e04101994fa4e2e) ([merge request](gitlab-org/charts/gitlab!2106))
+- [Gitlab-sshd experimental support](gitlab-org/charts/gitlab@41879ffce3c39af07dfe767f3a634ab4aa823d19) ([merge request](gitlab-org/charts/gitlab!1855))
+
+### Fixed (5 changes)
+
+- [Add toString to sidekiq deployment image logic](gitlab-org/charts/gitlab@97f20f307b92e4b370ebb57ba9e0c1f9435e2842) ([merge request](gitlab-org/charts/gitlab!2111))
+- [Fix references to traceChunks and sharedState](gitlab-org/charts/gitlab@d136a24903aa4903319f9f4ec8b07b1dde9c97a0) ([merge request](gitlab-org/charts/gitlab!2117))
+- [Add quotes to labels content, preventing unquoted booleans when deploying chart](gitlab-org/charts/gitlab@614778c435dc94b484b84daccf77f8b063432a25) ([merge request](gitlab-org/charts/gitlab!2068))
+- [Gitaly: Bind metrics endpoint to 0.0.0.0 instead of localhost](gitlab-org/charts/gitlab@dc8857272d92ed690744d6166033edabc5ec1952) ([merge request](gitlab-org/charts/gitlab!2100))
+- [Ensure backup includes Pages bucket also](gitlab-org/charts/gitlab@98d52b39c1293037432025afae3f4441a2a2d7c9) ([merge request](gitlab-org/charts/gitlab!2107))
+
+### Changed (16 changes)
+
+- [Standardize imagePullPolicy and imagePullSecrets behavior](gitlab-org/charts/gitlab@d3a329f1753e635188ff2dc02c111382bf406bfb) ([merge request](gitlab-org/charts/gitlab!2130))
+- [Update gitlab-org/container-registry from 3.8.0-gitlab to 3.9.0-gitlab](gitlab-org/charts/gitlab@b076bfc4d000824f4880f14184fc098a88fb56cd) ([merge request](gitlab-org/charts/gitlab!2142))
+- [Bump container registry to v3.8.0](gitlab-org/charts/gitlab@9a754157f2d68c46667f5635ccaf15993a3ecbb5) ([merge request](gitlab-org/charts/gitlab!2139))
+- [Rename pullsecrets template to gitlab.image.pullSecrets](gitlab-org/charts/gitlab@ad5e7a7e0239df01dc6afbbb00c2a5cf1c57abe8) ([merge request](gitlab-org/charts/gitlab!2126))
+- [Use renamed image: task-runner -> toolbox](gitlab-org/charts/gitlab@e880a913a22e8f3631cedcb3522fb9caba6bb9c4) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2099))
+- [Deprecate global.imagePullPolicy and move it to global.image.pullPolicy](gitlab-org/charts/gitlab@f49cc36c333b2997ebea99db6568b68dac925add) ([merge request](gitlab-org/charts/gitlab!2120))
+- [Update gitlab-org/gitlab-exporter from 11.1.0 to 11.2.0](gitlab-org/charts/gitlab@35f21594c0dc313735a17bcb7991fafdfef2fbe8) ([merge request](gitlab-org/charts/gitlab!2124))
+- [Update gitlab-org/container-registry from 3.6.2-gitlab to 3.7.0-gitlab](gitlab-org/charts/gitlab@b0df57f8d4be24678da3f6e9b7fa4eed820abf04) ([merge request](gitlab-org/charts/gitlab!2123))
+- [Update gitlab-org/container-registry from 3.6.1-gitlab to 3.6.2-gitlab](gitlab-org/charts/gitlab@1e9b17df737a461a5401f8e8b10946822dfbf25f) ([merge request](gitlab-org/charts/gitlab!2115))
+- [Switch busybox/nginx-ingress containers to mirror](gitlab-org/charts/gitlab@df93c5f7c06eef41fff461bdb07ae23da4f84f45) ([merge request](gitlab-org/charts/gitlab!2114))
+- [Update gitlab-org/gitlab-exporter from 11.0.1 to 11.1.0](gitlab-org/charts/gitlab@b8099e5d4774dcf0e8b7abc4a09f07cfebe18483) ([merge request](gitlab-org/charts/gitlab!2109))
+- [Update gitlab-org/container-registry from 3.6.0-gitlab to 3.6.1-gitlab](gitlab-org/charts/gitlab@620c3b9e6dad1e11eede8b0c22952cf794aad76c) ([merge request](gitlab-org/charts/gitlab!2102))
+- [Update gitlab-org/charts/gitlab-runner from 0.30.0 to 0.31.0](gitlab-org/charts/gitlab@3fba0b2a29774cf3118b5cf7121bd95a9116708c) ([merge request](gitlab-org/charts/gitlab!2101))
+- [Update gitlab-org/container-registry from 3.5.2-gitlab to 3.6.0-gitlab](gitlab-org/charts/gitlab@ec98f3663375be3ddf7fec7ab6078fbb65aabeb9) ([merge request](gitlab-org/charts/gitlab!2096))
+- [Update gitlab-exporter appVersion 11.0.1](gitlab-org/charts/gitlab@d6cc85961e3d8369460840e70415b593bd82e432) ([merge request](gitlab-org/charts/gitlab!2092))
+- [Update gitlab-org/gitlab-exporter from 10.5.0 to 11.0.0](gitlab-org/charts/gitlab@2c2a8c2b877b45d47b8bb61a09ed6cb5f8b79392) ([merge request](gitlab-org/charts/gitlab!2092))
+
 ## 5.1.3 (2021-08-17)
 
 ### Fixed (1 change)
