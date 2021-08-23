@@ -39,7 +39,7 @@ else
 fi
 
 #TODO: Get all the components and their corresponding versions
-components=(gitlab-rails-ee gitlab-webservice-ee gitlab-workhorse-ee gitlab-sidekiq-ee gitlab-task-runner-ee)
+components=(gitlab-rails-ee gitlab-webservice-ee gitlab-workhorse-ee gitlab-sidekiq-ee gitlab-toolbox-ee)
 
 # ${CNG_REGISTRY%%/*} will get registry domain from the entire path. It
 # essentially says "delete the longest substring starting with a forward slash
