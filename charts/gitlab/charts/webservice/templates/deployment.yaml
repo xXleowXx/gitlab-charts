@@ -219,6 +219,10 @@ spec:
               value: "true"
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
           volumeMounts:
+            {{- if $.Values.hostKeys.mount }}
+            - name: {{ $.Values.hostKeys.mountName }}
+              mountPath: /etc/ssh
+            {{- end }}
             {{- if $.Values.metrics.enabled }}
             - name: webservice-metrics
               mountPath: '/metrics'
@@ -341,6 +345,9 @@ spec:
       terminationGracePeriodSeconds: {{ .deployment.terminationGracePeriodSeconds | int }}
       {{- end }}
       volumes:
+      {{- if $.Values.hostKeys.mount }}
+      {{- include "webservice.hostKeys.volume" $ | nindent 6 }}
+      {{- end }}
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       {{- include "gitlab.psql.ssl.volume" $ | nindent 6 }}
       {{- include "gitlab.geo.psql.ssl.volume" $ | nindent 6 }}
