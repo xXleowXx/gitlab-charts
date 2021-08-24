@@ -433,7 +433,9 @@ describe 'GitLab Pages' do
                 gitlabClientHttpTimeout: 25
                 gitlabClientJwtExpiry: 35
                 gitlabServer: https://randomgitlabserver.com
-                headers: ['FOO: ABC']
+                headers:
+                  - "FOO: BAR"
+                  - "BAZ: BAT"
                 insecureCiphers: true
                 internalGitlabServer: https://int.randomgitlabserver.com
                 logFormat: text
@@ -455,6 +457,7 @@ describe 'GitLab Pages' do
 
         it 'populates Pages configuration' do
           default_content = <<~MSG
+            header=FOO: BAR,BAZ: BAT
             listen-proxy=0.0.0.0:8090
             pages-domain=pages.example.com
             pages-root=/srv/gitlab-pages
