@@ -71,10 +71,16 @@ configurations that can be supplied to the `helm install` command using the
 | `domainConfigSource`             | `gitlab`              | Domain configuration source                          |
 | `extraVolumeMounts`              |                       | List of extra volumes mounts to add                  |
 | `extraVolumes`                   |                       | List of extra volumes to create                      |
+| `gitlabCache.cleanup`            | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#global-settings |
+| `gitlabCache.expiry`             | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#global-settings |
+| `gitlabCache.refresh`            | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#global-settings |
 | `gitlabClientHttpTimeout`        |                       | GitLab API HTTP client connection timeout in seconds |
 | `gitlabClientJwtExpiry`          |                       | JWT Token expiry time in seconds                     |
+| `gitlabRetrieval.interval`       | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#global-settings |
+| `gitlabRetrieval.retries`        | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#global-settings |
+| `gitlabRetrieval.timeout`        | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#global-settings |
 | `gitlabServer`                   |                       | GitLab server FQDN                                   |
-| `headers`                        | `[]`                  | The additional http header(s) that should be send to the client |
+| `headers`                        | `[]`                  | Specify any additional http headers that should be sent to the client with each response. Multiple headers can be given as an array, header and value as one string, for example ['my-header: myvalue', 'my-other-header: my-other-value'] |
 | `insecureCiphers`                | `false`               | Use default list of cipher suites, may contain insecure ones like 3DES and RC4 |
 | `internalGitlabServer`           |                       | Internal GitLab server used for API requests         |
 | `logFormat`                      | `json`                | Log output format                                    |
@@ -88,6 +94,10 @@ configurations that can be supplied to the `helm install` command using the
 | `tls.minVersion`                 |                       | Specifies the minimum SSL/TLS version                |
 | `tls.maxVersion`                 |                       | Specifies the maximum SSL/TLS version                |
 | `useHttp2`                       | `true`                | Enable HTTP2 support                                 |
+| `zipCache.cleanup`               | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration |
+| `zipCache.expiration`            | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration |
+| `zipCache.refresh`               | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration |
+| `zipOpenTimeout`                 | int                   | See: https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration |
 
 ### Configuring the `ingress`
 

@@ -116,5 +116,8 @@ data:
     zip-cache-refresh={{ $zipCache.refresh }}s
     {{- end }}
     {{- end }}
+    {{- if .Values.zipOpenTimeout }}
+    zip-open-timeout={{ .Values.zipOpenTimeout }}s
+    {{- end }}
   configure: |
     {{- include "gitlab.scripts.configure.secrets" (dict "required" "pages" "optional" "pages") | nindent 4 -}}
