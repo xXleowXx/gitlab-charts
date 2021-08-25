@@ -117,7 +117,7 @@ internalGitlabServer:
 logFormat: 'json'
 logVerbose: false
 maxConnections:
-#  propagate_correlation_id:
+#  propagateCorrelationId:
 redirectHttp: false
 sentry:
   enabled: false
