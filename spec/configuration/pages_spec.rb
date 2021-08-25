@@ -452,6 +452,8 @@ describe 'GitLab Pages' do
                 useHttp2: false
                 metrics:
                   port: 9999
+                zipCache:
+                  refresh: 60
           ))
         end
 
@@ -484,6 +486,7 @@ describe 'GitLab Pages' do
             auth-client-id=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appid').strip.dump[1..-2] %>
             auth-client-secret=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appsecret').strip.dump[1..-2] %>
             auth-secret=<%= File.read('/etc/gitlab-secrets/pages/auth_secret').strip.dump[1..-2] %>
+            zip-cache-refresh=60s
           MSG
 
           expect(config_data).to eq default_content
