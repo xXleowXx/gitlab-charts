@@ -205,6 +205,10 @@ describe 'GitLab Pages' do
                 'aws_access_key_id' => "<%= File.read('/etc/gitlab/minio/accesskey').strip.dump[1..-2] %>",
                 'aws_secret_access_key' => "<%= File.read('/etc/gitlab/minio/secretkey').strip.dump[1..-2] %>"
               }
+            },
+            'local_store' => {
+              'enabled' => false,
+              'path' => nil
             }
           )
         end
@@ -230,6 +234,9 @@ describe 'GitLab Pages' do
                   connection:
                     secret: custom-secret
                     key: custom-key
+                localStore:
+                  enabled: true
+                  path: /random/path
           ))
         end
 
@@ -249,6 +256,10 @@ describe 'GitLab Pages' do
               'enabled' => true,
               'remote_directory' => 'random-bucket',
               'connection' => "<%= YAML.load_file(\"/etc/gitlab/objectstorage/pages\").to_json() %>"
+            },
+            'local_store' => {
+              'enabled' => true,
+              'path' => '/random/path'
             }
           )
         end
