@@ -653,7 +653,7 @@ global:
       fsGroup: 65534
   busybox:
     image:
-      repository: registry.gitlab.com/gitlab-org/cloud-native/mirror/images/busybox
+      repository: busybox
       tag: latest
       # pullPolicy: IfNotPresent
       # pullSecrets: []
