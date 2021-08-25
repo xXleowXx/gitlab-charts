@@ -71,14 +71,14 @@ configurations that can be supplied to the `helm install` command using the
 | `domainConfigSource`             | `gitlab`              | Domain configuration source                          |
 | `extraVolumeMounts`              |                       | List of extra volumes mounts to add                  |
 | `extraVolumes`                   |                       | List of extra volumes to create                      |
-| `gitlabCache.cleanup`            | int                   | See: [Pages Global Settings] |
-| `gitlabCache.expiry`             | int                   | See: [Pages Global Settings] |
-| `gitlabCache.refresh`            | int                   | See: [Pages Global Settings] |
+| `gitlabCache.cleanup`            | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
+| `gitlabCache.expiry`             | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
+| `gitlabCache.refresh`            | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
 | `gitlabClientHttpTimeout`        |                       | GitLab API HTTP client connection timeout in seconds |
 | `gitlabClientJwtExpiry`          |                       | JWT Token expiry time in seconds                     |
-| `gitlabRetrieval.interval`       | int                   | See: [Pages Global Settings] |
-| `gitlabRetrieval.retries`        | int                   | See: [Pages Global Settings] |
-| `gitlabRetrieval.timeout`        | int                   | See: [Pages Global Settings] |
+| `gitlabRetrieval.interval`       | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
+| `gitlabRetrieval.retries`        | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
+| `gitlabRetrieval.timeout`        | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
 | `gitlabServer`                   |                       | GitLab server FQDN                                   |
 | `headers`                        | `[]`                  | Specify any additional http headers that should be sent to the client with each response. Multiple headers can be given as an array, header and value as one string, for example ['my-header: myvalue', 'my-other-header: my-other-value'] |
 | `insecureCiphers`                | `false`               | Use default list of cipher suites, may contain insecure ones like 3DES and RC4 |
@@ -95,10 +95,10 @@ configurations that can be supplied to the `helm install` command using the
 | `tls.minVersion`                 |                       | Specifies the minimum SSL/TLS version                |
 | `tls.maxVersion`                 |                       | Specifies the maximum SSL/TLS version                |
 | `useHttp2`                       | `true`                | Enable HTTP2 support                                 |
-| `zipCache.cleanup`               | int                   | See: [Zip Serving and Cache Configuration] |
-| `zipCache.expiration`            | int                   | See: [Zip Serving and Cache Configuration] |
-| `zipCache.refresh`               | int                   | See: [Zip Serving and Cache Configuration] |
-| `zipOpenTimeout`                 | int                   | See: [Zip Serving and Cache Configuration] |
+| `zipCache.cleanup`               | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |
+| `zipCache.expiration`            | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |
+| `zipCache.refresh`               | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |
+| `zipOpenTimeout`                 | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |
 
 ### Configuring the `ingress`
 
@@ -138,6 +138,3 @@ extraVolumeMounts: |
   - name: example-volume
     mountPath: /etc/example
 ```
-
-[Pages Global Settings]: https://docs.gitlab.com/ee/administration/pages/index.html#global-settings |
-[Zip Serving and Cache Configuration]: https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration
