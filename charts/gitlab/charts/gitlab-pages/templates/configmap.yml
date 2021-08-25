@@ -23,11 +23,11 @@ data:
     {{- end }}
     {{- if .Values.gitlabRetrieval }}
     {{- $gitlabRetrieval := .Values.gitlabRetrieval }}
-    {{- if $gitlabRetrieval }}
+    {{- if $gitlabRetrieval.interval }}
     gitlab-retrieval-interval={{ $gitlabRetrieval.interval }}s
     {{- end }}
     {{- if $gitlabRetrieval.retries }}
-    gitlab-retrieval-retries={{ $gitlabRetrieval.retries }}s
+    gitlab-retrieval-retries={{ $gitlabRetrieval.retries }}
     {{- end }}
     {{- if $gitlabRetrieval.timeout }}
     gitlab-retrieval-timeout={{ $gitlabRetrieval.timeout }}s
