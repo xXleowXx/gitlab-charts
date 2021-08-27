@@ -124,6 +124,7 @@ gitlabServer:
 headers: []
 insecureCiphers: false
 internalGitlabServer:
+#  listenHttpsProxyV2
 logFormat: 'json'
 logVerbose: false
 maxConnections:
