@@ -182,6 +182,7 @@ describe 'GitLab Pages' do
 
       context 'with default values' do
         it 'populates Pages configuration' do
+          expect(pages_enabled_template.exit_code).to eq(0), "Unexpected error code #{pages_enabled_template.exit_code} -- #{pages_enabled_template.stderr}"
           expect(config_yaml_data['production']['pages']).to eq(
             'enabled' => true,
             'access_control' => false,
@@ -443,8 +444,12 @@ describe 'GitLab Pages' do
                 domainConfigSource: disk
                 gitlabClientHttpTimeout: 25
                 gitlabClientJwtExpiry: 35
+                gitlabRetrieval:
+                  retries: 3
                 gitlabServer: https://randomgitlabserver.com
-                headers: ['FOO: ABC']
+                headers:
+                  - "FOO: BAR"
+                  - "BAZ: BAT"
                 insecureCiphers: true
                 internalGitlabServer: https://int.randomgitlabserver.com
                 logFormat: text
@@ -461,11 +466,15 @@ describe 'GitLab Pages' do
                 useHttp2: false
                 metrics:
                   port: 9999
+                zipCache:
+                  refresh: 60s
           ))
         end
 
         it 'populates Pages configuration' do
           default_content = <<~MSG
+            gitlab-retrieval-retries=3
+            header=FOO: BAR;;BAZ: BAT
             listen-proxy=0.0.0.0:8090
             pages-domain=pages.example.com
             pages-root=/srv/gitlab-pages
@@ -492,8 +501,10 @@ describe 'GitLab Pages' do
             auth-client-id=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appid').strip.dump[1..-2] %>
             auth-client-secret=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appsecret').strip.dump[1..-2] %>
             auth-secret=<%= File.read('/etc/gitlab-secrets/pages/auth_secret').strip.dump[1..-2] %>
+            zip-cache-refresh=60s
           MSG
 
+          expect(pages_enabled_template.exit_code).to eq(0), "Unexpected error code #{pages_enabled_template.exit_code} -- #{pages_enabled_template.stderr}"
           expect(config_data).to eq default_content
         end
       end
