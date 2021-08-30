@@ -456,14 +456,14 @@ describe 'GitLab Pages' do
                 metrics:
                   port: 9999
                 zipCache:
-                  refresh: 60
+                  refresh: 60s
           ))
         end
 
         it 'populates Pages configuration' do
           default_content = <<~MSG
             gitlab-retrieval-retries=3
-            header=FOO: BAR,BAZ: BAT
+            header=FOO: BAR;;BAZ: BAT
             listen-proxy=0.0.0.0:8090
             pages-domain=pages.example.com
             pages-root=/srv/gitlab-pages

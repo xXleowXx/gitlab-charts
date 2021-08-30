@@ -9,28 +9,26 @@ metadata:
   annotations:
 data:
   config.erb: |
-    {{- if .Values.gitlabCache }}
-    {{- $gitlabCache := .Values.gitlabCache }}
-    {{- if $gitlabCache.cleanup }}
-    gitlab-cache-cleanup={{ $gitlabCache.cleanup }}s
+    {{- with .Values.gitlabCache }}
+    {{- if .cleanup }}
+    gitlab-cache-cleanup={{ .cleanup }}
     {{- end }}
-    {{- if $gitlabCache.expiry }}
-    gitlab-cache-expiry={{ .Values.gitlabCache.expiry }}s
+    {{- if .expiry }}
+    gitlab-cache-expiry={{ .expiry }}
     {{- end }}
-    {{- if $gitlabCache.refresh }}
-    gitlab-cache-refresh={{ .Values.gitlabCache.refresh }}s
+    {{- if .refresh }}
+    gitlab-cache-refresh={{ .refresh }}
     {{- end }}
     {{- end }}
-    {{- if .Values.gitlabRetrieval }}
-    {{- $gitlabRetrieval := .Values.gitlabRetrieval }}
-    {{- if $gitlabRetrieval.interval }}
-    gitlab-retrieval-interval={{ $gitlabRetrieval.interval }}s
+    {{- with .Values.gitlabRetrieval }}
+    {{- if .interval }}
+    gitlab-retrieval-interval={{ .interval }}
     {{- end }}
-    {{- if $gitlabRetrieval.retries }}
-    gitlab-retrieval-retries={{ $gitlabRetrieval.retries }}
+    {{- if .retries }}
+    gitlab-retrieval-retries={{ .retries }}
     {{- end }}
-    {{- if $gitlabRetrieval.timeout }}
-    gitlab-retrieval-timeout={{ $gitlabRetrieval.timeout }}s
+    {{- if .timeout }}
+    gitlab-retrieval-timeout={{ .timeout }}
     {{- end }}
     {{- end }}
     {{- if not (empty .Values.headers) }}
@@ -101,20 +99,19 @@ data:
     auth-client-secret=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appsecret').strip.dump[1..-2] %>
     auth-secret=<%= File.read('/etc/gitlab-secrets/pages/auth_secret').strip.dump[1..-2] %>
     {{- end }}
-    {{- if .Values.zipCache }}
-    {{- $zipCache := .Values.zipCache }}
-    {{- if $zipCache.cleanup }}
-    zip-cache-cleanup={{ $zipCache.cleanup }}s
+    {{- with .Values.zipCache }}
+    {{- if .cleanup }}
+    zip-cache-cleanup={{ .cleanup }}
     {{- end }}
-    {{- if $zipCache.expiration }}
-    zip-cache-expiration={{ $zipCache.expiration }}s
+    {{- if .expiration }}
+    zip-cache-expiration={{ .expiration }}
     {{- end }}
-    {{- if $zipCache.refresh }}
-    zip-cache-refresh={{ $zipCache.refresh }}s
+    {{- if .refresh }}
+    zip-cache-refresh={{ .refresh }}
     {{- end }}
     {{- end }}
     {{- if .Values.zipOpenTimeout }}
-    zip-open-timeout={{ .Values.zipOpenTimeout }}s
+    zip-open-timeout={{ .Values.zipOpenTimeout }}
     {{- end }}
   configure: |
     {{- include "gitlab.scripts.configure.secrets" (dict "required" "pages" "optional" "pages") | nindent 4 -}}
