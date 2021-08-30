@@ -34,7 +34,7 @@ data:
     {{- end }}
     {{- end }}
     {{- if not (empty .Values.headers) }}
-    {{- $headers := .Values.headers | join "," }}
+    {{- $headers := .Values.headers | join ";;" }}
     header={{ $headers }}
     {{- end }}
     {{- $externalAddresses := concat $.Values.global.pages.externalHttp $.Values.global.pages.externalHttps | uniq }}
