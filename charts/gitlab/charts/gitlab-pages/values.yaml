@@ -94,15 +94,30 @@ priorityClassName: ""
 artifactsServerTimeout: 10
 artifactsServerUrl:
 domainConfigSource: 'gitlab'
+
+#  gitlabCache:
+#    cleanup:
+#    expiry:
+#    refresh:
+
+#  gitlabRetrieval
+#    interval:
+#    retries:
+#    timeout:
+
 gitlabClientHttpTimeout:
 gitlabClientJwtExpiry:
 gitlabServer:
+# Headers is to be a list of strings, Example:
+# headers:
+#   - "Permissions-Policy: interest-cohort=()"
 headers: []
 insecureCiphers: false
 internalGitlabServer:
 logFormat: 'json'
 logVerbose: false
 maxConnections:
+#  propagateCorrelationId:
 redirectHttp: false
 sentry:
   enabled: false
@@ -113,6 +128,11 @@ tls:
   minVersion:
   maxVersion:
 useHttp2: true
+
+# zipCache:
+#   cleanup:
+#   expiration:
+#   refresh:
 
 metrics:
   enabled: true
