@@ -1,4 +1,12 @@
 {{- if and .Values.enabled .Values.helmTests.enabled -}}
+{{- $gitlabUrl := include "gitlab.gitlab.url" $ -}}
+{{- if .Values.global.hosts.gitlab.hostnameOverride -}}
+{{-   $gitlabUrl = .Values.global.hosts.gitlab.hostnameOverride -}}
+{{-   if or .Values.global.hosts.https .Values.global.hosts.gitlab.https -}}
+{{-     $gitlabUrl = (printf "https://%s" $gitlabUrl) -}}
+{{-   else -}}
+{{-     $gitlabUrl = (printf "http://%s" $gitlabUrl) -}}
+{{-   end -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,7 +16,7 @@ data:
   test_login: |
     set -e
     echo 'Start Test'
-    endpoint="{{ template "gitlab.gitlab.url" . }}"
+    endpoint="{{ $gitlabUrl }}"
     cookie_read="-c /tmp/test_login.cookie"
     cookie_readwrite="$cookie_read -b /tmp/test_login.cookie"
 
