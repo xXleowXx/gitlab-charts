@@ -13,4 +13,4 @@ aws_secret_access_key: BOGUS_SECRET_KEY
 # aws_signature_version: 4
 # host: storage.example.com
 # endpoint: "https://minio.example.com:9000"
-# path_style: false
+path_style: true
