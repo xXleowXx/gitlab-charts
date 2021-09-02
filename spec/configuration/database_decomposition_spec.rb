@@ -194,6 +194,14 @@ describe 'Database configuration' do
         expect(db_config['production'].dig('ci', 'host')).to eq('test-postgresql.default.svc')
       end
 
+      it 'Places `main` stanza first' do
+        t = HelmTemplate.new(decompose_ci)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        database_yml = database_yml(t, 'webservice')
+        expect(database_yml).to match("production:\n  main:\n")
+      end
+
       it 'Templates different password files for each stanza' do
         t = HelmTemplate.new(decompose_ci)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"

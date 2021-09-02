@@ -10,7 +10,8 @@ Returns the contents of the `database.yml` blob for Rails pods
 datamodel: {{ .Values.local | toYaml | nindent 4 }}
 {{- end }}
 production:
-{{- range $database, $context  := .Values.local.psql }}
+{{- range $database := without (keys .Values.local.psql) "main" | concat (list "main") }}
+{{-   $context := get $.Values.local.psql $database }}
   {{ $database }}:
     adapter: postgresql
     encoding: unicode
