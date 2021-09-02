@@ -166,6 +166,10 @@ No changes.
 - [Remove the old resouce changes notices](gitlab-org/charts/gitlab@1755275b75dfe669c038e44dd2d218e3aa62c2e6) ([merge request](gitlab-org/charts/gitlab!2028))
 - [Remove ability to disable cluster from sidekiq values](gitlab-org/charts/gitlab@0de93fe181cd8c514aec013bf7e1541e1b41660b) ([merge request](gitlab-org/charts/gitlab!2024))
 
+## 4.12.11 (2021-09-02)
+
+No changes.
+
 ## 4.12.10 (2021-08-10)
 
 No changes.
