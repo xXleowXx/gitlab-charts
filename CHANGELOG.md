@@ -50,6 +50,10 @@ No changes.
 - [Update gitlab-exporter appVersion 11.0.1](gitlab-org/charts/gitlab@d6cc85961e3d8369460840e70415b593bd82e432) ([merge request](gitlab-org/charts/gitlab!2092))
 - [Update gitlab-org/gitlab-exporter from 10.5.0 to 11.0.0](gitlab-org/charts/gitlab@2c2a8c2b877b45d47b8bb61a09ed6cb5f8b79392) ([merge request](gitlab-org/charts/gitlab!2092))
 
+## 5.1.5 (2021-09-02)
+
+No changes.
+
 ## 5.1.4 (2021-08-31)
 
 No changes.
