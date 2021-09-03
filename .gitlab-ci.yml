@@ -48,6 +48,7 @@ stages:
   - stable
   - specs
   - qa
+  - staging-release
   - package
   - cleanup
 
@@ -732,6 +733,20 @@ wait_for_dev_images:
   only:
     refs:
       - /.*-stable/@gitlab/charts/gitlab
+
+staging_release:
+  stage: staging-release
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3"
+  variables:
+    CHANNEL: "stable"
+  script:
+    - if [[ $CI_COMMIT_REF_NAME =~ $AUTO_DEPLOY_TAG_REGEX ]]; then export CHANNEL="autodeploy"; fi
+    - helm dep up
+    - helm package .
+    - chart_file=$(ls -l gitlab*.tgz | head -n 1 | awk '{print $NF}')
+    - curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@${chart_file}" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/${CHANNEL}/charts"
+  only:
+    - tags@gitlab/charts/gitlab
 
 release_package:
   stage: package
