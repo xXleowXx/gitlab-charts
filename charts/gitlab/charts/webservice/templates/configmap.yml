@@ -1,4 +1,8 @@
 {{- if .Values.enabled -}}
+{{- $gitlabHostname := include "gitlab.gitlab.hostname" $ -}}
+{{- if .Values.global.hosts.gitlab.hostnameOverride -}}
+{{-   $gitlabHostname = .Values.global.hosts.gitlab.hostnameOverride -}}
+{{- end -}}
 {{- include "database.datamodel.prepare" $ -}}
 apiVersion: v1
 kind: ConfigMap
@@ -37,8 +41,8 @@ data:
   gitlab.yml.erb: |
     production: &base
       gitlab:
-        host: {{ template "gitlab.gitlab.hostname" . }}
-        https: {{ hasPrefix "https://" (include "gitlab.gitlab.url" .) }}
+        host: {{ $gitlabHostname }}
+        https: {{ or .Values.global.hosts.https .Values.global.hosts.gitlab.https }}
         {{- with .Values.global.hosts.ssh }}
         ssh_host: {{ . | quote }}
         {{- end }}
