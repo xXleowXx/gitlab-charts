@@ -492,7 +492,7 @@ describe 'Webservice Deployments configuration' do
           expect(items_b.length).to eq(1)
         end
 
-        it 'mounts the public keys for the expected deployments' do
+        it 'mounts the public keys for the expected deployments at the expected path' do
           vm_a = datamodel.find_volume_mount(item_key('Deployment', 'a'), 'webservice', 'ssh-host-keys')
           vm_b = datamodel.find_volume_mount(item_key('Deployment', 'b'), 'webservice', 'ssh-host-keys-b')
           vm_c = datamodel.find_volume_mount(item_key('Deployment', 'c'), 'webservice', 'ssh-host-keys')
@@ -500,6 +500,11 @@ describe 'Webservice Deployments configuration' do
           expect(vm_a).not_to be_nil
           expect(vm_b).not_to be_nil
           expect(vm_c).to be_nil
+
+          # the expected path is hardcoded
+          # https://gitlab.com/gitlab-org/gitlab/-/blob/81826be88622659dfa20f4ce2359660a9e51e4da/app/models/instance_configuration.rb#L7
+          expect(vm_a['mountPath']).to eq('/etc/ssh')
+          expect(vm_b['mountPath']).to eq('/etc/ssh')
         end
       end
     end
