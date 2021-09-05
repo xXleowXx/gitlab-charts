@@ -57,6 +57,7 @@ to the `helm install` command using the `--set` flags.
 | `gitlab.webservice.workhorse.tag`   |                       | Workhorse image tag                            |
 | `hpa.targetAverageValue`         | `1`                   | Set the autoscaling target value               |
 | `hostKeys.mount`         | `false`                   | Whether to mount the GitLab Shell [secret] containing the public SSH keys.                |
+| `hostKeys.mountName`         | `ssh-host-keys`                   | Name of the mounted volume.                |
 | `hostKeys.types`         | `[dsa,rsa,ecdsa,ed25519]`                   | List of SSH key types to mount.               |
 | `image.pullPolicy`               | `Always`              | Webservice image pull policy                      |
 | `image.pullSecrets`              |                       | Secrets for the image repository               |
