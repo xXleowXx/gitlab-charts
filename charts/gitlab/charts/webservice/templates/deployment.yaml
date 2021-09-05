@@ -346,7 +346,7 @@ spec:
       {{- end }}
       volumes:
       {{- if .hostKeys.mount }}
-      {{- include "webservice.hostKeys.volume" (dict "local" . "Release" .Release "Values" $.Values) | nindent 6 }}
+      {{- include "webservice.hostKeys.volume" (dict "local" . "Release" $.Release "Values" $.Values) | nindent 6 }}
       {{- end }}
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       {{- include "gitlab.psql.ssl.volume" $ | nindent 6 }}

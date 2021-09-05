@@ -332,6 +332,8 @@ describe 'Webservice Deployments configuration' do
                     thing: "one"
                 nodeSelector: # disable nodeSelector
                 tolerations: null # disable tolerations
+                hostKeys:
+                  mount: true
               b:
                 puma:
                   threads:
@@ -348,6 +350,11 @@ describe 'Webservice Deployments configuration' do
                     effect: "NoExecute"
                 extraEnv:
                   DEPLOYMENT: "b"
+                hostKeys:
+                  mount: true
+                  mountName: ssh-host-keys-b
+                  types:
+                  - dsa
               c:
                 puma:
                   threads:
@@ -454,6 +461,45 @@ describe 'Webservice Deployments configuration' do
 
           expect(pod_template_spec['tolerations']).to be_truthy
           expect(pod_template_spec['tolerations'][0]['effect']).to eql("NoSchedule")
+        end
+      end
+
+      context 'hostKeys settings (map)' do
+        it 'adds the SSH host keys volume' do
+          volume_a = datamodel.find_volume(item_key('Deployment', 'a'), 'ssh-host-keys')
+          volume_b = datamodel.find_volume(item_key('Deployment', 'b'), 'ssh-host-keys-b')
+          volume_c = datamodel.find_volume(item_key('Deployment', 'c'), 'ssh-host-keys')
+
+          expect(volume_a).not_to be_nil
+          expect(volume_b).not_to be_nil
+          expect(volume_c).to be_nil
+        end
+
+        it 'inherits when not present' do
+          # mountName already covered in a previous case
+          volume_a = datamodel.find_volume(item_key('Deployment', 'a'), 'ssh-host-keys')
+          items_a = volume_a.dig('secret', 'items')
+
+          expect(items_a.length).to eq(4)
+        end
+
+        it 'overrides when set' do
+          # mountName override already covered in previous case
+          volume_b = datamodel.find_volume(item_key('Deployment', 'b'), 'ssh-host-keys-b')
+
+          items_b = volume_b.dig('secret', 'items')
+
+          expect(items_b.length).to eq(1)
+        end
+
+        it 'mounts the public keys for the expected deployments' do
+          vm_a = datamodel.find_volume_mount(item_key('Deployment', 'a'), 'webservice', 'ssh-host-keys')
+          vm_b = datamodel.find_volume_mount(item_key('Deployment', 'b'), 'webservice', 'ssh-host-keys-b')
+          vm_c = datamodel.find_volume_mount(item_key('Deployment', 'c'), 'webservice', 'ssh-host-keys')
+
+          expect(vm_a).not_to be_nil
+          expect(vm_b).not_to be_nil
+          expect(vm_c).to be_nil
         end
       end
     end
