@@ -11,6 +11,10 @@ module Gitlab
       "kubectl exec -it #{pod_name} -- #{cmd}"
     end
 
+    def rails_full_command(cmd)
+      full_command("env BUNDLE_GEMFILE=#{rails_dir}/Gemfile #{cmd}")
+    end
+
     def gitaly_full_command(cmd)
       "kubectl exec -it #{gitaly_pod_name} -- #{cmd}"
     end
@@ -68,8 +72,7 @@ module Gitlab
     end
 
     def enforce_root_password(password)
-      rails_dir = ENV['RAILS_DIR'] || '/srv/gitlab'
-      cmd = full_command("#{rails_dir}/bin/rails runner \"user = User.find(1); user.password='#{password}'; user.password_confirmation='#{password}'; user.save!\"")
+      cmd = rails_full_command("#{rails_dir}/bin/rails runner \"user = User.find(1); user.password='#{password}'; user.password_confirmation='#{password}'; user.save!\"")
 
       stdout, status = Open3.capture2e(cmd)
       return [stdout, status]
@@ -107,7 +110,7 @@ module Gitlab
     end
 
     def run_migrations
-      cmd = full_command("gitlab-rake db:migrate")
+      cmd = rails_full_command("gitlab-rake db:migrate")
 
       stdout, status = Open3.capture2e(cmd)
       return [stdout, status]
@@ -137,8 +140,7 @@ module Gitlab
     end
 
     def set_runner_token
-      rails_dir = ENV['RAILS_DIR'] || '/srv/gitlab'
-      cmd = full_command("#{rails_dir}/bin/rails runner \"settings = ApplicationSetting.current_without_cache; settings.set_runners_registration_token('#{runner_registration_token}'); settings.encrypted_ci_jwt_signing_key=nil; settings.save!; Ci::Runner.delete_all\"")
+      cmd = rails_full_command("#{rails_dir}/bin/rails runner \"settings = ApplicationSetting.current_without_cache; settings.set_runners_registration_token('#{runner_registration_token}'); settings.encrypted_ci_jwt_signing_key=nil; settings.save!; Ci::Runner.delete_all\"")
 
       stdout, status = Open3.capture2e(cmd)
       return [stdout, status]
@@ -157,6 +159,10 @@ module Gitlab
       end
 
       `kubectl get pod -l #{filters} --field-selector=status.phase=Running -o jsonpath="{.items[0].metadata.name}"`
+    end
+
+    def rails_dir
+      ENV['RAILS_DIR'] || '/srv/gitlab'
     end
 
     def pod_name
