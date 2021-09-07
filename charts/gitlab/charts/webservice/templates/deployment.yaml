@@ -219,8 +219,8 @@ spec:
               value: "true"
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
           volumeMounts:
-            {{- if .hostKeys.mount }}
-            - name: {{ .hostKeys.mountName }}
+            {{- if .sshHostKeys.mount }}
+            - name: {{ .sshHostKeys.mountName }}
               mountPath: /etc/ssh
             {{- end }}
             {{- if $.Values.metrics.enabled }}
@@ -345,8 +345,8 @@ spec:
       terminationGracePeriodSeconds: {{ .deployment.terminationGracePeriodSeconds | int }}
       {{- end }}
       volumes:
-      {{- if .hostKeys.mount }}
-      {{- include "webservice.hostKeys.volume" (dict "local" . "Release" $.Release "Values" $.Values) | nindent 6 }}
+      {{- if .sshHostKeys.mount }}
+      {{- include "webservice.sshHostKeys.volume" (dict "local" . "Release" $.Release "Values" $.Values) | nindent 6 }}
       {{- end }}
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       {{- include "gitlab.psql.ssl.volume" $ | nindent 6 }}

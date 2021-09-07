@@ -332,7 +332,7 @@ describe 'Webservice Deployments configuration' do
                     thing: "one"
                 nodeSelector: # disable nodeSelector
                 tolerations: null # disable tolerations
-                hostKeys:
+                sshHostKeys:
                   mount: true
               b:
                 puma:
@@ -350,7 +350,7 @@ describe 'Webservice Deployments configuration' do
                     effect: "NoExecute"
                 extraEnv:
                   DEPLOYMENT: "b"
-                hostKeys:
+                sshHostKeys:
                   mount: true
                   mountName: ssh-host-keys-b
                   types:
@@ -464,7 +464,7 @@ describe 'Webservice Deployments configuration' do
         end
       end
 
-      context 'hostKeys settings (map)' do
+      context 'sshHostKeys settings (map)' do
         it 'adds the SSH host keys volume' do
           volume_a = datamodel.find_volume(item_key('Deployment', 'a'), 'ssh-host-keys')
           volume_b = datamodel.find_volume(item_key('Deployment', 'b'), 'ssh-host-keys-b')

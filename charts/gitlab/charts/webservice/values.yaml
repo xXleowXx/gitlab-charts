@@ -42,7 +42,7 @@ common:
   labels: {}
 serviceLabels: {}
 
-hostKeys:
+sshHostKeys:
   # backwards compatibility - do not automount by default as the default behavior
   # assumes all four key types (specified below), provided by `shared-secrets`
   mount: false
