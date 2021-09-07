@@ -110,6 +110,12 @@ module Gitlab
     end
 
     def run_migrations
+      cmd = full_command("ruby -rbundler -e 'p Bundler.settings; ENV[:BUNDLE_GEMFILE.to_s] = %q{#{rails_dir}/Gemfile}; p Bundler.settings; Bundler.reset_settings_and_root!; p Bundler.settings'")
+      stdout, _ = Open3.capture2e(cmd)
+
+      puts "...#{cmd}..."
+      puts stdout
+
       cmd = rails_full_command("gitlab-rake db:migrate")
 
       stdout, status = Open3.capture2e(cmd)
