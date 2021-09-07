@@ -116,18 +116,18 @@ Here is a direct comparison of Ruby's `Hash.merge` versus `Hash.deep_merge` from
 
 ```plaintext
 2.7.2 :002 > require 'yaml'
- => true 
+ => true
 2.7.2 :003"> example = YAML.safe_load(%(
 2.7.2 :004">   a:
 2.7.2 :005">     b: 1
 2.7.2 :006">     c: [ 1, 2, 3]
 2.7.2 :007 >  ))
- => {"a"=>{"b"=>1, "c"=>[1, 2, 3]}} 
+ => {"a"=>{"b"=>1, "c"=>[1, 2, 3]}}
 2.7.2 :008"> source = YAML.safe_load(%(
 2.7.2 :009">   a:
 2.7.2 :010">     d: "whee"
 2.7.2 :011 >  ))
- => {"a"=>{"d"=>"whee"}} 
+ => {"a"=>{"d"=>"whee"}}
 2.7.2 :012 > example.merge(source)
  => {"a"=>{"d"=>"whee"}}
 ```
@@ -135,8 +135,8 @@ Here is a direct comparison of Ruby's `Hash.merge` versus `Hash.deep_merge` from
 ```plaintext
 2.7.2 :013 > require 'hash_deep_merge'
 2.7.2 :014 > example = {"a"=>{"b"=>1, "c"=>[1, 2, 3]}}
- => {"a"=>{"b"=>1, "c"=>[1, 2, 3]}} 
-2.7.2 :015 > source = {"a"=>{"b"=> 2, "d"=>"whee"}} 
+ => {"a"=>{"b"=>1, "c"=>[1, 2, 3]}}
+2.7.2 :015 > source = {"a"=>{"b"=> 2, "d"=>"whee"}}
  => {"a"=>{"b"=>2, "d"=>"whee"}}
 2.7.2 :016 > example.deep_merge(source)
  => {"a"=>{"b"=>2, "c"=>[1, 2, 3], "d"=>"whee"}}
