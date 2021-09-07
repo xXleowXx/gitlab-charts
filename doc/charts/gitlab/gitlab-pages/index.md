@@ -80,7 +80,7 @@ configurations that can be supplied to the `helm install` command using the
 | `gitlabRetrieval.retries`        | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
 | `gitlabRetrieval.timeout`        | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
 | `gitlabServer`                   |                       | GitLab server FQDN                                   |
-| `headers`                        | `[]`                  | Specify any additional http headers that should be sent to the client with each response. Multiple headers can be given as an array, header and value as one string, for example ['my-header: myvalue', 'my-other-header: my-other-value'] |
+| `headers`                        | `[]`                  | Specify any additional http headers that should be sent to the client with each response. Multiple headers can be given as an array, header and value as one string, for example `['my-header: myvalue', 'my-other-header: my-other-value']` |
 | `insecureCiphers`                | `false`               | Use default list of cipher suites, may contain insecure ones like 3DES and RC4 |
 | `internalGitlabServer`           |                       | Internal GitLab server used for API requests         |
 | `logFormat`                      | `json`                | Log output format                                    |
