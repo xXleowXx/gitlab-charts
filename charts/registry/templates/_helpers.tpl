@@ -172,10 +172,11 @@ Failing that a serviceAccount will be generated automatically
 
 {{/*
 Create a default fully qualified job name.
-Due to the job only being allowed to run once, we add the chart revision so Helm
+Due to the job only being allowed to run once, we add the sha256sum of the
+configmap, the repository, and image tag of the registry so Helm
 upgrades don't cause errors trying to create the already ran job.
 */}}
 {{- define "registry.migrations.jobname" -}}
 {{- $name := include "registry.fullname" . | trunc 55 | trimSuffix "-" -}}
-{{- printf "%s-migrations-%d" $name .Release.Revision | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-migrations-%s" $name (cat (include (print $.Template.BasePath "/configmap.yaml") .) "{{ .Values.image.repository }}:{{ .Values.image.tag }}" | sha256sum) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
