@@ -178,5 +178,6 @@ upgrades don't cause errors trying to create the already ran job.
 */}}
 {{- define "registry.migrations.jobname" -}}
 {{- $name := include "registry.fullname" . | trunc 55 | trimSuffix "-" -}}
-{{- printf "%s-migrations-%s" $name (cat (include (print $.Template.BasePath "/configmap.yaml") .) "{{ .Values.image.repository }}:{{ .Values.image.tag }}" | sha256sum) | trunc 63 | trimSuffix "-" -}}
+{{- $control := (cat (include (print $.Template.BasePath "/configmap.yaml") . ) (printf "%s:%s" .Values.image.repository .Values.image.tag)) | sha256sum }}
+{{- printf "%s-migrations-%s" $name $control | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
