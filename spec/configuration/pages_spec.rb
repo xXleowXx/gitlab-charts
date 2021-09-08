@@ -50,6 +50,23 @@ describe 'GitLab Pages' do
       end
     end
 
+    describe 'when network policy is enabled' do
+      let(:enable_network_policy) do
+        YAML.safe_load(%(
+          gitlab:
+            gitlab-pages:
+              networkpolicy:
+                enabled: true
+        )).deep_merge(pages_enabled_values).deep_merge(values)
+      end
+
+      it 'creates a network policy object' do
+        t = HelmTemplate.new(enable_network_policy)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+        expect(t.dig('NetworkPolicy/test-gitlab-pages-v1', 'metadata', 'labels')).to include('app' => 'gitlab-pages')
+      end
+    end
+
     context 'When customer provides additional labels' do
       let(:labels) do
         YAML.safe_load(%(
