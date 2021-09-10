@@ -46,7 +46,7 @@ global:
 
 common:
   labels: {}
-  
+
 ## Control the InitContainer behaviors.
 init:
   image: {}
