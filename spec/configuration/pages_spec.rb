@@ -860,7 +860,8 @@ describe 'GitLab Pages' do
             gitlab:
               gitlab-pages:
                 service:
-                  listenHttpsProxyV2: 2443
+                  customDomains:
+                    listenHttpsProxyV2: 2443
           ))
         end
 

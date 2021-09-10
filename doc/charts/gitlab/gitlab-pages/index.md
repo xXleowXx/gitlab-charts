@@ -57,6 +57,8 @@ configurations that can be supplied to the `helm install` command using the
 | `service.name`                            | `gitlab-pages`    | GitLab Pages service name                                |
 | `service.customDomains.type`              | `LoadBalancer`    | Type of service created for handling custom domains      |
 | `service.customDomains.internalHttpsPort` | `8091`            | Port where Pages daemon listens for HTTPS requests       |
+| `service.customDomains.internalHTTPSPort` | `8091`            | Port where Pages daemon listens for HTTPS requests       |
+| `service.customDomains.listenHttpsProxyV2`|                   | The port to listen on for HTTPS PROXYv2 requests.        |
 | `service.customDomains.nodePort.http`     |                   | Node Port to be opened for HTTP connections. Valid only if `service.customDomains.type` is `NodePort` |
 | `service.customDomains.nodePort.https`    |                   | Node Port to be opened for HTTPS connections. Valid only if `service.customDomains.type` is `NodePort` |
 | `serviceLabels`                           | `{}`              | Supplemental service labels                              |
@@ -83,7 +85,6 @@ configurations that can be supplied to the `helm install` command using the
 | `headers`                        | `[]`                  | Specify any additional http headers that should be sent to the client with each response. Multiple headers can be given as an array, header and value as one string, for example `['my-header: myvalue', 'my-other-header: my-other-value']` |
 | `insecureCiphers`                | `false`               | Use default list of cipher suites, may contain insecure ones like 3DES and RC4 |
 | `internalGitlabServer`           |                       | Internal GitLab server used for API requests         |
-| `listenHttpsProxyV2`             |                       | The port to listen on for HTTPS PROXYv2 requests. |
 | `logFormat`                      | `json`                | Log output format                                    |
 | `logVerbose`                     | `false`               | Verbose logging                                      |
 | `maxConnections`                 |                       | Limit on the number of concurrent connections to the HTTP, HTTPS or proxy listeners |

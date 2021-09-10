@@ -32,7 +32,7 @@ spec:
     {{- end -}}
     {{- if not (empty $.Values.global.pages.externalHttps) }}
     - port: 443
-      targetPort: {{ (default .Values.service.customDomains.internalHttpsPort .Values.service.listenHttpsProxyV2) | int }}
+      targetPort: {{ (default .Values.service.customDomains.internalHttpsPort .Values.service.customDomains.listenHttpsProxyV2) | int }}
       protocol: TCP
       name: https-{{ template "name" . }}
       {{- if and (eq .Values.service.customDomains.type "NodePort") .Values.service.customDomains.nodePort.https }}
