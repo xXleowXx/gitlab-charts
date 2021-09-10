@@ -164,7 +164,7 @@ spec:
                   path: migrations/initial_root_password
           - secret:
               name: {{ template "gitlab.gitlab-runner.registrationToken.secret" . }}
-              items: 
+              items:
                 - key: runner-registration-token
                   path: migrations/gitlab_shared_runners_registration_token
           {{- if .Values.global.gitlab.license.secret }}

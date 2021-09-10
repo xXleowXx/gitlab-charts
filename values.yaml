@@ -688,7 +688,7 @@ upgradeCheck:
     # repository:
     # tag:
     # pullPolicy: IfNotPresent
-    # pullSecrets: []    
+    # pullSecrets: []
   securityContext:
     # in alpine/debian/busybox based images, this is `nobody:nogroup`
     runAsUser: 65534

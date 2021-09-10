@@ -54,7 +54,7 @@ spec:
             {{- else -}}
             backend:
               serviceName: {{ template "webservice.fullname.withSuffix" . }}
-              servicePort: {{ $.Values.service.workhorseExternalPort }} 
+              servicePort: {{ $.Values.service.workhorseExternalPort }}
             {{- end -}}
           {{- if has .ingress.path (list "/" "/*") }}
           - path: /admin/sidekiq{{ .ingress.path }}

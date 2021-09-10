@@ -56,7 +56,7 @@ data:
       web_listen: "0.0.0.0:{{ .Values.metrics.port }}"
       # Maximum number of concurrent sessions allowed on a single SSH connection. Defaults to 100.
       concurrent_sessions_limit: {{ .Values.config.maxStartups.full }}
-      # SSH host key files. 
+      # SSH host key files.
       host_key_files:
       <% Dir["/etc/ssh/ssh_host_*_key"].each do |file| %>
       <%= "- #{file}" %>

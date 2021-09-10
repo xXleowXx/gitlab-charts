@@ -39,7 +39,7 @@ gitaly:
   #   key: token
 
 psql: {}
-  # port: 5432 
+  # port: 5432
 
 global:
   psql: {}
@@ -82,5 +82,4 @@ serviceAccount:
   create: false
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
-  # name: 
-  
+  # name:
