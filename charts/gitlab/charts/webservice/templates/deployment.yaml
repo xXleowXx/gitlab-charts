@@ -32,7 +32,8 @@ spec:
   {{- if $.Values.global.operator.enabled }}
   paused: true
   {{- end }}
-  replicas: {{ .hpa.minReplicas }}
+  # Don't provide replicas when HPA are present
+  # replicas: {{ .hpa.minReplicas }}
   selector:
     matchLabels:
       {{- include "gitlab.selectorLabels" $ | nindent 6 }}

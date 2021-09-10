@@ -12,7 +12,8 @@ metadata:
   annotations:
     {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.hpa.minReplicas }}
+  # Don't provide replicas when HPA are present
+  # replicas: {{ .Values.hpa.minReplicas }}
   selector:
     matchLabels:
       app: {{ template "name" . }}
