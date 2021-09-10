@@ -120,7 +120,7 @@ class HelmTemplate
   def find_volume_mount(item, container_name, volume_name, init = false)
     find_container(item, container_name, init)
       &.dig('volumeMounts')
-      &.find { |volume| volume['name'] = volume_name }
+      &.find { |volume| volume['name'] == volume_name }
   end
 
   def find_container(item, container_name, init = false)

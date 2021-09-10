@@ -217,3 +217,29 @@ Global values will override any chart-specific values.
   value: {{ $value | quote }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+
+*/}}
+{{/*
+Defines a volume containing all public host SSH keys, fingerprints of which will become available
+under /help/instance_configuration for users to be able to verify the server
+
+It expects a dictionary with three entries:
+- `local` which contains sshHostKeys configuration of a single webservice Deployment
+- `Release` being a copy of .Release
+- `Values` being a copy of .Values
+
+The `Release` and `Values` keys are needed because of the usage of the
+`gitlab.gitlab-shell.hostKeys.secret` helper.
+*/}}
+{{- define "webservice.sshHostKeys.volume" -}}
+- name: {{ .local.sshHostKeys.mountName }}
+  secret:
+    secretName: {{ template "gitlab.gitlab-shell.hostKeys.secret" . }}
+    items:
+    {{- range .local.sshHostKeys.types }}
+    - key: ssh_host_{{ . }}_key.pub
+      path: ssh_host_{{ . }}_key.pub
+    {{- end -}}
+{{- end -}}
