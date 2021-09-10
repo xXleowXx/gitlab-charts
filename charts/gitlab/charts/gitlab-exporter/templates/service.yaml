@@ -18,5 +18,5 @@ spec:
       protocol: TCP
       name: gitlab-exporter
   selector:
-    {{- include "gitlab.selectorLabels" . | nindent 4 }} 
+    {{- include "gitlab.selectorLabels" . | nindent 4 }}
 {{- end }}
