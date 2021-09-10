@@ -114,6 +114,8 @@ tolerations: # array
   {{- if .Values.tolerations }}
   {{- .Values.tolerations | toYaml | nindent 2 }}
   {{- end }}
+sshHostKeys: # map
+  {{- .Values.sshHostKeys | toYaml | nindent 2 }}
 {{- end -}}
 
 {{/*

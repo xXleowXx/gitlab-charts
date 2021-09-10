@@ -42,6 +42,19 @@ common:
   labels: {}
 serviceLabels: {}
 
+sshHostKeys:
+  # backwards compatibility - do not automount by default as the default behavior
+  # assumes all four key types (specified below), provided by `shared-secrets`
+  mount: false
+  mountName: ssh-host-keys
+  # defines which types of public SSH host keys to mount so that their fingerprints
+  # are available under /help/instance_configuration
+  types:
+  - dsa
+  - rsa
+  - ecdsa
+  - ed25519
+
 metrics:
   enabled: true
   annotations:
