@@ -848,3 +848,17 @@ qa_eks_manual_full_suite:
     name: eks_review/$CI_COMMIT_REF_NAME
     on_stop: stop_review_eks
   when: manual
+
+create_operator_mr:
+  stage: package
+  timeout: 2h
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
+  allow_failure: true
+  before_script:
+    - bundle install
+  script:
+    - bash scripts/create_operator_mr.sh
+  only:
+    - tags@gitlab/charts/gitlab
+  when: manual
+  needs: []
