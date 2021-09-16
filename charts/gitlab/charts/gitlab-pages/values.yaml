@@ -137,6 +137,7 @@ statusUri:
 tls:
   minVersion:
   maxVersion:
+useProxyV2: false
 useHttp2: true
 
 # zipCache:
