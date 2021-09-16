@@ -859,31 +859,14 @@ describe 'GitLab Pages' do
                   - 1.1.1.1
             gitlab:
               gitlab-pages:
-                service:
-                  customDomains:
-                    listenHttpsProxyV2: 2443
+                useProxyV2: true
           ))
         end
 
         describe 'pages configuration' do
           it 'exposes proper listeners' do
-            expect(pages_config_data).to match(/listen-https-proxyv2=0.0.0.0:2443/)
+            expect(pages_config_data).to match(/listen-https-proxyv2=0.0.0.0:8091/)
             expect(pages_config_data).not_to match(/listen-https=0.0.0.0:8091/)
-          end
-        end
-
-        describe 'pages-custom-domain service' do
-          it 'is enabled and exposes correct port' do
-            expect(pages_enabled_template.dig('Service/test-gitlab-pages-custom-domains', 'spec', 'ports')).to eq(
-              [
-                {
-                  'port' => 443,
-                  'targetPort' => 2443,
-                  'protocol' => 'TCP',
-                  'name' => 'https-gitlab-pages'
-                }
-              ]
-            )
           end
         end
       end

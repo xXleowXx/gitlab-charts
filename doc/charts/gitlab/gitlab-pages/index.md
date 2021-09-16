@@ -58,7 +58,6 @@ configurations that can be supplied to the `helm install` command using the
 | `service.customDomains.type`              | `LoadBalancer`    | Type of service created for handling custom domains      |
 | `service.customDomains.internalHttpsPort` | `8091`            | Port where Pages daemon listens for HTTPS requests       |
 | `service.customDomains.internalHTTPSPort` | `8091`            | Port where Pages daemon listens for HTTPS requests       |
-| `service.customDomains.listenHttpsProxyV2`|                   | The port to listen on for HTTPS PROXYv2 requests.        |
 | `service.customDomains.nodePort.http`     |                   | Node Port to be opened for HTTP connections. Valid only if `service.customDomains.type` is `NodePort` |
 | `service.customDomains.nodePort.https`    |                   | Node Port to be opened for HTTPS connections. Valid only if `service.customDomains.type` is `NodePort` |
 | `serviceLabels`                           | `{}`              | Supplemental service labels                              |
@@ -97,6 +96,7 @@ configurations that can be supplied to the `helm install` command using the
 | `tls.minVersion`                 |                       | Specifies the minimum SSL/TLS version                |
 | `tls.maxVersion`                 |                       | Specifies the maximum SSL/TLS version                |
 | `useHttp2`                       | `true`                | Enable HTTP2 support                                 |
+| `useProxyV2`            |        | `false`               | Force HTTPS request to utilize the HTTPS PROXYv2 protocol. |
 | `zipCache.cleanup`               | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |
 | `zipCache.expiration`            | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |
 | `zipCache.refresh`               | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |

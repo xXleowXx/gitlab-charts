@@ -43,8 +43,8 @@ data:
     listen-http=0.0.0.0:{{ .Values.service.internalPort }}
       {{- end }}
       {{- if not (empty $.Values.global.pages.externalHttps) }}
-        {{- if .Values.service.customDomains.listenHttpsProxyV2 }}
-    listen-https-proxyv2=0.0.0.0:{{ .Values.service.customDomains.listenHttpsProxyV2 | int }}
+        {{- if .Values.useProxyV2 }}
+    listen-https-proxyv2=0.0.0.0:{{ .Values.service.customDomains.internalHttpsPort | int }}
         {{- else }}
     listen-https=0.0.0.0:{{ .Values.service.customDomains.internalHttpsPort }}
         {{- end }}
