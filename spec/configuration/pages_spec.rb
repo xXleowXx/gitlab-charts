@@ -848,6 +848,28 @@ describe 'GitLab Pages' do
           end
         end
       end
+
+      context 'when using HTTPS Proxy V2' do
+        let(:pages_enabled_values) do
+          YAML.safe_load(%(
+            global:
+              pages:
+                enabled: true
+                externalHttps:
+                  - 1.1.1.1
+            gitlab:
+              gitlab-pages:
+                useProxyV2: true
+          ))
+        end
+
+        describe 'pages configuration' do
+          it 'exposes proper listeners' do
+            expect(pages_config_data).to match(/listen-https-proxyv2=0.0.0.0:8091/)
+            expect(pages_config_data).not_to match(/listen-https=0.0.0.0:8091/)
+          end
+        end
+      end
     end
   end
 end
