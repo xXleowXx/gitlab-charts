@@ -57,7 +57,7 @@ configurations that can be supplied to the `helm install` command using the
 | `service.name`                            | `gitlab-pages`    | GitLab Pages service name                                |
 | `service.customDomains.type`              | `LoadBalancer`    | Type of service created for handling custom domains      |
 | `service.customDomains.internalHttpsPort` | `8091`            | Port where Pages daemon listens for HTTPS requests       |
-| `service.customDomains.internalHTTPSPort` | `8091`            | Port where Pages daemon listens for HTTPS requests       |
+| `service.customDomains.internalHttpsPort` | `8091`            | Port where Pages daemon listens for HTTPS requests       |
 | `service.customDomains.nodePort.http`     |                   | Node Port to be opened for HTTP connections. Valid only if `service.customDomains.type` is `NodePort` |
 | `service.customDomains.nodePort.https`    |                   | Node Port to be opened for HTTPS connections. Valid only if `service.customDomains.type` is `NodePort` |
 | `serviceLabels`                           | `{}`              | Supplemental service labels                              |
