@@ -857,6 +857,7 @@ create_operator_mr:
   before_script:
     - bundle install
   script:
+    - git fetch origin --tags
     - bash scripts/create_operator_mr.sh
   only:
     - tags@gitlab/charts/gitlab

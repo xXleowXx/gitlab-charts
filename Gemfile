@@ -10,7 +10,6 @@ gem 'capybara-screenshot'
 gem 'docker-api'
 gem 'rake'
 gem 'hash-deep-merge'
-gem 'gitlab'
 
 group :rubocop do
   gem 'gitlab-styles', '~> 6.1', require: false
