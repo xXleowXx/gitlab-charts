@@ -38,9 +38,6 @@ service:
   customDomains:
     type: LoadBalancer
     internalHttpsPort: 8091
-    # Should you desire to utilize Proxy V2, use the
-    # below option for HTTPS instead
-    # listenHttpsProxyV2: 8091
     nodePort: {}
       # http
       # https
@@ -140,6 +137,7 @@ statusUri:
 tls:
   minVersion:
   maxVersion:
+useProxyV2: false
 useHttp2: true
 
 # zipCache:
