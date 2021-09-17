@@ -12,6 +12,10 @@ git clone "https://${OPERATOR_PROJECT_USERNAME}:${OPERATOR_PROJECT_PASSWORD}@${O
 bundle exec ruby -e "require './scripts/gitlab_charts_helper'; puts GitLabChartsHelper.supported_versions" > /tmp/gitlab-operator/CHART_VERSIONS
 
 pushd /tmp/gitlab-operator || exit
+  if $(git diff --quiet); then
+    echo "No changes to commit. Exiting."
+    exit 0
+  fi
   git checkout -b "bump-charts-${CI_COMMIT_TAG}"
   git add CHART_VERSIONS
   git commit -m "Update CHART_VERSIONS for GitLab Chart release ${CI_COMMIT_TAG}"
