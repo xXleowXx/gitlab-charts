@@ -859,7 +859,10 @@ create_operator_mr:
   script:
     - git fetch origin --tags
     - bash scripts/create_operator_mr.sh
-  only:
-    - tags@gitlab/charts/gitlab
-  when: manual
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/'
+      when: never
+    - if: '$CI_COMMIT_TAG && $CI_PROJECT_PATH == "gitlab/charts/gitlab"'
+      when: manual
+    - when: never
   needs: []
