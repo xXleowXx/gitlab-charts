@@ -25,7 +25,7 @@ If you do not current have an OpenShift cluster, you can check out this guide to
 
 ## Known Limitations
 
-The GitLab Operator is still being developed so before getting started here are a few known limitations.
+The GitLab Operator is being actively developed, and currently has a few known limitations.
 
 ### Object storage must use in-cluster MinIO
 
