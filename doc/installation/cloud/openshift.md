@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ## GitLab Operator
 
-The recommended method for installing GitLab on OpenShiftt is by using the GitLab Operator.
+The recommended method for installing GitLab on OpenShift is by using the GitLab Operator.
 
 The GitLab operator aims to manage the full lifecycle of GitLab instances in your Openshift container platforms.
 The operator aims to:
