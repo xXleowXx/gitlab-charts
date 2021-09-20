@@ -70,7 +70,7 @@ To create an OpenShift cluster, see the [OpenShift cluster setup docs](openshift
 
 An ingress controller is required to provide external access to the application and secure communication between components.
 
-The GitLab Operator will deploy our [forked NGINX chart from the GitLab Helm Chart](https://docs.gitlab.com/charts/charts/nginx/) by default.
+The GitLab Operator will deploy our [forked NGINX chart from the GitLab Helm Chart](charts/charts/nginx.md) by default.
 
 If you prefer to use an external ingress controller, we recommend [NGINX Ingress](https://kubernetes.github.io/ingress-nginx/deploy/) by the Kubernetes community to deploy an Ingress Controller. Follow the relevant instructions in the link based on your platform and preferred tooling. Take note of the ingress class value for later (it typically defaults to `nginx`).
 
@@ -94,7 +94,7 @@ OpenShift ships with [Prometheus Adapter](https://docs.openshift.com/container-p
 
 You will need an internet-accessible domain to which you can add a DNS record.
 
-See our [networking and DNS documentation](https://docs.gitlab.com/charts/installation/deployment.html#networking-and-dns) for more details on connecting your domain to the GitLab components. You will use the configuration mentioned in this section when defining your GitLab custom resource (CR).
+See our [networking and DNS documentation](charts/installation/deployment.html#networking-and-dns.md) for more details on connecting your domain to the GitLab components. You will use the configuration mentioned in this section when defining your GitLab custom resource (CR).
 
 ## Installing the GitLab Operator
 
@@ -116,8 +116,7 @@ See our [networking and DNS documentation](https://docs.gitlab.com/charts/instal
 
     This command first deploys the service accounts, roles and role bindings used by the operator, and then the operator itself.
 
-    Note: by default, the Operator will only watch the namespace where it is deployed. If you would like it to watch at the cluster scope,
-    modify [config/manager/kustomization.yaml](../config/manager/kustomization.yaml) by commenting out the `namesapce_scope.yaml` patch.
+  Note: by default, the Operator will only watch the namespace where it is deployed. If you would like it to watch at the cluster scope, modify [config/manager/kustomization.yaml](../config/manager/kustomization.yaml) by commenting out the `namesapce_scope.yaml` patch.
 
 2. Create a GitLab custom resource (CR).
 
@@ -125,7 +124,7 @@ See our [networking and DNS documentation](https://docs.gitlab.com/charts/instal
 
    Here is an example of the content to put in this file:
 
-   ```yaml
+   ```YAML
    apiVersion: apps.gitlab.com/v1beta1
    kind: GitLab
    metadata:
@@ -143,7 +142,7 @@ See our [networking and DNS documentation](https://docs.gitlab.com/charts/instal
            email: youremail@example.com # use your real email address here
    ```
 
-   For more details on configuration options to use under `spec.chart.values`, see our [GitLab Helm Chart documentation](https://docs.gitlab.com/charts).
+   For more details on configuration options to use under `spec.chart.values`, see our [GitLab Helm Chart documentation](charts.md).
 
 3. Deploy a GitLab instance using your new GitLab CR.
 
