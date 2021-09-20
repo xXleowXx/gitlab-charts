@@ -4,197 +4,120 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Installing GitLab on OpenShift
+# OpenShift cluster setup
 
-## GitLab Operator
+This document walks you through using the automation scripts in this project to create an OpenShift cluster in Google Cloud.
 
-The recommended method for installing GitLab on OpenShift is by using the GitLab Operator.
+## Preparation
 
-The GitLab operator aims to manage the full lifecycle of GitLab instances in your Openshift container platforms.
+First, you should have a Red Hat account associated with your GitLab email.
+Contact our Red Hat Alliance liason; they will arrange to send you an account invitation email. Once you activate your Red Hat account, you will have access the to licenses and subscriptions needed to run OpenShift.
 
-The operator aims to:
+To launch a cluster in Google Cloud, a public Cloud DNS zone must be connected to a registered domain and configured in Google Cloud DNS. If a domain is not already available, follow the steps [in this guide](https://github.com/openshift/installer/blob/master/docs/user/gcp/dns.md) to create one.
 
-* ease installation and configuration of GitLab instances
-* offer near-zero downtime upgrades from version to version
-* ease backup and restore of GitLab and its components
-* aggregate and visualize metrics using Prometheus and Grafana
-* setup auto-scaling
+### Get the CLI tools and Pull Secret
 
-Note that this does not include the GitLab Runner. The GitLab Runner is a lightweight, highly-scalable agent that picks up a CI job through the coordinator API of GitLab CI/CD, runs the job, and sends the result back to the GitLab instance. If you would like to use Runners to pick up CI jobs in your OpenShift apps, and host GitLab outside of an OpenShift cluster see more information on [installing GitLab Runners](https://docs.gitlab.com/runner/). For more inforation on the GitLab Runner Operator, see the [GitLab Runner Operator repository](https://gitlab.com/gitlab-org/gl-openshift/gitlab-runner-operator/-/blob/master/README.md).
+Two CLI tools are required to create an OpenShift cluster (`openshift-install`) and then interact with the cluster (`oc`).
 
-If you do not current have an OpenShift cluster, you can check out this guide to [setup and OpenShift cluster](https://gitlab.com/gitlab-org/gl-openshift/gitlab-operator/-/blob/master/doc/openshift-cluster-setup.md).
+A pull secret is required to fetch images from Red Hat's private Docker registry.
+Every developer has a different pull secret associated with their Red Hat account.
 
-## Known limitations
+To get the CLI tools and your pull secret, go to [Red Hat's cloud](https://cloud.redhat.com/openshift/install/gcp/installer-provisioned) and log in with your Red Hat account.
+On this page, download the latest version of the installer and command-line tools with the links provided. Extract these packages and place `openshift-install` and `oc` in your `PATH`.
 
-Below are known limitations of the GitLab Operator.
+Copy the pull secret to your clipboard and write the content to a file `pull_secret` in the root of this repository. This file is gitignored.
 
-### Multiple instances of Webservice not supported on OpenShift
+### Create a Google Cloud (GCP) Service Account
 
-Multiple Webservice instances are problematic on OpenShift. The Ingresses report "All hosts are taken by other resources" when using NGINX Ingress Operator.
+Follow [these instructions](https://docs.openshift.com/container-platform/4.6/installing/installing_gcp/installing-gcp-account.html#installation-gcp-service-account_installing-gcp-account) to create a Service Account in the Google Cloud `cloud-native` project. Attach all roles marked as Required in that document.
+Once the Service Account is created, generate a JSON key and save it as `gcloud.json` in the root of this repository. This file is gitignored.
 
-Related: [#160](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/160)
+## Create your OpenShift cluster
 
-### Certain components not supported
+To create the OpenShift cluster:
 
-Below is a list of unsupported components:
+1. Clone the GitLab Operator respository:
 
-- Praefect: [#136](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/136)
-- KAS: [#139](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/139)
-
-# Installation
-
-This document describes how to deploy the GitLab operator via manifests in your Kubernetes or OpenShift cluster.
-
-If using OpenShift, these steps normally are handled by OLM (the Operator Lifecycle Manager) once an operator is bundle published. However, to test the most recent operator images, users may need to install the operator using the deployment manifests available in the operator repository.
-
-## Prerequisites
-
-1. [Create or use an existing Kubernetes or OpenShift cluster](#cluster)
-2. Install pre-requisite services and software
-    - [Ingress controller](#ingress-controller)
-    - [Certificate manager](#tls-certificates)
-    - [Metrics server](#metrics)
-3. [Configure Domain Name Services](#configure-domain-name-services)
-
-### Cluster
-
-#### Kubernetes
-
-To create a traditional Kubernetes cluster, consider using [official tooling](https://kubernetes.io/docs/tasks/tools/) or your preferred method of installation.
-
-#### OpenShift
-
-To create an OpenShift cluster, see the [OpenShift cluster setup docs](openshift-cluster-setup.md).
-
-### Ingress controller
-
-An ingress controller is required to provide external access to the application and secure communication between components.
-
-The GitLab Operator will deploy our [forked NGINX chart from the GitLab Helm Chart](charts/charts/nginx.md) by default.
-
-If you prefer to use an external ingress controller, we recommend [NGINX Ingress](https://kubernetes.github.io/ingress-nginx/deploy/) by the Kubernetes community to deploy an Ingress Controller. Follow the relevant instructions in the link based on your platform and preferred tooling. Take note of the ingress class value for later (it typically defaults to `nginx`).
-
-When configuring the GitLab CR, be sure to set `nginx-ingress.enabled=false` to disable the NGINX objects from the GitLab Helm Chart.
-
-### TLS certificates
-
-We recommend [Cert Manager](https://cert-manager.io/docs/installation/) to create certificates used to secure the GitLab and Registry URLs. Follow the relevant instructions in the link based on your platform and preferred tooling.
-
-### Metrics
-
-#### Kubernetes
-
-Install the [metrics server](https://github.com/kubernetes-sigs/metrics-server#installation) so the HorizontalPodAutoscalers can retrieve pod metrics.
-
-#### OpenShift
-
-OpenShift ships with [Prometheus Adapter](https://docs.openshift.com/container-platform/4.6/monitoring/understanding-the-monitoring-stack.html#default-monitoring-components_understanding-the-monitoring-stack) by default, so there is no manual action required here.
-
-### Configure Domain Name Services
-
-You will need an internet-accessible domain to which you can add a DNS record.
-
-See our [networking and DNS documentation](charts/installation/deployment.html#networking-and-dns.md) for more details on connecting your domain to the GitLab components. You will use the configuration mentioned in this section when defining your GitLab custom resource (CR).
-
-## Installing the GitLab Operator
-
-1. Deploy the GitLab Operator.
-
-    ```
-    $ GL_OPERATOR_VERSION=0.0.1
-    $ kubectl create namespace gitlab-system
-    $ kubectl apply -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${GL_OPERATOR_VERSION}.yaml
-    ```
-    
-    or more verbose (note double quotes):
-
-    ```
-    $ GL_OPERATOR_VERSION=0.0.1
-    $ kubectl create namespace gitlab-system
-    $ kubectl apply -f "https://gitlab.com/api/v4/projects/gitlab-org%2Fcloud-native%2Fgitlab-operator/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${GL_OPERATOR_VERSION}.yaml"
-    ```
-
-    This command first deploys the service accounts, roles and role bindings used by the operator, and then the operator itself.
-
-  Note: by default, the Operator will only watch the namespace where it is deployed. If you would like it to watch at the cluster scope, modify [config/manager/kustomization.yaml](../config/manager/kustomization.yaml) by commenting out the `namesapce_scope.yaml` patch.
-
-2. Create a GitLab custom resource (CR).
-
-   Create a new file named something like `mygitlab.yaml`.
-
-   Here is an example of the content to put in this file:
-
-   ```YAML
-   apiVersion: apps.gitlab.com/v1beta1
-   kind: GitLab
-   metadata:
-     name: example
-   spec:
-     chart:
-       version: "X.Y.Z" # select a version from the CHART_VERSIONS file in the root of this project
-       values:
-         global:
-           hosts:
-             domain: example.com # use a real domain here
-           ingress:
-             configureCertmanager: true
-         certmanager-issuer:
-           email: youremail@example.com # use your real email address here
+   ```shell
+   git clone https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.git
    ```
 
-   For more details on configuration options to use under `spec.chart.values`, see our [GitLab Helm Chart documentation](charts.md).
+1. Run the script to create the OpenShift cluster in Google Cloud:
 
-3. Deploy a GitLab instance using your new GitLab CR.
-
-   ```
-   $ kubectl -n gitlab-system apply -f mygitlab.yaml
-   ```
-
-   This command sends your GitLab CR up to the cluster for the GitLab Operator to reconcile. You can watch the progress by tailing the logs from the controller pod:
-
-   ```
-   $  kubectl -n gitlab-system logs deployment/gitlab-controller-manager -c manager -f
+   ```shell
+   cd gitlab-operator
+   ./scripts/create_openshift_cluster.sh
    ```
 
-   You can also list GitLab resources and check their status:
+This will be a 6 node cluster with 3 control plane (master) nodes and 3 worker nodes.
+The process takes around 40 minutes. Follow the instructions at the end of the
+console output to connect to the cluster.
 
+Once created, you should be able to see your cluster registered in
+[Red Hat cloud](https://cloud.redhat.com/openshift/). All installation logs and
+metadata will be stored in the `install-$CLUSTER_NAME/` directory in this repository.
+This directory is gitignored.
+
+### Configuration options
+
+Configuration can be applied during runtime by setting environment variables.
+All options have defaults, so no options are required.
+
+|Variable|Description|Default|
+|-|-|-|
+|`CLUSTER_NAME`|Name of cluster|`ocp-$USER`|
+|`BASE_DOMAIN`|Root domain for cluster|`k8s-ft.win`|
+|`GCP_PROJECT_ID`|Google Cloud project ID|`cloud-native-182609`|
+|`GCP_REGION`|Google Cloud region for cluster|`us-central1`|
+|`GOOGLE_APPLICATION_CREDENTIALS`|Path to Google Cloud service account JSON file|`gcloud.json`|
+|`GOOGLE_CREDENTIALS`|Content of Google Cloud service account JSON file|Content of `$GOOGLE_APPLICATION_CREDENTIALS`|
+|`PULL_SECRET_FILE`|Path to Red Hat pull secret file|`pull_secret`|
+|`PULL_SECRET`|Content of Red Hat pull secret file|Content of `$PULL_SECRET_FILE`|
+|`SSH_PUBLIC_KEY_FILE`|Path to SSH public key file|`$HOME/.ssh/id_rsa.pub`|
+|`SSH_PUBLIC_KEY`|Content of SSH public key file|Content of `$SSH_PUBLIC_KEY_FILE`|
+|`LOG_LEVEL`|Verbosity of `openshift-install` output|`info`|
+|`INSTALL_DIR`|Directory for install assets, useful for launching multiple clusters|`install-$CLUSTER_NAME`|
+
+NOTE:
+The variables `CLUSTER_NAME` and `BASE_DOMAIN` are combined to build the domain name for the cluster.
+
+## Destroy your OpenShift cluster
+
+To destroy the OpenShift cluster:
+
+1. Clone the GitLab Operator respository:
+
+   ```shell
+   git clone https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.git
    ```
-   $ kubectl get gitlabs -n gitlab-system
+
+1. Run the script to destroy the OpenShift cluster in Google Cloud. This takes
+   around 4 minutes:
+
+   ```shell
+   cd gitlab-operator
+   ./scripts/destroy_openshift_cluster.sh
    ```
 
-   When the CR is reconciled (the status of the GitLab resource will be `RUNNING`), you can access GitLab in your browser at `https://gitlab.example.com`.
+Configuration can be applied during runtime by setting the following environment
+variables. All options have defaults, no options are required.
 
-## Uninstall the GitLab Operator
+|Variable|Description|Default|
+|-|-|-|
+|`GOOGLE_APPLICATION_CREDENTIALS`|Path to Google Cloud service account JSON file|`gcloud.json`|
+|`GOOGLE_CREDENTIALS`|Content of Google Cloud service account JSON file|Content of `$GOOGLE_APPLICATION_CREDENTIALS`|
+|`LOG_LEVEL`|Verbosity of `openshift-install` output|`info`|
+|`INSTALL_DIR`|Directory for install assets, useful for launching multiple clusters|`install-$CLUSTER_NAME`|
 
-Follow the steps below to remove the GitLab Operator and its associated resources.
+## Next steps
 
-Items to note prior to uninstalling the operator:
+When the cluster is up and running, you can continue [installing GitLab](../operator.md).
 
-- The operator does not delete the Persistent Volume Claims or Secrets when a GitLab instance is deleted.
-- When deleting the Operator, the namespace where it is installed (`gitlab-system` by default) will not be deleted automatically. This is to ensure persistent volumes are not lost unintentionally.
+## Resources
 
-### Uninstall an instance of GitLab
-
-```
-$ kubectl -n gitlab-system delete -f mygitlab.yaml
-```
-
-This will remove the GitLab instance, and all associated objects except for (PVCs as noted above).
-
-### Uninstall the GitLab Operator
-
-
-```
-$ GL_OPERATOR_VERSION=0.0.1
-$ kubectl delete -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${GL_OPERATOR_VERSION}.yaml
-```
-
-More verbose version of above is (note double quotes):
-
-```
-$ GL_OPERATOR_VERSION=0.0.1
-$ kubectl delete -f "https://gitlab.com/api/v4/projects/gitlab-org%2Fcloud-native%2Fgitlab-operator/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${GL_OPERATOR_VERSION}.yaml"
-```
-
-
-This will delete the Operator's resources, including the running Deployment of the Operator. This **will not** delete objects associated with a GitLab instance.
+- [`openshift-installer` source code](https://github.com/openshift/installer)
+- [`oc` source code](https://github.com/openshift/oc)
+- [`openshift-installer` and `oc` packages](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/)
+- [OpenShift Container Project (OCP) architecture docs](https://access.redhat.com/documentation/en-us/openshift_container_platform/latest/html/architecture/architecture)
+- [OpenShift GCP docs](https://docs.openshift.com/container-platform/latest/installing/installing_gcp/installing-gcp-account.html)
+- [OpenShift troubleshooting guide](https://docs.openshift.com/container-platform/latest/support/troubleshooting/troubleshooting-installations.html)
