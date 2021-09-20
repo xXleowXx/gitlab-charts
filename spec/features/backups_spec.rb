@@ -17,7 +17,13 @@ describe "Restoring a backup" do
 
     # We run migrations once early to get the db into a place where we can set the runner token
     # Ignore errors, we will run the migrations again after the token
-    run_migrations
+    _, status = run_migrations
+
+    # temp workaround https://gitlab.com/gitlab-org/gitlab/-/issues/341299 to unblock release
+    unless status.success?
+      mark_migration_complete('20210826145509')
+      run_migrations
+    end
 
     stdout, status = set_runner_token
     fail stdout unless status.success?
