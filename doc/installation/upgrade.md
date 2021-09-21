@@ -12,6 +12,11 @@ corresponding to the specific release you want to upgrade to and look for any
 [release notes](../releases/index.md) that might pertain to the new GitLab chart
 version.
 
+NOTE:
+**Zero-downtime upgrades** are not available with the GitLab charts.
+Ongoing work to support this feature can be tracked via
+[the GitLab Operator issue](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/59).
+
 WARNING:
 If you are upgrading from the `4.x` version of the chart to the latest `5.0` release, you need
 to first update to the latest `4.12.x` patch release in order for the upgrade to work.
