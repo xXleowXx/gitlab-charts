@@ -2,6 +2,28 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.3.0 (2021-09-21)
+
+### Added (1 change)
+
+- [Mount SSH host keys into Webservice container](gitlab-org/charts/gitlab@ff3670c0633094d30d5c8d6e89d394f46ae08d29) by @kravvcu ([merge request](gitlab-org/charts/gitlab!2168))
+
+### Fixed (3 changes)
+
+- [Drop the special ingress rule for /admin/sidekiq](gitlab-org/charts/gitlab@63bad505f20df8b0a211343d75dee1e4e9917445) ([merge request](gitlab-org/charts/gitlab!2182))
+- [Rails db: always put main first](gitlab-org/charts/gitlab@ad9b461b0ddedf1e05b45db54e2950c20298380c) ([merge request](gitlab-org/charts/gitlab!2159))
+- [Remove Gitaly's redundant Prometheus listen addr](gitlab-org/charts/gitlab@fe4a41f5f111a536407ed427d295f9b558bee8d9) ([merge request](gitlab-org/charts/gitlab!2153))
+
+### Changed (7 changes)
+
+- [Update gitlab-org/container-registry from 3.10.1-gitlab to 3.11.0-gitlab](gitlab-org/charts/gitlab@09cb819fc9dbfd17262adf977d369034299b42f5) ([merge request](gitlab-org/charts/gitlab!2181))
+- [Deployments: remove .spec.replicas when HPA present](gitlab-org/charts/gitlab@a23f7ed46ee68b5740690a352e3dd452750abb7a) ([merge request](gitlab-org/charts/gitlab!2180))
+- [Update gitlab-org/container-registry from 3.10.0-gitlab to 3.10.1-gitlab](gitlab-org/charts/gitlab@ba458fab385380bb138a5cc0c8bd71c4d49cc199) ([merge request](gitlab-org/charts/gitlab!2172))
+- [Update gitlab-org/container-registry from 3.9.0-gitlab to 3.10.0-gitlab](gitlab-org/charts/gitlab@9bfbdbf5cfd2619109ef5a49e4312f0210395d41) ([merge request](gitlab-org/charts/gitlab!2156))
+- [Change default configuration for HSTS](gitlab-org/charts/gitlab@14936c95c921770b67c28642dc950fa186252bdd) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2118))
+- [Update gitlab-org/charts/gitlab-runner from 0.31.0 to 0.32.0](gitlab-org/charts/gitlab@0665982645d842994a54bddb1269fbb694a743cb) ([merge request](gitlab-org/charts/gitlab!2149))
+- [Adds pages local_store configuration](gitlab-org/charts/gitlab@426c34858876fe0d52cd4fe880f44771af17e19b) ([merge request](gitlab-org/charts/gitlab!2141))
+
 ## 5.2.4 (2021-09-17)
 
 No changes.
