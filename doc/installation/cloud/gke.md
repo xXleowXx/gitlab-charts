@@ -99,8 +99,8 @@ We will use this IP to bind with a DNS name in the next section.
 If you created your cluster manually or used the `USE_STATIC_IP` option with the scripted creation,
 you'll need a public domain with an A record wild card DNS entry pointing to the IP we just created.
 
-Follow the [Google DNS quickstart guide](https://cloud.google.com/dns/docs/quickstart)
-to create the DNS entry.
+Otherwise follow the [Google DNS quickstart guide](https://cloud.google.com/dns/docs/quickstart)
+to create an empty Cloud DNS zone. The zone will be populated with DNS records in the next steps.
 
 ## Next Steps
 
