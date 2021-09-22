@@ -677,10 +677,12 @@ production_specs_eks:
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "eks-production"
 
+# Custom file pattern to exclude failing spec and still enable parallelization
+# https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2886
 .knapsack-variables:
   variables:
     KNAPSACK_REPORT_PATH: "knapsack/master_report.json"
-    KNAPSACK_TEST_FILE_PATTERN: "qa/specs/features/**/*_spec.rb"
+    KNAPSACK_TEST_FILE_PATTERN: "qa/specs/features/**/!(kubernetes_integration_spec).rb"
     KNAPSACK_GENERATE_REPORT: "true"
 
 .qa:
