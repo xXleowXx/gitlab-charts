@@ -146,9 +146,14 @@ This section contains possible solutions for problems you might encounter.
 
 ### SSL termination errors
 
-If you are using Let's Encrypt as your TLS provider and you are facing certificate related errors then first check your domain with [letsdebug](https://letsdebug.net/). It will show the error related to letsencrypt and itt will show you the error in red. If it turns green then it could be a problem related to certmanager. You can debug this by running:
- 
- ```shell
- kubectl describe certificate,order,challenge --all-namespaces
- ```
-This will show the errors related to cert manager. You can also try removing the certificate object to force requesting a new one. If this doesn't work then consider reinstalling the cert-manager.
+If you are using Let's Encrypt as your TLS provider and you are facing certificate-related errors, you have a few options to debug this:
+
+1. Check your domain with [letsdebug](https://letsdebug.net/) for any possible errors.
+1. If letsdebug returns not errors, see if there's a problem related to cert-manager:
+
+   ```shell
+   kubectl describe certificate,order,challenge --all-namespaces
+   ```
+
+   If you see any errors, try removing the certificate object to force requesting a new one.
+1. If nothing of the above works, consider reinstalling the cert-manager.
