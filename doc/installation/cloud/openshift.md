@@ -11,7 +11,7 @@ This document walks you through using the automation scripts in this project to 
 ## Preparation
 
 First, you should have a Red Hat account associated with your GitLab email.
-Contact our Red Hat Alliance liason; they will arrange to send you an account invitation email. Once you activate your Red Hat account, you will have access the to licenses and subscriptions needed to run OpenShift.
+Contact our Red Hat Alliance liaison; they will arrange to send you an account invitation email. Once you activate your Red Hat account, you will have access the to licenses and subscriptions needed to run OpenShift.
 
 To launch a cluster in Google Cloud, a public Cloud DNS zone must be connected to a registered domain and configured in Google Cloud DNS. If a domain is not already available, follow the steps [in this guide](https://github.com/openshift/installer/blob/master/docs/user/gcp/dns.md) to create one.
 
@@ -36,7 +36,7 @@ Once the Service Account is created, generate a JSON key and save it as `gcloud.
 
 To create the OpenShift cluster:
 
-1. Clone the GitLab Operator respository:
+1. Clone the GitLab Operator repository:
 
    ```shell
    git clone https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.git
@@ -85,7 +85,7 @@ The variables `CLUSTER_NAME` and `BASE_DOMAIN` are combined to build the domain 
 
 To destroy the OpenShift cluster:
 
-1. Clone the GitLab Operator respository:
+1. Clone the GitLab Operator repository:
 
    ```shell
    git clone https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.git
