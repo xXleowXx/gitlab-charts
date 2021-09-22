@@ -88,9 +88,10 @@ deployment manifests available in the
 1. Deploy the GitLab Operator:
 
    ```shell
-   GL_OPERATOR_VERSION=0.0.1
+   GL_OPERATOR_VERSION=0.1.0
+   PLATFORM=kubernetes # or "openshift"
    kubectl create namespace gitlab-system
-   kubectl apply -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${GL_OPERATOR_VERSION}.yaml
+   kubectl apply -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${PLATFORM}-${GL_OPERATOR_VERSION}.yaml
    ```
 
    NOTE:
@@ -176,8 +177,9 @@ To remove the GitLab Operator and its associated resources:
 1. Uninstall the GitLab Operator
 
    ```shell
-   GL_OPERATOR_VERSION=0.0.1
-   kubectl delete -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${GL_OPERATOR_VERSION}.yaml
+   GL_OPERATOR_VERSION=0.1.0
+   PLATFORM=kubernetes # or "opensfhit"
+   kubectl delete -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${PLATFORM}-${GL_OPERATOR_VERSION}.yaml
    ```
 
    This will delete the Operator's resources, including the running Deployment
