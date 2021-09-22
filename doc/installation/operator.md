@@ -101,9 +101,13 @@ deployment manifests available in the
    This command first deploys the service accounts, roles and role bindings used by the operator, and then the operator itself.
 
    By default, the Operator will only watch the namespace where it is deployed.
-   If you'd like it to watch at the cluster scope, modify
-   [`kustomization.yaml`](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/tree/master/config/manager/kustomization.yaml)
-   by commenting out the `namesapce_scope.yaml` patch.
+   If you'd like it to watch at the cluster scope, then remove the `WATCH_NAMESPACE`
+   environment variable from the Deployment in the manifest under:
+   `spec.template.spec.containers[0].env` and re-run the `kubectl apply` command above.
+
+   NOTE:
+   Running the Operator at the cluster scope is considered experimental.
+   See https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/100 for more information.
 
 1. Create a GitLab custom resource (CR), by creating a new YAML file (for example
    named `mygitlab.yaml`). Here is an example of the content to put in
