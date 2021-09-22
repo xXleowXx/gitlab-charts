@@ -9,9 +9,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 GitLab Operator is an implementation of the [Operator pattern](https://www.openshift.com/blog)
 for managing the lifecycle and upgrades of a GitLab instance. The GitLab Operator strengthens the support of OpenShift from GitLab, but is intended to be as native to Kubernetes as for OpenShift. The GitLab Operator provides a method of synchronizing and controlling various
 stages of cloud-native GitLab installation/upgrade procedures. Using the Operator provides the ability to perform
-rolling upgrades with minmal down time. The first goal is to support OpenShift, the subsequent goal will be for automation of day 2 operations like upgrades as noted.
+rolling upgrades with minimal down time. The first goal is to support OpenShift, the subsequent goal will be for automation of day 2 operations like upgrades as noted.
 
-The Operator offers the benefit of Day 2 operators to the GitLab installation, there are many automation benefits to utilizing the Operator vs Helm. The Operator utilizes the Helm Chart but the Operator will continously run making upgrading, backups, and more, automatic.
+The Operator offers the benefit of Day 2 operators to the GitLab installation, there are many automation benefits to utilizing the Operator vs Helm. The Operator utilizes the Helm Chart but the Operator will continuously run making upgrading, backups, and more, automatic.
 
 The GitLab Operator aims to:
 
@@ -22,7 +22,7 @@ The GitLab Operator aims to:
 - Aggregate and visualize metrics using Prometheus and Grafana.
 - Set up auto-scaling.
 
-The GitLab Operator does not include the GitLab Runner. For more inforation, see
+The GitLab Operator does not include the GitLab Runner. For more information, see
 the [GitLab Runner Operator repository](https://gitlab.com/gitlab-org/gl-openshift/gitlab-runner-operator).
 
 ## Known limitations
@@ -46,24 +46,25 @@ Before you install GitLab with GitLab Operator, you must:
      preferred method of installation.
    - **OpenShift:** To create an OpenShift cluster, see the [OpenShift cluster setup docs](cloud/openshift.md).
 1. Install the following services and software:
-    - **Ingress controller**
 
-      An Ingress controller is required to provide external access to the application and secure communication between components.
-      The GitLab Operator will deploy our [forked NGINX chart from the GitLab Helm Chart](../charts/nginx/index.md) by default.
-      If you prefer to use an external Ingress controller, we recommend [NGINX Ingress](https://kubernetes.github.io/ingress-nginx/deploy/) by the Kubernetes community to deploy an Ingress Controller. Follow the relevant instructions in the link based on your platform and preferred tooling. Take note of the Ingress class value for later (it typically defaults to `nginx`).
+   - **Ingress controller**
 
-      When configuring the GitLab custom resource (CR), be sure to set `nginx-ingress.enabled=false` to disable the NGINX objects from the GitLab Helm Chart.
+     An Ingress controller is required to provide external access to the application and secure communication between components.
+     The GitLab Operator will deploy our [forked NGINX chart from the GitLab Helm Chart](../charts/nginx/index.md) by default.
+     If you prefer to use an external Ingress controller, we recommend [NGINX Ingress](https://kubernetes.github.io/ingress-nginx/deploy/) by the Kubernetes community to deploy an Ingress Controller. Follow the relevant instructions in the link based on your platform and preferred tooling. Take note of the Ingress class value for later (it typically defaults to `nginx`).
 
-    - **Certificate manager**
+     When configuring the GitLab custom resource (CR), be sure to set `nginx-ingress.enabled=false` to disable the NGINX objects from the GitLab Helm Chart.
 
-      For the TLS certificates, we recommend [Cert Manager](https://cert-manager.io/docs/installation/)
-      to create certificates used to secure the GitLab and Registry URLs. Follow
-      the relevant instructions in the link based on your platform and preferred tooling.
+   - **Certificate manager**
 
-    - **Metrics server**
+     For the TLS certificates, we recommend [Cert Manager](https://cert-manager.io/docs/installation/)
+     to create certificates used to secure the GitLab and Registry URLs. Follow
+     the relevant instructions in the link based on your platform and preferred tooling.
 
-      - Kubernetes: Install the [metrics server](https://github.com/kubernetes-sigs/metrics-server#installation) so the HorizontalPodAutoscalers can retrieve pod metrics.
-      - OpenShift: OpenShift ships with [Prometheus Adapter](https://docs.openshift.com/container-platform/4.6/monitoring/understanding-the-monitoring-stack.html#default-monitoring-components_understanding-the-monitoring-stack) by default, so there is no manual action required here.
+   - **Metrics server**
+
+     - Kubernetes: Install the [metrics server](https://github.com/kubernetes-sigs/metrics-server#installation) so the HorizontalPodAutoscalers can retrieve pod metrics.
+     - OpenShift: OpenShift ships with [Prometheus Adapter](https://docs.openshift.com/container-platform/4.6/monitoring/understanding-the-monitoring-stack.html#default-monitoring-components_understanding-the-monitoring-stack) by default, so there is no manual action required here.
 
 1. Configure the Domain Name services:
 
@@ -86,22 +87,22 @@ deployment manifests available in the
 
 1. Deploy the GitLab Operator:
 
-    ```shell
-    GL_OPERATOR_VERSION=0.0.1
-    kubectl create namespace gitlab-system
-    kubectl apply -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${GL_OPERATOR_VERSION}.yaml
-    ```
+   ```shell
+   GL_OPERATOR_VERSION=0.0.1
+   kubectl create namespace gitlab-system
+   kubectl apply -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${GL_OPERATOR_VERSION}.yaml
+   ```
 
-    NOTE:
-    `18899486` is the ID of the
-    [GitLab Operator project](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator).
+   NOTE:
+   `18899486` is the ID of the
+   [GitLab Operator project](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator).
 
-    This command first deploys the service accounts, roles and role bindings used by the operator, and then the operator itself.
+   This command first deploys the service accounts, roles and role bindings used by the operator, and then the operator itself.
 
-    By default, the Operator will only watch the namespace where it is deployed.
-    If you'd like it to watch at the cluster scope, modify
-    [`kustomization.yaml`](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/tree/master/config/manager/kustomization.yaml)
-    by commenting out the `namesapce_scope.yaml` patch.
+   By default, the Operator will only watch the namespace where it is deployed.
+   If you'd like it to watch at the cluster scope, modify
+   [`kustomization.yaml`](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/tree/master/config/manager/kustomization.yaml)
+   by commenting out the `namesapce_scope.yaml` patch.
 
 1. Create a GitLab custom resource (CR), by creating a new YAML file (for example
    named `mygitlab.yaml`). Here is an example of the content to put in
