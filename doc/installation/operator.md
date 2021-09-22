@@ -107,7 +107,7 @@ deployment manifests available in the
 
    NOTE:
    Running the Operator at the cluster scope is considered experimental.
-   See https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/100 for more information.
+   See [issue #100](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/100) for more information.
 
 1. Create a GitLab custom resource (CR), by creating a new YAML file (for example
    named `mygitlab.yaml`). Here is an example of the content to put in
