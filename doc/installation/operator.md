@@ -132,7 +132,7 @@ deployment manifests available in the
    ```
 
    For more details on configuration options to use under `spec.chart.values`,
-   see the [GitLab Helm Chart documentation](../charts/globals.md).
+   see the [GitLab Helm Chart documentation](../charts/index.md).
 
 1. Deploy a GitLab instance using your new GitLab CR:
 
