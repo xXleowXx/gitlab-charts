@@ -112,6 +112,13 @@ module Gitlab
       return [stdout, status]
     end
 
+    def mark_migration_complete(migration)
+      cmd = full_command("gitlab-rake gitlab:db:mark_migration_complete[#{migration}]")
+
+      stdout, status = Open3.capture2e(cmd)
+      return [stdout, status]
+    end
+
     def restart_webservice
       filters = 'app=webservice'
 
