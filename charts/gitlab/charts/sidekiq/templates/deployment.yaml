@@ -1,4 +1,7 @@
 {{- if .Values.enabled -}}
+{{- $imageCfg := dict "global" $.Values.global.image "local" $.Values.image -}}
+{{- $initImageCfg := dict "global" .Values.global.busybox.image "local" .Values.init.image -}}
+{{- include "database.datamodel.prepare" $ -}}
 {{- $chart := printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" -}}
 {{- $name := default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- $releaseName := .Release.Name -}}
@@ -100,6 +103,7 @@ spec:
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global.busybox) | quote }}
+          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" $ | nindent 10 }}
           volumeMounts:
@@ -120,7 +124,7 @@ spec:
             {{- toYaml $.Values.init.resources | nindent 12 }}
         - name: dependencies
           image: "{{ $image }}"
-          {{ template "gitlab.image.pullPolicy" $ }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - /scripts/wait-for-deps
           env:
@@ -158,12 +162,12 @@ spec:
             readOnly: true
           resources:
             {{- toYaml $.Values.init.resources | nindent 12 }}
-{{- include "gitlab.image.pullSecrets" (dict "global" $.Values.global.image "local" $.Values.image) | indent 6 }}
+      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
       containers:
         {{- include "gitlab.extraContainers" $ | nindent 8 }}
         - name: {{ $name }}
           image: "{{ $image }}"
-          {{ template "gitlab.image.pullPolicy" $ }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           env:
 {{- if $metricsEnabled }}
             - name: prometheus_multiproc_dir
@@ -294,7 +298,9 @@ spec:
                   path: rails-secrets/secrets.yml
           {{- include "gitlab.gitaly.clientSecrets" $ | nindent 10 }}
           {{- include "gitlab.redis.secrets" $ | nindent 10 }}
-          {{- include "gitlab.psql.secret" $ | nindent 10 }}
+          {{- range $.Values.local.psql }}
+          {{-   include "gitlab.psql.secret" . | nindent 10 }}
+          {{- end }}
           {{- if include "gitlab.geo.secondary" $ }}
           - secret:
               name: {{ template "gitlab.geo.psql.password.secret" $ }}

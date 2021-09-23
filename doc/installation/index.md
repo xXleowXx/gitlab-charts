@@ -10,7 +10,7 @@ Install GitLab on Kubernetes with the cloud native GitLab Helm chart.
 
 ## Requirements
 
-In order to deploy GitLab on Kubernetes, the following are required:
+To deploy GitLab on Kubernetes, the following are required:
 
 1. kubectl `1.16` or higher, compatible with your cluster
    ([+/- 1 minor release from your cluster](https://kubernetes.io/docs/tasks/tools/)).
@@ -44,7 +44,7 @@ choice:
 - [Amazon EKS](cloud/eks.md)
 - [Azure Kubernetes Service](cloud/aks.md)
 - [Google Kubernetes Engine](cloud/gke.md)
-- [OpenShift Origin](cloud/openshift.md)
+- [OpenShift](cloud/openshift.md)
 - [Oracle Container Engine for Kubernetes](cloud/oke.md)
 - VMware Tanzu - Documentation to be added.
 - On-Premises solutions - Documentation to be added.

@@ -548,6 +548,9 @@ global:
     externalHttp: []
     externalHttps: []
     artifactsServer: true
+    localStore:
+      enabled: false
+      # path: /srv/gitlab/shared/pages
     objectStore:
       enabled: true
       bucket: gitlab-pages
@@ -634,6 +637,8 @@ global:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/alpine-certificates
       tag: 20191127-r2
+      # pullPolicy: IfNotPresent
+      # pullSecrets: []
     customCAs: []
     # - secret: custom-CA
     # - secret: more-custom-CAs
@@ -653,6 +658,8 @@ global:
     image:
       repository: registry.gitlab.com/gitlab-org/cloud-native/mirror/images/busybox
       tag: latest
+      # pullPolicy: IfNotPresent
+      # pullSecrets: []
 
   ## https://docs.gitlab.com/charts/charts/globals#service-accounts
   serviceAccount:
@@ -681,7 +688,7 @@ upgradeCheck:
     # repository:
     # tag:
     # pullPolicy: IfNotPresent
-    # pullSecrets: []    
+    # pullSecrets: []
   securityContext:
     # in alpine/debian/busybox based images, this is `nobody:nogroup`
     runAsUser: 65534
@@ -720,8 +727,9 @@ nginx-ingress:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
     config:
-      hsts: "false"
+      hsts: "true"
       hsts-include-subdomains: "false"
+      hsts-max-age: "63072000"
       server-name-hash-bucket-size: "256"
       use-http2: "true"
       ssl-ciphers: "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4"

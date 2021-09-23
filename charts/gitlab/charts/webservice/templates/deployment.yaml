@@ -1,4 +1,7 @@
 {{- if $.Values.enabled }}
+{{- $imageCfg := dict "global" $.Values.global.image "local" $.Values.image -}}
+{{- $initImageCfg := dict "global" $.Values.global.busybox.image "local" $.Values.init.image -}}
+{{- include "database.datamodel.prepare" $ -}}
 {{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
 {{- range $.Values.deployments -}}
@@ -29,7 +32,8 @@ spec:
   {{- if $.Values.global.operator.enabled }}
   paused: true
   {{- end }}
-  replicas: {{ .hpa.minReplicas }}
+  # Don't provide replicas when HPA are present
+  # replicas: {{ .hpa.minReplicas }}
   selector:
     matchLabels:
       {{- include "gitlab.selectorLabels" $ | nindent 6 }}
@@ -100,6 +104,7 @@ spec:
           command: ['sh']
           args: [ '-c', 'sh -x /config-webservice/configure ; sh -x /config-workhorse/configure ; mkdir -p -m 3770 /tmp/gitlab']
           image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global.busybox) | quote }}
+          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
           volumeMounts:
@@ -128,7 +133,7 @@ spec:
             {{- toYaml $.Values.init.resources | nindent 12 }}
         - name: dependencies
           image: {{ include "webservice.image" $ }}
-          {{ template "gitlab.image.pullPolicy" $ }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - /scripts/wait-for-deps
           env:
@@ -162,12 +167,12 @@ spec:
               readOnly: true
           resources:
             {{- toYaml $.Values.init.resources | nindent 12 }}
-      {{- include "gitlab.image.pullSecrets" (dict "global" $.Values.global.image "local" $.Values.image) | indent 6 }}
+      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
       containers:
         {{- include "gitlab.extraContainers" $ | nindent 8 }}
         - name: {{ $.Chart.Name }}
           image: {{ include "webservice.image" $ }}
-          {{ template "gitlab.image.pullPolicy" $ }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ $.Values.service.internalPort }}
               name: webservice
@@ -209,12 +214,18 @@ spec:
             - name: SHUTDOWN_BLACKOUT_SECONDS
               value: "{{ .shutdown.blackoutSeconds }}"
             {{- include "gitlab.tracing.env" $ | nindent 12 }}
+            {{- if $.Values.global.tracing.urlTemplate }}
             - name: GITLAB_TRACING_URL
               value: {{ $.Values.global.tracing.urlTemplate | quote }}
+            {{- end }}
             - name: WORKHORSE_ARCHIVE_CACHE_DISABLED
               value: "true"
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
           volumeMounts:
+            {{- if .sshHostKeys.mount }}
+            - name: {{ .sshHostKeys.mountName }}
+              mountPath: /etc/ssh
+            {{- end }}
             {{- if $.Values.metrics.enabled }}
             - name: webservice-metrics
               mountPath: '/metrics'
@@ -272,7 +283,7 @@ spec:
             {{- toYaml .resources | nindent 12 }}
         - name: gitlab-workhorse
           image: "{{ coalesce $.Values.workhorse.image (include "workhorse.repository" $) }}:{{ coalesce $.Values.workhorse.tag (include "gitlab.versionTag" $ ) }}"
-          {{ template "gitlab.image.pullPolicy" $ }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ $.Values.service.workhorseInternalPort }}
               name: workhorse
@@ -337,6 +348,9 @@ spec:
       terminationGracePeriodSeconds: {{ .deployment.terminationGracePeriodSeconds | int }}
       {{- end }}
       volumes:
+      {{- if .sshHostKeys.mount }}
+      {{- include "webservice.sshHostKeys.volume" (dict "local" . "Release" $.Release "Values" $.Values) | nindent 6 }}
+      {{- end }}
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       {{- include "gitlab.psql.ssl.volume" $ | nindent 6 }}
       {{- include "gitlab.geo.psql.ssl.volume" $ | nindent 6 }}
@@ -369,7 +383,9 @@ spec:
                   path: shell/.gitlab_shell_secret
           {{- include "gitlab.gitaly.clientSecrets" $ | nindent 10 }}
           {{- include "gitlab.redis.secrets" $ | nindent 10 }}
-          {{- include "gitlab.psql.secret" $ | nindent 10 }}
+          {{- range $.Values.local.psql }}
+          {{-   include "gitlab.psql.secret" . | nindent 10 }}
+          {{- end }}
           {{- if include "gitlab.geo.secondary" $ }}
           - secret:
               name: {{ template "gitlab.geo.psql.password.secret" $ }}

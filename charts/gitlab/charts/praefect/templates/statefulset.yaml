@@ -1,4 +1,5 @@
----
+{{- $imageCfg := dict "global" .Values.global.image "local" .Values.image -}}
+{{- $initImageCfg := dict "global" .Values.global.busybox.image "local" .Values.init.image -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -10,7 +11,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      {{- include "gitlab.selectorLabels" . | nindent 6 }} 
+      {{- include "gitlab.selectorLabels" . | nindent 6 }}
   serviceName: {{ template "gitlab.praefect.serviceName" $ }}
   replicas: {{ $.Values.replicas }}
   podManagementPolicy: Parallel
@@ -36,7 +37,7 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  {{- include "gitlab.selectorLabels" . | nindent 18 }} 
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }}
       {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
       affinity:
         podAntiAffinity:
@@ -46,7 +47,7 @@ spec:
               topologyKey: kubernetes.io/hostname
               labelSelector:
                 matchLabels:
-                  {{- include "gitlab.selectorLabels" . | nindent 18 }} 
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }}
       {{- end }}
       {{- include "gitlab.nodeSelector" . | nindent 6 }}
       {{- if .Values.tolerations }}
@@ -62,6 +63,7 @@ spec:
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" .Values.global.busybox) | quote }}
+          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" $ | nindent 10 }}
           volumeMounts:
@@ -80,7 +82,7 @@ spec:
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
-{{- include "gitlab.image.pullSecrets" (dict "global" .Values.global.image "local" .Values.image) | indent 6 }}
+      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
       {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
       {{- end }}
@@ -88,7 +90,7 @@ spec:
         {{- include "gitlab.extraContainers" . | nindent 6 }}
       - name: {{ $.Chart.Name }}
         image: "{{ $.Values.image.repository }}:{{ coalesce $.Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" $.Chart.AppVersion "prepend" "true")) }}"
-        {{ template "gitlab.image.pullPolicy" . }}
+        {{- include "gitlab.image.pullPolicy" $imageCfg | indent 8 }}
         ports:
           - containerPort: {{ include "gitlab.praefect.internalPort" $ }}
         {{- if $.Values.global.praefect.tls.enabled }}

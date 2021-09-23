@@ -94,22 +94,7 @@ the amount of context we're comfortable placing here. Please see our (nearly)
 
 ## Upgrading
 
-Once your GitLab Chart is installed, configuration changes and chart updates
-should be done using `helm upgrade`:
-
-```shell
-helm repo add gitlab https://charts.gitlab.io/
-helm repo update
-helm get values gitlab > gitlab.yaml
-helm upgrade gitlab gitlab/gitlab -f gitlab.yaml
-```
-
-For more detailed information see [Upgrading](installation/upgrade.md).
-
-NOTE:
-**Zero-downtime upgrades** are not available with the GitLab charts.
-Ongoing work to support this feature can be tracked via
-[the GitLab Operator issue](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/59).
+Please see [Upgrading](installation/upgrade.md).
 
 ## Uninstall
 
@@ -185,7 +170,7 @@ under [development](development/index.md).
 ### GitLab version mappings
 
 The GitLab chart doesn't have the same version number as GitLab itself.
-Breaking changes are anticipated that may need to be introduced to the chart
+Breaking changes are anticipated that may have to be introduced to the chart
 that would warrant a major version bump, and the requirement for these changes
 could completely block other development on these charts until completed.
 

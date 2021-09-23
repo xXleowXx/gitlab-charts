@@ -1,6 +1,6 @@
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
-  tag: 'v3.7.0-gitlab'
+  tag: 'v3.11.0-gitlab'
   # pullPolicy: IfNotPresent
   # pullSecrets: []
 
@@ -121,10 +121,10 @@ global:
 
 ## Control the InitContainer behaviors.
 init:
-  image:
+  image: {}
     # repository:
     # tag:
-    pullPolicy: IfNotPresent
+    # pullPolicy: IfNotPresent
   resources:
     requests:
       cpu: 50m
