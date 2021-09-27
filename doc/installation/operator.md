@@ -29,9 +29,6 @@ the [GitLab Runner Operator repository](https://gitlab.com/gitlab-org/gl-openshi
 
 Below are the known limitations of the GitLab Operator:
 
-- Multiple instances of Webservice not supported on OpenShift. The Ingresses
-  report "All hosts are taken by other resources" when using NGINX Ingress Operator.
-  See issue [#160](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/160).
 - Certain components not supported:
   - Praefect: see issue [#136](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/136)
   - KAS: see issue [#139](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/139)
