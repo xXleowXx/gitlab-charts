@@ -78,6 +78,24 @@ tag_auto_deploy:
       - $DEPS_PIPELINE
       - $TRIGGER_JOB
 
+update-trigger-branch:
+  stage: prepare
+  allow_failure: true # Failures are expected if there are parrallel runs, and we hit git locks
+  before_script: []
+  variables:
+    GIT_STRATEGY: none
+    TRIGGER_PROJECT: "gitlab.com/gitlab-org/charts/gitlab.git"
+    TRIGGER_BRANCH: "master-trigger-branch"
+  script:
+    - git clone "https://${GITLAB_TRIGGER_UPDATE_BOT_USERNAME}:${GITLAB_TRIGGER_UPDATE_BOT_PASSWORD}@${TRIGGER_PROJECT}" update-project
+    - cd update-project
+    - git checkout -B ${TRIGGER_BRANCH}
+    - git merge $CI_DEFAULT_BRANCH
+    - git push origin ${TRIGGER_BRANCH} -o ci.skip
+  rules:
+    - if: '$CI_PROJECT_PATH == "gitlab-org/charts/gitlab" && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH'
+    - if: '$TRIGGER_UPDATE' # Allow us to manually trigger this job in a pipleine if we wish using this CI variable
+
 dependency_update:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
   stage: prepare
