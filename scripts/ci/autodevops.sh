@@ -72,9 +72,9 @@ function deploy() {
 
   # Use the gitlab version from the environment or use stable images when on the stable branch
   gitlab_app_version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
-  if [[ -n "$GITLAB_VERSION" ]]; then
+  if [[ -n "${GITLAB_VERSION}" ]]; then
     image_branch=$GITLAB_VERSION
-  elif [[ $CI_COMMIT_BRANCH =~ -stable$ ]] && [[ $gitlab_app_version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  elif [[ "${CI_COMMIT_BRANCH}" =~ -stable$ ]] && [[ "${gitlab_app_version}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     image_branch=$(echo "${gitlab_app_version%.*}-stable" | tr '.' '-')
   fi
 
