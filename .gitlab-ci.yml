@@ -38,6 +38,7 @@ variables:
   HELM_MAX_HISTORY: 20
   TEST_BACKUP_PREFIX: "14.0.5"
   NAMESPACE: $KUBE_NAMESPACE
+  ENVIRONMENT_REF_NAME: $CI_COMMIT_REF_NAME
 
 stages:
   - prepare
@@ -197,11 +198,11 @@ review_gke:
     DNS_PROVIDER: "google"
   extends: .review_template
   environment:
-    name: gke_review/$CI_COMMIT_REF_NAME
+    name: gke_review/$ENVIRONMENT_REF_NAME
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
     auto_stop_in: 4 days
-  resource_group: "gke-review-app-${CI_COMMIT_REF_NAME}"
+  resource_group: "gke-review-app-${ENVIRONMENT_REF_NAME}"
 
 review_gke_dev:
   variables:
@@ -209,11 +210,11 @@ review_gke_dev:
     HELM_EXTRA_ARGS: "-f scripts/ci/values-dev-images.yaml"
   extends: .review_template
   environment:
-    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    name: dev_gke_review/$ENVIRONMENT_REF_NAME
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke_dev
     auto_stop_in: 4 days
-  resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
+  resource_group: "gke-review-app-dev-${ENVIRONMENT_REF_NAME}"
   only:
     refs:
       - /.*-stable/@gitlab/charts/gitlab
@@ -225,11 +226,11 @@ review_eks:
     DNS_PROVIDER: "aws"
   extends: .review_template
   environment:
-    name: eks_review/$CI_COMMIT_REF_NAME
+    name: eks_review/$ENVIRONMENT_REF_NAME
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
     auto_stop_in: 4 days
-  resource_group: "eks-review-app-${CI_COMMIT_REF_NAME}"
+  resource_group: "eks-review-app-${ENVIRONMENT_REF_NAME}"
 
 .stop_review_template:
   stage: review
@@ -260,13 +261,13 @@ review_eks:
 stop_review_gke:
   extends: .stop_review_template
   environment:
-    name: gke_review/$CI_COMMIT_REF_NAME
+    name: gke_review/$ENVIRONMENT_REF_NAME
     action: stop
 
 stop_review_gke_dev:
   extends: .stop_review_template
   environment:
-    name: dev_gke_review/$CI_COMMIT_REF_NAME
+    name: dev_gke_review/$ENVIRONMENT_REF_NAME
     action: stop
   only:
     refs:
@@ -277,7 +278,7 @@ stop_review_gke_dev:
 stop_review_eks:
   extends: .stop_review_template
   environment:
-    name: eks_review/$CI_COMMIT_REF_NAME
+    name: eks_review/$ENVIRONMENT_REF_NAME
     action: stop
 
 # Keys that start with a dot (.) will not be processed by GitLab CI.
@@ -367,7 +368,7 @@ stable_eks:
 review_helm_test:
   stage: qa
   environment:
-    name: gke_review/$CI_COMMIT_REF_NAME
+    name: gke_review/$ENVIRONMENT_REF_NAME
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
   script:
@@ -410,7 +411,7 @@ debug_review:
     paths:
     - variables
   environment:
-    name: gke_review/$CI_COMMIT_REF_NAME
+    name: gke_review/$ENVIRONMENT_REF_NAME
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
   variables:
@@ -543,8 +544,8 @@ review-docs-deploy:
   extends:
   - .review-docs
   environment:
-    name: review-docs/$CI_COMMIT_REF_SLUG
-    url: http://${DOCS_BRANCH}-${DOCS_GITLAB_REPO_SUFFIX}-${CI_COMMIT_REF_SLUG}.${DOCS_REVIEW_APPS_DOMAIN}/${DOCS_GITLAB_REPO_SUFFIX}
+    name: review-docs/$ENVIRONMENT_REF_NAME
+    url: http://${DOCS_BRANCH}-${DOCS_GITLAB_REPO_SUFFIX}-${ENVIRONMENT_REF_NAME}.${DOCS_REVIEW_APPS_DOMAIN}/${DOCS_GITLAB_REPO_SUFFIX}
     on_stop: review-docs-cleanup
   script:
   - ./trigger-build docs deploy
@@ -554,7 +555,7 @@ review-docs-cleanup:
   extends:
   - .review-docs
   environment:
-    name: review-docs/$CI_COMMIT_REF_SLUG
+    name: review-docs/$ENVIRONMENT_REF_NAME
     action: stop
   script:
   - ./trigger-build docs cleanup
@@ -595,10 +596,10 @@ review_specs_gke:
     VARIABLES_FILE: "variables/review_gke"
     RSPEC_TAGS: type:feature
   environment:
-    name: gke_review/$CI_COMMIT_REF_NAME
+    name: gke_review/$ENVIRONMENT_REF_NAME
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
-  resource_group: "gke-review-app-${CI_COMMIT_REF_NAME}"
+  resource_group: "gke-review-app-${ENVIRONMENT_REF_NAME}"
   only:
     refs:
       - branches
@@ -617,10 +618,10 @@ review_specs_gke:
 #     VARIABLES_FILE: "variables/review_gke_dev"
 #     RSPEC_TAGS: type:feature
 #   environment:
-#     name: dev_gke_review/$CI_COMMIT_REF_NAME
+#     name: dev_gke_review/$ENVIRONMENT_REF_NAME
 #     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
 #     on_stop: stop_review_gke_dev
-#   resource_group: "gke-review-app-dev-${CI_COMMIT_REF_NAME}"
+#   resource_group: "gke-review-app-dev-${ENVIRONMENT_REF_NAME}"
 #   only:
 #     refs:
 #       - /.*-stable/@gitlab/charts/gitlab
@@ -633,10 +634,10 @@ review_specs_eks:
     VARIABLES_FILE: "variables/review_eks"
     RSPEC_TAGS: type:feature
   environment:
-    name: eks_review/$CI_COMMIT_REF_NAME
+    name: eks_review/$ENVIRONMENT_REF_NAME
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
-  resource_group: "eks-review-app-${CI_COMMIT_REF_NAME}"
+  resource_group: "eks-review-app-${CI_COMMENVIRONMENT_REF_NAMEIT_REF_NAME}"
   only:
     refs:
       - branches
@@ -815,7 +816,7 @@ qa_gke:
     VARIABLES_FILE: "variables/review_gke"
     TEST_SUITE: '--tag smoke --tag reliable'
   environment:
-    name: gke_review/$CI_COMMIT_REF_NAME
+    name: gke_review/$ENVIRONMENT_REF_NAME
     on_stop: stop_review_gke
 
 qa_eks:
@@ -824,7 +825,7 @@ qa_eks:
     VARIABLES_FILE: "variables/review_eks"
     TEST_SUITE: '--tag smoke --tag reliable'
   environment:
-    name: eks_review/$CI_COMMIT_REF_NAME
+    name: eks_review/$ENVIRONMENT_REF_NAME
     on_stop: stop_review_eks
 
 qa_gke_production:
@@ -833,7 +834,7 @@ qa_gke_production:
     VARIABLES_FILE: "variables/stable_gke"
     TEST_SUITE: '--tag smoke --tag reliable'
   environment:
-    name: gke_production/$CI_COMMIT_REF_NAME
+    name: gke_production/$ENVIRONMENT_REF_NAME
 
 qa_eks_production:
   extends: .qa_production
@@ -841,7 +842,7 @@ qa_eks_production:
     VARIABLES_FILE: "variables/stable_eks"
     TEST_SUITE: '--tag smoke --tag reliable'
   environment:
-    name: eks_production/$CI_COMMIT_REF_NAME
+    name: eks_production/$ENVIRONMENT_REF_NAME
 
 # QA jobs for Full E2E suites
 
@@ -852,7 +853,7 @@ qa_gke_manual_full_suite:
     VARIABLES_FILE: "variables/review_gke"
     TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient'
   environment:
-    name: gke_review/$CI_COMMIT_REF_NAME
+    name: gke_review/$ENVIRONMENT_REF_NAME
     on_stop: stop_review_gke
   when: manual
 
@@ -863,7 +864,7 @@ qa_eks_manual_full_suite:
     VARIABLES_FILE: "variables/review_eks"
     TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient'
   environment:
-    name: eks_review/$CI_COMMIT_REF_NAME
+    name: eks_review/$ENVIRONMENT_REF_NAME
     on_stop: stop_review_eks
   when: manual
 
