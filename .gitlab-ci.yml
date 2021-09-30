@@ -85,7 +85,7 @@ update-trigger-branch:
   variables:
     GIT_STRATEGY: none
     TRIGGER_PROJECT: "gitlab.com/gitlab-org/charts/gitlab.git"
-    TRIGGER_BRANCH: "dj-test-trigger"
+    TRIGGER_BRANCH: "dj-test-trigger-2"
   script:
     - git clone "https://${GITLAB_TRIGGER_UPDATE_BOT_USERNAME}:${GITLAB_TRIGGER_UPDATE_BOT_PASSWORD}@${TRIGGER_PROJECT}" update-project
     - cd update-project
