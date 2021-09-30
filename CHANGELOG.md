@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.3.1 (2021-09-30)
+
+No changes.
+
 ## 5.3.0 (2021-09-21)
 
 ### Added (1 change)
@@ -23,6 +27,10 @@ entry.
 - [Change default configuration for HSTS](gitlab-org/charts/gitlab@14936c95c921770b67c28642dc950fa186252bdd) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2118))
 - [Update gitlab-org/charts/gitlab-runner from 0.31.0 to 0.32.0](gitlab-org/charts/gitlab@0665982645d842994a54bddb1269fbb694a743cb) ([merge request](gitlab-org/charts/gitlab!2149))
 - [Adds pages local_store configuration](gitlab-org/charts/gitlab@426c34858876fe0d52cd4fe880f44771af17e19b) ([merge request](gitlab-org/charts/gitlab!2141))
+
+## 5.2.5 (2021-09-30)
+
+No changes.
 
 ## 5.2.4 (2021-09-17)
 
@@ -75,6 +83,10 @@ No changes.
 - [Update gitlab-org/container-registry from 3.5.2-gitlab to 3.6.0-gitlab](gitlab-org/charts/gitlab@ec98f3663375be3ddf7fec7ab6078fbb65aabeb9) ([merge request](gitlab-org/charts/gitlab!2096))
 - [Update gitlab-exporter appVersion 11.0.1](gitlab-org/charts/gitlab@d6cc85961e3d8369460840e70415b593bd82e432) ([merge request](gitlab-org/charts/gitlab!2092))
 - [Update gitlab-org/gitlab-exporter from 10.5.0 to 11.0.0](gitlab-org/charts/gitlab@2c2a8c2b877b45d47b8bb61a09ed6cb5f8b79392) ([merge request](gitlab-org/charts/gitlab!2092))
+
+## 5.1.7 (2021-09-30)
+
+No changes.
 
 ## 5.1.6 (2021-09-27)
 
