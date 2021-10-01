@@ -194,3 +194,18 @@ networkpolicy:
           - port: 53
             protocol: UDP
 ```
+### Secure DNS and GitLab Pages
+
+In order to have TLS access to the GitLab Pages feature you will need create a dedicated wildcard certificate for your pages domain in the following format: `*.pages.<yourdomain>` 
+
+Then add it as secret to your kubernetes nodes using `create secret tls tls-star-pages-<mysecret> --cert=<path/to/fullchain.pem> --key=<path/to/privkey.pem>` and into your values file similar as the following example:
+
+```yaml
+gitlab:
+  gitlab-pages:
+    ingress:
+      tls:
+        secretName: tls-star-pages-<mysecret>
+```
+
+On your DNS you will need to add a CNAME record on your DNS with name `*.pages` pointing to your LoadBalancer so that the certificate is used on your installation.
