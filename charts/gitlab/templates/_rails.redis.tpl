@@ -52,6 +52,13 @@ Input: dict "context" $ "name" string
 {{- end -}}
 {{- end -}}
 
+{{- define "gitlab.rails.redis.rateLimiting" -}}
+{{- if .Values.global.redis.rateLimiting -}}
+{{- $_ := set $ "redisConfigName" "rateLimiting" }}
+{{- include "gitlab.rails.redis.yaml" (dict "context" $ "name" "redis.rate_limiting") -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 cable.yml configuration
 If no `global.redis.actioncable`, use `global.redis`

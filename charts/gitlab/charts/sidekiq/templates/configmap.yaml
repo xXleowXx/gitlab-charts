@@ -25,6 +25,7 @@ data:
   {{- include "gitlab.rails.redis.queues" . | nindent 2 }}
   {{- include "gitlab.rails.redis.cable" . | nindent 2 }}
   {{- include "gitlab.rails.redis.traceChunks" . | nindent 2 }}
+  {{- include "gitlab.rails.redis.rateLimiting" . | nindent 2 }}
   gitlab.yml.erb: |
     production: &base
       gitlab:
