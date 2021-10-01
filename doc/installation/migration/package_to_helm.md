@@ -33,6 +33,11 @@ JUnit test report artifact (`junit.xml.gz`) migration
 [was not supported until GitLab 12.8](https://gitlab.com/gitlab-org/gitlab/-/issues/27698#note_317190991)
 by the `gitlab:artifacts:migrate` script below.
 
+NOTE:
+If you're running GitLab from within a Docker container,
+replace `sudo` in the following commands
+with `docker exec -t <container name>`.
+
 1. Migrate any existing files (uploads, artifacts, LFS objects) from the package-based
    installation to object storage:
 
