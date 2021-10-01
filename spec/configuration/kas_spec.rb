@@ -388,7 +388,7 @@ describe 'kas configuration' do
         it 'has the correct defaults' do
           expect(gitlab_yml(chart)).to include(YAML.safe_load(%(
             enabled: true
-            internal_url: grpc://test-kas.svc:8153
+            internal_url: grpc://test-kas.default.svc:8153
             external_url: wss://kas.example.com
           )))
         end
