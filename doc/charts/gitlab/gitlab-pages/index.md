@@ -194,6 +194,7 @@ networkpolicy:
           - port: 53
             protocol: UDP
 ```
+
 ### Secure DNS and GitLab Pages
 
 In order to have TLS access to the GitLab Pages feature you will need create a dedicated wildcard certificate for your pages domain in the following format: `*.pages.<yourdomain>` 
