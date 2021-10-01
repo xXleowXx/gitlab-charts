@@ -438,15 +438,16 @@ continue to apply with the Sentinel support unless re-specified in the table abo
 
 The GitLab chart includes support for running with separate Redis instances
 for different persistence classes, currently: `cache`, `queues`, `sharedState`,
-`actioncable` and `traceChunks`.
+`actioncable`, `traceChunks`, and `rateLimiting`.
 
-| Instance     | Purpose                                             |
-|:-------------|:----------------------------------------------------|
-| `cache`        | Store cached data                                   |
-| `queues`       | Store Sidekiq background jobs                       |
-| `sharedState`  | Store session-related and other persistent data     |
-| `actioncable`  | Pub/Sub queue backend for ActionCable               |
-| `traceChunks`  | Store job traces temporarily                        |
+| Instance       | Purpose                                                         |
+|:---------------|:----------------------------------------------------------------|
+| `cache`        | Store cached data                                               |
+| `queues`       | Store Sidekiq background jobs                                   |
+| `sharedState`  | Store session-related and other persistent data                 |
+| `actioncable`  | Pub/Sub queue backend for ActionCable                           |
+| `traceChunks`  | Store job traces temporarily                                    |
+| `rateLimiting` | Store rate-limiting usage for RackAttack and Application Limits |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -499,6 +500,13 @@ global:
         enabled: true
         secret: traceChunks-secret
         key: traceChunks-password
+    rateLimiting:
+      host: rateLimiting.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: rateLimiting-secret
+        key: rateLimiting-password
 ```
 
 The following table describes the attributes for each dictionary of the
