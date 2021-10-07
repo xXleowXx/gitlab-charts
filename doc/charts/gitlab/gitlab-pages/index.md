@@ -197,24 +197,26 @@ networkpolicy:
 
 ### TLS access to GitLab Pages
 
-To have TLS access to the GitLab Pages feature you must create a dedicated wildcard
-certificate for your pages domain in this format: `*.pages.<yourdomain>`.
+To have TLS access to the GitLab Pages feature you must:
 
-Next, create the Secret in Kubernetes:
+1. Create a dedicated wildcard certificate for your GitLab Pages domain in this format:
+   `*.pages.<yourdomain>`.
 
-  ```shell
-  kubectl create secret tls tls-star-pages-<mysecret> --cert=<path/to/fullchain.pem> --key=<path/to/privkey.pem>
-  ```
+1. Create the secret in Kubernetes:
 
-Then, configure GitLab Pages to use this Secret:
+   ```shell
+   kubectl create secret tls tls-star-pages-<mysecret> --cert=<path/to/fullchain.pem> --key=<path/to/privkey.pem>
+   ```
 
-  ```yaml
-  gitlab:
-    gitlab-pages:
-      ingress:
-        tls:
-          secretName: tls-star-pages-<mysecret>
-  ```
+1. Configure GitLab Pages to use this secret:
 
-Finally, create a DNS entry in your
-DNS provider with name `*.pages.<yourdomaindomain>` pointing to your LoadBalancer.
+   ```yaml
+   gitlab:
+     gitlab-pages:
+       ingress:
+         tls:
+           secretName: tls-star-pages-<mysecret>
+   ```
+
+1. Create a DNS entry in your DNS provider with the name `*.pages.<yourdomaindomain>`
+   pointing to your LoadBalancer.
