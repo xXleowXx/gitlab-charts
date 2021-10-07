@@ -139,7 +139,7 @@ data:
           port: {{ .Values.monitoring.exporter.port }}
         sidekiq_exporter:
       shutdown:
-        blackout_seconds: {{ env.Getenv "SHUTDOWN_BLACKOUT_SECONDS" }}
+        blackout_seconds: {% env.Getenv "SHUTDOWN_BLACKOUT_SECONDS" %}
       {{- include "gitlab.appConfig.rackAttack" . | nindent 6 }}
       ## Registry Integration
       {{- include "gitlab.appConfig.registry.configuration" $ | nindent 6 }}
@@ -187,7 +187,7 @@ data:
     Sentinel = [ {{ template "gitlab.redis.workhorse.sentinel-list" $ }} ]
     {{- end }}
     {{- if $.Values.global.redis.password.enabled }}
-    Password = "{{ file.Read "/etc/gitlab/redis/redis-password" }}"
+    Password = "{% file.Read "/etc/gitlab/redis/redis-password" %}"
     {{- end }}
     {{- end }}
     {{- include "workhorse.object_storage.config" $ | nindent 4 }}
