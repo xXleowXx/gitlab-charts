@@ -150,6 +150,7 @@ spec:
           volumeMounts:
           {{- tpl (default "" .extraVolumeMounts) $ | nindent 10 }}
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
+          {{- include "gitlab.certificates.volumeMount" $ | nindent 10 }}
           - name: sidekiq-config
             mountPath: '/var/opt/gitlab/templates'
             readOnly: true
