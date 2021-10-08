@@ -96,7 +96,6 @@ data:
     {{- if eq $.Values.global.pages.accessControl true }}
     auth-redirect-uri={{ template "oauth.gitlab-pages.authRedirectUri" . }}
     auth-client-id={% file.Read "/etc/gitlab-secrets/pages/gitlab_appid" %}
-    auth-client-secret={{ file.Read "/etc/gitlab-secrets/pages/gitlab_appsecret" }}
     auth-client-secret={% file.Read "/etc/gitlab-secrets/pages/gitlab_appsecret" %}
     auth-secret={% file.Read "/etc/gitlab-secrets/pages/auth_secret" %} 
     {{- end }}
