@@ -121,7 +121,8 @@ deployment manifests available in the
        values:
          global:
            hosts:
-             domain: example.com # = Use the base domain for GitLab. "gitlab." and "registry." will be exposed as subdomains.
+             domain: example.com # Provide a real base domain for GitLab. "gitlab." and "registry." will be exposed as subdomains.
+             externalIP: "1.1.1.1" # If using a static DNS record for the subdomain, enter the IP address it resolves to here.
            ingress:
              configureCertmanager: true
          certmanager-issuer:
