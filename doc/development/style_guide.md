@@ -366,3 +366,27 @@ And then pulling the above into a variable and configuration:
 config:
 {{ $barVar }}
 ```
+
+## Templating Configuration Files
+
+These charts make use of the Cloud Native GitLab ("CNG") containers.
+Those containers support the use of either [ERB](https://docs.ruby-lang.org/en/2.7.0/ERB.html)
+or [gomplate](https://docs.gomplate.ca/).
+
+**Guidelines:**
+
+1. Use template files within ConfigMaps (example: `gitlab.yml.erb`, `config.toml.tpl`)
+    - Entries _must_ use the expected extensions in order to be handled as templates.
+1. Use templates to populate Secret contents from mounted file locations. (example: [GitLab Pages `config`](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/charts/gitlab/charts/gitlab-pages/templates/configmap.yml))
+1. ERB (`.erb`) can be used for any container using Ruby during run-time execution
+1. gomplate (`.tpl`) can be used for any container.
+
+**ERB usage:**
+
+We make use of standard ERB, and you can expect [`json`](https://docs.ruby-lang.org/en/2.7.0/JSON.html) and [`yaml`](https://docs.ruby-lang.org/en/2.7.0/YAML.html) modules to have been pre-loaded.
+
+**gomplate usage:**
+
+We make use of gomplate in order to remove the size and surface of Ruby within
+containers. We configure gomplate [syntax](https://docs.gomplate.ca/syntax/) with alternate delimiters of `{% %}`, so not
+to collide with Helm's use of `{{ }}`.
