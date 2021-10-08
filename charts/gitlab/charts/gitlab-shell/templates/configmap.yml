@@ -58,9 +58,11 @@ data:
       concurrent_sessions_limit: {{ .Values.config.maxStartups.full }}
       # SSH host key files.
       host_key_files:
-      {%- range (file.ReadDir "/etc/ssh/") %}
-      {% if ( . | regexp.Match `^ssh_host_.+_key`) %} {%- strings.Indent 2 "- " %} {%.%} {%- end -%}
-      {%- end -%}
+      {%- range file.Walk "/etc/ssh" %}
+        {%- if filepath.Match "/etc/ssh/ssh_host_*_key" . %}
+        - {%.%}
+        {%- end %}
+      {%- end %}
     {{- end }}
 # Leave this here - This line denotes end of block to the parser.
 {{- end }}
