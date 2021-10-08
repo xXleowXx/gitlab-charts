@@ -154,7 +154,7 @@ deployment manifests available in the
    you can access GitLab in your browser at the domain you set up in the custom
    resource.
 
-   To log in, an initial administrator account has been created. The username is `root` and the password is stored in the `<name>-gitlab-initial-root-password` secret. By default, this is in the `gitlab-system` namespace, and must be base64 decoded to use.
+   To log in use the base domain you specified, with the `gitlab` subdomain, for example: `https://gitlab.example.com`. An initial administrator account has also been created. The username is `root` and the password is stored in the `<name>-gitlab-initial-root-password` secret. By default, this is in the `gitlab-system` namespace, and must be base64 decoded to use.
 
    ```shell
   kubectl -n gitlab-system get secret <name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
