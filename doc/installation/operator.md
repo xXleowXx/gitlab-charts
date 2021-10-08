@@ -121,7 +121,7 @@ deployment manifests available in the
        values:
          global:
            hosts:
-             domain: example.com # use a real domain here
+             domain: example.com # = Use the base domain for GitLab. "gitlab." and "registry." will be exposed as subdomains.
            ingress:
              configureCertmanager: true
          certmanager-issuer:
@@ -179,7 +179,7 @@ To remove the GitLab Operator and its associated resources:
 
    ```shell
    GL_OPERATOR_VERSION=0.1.0
-   PLATFORM=kubernetes # or "opensfhit"
+   PLATFORM=kubernetes # or "openshift"
    kubectl delete -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${PLATFORM}-${GL_OPERATOR_VERSION}.yaml
    ```
 
