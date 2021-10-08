@@ -121,7 +121,7 @@ deployment manifests available in the
        values:
          global:
            hosts:
-             domain: example.com # use a real domain here
+             domain: example.com # = Use the base domain for GitLab. "gitlab." and "registry." will be exposed as subdomains.
            ingress:
              configureCertmanager: true
          certmanager-issuer:
