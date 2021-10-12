@@ -508,6 +508,36 @@ describe 'Webservice Deployments configuration' do
         end
       end
     end
+
+    context 'when ingress provider is not specified' do
+      it 'properly sets the global ingress provider' do
+        t = HelmTemplate.new(default_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'nginx')
+      end
+    end
+
+    context 'when ingress provider is specified' do
+      let(:deployments_values) do
+        YAML.safe_load(%(
+          gitlab:
+            webservice:
+              deployments:
+                default:
+                  ingress:
+                    path: /
+                    provider: webservice-provider
+        )).deep_merge(default_values)
+      end
+
+      it 'properly sets the webservice-local ingress provider' do
+        t = HelmTemplate.new(deployments_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'webservice-provider')
+      end
+    end
   end
 
   context 'shutdown.blackoutSeconds' do
