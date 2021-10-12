@@ -156,11 +156,9 @@ deployment manifests available in the
 
    To log in use the base domain you specified, with the `gitlab` subdomain, for example: `https://gitlab.example.com`. An initial administrator account has also been created. The username is `root` and the password is stored in the `<name>-gitlab-initial-root-password` secret. By default, this is in the `gitlab-system` namespace, and must be base64 decoded to use.
 
-   ```shell
-
+  ```shell
   kubectl -n gitlab-system get secret <name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
-  
-   ```
+  ```
 
 ## Uninstall the GitLab Operator
 
