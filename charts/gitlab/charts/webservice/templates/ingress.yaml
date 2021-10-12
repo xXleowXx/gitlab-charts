@@ -26,10 +26,8 @@ metadata:
     {{- include "webservice.commonLabels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" $ }}"
-    {{- if default .ingress.provider $.Values.global.ingress.provider }}
-    kubernetes.io/ingress.provider: {{ default .ingress.provider $.Values.global.ingress.provider }}
-    {{- end }}
-    {{- if eq "nginx" (default .ingress.provider $.Values.global.ingress.provider) }}
+    kubernetes.io/ingress.provider: {{ default $.Values.global.ingress.provider .ingress.provider }}
+    {{- if eq "nginx" (default $.Values.global.ingress.provider .ingress.provider) }}
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .ingress.proxyBodySize | quote }}
     nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .ingress.proxyReadTimeout | quote }}
     nginx.ingress.kubernetes.io/proxy-connect-timeout: {{ .ingress.proxyConnectTimeout | quote }}
