@@ -527,7 +527,11 @@ describe 'Webservice Deployments configuration' do
                 default:
                   ingress:
                     path: /
-                    provider: webservice-provider
+                    provider: default-provider
+                second:
+                  ingress:
+                    path: /second
+                    provider: second-provider
         )).deep_merge(default_values)
       end
 
@@ -535,7 +539,8 @@ describe 'Webservice Deployments configuration' do
         t = HelmTemplate.new(deployments_values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
-        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'webservice-provider')
+        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'default-provider')
+        expect(t.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
       end
     end
   end
