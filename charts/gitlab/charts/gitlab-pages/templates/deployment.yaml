@@ -98,7 +98,7 @@ spec:
               name: metrics
           {{- end }}
           # readinessProbe should always hit port used by `listen-http`, as k8s won't use TLS or ProxyV2
-          {{- $externalHttp := $.Values.global.pages.externalHttp uniq }}
+          {{- $externalHttp := $.Values.global.pages.externalHttp }}
           readinessProbe:
             httpGet:
               path: {{ $.Values.statusUri | quote }}
