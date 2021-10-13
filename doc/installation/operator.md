@@ -175,11 +175,11 @@ To remove the GitLab Operator and its associated resources:
    This will remove the GitLab instance, and all associated objects except for
    PVCs as noted above.
 
-1. Uninstall the GitLab Operator
+1. Uninstall the GitLab Operator.
 
    ```shell
    GL_OPERATOR_VERSION=0.1.0
-   PLATFORM=kubernetes # or "opensfhit"
+   PLATFORM=kubernetes # or "openshift"
    kubectl delete -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${PLATFORM}-${GL_OPERATOR_VERSION}.yaml
    ```
 
