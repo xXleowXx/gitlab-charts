@@ -807,6 +807,7 @@ global:
       matomoUrl:
       matomoSiteId:
       matomoDisableCookies:
+      oneTrustId:
     object_store:
       enabled: false
       proxy_download: true
@@ -984,6 +985,7 @@ under the `extra` key below `appConfig`:
 | `extra.matomoSiteId`       | String | (empty) | Matomo Site ID. |
 | `extra.matomoUrl`          | String | (empty) | Matomo URL. |
 | `extra.matomoDisableCookies`| Boolean | (empty) | Disable Matomo cookies (corresponds to `disableCookies` in the Matomo script) |
+| `extra.oneTrustId`         | String | (empty) | OneTrust ID. |
 
 ### Consolidated object storage
 
