@@ -270,6 +270,18 @@ version of the chart and then follow the steps in the [upgrade guide](../install
 upgrade the bundled PostgreSQL version. Once PostgreSQL is properly upgraded, try the GitLab Helm
 chart upgrade again.
 
+## Bundled NGINX Ingress pod fails to start: `Failed to watch *v1beta1.Ingress`
+
+The following error message may appear in the bundled NGINX Ingress controller pod if running Kubernetes version 1.22 or later:
+
+```plaintext
+Failed to watch *v1beta1.Ingress: failed to list *v1beta1.Ingress: the server could not find the requested resource
+```
+
+To address this, ensure the Kubernetes version is 1.21 or older. See
+[#2852](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2852) for
+more information regarding NGINX Ingress support for Kubernetes 1.22 or later.
+
 ## Increased load on `/api/v4/jobs/requests` endpoint
 
 You may face this issue if the option `workhorse.keywatcher` was set to `false` for the deployment servicing `/api/*`.
