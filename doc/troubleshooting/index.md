@@ -272,7 +272,7 @@ chart upgrade again.
 
 ## Bundled NGINX Ingress pod fails to start: `Failed to watch *v1beta1.Ingress`
 
-The following error message may appear in the bundled NGINX Ingress controller pod if running Kubernetes version 1.22+:
+The following error message may appear in the bundled NGINX Ingress controller pod if running Kubernetes version 1.22 or later:
 
 ```plaintext
 Failed to watch *v1beta1.Ingress: failed to list *v1beta1.Ingress: the server could not find the requested resource
@@ -280,7 +280,7 @@ Failed to watch *v1beta1.Ingress: failed to list *v1beta1.Ingress: the server co
 
 To address this, ensure the Kubernetes version is 1.21 or older. See
 [#2852](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2852) for
-more information regarding NGINX Ingress support for Kubernetes 1.22+.
+more information regarding NGINX Ingress support for Kubernetes 1.22 or later.
 
 ## Increased load on `/api/v4/jobs/requests` endpoint
 
