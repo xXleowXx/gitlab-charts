@@ -194,7 +194,7 @@ describe 'GitLab Pages' do
 
     describe 'GitLab yml file contents' do
       subject(:config_yaml_data) do
-        YAML.safe_load(pages_enabled_template.dig('ConfigMap/test-webservice', 'data', 'gitlab.yml.erb'))
+        YAML.safe_load(pages_enabled_template.dig('ConfigMap/test-webservice', 'data', 'gitlab.yml.tpl'))
       end
 
       context 'with default values' do
@@ -529,7 +529,7 @@ describe 'GitLab Pages' do
 
     describe 'customDomains' do
       subject(:gitlab_yml_data) do
-        YAML.safe_load(pages_enabled_template.dig('ConfigMap/test-webservice', 'data', 'gitlab.yml.erb'))
+        YAML.safe_load(pages_enabled_template.dig('ConfigMap/test-webservice', 'data', 'gitlab.yml.tpl'))
       end
 
       subject(:pages_config_data) do

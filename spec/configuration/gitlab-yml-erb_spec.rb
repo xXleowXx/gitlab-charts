@@ -3,7 +3,7 @@ require 'helm_template_helper'
 require 'yaml'
 require 'hash_deep_merge'
 
-describe 'gitlab.yml.erb configuration' do
+describe 'gitlab.yml.tpl configuration' do
   let(:default_values) do
     YAML.safe_load(%(
       certmanager-issuer:
@@ -12,12 +12,12 @@ describe 'gitlab.yml.erb configuration' do
   end
 
   context 'when CSP is disabled' do
-    it 'does not populate the gitlab.yml.erb' do
+    it 'does not populate the gitlab.yml.tpl' do
       t = HelmTemplate.new(default_values)
       expect(t.dig(
         'ConfigMap/test-webservice',
         'data',
-        'gitlab.yml.erb'
+        'gitlab.yml.tpl'
       )).not_to include('content_security_policy')
     end
   end
@@ -50,12 +50,12 @@ describe 'gitlab.yml.erb configuration' do
       )).merge(default_values)
     end
 
-    it 'populates the gitlab.yml.erb' do
+    it 'populates the gitlab.yml.tpl' do
       t = HelmTemplate.new(required_values)
       expect(t.dig(
         'ConfigMap/test-webservice',
         'data',
-        'gitlab.yml.erb'
+        'gitlab.yml.tpl'
       )).to include('content_security_policy')
     end
 
@@ -81,12 +81,12 @@ describe 'gitlab.yml.erb configuration' do
     context 'when true' do
       let(:value) { true }
 
-      it 'populates the gitlab.yml.erb with true' do
+      it 'populates the gitlab.yml.tpl with true' do
         t = HelmTemplate.new(required_values)
         expect(t.dig(
           'ConfigMap/test-webservice',
           'data',
-          'gitlab.yml.erb'
+          'gitlab.yml.tpl'
         )).to include('matomo_disable_cookies: true')
       end
     end
@@ -94,14 +94,14 @@ describe 'gitlab.yml.erb configuration' do
     context 'when false' do
       let(:value) { false }
 
-      it 'does not populate the gitlab.yml.erb' do
+      it 'does not populate the gitlab.yml.tpl' do
         t = HelmTemplate.new(required_values)
 
         expect(t.exit_code).to eq(0)
         expect(t.dig(
           'ConfigMap/test-webservice',
           'data',
-          'gitlab.yml.erb'
+          'gitlab.yml.tpl'
         )).not_to include('matomo_disable_cookies')
       end
     end
@@ -109,14 +109,14 @@ describe 'gitlab.yml.erb configuration' do
     context 'when nil' do
       let(:value) { nil }
 
-      it 'does not populate the gitlab.yml.erb' do
+      it 'does not populate the gitlab.yml.tpl' do
         t = HelmTemplate.new(required_values)
 
         expect(t.exit_code).to eq(0)
         expect(t.dig(
           'ConfigMap/test-webservice',
           'data',
-          'gitlab.yml.erb'
+          'gitlab.yml.tpl'
         )).not_to include('matomo_disable_cookies')
       end
     end
@@ -137,7 +137,7 @@ describe 'gitlab.yml.erb configuration' do
         ))
       end
 
-      it 'does not populate the gitlab.yml.erb' do
+      it 'does not populate the gitlab.yml.tpl' do
         t = HelmTemplate.new(required_values)
 
         expect(t.stderr).to eq("")
@@ -146,7 +146,7 @@ describe 'gitlab.yml.erb configuration' do
           t.dig(
             'ConfigMap/test-webservice',
             'data',
-            'gitlab.yml.erb'
+            'gitlab.yml.tpl'
           )
         )['production']).to have_key('sidekiq')
       end
@@ -167,7 +167,7 @@ describe 'gitlab.yml.erb configuration' do
         ))
       end
 
-      it 'populates the gitlab.yml.erb with corresponding array' do
+      it 'populates the gitlab.yml.tpl with corresponding array' do
         t = HelmTemplate.new(required_values)
 
         expect(t.exit_code).to eq(0)
@@ -175,7 +175,7 @@ describe 'gitlab.yml.erb configuration' do
           t.dig(
             'ConfigMap/test-webservice',
             'data',
-            'gitlab.yml.erb'
+            'gitlab.yml.tpl'
           )
         )['production']).to include(YAML.safe_load(%(
           sidekiq:
@@ -205,7 +205,7 @@ describe 'gitlab.yml.erb configuration' do
         ))
       end
 
-      it 'does not populate the gitlab.yml.erb' do
+      it 'does not populate the gitlab.yml.tpl' do
         t = HelmTemplate.new(required_values)
 
         expect(t.stderr).to eq("")
@@ -214,7 +214,7 @@ describe 'gitlab.yml.erb configuration' do
           t.dig(
             'ConfigMap/test-sidekiq',
             'data',
-            'gitlab.yml.erb'
+            'gitlab.yml.tpl'
           )
         )['production']['sidekiq']).to include(YAML.safe_load(%(
           log_format: "default"
@@ -237,7 +237,7 @@ describe 'gitlab.yml.erb configuration' do
         ))
       end
 
-      it 'populates the gitlab.yml.erb with corresponding array' do
+      it 'populates the gitlab.yml.tpl with corresponding array' do
         t = HelmTemplate.new(required_values)
 
         expect(t.exit_code).to eq(0)
@@ -245,7 +245,7 @@ describe 'gitlab.yml.erb configuration' do
           t.dig(
             'ConfigMap/test-sidekiq',
             'data',
-            'gitlab.yml.erb'
+            'gitlab.yml.tpl'
           )
         )['production']['sidekiq']).to include(YAML.safe_load(%(
           log_format: "default"
