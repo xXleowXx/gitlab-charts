@@ -1,6 +1,0 @@
----
-title: ninjasloth add support for proxy protocol with gitlab-sshd in the gitlab-shell
-  chart
-merge_request:
-author: Nick Duff
-type: added
