@@ -549,9 +549,7 @@ describe 'GitLab Pages' do
         end
 
         describe 'pages configuration' do
-          it 'does not expose listen-http, listen-https, root-cert or root-key' do
-            # Disabled. Using this for `/-/readiness` via statusUri
-            # expect(pages_config_data).not_to match(/listen-http=/)
+          it 'does not expose listen-https, root-cert or root-key' do
             expect(pages_config_data).not_to match(/listen-https=/)
             expect(pages_config_data).not_to match(/root-cert=/)
             expect(pages_config_data).not_to match(/root-key=/)
@@ -559,6 +557,11 @@ describe 'GitLab Pages' do
 
           it 'exposes listen-proxy correctly' do
             expect(pages_config_data).to match(/listen-proxy=0.0.0.0:8090/)
+          end
+
+          it 'configures readiness probe correctly' do
+            expect(pages_config_data).to match(/listen-http=0.0.0.0:9090/)
+            expect(pages_config_data).to match(/pages-status=\/-\/readiness/)
           end
         end
 
@@ -667,10 +670,11 @@ describe 'GitLab Pages' do
             expect(pages_config_data).to match(%r{root-cert=/etc/gitlab-secrets/pages/pages.example.com.crt})
             expect(pages_config_data).to match(%r{root-key=/etc/gitlab-secrets/pages/pages.example.com.key})
           end
-          # Disabled. Using this for `/-/readiness` via statusUri
-          # it 'does not expose listen-http' do
-          #   expect(pages_config_data).not_to match(/listen-http=/)
-          # end
+
+          it 'configures readiness probe correctly' do
+            expect(pages_config_data).to match(/listen-http=0.0.0.0:9090/)
+            expect(pages_config_data).to match(/pages-status=\/-\/readiness/)
+          end
 
           it 'does not expose listen-proxy ' do
             expect(pages_config_data).not_to match(/listen-proxy=/)
