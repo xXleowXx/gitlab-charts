@@ -561,7 +561,7 @@ describe 'GitLab Pages' do
 
           it 'configures readiness probe correctly' do
             expect(pages_config_data).to match(/listen-http=0.0.0.0:9090/)
-            expect(pages_config_data).to match(/pages-status=\/-\/readiness/)
+            expect(pages_config_data).to match(%r{pages-status=/-/readiness})
           end
         end
 
@@ -673,7 +673,7 @@ describe 'GitLab Pages' do
 
           it 'configures readiness probe correctly' do
             expect(pages_config_data).to match(/listen-http=0.0.0.0:9090/)
-            expect(pages_config_data).to match(/pages-status=\/-\/readiness/)
+            expect(pages_config_data).to match(%r{pages-status=/-/readiness})
           end
 
           it 'does not expose listen-proxy ' do
