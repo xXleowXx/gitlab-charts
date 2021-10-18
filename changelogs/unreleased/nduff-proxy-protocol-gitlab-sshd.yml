@@ -1,5 +1,6 @@
 ---
-title: ninjasloth 5.4.0 (2021-10-18)
+title: ninjasloth add support for proxy protocol with gitlab-sshd in the gitlab-shell
+  chart
 merge_request:
 author: Nick Duff
 type: added
