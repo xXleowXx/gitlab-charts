@@ -17,6 +17,10 @@ NOTE:
 Our [fork](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/charts/nginx-ingress) of the NGINX chart was pulled from
 [GitHub](https://github.com/kubernetes/ingress-nginx). See [Our NGINX fork](fork.md) for details on what was modified in our fork.
 
+NOTE:
+The version of the NGINX Ingress Helm Chart bundled with the GitLab Helm Charts does not support Kubernetes 1.22.
+See [#2852](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2852) for more information.
+
 ## Configuring NGINX
 
 See [NGINX chart documentation](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/charts/nginx-ingress/README.md#configuration)

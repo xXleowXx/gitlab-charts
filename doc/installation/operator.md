@@ -121,7 +121,8 @@ deployment manifests available in the
        values:
          global:
            hosts:
-             domain: example.com # use a real domain here
+             domain: example.com # Provide a real base domain for GitLab. "gitlab." and "registry." will be exposed as subdomains.
+             externalIP: "1.1.1.1" # If using a static wildcard DNS record for the base domain, enter the IP address it resolves to here.
            ingress:
              configureCertmanager: true
          certmanager-issuer:
@@ -154,6 +155,12 @@ deployment manifests available in the
    you can access GitLab in your browser at the domain you set up in the custom
    resource.
 
+   To log in use the base domain you specified, with the `gitlab` subdomain, for example: `https://gitlab.example.com`. An initial administrator account has also been created. The username is `root` and the password is stored in the `<name>-gitlab-initial-root-password` secret. By default, this is in the `gitlab-system` namespace, and must be base64 decoded to use.
+
+  ```shell
+  kubectl -n gitlab-system get secret <name>-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
+  ```
+
 ## Uninstall the GitLab Operator
 
 Items to note prior to uninstalling the Operator:
@@ -175,11 +182,11 @@ To remove the GitLab Operator and its associated resources:
    This will remove the GitLab instance, and all associated objects except for
    PVCs as noted above.
 
-1. Uninstall the GitLab Operator
+1. Uninstall the GitLab Operator.
 
    ```shell
    GL_OPERATOR_VERSION=0.1.0
-   PLATFORM=kubernetes # or "opensfhit"
+   PLATFORM=kubernetes # or "openshift"
    kubectl delete -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${PLATFORM}-${GL_OPERATOR_VERSION}.yaml
    ```
 

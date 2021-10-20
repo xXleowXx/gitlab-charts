@@ -119,5 +119,5 @@ When the cluster is up and running, you can continue [installing GitLab](../oper
 - [`oc` source code](https://github.com/openshift/oc)
 - [`openshift-installer` and `oc` packages](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/)
 - [OpenShift Container Project (OCP) architecture docs](https://access.redhat.com/documentation/en-us/openshift_container_platform/latest/html/architecture/architecture)
-- [OpenShift GCP docs](https://docs.openshift.com/container-platform/latest/installing/installing_gcp/installing-gcp-account.html)
-- [OpenShift troubleshooting guide](https://docs.openshift.com/container-platform/latest/support/troubleshooting/troubleshooting-installations.html)
+- [OpenShift GCP docs](https://docs.openshift.com/container-platform/4.8/installing/installing_gcp/installing-gcp-account.html)
+- [OpenShift troubleshooting guide](https://docs.openshift.com/container-platform/4.8/support/troubleshooting/troubleshooting-installations.html)
