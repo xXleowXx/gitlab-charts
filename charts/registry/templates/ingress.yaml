@@ -13,7 +13,7 @@ metadata:
     {{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "{{ template "registry.ingressclass" . }}"
-    kubernetes.io/ingress.provider: {{ .Values.global.ingress.provider }}
+    kubernetes.io/ingress.provider: "{{ template "gitlab.ingressprovider" . }}"
     {{- if eq "nginx" .Values.global.ingress.provider }}
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.proxyBodySize | quote }}
     nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.proxyReadTimeout | quote }}

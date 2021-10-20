@@ -334,6 +334,13 @@ Returns the nginx ingress class
 {{- end -}}
 
 {{/*
+Returns the ingress provider
+*/}}
+{{- define "gitlab.ingressprovider" -}}
+{{- default .Values.global.ingress.provider .Values.ingress.provider -}}
+{{- end -}}
+
+{{/*
 Overrides the ingress-nginx template to make sure gitlab-shell name matches
 */}}
 {{- define "ingress-nginx.tcp-configmap" -}}
