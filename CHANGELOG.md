@@ -2,6 +2,33 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.4.0 (2021-10-21)
+
+### Added (2 changes)
+
+- [Pages: enable proper readiness probe](gitlab-org/charts/gitlab@9b4d367bc96a2430eca9cfb32b916f0860bdd7ff) ([merge request](gitlab-org/charts/gitlab!2225))
+- [Allow configuring redis instance for rate limiting](gitlab-org/charts/gitlab@349cb8056f484dde330589805076ba86e70306d5) ([merge request](gitlab-org/charts/gitlab!2187))
+
+### Fixed (4 changes)
+
+- [Add certificate volumeMounts to Rails deployments](gitlab-org/charts/gitlab@7a1fbf603eca4d698c16275eb1f7dd8dbcfdb45b) ([merge request](gitlab-org/charts/gitlab!2219))
+- [Add missing namespace to default KAS internal URL](gitlab-org/charts/gitlab@582d9b2b3298da78dc7b6c826e7dd5ee705505dd) ([merge request](gitlab-org/charts/gitlab!2207))
+- [Add a preStop hook to registry to sleep for 5 seconds](gitlab-org/charts/gitlab@24efafe6276eb5ea5ae9bc82d670cf0529356dd5) ([merge request](gitlab-org/charts/gitlab!2199))
+- [Move 'global.kas.apiExternalPort' to parent chart](gitlab-org/charts/gitlab@d68096d019a01cf1ba1953fde6b26e6cfcdffa6b) ([merge request](gitlab-org/charts/gitlab!2201))
+
+### Changed (5 changes)
+
+- [Pin mailroom to 0.0.14](gitlab-org/charts/gitlab@5befab88589e25b0b851e6f39432e2051d3628d2) ([merge request](gitlab-org/charts/gitlab!2236))
+- [Update gitlab-org/container-registry from 3.11.1-gitlab to 3.12.0-gitlab](gitlab-org/charts/gitlab@cc5af8331e1f3aef9eaaee88f366e516cfc80c3f) ([merge request](gitlab-org/charts/gitlab!2230))
+- [Update runner chart to v0.33.1](gitlab-org/charts/gitlab@c40f40aab0118470f1b18dd42bae86e85fe1d6e9) by @xasx ([merge request](gitlab-org/charts/gitlab!2206))
+- [Update gitlab-org/charts/gitlab-runner from 0.32.0 to 0.33.0](gitlab-org/charts/gitlab@ce87597fbd8881f1a711affd926c6a332daf9254) ([merge request](gitlab-org/charts/gitlab!2203))
+- [Update gitlab-org/container-registry from 3.11.0-gitlab to 3.11.1-gitlab](gitlab-org/charts/gitlab@3e6492bf41609054214308006289a9e638038e22) ([merge request](gitlab-org/charts/gitlab!2194))
+
+### Other (2 changes)
+
+- [Remove reference to deprecated operator](gitlab-org/charts/gitlab@d03e3293fdfe698eb3b5defe0b919351ef9485eb) ([merge request](gitlab-org/charts/gitlab!2197))
+- [Add $PLATFORM to installation commands](gitlab-org/charts/gitlab@8e72a88fb391cb98f64e712b07e65d65db4ab8fd) ([merge request](gitlab-org/charts/gitlab!2190))
+
 ## 5.3.3 (2021-10-12)
 
 No changes.
