@@ -341,6 +341,13 @@ Returns the ingress provider
 {{- end -}}
 
 {{/*
+Returns the ingress provider for Webservice
+*/}}
+{{- define "gitlab.ingressprovider.webservice" -}}
+{{- default $.Values.global.ingress.provider .local.ingress.provider -}}
+{{- end -}}
+
+{{/*
 Overrides the ingress-nginx template to make sure gitlab-shell name matches
 */}}
 {{- define "ingress-nginx.tcp-configmap" -}}
