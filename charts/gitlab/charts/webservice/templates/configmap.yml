@@ -35,7 +35,7 @@ data:
   {{- include "gitlab.rails.redis.cable" . | nindent 2 }}
   {{- include "gitlab.rails.redis.traceChunks" . | nindent 2 }}
   {{- include "gitlab.rails.redis.rateLimiting" . | nindent 2 }}
-  gitlab.yml.tpl: |
+  gitlab.yml.erb: |
     production: &base
       gitlab:
         host: {{ template "gitlab.gitlab.hostname" . }}
@@ -139,7 +139,7 @@ data:
           port: {{ .Values.monitoring.exporter.port }}
         sidekiq_exporter:
       shutdown:
-        blackout_seconds: {% env.Getenv "SHUTDOWN_BLACKOUT_SECONDS" %}
+        blackout_seconds: <%= ENV["SHUTDOWN_BLACKOUT_SECONDS"] %>
       {{- include "gitlab.appConfig.rackAttack" . | nindent 6 }}
       ## Registry Integration
       {{- include "gitlab.appConfig.registry.configuration" $ | nindent 6 }}
