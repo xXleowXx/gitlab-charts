@@ -155,6 +155,28 @@ storage, and thus is an [Advanced Configuration](advanced/index.md).
 To migrate your existing Omnibus GitLab instance to these charts, follow the
 [migration documentation](installation/migration/index.md).
 
+### Devel builds
+
+Development chart versions are being built with every merge to `master`.
+
+It is possible to track current non-production "development" releases of Helm chart by using `devel` channel:
+
+```shell
+helm repo add gitlab-devel https://gitlab.com/api/v4/projects/3828396/packages/helm/devel
+```
+
+and using `--devel` option for `helm` pointing to a specific release:
+
+```shell
+helm install --devel --version 1.2.3-4567 gitlab-devel/gitlab
+```
+
+to list available `devel` versions:
+
+```shell
+helm search repo gitlab-devel --devel
+```
+
 ## Architecture
 
 These charts are complex, as they coordinate the deployment of a complete application
