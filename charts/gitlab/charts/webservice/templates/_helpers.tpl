@@ -101,13 +101,13 @@ If consolidated object storage is in use, read the connection YAML
 {%- $aws_secret_access_key := "" -%}
 {%- $azure_storage_account_name := "" -%}
 {%- $azure_storage_access_key := "" -%}
-{%- if file.Exists "/tmp/gitlab/minio/accesskey" -%}
+{%- if file.Exists "/etc/gitlab/minio/accesskey" -%}
   {%- $provider = "AWS" -%}
-  {%- $aws_access_key_id = file.Read "/tmp/gitlab/minio/accesskey" | strings.TrimSpace -%}
-  {%- $aws_secret_access_key = file.Read "/tmp/gitlab/minio/secretkey" | strings.TrimSpace -%}
+  {%- $aws_access_key_id = file.Read "/etc/gitlab/minio/accesskey" | strings.TrimSpace -%}
+  {%- $aws_secret_access_key = file.Read "/etc/gitlab/minio/secretkey" | strings.TrimSpace -%}
 {%- end -%}
-{%- if file.Exists "/tmp/gitlab/objectstorage/object_store" -%}
-  {%- $connection := file.Read "/tmp/gitlab/objectstorage/object_store" | strings.TrimSpace | data.YAML -%}
+{%- if file.Exists "/etc/gitlab/objectstorage/object_store" -%}
+  {%- $connection := file.Read "/etc/gitlab/objectstorage/object_store" | strings.TrimSpace | data.YAML -%}
   {%- $provider = $connection.provider -%}
   {%- if has $connection "aws_access_key_id" -%}
     {%- $aws_access_key_id = $connection.aws_access_key_id -%}
