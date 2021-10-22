@@ -117,7 +117,7 @@ If consolidated object storage is in use, read the connection YAML
     {%- $azure_storage_access_key = $connection.azure_storage_access_key -%}
   {%- end -%}
 {%- end -%}
-{%- if has $supported_providers $provider -%}
+{%- if has $supported_providers $provider %}
 [object_storage]
 provider = "{% $provider %}"
 {%   if eq $provider "AWS" -%}
