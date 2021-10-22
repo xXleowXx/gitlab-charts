@@ -26,8 +26,8 @@ describe 'Gitaly configuration' do
     it 'populates external instances to gitlab.yml' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0)
-      # check that gitlab.yml.tpl contains production.repositories.storages
-      gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.tpl')
+      # check that gitlab.yml.erb contains production.repositories.storages
+      gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb')
       storages = YAML.load(gitlab_yml)['production']['repositories']['storages']
       expect(storages).to have_key('default')
       expect(storages['default']['gitaly_address']).to eq('tcp://git.example.com:8075')
@@ -49,8 +49,8 @@ describe 'Gitaly configuration' do
       it 'populates a tls uri' do
         t = HelmTemplate.new(values)
         expect(t.exit_code).to eq(0)
-        # check that gitlab.yml.tpl contains production.repositories.storages
-        gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.tpl')
+        # check that gitlab.yml.erb contains production.repositories.storages
+        gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb')
         storages = YAML.load(gitlab_yml)['production']['repositories']['storages']
         expect(storages).to have_key('default')
         expect(storages['default']['gitaly_address']).to eq('tls://git.example.com:8076')
@@ -74,8 +74,8 @@ describe 'Gitaly configuration' do
       it 'populates a tls uri' do
         t = HelmTemplate.new(values)
         expect(t.exit_code).to eq(0)
-        # check that gitlab.yml.tpl contains production.repositories.storages
-        gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.tpl')
+        # check that gitlab.yml.erb contains production.repositories.storages
+        gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb')
         storages = YAML.load(gitlab_yml)['production']['repositories']['storages']
         expect(storages).to have_key('default')
         expect(storages['default']['gitaly_address']).to eq('tls://git.example.com:8076')
@@ -100,8 +100,8 @@ describe 'Gitaly configuration' do
       it 'populates a tcp uri' do
         t = HelmTemplate.new(values)
         expect(t.exit_code).to eq(0)
-        # check that gitlab.yml.tpl contains production.repositories.storages
-        gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.tpl')
+        # check that gitlab.yml.erb contains production.repositories.storages
+        gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb')
         storages = YAML.load(gitlab_yml)['production']['repositories']['storages']
         expect(storages).to have_key('default')
         expect(storages['default']['gitaly_address']).to eq('tcp://git.example.com:8075')
