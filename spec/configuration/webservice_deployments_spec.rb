@@ -509,7 +509,7 @@ describe 'Webservice Deployments configuration' do
       end
     end
 
-    context 'ingress provider annotations' do
+    context 'local ingress provider annotations' do
       let(:deployments_values) do
         YAML.safe_load(%(
           gitlab:
@@ -525,12 +525,52 @@ describe 'Webservice Deployments configuration' do
         )).deep_merge(default_values)
       end
 
-      it 'properly sets the ingress provider annotation per deployment' do
-        t = HelmTemplate.new(deployments_values)
-        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+      let(:template) { HelmTemplate.new(deployments_values) }
 
-        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'nginx')
-        expect(t.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
+      it 'templates successfully' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+      end
+
+      it 'properly sets the default ingress provider when not specified' do
+        expect(template.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'nginx')
+      end
+
+      it 'properly sets the local ingress provider when specified' do
+        expect(template.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
+      end
+    end
+
+    context 'global ingress provider annotations' do
+      let(:deployments_values) do
+        YAML.safe_load(%(
+          global:
+            ingress:
+              provider: global-provider
+          gitlab:
+            webservice:
+              deployments:
+                default:
+                  ingress:
+                    path: /
+                second:
+                  ingress:
+                    path: /second
+                    provider: second-provider
+        )).deep_merge(default_values)
+      end
+
+      let(:template) { HelmTemplate.new(deployments_values) }
+
+      it 'templates successfully' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+      end
+
+      it 'properly sets the global ingress provider when not specified' do
+        expect(template.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'global-provider')
+      end
+
+      it 'properly sets the local ingress provider when specified' do
+        expect(template.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
       end
     end
   end
