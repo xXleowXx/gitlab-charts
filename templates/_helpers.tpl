@@ -336,14 +336,14 @@ Returns the nginx ingress class
 {{/*
 Returns the ingress provider
 */}}
-{{- define "gitlab.ingressprovider" -}}
+{{- define "gitlab.ingress.provider" -}}
 {{- default .Values.global.ingress.provider .Values.ingress.provider -}}
 {{- end -}}
 
 {{/*
 Returns the ingress provider for Webservice
 */}}
-{{- define "gitlab.ingressprovider.webservice" -}}
+{{- define "gitlab.ingress.provider.webservice" -}}
 {{- default $.Values.global.ingress.provider .local.ingress.provider -}}
 {{- end -}}
 
