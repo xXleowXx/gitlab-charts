@@ -335,16 +335,13 @@ Returns the nginx ingress class
 
 {{/*
 Returns the ingress provider
+
+  It expects a dictionary with two entries:
+    - `global` which contains global ingress settings, e.g. .Values.global.ingress
+    - `local` which contains local ingress settings, e.g. .Values.ingress
 */}}
 {{- define "gitlab.ingress.provider" -}}
-{{- default .Values.global.ingress.provider .Values.ingress.provider -}}
-{{- end -}}
-
-{{/*
-Returns the ingress provider for Webservice
-*/}}
-{{- define "gitlab.ingress.provider.webservice" -}}
-{{- default $.Values.global.ingress.provider .local.ingress.provider -}}
+{{- default .global.provider .local.provider -}}
 {{- end -}}
 
 {{/*

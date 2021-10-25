@@ -10,6 +10,7 @@ From here on:
 - `.` is `.deployments.xyz` value
 - `.name` is the key (xyz)
 */}}
+{{- $ingressCfg := dict "global" $.Values.global.ingress "local" .ingress -}}
 ---
 apiVersion: {{ template "ingress.apiVersion" $}}
 kind: Ingress
@@ -21,7 +22,7 @@ metadata:
     {{- include "gitlab.commonLabels" $ | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" $ }}"
-    kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider.webservice" (merge (dict) $ (dict "local" .)) }}"
+    kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
     {{- if eq "nginx" $.Values.global.ingress.provider }}
     nginx.ingress.kubernetes.io/proxy-body-size: {{ $.Values.ingress.proxyBodySize | quote }}
     nginx.ingress.kubernetes.io/proxy-read-timeout: {{ $.Values.ingress.proxyReadTimeout | quote }}
