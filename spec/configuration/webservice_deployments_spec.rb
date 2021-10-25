@@ -595,7 +595,7 @@ describe 'Webservice Deployments configuration' do
       configmaps = t.resources_by_kind('ConfigMap')
       workhorse_config = {}
       ['default', 'api', 'git'].each do |container|
-        workhorse_config[container] = configmaps.fetch("ConfigMap/test-workhorse-#{container}").fetch("data").fetch("workhorse-config.toml.erb")
+        workhorse_config[container] = configmaps.fetch("ConfigMap/test-workhorse-#{container}").fetch("data").fetch("workhorse-config.toml.tpl")
       end
 
       expect(workhorse_config['default']).not_to include("[redis]")
