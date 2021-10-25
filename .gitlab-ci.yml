@@ -575,10 +575,7 @@ review-docs-cleanup:
     S3_CONFIG_PATH: /etc/gitlab/minio
   script:
     - ./scripts/ci/install_spec_dependencies
-    - if [[ -n "${VARIABLES_FILE}" ]]; then source "${VARIABLES_FILE}"; ./scripts/ci/feature_spec_setup; else ./scripts/ci/integration_spec_setup; fi
-    - bundle config set path 'gems'
-    - bundle install -j $(nproc)
-    - bundle exec rspec -c -f d spec -t "${RSPEC_TAGS}"
+    - ./scripts/ci/run_specs
   artifacts:
     when: on_failure
     expire_in: 7d
@@ -654,6 +651,7 @@ specs_without_cluster:
   variables:
     RSPEC_TAGS: ~type:feature
   needs: []
+  parallel: 5
   except:
     refs:
       - /(^docs[\/-].+|.+-docs$)/
@@ -671,6 +669,7 @@ production_specs_without_cluster:
   extends: .production_specs
   variables:
     RSPEC_TAGS: ~type:feature
+  parallel: 5
   except:
     refs:
       - /(^docs[\/-].+|.+-docs$)/
