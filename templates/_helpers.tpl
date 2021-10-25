@@ -336,9 +336,9 @@ Returns the nginx ingress class
 {{/*
 Returns the ingress provider
 
-  It expects a dictionary with two entries:
-    - `global` which contains global ingress settings, e.g. .Values.global.ingress
-    - `local` which contains local ingress settings, e.g. .Values.ingress
+It expects a dictionary with two entries:
+  - `global` which contains global ingress settings, e.g. .Values.global.ingress
+  - `local` which contains local ingress settings, e.g. .Values.ingress
 */}}
 {{- define "gitlab.ingress.provider" -}}
 {{- default .global.provider .local.provider -}}
