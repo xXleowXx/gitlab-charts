@@ -2,6 +2,7 @@
 {{- if and (empty ($externalAddresses)) (eq (include "gitlab.ingress.enabled" $) "true") -}}
 {{- $hostname := include "gitlab.pages.hostname" . -}}
 {{- $tlsSecret := include "pages.tlsSecret" . -}}
+{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress -}}
 apiVersion: {{ template "ingress.apiVersion" $}}
 kind: Ingress
 metadata:
@@ -12,9 +13,7 @@ metadata:
     {{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
-    {{- if .Values.global.ingress.provider }}
-    kubernetes.io/ingress.provider: {{ .Values.global.ingress.provider }}
-    {{- end }}
+    kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
     {{ include "gitlab.certmanager_annotations" . }}
   {{- range $key, $value := merge .Values.ingress.annotations .Values.global.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
