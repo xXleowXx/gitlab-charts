@@ -525,18 +525,12 @@ describe 'Webservice Deployments configuration' do
         )).deep_merge(default_values)
       end
 
-      let(:template) { HelmTemplate.new(deployments_values) }
+      it 'properly sets the ingress providers' do
+        t = HelmTemplate.new(deployments_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
-      it 'templates successfully' do
-        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
-      end
-
-      it 'properly sets the default ingress provider when not specified' do
-        expect(template.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'nginx')
-      end
-
-      it 'properly sets the local ingress provider when specified' do
-        expect(template.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
+        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'nginx')
+        expect(t.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
       end
     end
 
@@ -559,18 +553,12 @@ describe 'Webservice Deployments configuration' do
         )).deep_merge(default_values)
       end
 
-      let(:template) { HelmTemplate.new(deployments_values) }
+      it 'properly sets the ingress providers' do
+        t = HelmTemplate.new(deployments_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
-      it 'templates successfully' do
-        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
-      end
-
-      it 'properly sets the global ingress provider when not specified' do
-        expect(template.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'global-provider')
-      end
-
-      it 'properly sets the local ingress provider when specified' do
-        expect(template.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
+        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'global-provider')
+        expect(t.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
       end
     end
   end
