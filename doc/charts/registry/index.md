@@ -504,7 +504,7 @@ the `deny` field.
 
 | Name              | Type   | Default | Description                                                                                                                                                                             |
 | :---------------: | :----: | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| `referencelimit`  | Int    | `0`     | The maximum number of of references, such as layers, image configurations, and other manifests, that a single manifest may have. When set to `0` (default) this validation is disabled. |
+| `referencelimit`  | Int    | `0`     | The maximum number of references, such as layers, image configurations, and other manifests, that a single manifest may have. When set to `0` (default) this validation is disabled.    |
 | `ulrs.allow`      | Array  | `[]`    | List of regular expressions that enables URLs in the layers of manifests. When left empty (default), layers with any URLs will be rejected.                                             |
 | `ulrs.deny`       | Array  | `[]`    | List of regular expressions that restricts the URLs in the layers of manifests. When left empty (default), no layer with URLs which passed the `urls.allow` list will be rejected       |
 
