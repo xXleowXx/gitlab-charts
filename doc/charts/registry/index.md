@@ -99,6 +99,11 @@ registry:
       enabled: false
   validation:
     disabled: true
+    manifests:
+      referencelimit: 0
+      urls:
+        allow: []
+        deny: []
   notifications: {}
   tolerations: []
   ingress:
@@ -477,11 +482,31 @@ If you _must_ support older versions of Docker clients, you can do so by setting
 
 The `validation` field is a map that controls the Docker image validation
 process in the registry. When image validation is enabled the registry rejects
-windows images with foreign layers.
+windows images with foreign layers, unless the `manifests.urls.allow` field
+within the validation stanza is explicitly set to allow those layer urls.
+
+Validation only happens during manifest push, so images already present in the
+registry are not affected by changes to the values in this section.
 
 The image validation is turned off by default.
 
 To enable image validation you need to explicitly set `registry.validation.disabled: false`.
+
+#### manifests
+
+The `manifests` field allows configuration of validation policies particular to
+manifests.
+
+The `urls` section contains both `allow` and `deny` fields. For manifest layers
+which contain URLs to pass validation, that layer must match one of the regular
+expressions in the `allow` field, while not matching any regular expression in
+the `deny` field.
+
+| Name              | Type   | Default | Description                                                                                                                                                                             |
+| :---------------: | :----: | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| `referencelimit`  | Int    | `0`     | The maximum number of of references, such as layers, image configurations, and other manifests, that a single manifest may have. When set to `0` (default) this validation is disabled. |
+| `ulrs.allow`      | Array  | `[]`    | List of regular expressions that enables URLs in the layers of manifests. When left empty (default), layers with any URLs will be rejected.                                             |
+| `ulrs.deny`       | Array  | `[]`    | List of regular expressions that restricts the URLs in the layers of manifests. When left empty (default), no layer with URLs which passed the `urls.allow` list will be rejected       |
 
 ### notifications
 
