@@ -817,7 +817,7 @@ helm upgrade mygitlab gitlab/gitlab -f mygitlab.yml --wait
 The administrative commands can be run against the Container Registry
 only from a Registry pod, where both the `registry` binary as well as necessary
 configuration is available. [Issue #2629](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2629)
-is open to discuss how to provide this functionality from the task-runner pod.
+is open to discuss how to provide this functionality from the toolbox pod.
 
 To run administrative commands:
 

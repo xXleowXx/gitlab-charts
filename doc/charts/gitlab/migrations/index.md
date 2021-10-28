@@ -33,7 +33,7 @@ Table below contains all the possible charts configurations that can be supplied
 | Parameter                   | Description                              | Default           |
 | --------------------------- | ---------------------------------------- | ----------------  |
 | `common.labels`             | Supplemental labels that are applied to all objects created by this chart.  | `{}` |
-| `image.repository`          | Migrations image repository              | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee` |
+| `image.repository`          | Migrations image repository              | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee` |
 | `image.tag`                 | Migrations image tag                     |                   |
 | `image.pullPolicy`          | Migrations pull policy                   | `Always`          |
 | `image.pullSecrets`         | Secrets for the image repository         |                   |
@@ -103,7 +103,7 @@ image:
 
 By default, the Helm charts use the Enterprise Edition of GitLab. If desired, you can instead use the Community Edition. Learn more about the [difference between the two](https://about.gitlab.com/install/ce-or-ee/).
 
-In order to use the Community Edition, set `image.repository` to `registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ce`
+In order to use the Community Edition, set `image.repository` to `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ce`
 
 ## External Services
 

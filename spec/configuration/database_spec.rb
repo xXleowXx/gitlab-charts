@@ -74,7 +74,7 @@ describe 'Database configuration' do
       it 'populates global database to all charts' do
         template = HelmTemplate.new(global_values)
         expect(database_yml(template,'webservice')).to include("database: testing")
-        expect(database_yml(template,'task-runner')).to include("database: testing")
+        expect(database_yml(template,'toolbox')).to include("database: testing")
         expect(database_yml(template,'sidekiq')).to include("database: testing")
       end
 
@@ -91,7 +91,7 @@ describe 'Database configuration' do
         it 'populates local database to webservice, and global to others' do
           template = HelmTemplate.new(local_values)
           expect(database_yml(template,'webservice')).to include("database: local")
-          expect(database_yml(template,'task-runner')).to include("database: testing")
+          expect(database_yml(template,'toolbox')).to include("database: testing")
           expect(database_yml(template,'sidekiq')).to include("database: testing")
         end
       end
