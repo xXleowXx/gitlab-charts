@@ -59,6 +59,13 @@ Input: dict "context" $ "name" string
 {{- end -}}
 {{- end -}}
 
+{{- define "gitlab.rails.redis.sessions" -}}
+{{- if .Values.global.redis.sessions -}}
+{{- $_ := set $ "redisConfigName" "sessions" }}
+{{- include "gitlab.rails.redis.yaml" (dict "context" $ "name" "redis.sessions") -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 cable.yml configuration
 If no `global.redis.actioncable`, use `global.redis`

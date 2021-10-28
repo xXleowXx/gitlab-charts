@@ -437,17 +437,17 @@ continue to apply with the Sentinel support unless re-specified in the table abo
 ### Multiple Redis support
 
 The GitLab chart includes support for running with separate Redis instances
-for different persistence classes, currently: `cache`, `queues`, `sharedState`,
-`actioncable`, `traceChunks`, and `rateLimiting`.
+for different persistence classes, currently:
 
 | Instance       | Purpose                                                         |
 |:---------------|:----------------------------------------------------------------|
 | `cache`        | Store cached data                                               |
 | `queues`       | Store Sidekiq background jobs                                   |
-| `sharedState`  | Store session-related and other persistent data                 |
+| `sharedState`  | Store various persistent data such as distributed locks         |
 | `actioncable`  | Pub/Sub queue backend for ActionCable                           |
 | `traceChunks`  | Store job traces temporarily                                    |
 | `rateLimiting` | Store rate-limiting usage for RackAttack and Application Limits |
+| `sessions`     | Store user session data                                         |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -507,6 +507,13 @@ global:
         enabled: true
         secret: rateLimiting-secret
         key: rateLimiting-password
+    sessions:
+      host: sessions.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: sessions-secret
+        key: sessions-password
 ```
 
 The following table describes the attributes for each dictionary of the

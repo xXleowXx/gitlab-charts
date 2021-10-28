@@ -508,6 +508,59 @@ describe 'Webservice Deployments configuration' do
         end
       end
     end
+
+    context 'local ingress provider annotations' do
+      let(:deployments_values) do
+        YAML.safe_load(%(
+          gitlab:
+            webservice:
+              deployments:
+                default:
+                  ingress:
+                    path: /
+                second:
+                  ingress:
+                    path: /second
+                    provider: second-provider
+        )).deep_merge(default_values)
+      end
+
+      it 'properly sets the ingress providers' do
+        t = HelmTemplate.new(deployments_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'nginx')
+        expect(t.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
+      end
+    end
+
+    context 'global ingress provider annotations' do
+      let(:deployments_values) do
+        YAML.safe_load(%(
+          global:
+            ingress:
+              provider: global-provider
+          gitlab:
+            webservice:
+              deployments:
+                default:
+                  ingress:
+                    path: /
+                second:
+                  ingress:
+                    path: /second
+                    provider: second-provider
+        )).deep_merge(default_values)
+      end
+
+      it 'properly sets the ingress providers' do
+        t = HelmTemplate.new(deployments_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'global-provider')
+        expect(t.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
+      end
+    end
   end
 
   context 'shutdown.blackoutSeconds' do
