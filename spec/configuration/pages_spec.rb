@@ -412,7 +412,7 @@ describe 'GitLab Pages' do
 
     describe 'Pages configuration file' do
       subject(:config_data) do
-        pages_enabled_template.dig('ConfigMap/test-gitlab-pages', 'data', 'config.erb')
+        pages_enabled_template.dig('ConfigMap/test-gitlab-pages', 'data', 'config.tpl')
       end
 
       context 'default values with Pages enabled' do
@@ -519,9 +519,9 @@ describe 'GitLab Pages' do
             tls-min-version=tls1.0
             tls-max-version=tls1.2
             auth-redirect-uri=https://projects.pages.example.com/auth
-            auth-client-id=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appid').strip.dump[1..-2] %>
-            auth-client-secret=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appsecret').strip.dump[1..-2] %>
-            auth-secret=<%= File.read('/etc/gitlab-secrets/pages/auth_secret').strip.dump[1..-2] %>
+            auth-client-id={% file.Read "/etc/gitlab-secrets/pages/gitlab_appid" %}
+            auth-client-secret={% file.Read "/etc/gitlab-secrets/pages/gitlab_appsecret" %}
+            auth-secret={% file.Read "/etc/gitlab-secrets/pages/auth_secret" %}
             zip-cache-refresh=60s
           MSG
 
@@ -537,7 +537,7 @@ describe 'GitLab Pages' do
       end
 
       subject(:pages_config_data) do
-        pages_enabled_template.dig('ConfigMap/test-gitlab-pages', 'data', 'config.erb')
+        pages_enabled_template.dig('ConfigMap/test-gitlab-pages', 'data', 'config.tpl')
       end
 
       context 'when not enabled' do
