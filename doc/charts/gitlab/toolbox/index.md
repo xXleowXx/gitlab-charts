@@ -4,21 +4,21 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Task Runner
+# Toolbox
 
-The Task Runner Pod is used to execute periodic housekeeping tasks within
+The Toolbox Pod is used to execute periodic housekeeping tasks within
 the GitLab application. These tasks include backups, Sidekiq maintenance,
 and Rake tasks.
 
 ## Configuration
 
 The following configuration settings are the default settings provided by the
-Task Runner chart:
+Toolbox chart:
 
 ```yaml
 gitlab:
-  ## doc/charts/gitlab/task-runner
-  task-runner:
+  ## doc/charts/gitlab/toolbox
+  toolbox:
     enabled: true
     replicas: 1
     backups:
@@ -52,7 +52,7 @@ gitlab:
 
 | Parameter                                   | Description                                  | Default                      |
 |---------------------------------------------|----------------------------------------------|------------------------------|
-| `annotations`                               | Annotations to add to the Task Runner Pods and Jobs | `{}`                      |
+| `annotations`                               | Annotations to add to the Toolbox Pods and Jobs | `{}`                      |
 | `common.labels`                             | Supplemental labels that are applied to all objects created by this chart.  | `{}` |
 | `antiAffinityLabels.matchLabels`            | Labels for setting anti-affinity options     |                              |
 | `backups.cron.concurrencyPolicy`            | Kubernetes Job concurrency policy            | `Replace`                    |
@@ -77,34 +77,34 @@ gitlab:
 | `backups.objectStorage.config.secret`       | Object storage credentials secret            | ""                           |
 | `common.labels`                             | Supplemental labels that are applied to all objects created by this chart. | `{}` |
 | `deployment.strategy`                       | Allows one to configure the update strategy utilized by the deployment | { `type`: `Recreate` } |
-| `enabled`                                   | Task Runner enablement flag                  | true                         |
+| `enabled`                                   | Toolbox enablement flag                  | true                         |
 | `extra`                                     | YAML block for [extra `gitlab.yml` configuration](https://gitlab.com/gitlab-org/gitlab/-/blob/8d2b59dbf232f17159d63f0359fa4793921896d5/config/gitlab.yml.example#L1193-1199) | {}                          |
-| `image.pullPolicy`                          | Task Runner image pull policy                | `IfNotPresent`               |
-| `image.pullSecrets`                         | Task Runner image pull secrets               |                              |
-| `image.repository`                          | Task Runner image repository                 | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee` |
-| `image.tag`                                 | Task Runner image tag                        | `master`                     |
-| `init.image.repository`                     | Task Runner init image repository            |                              |
-| `init.image.tag`                            | Task Runner init image tag                   |                              |
-| `init.resources`                            | Task Runner init container resource requirements | { `requests`: { `cpu`: `50m` }} |
-| `nodeSelector`                              | Task Runner and backup job node selection    |                              |
-| `persistence.accessMode`                    | Task Runner persistence access mode          | `ReadWriteOnce`              |
-| `persistence.enabled`                       | Task Runner enable persistence flag          | false                        |
+| `image.pullPolicy`                          | Toolbox image pull policy                | `IfNotPresent`               |
+| `image.pullSecrets`                         | Toolbox image pull secrets               |                              |
+| `image.repository`                          | Toolbox image repository                 | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee` |
+| `image.tag`                                 | Toolbox image tag                        | `master`                     |
+| `init.image.repository`                     | Toolbox init image repository            |                              |
+| `init.image.tag`                            | Toolbox init image tag                   |                              |
+| `init.resources`                            | Toolbox init container resource requirements | { `requests`: { `cpu`: `50m` }} |
+| `nodeSelector`                              | Toolbox and backup job node selection    |                              |
+| `persistence.accessMode`                    | Toolbox persistence access mode          | `ReadWriteOnce`              |
+| `persistence.enabled`                       | Toolbox enable persistence flag          | false                        |
 | `persistence.matchExpressions`              | Label-expression matches to bind             |                              |
 | `persistence.matchLabels`                   | Label-value matches to bind                  |                              |
-| `persistence.size`                          | Task Runner persistence volume size          | `10Gi`                       |
+| `persistence.size`                          | Toolbox persistence volume size          | `10Gi`                       |
 | `persistence.storageClass`                  | StorageClass name for provisioning           |                              |
-| `persistence.subPath`                       | Task Runner persistence volume mount path    |                              |
+| `persistence.subPath`                       | Toolbox persistence volume mount path    |                              |
 | `persistence.volumeName`                    | Existing PersistentVolume name               |                              |
-| `podLabels`                                 | Labels for running Task Runner Pods          | {}                           |
-| `replicas`                                  | Number of Task Runner Pods to run            | `1`                          |
-| `resources.requests`                        | Task Runner minimum requested resources      | { `cpu`: `50m`, `memory`: `350M` |
+| `podLabels`                                 | Labels for running Toolbox Pods          | {}                           |
+| `replicas`                                  | Number of Toolbox Pods to run            | `1`                          |
+| `resources.requests`                        | Toolbox minimum requested resources      | { `cpu`: `50m`, `memory`: `350M` |
 | `securityContext.fsGroup`                   | Group ID under which the pod should be started | `1000`                     |
 | `securityContext.runAsUser`                 | User ID under which the pod should be started  | `1000`                     |
 | `serviceAccount.annotations`                | Annotations for ServiceAccount               | {}                           |
 | `serviceAccount.enabled`                    | Flag for using ServiceAccount                | false                        |
 | `serviceAccount.create`                     | Flag for creating a ServiceAccount           | false                        |
 | `serviceAccount.name`                       | Name of ServiceAccount to use                |                              |
-| `tolerations`                               | Tolerations to add to the Task Runner        |                              |
+| `tolerations`                               | Tolerations to add to the Toolbox        |                              |
 
 ## Configuring backups
 
@@ -139,7 +139,7 @@ using the `.volumeName` property or by using the selector `.matchLables` /
 `.matchExpressions` properties.
 
 In most cases the default value of `.accessMode` will provide adequate
-controls for only Task Runner accessing the PersistentVolumes. Please consult
+controls for only Toolbox accessing the PersistentVolumes. Please consult
 the documentation for the CSI driver installed in the Kubernetes cluster to
 ensure that the setting is correct.
 
@@ -166,19 +166,19 @@ restoration disk space also needs to grow accordingly. In most cases the
 size of the restoration disk space should be the same size as the backup
 disk space.
 
-## Task Runner included tools
+## Toolbox included tools
 
-The Task Runner container contains useful GitLab tools such as Rails console,
+The Toolbox container contains useful GitLab tools such as Rails console,
 Rake tasks, etc. These commands allow one to check the status of the database
 migrations, execute Rake tasks for administrative tasks, interact with
 the Rails console:
 
 ```shell
-# locate the Task Runner pod
-kubectl get pods -lapp=task-runner
+# locate the Toolbox pod
+kubectl get pods -lapp=toolbox
 
 # Launch a shell inside the pod
-kubectl exec -it <Task Runner pod name> -- bash
+kubectl exec -it <Toolbox pod name> -- bash
 
 # open Rails console
 gitlab-rails console -e production

@@ -259,24 +259,24 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
 ## Set the Geo Primary instance
 
 Now that the chart has been deployed, and a license uploaded, we can configure
-this as the Primary instance. We will do this via the Task Runner Pod.
+this as the Primary instance. We will do this via the Toolbox Pod.
 
-1. Find the Task Runner Pod
+1. Find the Toolbox Pod
 
    ```shell
-   kubectl --namespace gitlab get pods -lapp=task-runner
+   kubectl --namespace gitlab get pods -lapp=toolbox
    ```
 
 1. Run `gitlab-rake geo:set_primary_node` with `kubectl exec`:
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake geo:set_primary_node
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rake geo:set_primary_node
    ```
 
 1. Check the status of Geo configuration:
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- gitlab-rake gitlab:geo:check
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rake gitlab:geo:check
    ```
 
    You should see output similar to below:
@@ -578,18 +578,18 @@ that the **secondary** instance can act on those notifications immediately.
 ## Confirm Operational Status
 
 The final step is to verify the Geo replication status on the secondary instance once fully
-configured, via the Task Runner Pod.
+configured, via the Toolbox Pod.
 
-1. Find the Task Runner Pod:
+1. Find the Toolbox Pod:
 
    ```shell
-   kubectl --namespace gitlab get pods -lapp=task-runner
+   kubectl --namespace gitlab get pods -lapp=toolbox
    ```
 
 1. Attach to the Pod with `kubectl exec`:
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-task-runner-XXX -- bash -l
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- bash -l
    ```
 
 1. Check the status of Geo configuration:
