@@ -97,6 +97,17 @@ spec:
             - containerPort: {{ .Values.metrics.port | int }}
               name: metrics
           {{- end }}
+          # readinessProbe should always hit port used by `listen-http`, as k8s won't use TLS or ProxyV2
+          {{- $externalHttp := $.Values.global.pages.externalHttp }}
+          readinessProbe:
+            httpGet:
+              path: {{ $.Values.statusUri | quote }}
+              port: {{ if $externalHttp }}{{ $.Values.service.internalPort | int }}{{ else }}9090{{ end }}
+            initialDelaySeconds: {{ $.Values.deployment.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ $.Values.deployment.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ $.Values.deployment.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ $.Values.deployment.readinessProbe.successThreshold }}
+            failureThreshold: {{ $.Values.deployment.readinessProbe.failureThreshold }}
       volumes:
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       - name: pages-config

@@ -412,7 +412,7 @@ describe 'GitLab Pages' do
 
     describe 'Pages configuration file' do
       subject(:config_data) do
-        pages_enabled_template.dig('ConfigMap/test-gitlab-pages', 'data', 'config.erb')
+        pages_enabled_template.dig('ConfigMap/test-gitlab-pages', 'data', 'config.tpl')
       end
 
       context 'default values with Pages enabled' do
@@ -427,6 +427,7 @@ describe 'GitLab Pages' do
         it 'populates Pages config file' do
           default_content = <<~MSG
             listen-proxy=0.0.0.0:8090
+            listen-http=0.0.0.0:9090
             pages-domain=pages.example.com
             pages-root=/srv/gitlab-pages
             log-format=json
@@ -441,6 +442,7 @@ describe 'GitLab Pages' do
             api-secret-key=/etc/gitlab-secrets/pages/secret
             domain-config-source=gitlab
             metrics-address=:9235
+            pages-status=/-/readiness
           MSG
 
           expect(config_data).to eq default_content
@@ -493,6 +495,7 @@ describe 'GitLab Pages' do
             gitlab-retrieval-retries=3
             header=FOO: BAR;;BAZ: BAT
             listen-proxy=0.0.0.0:8090
+            listen-http=0.0.0.0:9090
             pages-domain=pages.example.com
             pages-root=/srv/gitlab-pages
             log-format=text
@@ -512,12 +515,13 @@ describe 'GitLab Pages' do
             gitlab-client-jwt-expiry=35
             sentry-dsn=foobar
             sentry-environment=qwerty
+            pages-status=/-/readiness
             tls-min-version=tls1.0
             tls-max-version=tls1.2
             auth-redirect-uri=https://projects.pages.example.com/auth
-            auth-client-id=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appid').strip.dump[1..-2] %>
-            auth-client-secret=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appsecret').strip.dump[1..-2] %>
-            auth-secret=<%= File.read('/etc/gitlab-secrets/pages/auth_secret').strip.dump[1..-2] %>
+            auth-client-id={% file.Read "/etc/gitlab-secrets/pages/gitlab_appid" %}
+            auth-client-secret={% file.Read "/etc/gitlab-secrets/pages/gitlab_appsecret" %}
+            auth-secret={% file.Read "/etc/gitlab-secrets/pages/auth_secret" %}
             zip-cache-refresh=60s
           MSG
 
@@ -533,7 +537,7 @@ describe 'GitLab Pages' do
       end
 
       subject(:pages_config_data) do
-        pages_enabled_template.dig('ConfigMap/test-gitlab-pages', 'data', 'config.erb')
+        pages_enabled_template.dig('ConfigMap/test-gitlab-pages', 'data', 'config.tpl')
       end
 
       context 'when not enabled' do
@@ -545,8 +549,7 @@ describe 'GitLab Pages' do
         end
 
         describe 'pages configuration' do
-          it 'does not expose listen-http, listen-https, root-cert or root-key' do
-            expect(pages_config_data).not_to match(/listen-http=/)
+          it 'does not expose listen-https, root-cert or root-key' do
             expect(pages_config_data).not_to match(/listen-https=/)
             expect(pages_config_data).not_to match(/root-cert=/)
             expect(pages_config_data).not_to match(/root-key=/)
@@ -554,6 +557,11 @@ describe 'GitLab Pages' do
 
           it 'exposes listen-proxy correctly' do
             expect(pages_config_data).to match(/listen-proxy=0.0.0.0:8090/)
+          end
+
+          it 'configures readiness probe correctly' do
+            expect(pages_config_data).to match(/listen-http=0.0.0.0:9090/)
+            expect(pages_config_data).to match(%r{pages-status=/-/readiness})
           end
         end
 
@@ -663,8 +671,9 @@ describe 'GitLab Pages' do
             expect(pages_config_data).to match(%r{root-key=/etc/gitlab-secrets/pages/pages.example.com.key})
           end
 
-          it 'does not expose listen-http' do
-            expect(pages_config_data).not_to match(/listen-http=/)
+          it 'configures readiness probe correctly' do
+            expect(pages_config_data).to match(/listen-http=0.0.0.0:9090/)
+            expect(pages_config_data).to match(%r{pages-status=/-/readiness})
           end
 
           it 'does not expose listen-proxy ' do

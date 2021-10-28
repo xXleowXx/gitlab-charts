@@ -15,6 +15,14 @@ global:
       # name: kas.example.com
       # https: true
 
+init:
+  image: {}
+    # repository:
+    # tag:
+  resources:
+    requests:
+      cpu: 50m
+
 hpa:
   targetAverageValue: 100m
 image:

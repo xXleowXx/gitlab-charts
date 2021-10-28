@@ -8,7 +8,7 @@ metadata:
     {{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
 data:
-  config.erb: |
+  config.tpl: |
     {{- with .Values.gitlabCache }}
     {{- if .cleanup }}
     gitlab-cache-cleanup={{ .cleanup }}
@@ -38,9 +38,12 @@ data:
     {{- $externalAddresses := concat $.Values.global.pages.externalHttp $.Values.global.pages.externalHttps | uniq }}
     {{- if (empty ($externalAddresses)) }}
     listen-proxy=0.0.0.0:{{ .Values.service.internalPort }}
+    listen-http=0.0.0.0:9090
     {{- else }}
       {{- if not (empty $.Values.global.pages.externalHttp) }}
     listen-http=0.0.0.0:{{ .Values.service.internalPort }}
+      {{-  else  }}
+    listen-http=0.0.0.0:9090
       {{- end }}
       {{- if not (empty $.Values.global.pages.externalHttps) }}
     listen-https{{ if .Values.useProxyV2 }}-proxyv2{{ end }}=0.0.0.0:{{ .Values.service.customDomains.internalHttpsPort | int }}
@@ -95,9 +98,9 @@ data:
     {{- end }}
     {{- if eq $.Values.global.pages.accessControl true }}
     auth-redirect-uri={{ template "oauth.gitlab-pages.authRedirectUri" . }}
-    auth-client-id=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appid').strip.dump[1..-2] %>
-    auth-client-secret=<%= File.read('/etc/gitlab-secrets/pages/gitlab_appsecret').strip.dump[1..-2] %>
-    auth-secret=<%= File.read('/etc/gitlab-secrets/pages/auth_secret').strip.dump[1..-2] %>
+    auth-client-id={% file.Read "/etc/gitlab-secrets/pages/gitlab_appid" %}
+    auth-client-secret={% file.Read "/etc/gitlab-secrets/pages/gitlab_appsecret" %}
+    auth-secret={% file.Read "/etc/gitlab-secrets/pages/auth_secret" %} 
     {{- end }}
     {{- with .Values.zipCache }}
     {{- if .cleanup }}
