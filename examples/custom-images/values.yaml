@@ -38,7 +38,7 @@ gitlab:
   sidekiq:
     <<: *custom
     init: *custom
-  task-runner:
+  toolbox:
     <<: *custom
     init: *custom
   webservice:

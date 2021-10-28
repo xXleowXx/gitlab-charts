@@ -158,7 +158,7 @@ module Gitlab
     end
 
     def pod_name
-      filters = 'app=task-runner'
+      filters = 'app=toolbox'
 
       @pod ||= find_pod_name(filters)
     end

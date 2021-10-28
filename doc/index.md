@@ -31,7 +31,7 @@ can be installed separately.
   - GitLab/[Mailroom](charts/gitlab/mailroom/index.md)
   - GitLab/[Migrations](charts/gitlab/migrations/index.md)
   - GitLab/[Sidekiq](charts/gitlab/sidekiq/index.md)
-  - GitLab/[Task Runner](charts/gitlab/task-runner/index.md)
+  - GitLab/[Toolbox](charts/gitlab/toolbox/index.md)
   - GitLab/[Webservice](charts/gitlab/webservice/index.md)
 - Optional dependencies:
   - [PostgreSQL](https://artifacthub.io/packages/helm/bitnami/postgresql)
