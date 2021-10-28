@@ -85,9 +85,9 @@ Appropriate IRSA annotations for roles can be applied to ServiceAccounts through
 this Helm chart in one of two ways:
 
 1. ServiceAccounts that have been pre-created as described in the above AWS documentation.
-This will ensure the proper annotations on the ServiceAccount and the linked OIDC provider.
+   This ensures the proper annotations on the ServiceAccount and the linked OIDC provider.
 1. Chart-generated ServiceAccounts with annotations defined. We allow for the configuration
-of annotations on ServiceAccounts both globally and on a per-chart basis.
+   of annotations on ServiceAccounts both globally and on a per-chart basis.
 
 WARNING:
 Using the `backup-utility` as specified in the [backup documentation](../../backup-restore/backup.md)
@@ -95,7 +95,7 @@ does not properly copy the backup file to the S3 bucket. The `backup-utility` us
 the `s3cmd` to perform the copy of the backup file and it has a known
 issue of [not supporting OIDC authentication](https://github.com/s3tools/s3cmd/issues/1075).
 There is a [pull request](https://github.com/s3tools/s3cmd/pull/1112)
-to mitigate this issue, but it has yet to be accepted into the `s3cmd` code base.
+to mitigate this issue, but it has yet to be accepted into the `s3cmd` codebase.
 
 #### Using pre-created service accounts
 
