@@ -217,8 +217,9 @@ For Google Cloud Storage (GCS):
 
 See the [backup/restore object storage documentation](../../backup-restore/index.md#object-storage) for full details.
 
-> **Note**: In order to backup/restore files from the other object storage locations, the configuration file needs to be
-> configured to authenticate as a user with sufficient access to read/write to all GitLab buckets.
+NOTE:
+To backup or restore files from the other object storage locations, the configuration file needs to be
+configured to authenticate as a user with sufficient access to read/write to all GitLab buckets.
 
 ### Backups storage example
 
@@ -260,7 +261,7 @@ See the [backup/restore object storage documentation](../../backup-restore/index
 
      # Setup access keys
      # Access Key = Azure Storage Account name
-     access_key =  BOGUS_ACCOUNT_NAME
+     access_key = BOGUS_ACCOUNT_NAME
      # Secret Key = Azure Storage Account Key
      secret_key = BOGUS_KEY
 
