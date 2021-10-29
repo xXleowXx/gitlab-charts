@@ -231,6 +231,11 @@ compatibility:
 # See https://github.com/docker/distribution/issues/2795
 validation:
   disabled: true
+  manifests:
+    referencelimit: 0
+    urls:
+      allow: []
+      deny: []
 
 # Configure the logging mechanism for the Container Registry as desired
 # See https://docs.docker.com/registry/configuration/#log
