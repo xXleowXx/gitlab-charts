@@ -312,7 +312,7 @@ workhorse:
 
 ## Git over SSH: `the remote end hung up unexpectedly`
 
-Git operations over SSH may fail intermittently with the following error:
+Git operations over SSH might fail intermittently with the following error:
 
 ```plaintext
 fatal: the remote end hung up unexpectedly
@@ -320,32 +320,32 @@ fatal: early EOF
 fatal: index-pack failed
 ```
 
-There are a number of potential causes for this.
+There are a number of potential causes for this error:
 
-### Network timeouts
+- **Network timeouts**:
 
-Git clients sometimes open a connection and leave it idling, for example: while compressing objects.
-Settings such as `timeout client` in HAProxy may cause these idle connections to get terminated.
+  Git clients sometimes open a connection and leave it idling, like when compressing objects.
+  Settings like `timeout client` in HAProxy might cause these idle connections to be terminated.
 
-In [GitLab 14.0 (chart version 5.0)](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2049) and later a
-keepalive can be set in `sshd`:
+  In [GitLab 14.0 (chart version 5.0)](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2049)
+  and later, you can set a keepalive in `sshd`:
 
-```yaml
-gitlab:
-  gitlab-shell:
-    config:
-      clientAliveInterval: 15
-```
+  ```yaml
+  gitlab:
+    gitlab-shell:
+      config:
+        clientAliveInterval: 15
+  ```
 
-### `gitlab-shell` memory
+- **`gitlab-shell` memory**:
 
-By default, the chart does not set a limit on GitLab Shell memory.
-If `gitlab.gitlab-shell.resources.limits.memory` is set too low, Git operations over SSH may fail with these errors.
+  By default, the chart does not set a limit on GitLab Shell memory.
+  If `gitlab.gitlab-shell.resources.limits.memory` is set too low, Git operations over SSH may fail with these errors.
 
-Check with `kubectl describe nodes` to confirm that this is caused by memory limits rather than
-timeouts over the network.
+  Run `kubectl describe nodes` to confirm that this is caused by memory limits rather than
+  timeouts over the network.
 
-```plaintext
-System OOM encountered, victim process: gitlab-shell
-Memory cgroup out of memory: Killed process 3141592 (gitlab-shell)
-```
+  ```plaintext
+  System OOM encountered, victim process: gitlab-shell
+  Memory cgroup out of memory: Killed process 3141592 (gitlab-shell)
+  ```
