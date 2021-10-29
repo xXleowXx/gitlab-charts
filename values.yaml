@@ -277,6 +277,7 @@ global:
       matomoUrl:
       matomoSiteId:
       matomoDisableCookies:
+      oneTrustId:
 
     ## https://docs.gitlab.com/charts/charts/globals#lfs-artifacts-uploads-packages-external-mr-diffs-and-dependency-proxy
     object_store:
