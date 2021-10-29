@@ -89,7 +89,7 @@ In future tests we will try to include sustained concurrent load, to better matc
   - memory: > `20M` (greater than stress task)
 
 Check the [troubleshooting documentation](../troubleshooting/index.md#git-over-ssh-the-remote-end-hung-up-unexpectedly)
-for details on what might happen if `gitlab-shell.limits.memory` is set too low.
+for details on what might happen if `gitlab.gitlab-shell.resources.limits.memory` is set too low.
 
 ### Webservice
 

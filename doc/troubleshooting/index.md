@@ -324,14 +324,14 @@ There are a number of potential causes for this.
 
 ### Network timeouts
 
-Long running connections from Git clients doing things like compressing objects before sending might run
-into timeouts such as [the haxproxy timeout_client](https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/-/blob/bac2c92cec052783b8d34244bb1e4afda95c5eb5/attributes/default.rb#L39)
-setting.
+Git clients sometimes open a connection and leave it idling, for example: while compressing objects.
+Settings such as `timeout client` in HAProxy may cause these idle connections to get terminated.
 
-From [Chart 5.0 (GitLab 14.0)](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2049) a
+In [GitLab 14.0 (chart version 5.0)](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2049) and later a
 keepalive can be set in `sshd`:
 
 ```yaml
+gitlab:
   gitlab-shell:
     config:
       clientAliveInterval: 15
@@ -340,7 +340,7 @@ keepalive can be set in `sshd`:
 ### `gitlab-shell` memory
 
 By default, the chart does not set a limit on GitLab Shell memory.
-If `gitlab-shell.limits.memory` is set too low, Git operations over SSH may fail with these errors.
+If `gitlab.gitlab-shell.resources.limits.memory` is set too low, Git operations over SSH may fail with these errors.
 
 Check with `kubectl describe nodes` to confirm that this is caused by memory limits rather than
 timeouts over the network.
