@@ -71,7 +71,7 @@ to the `helm install` command using the `--set` flags:
 | `resources.requests.cpu`             | `900m`            | Sidekiq minimum needed CPU               |
 | `resources.requests.memory`          | `2G`              | Sidekiq minimum needed memory            |
 | `resources.limits.memory`            |                   | Sidekiq maximum allowed memory           |
-| `timeout`                            | `5`               | Sidekiq job timeout                      |
+| `timeout`                            | `25`              | Sidekiq job timeout                      |
 | `tolerations`                        | `[]`              | Toleration labels for pod assignment     |
 | `memoryKiller.daemonMode`            | `true`            | If `false`, uses the legacy memory killer mode |
 | `memoryKiller.maxRss`                | `2000000`         | Maximum RSS before delayed shutdown triggered expressed in kilobytes |

@@ -953,7 +953,7 @@ describe 'checkConfig template' do
         )).deep_merge(default_required_values)
       end
 
-      let(:error_output) { 'You must set `terminationGracePeriodSeconds` (1) longer than `timeout` (5) for pod `valid-1`.' }
+      let(:error_output) { 'You must set `terminationGracePeriodSeconds` (1) longer than `timeout` (25) for pod `valid-1`.' }
 
       include_examples 'config validation',
                       success_description: 'when Sidekiq timeout is less than terminationGracePeriodSeconds',
