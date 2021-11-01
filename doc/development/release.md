@@ -10,13 +10,13 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ### Major Releases
 
-Major releases will be for breaking changes **and** significant milestones in the chart or GitLab release. We will start at 0, and bump it to 1 for our GA release of the charts.
+Major releases are for breaking changes **and** significant milestones in the chart or GitLab release.
 
-We will bump it for:
+We will bump the major version number for:
 
-- significant additions/changes (let's say we add pages by default, or we drop NGINX completely)
-- breaking changes in GitLab or in the charts (requiring manual interaction to your existing install to upgrade)
-- Major updates in the GitLab image. (the release of 12.0.0)
+- Significant additions or changes. For example, we add Pages by default or we drop NGINX completely.
+- Breaking changes in GitLab or in the charts, requiring manual interaction to your existing install to upgrade.
+- Major updates in the GitLab image. For example, the release of 12.0.0.
 
 ### Minor Releases
 
