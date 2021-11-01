@@ -22,7 +22,7 @@ describe 'Sidekiq configuration' do
 
   context 'when setting extraEnv' do
     def container_name(pod)
-      "Deployment/test-sidekiq-#{pod}-v1"
+      "Deployment/test-sidekiq-#{pod}-v2"
     end
 
     context 'when the global value is set' do
@@ -172,7 +172,7 @@ describe 'Sidekiq configuration' do
 
       expect(t.exit_code).to eq(0)
       expect(t.env(
-        'Deployment/test-sidekiq-all-in-1-v1',
+        'Deployment/test-sidekiq-all-in-1-v2',
         'sidekiq')).to include(
           { 'name' => 'SIDEKIQ_DAEMON_MEMORY_KILLER', 'value' => '1' },
           { 'name' => 'SIDEKIQ_MEMORY_KILLER_CHECK_INTERVAL', 'value' => '3' },
@@ -182,7 +182,7 @@ describe 'Sidekiq configuration' do
         )
 
       expect(t.env(
-        'Deployment/test-sidekiq-all-in-1-v1',
+        'Deployment/test-sidekiq-all-in-1-v2',
         'sidekiq')).not_to include(
           { 'name' => 'SIDEKIQ_MEMORY_KILLER_HARD_LIMIT_RSS' }
         )
@@ -193,7 +193,7 @@ describe 'Sidekiq configuration' do
 
       expect(t.exit_code).to eq(0)
       expect(t.env(
-        'Deployment/test-sidekiq-all-in-1-v1',
+        'Deployment/test-sidekiq-all-in-1-v2',
         'sidekiq')).to include(
           { 'name' => 'SIDEKIQ_MEMORY_KILLER_HARD_LIMIT_RSS', 'value' => '9000000' }
         )
@@ -237,7 +237,7 @@ describe 'Sidekiq configuration' do
 
         expect(t.exit_code).to eq(0)
         expect(t.env(
-          'Deployment/test-sidekiq-s0-v1',
+          'Deployment/test-sidekiq-s0-v2',
           'sidekiq')).to include(
             { 'name' => 'SIDEKIQ_DAEMON_MEMORY_KILLER', 'value' => '1' },
             { 'name' => 'SIDEKIQ_MEMORY_KILLER_CHECK_INTERVAL', 'value' => '3' },
@@ -247,7 +247,7 @@ describe 'Sidekiq configuration' do
           )
 
         expect(t.env(
-          'Deployment/test-sidekiq-s0-v1',
+          'Deployment/test-sidekiq-s0-v2',
           'sidekiq')).not_to include(
             { 'name' => 'SIDEKIQ_MEMORY_KILLER_HARD_LIMIT_RSS' }
           )
@@ -258,13 +258,13 @@ describe 'Sidekiq configuration' do
 
         expect(t.exit_code).to eq(0)
         expect(t.env(
-          'Deployment/test-sidekiq-s0-v1',
+          'Deployment/test-sidekiq-s0-v2',
           'sidekiq')).not_to include(
             { 'name' => 'SIDEKIQ_MEMORY_KILLER_HARD_LIMIT_RSS' }
           )
 
         expect(t.env(
-          'Deployment/test-sidekiq-s1-v1',
+          'Deployment/test-sidekiq-s1-v2',
           'sidekiq')).to include(
             { 'name' => 'SIDEKIQ_MEMORY_KILLER_MAX_RSS', 'value' => '9' },
           )
@@ -317,12 +317,12 @@ describe 'Sidekiq configuration' do
         t = HelmTemplate.new(default_values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
         expect(t.dig('ConfigMap/test-sidekiq', 'metadata', 'labels')).to include('global' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).not_to include('global' => 'global')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => 'true')
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('pod' => 'true')
-        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v2', 'metadata', 'labels')).not_to include('global' => 'global')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v2', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v2', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v2', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => 'true')
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v2', 'spec', 'template', 'metadata', 'labels')).to include('pod' => 'true')
+        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-all-in-1-v2', 'metadata', 'labels')).to include('global' => 'sidekiq')
         expect(t.dig('NetworkPolicy/test-sidekiq-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
         expect(t.dig('PodDisruptionBudget/test-sidekiq-all-in-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
         expect(t.dig('ServiceAccount/test-sidekiq', 'metadata', 'labels')).to include('global' => 'sidekiq')
@@ -368,26 +368,26 @@ describe 'Sidekiq configuration' do
         t = HelmTemplate.new(default_values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
         expect(t.dig('ConfigMap/test-sidekiq', 'metadata', 'labels')).to include('global' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('foo' => 'global')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('sidekiq' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).not_to include('global' => 'global')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => 'true')
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'metadata', 'labels')).to include('pod' => 'true')
-        expect(t.dig('Deployment/test-sidekiq-pod-2-v1', 'spec', 'template', 'metadata', 'labels')).to include('deployment' => 'negateQueues')
-        expect(t.dig('Deployment/test-sidekiq-pod-2-v1', 'spec', 'template', 'metadata', 'labels')).to include('sidekiq' => 'pod-2')
-        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'spec', 'template', 'metadata', 'labels')).to include('deployment' => 'fooQueue')
-        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'metadata', 'labels')).to include('sidekiq' => 'pod-common-3')
-        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'metadata', 'labels')).not_to include('sidekiq' => 'pod-label-3')
-        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'metadata', 'labels')).not_to include('sidekiq' => 'sidekiq')
-        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'spec', 'template', 'metadata', 'labels')).to include('sidekiq' => 'pod-label-3')
-        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'spec', 'template', 'metadata', 'labels')).not_to include('sidekiq' => 'pod-common-3')
-        expect(t.dig('Deployment/test-sidekiq-pod-3-v1', 'spec', 'template', 'metadata', 'labels')).not_to include('sidekiq' => 'sidekiq')
-        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-1-v1', 'metadata', 'labels')).to include('global' => 'sidekiq')
-        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-3-v1', 'metadata', 'labels')).to include('sidekiq' => 'pod-common-3')
-        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-3-v1', 'metadata', 'labels')).not_to include('sidekiq' => 'pod-label-3')
-        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-3-v1', 'metadata', 'labels')).not_to include('sidekiq' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'metadata', 'labels')).to include('foo' => 'global')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'metadata', 'labels')).to include('sidekiq' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'metadata', 'labels')).not_to include('global' => 'global')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'spec', 'template', 'metadata', 'labels')).to include('global' => 'pod')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => 'true')
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'spec', 'template', 'metadata', 'labels')).to include('pod' => 'true')
+        expect(t.dig('Deployment/test-sidekiq-pod-2-v2', 'spec', 'template', 'metadata', 'labels')).to include('deployment' => 'negateQueues')
+        expect(t.dig('Deployment/test-sidekiq-pod-2-v2', 'spec', 'template', 'metadata', 'labels')).to include('sidekiq' => 'pod-2')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v2', 'spec', 'template', 'metadata', 'labels')).to include('deployment' => 'fooQueue')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v2', 'metadata', 'labels')).to include('sidekiq' => 'pod-common-3')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v2', 'metadata', 'labels')).not_to include('sidekiq' => 'pod-label-3')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v2', 'metadata', 'labels')).not_to include('sidekiq' => 'sidekiq')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v2', 'spec', 'template', 'metadata', 'labels')).to include('sidekiq' => 'pod-label-3')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v2', 'spec', 'template', 'metadata', 'labels')).not_to include('sidekiq' => 'pod-common-3')
+        expect(t.dig('Deployment/test-sidekiq-pod-3-v2', 'spec', 'template', 'metadata', 'labels')).not_to include('sidekiq' => 'sidekiq')
+        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-1-v2', 'metadata', 'labels')).to include('global' => 'sidekiq')
+        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-3-v2', 'metadata', 'labels')).to include('sidekiq' => 'pod-common-3')
+        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-3-v2', 'metadata', 'labels')).not_to include('sidekiq' => 'pod-label-3')
+        expect(t.dig('HorizontalPodAutoscaler/test-sidekiq-pod-3-v2', 'metadata', 'labels')).not_to include('sidekiq' => 'sidekiq')
         expect(t.dig('PodDisruptionBudget/test-sidekiq-pod-3-v1', 'metadata', 'labels')).to include('sidekiq' => 'pod-common-3')
         expect(t.dig('PodDisruptionBudget/test-sidekiq-pod-3-v1', 'metadata', 'labels')).not_to include('sidekiq' => 'pod-label-3')
         expect(t.dig('PodDisruptionBudget/test-sidekiq-pod-3-v1', 'metadata', 'labels')).not_to include('sidekiq' => 'sidekiq')
@@ -413,7 +413,7 @@ describe 'Sidekiq configuration' do
     context 'with default deployment-global value and no pod-local value' do
       it 'sets default deployment-global value for terminationGracePeriodSeconds in the Pod spec' do
         t = HelmTemplate.new(default_values)
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(30)
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v2', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(30)
       end
     end
 
@@ -429,7 +429,7 @@ describe 'Sidekiq configuration' do
 
       it 'sets user specified deployment-global value for terminationGracePeriodSeconds in the Pod spec' do
         t = HelmTemplate.new(default_values.deep_merge(chart_values))
-        expect(t.dig('Deployment/test-sidekiq-all-in-1-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(60)
+        expect(t.dig('Deployment/test-sidekiq-all-in-1-v2', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(60)
       end
     end
 
@@ -447,7 +447,7 @@ describe 'Sidekiq configuration' do
 
       it 'sets user specified pod-local value for terminationGracePeriodSeconds in the Pod spec' do
         t = HelmTemplate.new(default_values.deep_merge(chart_values))
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(55)
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(55)
       end
     end
 
@@ -469,12 +469,12 @@ describe 'Sidekiq configuration' do
 
       it 'sets user specified pod-local value for terminationGracePeriodSeconds in the Pod spec' do
         t = HelmTemplate.new(default_values.deep_merge(chart_values))
-        expect(t.dig('Deployment/test-sidekiq-pod-1-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(66)
+        expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(66)
       end
 
       it 'sets user specified deployment-global value for terminationGracePeriodSeconds in the Pod spec where pod-local value is not set' do
         t = HelmTemplate.new(default_values.deep_merge(chart_values))
-        expect(t.dig('Deployment/test-sidekiq-pod-2-v1', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(77)
+        expect(t.dig('Deployment/test-sidekiq-pod-2-v2', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(77)
       end
     end
   end
