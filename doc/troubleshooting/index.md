@@ -178,7 +178,9 @@ Sidekiq pods did not receive a unique selector prior to chart release
 `3.0.0`. [The problems with this were documented in](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/663).
 
 Upgrades to `3.0.0` using Helm will automatically delete the old Sidekiq deployments and create new ones by appending `-v1` to the
-name of the Sidekiq `Deployments`,`HPAs`, and `Pods`.
+name of the Sidekiq `Deployments`,`HPAs`, and `Pods`. 
+
+Starting from `5.5.0` Helm will delete old Sidekiq deployments from prior versions and will use `-v2` suffix for `Pods`, `Deployments` and `HPAs`.
 
 If you continue to run into this error on the Sidekiq deployment when installing `3.0.0`, resolve these with the following
 steps:
@@ -232,7 +234,7 @@ You can find the full explanation and workaround in [Migrating from Helm v2 to H
 
 You may face this error when restoring a backup on your Helm chart instance. Use the following steps as a workaround:
 
-1. Inside your `task-runner` pod open the DB console:
+1. Inside your `toolbox` pod open the DB console:
 
    ```shell
    /srv/gitlab/bin/rails dbconsole -p

@@ -641,11 +641,11 @@ describe 'checkConfig template' do
                     error_description: 'when Gitaly and Praefect are enabled and no storages are named "default"'
   end
 
-  describe 'gitaly.task-runner.replicas' do
+  describe 'gitaly.toolbox.replicas' do
     let(:success_values) do
       YAML.safe_load(%(
         gitlab:
-          task-runner:
+          toolbox:
             replicas: 1
             persistence:
               enabled: true
@@ -655,7 +655,7 @@ describe 'checkConfig template' do
     let(:error_values) do
       YAML.safe_load(%(
         gitlab:
-          task-runner:
+          toolbox:
             replicas: 2
             persistence:
               enabled: true
@@ -665,8 +665,8 @@ describe 'checkConfig template' do
     let(:error_output) { 'more than 1 replica, but also with a PersistentVolumeClaim' }
 
     include_examples 'config validation',
-                     success_description: 'when task-runner has persistence enabled and one replica',
-                     error_description: 'when task-runner has persistence enabled and more than one replica'
+                     success_description: 'when toolbox has persistence enabled and one replica',
+                     error_description: 'when toolbox has persistence enabled and more than one replica'
   end
 
   describe 'multipleRedis' do
@@ -953,7 +953,7 @@ describe 'checkConfig template' do
         )).deep_merge(default_required_values)
       end
 
-      let(:error_output) { 'You must set `terminationGracePeriodSeconds` (1) longer than `timeout` (5) for pod `valid-1`.' }
+      let(:error_output) { 'You must set `terminationGracePeriodSeconds` (1) longer than `timeout` (25) for pod `valid-1`.' }
 
       include_examples 'config validation',
                       success_description: 'when Sidekiq timeout is less than terminationGracePeriodSeconds',

@@ -158,7 +158,7 @@ CIYAML
     gitlab-shell:
       minReplicas: 1    # 2
       maxReplicas: 2    # 10
-    task-runner:
+    toolbox:
       enabled: true
   nginx-ingress:
     controller:
@@ -257,13 +257,13 @@ function wait_for_deploy {
   echo ""
 }
 
-function restart_task_runner() {
-  # restart the task-runner pods, by deleting them
+function restart_toolbox() {
+  # restart the toolbox pods, by deleting them
   # the ReplicaSet of the Deployment will re-create them
   # this ensure we run up-to-date on tags like `master` when there
   # have been no changes to the configuration to warrant a restart
   # via metadata checksum annotations
-  kubectl -n ${NAMESPACE} delete pods -lapp=task-runner,release=${RELEASE_NAME}
+  kubectl -n ${NAMESPACE} delete pods -lapp=toolbox,release=${RELEASE_NAME}
   # always "succeed" so not to block.
   return 0
 }

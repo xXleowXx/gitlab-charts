@@ -277,6 +277,7 @@ global:
       matomoUrl:
       matomoSiteId:
       matomoDisableCookies:
+      oneTrustId:
 
     ## https://docs.gitlab.com/charts/charts/globals#lfs-artifacts-uploads-packages-external-mr-diffs-and-dependency-proxy
     object_store:
@@ -1055,8 +1056,8 @@ grafana:
 ## Settings for individual sub-charts under GitLab
 ## Note: Many of these settings are configurable via globals
 gitlab:
-  ## https://docs.gitlab.com/charts/charts/gitlab/task-runner
-  task-runner:
+  ## https://docs.gitlab.com/charts/charts/gitlab/toolbox
+  toolbox:
     replicas: 1
     antiAffinityLabels:
       matchLabels:

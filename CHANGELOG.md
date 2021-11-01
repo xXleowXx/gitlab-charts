@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.4.1 (2021-10-28)
+
+No changes.
+
 ## 5.4.0 (2021-10-21)
 
 ### Added (2 changes)
@@ -28,6 +32,10 @@ entry.
 
 - [Remove reference to deprecated operator](gitlab-org/charts/gitlab@d03e3293fdfe698eb3b5defe0b919351ef9485eb) ([merge request](gitlab-org/charts/gitlab!2197))
 - [Add $PLATFORM to installation commands](gitlab-org/charts/gitlab@8e72a88fb391cb98f64e712b07e65d65db4ab8fd) ([merge request](gitlab-org/charts/gitlab!2190))
+
+## 5.3.4 (2021-10-28)
+
+No changes.
 
 ## 5.3.3 (2021-10-12)
 
@@ -62,6 +70,10 @@ No changes.
 - [Change default configuration for HSTS](gitlab-org/charts/gitlab@14936c95c921770b67c28642dc950fa186252bdd) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2118))
 - [Update gitlab-org/charts/gitlab-runner from 0.31.0 to 0.32.0](gitlab-org/charts/gitlab@0665982645d842994a54bddb1269fbb694a743cb) ([merge request](gitlab-org/charts/gitlab!2149))
 - [Adds pages local_store configuration](gitlab-org/charts/gitlab@426c34858876fe0d52cd4fe880f44771af17e19b) ([merge request](gitlab-org/charts/gitlab!2141))
+
+## 5.2.6 (2021-10-28)
+
+No changes.
 
 ## 5.2.5 (2021-09-30)
 
@@ -254,6 +266,10 @@ No changes.
 - [Remove deprecated `experimentalQueueSelector` option for Sidekiq](gitlab-org/charts/gitlab@007788f0ba373f7d3fc51623ea5b70021b62ca5b) ([merge request](gitlab-org/charts/gitlab!2023))
 - [Remove the old resouce changes notices](gitlab-org/charts/gitlab@1755275b75dfe669c038e44dd2d218e3aa62c2e6) ([merge request](gitlab-org/charts/gitlab!2028))
 - [Remove ability to disable cluster from sidekiq values](gitlab-org/charts/gitlab@0de93fe181cd8c514aec013bf7e1541e1b41660b) ([merge request](gitlab-org/charts/gitlab!2024))
+
+## 4.12.13 (2021-10-29)
+
+No changes.
 
 ## 4.12.12 (2021-09-21)
 
