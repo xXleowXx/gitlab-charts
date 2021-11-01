@@ -355,6 +355,8 @@ For example, consider this test refactor:
 Before: ~14 seconds to run
 
 ```ruby
+let(:template) { HelmTemplate.new(deployments_values) }
+
 it 'properly sets the global ingress provider when not specified' do
   expect(template.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'global-provider')
 end
@@ -367,10 +369,12 @@ end
 After: ~5 seconds to run
 
 ```ruby
+let(:template) { HelmTemplate.new(deployments_values) }
+
 it 'properly sets the ingress provider' do
   expect(template.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'global-provider')
   expect(template.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
 end
 ```
 
-Consolidating two `it` blocks into one leads to significant time savings.
+Consolidating two `it` blocks into one leads to significant time savings because it reduces the number of calls to `helm template`.
