@@ -336,7 +336,7 @@ the start of an RSpec run `kubectl get nodes` will be checked for results
 and if it returns successfully the tests in the `features` directory will
 be included.
 
-## Optimizing for test speed
+## Optimizing test speed
 
 Each `it` block runs a Helm template, which is a time and resource intensive
 operation. Given the high frequency of these blocks in our RSpec test suites,
