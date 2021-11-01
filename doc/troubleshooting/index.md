@@ -180,7 +180,7 @@ Sidekiq pods did not receive a unique selector prior to chart release
 Upgrades to `3.0.0` using Helm will automatically delete the old Sidekiq deployments and create new ones by appending `-v1` to the
 name of the Sidekiq `Deployments`,`HPAs`, and `Pods`. 
 
-Starting from `5.4.0` Helm will automatically delete old Sidekiq deployments (including ones with `-v1` suffixes) and will use `-v2` suffix for `Pods`, `Deployments` and `HPAs`.
+Starting from `5.5.0` Helm will delete old Sidekiq deployments from prior versions and will use `-v2` suffix for `Pods`, `Deployments` and `HPAs`.
 
 If you continue to run into this error on the Sidekiq deployment when installing `3.0.0`, resolve these with the following
 steps:
