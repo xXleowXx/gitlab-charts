@@ -111,7 +111,7 @@ describe "Restoring a backup" do
 
       Dir.glob("/tmp/original_backup/*") do |file|
         file_path = "/tmp/test_backup/#{File.basename(file)}"
-        expect(File.exist?(file_path)).to be_truthy, "Expected #{file_path} to exist in original and test"
+        expect(File.exist?(file_path)).to be_truthy, "#{File.basename(file)} exists in original backup but not in test ( #{file_path} )"
         # extract every tar file
         if File.extname(file) == 'tar'
           cmd = "tar -xf #{file} -C /tmp/original_backup"
