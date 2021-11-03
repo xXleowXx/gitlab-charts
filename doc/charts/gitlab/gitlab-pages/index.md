@@ -101,6 +101,8 @@ configurations that can be supplied to the `helm install` command using the
 | `zipCache.expiration`            | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |
 | `zipCache.refresh`               | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |
 | `zipOpenTimeout`                 | int                   | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration) |
+| `rateLimitSourceIP`              | int                   | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits) |
+| `rateLimitSourceIPBurst`         | int                   | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits) |
 
 ### Configuring the `ingress`
 
