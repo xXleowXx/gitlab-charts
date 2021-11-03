@@ -54,7 +54,7 @@ class HelmTemplate
     stdout.strip
   end
 
-  def template(values, release_name = 'test', extra_args)
+  def template(values, release_name = 'test', extra_args = '')
     @values  = values
     result = Open3.capture3(self.class.helm_template_call(namespace: 'default', release_name: release_name, extra_args: extra_args),
                             chdir: File.join(__dir__,  '..'),
