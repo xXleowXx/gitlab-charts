@@ -8,6 +8,10 @@ describe 'GitLab Ingress configuration(s)' do
     template.dig("Ingress/#{ingress_name}", 'spec', 'rules', 0, 'http', 'paths')
   end
 
+  def get_apiVersion(template, ingress_name)
+    template.dig("Ingress/#{ingress_name}", 'apiVersion')
+  end
+
   let(:default_values) do
     YAML.safe_load(%(
       certmanager-issuer:
@@ -140,6 +144,52 @@ describe 'GitLab Ingress configuration(s)' do
         paths = get_paths(template, "test-webservice-root-smartcard")
         paths.each do |p|
           expect(p["backend"]["serviceName"]).to eq("test-webservice-root")
+        end
+      end
+    end
+  end
+
+  describe 'api version' do
+    let(:api_version_specified) do
+      enable_all_ingress.deep_merge(YAML.safe_load(%(
+        global:                                                   
+          ingress:
+            apiVersion: global/v0beta0
+        gitlab:
+          webservice:
+            deployments:
+              default: 
+                ingress:
+                  path: /
+                  apiVersion: local/v0beta0
+      )))
+    end
+
+    context 'when not specified' do
+      it 'sets extensions/v1beta1' do
+        template = HelmTemplate.new(enable_all_ingress)
+        expect(template.exit_code).to eq(0)
+
+        ingress_names.each do |ingress_name|
+          apiVersion = get_apiVersion(template, ingress_name)
+          expect(apiVersion).to eq("extensions/v1beta1")
+        end
+      end
+    end
+
+    context 'when specified' do
+      it 'sets proper apiVersion' do
+        template = HelmTemplate.new(api_version_specified)
+        expect(template.exit_code).to eq(0)
+
+        ingress_names.each do |ingress_name|
+          apiVersion = get_apiVersion(template, ingress_name)
+
+          if ingress_name.include? "webservice"
+            expect(apiVersion).to eq("local/v0beta0")
+          else
+            expect(apiVersion).to eq("global/v0beta0")
+          end
         end
       end
     end
