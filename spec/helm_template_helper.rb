@@ -6,13 +6,14 @@ class HelmTemplate
     `helm version -c`.match('Ver(sion)?:"v(\d)\.')[2]
   end
 
-  def self.helm_template_call(release_name: 'test', path: '-', namespace: nil)
+  def self.helm_template_call(release_name: 'test', path: '-', namespace: nil, api_versions: nil)
     namespace_arg = namespace.nil? ? '' : "--namespace #{namespace}"
+    api_versions_arg = api_versions.nil? ? '' : "--api-versions=#{api_versions}"
     case helm_version
     when "2" then
-      "helm template -n #{release_name} -f #{path} #{namespace_arg} ."
+      "helm template -n #{release_name} -f #{path} #{namespace_arg} #{api_versions_arg} ."
     when "3" then
-      "helm template #{release_name} . -f #{path} #{namespace_arg}"
+      "helm template #{release_name} . -f #{path} #{namespace_arg} #{api_versions_arg}"
     else
       # If we don't know the version of Helm, use `false` command
       "false"
@@ -41,8 +42,8 @@ class HelmTemplate
 
   attr_reader :mapped
 
-  def initialize(values, release_name = 'test')
-    template(values, release_name)
+  def initialize(values, release_name = 'test', api_versions = '')
+    template(values, release_name, api_versions)
   end
 
   def namespace
@@ -53,9 +54,9 @@ class HelmTemplate
     stdout.strip
   end
 
-  def template(values, release_name = 'test')
+  def template(values, release_name = 'test', api_versions)
     @values  = values
-    result = Open3.capture3(self.class.helm_template_call(namespace: 'default', release_name: release_name),
+    result = Open3.capture3(self.class.helm_template_call(namespace: 'default', release_name: release_name, api_versions: api_versions),
                             chdir: File.join(__dir__,  '..'),
                             stdin_data: YAML.dump(values))
     @stdout, @stderr, @exit_code = result

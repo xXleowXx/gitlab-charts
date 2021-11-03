@@ -165,14 +165,26 @@ describe 'GitLab Ingress configuration(s)' do
       )))
     end
 
-    context 'when not specified' do
-      it 'sets extensions/v1beta1' do
+    context 'when not specified (without cluster connection)' do
+      it 'sets default version (extensions/v1beta1)' do
         template = HelmTemplate.new(enable_all_ingress)
         expect(template.exit_code).to eq(0)
 
         ingress_names.each do |ingress_name|
           api_version = get_api_version(template, ingress_name)
           expect(api_version).to eq("extensions/v1beta1")
+        end
+      end
+    end
+
+    context 'when not specified (with cluster connection)' do
+      it 'sets highest cluster-supported version' do
+        template = HelmTemplate.new(enable_all_ingress, 'test', 'networking.k8s.io/v1/Ingress')
+        expect(template.exit_code).to eq(0)
+
+        ingress_names.each do |ingress_name|
+          api_version = get_api_version(template, ingress_name)
+          expect(api_version).to eq('networking.k8s.io/v1')
         end
       end
     end
