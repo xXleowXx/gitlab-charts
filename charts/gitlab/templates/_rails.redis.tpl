@@ -76,3 +76,15 @@ If no `global.redis.actioncable`, use `global.redis`
 {{- end -}}
 {{- include "gitlab.rails.redis.yaml" (dict "context" $ "name" "cable") -}}
 {{- end -}}
+
+
+{{- define "gitlab.rails.redis.all" -}}
+{{ include "gitlab.rails.redis.resque" . }}
+{{ include "gitlab.rails.redis.cache" . }}
+{{ include "gitlab.rails.redis.sharedState" . }}
+{{ include "gitlab.rails.redis.queues" . }}
+{{ include "gitlab.rails.redis.cable" . }}
+{{ include "gitlab.rails.redis.traceChunks" . }}
+{{ include "gitlab.rails.redis.rateLimiting" . }}
+{{ include "gitlab.rails.redis.sessions" . }}
+{{- end -}}
