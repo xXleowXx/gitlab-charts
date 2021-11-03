@@ -346,7 +346,7 @@ The [RSpec docs](https://relishapp.com/rspec/rspec-core/v/3-10/docs/helper-metho
 provide further explanation:
 
 >>>
-Use let to define a memoized helper method. The value will be cached
+Use `let` to define a memoized helper method. The value will be cached
 across multiple calls in the same example but not across examples.
 >>>
 
