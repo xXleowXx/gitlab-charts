@@ -101,12 +101,12 @@ If consolidated object storage is in use, read the connection YAML
 {%- $aws_secret_access_key := "" -%}
 {%- $azure_storage_account_name := "" -%}
 {%- $azure_storage_access_key := "" -%}
-{%- if file.Exists "/etc/gitlab/minio/accesskey" -%}
+{%- if file.Exists "/etc/gitlab/minio/accesskey" %}
   {%- $provider = "AWS" -%}
   {%- $aws_access_key_id = file.Read "/etc/gitlab/minio/accesskey" | strings.TrimSpace -%}
   {%- $aws_secret_access_key = file.Read "/etc/gitlab/minio/secretkey" | strings.TrimSpace -%}
-{%- end -%}
-{%- if file.Exists "/etc/gitlab/objectstorage/object_store" -%}
+{%- end %}
+{%- if file.Exists "/etc/gitlab/objectstorage/object_store" %}
   {%- $connection := file.Read "/etc/gitlab/objectstorage/object_store" | strings.TrimSpace | data.YAML -%}
   {%- $provider = $connection.provider -%}
   {%- if has $connection "aws_access_key_id" -%}
@@ -116,23 +116,23 @@ If consolidated object storage is in use, read the connection YAML
     {%- $azure_storage_account_name = $connection.azure_storage_account_name -%}
     {%- $azure_storage_access_key = $connection.azure_storage_access_key -%}
   {%- end -%}
-{%- end -%}
+{%- end %}
 {%- if has $supported_providers $provider %}
 [object_storage]
 provider = "{% $provider %}"
-{%   if eq $provider "AWS" -%}
+{%-   if eq $provider "AWS" %}
 # AWS / S3 object storage configuration.
 [object_storage.s3]
 # access/secret can be blank!
 aws_access_key_id = "{% $aws_access_key_id %}"
 aws_secret_access_key = "{% $aws_secret_access_key %}"
-{%   else if eq $provider "AzureRM" -%}
+{%-   else if eq $provider "AzureRM" %}
 # Azure Blob storage configuration.
 [object_storage.azurerm]
 azure_storage_account_name = "{% $azure_storage_account_name %}"
 azure_storage_access_key = "{% $azure_storage_access_key %}"
-{%-   end -%}
-{%- end -%}
+{%-   end %}
+{%- end %}
 {{- end -}}
 
 {{/*
