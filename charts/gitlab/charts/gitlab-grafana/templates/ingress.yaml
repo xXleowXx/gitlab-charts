@@ -5,7 +5,7 @@
 {{- end -}}
 {{- $tlsSecret := include "webservice.tlsSecret" . -}}
 {{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "capabilities" .Capabilities -}}
-apiVersion: {{ template "ingress.apiVersion" $ingressCfg }}
+apiVersion: {{ template "gitlab.ingress.apiVersion" $ingressCfg }}
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}-grafana-app

@@ -4,7 +4,7 @@
 {{- $tlsSecret := include "minio.tlsSecret" . -}}
 {{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "capabilities" .Capabilities -}}
 
-apiVersion: {{ template "ingress.apiVersion" $ingressCfg }}
+apiVersion: {{ template "gitlab.ingress.apiVersion" $ingressCfg }}
 kind: Ingress
 metadata:
   name: {{ template "minio.fullname" . }}
