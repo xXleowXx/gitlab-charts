@@ -69,7 +69,7 @@ global:
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-ingress-settings
   ingress:
-    # apiVersion: extensions/v1beta1
+    apiVersion:
     configureCertmanager: true
     provider: nginx
     annotations: {}
