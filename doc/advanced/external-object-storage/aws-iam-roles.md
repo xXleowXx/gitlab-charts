@@ -99,8 +99,8 @@ This has been resolved in their 2.2.0 release, which has been
 
 #### Workaround to perform backups before Gitlab 14.4
 
-If you are on a version earlier than 14.4, the following can be run in your task-runner pod to sideload
-the latest version of `s3cmd`. `backup-utility` can then be run as per usual.
+If you are on a version earlier than 14.4, run the following command in your task-runner pod to sideload
+the latest version of `s3cmd`. You can then run `backup-utility` as per usual.
 
 ```bash
 pip install --upgrade s3cmd && export PATH="$(python3 -m site --user-base)/bin:${PATH}"
