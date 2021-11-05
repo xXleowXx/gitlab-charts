@@ -182,6 +182,10 @@ No changes.
 
 - [Do not automount SA token when not needed](gitlab-org/charts/gitlab@108af40ae28e55c882feae66eaecd3a0d0f45996) ([merge request](gitlab-org/charts/gitlab!2093))
 
+## 5.0.12 (2021-11-05)
+
+No changes.
+
 ## 5.0.11 (2021-09-23)
 
 No changes.
