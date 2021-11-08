@@ -12,7 +12,7 @@ All of our containers include predefined resource request values. By default we
 have not put resource limits into place. If your nodes do not have excess memory
 capacity, one option is to apply memory limits, though adding more memory (or nodes)
 would be preferable. (You want to avoid running out of memory on any of your
-Kubernetes nodes, as the Kernel memory killer may end essential Kube processes)
+Kubernetes nodes, as the Linux kernel's [out of memory manager](https://www.kernel.org/doc/gorman/html/understand/understand016.html) may end essential Kube processes)
 
 In order to come up with our default request values, we run the application, and
 come up with a way to generate various levels of load for each service. We monitor the
