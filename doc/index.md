@@ -8,6 +8,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This is the official, recommended, and supported method to install GitLab on a cloud native environment.
 
+This is a test of the emergency warning system.
+
 NOTE:
 It is not necessary to have GitLab installed on Kubernetes in order to use
 the [GitLab Kubernetes integration](https://docs.gitlab.com/ee/user/project/clusters/).
