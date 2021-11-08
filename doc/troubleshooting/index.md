@@ -349,3 +349,160 @@ There are a number of potential causes for this error:
   System OOM encountered, victim process: gitlab-shell
   Memory cgroup out of memory: Killed process 3141592 (gitlab-shell)
   ```
+
+## TLS and certificates
+
+If your GitLab instance needs to trust a private TLS certificate authority, GitLab might
+fail to handshake with other services like object storage, Elasticsearch, Jira, or Jenkins:
+
+```plaintext
+error: certificate verify failed (unable to get local issuer certificate)
+```
+
+Partial trust of certificates signed by private certificate authorities can occur if:
+
+- The supplied certificates are not in separate files.
+- The certificates init container doesn't perform all the required steps.
+
+Also, GitLab is mostly written in Ruby on Rails and Golang, and each language's
+TLS libraries work differently. This difference can result in issues like job logs
+failing to render in the GitLab UI but raw job logs downloading without issue.
+
+Additionally, depending on the `proxy_download` configuration, your browser is
+redirected to the object storage with no issues if the trust store is correctly configured.
+At the same time, TLS handshakes by one or more GitLab components could still fail.
+
+### Certificate trust setup and troubleshooting
+
+As part of troubleshooting certificate issues, be sure to:
+
+- Create secrets for each certificate you need to trust.
+- Provide only one certificate per file.
+
+  ```plaintext
+  kubectl create secret generic custom-ca --from-file=unique_name=/path/to/cert
+  ```
+
+  In this example, the certificate is stored using the key name `unique_name`
+
+If you supply a bundle or a chain, some GitLab components won't work.
+
+Query secrets with `kubectl get secrets` and `kubectl describe secrets/secretname`,
+which shows the key name for the certificate under `Data`.
+
+Supply additional certificates to trust using `global.certificates.customCAs`
+[in the chart globals](../charts/globals.md#custom-certificate-authorities).
+
+When a pod is deployed, an init container mounts the certificates and sets them up so the GitLab
+components can use them. The init container is`registry.gitlab.com/gitlab-org/build/cng/alpine-certificates`.
+
+Additional certificates are mounted into the container at `/usr/local/share/ca-certificates`,
+using the secret key name as the certificate filename.
+
+The init container runs `/scripts/bundle-certificates` ([source](https://gitlab.com/gitlab-org/build/CNG-mirror/-/blob/master/alpine-certificates/scripts/bundle-certificates)).
+In that script, `update-ca-certificates`:
+
+1. Copies custom certificates from `/usr/local/share/ca-certificates` to `/etc/ssl/certs`.
+1. Compiles a bundle `ca-certificates.crt`.
+1. Generates hashes for each certificate and creates a symlink using the hash,
+   which is required for Rails. Certificate bundles are skipped with a warning:
+
+   ```plaintext
+   WARNING: unique_name does not contain exactly one certificate or CRL: skipping
+   ```
+
+[Troubleshoot the init container's status and logs](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-init-containers/#getting-details-about-init-containers).
+For example, to view the logs for the certificates init container and check for warnings:
+
+```plaintext
+kubectl logs gitlab-webservice-default-pod -c certificates
+```
+
+### Check on the Rails console
+
+Use the task runner pod to verify if Rails trusts the certificates you supplied.
+
+1. Start a rails console:
+
+   ```shell
+   kubectl get pods | grep task-runner
+   kubectl exec -it <task-runner-pod-name> -- bash
+   /srv/gitlab/bin/rails console
+   ```
+
+1. Verify the location Rails checks for certificate authorities:
+
+   ```ruby
+   OpenSSL::X509::DEFAULT_CERT_DIR
+   ```
+
+1. Execute an HTTPS query in the Rails console:
+
+   ```ruby
+   ## Configure a web server to connect to:
+   uri = URI.parse("https://myservice.example.com")
+
+   require 'openssl'
+   require 'net/http'
+   Rails.logger.level = 0
+   OpenSSL.debug=1
+   http = Net::HTTP.new(uri.host, uri.port)
+   http.set_debug_output($stdout)
+   http.use_ssl = true
+
+   http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+   # http.verify_mode = OpenSSL::SSL::VERIFY_NONE # TLS verification disabled
+
+   response = http.request(Net::HTTP::Get.new(uri.request_uri))
+   ```
+
+### Troubleshoot the init container
+
+Run the certificates container using Docker.
+
+1. Set up a directory structure and populate it with your certificates:
+
+   ```shell
+   mkdir -p etc/ssl/certs usr/local/share/ca-certificates
+
+     # The secret name is: my-root-ca
+     # The key name is: corporate_root
+
+   kubectl get secret my-root-ca -ojsonpath='{.data.corporate_root}' | \
+        base64 --decode > usr/local/share/ca-certificates/corporate_root
+
+     # Check the certificate is correct:
+
+   openssl x509 -in usr/local/share/ca-certificates/corporate_root -text -noout
+   ```
+
+1. Determine the correct container version:
+
+   ```shell
+   kubectl get deployment -lapp=webservice -ojsonpath='{.items[0].spec.template.spec.initContainers[0].image}'
+   ```
+
+1. Run container, which performs the preparation of `etc/ssl/certs` content:
+
+   ```shell
+   docker run -ti --rm \
+        -v $(pwd)/etc/ssl/certs:/etc/ssl/certs \
+        -v $(pwd)/usr/local/share/ca-certificates:/usr/local/share/ca-certificates \
+        registry.gitlab.com/gitlab-org/build/cng/alpine-certificates:20191127-r2
+
+1. Check your certificates have been correctly built:
+
+   - `etc/ssl/certs/ca-cert-corporate_root.pem` should have been created.
+   - There should be a hashed filename, which is a symlink to the certificate itself (such as `etc/ssl/certs/1234abcd.0`).
+   - The file and the symbolic link should display with:
+
+     ```shell
+     ls -l etc/ssl/certs/ | grep corporate_root
+     ```
+
+     For example:
+
+     ```plaintext
+     lrwxrwxrwx   1 root root      20 Oct  7 11:34 28746b42.0 -> ca-cert-corporate_root.pem
+     -rw-r--r--   1 root root    1948 Oct  7 11:34 ca-cert-corporate_root.pem
+     ```
