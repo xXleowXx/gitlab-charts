@@ -105,7 +105,6 @@ the latest version of `s3cmd`. You can then run `backup-utility` as per usual.
 ```shell
 pip install --upgrade s3cmd && export PATH="$(python3 -m site --user-base)/bin:${PATH}"
 ```
-
 #### Using pre-created service accounts
 
 Set the following options when the GitLab chart is deployed. It is important
