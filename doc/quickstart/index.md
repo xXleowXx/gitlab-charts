@@ -128,7 +128,7 @@ This is automatically generated at installation time, and stored in a Kubernetes
 Secret. Let's fetch that password from the secret, and decode it:
 
 ```shell
-kubectl get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode ; echo
+kubectl get secret gitlab-gitlab-initial-root-password --namespace gitlab -ojsonpath='{.data.password}' | base64 --decode ; echo
 ```
 
 Yes, you read that right, that's `gitlab-gitlab-...`.
