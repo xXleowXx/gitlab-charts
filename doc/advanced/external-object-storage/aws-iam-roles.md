@@ -94,8 +94,17 @@ Using the `backup-utility` as specified in the [backup documentation](../../back
 does not properly copy the backup file to the S3 bucket. The `backup-utility` uses
 the `s3cmd` to perform the copy of the backup file and it has a known
 issue of [not supporting OIDC authentication](https://github.com/s3tools/s3cmd/issues/1075).
-There is a [pull request](https://github.com/s3tools/s3cmd/pull/1112)
-to mitigate this issue, but it has yet to be accepted into the `s3cmd` codebase.
+This has been resolved in their 2.2.0 release, which has been
+[merged](https://gitlab.com/gitlab-org/build/CNG/-/merge_requests/772) into GitLab 14.4.
+
+#### Workaround to perform backups before GitLab 14.4
+
+If you are on a version earlier than 14.4, run the following command in your task-runner pod to sideload
+the latest version of `s3cmd`. You can then run `backup-utility` as per usual.
+
+```shell
+pip install --upgrade s3cmd && export PATH="$(python3 -m site --user-base)/bin:${PATH}"
+```
 
 #### Using pre-created service accounts
 
