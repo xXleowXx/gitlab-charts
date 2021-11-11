@@ -474,6 +474,7 @@ describe 'GitLab Pages' do
                 logFormat: text
                 logVerbose: true
                 maxConnections: 45
+                maxURILength: 2048
                 redirectHttp: true
                 sentry:
                   enabled: true
@@ -511,6 +512,7 @@ describe 'GitLab Pages' do
             domain-config-source=disk
             metrics-address=:9999
             max-conns=45
+            max-uri-length=2048
             gitlab-client-http-timeout=25
             gitlab-client-jwt-expiry=35
             sentry-dsn=foobar

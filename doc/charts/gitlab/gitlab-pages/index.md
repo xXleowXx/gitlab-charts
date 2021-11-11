@@ -87,6 +87,7 @@ configurations that can be supplied to the `helm install` command using the
 | `logFormat`                      | `json`                | Log output format                                    |
 | `logVerbose`                     | `false`               | Verbose logging                                      |
 | `maxConnections`                 |                       | Limit on the number of concurrent connections to the HTTP, HTTPS or proxy listeners |
+| `maxURILength`                   |                       | Limit the length of URI, 0 for unlimited. |
 | `propagateCorrelationId`         |                       | Reuse existing Correlation-ID from the incoming request header `X-Request-ID` if present |
 | `redirectHttp`                   | `false`               | Redirect pages from HTTP to HTTPS                    |
 | `sentry.enabled`                 | `false`               | Enable Sentry reporting                              |
