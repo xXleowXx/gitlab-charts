@@ -259,6 +259,8 @@ global:
       ### Snapshot active user statistics
       # historical_data_worker:
       #   cron: "0 12 * * *"
+      # loose_foreign_keys_cleanup_worker_cron:
+      #   cron: "*/5 * * * *"
 
     ## https://docs.gitlab.com/charts/charts/globals#content-security-policy
     contentSecurityPolicy:
