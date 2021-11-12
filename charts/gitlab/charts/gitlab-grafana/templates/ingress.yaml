@@ -4,8 +4,8 @@
 {{-   $gitlabHostname = .Values.global.hosts.gitlab.hostnameOverride -}}
 {{- end -}}
 {{- $tlsSecret := include "webservice.tlsSecret" . -}}
-{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress -}}
-apiVersion: {{ template "ingress.apiVersion" $}}
+{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "capabilities" .Capabilities -}}
+apiVersion: {{ template "gitlab.ingress.apiVersion" $ingressCfg }}
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}-grafana-app
