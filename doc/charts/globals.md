@@ -115,6 +115,7 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 
 | Name                           | Type    | Default        | Description |
 |:------------------------------ |:-------:|:-------        |:----------- |
+| `apiVersion`                   | String  |                | API version to use in the Ingress object definitions.
 | `annotations.*annotation-key*` | String  |                | Where `annotation-key` is a string that will be used with the value as an annotation on every Ingress. For Example: `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. No global annotations are provided by default. |
 | `configureCertmanager`         | Boolean | `true`         | [See below](#globalingressconfigurecertmanager). |
 | `class`                        | String  | `gitlab-nginx` | Global setting that controls `kubernetes.io/ingress.class` annotation in `Ingress` resources. |

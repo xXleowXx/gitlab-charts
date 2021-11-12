@@ -2,8 +2,8 @@
 {{- if and (empty ($externalAddresses)) (eq (include "gitlab.ingress.enabled" $) "true") -}}
 {{- $hostname := include "gitlab.pages.hostname" . -}}
 {{- $tlsSecret := include "pages.tlsSecret" . -}}
-{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress -}}
-apiVersion: {{ template "ingress.apiVersion" $}}
+{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "capabilities" .Capabilities -}}
+apiVersion: {{ template "gitlab.ingress.apiVersion" $ingressCfg }}
 kind: Ingress
 metadata:
   name: {{ template "fullname" . }}
