@@ -5,17 +5,20 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
     {{- include "gitlab.commonLabels" . | nindent 4 }}
-    component: "{{ .Values.defaultBackend.name }}"
+    component: "{{ .Values.controller.name }}"
     {{- include "ingress-nginx.labels" . | nindent 4 }}
     app.kubernetes.io/component: default-backend
   name: {{ include "ingress-nginx.defaultBackend.fullname" . }}
+  {{- if include "gitlab.deploymentAnnotations" . }}
   annotations:
     {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
+  {{- end }}
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     matchLabels:
       {{- include "ingress-nginx.selectorLabels" . | nindent 6 }}
-      component: "{{ .Values.defaultBackend.name }}"
+      app.kubernetes.io/component: default-backend
 {{- if not .Values.defaultBackend.autoscaling.enabled }}
   replicas: {{ .Values.defaultBackend.replicaCount }}
 {{- end }}
@@ -27,7 +30,7 @@ spec:
     {{- end }}
       labels:
         {{- include "ingress-nginx.selectorLabels" . | nindent 8 }}
-        component: "{{ .Values.defaultBackend.name }}"
+        app.kubernetes.io/component: default-backend
       {{- if .Values.defaultBackend.podLabels }}
         {{- toYaml .Values.defaultBackend.podLabels | nindent 8 }}
       {{- end }}
@@ -44,7 +47,7 @@ spec:
       containers:
         - name: {{ template "ingress-nginx.name" . }}-default-backend
           {{- with .Values.defaultBackend.image }}
-          image: "{{.repository}}:{{ .tag }}{{- if (.digest) -}} @{{.digest}} {{- end -}}"
+          image: "{{- if .repository -}}{{ .repository }}{{ else }}{{ .registry }}/{{ .image }}{{- end -}}:{{ .tag }}{{- if (.digest) -}} @{{.digest}} {{- end -}}"
           {{- end }}
           imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy }}
         {{- if .Values.defaultBackend.extraArgs }}
@@ -93,13 +96,16 @@ spec:
             - name: http
               containerPort: {{ .Values.defaultBackend.port }}
               protocol: TCP
+        {{- if .Values.defaultBackend.extraVolumeMounts }}
+          volumeMounts: {{- toYaml .Values.defaultBackend.extraVolumeMounts | nindent 12 }}
+        {{- end }}
         {{- if .Values.defaultBackend.resources }}
           resources: {{ toYaml .Values.defaultBackend.resources | nindent 12 }}
         {{- end }}
     {{- if .Values.defaultBackend.nodeSelector }}
       nodeSelector: {{ toYaml .Values.defaultBackend.nodeSelector | nindent 8 }}
-    {{- else }}
-    {{- include "gitlab.nodeSelector" . | nindent 6 }}
+    {{- else if include "gitlab.nodeSelector" . }}
+      {{- include "gitlab.nodeSelector" . | nindent 6 }}
     {{- end }}
       serviceAccountName: {{ template "ingress-nginx.defaultBackend.serviceAccountName" . }}
     {{- if .Values.defaultBackend.tolerations }}
@@ -109,4 +115,7 @@ spec:
       affinity: {{ toYaml .Values.defaultBackend.affinity | nindent 8 }}
     {{- end }}
       terminationGracePeriodSeconds: 60
+    {{- if .Values.defaultBackend.extraVolumes }}
+      volumes: {{ toYaml .Values.defaultBackend.extraVolumes | nindent 8 }}
+    {{- end }}
 {{- end }}
