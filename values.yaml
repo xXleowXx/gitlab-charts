@@ -744,6 +744,9 @@ nginx-ingress:
       server-tokens: "false"
     service:
       externalTrafficPolicy: "Local"
+    ingressClassByName: false
+    ingressClassResource:
+      name: "{{ .Release.Name }}-nginx"
     resources:
       requests:
         cpu: 100m
