@@ -119,5 +119,11 @@ data:
     {{- if .Values.zipOpenTimeout }}
     zip-open-timeout={{ .Values.zipOpenTimeout }}
     {{- end }}
+    {{- if .Values.rateLimitSourceIP }}
+    rate-limit-source-ip={{ .Values.rateLimitSourceIP }}
+    {{- end }}
+    {{- if .Values.rateLimitSourceIPBurst }}
+    rate-limit-source-ip-burst={{ .Values.rateLimitSourceIPBurst }}
+    {{- end }}
   configure: |
     {{- include "gitlab.scripts.configure.secrets" (dict "required" "pages" "optional" "pages") | nindent 4 -}}
