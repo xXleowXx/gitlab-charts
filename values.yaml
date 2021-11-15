@@ -777,7 +777,10 @@ nginx-ingress:
         memory: 5Mi
   rbac:
     create: true
-    scope: true
+    # Needed for k8s 1.20 and 1.21
+    # https://github.com/kubernetes/ingress-nginx/issues/7510
+    # https://github.com/kubernetes/ingress-nginx/issues/7519
+    scope: false
   serviceAccount:
     create: true
 
