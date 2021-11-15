@@ -487,6 +487,8 @@ describe 'GitLab Pages' do
                   port: 9999
                 zipCache:
                   refresh: 60s
+                rateLimitSourceIP: 100.5
+                rateLimitSourceIPBurst: 50
           ))
         end
 
@@ -523,6 +525,8 @@ describe 'GitLab Pages' do
             auth-client-secret={% file.Read "/etc/gitlab-secrets/pages/gitlab_appsecret" %}
             auth-secret={% file.Read "/etc/gitlab-secrets/pages/auth_secret" %}
             zip-cache-refresh=60s
+            rate-limit-source-ip=100.5
+            rate-limit-source-ip-burst=50
           MSG
 
           expect(pages_enabled_template.exit_code).to eq(0), "Unexpected error code #{pages_enabled_template.exit_code} -- #{pages_enabled_template.stderr}"
