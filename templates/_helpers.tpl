@@ -545,6 +545,35 @@ Override upstream redis secret key name
 {{- end -}}
 
 {{/*
+Return the appropriate apiVersion for Ingress.
+*/}}
+{{- define "ingress.apiVersion" -}}
+{{-   if .Capabilities.APIVersions.Has "networking.k8s.io/v1" -}}
+{{-     print "networking.k8s.io/v1" -}}
+{{-   else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" -}}
+{{-     print "networking.k8s.io/v1beta1" -}}
+{{-   else -}}
+{{-     print "extensions/v1beta1" -}}
+{{-   end -}}
+{{- end -}}
+
+{{/*
+Return an ingressClassName field if the Ingress apiVersion allows it
+*/}}
+{{- define "ingress.classNameField" -}}
+{{-   if .Capabilities.APIVersions.Has "networking.k8s.io/v1" -}}
+ingressClassName: {{ include "ingress.className" . }}
+{{-   end -}}
+{{- end -}}
+
+{{/*
+Return the ingressClassName
+*/}}
+{{- define "ingress.className" -}}
+{{ .Release.Name }}-nginx
+{{- end -}}
+
+{{/*
 Return the fullname template for shared-secrets job.
 */}}
 {{- define "shared-secrets.fullname" -}}
