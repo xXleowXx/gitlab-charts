@@ -13,7 +13,9 @@ metadata:
 {{- include "gitlab.standardLabels" . | nindent 4 }}
 {{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
-    kubernetes.io/ingress.class: "{{ template "minio.ingressclass" . }}"
+    {{- if not (.Capabilities.APIVersions.Has "networking.k8s.io/v1") }}
+    kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
+    {{- end }}
     kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
     {{- if eq "nginx" .Values.global.ingress.provider }}
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.proxyBodySize | quote }}
@@ -26,12 +28,13 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
+  {{ include "ingress.classNameField" $ }}
   rules:
     - host: {{ $minioHostname }}
       http:
         paths:
           - path: {{ coalesce $.Values.ingress.path $.Values.global.ingress.path }}
-            {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
+            {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1" -}}
             pathType: {{ default "Prefix" $.Values.global.ingress.pathType }}
             backend:
               service:
