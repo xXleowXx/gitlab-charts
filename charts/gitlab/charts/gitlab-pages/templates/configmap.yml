@@ -73,6 +73,9 @@ data:
     {{- if .Values.maxConnections }}
     max-conns={{ .Values.maxConnections }}
     {{- end }}
+    {{- if .Values.maxURILength }}
+    max-uri-length={{ .Values.maxURILength }}
+    {{- end }}
     {{- if .Values.gitlabClientHttpTimeout }}
     gitlab-client-http-timeout={{ .Values.gitlabClientHttpTimeout }}
     {{- end }}
