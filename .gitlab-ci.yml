@@ -144,16 +144,16 @@ lint_package:
       - /(^docs[\/-].+|.+-docs$)/
       - *com_auto_deploy_branch_ref
 
-"Validate 1.16.15":
-  extends: .kubeval
-  variables:
-    KUBE_VERSION: "1.16.15"
-    KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
-
 "Validate 1.20.7":
   extends: .kubeval
   variables:
     KUBE_VERSION: "1.20.7"
+    KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
+
+"Validate 1.22.3":
+  extends: .kubeval
+  variables:
+    KUBE_VERSION: "1.22.3"
     KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
 
 .review_template:
