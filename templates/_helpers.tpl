@@ -348,6 +348,24 @@ kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressC
 {{- end -}}
 
 {{/*
+Return an ingressClassName field if the Ingress apiVersion allows it
+*/}}
+{{- define "gitlab.ingress.classnameField" -}}
+{{-   if .Capabilities.APIVersions.Has "networking.k8s.io/v1" -}}
+ingressClassName: {{ include "gitlab.ingressclass" . }}
+{{-   end -}}
+{{- end -}}
+
+{{/*
+Return an ingress.class if the Ingress apiVersion allows it
+*/}}
+{{- define "gitlab.ingress.classAnnotation" -}}
+{{-   if not ($.Capabilities.APIVersions.Has "networking.k8s.io/v1/IngressClass") }}
+kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
+{{-   end }}
+{{- end -}}
+
+{{/*
 Returns the nginx ingress class
 */}}
 {{- define "gitlab.ingressclass" -}}
@@ -542,35 +560,6 @@ Override upstream redis secret key name
 */}}
 {{- define "redis.secretPasswordKey" -}}
 {{ template "gitlab.redis.password.key" . }}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for Ingress.
-*/}}
-{{- define "ingress.apiVersion" -}}
-{{-   if .Capabilities.APIVersions.Has "networking.k8s.io/v1" -}}
-{{-     print "networking.k8s.io/v1" -}}
-{{-   else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" -}}
-{{-     print "networking.k8s.io/v1beta1" -}}
-{{-   else -}}
-{{-     print "extensions/v1beta1" -}}
-{{-   end -}}
-{{- end -}}
-
-{{/*
-Return an ingressClassName field if the Ingress apiVersion allows it
-*/}}
-{{- define "ingress.classNameField" -}}
-{{-   if .Capabilities.APIVersions.Has "networking.k8s.io/v1" -}}
-ingressClassName: {{ include "ingress.className" . }}
-{{-   end -}}
-{{- end -}}
-
-{{/*
-Return the ingressClassName
-*/}}
-{{- define "ingress.className" -}}
-{{ .Release.Name }}-nginx
 {{- end -}}
 
 {{/*

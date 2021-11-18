@@ -12,13 +12,14 @@ metadata:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
     {{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
-    kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
+    {{- template "gitlab.ingress.classAnnotation" $ }}
     kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
     {{ include "gitlab.certmanager_annotations" . }}
   {{- range $key, $value := merge .Values.ingress.annotations .Values.global.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
+  {{ template "gitlab.ingress.classnameField" $ }}
   rules:
     - host: {{ $hostname }}
       http:
