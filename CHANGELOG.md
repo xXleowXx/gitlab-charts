@@ -2,6 +2,32 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.5.0 (2021-11-19)
+
+### Added (3 changes)
+
+- [Add MaxURILength option for GitLab Pages](gitlab-org/charts/gitlab@426e60d5229d92090f3e7c207438aac481ce1c8a) ([merge request](gitlab-org/charts/gitlab!2266))
+- [Add loose foreign key cron worker](gitlab-org/charts/gitlab@e37cfdb0f344c51320268784838b4292daa153d7) ([merge request](gitlab-org/charts/gitlab!2265))
+- [Add one_trust_id config](gitlab-org/charts/gitlab@86339448ae78770fc4637020c34370f5c45b03a6) ([merge request](gitlab-org/charts/gitlab!2237))
+
+### Fixed (1 change)
+
+- [Raise Sidekiq job timeout from 5 to 25 seconds](gitlab-org/charts/gitlab@f94968b4bef32446b38c2033364107d1cff6e1bb) ([merge request](gitlab-org/charts/gitlab!2249))
+
+### Changed (7 changes)
+
+- [Update gitlab-org/container-registry from 3.14.3-gitlab to 3.15.0-gitlab](gitlab-org/charts/gitlab@f8f07d262d73c80b2bf863b79358cf9c53214689) ([merge request](gitlab-org/charts/gitlab!2271))
+- [Update gitlab-org/container-registry from 3.14.2-gitlab to 3.14.3-gitlab](gitlab-org/charts/gitlab@34fbd2864de95f80337da3db08ff92323a1a1e33) ([merge request](gitlab-org/charts/gitlab!2264))
+- [Update gitlab-org/container-registry from 3.14.1-gitlab to 3.14.2-gitlab](gitlab-org/charts/gitlab@fe13ae8f5bed9ab67593b526f52bb97835203c41) ([merge request](gitlab-org/charts/gitlab!2257))
+- [Update gitlab-org/container-registry from 3.13.0-gitlab to 3.14.1-gitlab](gitlab-org/charts/gitlab@6119f3f5307166cf99df9a8fdc14ffbc153143fb) ([merge request](gitlab-org/charts/gitlab!2250))
+- [GitLab Shell: replace ERB with gomplate](gitlab-org/charts/gitlab@44923bed8bb1578a68b50d5a0d93b5b8cb51fc05) by @kristofkalocsai ([merge request](gitlab-org/charts/gitlab!2220))
+- [GitLab Pages: replace ERB with gomplate](gitlab-org/charts/gitlab@22119c6893be97ed9d2ea8fd72a12784d45a3abe) by @kristofkalocsai ([merge request](gitlab-org/charts/gitlab!2217))
+- [Update gitlab-org/container-registry from 3.12.0-gitlab to 3.13.0-gitlab](gitlab-org/charts/gitlab@2ea30e59cdad005e45866da788ecf8dfd212eb2b) ([merge request](gitlab-org/charts/gitlab!2235))
+
+### Other (1 change)
+
+- [[Docs] Operator: clarify available chart versions](gitlab-org/charts/gitlab@afcb3d95d2f997cc1d77087bb85a73b918a38101) ([merge request](gitlab-org/charts/gitlab!2268))
+
 ## 5.4.2 (2021-11-08)
 
 No changes.
