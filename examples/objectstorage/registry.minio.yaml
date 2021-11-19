@@ -4,10 +4,9 @@
 #   See https://gitlab.com/gitlab-org/charts/gitlab/tree/master/doc/charts/registry/#storage
 #   See https://gitlab.com/gitlab-org/charts/gitlab/blob/master/doc/advanced/external-object-storage
 s3:
-  aws_signature_version: 4
-  host: storage.example.com
+  v4auth: true
   regionendpoint: "https://storage.example.com:9000"
-  path_style: true
+  pathstyle: true
   region: us-east-1
   bucket: registry
   accesskey: ACCESSKEY
