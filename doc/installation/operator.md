@@ -6,6 +6,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab Operator **(FREE SELF)**
 
+NOTE:
+If you want to integrate GitLab with OpenShift, see the [OpenShift and GitLab documentation](https://docs.gitlab.com/ee/install/openshift_and_gitlab/index.html).
+
 GitLab Operator is an implementation of the [Operator pattern](https://www.openshift.com/blog)
 for managing the lifecycle and upgrades of a GitLab instance. The GitLab Operator strengthens the support of OpenShift from GitLab, but is intended to be as native to Kubernetes as for OpenShift. The GitLab Operator provides a method of synchronizing and controlling various
 stages of cloud-native GitLab installation/upgrade procedures. Using the Operator provides the ability to perform
