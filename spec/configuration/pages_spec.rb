@@ -892,6 +892,8 @@ describe 'GitLab Pages' do
             global:
               pages:
                 enabled: true
+                externalHttp:
+                  - 1.1.1.1
                 externalHttps:
                   - 1.1.1.1
             gitlab:
