@@ -99,7 +99,7 @@ The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-
 
 The `task-runner` pod [was renamed](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2099/diffs) to `toolbox` in `5.2.0` so any configuration that references `task-runner` will have to be renamed to `toolbox`.
 
-#### Missing object storage secret
+### Missing object storage secret
 
 Upgrading to 5.2 or newer may throw an error similar to the following:
 
