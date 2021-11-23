@@ -107,7 +107,7 @@ Upgrading to 5.5 or newer may throw an error similar to the following:
 Error: UPGRADE FAILED: execution error at (gitlab/charts/gitlab/charts/toolbox/templates/deployment.yaml:227:23): A valid backups.objectStorage.config.secret is needed!
 ```
 
-If the secret mentioned in the error does already exist and is correct, then this error is likely thrown because there is an object storage configuration value that still references `task-runner` instead of the new `toolbox`. Rename `task-runner` to `toolbox` in your configuration to fix this.
+If the secret mentioned in the error does already exist and is correct, then this error is likely thrown because there is an object storage configuration value that still references `task-runner` instead of the new `toolbox`. Rename `task-runner` to `toolbox` in your configuration to fix this. Please see [this issue to clarify the error message](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3004).
 
 ## Upgrade steps for 5.0 release
 
