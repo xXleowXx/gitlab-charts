@@ -95,6 +95,20 @@ The steps have been documented in the [5.0 upgrade steps](#upgrade-steps-for-50-
 As part of the `4.0.0` release of this chart, we upgraded the bundled [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) from `7.7.0` to `8.9.4`. This is not a drop in replacement. Manual steps need to be performed to upgrade the database.
 The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-release).
 
+## Upgrade steps for 5.2 release
+
+The `task-runner` pod [was renamed](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2099/diffs) to `toolbox` in `5.2.0` so any configuration that references `task-runner` will have to be renamed to `toolbox`.
+
+#### Missing object storage secret
+
+Upgrading to 5.2 or newer may throw an error similar to the following:
+
+```shell
+Error: UPGRADE FAILED: execution error at (gitlab/charts/gitlab/charts/toolbox/templates/deployment.yaml:227:23): A valid backups.objectStorage.config.secret is needed!
+```
+
+If the secret mentioned in the error does already exist and is correct, then this error is likely thrown because there is an object storage configuration value that still references `task-runner` instead of the new `toolbox`. Rename `task-runner` to `toolbox` in your configuration to fix this.
+
 ## Upgrade steps for 5.0 release
 
 The `5.0.0` release requires manual steps in order to perform the upgrade. If you're using the
