@@ -16,15 +16,12 @@ gitlab:
   migrations:
     image:
       repository: dev.gitlab.org:5005/gitlab/charts/components/images/gitlab-toolbox-ee
-      <<: *pullSecret
   sidekiq:
     image:
       repository: dev.gitlab.org:5005/gitlab/charts/components/images/gitlab-sidekiq-ee
-      <<: *pullSecret
   toolbox:
     image:
       repository: dev.gitlab.org:5005/gitlab/charts/components/images/gitlab-toolbox-ee
-      <<: *pullSecret
   webservice:
     image:
       repository: dev.gitlab.org:5005/gitlab/charts/components/images/gitlab-webservice-ee
