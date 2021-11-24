@@ -414,7 +414,7 @@ is templated into both YAML and TOML.
 
 Let's use `my"$pec!@l"p#assword%'` as an example:
 
-```ERB
+```erb
 # YAML
 gitaly:
   token: "<%= File.read('gitaly_token').strip =>"
@@ -444,20 +444,20 @@ token = "my"$pec!@l"p#assword%'"
 This changed to `<%= File.read('gitaly_token').strip.to_json %>` results valid
 content format for YAML and TOML. Note the removal of `"` from outside of `<% %>`.
 
-```
+```yaml
 gitaly:
   token: "my\"$pec!@l\"p#assword%'"
 ```
 
 This same can be done with gomplate: `{% file.Read "gitaly_token" | strings.TrimSpace | data.ToJSON %}`
 
-```
-## ERB and gomplate side by side
-# YAML
+```yaml
 gitaly:
   token: {% file.Read "./token" | strings.TrimSpace | data.ToJSON %}
   token: <%= File.read('gitaly_token').strip.to_json %>
-# TOML
+```
+
+```toml
 [auth]
 token = {% file.Read "./token" | strings.TrimSpace | data.ToJSON %}
 token = <%= File.read('gitaly_token').strip.to_json %>
