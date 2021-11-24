@@ -184,7 +184,7 @@ lint_package:
     refs:
       - branches
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
   except:
     <<: *deps_pipeline
     refs:
@@ -219,7 +219,7 @@ review_gke_dev:
     refs:
       - /.*-stable/@gitlab/charts/gitlab
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
 
 review_eks:
   variables:
@@ -249,7 +249,7 @@ review_eks:
     refs:
       - branches
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
   except:
     <<: *deps_pipeline
     refs:
@@ -273,7 +273,7 @@ stop_review_gke_dev:
     refs:
       - /.*-stable/@gitlab/charts/gitlab
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
 
 stop_review_eks:
   extends: .stop_review_template
@@ -312,7 +312,7 @@ stop_review_eks:
     refs:
       - master
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
 
 # This job continuously deploys to production on every push to `master`.
 # To make this a manual process, either because you're enabling `staging`
@@ -345,7 +345,7 @@ stop_review_eks:
     refs:
       - master
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
 
 stable_gke:
   extends: .stable
@@ -377,7 +377,7 @@ review_helm_test:
     refs:
       - branches
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
   except:
     <<: *deps_pipeline
     refs:
@@ -398,7 +398,7 @@ production_helm_test:
     refs:
       - master@charts/gitlab
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
 
 
 debug_review:
@@ -421,7 +421,7 @@ debug_review:
     refs:
       - branches
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
   except:
     <<: *deps_pipeline
     refs:
@@ -601,7 +601,7 @@ review_specs_gke:
     refs:
       - branches
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
   except:
     refs:
       - master
@@ -623,7 +623,7 @@ review_specs_gke:
 #     refs:
 #       - /.*-stable/@gitlab/charts/gitlab
 #     variables:
-#       - $KUBECONFIG
+#       - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
 
 review_specs_eks:
   extends: .specs
@@ -639,7 +639,7 @@ review_specs_eks:
     refs:
       - branches
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
   except:
     refs:
       - master
@@ -663,7 +663,7 @@ specs_without_cluster:
     refs:
       - master
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
 
 production_specs_without_cluster:
   extends: .production_specs
@@ -730,7 +730,7 @@ production_specs_eks:
     refs:
       - branches
     variables:
-      - $KUBECONFIG
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab"
   retry: 1
   allow_failure: true
 
