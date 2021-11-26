@@ -476,7 +476,7 @@ Secondary Kubernetes deployment:
    ```shell
    kubectl get --namespace gitlab -o yaml secret gitlab-geo-gitlab-shell-host-keys > ssh-host-keys.yaml
    kubectl get --namespace gitlab -o yaml secret gitlab-geo-rails-secret > rails-secrets.yaml
-   kubectl get --namespace gitlab -o yaml secret gitlab-registry-secret > registry-secrets.yaml
+   kubectl get --namespace gitlab -o yaml secret gitlab-geo-registry-secret > registry-secrets.yaml
    ```
 
 1. Change your `kubectl` context to that of your Secondary.
