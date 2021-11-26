@@ -150,6 +150,139 @@ describe 'Sidekiq configuration' do
     end
   end
 
+  context 'when configuring monitoring' do
+    let(:values) { default_values }
+    let(:template) { HelmTemplate.new(values) }
+    let(:gitlab_yml) { YAML.safe_load(template.dig('ConfigMap/test-sidekiq', 'data', 'gitlab.yml.erb')) }
+    let(:monitoring) { gitlab_yml.dig('production', 'monitoring') }
+
+    context 'sidekiq_exporter' do
+      context 'when not configured' do
+        it 'uses default settings' do
+          expect(monitoring).to include(
+            'sidekiq_exporter' => {
+              'enabled' => true,
+              'address' => '0.0.0.0',
+              'port' => 3807
+            }
+          )
+        end
+      end
+
+      context 'when disabled' do
+        let(:values) do
+          YAML.safe_load(%(
+            gitlab:
+              sidekiq:
+                metrics:
+                  enabled: false
+          )).deep_merge(default_values)
+        end
+
+        it 'emits empty hash' do
+          expect(monitoring['sidekiq_exporter']).to be(nil)
+        end
+      end
+
+      context 'when custom values are set' do
+        let(:values) do
+          YAML.safe_load(%(
+            gitlab:
+              sidekiq:
+                metrics:
+                  enabled: true
+                  port: 2222
+          )).deep_merge(default_values)
+        end
+
+        it 'uses these settings' do
+          expect(monitoring).to include(
+            'sidekiq_exporter' => {
+              'enabled' => true,
+              'address' => '0.0.0.0',
+              'port' => 2222
+            }
+          )
+        end
+      end
+    end
+
+    context 'sidekiq_health_checks' do
+      context 'when not configured' do
+        it 'uses default settings' do
+          expect(monitoring).to include(
+            'sidekiq_health_checks' => {
+              'enabled' => true,
+              'address' => '0.0.0.0',
+              'port' => 3807
+            }
+          )
+        end
+
+        context 'when sidekiq_exporter is configured' do
+          let(:values) do
+            YAML.safe_load(%(
+              gitlab:
+                sidekiq:
+                  metrics:
+                    enabled: true
+                    port: 2222
+                  health_checks:
+                    enabled: true
+            )).deep_merge(default_values)
+          end
+
+          it 'inherits its settings' do
+            expect(monitoring).to include(
+              'sidekiq_health_checks' => {
+                'enabled' => true,
+                'address' => '0.0.0.0',
+                'port' => 2222
+              }
+            )
+          end
+        end
+      end
+
+      context 'when disabled' do
+        let(:values) do
+          YAML.safe_load(%(
+            gitlab:
+              sidekiq:
+                health_checks:
+                  enabled: false
+          )).deep_merge(default_values)
+        end
+
+        it 'emits empty hash' do
+          expect(monitoring['sidekiq_health_checks']).to be(nil)
+        end
+      end
+
+      context 'when custom values are set' do
+        let(:values) do
+          YAML.safe_load(%(
+            gitlab:
+              sidekiq:
+                health_checks:
+                  enabled: true
+                  port: 2222
+          )).deep_merge(default_values)
+        end
+
+        it 'uses these settings' do
+          expect(monitoring).to include(
+            'sidekiq_health_checks' => {
+              'enabled' => true,
+              'address' => '0.0.0.0',
+              'port' => 2222
+            }
+          )
+        end
+      end
+    end
+  end
+
   context 'when configuring memoryKiller' do
     let(:default_values) do
       YAML.safe_load(%(
