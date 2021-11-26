@@ -14,6 +14,7 @@ The table below maps some of the key previous chart versions and GitLab versions
 | 5.4.2 | 14.4.2 |
 | 5.4.1 | 14.4.1 |
 | 5.4.0 | 14.4.0 |
+| 5.3.5 | 14.3.5 |
 | 5.3.4 | 14.3.4 |
 | 5.3.3 | 14.3.3 |
 | 5.3.2 | 14.3.2 |
