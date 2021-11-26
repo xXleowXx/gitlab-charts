@@ -101,6 +101,10 @@ No changes.
 - [Update gitlab-org/charts/gitlab-runner from 0.31.0 to 0.32.0](gitlab-org/charts/gitlab@0665982645d842994a54bddb1269fbb694a743cb) ([merge request](gitlab-org/charts/gitlab!2149))
 - [Adds pages local_store configuration](gitlab-org/charts/gitlab@426c34858876fe0d52cd4fe880f44771af17e19b) ([merge request](gitlab-org/charts/gitlab!2141))
 
+## 5.2.7 (2021-11-26)
+
+No changes.
+
 ## 5.2.6 (2021-10-28)
 
 No changes.
