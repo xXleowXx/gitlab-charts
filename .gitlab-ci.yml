@@ -533,8 +533,14 @@ check_docs_links:
     # By default, deploy the Review App using the `main` branch of the `gitlab-org/gitlab-docs` project
     DOCS_BRANCH: main
   when: manual
+  only:
+    refs:
+      - branches
+    variables:
+      - $CI_PROJECT_PATH == "gitlab-org/charts/gitlab" || $CI_PROJECT_PATH == "gitlab/charts/gitlab"
   except:
     - triggers
+    - master
     - *com_auto_deploy_branch_ref
 
 # Trigger a docs build in gitlab-docs
