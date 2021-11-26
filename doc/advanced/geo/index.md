@@ -189,7 +189,7 @@ After the configuration above is prepared:
    for the Secondary database to be able to replicate (save this output):
 
    ```shell
-   cat ~gitlab-psql/data/server.crt`
+   cat ~gitlab-psql/data/server.crt
    ```
 
 ## Deploy chart as Geo Primary
@@ -468,7 +468,7 @@ Secondary Kubernetes deployment:
 
 - `gitlab-geo-gitlab-shell-host-keys`
 - `gitlab-geo-rails-secret`
-- `gitlab-registry-secret`, if Registry replication is enabled.
+- `gitlab-geo-registry-secret`, if Registry replication is enabled.
 
 1. Change your `kubectl` context to that of your Primary.
 1. Collect these secrets from the Primary deployment:
