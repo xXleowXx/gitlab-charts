@@ -135,7 +135,7 @@ lint_package:
     - helm repo add gitlab https://charts.gitlab.io
     - helm repo add jetstack https://charts.jetstack.io
     - helm dependencies update
-    - helm kubeval . --force-color --strict --set certmanager-issuer.email=support@gitlab.com --skip-kinds "CustomResourceDefinition" -v $KUBE_VERSION
+    - helm kubeval . --force-color --strict --set certmanager-issuer.email=support@gitlab.com $HELM_EXTRAS --skip-kinds "CustomResourceDefinition" -v $KUBE_VERSION
   except:
     <<: *deps_pipeline
     refs:
@@ -155,6 +155,7 @@ lint_package:
   variables:
     KUBE_VERSION: "1.22.3"
     KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
+    HELM_EXTRAS: "--set global.ingress.apiVersion=networking.k8s.io/v1"
 
 .review_template:
   stage: review
