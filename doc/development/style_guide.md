@@ -453,12 +453,8 @@ This same can be done with gomplate: `{% file.Read "gitaly_token" | strings.Trim
 
 ```yaml
 gitaly:
+  # gomplate
   token: {% file.Read "./token" | strings.TrimSpace | data.ToJSON %}
+  # ERB
   token: <%= File.read('gitaly_token').strip.to_json %>
-```
-
-```toml
-[auth]
-token = {% file.Read "./token" | strings.TrimSpace | data.ToJSON %}
-token = <%= File.read('gitaly_token').strip.to_json %>
 ```
