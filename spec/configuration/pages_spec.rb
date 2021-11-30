@@ -220,8 +220,8 @@ describe 'GitLab Pages' do
                 'host' => 'minio.example.com',
                 'endpoint' => 'http://test-minio-svc.default.svc:9000',
                 'path_style' => true,
-                'aws_access_key_id' => "<%= File.read('/etc/gitlab/minio/accesskey').strip.dump[1..-2] %>",
-                'aws_secret_access_key' => "<%= File.read('/etc/gitlab/minio/secretkey').strip.dump[1..-2] %>"
+                'aws_access_key_id' => "<%= File.read('/etc/gitlab/minio/accesskey').strip.to_json %>",
+                'aws_secret_access_key' => "<%= File.read('/etc/gitlab/minio/secretkey').strip.to_json %>"
               }
             },
             'local_store' => {
