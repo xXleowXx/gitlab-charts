@@ -206,5 +206,73 @@ describe 'GitLab Ingress configuration(s)' do
         end
       end
     end
+
+    context 'when using ingress with networking.k8s.io/v1beta1 API' do
+      it 'does not set ingressClassName resource' do
+        api_version = enable_all_ingress.deep_merge(YAML.safe_load(%(
+            global:
+              ingress:
+                apiVersion: networking.k8s.io/v1beta1
+          )))
+
+        template = HelmTemplate.new(api_version)
+        expect(template.exit_code).to eq(0)
+
+        ingress_names.each do |ingress_name|
+          classResource = template.dig("Ingress/#{ingress_name}", 'spec', 'ingressClassName')
+          expect(classResource).to eq(nil)
+        end
+      end
+
+      it 'sets ingress-class annotation' do
+        api_version = enable_all_ingress.deep_merge(YAML.safe_load(%(
+            global:
+              ingress:
+                apiVersion: networking.k8s.io/v1beta1
+          )))
+
+        template = HelmTemplate.new(api_version)
+        expect(template.exit_code).to eq(0)
+
+        ingress_names.each do |ingress_name|
+          annotation = template.dig("Ingress/#{ingress_name}", 'metadata', 'annotations', 'kubernetes.io/ingress.class')
+          expect(annotation).to eq('test-nginx')
+        end
+      end
+    end
+
+    context 'when using ingress with networking.k8s.io/v1 API' do
+      it 'sets ingressClassName resource' do
+        api_version = enable_all_ingress.deep_merge(YAML.safe_load(%(
+            global:
+              ingress:
+                apiVersion: networking.k8s.io/v1
+          )))
+
+        template = HelmTemplate.new(api_version)
+        expect(template.exit_code).to eq(0)
+
+        ingress_names.each do |ingress_name|
+          classResource = template.dig("Ingress/#{ingress_name}", 'spec', 'ingressClassName')
+          expect(classResource).to eq('test-nginx')
+        end
+      end
+
+      it 'does not set ingress-class annotation' do
+        api_version = enable_all_ingress.deep_merge(YAML.safe_load(%(
+            global:
+              ingress:
+                apiVersion: networking.k8s.io/v1
+          )))
+
+        template = HelmTemplate.new(api_version)
+        expect(template.exit_code).to eq(0)
+
+        ingress_names.each do |ingress_name|
+          annotation = template.dig("Ingress/#{ingress_name}", 'metadata', 'annotations', 'kubernetes.io/ingress.class')
+          expect(annotation).to eq(nil)
+        end
+      end
+    end
   end
 end

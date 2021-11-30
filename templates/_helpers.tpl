@@ -351,7 +351,11 @@ kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressC
 Return an ingressClassName field if the Ingress apiVersion allows it
 */}}
 {{- define "gitlab.ingress.classnameField" -}}
-{{-   if .Capabilities.APIVersions.Has "networking.k8s.io/v1" -}}
+{{-   if .Values.global.ingress.apiVersion -}}
+{{-     if eq .Values.global.ingress.apiVersion "networking.k8s.io/v1" -}}
+ingressClassName: {{ include "gitlab.ingressclass" . }}
+{{-     end -}}
+{{-   else if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
 ingressClassName: {{ include "gitlab.ingressclass" . }}
 {{-   end -}}
 {{- end -}}
@@ -360,7 +364,11 @@ ingressClassName: {{ include "gitlab.ingressclass" . }}
 Return an ingress.class if the Ingress apiVersion allows it
 */}}
 {{- define "gitlab.ingress.classAnnotation" -}}
-{{-   if not ($.Capabilities.APIVersions.Has "networking.k8s.io/v1/IngressClass") -}}
+{{-   if .Values.global.ingress.apiVersion -}}
+{{-     if not (eq .Values.global.ingress.apiVersion "networking.k8s.io/v1") -}}
+kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
+{{-   end -}}
+{{-   else if not (.Capabilities.APIVersions.Has "networking.k8s.io/v1/IngressClass") -}}
 kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
 {{-   end -}}
 {{- end -}}
