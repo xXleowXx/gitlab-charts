@@ -219,8 +219,8 @@ describe 'GitLab Ingress configuration(s)' do
         expect(template.exit_code).to eq(0)
 
         ingress_names.each do |ingress_name|
-          classResource = template.dig("Ingress/#{ingress_name}", 'spec', 'ingressClassName')
-          expect(classResource).to eq(nil)
+          class_resource = template.dig("Ingress/#{ingress_name}", 'spec', 'ingressClassName')
+          expect(class_resource).to eq(nil)
         end
       end
 
@@ -253,8 +253,8 @@ describe 'GitLab Ingress configuration(s)' do
         expect(template.exit_code).to eq(0)
 
         ingress_names.each do |ingress_name|
-          classResource = template.dig("Ingress/#{ingress_name}", 'spec', 'ingressClassName')
-          expect(classResource).to eq('test-nginx')
+          class_resource = template.dig("Ingress/#{ingress_name}", 'spec', 'ingressClassName')
+          expect(class_resource).to eq('test-nginx')
         end
       end
 
