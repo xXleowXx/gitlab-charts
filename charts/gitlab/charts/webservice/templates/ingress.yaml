@@ -44,7 +44,7 @@ spec:
       http:
         paths:
           - path: {{ .ingress.path }}
-            {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
+            {{ if or ($.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") (eq $.Values.global.ingress.apiVersion "networking.k8s.io/v1") -}}
             pathType: {{ default .ingress.pathType $.Values.global.ingress.pathType }}
             backend:
               service:
