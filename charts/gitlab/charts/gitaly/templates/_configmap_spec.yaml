@@ -99,7 +99,7 @@ data:
     {{- end }}
 
     [auth]
-    token = "<%= File.read('/etc/gitlab-secrets/gitaly/gitaly_token').strip.dump[1..-2] %>"
+    token = <%= File.read('/etc/gitlab-secrets/gitaly/gitaly_token').strip.to_json %>
 
     [git]
     {{- with .Values.git }}
