@@ -360,9 +360,9 @@ ingressClassName: {{ include "gitlab.ingressclass" . }}
 Return an ingress.class if the Ingress apiVersion allows it
 */}}
 {{- define "gitlab.ingress.classAnnotation" -}}
-{{-   if not ($.Capabilities.APIVersions.Has "networking.k8s.io/v1/IngressClass") }}
+{{-   if not ($.Capabilities.APIVersions.Has "networking.k8s.io/v1/IngressClass") -}}
 kubernetes.io/ingress.class: "{{ template "gitlab.ingressclass" . }}"
-{{-   end }}
+{{-   end -}}
 {{- end -}}
 
 {{/*

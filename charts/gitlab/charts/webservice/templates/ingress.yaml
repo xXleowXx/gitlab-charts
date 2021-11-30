@@ -26,7 +26,7 @@ metadata:
     {{- include "webservice.labels" . | nindent 4 }}
     {{- include "webservice.commonLabels" . | nindent 4 }}
   annotations:
-    {{- template "gitlab.ingress.classAnnotation" $ }}
+    {{ include "gitlab.ingress.classAnnotation" $ }}
     kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
     {{- if eq "nginx" (default $.Values.global.ingress.provider .ingress.provider) }}
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .ingress.proxyBodySize | quote }}
