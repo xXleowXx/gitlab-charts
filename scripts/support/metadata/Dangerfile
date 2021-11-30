@@ -7,7 +7,7 @@ WORKTYPE_LABELS = [
   'feature::enhancement',
   'feature::maintenance',
   'type::maintenance',
-  'type:tooling',
+  'type::tooling',
   'tooling::pipelines',
   'tooling::workflow',
   'documentation'
