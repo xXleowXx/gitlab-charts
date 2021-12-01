@@ -784,21 +784,17 @@ wait_for_dev_images:
 
 publish_tagged_package:
   extends: .publish_chart_package
-  # stage: staging-release
   variables:
     CHANNEL: "stable"
   rules:
     - if: '$CI_SERVER_HOST == "dev.gitlab.org" && $CI_PROJECT_PATH == "gitlab/charts/gitlab" && $CI_COMMIT_TAG'
-      when: always
 
 publish_audodeploy_package:
   extends: .publish_chart_package
-  # stage: staging-release
   variables:
     CHANNEL: "autodeploy"
   rules:
     - if: '$CI_SERVER_HOST == "dev.gitlab.org" && $CI_PROJECT_PATH == "gitlab/charts/gitlab" && $CI_COMMIT_TAG && $COMMIT_REF_NAME =~ /$AUTO_DEPLOY_TAG_REGEX/'
-      when: always
 
 publish_devel_package:
   extends: .publish_chart_package
@@ -808,7 +804,6 @@ publish_devel_package:
   rules:
     - *skip_if_merge_pipeline
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-      when: always
 
 release_package:
   stage: release-package
