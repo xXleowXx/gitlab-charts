@@ -809,6 +809,7 @@ global:
       matomoSiteId:
       matomoDisableCookies:
       oneTrustId:
+      googleTagManagerNonceId:
     object_store:
       enabled: false
       proxy_download: true
@@ -987,6 +988,7 @@ under the `extra` key below `appConfig`:
 | `extra.matomoUrl`          | String | (empty) | Matomo URL. |
 | `extra.matomoDisableCookies`| Boolean | (empty) | Disable Matomo cookies (corresponds to `disableCookies` in the Matomo script) |
 | `extra.oneTrustId`         | String | (empty) | OneTrust ID. |
+| `extra.googleTagManagerNonceId` | String | (empty) | Google Tag Manager ID. |
 
 ### Consolidated object storage
 

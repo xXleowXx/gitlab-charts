@@ -69,6 +69,9 @@ extra:
   {{ if .extra.oneTrustId }}
   one_trust_id: {{ .extra.oneTrustId | quote }}
   {{- end }}
+  {{ if .extra.googleTagManagerNonceId }}
+  google_tag_manager_nonce_id: {{ .extra.googleTagManagerNonceId | quote }}
+  {{- end }}
 {{- end -}}
 
 {{- define "gitlab.appConfig.rackAttack" -}}
