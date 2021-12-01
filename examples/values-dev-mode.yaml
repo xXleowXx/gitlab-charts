@@ -1,0 +1,7 @@
+# Puts GitLab into development mode.
+# References:
+# - https://docs.gitlab.com/ee/development/database_debugging.html
+# - https://docs.gitlab.com/ee/administration/environment_variables.html#supported-environment-variables
+global:
+  extraEnv:
+    RAILS_ENV: development
