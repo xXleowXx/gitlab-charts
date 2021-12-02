@@ -61,9 +61,17 @@ class HelmTemplate
                             stdin_data: YAML.dump(values))
     @stdout, @stderr, @exit_code = result
     # handle common failures when helm or chart not setup properly
-    case @exit_code
-    when 256
-      fail "Chart dependencies not installed, run 'helm dependency update'" if @stderr.include? 'found in Chart.yaml, but missing in charts/ directory'
+    if @exit_code == 256
+      case
+      when @stderr.start_with?('FATAL')
+        # errors that start with FATAL are expected failures, pass to RSpec
+      when @stderr.start_with?('Error: template: gitlab/templates/NOTES.txt')
+        # checkConfig failure, pass to RSpec
+      when @stderr.include?('found in Chart.yaml, but missing in charts/ directory')
+        fail "Chart dependencies not installed, run 'helm dependency update'"
+      when @stderr.include?('Error: template')
+        fail "Helm template syntax error.\n#{@stderr}"
+      end
     end
     # load the complete output's YAML documents into an array
     yaml = YAML.load_stream(@stdout)
