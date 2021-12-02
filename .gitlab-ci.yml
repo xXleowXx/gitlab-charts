@@ -771,7 +771,8 @@ wait_for_dev_images:
   stage: package
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3"
   variables:
-    CHANNEL: "unstable"
+    # **Required** variable to set channel to which chart will be published:
+    # CHANNEL: "unstable"
     VERSION_SUFFIX: ""
   script:
     - helm dependency update
