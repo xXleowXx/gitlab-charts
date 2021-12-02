@@ -64,12 +64,6 @@ before_script:
 .stable_branch_items:
   - &stable_branch_ref /^[0-9]+-[0-9]+-stable$/
 
-.skip_if_merge_pipeline:
-  rules: 
-    - &skip_if_merge_pipeline
-      if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: never
-
 tag_auto_deploy:
   stage: staging-release
   rules:
@@ -803,7 +797,6 @@ publish_devel_package:
     CHANNEL: "devel"
     VERSION_SUFFIX: "-${CI_PIPELINE_ID}"
   rules:
-    # - *skip_if_merge_pipeline
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 release_package:
