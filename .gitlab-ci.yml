@@ -803,7 +803,7 @@ publish_devel_package:
     CHANNEL: "devel"
     VERSION_SUFFIX: "-${CI_PIPELINE_ID}"
   rules:
-    - *skip_if_merge_pipeline
+    # - *skip_if_merge_pipeline
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 release_package:
