@@ -79,6 +79,10 @@ No changes.
 - [Remove reference to deprecated operator](gitlab-org/charts/gitlab@d03e3293fdfe698eb3b5defe0b919351ef9485eb) ([merge request](gitlab-org/charts/gitlab!2197))
 - [Add $PLATFORM to installation commands](gitlab-org/charts/gitlab@8e72a88fb391cb98f64e712b07e65d65db4ab8fd) ([merge request](gitlab-org/charts/gitlab!2190))
 
+## 5.3.6 (2021-12-03)
+
+No changes.
+
 ## 5.3.5 (2021-11-26)
 
 No changes.
