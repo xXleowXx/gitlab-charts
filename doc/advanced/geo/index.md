@@ -575,6 +575,12 @@ replicating missing data from the **primary** instance. This process is known as
 Meanwhile, the **primary** instance starts to notify each **secondary** instance of any changes, so
 that the **secondary** instance can act on those notifications immediately.
 
+## Use Geo proxying for secondary sites
+
+To serve read-write traffic by proxying to the primary site, you can
+[enable Geo secondary proxying](https://docs.gitlab.com/ee/administration/geo/secondary_proxy/)
+and use a single, unified URL for all Geo sites.
+
 ## Confirm Operational Status
 
 The final step is to verify the Geo replication status on the secondary instance once fully
