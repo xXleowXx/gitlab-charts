@@ -284,7 +284,7 @@ function ensure_namespace() {
 
 function check_kube_domain() {
   if [ -z ${KUBE_INGRESS_BASE_DOMAIN+x} ]; then
-    echo "In order to deploy, KUBE_INGRESS_BASE_DOMAIN must be set as a variable at the group or project level, or manually added in .gitlab-cy.yml"
+    echo "ERROR: In order to deploy, KUBE_INGRESS_BASE_DOMAIN must be set as a variable at the group or project level, or manually added in .gitlab-cy.yml"
     false
   else
     true
