@@ -885,6 +885,30 @@ describe 'GitLab Pages' do
           end
         end
       end
+
+      context 'when using HTTP Proxy' do
+        let(:pages_enabled_values) do
+          YAML.safe_load(%(
+            global:
+              pages:
+                enabled: true
+                externalHttp:
+                  - 1.1.1.1
+                externalHttps:
+                  - 1.1.1.1
+            gitlab:
+              gitlab-pages:
+                useHTTPProxy: true
+          ))
+        end
+
+        describe 'pages configuration' do
+          it 'exposes proper listeners' do
+            expect(pages_config_data).to match(/listen-proxy=0.0.0.0:8090/)
+            expect(pages_config_data).not_to match(/listen-http=0.0.0.0:8090/)
+          end
+        end
+      end
     end
   end
 end
