@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.5.2 (2021-12-03)
+
+No changes.
+
 ## 5.5.1 (2021-12-01)
 
 No changes.
@@ -31,6 +35,10 @@ No changes.
 ### Other (1 change)
 
 - [[Docs] Operator: clarify available chart versions](gitlab-org/charts/gitlab@afcb3d95d2f997cc1d77087bb85a73b918a38101) ([merge request](gitlab-org/charts/gitlab!2268))
+
+## 5.4.4 (2021-12-03)
+
+No changes.
 
 ## 5.4.3 (2021-12-01)
 
@@ -70,6 +78,10 @@ No changes.
 
 - [Remove reference to deprecated operator](gitlab-org/charts/gitlab@d03e3293fdfe698eb3b5defe0b919351ef9485eb) ([merge request](gitlab-org/charts/gitlab!2197))
 - [Add $PLATFORM to installation commands](gitlab-org/charts/gitlab@8e72a88fb391cb98f64e712b07e65d65db4ab8fd) ([merge request](gitlab-org/charts/gitlab!2190))
+
+## 5.3.6 (2021-12-03)
+
+No changes.
 
 ## 5.3.5 (2021-11-26)
 
