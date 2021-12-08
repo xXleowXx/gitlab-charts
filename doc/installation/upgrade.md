@@ -97,7 +97,10 @@ The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-
 
 ## Upgrade steps for 5.5 release
 
-The `task-runner` chart [was renamed](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2099/diffs) to `toolbox` in `5.2.0` and was removed in `5.5.0`. As a result, any mention of `task-runner` in your configuration should be renamed to `toolbox`. In version 5.5 and newer, use the toolbox chart, and in version 5.4 and older, use the task-runner chart.
+The `task-runner` chart [was renamed](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2099/diffs)
+to `toolbox` and removed in `5.5.0`. As a result, any mention of `task-runner`
+in your configuration should be renamed to `toolbox`. In version 5.5 and newer,
+use the `toolbox` chart, and in version 5.4 and older, use the `task-runner` chart.
 
 ### Missing object storage secret error
 
