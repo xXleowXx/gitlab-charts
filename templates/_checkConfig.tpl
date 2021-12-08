@@ -37,6 +37,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.geo.database" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.geo.secondary.database" .) -}}
 {{- $messages = append $messages (include "gitlab.toolbox.replicas" .) -}}
+{{- $messages = append $messages (include "gitlab.toolbox.backups.objectStorage.config.secret" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.multipleRedis" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.hostWhenNoInstall" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.postgresql.deprecatedVersion" .) -}}
@@ -309,6 +310,20 @@ gitaly:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.gitaly.extern.repos */}}
+
+{{/*
+Ensure that a valid object storage config secret is provided.
+*/}}
+{{- define "gitlab.toolbox.backups.objectStorage.config.secret" -}}
+{{-   if or .Values.gitlab.toolbox.backups.objectStorage.config (not (or .Values.global.minio.enabled .Values.global.appConfig.object_store.enabled)) (eq .Values.gitlab.toolbox.backups.objectStorage.backend "gcs") }}
+{{-     if not .Values.gitlab.toolbox.backups.objectStorage.config.secret -}}
+toolbox:
+    A valid object storage config secret is needed for backups.
+    Please configure it via `gitlab.toolbox.backups.objectStorage.config.secret`.
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.toolbox.backups.objectStorage.config.secret */}}
 
 {{/*
 Ensure that gitlab/toolbox is not configured with `replicas` > 1 if
