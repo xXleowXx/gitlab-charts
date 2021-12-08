@@ -65,17 +65,7 @@ class HelmTemplate
     when 256
       fail "Chart dependencies not installed, run 'helm dependency update'" if @stderr.include? 'found in Chart.yaml, but missing in charts/ directory'
     end
-    # if @exit_code == 256
-    #   # rubocop:disable Style/GuardClause
-    #   if !@stderr.include?('webservice.datamodel.prepare')
-    #     if @stderr.include?('found in Chart.yaml, but missing in charts/ directory')
-    #       fail "Chart dependencies not installed, run 'helm dependency update'"
-    #     elsif @stderr.include?('Error: template') && !@stderr.include?('gitlab/templates/NOTES.txt')
-    #       fail "Helm template syntax error.\n#{@stderr}"
-    #     end
-    #   end
-    #   # rubocop:enable Style/GuardClause
-    # end
+
     # load the complete output's YAML documents into an array
     yaml = YAML.load_stream(@stdout)
     # filter out any empty YAML documents (nil)
