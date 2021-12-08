@@ -48,6 +48,7 @@ spec:
         {{- include "ingress-nginx.selectorLabels" . | nindent 8 }}
         component: "{{ .Values.controller.name }}"
         app.kubernetes.io/component: controller
+      {{- include "gitlab.podLabels" . | nindent 8 }}
       {{- if .Values.controller.podLabels }}
         {{- toYaml .Values.controller.podLabels | nindent 8 }}
       {{- end }}
