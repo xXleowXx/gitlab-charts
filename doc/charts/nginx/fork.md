@@ -22,3 +22,5 @@ The following adjustments were made to the NGINX fork:
   - `role.yaml`: rule for editing leader ConfigMap uses `ingress-nginx.controller.ingress-class`
 - Replace `controller.service.loadBalancerIP` with `global.hosts.externalIP`
 - Added support to add common labels through `common.labels` configuration option
+- `controller-deployment.yaml`: Disabled the use of `controller.nodeSelector` value
+- `default-backend-deployment.yaml`: Disable the use of `defaultbackend.nodeSelector` value
