@@ -1,10 +1,10 @@
 ---
 stage: Enablement
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab-Grafana chart
+# Using the GitLab-Grafana chart **(FREE SELF)**
 
 The `gitlab-grafana` subchart adapts the [`grafana/grafana`](https://artifacthub.io/packages/helm/grafana/grafana)
 chart to operate correctly with the same level of configuration as the Omnibus
