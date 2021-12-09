@@ -1,10 +1,10 @@
 ---
 stage: Enablement
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
 ---
 
-# Using the Praefect chart (alpha)
+# Using the Praefect chart (alpha) **(FREE SELF)**
 
 WARNING:
 The Praefect chart is still under development. The alpha version is not yet suitable for production use. Upgrades may require significant manual intervention.

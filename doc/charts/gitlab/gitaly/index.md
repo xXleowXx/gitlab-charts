@@ -1,10 +1,10 @@
 ---
 stage: Enablement
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab-Gitaly chart
+# Using the GitLab-Gitaly chart **(FREE SELF)**
 
 The `gitaly` sub-chart provides a configurable deployment of Gitaly Servers.
 
