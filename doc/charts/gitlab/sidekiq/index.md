@@ -1,10 +1,10 @@
 ---
 stage: Enablement
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab-Sidekiq chart
+# Using the GitLab-Sidekiq chart **(FREE SELF)**
 
 The `sidekiq` sub-chart provides configurable deployment of Sidekiq workers, explicitly
 designed to provide separation of queues across multiple `Deployment`s with individual
