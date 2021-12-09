@@ -554,7 +554,7 @@ command](https://cloud.google.com/memorystore/docs/redis/product-constraints#blo
 By default, Sidekiq will attempt to set the `CLIENT` for debugging
 purposes. This can be disabled via the following configuration setting:
 
-```
+```yaml
 global:
   redis:
     password:
