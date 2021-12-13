@@ -547,12 +547,9 @@ global:
   --set global.redis.scheme=rediss
 ```
 
-### Configure Google Cloud Memorystore
+### Password-less Redis Servers
 
-Google Cloud Memorystore [does not support the Redis `CLIENT`
-command](https://cloud.google.com/memorystore/docs/redis/product-constraints#blocked_redis_commands).
-By default, Sidekiq will attempt to set the `CLIENT` for debugging
-purposes. This can be disabled via the following configuration setting:
+Some Redis services such as Google Cloud Memorystore do not make use of passwords and the associated `AUTH` command. The use and requirement for a password can be disabled via the following configuration setting:
 
 ```yaml
 global:
