@@ -14,7 +14,7 @@ From here on:
 - `.` is `.deployments.xyz` value
 - `.name` is the key (xyz)
 */}}
-{{- $ingressCfg := dict "global" $.Values.global.ingress "local" .ingress "capabilities" $.Capabilities -}}
+{{- $ingressCfg := dict "global" $.Values.global.ingress "local" .ingress "parent" $ "capabilities" $.Capabilities -}}
 ---
 apiVersion: {{ template "gitlab.ingress.apiVersion" $ingressCfg }}
 kind: Ingress
@@ -26,7 +26,7 @@ metadata:
     {{- include "webservice.labels" . | nindent 4 }}
     {{- include "webservice.commonLabels" . | nindent 4 }}
   annotations:
-    {{ include "gitlab.ingress.classAnnotation" $ }}
+    {{ include "ingress.class.annotation" $ingressCfg }}
     kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
     {{- if eq "nginx" (default $.Values.global.ingress.provider .ingress.provider) }}
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .ingress.proxyBodySize | quote }}
@@ -38,13 +38,13 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
-  {{ template "gitlab.ingress.classnameField" $ }}
+  {{ include "ingress.class.spec" $ingressCfg }}
   rules:
     - host: {{ $gitlabHostname }}
       http:
         paths:
           - path: {{ .ingress.path }}
-            {{ if or ($.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") (eq $.Values.global.ingress.apiVersion "networking.k8s.io/v1") -}}
+            {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
             pathType: {{ default .ingress.pathType $.Values.global.ingress.pathType }}
             backend:
               service:

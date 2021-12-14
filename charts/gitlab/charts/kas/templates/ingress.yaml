@@ -2,7 +2,7 @@
 {{- if eq (include "gitlab.ingress.enabled" $) "true" -}}
 {{- $hostname := include "gitlab.kas.hostname" . -}}
 {{- $tlsSecret := include "kas.tlsSecret" . -}}
-{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "capabilities" .Capabilities -}}
+{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "parent" . "capabilities" .Capabilities -}}
 apiVersion: {{ template "gitlab.ingress.apiVersion" $ingressCfg }}
 kind: Ingress
 metadata:
@@ -12,20 +12,20 @@ metadata:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
     {{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
-    {{ include "gitlab.ingress.classAnnotation" . }}
+    {{ include "ingress.class.annotation" $ingressCfg }}
     kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
     {{ include "gitlab.certmanager_annotations" . }}
   {{- range $key, $value := merge .Values.ingress.annotations .Values.global.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
-  {{ template "gitlab.ingress.classnameField" $ }}
+  {{ include "ingress.class.spec" $ingressCfg }}
   rules:
     - host: {{ $hostname }}
       http:
         paths:
           - path: "{{ trimSuffix "/" $.Values.ingress.agentPath }}{{ $.Values.global.ingress.path }}"
-            {{ if or ($.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") (eq $.Values.global.ingress.apiVersion "networking.k8s.io/v1") -}}
+            {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
             pathType: {{ default "Prefix" $.Values.global.ingress.pathType }}
             backend:
               service:
@@ -38,7 +38,7 @@ spec:
               servicePort: {{ .Values.service.externalPort }}
             {{- end }}
           - path: "{{ trimSuffix "/" $.Values.ingress.k8sApiPath }}{{ $.Values.global.ingress.path }}"
-            {{ if or ($.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") (eq $.Values.global.ingress.apiVersion "networking.k8s.io/v1") -}}
+            {{ if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
             pathType: {{ default "Prefix" $.Values.global.ingress.pathType }}
             backend:
               service:
