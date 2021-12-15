@@ -56,6 +56,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.nginx.clusterrole.scope" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.geo.registry.replication.primaryApiUrl" .) -}}
@@ -664,6 +665,15 @@ nginx-ingress:
 {{-   end -}}
 {{- end -}}
 {{/* END "gitlab.checkConfig.nginx.controller" */}}
+
+{{- define "gitlab.checkConfig.nginx.clusterrole.scope" -}}
+{{-   if (index $.Values "nginx-ingress").rbac.scope -}}
+nginx-ingress:
+  'rbac.scope' should be false. Namespaced IngressClasses do not exist.
+  See https://github.com/kubernetes/ingress-nginx/issues/7519
+{{-   end -}}
+{{- end -}}
+{{/* END "gitlab.checkConfig.nginx.clusterrole" */}}
 
 {{/*
 Ensure that when type is set to LoadBalancer that loadBalancerSourceRanges are set
