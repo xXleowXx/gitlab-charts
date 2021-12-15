@@ -144,13 +144,16 @@ lint_package:
       - /(^docs[\/-].+|.+-docs$)/
       - *com_auto_deploy_branch_ref
 
-"Validate 1.20.7":
-  extends: .kubeval
-  variables:
 "Validate 1.19.16":
   extends: .kubeval
   variables:
     KUBE_VERSION: "1.19.16"
+    KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
+
+"Validate 1.20.7":
+  extends: .kubeval
+  variables:
+    KUBE_VERSION: "1.20.7"
     KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
 
 "Validate 1.22.3":
