@@ -52,6 +52,7 @@ stages:
   - staging-release
   - package
   - cleanup
+  - report
 
 before_script:
   - source scripts/ci/autodevops.sh
@@ -890,3 +891,12 @@ create_operator_mr:
       when: manual
     - when: never
   needs: []
+
+issue-bot:
+  stage: report
+  image: registry.gitlab.com/gitlab-org/distribution/issue-bot:latest
+  script: /issue-bot
+  rules:
+    # Only run when pipeline fails for the default branch on gitlab.com
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH && $CI_SERVER_HOST == "gitlab.com"'
+      when: on_failure
