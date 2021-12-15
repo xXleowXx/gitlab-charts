@@ -147,7 +147,10 @@ lint_package:
 "Validate 1.20.7":
   extends: .kubeval
   variables:
-    KUBE_VERSION: "1.20.7"
+"Validate 1.19.16":
+  extends: .kubeval
+  variables:
+    KUBE_VERSION: "1.19.16"
     KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
 
 "Validate 1.22.3":
