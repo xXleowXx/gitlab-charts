@@ -43,8 +43,10 @@ Before you install GitLab with GitLab Operator, you must:
 1. Create or use an existing Kubernetes or OpenShift cluster:
    - **Kubernetes:** To create a traditional Kubernetes cluster, consider using
      the [official tooling](https://kubernetes.io/docs/tasks/tools/) or your
-     preferred method of installation.
+     preferred method of installation. The GitLab Operator supports Kubernetes
+     1.19 through 1.21.
    - **OpenShift:** To create an OpenShift cluster, see the [OpenShift cluster setup docs](cloud/openshift.md).
+     The GitLab Operator supports OpenShift 4.6 through 4.9.
 1. Install the following services and software:
 
    - **Ingress controller**
