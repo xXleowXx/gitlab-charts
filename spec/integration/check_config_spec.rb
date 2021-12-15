@@ -1378,5 +1378,4 @@ describe 'checkConfig template' do
                      success_description: 'when set to false',
                      error_description: 'when set to true'
   end
-
 end
