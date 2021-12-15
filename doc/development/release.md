@@ -106,6 +106,28 @@ By default, this task will be automatically run from CI when a new release image
 
 > Currently the `helm-release-tools` branch from the release tools repository is used to release the chart
 
+### Development builds
+
+Development chart versions are being built with every merge to `master`.
+
+It is possible to track current non-production "development" releases of Helm chart by using `devel` channel:
+
+```shell
+helm repo add gitlab-devel https://gitlab.com/api/v4/projects/3828396/packages/helm/devel
+```
+
+and using `--devel` option for `helm` pointing to a specific release:
+
+```shell
+helm install --devel --version 1.2.3-4567 gitlab-devel/gitlab
+```
+
+to list available `devel` versions:
+
+```shell
+helm search repo gitlab-devel --devel
+```
+
 ### Manually releasing the chart
 
 Before manually releasing the chart, ensure all the chart changes you want from `master` have been picked into the
