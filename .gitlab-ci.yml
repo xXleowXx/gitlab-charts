@@ -892,11 +892,6 @@ create_operator_mr:
     - when: never
   needs: []
 
-intentional_failure:
-  stage: prepare
-  image: alpine:latest
-  script: exit 1
-
 issue-bot:
   stage: report
   image: registry.gitlab.com/gitlab-org/distribution/issue-bot:latest
