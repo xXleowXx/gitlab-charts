@@ -57,5 +57,5 @@ if there is a shared tls secret for all ingresses.
 Returns the nginx ingress class
 */}}
 {{- define "minio.ingressclass" -}}
-{{- pluck "class" .Values.global.ingress (dict "class" (printf "%s-nginx" .Release.Name)) | first -}}
+{{- pluck "class" .Values.global.ingress (dict "class" "nginx") | first -}}
 {{- end -}}

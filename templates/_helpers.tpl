@@ -351,7 +351,7 @@ kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressC
 Returns the nginx ingress class
 */}}
 {{- define "gitlab.ingressclass" -}}
-{{- pluck "class" .Values.global.ingress (dict "class" (printf "%s-nginx" .Release.Name)) | first -}}
+{{- pluck "class" .Values.global.ingress (dict "class" "nginx") | first -}}
 {{- end -}}
 
 {{/*
