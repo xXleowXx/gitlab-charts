@@ -24,7 +24,6 @@ rules:
       - pods
       - secrets
       - endpoints
-      - ingressclasses
     verbs:
       - get
       - list
