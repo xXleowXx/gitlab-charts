@@ -355,13 +355,6 @@ Returns the nginx ingress class
 {{- end -}}
 
 {{/*
-Returns the nginx ingress class
-*/}}
-{{- define "gitlab.ingressClassName" -}}
-nginx
-{{- end -}}
-
-{{/*
 Returns the ingress provider
 
 It expects a dictionary with two entries:
