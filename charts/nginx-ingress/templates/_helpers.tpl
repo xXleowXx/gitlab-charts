@@ -87,8 +87,6 @@ Per-component label:
 {{- define "ingress-nginx.selectorLabels" -}}
 app: {{ include "ingress-nginx.name" . }}
 release: {{ .Release.Name }}
-app.kubernetes.io/name: {{ include "ingress-nginx.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*

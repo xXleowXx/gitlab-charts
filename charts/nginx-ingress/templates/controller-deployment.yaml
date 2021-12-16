@@ -26,7 +26,6 @@ spec:
     matchLabels:
       {{- include "ingress-nginx.selectorLabels" . | nindent 6 }}
       component: "{{ .Values.controller.name }}"
-      app.kubernetes.io/component: controller
   {{- if not .Values.controller.autoscaling.enabled }}
   replicas: {{ .Values.controller.replicaCount }}
   {{- end }}
@@ -47,7 +46,6 @@ spec:
       labels:
         {{- include "ingress-nginx.selectorLabels" . | nindent 8 }}
         component: "{{ .Values.controller.name }}"
-        app.kubernetes.io/component: controller
       {{- include "gitlab.podLabels" . | nindent 8 }}
       {{- if .Values.controller.podLabels }}
         {{- toYaml .Values.controller.podLabels | nindent 8 }}
