@@ -20,6 +20,10 @@ To deploy GitLab on Kubernetes, the following are required:
     - Please refer to our [Cloud Native Hybrid reference architectures](https://docs.gitlab.com/ee/administration/reference_architectures/#available-reference-architectures) for the cluster topology recommendations for the specific environment sizes.
 
 NOTE:
+If using the in-chart NGINX Ingress Controller (`nginx-ingress.enabled=true`),
+then Kubernetes 1.19 or newer is required.
+
+NOTE:
 Support for Kubernetes 1.22 is under active development - see
 [&6883](https://gitlab.com/groups/gitlab-org/-/epics/6883) for more information.
 
