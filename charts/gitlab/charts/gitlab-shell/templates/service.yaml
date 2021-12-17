@@ -13,6 +13,10 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
+    - port: {{ .Values.metrics.port }}
+      targetPort: {{ .Values.metrics.port }}
+      protocol: TCP
+      name: metrics
     - port: {{ include "gitlab.shell.port" . | int }}
       targetPort: {{ .Values.service.internalPort }}
       protocol: TCP
