@@ -6,7 +6,7 @@ certmanager-issuer:
 .custom: &custom
   image:
     repository: custom-repository
-    tag: custom-tag
+    tag: 1.2.3-example
 
 # --- Global settings ---
 

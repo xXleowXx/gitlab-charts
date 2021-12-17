@@ -143,7 +143,9 @@ describe 'Strategy configuration' do
       resources_by_kind = local_template.resources_by_kind('Deployment').reject { |key, _| ignored_charts.include? key }
 
       resources_by_kind.each do |key, _|
-        expect(local_template.dig(key, 'spec', 'strategy')['type']).to eq('Recreate')
+        resource = local_template.dig(key, 'spec', 'strategy')
+        expect(resource).not_to be_nil, "Unable to find strategy for #{key}"
+        expect(resource['type']).to eq('Recreate'), "#{key} Deployment strategy: #{resource['type']}"
       end
     end
 
