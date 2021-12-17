@@ -774,7 +774,7 @@ nginx-ingress:
         memory: 5Mi
   rbac:
     create: true
-    scope: true
+    scope: false # enables ClusterRole to support IngressClasses
   serviceAccount:
     create: true
 
