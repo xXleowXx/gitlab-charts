@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
     {{- include "gitlab.commonLabels" . | nindent 4 }}
-    component: "{{ .Values.controller.name }}"
+    component: "{{ .Values.defaultBackend.name }}"
     {{- include "ingress-nginx.labels" . | nindent 4 }}
     app.kubernetes.io/component: default-backend
   name: {{ template "ingress-nginx.defaultBackend.fullname" . }}
