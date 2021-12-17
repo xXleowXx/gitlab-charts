@@ -51,7 +51,9 @@ stages:
   - qa
   - staging-release
   - package
+  - release-package
   - cleanup
+  - report
 
 before_script:
   - source scripts/ci/autodevops.sh
@@ -63,7 +65,7 @@ before_script:
   - &stable_branch_ref /^[0-9]+-[0-9]+-stable$/
 
 tag_auto_deploy:
-  stage: package
+  stage: staging-release
   rules:
     - if: $CI_PIPELINE_TRIGGERED && $TRIGGER_JOB == "tag_auto_deploy" && $AUTO_DEPLOY_TAG && $REPOSITORY_PAT
   script:
@@ -135,7 +137,7 @@ lint_package:
     - helm repo add gitlab https://charts.gitlab.io
     - helm repo add jetstack https://charts.jetstack.io
     - helm dependencies update
-    - helm kubeval . --force-color --strict --set certmanager-issuer.email=support@gitlab.com --skip-kinds "CustomResourceDefinition" -v $KUBE_VERSION
+    - helm kubeval . --force-color --strict --set certmanager-issuer.email=support@gitlab.com $HELM_EXTRAS --skip-kinds "CustomResourceDefinition" -v $KUBE_VERSION
   except:
     <<: *deps_pipeline
     refs:
@@ -144,10 +146,10 @@ lint_package:
       - /(^docs[\/-].+|.+-docs$)/
       - *com_auto_deploy_branch_ref
 
-"Validate 1.16.15":
+"Validate 1.19.16":
   extends: .kubeval
   variables:
-    KUBE_VERSION: "1.16.15"
+    KUBE_VERSION: "1.19.16"
     KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
 
 "Validate 1.20.7":
@@ -155,6 +157,13 @@ lint_package:
   variables:
     KUBE_VERSION: "1.20.7"
     KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
+
+"Validate 1.22.3":
+  extends: .kubeval
+  variables:
+    KUBE_VERSION: "1.22.3"
+    KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
+    HELM_EXTRAS: "--set global.ingress.apiVersion=networking.k8s.io/v1"
 
 .review_template:
   stage: review
@@ -758,22 +767,47 @@ wait_for_dev_images:
     refs:
       - /.*-stable/@gitlab/charts/gitlab
 
-staging_release:
-  stage: staging-release
+.publish_chart_package:
+  # publish chart into repo's Packages
+  stage: package
   image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3"
   variables:
-    CHANNEL: "stable"
+    # **Required** variable to set channel to which chart will be published:
+    # CHANNEL: "unstable"
+    VERSION_SUFFIX: ""
   script:
-    - if [[ $CI_COMMIT_REF_NAME =~ $AUTO_DEPLOY_TAG_REGEX ]]; then export CHANNEL="autodeploy"; fi
     - helm dependency update
-    - helm package .
+    - EXTRACTED_VERSION=$(awk '/^version/ {print $2}' Chart.yaml)
+    - VERSION=${VERSION:-${EXTRACTED_VERSION}}
+    - echo "Packaging ${VERSION}${VERSION_SUFFIX} for ${CHANNEL}"
+    - helm package --version=${VERSION}${VERSION_SUFFIX} .
     - chart_file=$(ls -l gitlab*.tgz | head -n 1 | awk '{print $NF}')
     - curl --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@${chart_file}" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/${CHANNEL}/charts"
-  only:
-    - tags@gitlab/charts/gitlab
+
+publish_tagged_package:
+  extends: .publish_chart_package
+  variables:
+    CHANNEL: "stable"
+  rules:
+    - if: '$CI_SERVER_HOST == "dev.gitlab.org" && $CI_PROJECT_PATH == "gitlab/charts/gitlab" && $CI_COMMIT_TAG'
+
+publish_audodeploy_package:
+  extends: .publish_chart_package
+  variables:
+    CHANNEL: "autodeploy"
+  rules:
+    - if: '$CI_SERVER_HOST == "dev.gitlab.org" && $CI_PROJECT_PATH == "gitlab/charts/gitlab" && $CI_COMMIT_TAG && $COMMIT_REF_NAME =~ /$AUTO_DEPLOY_TAG_REGEX/'
+
+publish_devel_package:
+  extends: .publish_chart_package
+  variables:
+    CHANNEL: "devel"
+    VERSION_SUFFIX: "-${CI_PIPELINE_ID}"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 release_package:
-  stage: package
+  stage: release-package
   timeout: 2h
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
   script:
@@ -784,6 +818,7 @@ release_package:
         UNSTABLE="false"
       fi
     - bash scripts/wait_for_images.sh
+    # trigger pipeline for https://gitlab.com/charts/charts.gitlab.io
     - curl -fS --request POST --form "token=${COM_CHARTS_TRIGGER_TOKEN}" --form ref=master
         --form "variables[CHART_NAME]=$CI_PROJECT_NAME"
         --form "variables[RELEASE_REF]=$CI_COMMIT_REF_NAME"
@@ -874,7 +909,7 @@ qa_eks_manual_full_suite:
   when: manual
 
 create_operator_mr:
-  stage: package
+  stage: release-package
   timeout: 2h
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
   allow_failure: true
@@ -890,3 +925,12 @@ create_operator_mr:
       when: manual
     - when: never
   needs: []
+
+issue-bot:
+  stage: report
+  image: registry.gitlab.com/gitlab-org/distribution/issue-bot:latest
+  script: /issue-bot
+  rules:
+    # Only run when pipeline fails for the default branch on gitlab.com
+    - if: '$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH && $CI_SERVER_HOST == "gitlab.com"'
+      when: on_failure
