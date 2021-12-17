@@ -729,7 +729,8 @@ certmanager:
 ## Installation & configuration of charts/ingress-nginx:
 nginx-ingress:
   enabled: true
-  tcpExternalConfig: "true"
+  tcp:
+    22: "{{ .Release.Namespace }}/gitlab-shell:{{ include \"gitlab.shell.port\" . | int }}{{ include \"gitlab.shell.tcp.proxyProtocol\" . }}"
   controller:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
