@@ -730,7 +730,7 @@ certmanager:
 nginx-ingress:
   enabled: true
   tcp:
-    22: '{{ .Release.Namespace }}/gitlab-shell:{{ include "gitlab.shell.port" . | int }}{{ include "gitlab.shell.tcp.proxyProtocol" . }}'
+    22: '{{ include "gitlab.nginx.gitlab-shell-config" . }}'
   controller:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
