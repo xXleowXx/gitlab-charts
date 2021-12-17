@@ -24,7 +24,9 @@ describe 'Annotations configuration' do
       'Deployment/test-certmanager-webhook',
       'Deployment/test-certmanager',
       'Deployment/test-gitlab-runner',
-      'Deployment/test-prometheus-server'
+      'Deployment/test-prometheus-server',
+      'Deployment/test-nginx-ingress-controller',
+      'Deployment/test-nginx-ingress-defaultbackend'
     ]
   end
 
