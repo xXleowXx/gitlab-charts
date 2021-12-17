@@ -18,7 +18,7 @@ spec:
   selector:
     matchLabels:
       {{- include "ingress-nginx.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/component: default-backend
+      component: "{{ .Values.defaultBackend.name }}"
 {{- if not .Values.defaultBackend.autoscaling.enabled }}
   replicas: {{ .Values.defaultBackend.replicaCount }}
 {{- end }}
@@ -30,7 +30,7 @@ spec:
     {{- end }}
       labels:
         {{- include "ingress-nginx.selectorLabels" . | nindent 8 }}
-        app.kubernetes.io/component: default-backend
+        component: "{{ .Values.defaultBackend.name }}"
       {{- include "gitlab.podLabels" . | nindent 8 }}
       {{- if .Values.defaultBackend.podLabels }}
         {{- toYaml .Values.defaultBackend.podLabels | nindent 8 }}
