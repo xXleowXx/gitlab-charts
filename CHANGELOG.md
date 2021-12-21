@@ -2,6 +2,17 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.6.0 (2021-12-21)
+
+### Changed (6 changes)
+
+- [Update gitlab-org/container-registry from 3.18.1-gitlab to 3.19.0-gitlab](gitlab-org/charts/gitlab@8c76c6594e07be584709112bd0ad6322bbe2b411) ([merge request](gitlab-org/charts/gitlab!2312))
+- [Update gitlab-org/charts/gitlab-runner from 0.35.3 to 0.36.0](gitlab-org/charts/gitlab@504aebed4b7ee63c73436d081392c531b29d7f6f) ([merge request](gitlab-org/charts/gitlab!2313))
+- [Update gitlab-org/charts/gitlab-runner from 0.35.0 to 0.35.3](gitlab-org/charts/gitlab@7017fda23b1a3788c9e6fb7a5e8f11027775c842) ([merge request](gitlab-org/charts/gitlab!2301))
+- [Update gitlab-org/container-registry from 3.16.0-gitlab to 3.17.0-gitlab](gitlab-org/charts/gitlab@e1b12db5cb630926ee76ce7684fba64263dc79af) ([merge request](gitlab-org/charts/gitlab!2285))
+- [Update gitlab-org/charts/gitlab-runner from 0.34.0 to 0.35.0](gitlab-org/charts/gitlab@12c4740147c25f788061176f124e5749eb9a7726) ([merge request](gitlab-org/charts/gitlab!2275))
+- [Update gitlab-org/container-registry from 3.15.0-gitlab to 3.16.0-gitlab](gitlab-org/charts/gitlab@3d2e013c2c37ee987fa064dacb8ae3f2f645aa4b) ([merge request](gitlab-org/charts/gitlab!2276))
+
 ## 5.5.2 (2021-12-03)
 
 No changes.
