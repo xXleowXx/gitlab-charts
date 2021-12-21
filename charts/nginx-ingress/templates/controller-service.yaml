@@ -25,7 +25,6 @@ spec:
 {{- if .Values.controller.service.externalIPs }}
   externalIPs: {{ toYaml .Values.controller.service.externalIPs | nindent 4 }}
 {{- end }}
-{{- if .Values.global.hosts.externalIP }}
 {{- if or .Values.global.hosts.externalIP .Values.controller.service.loadBalancerIP }}
   loadBalancerIP: {{ coalesce .Values.global.hosts.externalIP .Values.controller.service.loadBalancerIP }}
 {{- end }}
