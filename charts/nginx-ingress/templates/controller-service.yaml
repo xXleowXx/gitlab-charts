@@ -26,7 +26,8 @@ spec:
   externalIPs: {{ toYaml .Values.controller.service.externalIPs | nindent 4 }}
 {{- end }}
 {{- if .Values.global.hosts.externalIP }}
-  loadBalancerIP: {{ .Values.global.hosts.externalIP }}
+{{- if or .Values.global.hosts.externalIP .Values.controller.service.loadBalancerIP }}
+  loadBalancerIP: {{ coalesce .Values.global.hosts.externalIP .Values.controller.service.loadBalancerIP }}
 {{- end }}
 {{- if .Values.controller.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{ toYaml .Values.controller.service.loadBalancerSourceRanges | nindent 4 }}
