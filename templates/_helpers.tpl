@@ -335,7 +335,7 @@ It expects a dictionary with three entries:
   - `parent` which is the parent context (either `.` or `$`)
 
 Example usage:
-{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "parent" . -}}
+{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "context" . -}}
 kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
 */}}
 {{- define "gitlab.ingress.apiVersion" -}}
@@ -343,9 +343,9 @@ kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressC
 {{-     .local.apiVersion -}}
 {{-   else if .global.apiVersion -}}
 {{-     .global.apiVersion -}}
-{{-   else if .parent.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
+{{-   else if .context.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
 {{-     print "networking.k8s.io/v1" -}}
-{{-   else if .parent.Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" -}}
+{{-   else if .context.Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" -}}
 {{-     print "networking.k8s.io/v1beta1" -}}
 {{-   else -}}
 {{-     print "extensions/v1beta1" -}}
