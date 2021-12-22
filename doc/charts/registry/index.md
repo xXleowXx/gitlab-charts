@@ -668,8 +668,8 @@ Various vendors use different field names for the same construct:
 
 | Vendor | field name |
 | :----: | :--------: |
-| Google | `keyname` |
-| CloudFront| `keypairid` |
+| Google CDN | `keyname` |
+| CloudFront | `keypairid` |
 
 NOTE:
 Only configuration of `middleware.storage` section is supported at this time. 
