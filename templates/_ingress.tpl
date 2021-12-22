@@ -8,7 +8,7 @@ It expects a dictionary with two entries:
 {{- define "ingress.class.annotation" -}}
 {{-   $apiVersion := include "gitlab.ingress.apiVersion" . -}}
 {{-   $className := .global.class | default (printf "%s-nginx" .parent.Release.Name) -}}
-{{-   if and (not (eq $apiVersion "networking.k8s.io/v1")) (not (eq $apiVersion "networking.k8s.io/v1beta1")) -}}
+{{-   if not (eq $apiVersion "networking.k8s.io/v1") -}}
 kubernetes.io/ingress.class: {{ $className }}
 {{-   end -}}
 {{- end -}}
@@ -20,10 +20,10 @@ It expects a dictionary with two entries:
   - `global` which contains global ingress settings, e.g. .Values.global.ingress
   - `parent` which is the parent context (either `.` or `$`)
 */}}
-{{- define "ingress.class.spec" -}}
+{{- define "ingress.class.field" -}}
 {{-   $apiVersion := include "gitlab.ingress.apiVersion" . -}}
 {{-   $className := .global.class | default (printf "%s-nginx" .parent.Release.Name) -}}
-{{-   if or (eq $apiVersion "networking.k8s.io/v1") (eq $apiVersion "networking.k8s.io/v1beta1") -}}
+{{-   if eq $apiVersion "networking.k8s.io/v1" -}}
 ingressClassName: {{ $className }}
 {{-   end -}}
 {{- end -}}
