@@ -38,7 +38,7 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 spec:
-  {{ include "ingress.class.spec" $ingressCfg }}
+  {{ include "ingress.class.field" $ingressCfg }}
   rules:
     - host: {{ $smartcardHostname }}
       http:
