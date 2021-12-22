@@ -85,6 +85,15 @@ data:
         keyfile: /etc/docker/registry/profiling-key.json
         {{- end }}
       {{- end }}
+
+    middleware:
+      storage:
+        - name: cloudfront
+          options:
+            baseurl: https://XXXXXXX.cloudfront.net/
+            privatekey: /etc/docker/cloudfront/pk-XXXXXX.pem
+            keypairid: XXXXXX
+
     storage:
       maintenance:
         readonly:
