@@ -140,6 +140,18 @@ helm install gitlab gitlab/gitlab \
   --set gitlab.gitlab-pages.ingress.tls.secretName=<secret name>
 ```
 
+If you are using AWS ACM to create your wildcard certificate, it is not possible to specify them via secret because ACM certificates cannot be downloaded.
+Instead, specify them via  `nginx-ingress.controller.service.annotations` as shown below:
+
+```yaml
+nginx-ingress:
+  controller:
+    service:
+      annotations:
+        ...
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:{region}:{user id}:certificate/{id}
+```
+
 ## Troubleshooting
 
 This section contains possible solutions for problems you might encounter.
