@@ -11,7 +11,7 @@ If you want to integrate GitLab with OpenShift, see the [OpenShift and GitLab do
 
 GitLab Operator is an implementation of the [Operator pattern](https://www.openshift.com/blog)
 for managing the lifecycle and upgrades of a GitLab instance. The GitLab Operator strengthens the support of OpenShift from GitLab, but is intended to be as native to Kubernetes as for OpenShift. The GitLab Operator provides a method of synchronizing and controlling various
-stages of cloud-native GitLab installation/upgrade procedures. Using the Operator provides the ability to perform
+stages of cloud-native GitLab installation and upgrade procedures. Using the Operator provides the ability to perform
 rolling upgrades with minimal down time. The first goal is to support OpenShift, the subsequent goal will be for automation of day 2 operations like upgrades as noted.
 
 The Operator offers the benefit of Day 2 operators to the GitLab installation, there are many automation benefits to utilizing the Operator vs Helm. The Operator utilizes the Helm Chart but the Operator will continuously run making upgrading, backups, and more, automatic.
