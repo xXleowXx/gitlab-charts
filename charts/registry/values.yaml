@@ -160,9 +160,13 @@ init:
       # Indent /registry/storage/config 2 spaces before inserting into config.yml
       sed -i 's/^/  /' /registry/storage/config
       # Insert into /registry/config.yml after `storage:`
-      sed -i '/storage:/ r /registry/storage/config' /registry/config.yml
+      sed -i '/^storage:/ r /registry/storage/config' /registry/config.yml
       # Remove the now extraneous `config` file
       rm /registry/storage/config
+    fi
+    # Copy any middleware.storage if present
+    if [ -d /config/middleware.storage ]; then
+      cp -v -r -L /config/middleware.storage  /registry/middleware.storage
     fi
     # Set to known path, to used ConfigMap
     cat /config/certificate.crt > /registry/certificate.crt
@@ -216,10 +220,23 @@ hpa:
   customMetrics: []
 
 storage: {}
-  # secret:
-  # redirect:
-  #   disable:
-  #   exceptions: []
+# secret:
+# redirect:
+#   disable:
+#   exceptions: []
+middleware:
+  # See https://docs.docker.com/registry/configuration/#middleware
+  storage: []
+    ## EXAMPLE ONLY
+    # - name: cloudfront
+    #   options:
+    #     baseurl: cdn.registry.example.com
+    #     # `privatekey` is auto-generated.
+    #     privatekeySecret:
+    #       secret: cdn-private-key
+    #       key: private.pem
+    #     keypairid: GIBBERISH
+
 minio:
   redirect: false
 
