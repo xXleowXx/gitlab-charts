@@ -3,7 +3,7 @@ Adds `ingress.class` annotation based on the API version of Ingress.
 
 It expects a dictionary with two entries:
   - `global` which contains global ingress settings, e.g. .Values.global.ingress
-  - `parent` which is the parent context (either `.` or `$`)
+  - `context` which is the parent context (either `.` or `$`)
 */}}
 {{- define "ingress.class.annotation" -}}
 {{-   $apiVersion := include "gitlab.ingress.apiVersion" . -}}
@@ -18,7 +18,7 @@ Sets `ingressClassName` based on the API version of Ingress.
 
 It expects a dictionary with two entries:
   - `global` which contains global ingress settings, e.g. .Values.global.ingress
-  - `parent` which is the parent context (either `.` or `$`)
+  - `context` which is the parent context (either `.` or `$`)
 */}}
 {{- define "ingress.class.field" -}}
 {{-   $apiVersion := include "gitlab.ingress.apiVersion" . -}}

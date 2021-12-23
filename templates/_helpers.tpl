@@ -332,7 +332,7 @@ Return the appropriate apiVersion for Ingress.
 It expects a dictionary with three entries:
   - `global` which contains global ingress settings, e.g. .Values.global.ingress
   - `local` which contains local ingress settings, e.g. .Values.ingress
-  - `parent` which is the parent context (either `.` or `$`)
+  - `context` which is the parent context (either `.` or `$`)
 
 Example usage:
 {{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "context" . -}}
