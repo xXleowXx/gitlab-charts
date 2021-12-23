@@ -101,6 +101,7 @@ registry:
     disabled: true
     manifests:
       referencelimit: 0
+      payloadsizelimit: 0
       urls:
         allow: []
         deny: []
@@ -506,6 +507,7 @@ the `deny` field.
 | Name              | Type   | Default | Description                                                                                                                                                                             |
 | :---------------: | :----: | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | `referencelimit`  | Int    | `0`     | The maximum number of references, such as layers, image configurations, and other manifests, that a single manifest may have. When set to `0` (default) this validation is disabled.    |
+| `payloadsizelimit`  | Int    | `0`   | The maximum data size in bytes of manifest payloads. When set to `0` (default) this validation is disabled.    |
 | `urls.allow`      | Array  | `[]`    | List of regular expressions that enables URLs in the layers of manifests. When left empty (default), layers with any URLs will be rejected.                                             |
 | `urls.deny`       | Array  | `[]`    | List of regular expressions that restricts the URLs in the layers of manifests. When left empty (default), no layer with URLs which passed the `urls.allow` list will be rejected       |
 
