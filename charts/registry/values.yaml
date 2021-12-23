@@ -234,6 +234,7 @@ validation:
   disabled: true
   manifests:
     referencelimit: 0
+    payloadsizelimit: 0
     urls:
       allow: []
       deny: []
