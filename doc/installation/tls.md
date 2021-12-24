@@ -91,7 +91,6 @@ nginx-ingress:
         service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:{region}:{user id}:certificate/{id}
 ```
 
-
 ## Option 3: Use individual certificate per service
 
 Add your full chain certificates to the cluster as secrets, and then pass those secret names to each Ingress.
