@@ -43,7 +43,7 @@ init:
 tolerations: []
 
 ## The Gitaly StatefulSet's priorityClassName
-# priorityClassName:
+priorityClassName: ""
 
 logging:
   format: "json"
