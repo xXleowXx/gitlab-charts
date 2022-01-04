@@ -116,9 +116,10 @@ class HelmTemplate
     secrets['projected']['sources'].keep_if do |s|
       s['secret']['name'] == secret if s.has_key?('secret')
     end
-    if secrets['projected']['sources'].length == 1
-      secrets['projected']['sources'][0]['secret']
-    end
+
+    return unless secrets['projected']['sources'].length == 1
+
+    secrets['projected']['sources'][0]['secret']
   end
 
   def find_projected_secret(item, mount, secret)
@@ -131,14 +132,17 @@ class HelmTemplate
 
     result = nil
 
-    if secret and secret.has_key?('items')
+    if secret&.has_key?('items')
+
       secret['items'].each do |i|
         if i['key'] == key
           result = i
           break
         end
       end
+
     end
+
     result
   end
 

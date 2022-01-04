@@ -60,10 +60,7 @@ describe 'middleware configuration' do
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
       projected_secret_key = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'cdn-private-key', 'private.pem')
       expect(projected_secret_key).to have_key('path')
-
-      if projected_secret_key
-        expect(projected_secret_key['path']).to eq('middleware.storage/0/private.pem')
-      end
+      expect(projected_secret_key['path']).to eq('middleware.storage/0/private.pem') if projected_secret_key
     end
   end
 end
