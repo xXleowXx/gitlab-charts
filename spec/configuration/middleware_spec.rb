@@ -35,7 +35,7 @@ describe 'middleware configuration' do
       )).deep_merge(default_values)
     end
 
-    it 'Populates the middleware configuration in expected manner' do
+    it 'Populates the middleware storage configuration in expected manner' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
       expect(
@@ -55,10 +55,10 @@ describe 'middleware configuration' do
                 privatekey: "/etc/docker/registry/middleware.storage/0/private.pem"
       )))
     end
-    it 'Populates the deployment in expected manner' do
+    it 'Projects middleware storage secrets into deployment' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-      expect(t.find_projected_secret('Deployment/test-registry', 'registry-secrets', 'cdn-private-key')).to be true
+      expect(t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'cdn-private-key', 'private.pem')['path']).to eq('middleware.storage/0/private.pem')
     end
   end
 end
