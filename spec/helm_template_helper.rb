@@ -118,27 +118,24 @@ class HelmTemplate
     end
     if secrets['projected']['sources'].length == 1
       secrets['projected']['sources'][0]['secret']
-    else
-      nil
     end
   end
 
   def find_projected_secret(item, mount, secret)
     secret = get_projected_secret(item,mount,secret)
-    secret != nil 
+    !secret.nil?
   end
 
   def find_projected_secret_key(item, mount, secret, key)
     secret = get_projected_secret(item,mount,secret)
 
     result = nil
-    if secret
-      if secret.has_key?('items')
-        secret['items'].each do |i|
-          if i['key'] == key
-            result = i
-            break
-          end
+
+    if secret and secret.has_key?('items')
+      secret['items'].each do |i|
+        if i['key'] == key
+          result = i
+          break
         end
       end
     end
