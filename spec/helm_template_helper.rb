@@ -113,7 +113,11 @@ class HelmTemplate
   def find_projected_secret(item, mount, secret)
     secrets = find_volume(item,mount)
     secrets['projected']['sources'].keep_if do |s|
-      s['secret']['name'] == secret
+      if s.has_key?('secret')
+        s['secret']['name'] == secret
+      else
+        false
+      end
     end
 
     secrets['projected']['sources'].length == 1
