@@ -113,36 +113,36 @@ class HelmTemplate
   def get_projected_secret(item, mount, secret)
     # locate first instance of projected secret by name
     secrets = find_volume(item,mount)
-    secrets['projected']['sources'].each do |s|
-      if s.has_key?('secret')
-        if s['secret']['name'] == secret
-          return s['secret']
-        end
-      end
+    secrets['projected']['sources'].keep_if do |s|
+      s['secret']['name'] == secret if s.has_key?('secret')
     end
-    return nil
+    if secrets['projected']['sources'].length == 1
+      secrets['projected']['sources'][0]['secret']
+    else
+      nil
+    end
   end
 
   def find_projected_secret(item, mount, secret)
     secret = get_projected_secret(item,mount,secret)
-    if secret == nil 
-      false
-    else
-      true
-    end
+    secret != nil 
   end
 
   def find_projected_secret_key(item, mount, secret, key)
     secret = get_projected_secret(item,mount,secret)
 
+    result = nil
     if secret
-      secret['items'].each do |i|
-        if i['key'] == key
-          return i
+      if secret.has_key?('items')
+        secret['items'].each do |i|
+          if i['key'] == key
+            result = i
+            break
+          end
         end
       end
     end
-    return nil
+    result
   end
 
   def find_volume_mount(item, container_name, volume_name, init = false)
