@@ -24,7 +24,7 @@ describe 'middleware configuration' do
       YAML.safe_load(%(
         registry:
           middleware:
-            storage: 
+            storage:
               - name: cloudfront
                 options:
                   baseurl: cdn.registry.example.com
@@ -38,16 +38,17 @@ describe 'middleware configuration' do
     it 'Populates the middleware configuration in expected manner' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-      expect(YAML.safe_load(
+      expect(
+        YAML.safe_load(
           t.dig(
-            'ConfigMap/test-registry', 
-            'data', 
+            'ConfigMap/test-registry',
+            'data',
             'config.yml'
           ),
         [Symbol])['middleware']).to include(YAML.safe_load(%(
           storage:
             - name: cloudfront
-              options: 
+              options:
                 baseurl: cdn.registry.example.com
                 keypairid: "GIBBERISH"
                 privatekey: "/etc/docker/registry/middleware.storage/0/private.pem"
