@@ -45,7 +45,8 @@ describe 'middleware configuration' do
             'data',
             'config.yml'
           ),
-        [Symbol])['middleware']).to include(YAML.safe_load(%(
+          [Symbol]
+        )['middleware']).to include(YAML.safe_load(%(
           storage:
             - name: cloudfront
               options:
@@ -57,7 +58,7 @@ describe 'middleware configuration' do
     it 'Populates the deployment in expected manner' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-      expect(t.find_projected_secret('Deployment/test-registry', 'registry-secrets', 'cdn-private-key')).to  be true
+      expect(t.find_projected_secret('Deployment/test-registry', 'registry-secrets', 'cdn-private-key')).to be true
     end
   end
 end
