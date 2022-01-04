@@ -654,7 +654,7 @@ middleware:
         keypairid: ABCEDFGHIJKLMNOPQRST
 ```
 
-within above code `options.privatekeySecret` is a `generic` kubernetes secret contents of which corresponds to PEM file contents:
+Within above code `options.privatekeySecret` is a `generic` Kubernetes secret contents of which corresponds to PEM file contents:
 
 ```shell
 kubectl create secret generic cloudfront-secret-name --type=kubernetes.io/ssh-auth --from-file=private-key-ABC=pk-ABCEDFGHIJKLMNOPQRST.pem
