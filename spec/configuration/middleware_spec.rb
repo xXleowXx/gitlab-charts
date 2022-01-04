@@ -3,7 +3,7 @@ require 'helm_template_helper'
 require 'yaml'
 require 'hash_deep_merge'
 
-describe 'migrations configuration' do
+describe 'middleware configuration' do
   let(:default_values) do
     YAML.safe_load(%(
       certmanager-issuer:
