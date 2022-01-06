@@ -656,11 +656,13 @@ When type-specific object storage is enabled the `connection` property can not b
 
 {{- define "gitlab.checkConfig.nginx.controller.extraArgs" -}}
 {{-   if (index $.Values "nginx-ingress").enabled -}}
-{{-     if hasKey (index $.Values "nginx-ingress").controller.extraArgs "force-namespace-isolation" -}}
+{{-     if hasKey (index $.Values "nginx-ingress").controller "extraArgs" -}}
+{{-       if hasKey (index $.Values "nginx-ingress").controller.extraArgs "force-namespace-isolation" -}}
 nginx-ingress:
   `nginx-ingress.controller.extraArgs.force-namespace-isolation` was previously set by default in the GitLab chart's values.yaml file,
   but has since been deprecated upon the upgrade to NGINX 0.41.2 (upstream chart version 3.11.1).
   Please remove the `force-namespace-isolation` key.
+{{-       end -}}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
