@@ -1,6 +1,6 @@
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
-  tag: 'v3.18.1-gitlab'
+  tag: 'v3.20.0-gitlab'
   # pullPolicy: IfNotPresent
   # pullSecrets: []
 
@@ -234,6 +234,7 @@ validation:
   disabled: true
   manifests:
     referencelimit: 0
+    payloadsizelimit: 0
     urls:
       allow: []
       deny: []

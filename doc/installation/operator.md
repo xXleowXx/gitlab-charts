@@ -11,7 +11,7 @@ If you want to integrate GitLab with OpenShift, see the [OpenShift and GitLab do
 
 GitLab Operator is an implementation of the [Operator pattern](https://www.openshift.com/blog)
 for managing the lifecycle and upgrades of a GitLab instance. The GitLab Operator strengthens the support of OpenShift from GitLab, but is intended to be as native to Kubernetes as for OpenShift. The GitLab Operator provides a method of synchronizing and controlling various
-stages of cloud-native GitLab installation/upgrade procedures. Using the Operator provides the ability to perform
+stages of cloud-native GitLab installation and upgrade procedures. Using the Operator provides the ability to perform
 rolling upgrades with minimal down time. The first goal is to support OpenShift, the subsequent goal will be for automation of day 2 operations like upgrades as noted.
 
 The Operator offers the benefit of Day 2 operators to the GitLab installation, there are many automation benefits to utilizing the Operator vs Helm. The Operator utilizes the Helm Chart but the Operator will continuously run making upgrading, backups, and more, automatic.
@@ -43,8 +43,14 @@ Before you install GitLab with GitLab Operator, you must:
 1. Create or use an existing Kubernetes or OpenShift cluster:
    - **Kubernetes:** To create a traditional Kubernetes cluster, consider using
      the [official tooling](https://kubernetes.io/docs/tasks/tools/) or your
-     preferred method of installation.
+     preferred method of installation. The GitLab Operator supports Kubernetes
+     1.19 through 1.21. Support for Kubernetes 1.22 is under active development - see
+     [&6883](https://gitlab.com/groups/gitlab-org/-/epics/6883) for more information.
    - **OpenShift:** To create an OpenShift cluster, see the [OpenShift cluster setup docs](cloud/openshift.md).
+     The GitLab Operator supports OpenShift 4.6 through 4.9. Support for Kubernetes 1.22
+     is under active development - see [&6883](https://gitlab.com/groups/gitlab-org/-/epics/6883)
+     for more information.
+
 1. Install the following services and software:
 
    - **Ingress controller**
