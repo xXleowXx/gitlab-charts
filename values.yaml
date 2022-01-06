@@ -736,8 +736,11 @@ nginx-ingress:
     service:
       externalTrafficPolicy: "Local"
     ingressClassByName: false
-    ingressClassResource:
-      name: "{{ .Release.Name }}-nginx"
+    # We'll need this to be release-prefixed to support multiple instances,
+    # but the upstream chart doesn't currently use `tpl` in the IngressClass
+    # `metadata.name` field.
+    # ingressClassResource:
+    #   name: "{{ .Release.Name }}-nginx"
     resources:
       requests:
         cpu: 100m
