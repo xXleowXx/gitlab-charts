@@ -614,7 +614,6 @@ will supersede this default.
 
 Configuration of `middleware.storage` follows [upstream convention](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#middleware):
 
-
 Configuration is fairly generic and follows similar pattern:
 
 ```yaml
