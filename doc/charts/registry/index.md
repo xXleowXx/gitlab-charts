@@ -129,7 +129,7 @@ registry:
 
 If you chose to deploy this chart as a standalone, remove the `registry` at the top level.
 
-## Installation command line options
+## Installation parameters
 
 | Parameter                                  | Default                                      | Description                                                                                          |
 |--------------------------------------------|----------------------------------------------|------------------------------------------------------------------------------------------------------|
@@ -213,6 +213,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `tokenService`                             | `container_registry`                         | JWT token service                                                                                    |
 | `tokenIssuer`                              | `gitlab-issuer`                              | JWT token issuer                                                                                     |
 | `tolerations`                              | `[]`                                         | Toleration labels for pod assignment                                                                 |
+| `middleware.storage` |  | configuration layer for midleware storage ([s3 for instance](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#example-middleware-configuration))
 
 ## Chart configuration examples
 
@@ -610,6 +611,48 @@ The chart will populate `delete.enabled: true` into this configuration
 by default if not specified by the user. This keeps expected behavior in line with
 the default use of MinIO, as well as the Omnibus GitLab. Any user provided value
 will supersede this default.
+
+### middleware.storage
+
+Configuration of `middleware.storage` follows [upstream convention](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#middleware):
+
+Configuration is fairly generic and follows similar pattern:
+
+```yaml
+middleware:
+  # See https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#middleware
+  storage: 
+    - name: cloudfront
+      options:
+        baseurl: https://abcdefghijklmn.cloudfront.net/
+        # `privatekey` is auto-populated with the content from the privatekey Secret.
+        privatekeySecret:
+          secret: cloudfront-secret-name
+          # "key" value is going to be used to generate file name for PEM storage:
+          #   /etc/docker/registry/middleware.storage/<index>/<key>
+          key: private-key-ABC.pem
+        keypairid: ABCEDFGHIJKLMNOPQRST
+```
+
+Within above code `options.privatekeySecret` is a `generic` Kubernetes secret contents of which corresponds to PEM file contents:
+
+```shell
+kubectl create secret generic cloudfront-secret-name --type=kubernetes.io/ssh-auth --from-file=private-key-ABC=pk-ABCEDFGHIJKLMNOPQRST.pem
+```
+
+`privatekey` used upstream is being auto-populated by chart from the privatekey Secret and will be **ignored** if specified. 
+
+#### `keypairid` variants
+
+Various vendors use different field names for the same construct:
+
+| Vendor | field name |
+| :----: | :--------: |
+| Google CDN | `keyname` |
+| CloudFront | `keypairid` |
+
+NOTE:
+Only configuration of `middleware.storage` section is supported at this time. 
 
 ### debug
 
