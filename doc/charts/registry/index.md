@@ -614,27 +614,6 @@ will supersede this default.
 
 Configuration of `middleware.storage` follows [upstream convention](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#middleware):
 
-```yaml
-middleware:
-  storage:
-    - name: cloudfront
-      options:
-        baseurl: https://abcdefghijklmn.cloudfront.net/
-        privatekey: /etc/docker/cloudfront/pk-ABCEDFGHIJKLMNOPQRST.pem
-        keypairid: ABCEDFGHIJKLMNOPQRST
-```
-
-most of the drivers for `middleware.storage` follow the same pattern for configuration:
-
-```yaml
-middleware:
-  storage:
-    - name: drivername
-      options:
-        baseurl: https://someurl.com/
-        privatekey: /etc/docker/cloudfront/pk-ABCEDFGHIJKLMNOPQRST.pem
-        #... + vendor-specific keys
-```
 
 Configuration is fairly generic and follows similar pattern:
 
