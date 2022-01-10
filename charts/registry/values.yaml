@@ -225,17 +225,17 @@ storage: {}
 #   disable:
 #   exceptions: []
 middleware:
-  # See https://docs.docker.com/registry/configuration/#middleware
+  # See https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#middleware
   storage: []
     ## EXAMPLE ONLY
     # - name: cloudfront
     #   options:
     #     baseurl: cdn.registry.example.com
-    #     # `privatekey` is auto-generated.
+    #     # `privatekey` is auto-populated with the content from the privatekey Secret.
     #     privatekeySecret:
     #       secret: cdn-private-key
     #       key: private.pem
-    #     keypairid: GIBBERISH
+    #     keypairid: YOURKEYPAIRIDFORPRIVATEKEY
 
 minio:
   redirect: false
