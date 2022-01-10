@@ -645,7 +645,7 @@ middleware:
     - name: cloudfront
       options:
         baseurl: https://abcdefghijklmn.cloudfront.net/
-        # `privatekey` is auto-generated.
+        # `privatekey` is auto-populated with the content from the privatekey Secret.
         privatekeySecret:
           secret: cloudfront-secret-name
           # "key" value is going to be used to generate file name for PEM storage:
