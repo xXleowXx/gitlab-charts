@@ -59,6 +59,10 @@ No changes.
 
 - [[Docs] Operator: clarify available chart versions](gitlab-org/charts/gitlab@afcb3d95d2f997cc1d77087bb85a73b918a38101) ([merge request](gitlab-org/charts/gitlab!2268))
 
+## 5.4.5 (2022-01-11)
+
+No changes.
+
 ## 5.4.4 (2021-12-03)
 
 No changes.
