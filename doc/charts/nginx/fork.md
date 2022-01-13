@@ -25,3 +25,4 @@ The following adjustments were made to the NGINX fork:
   - Add `podlabels` and `global.pod.labels` to `.spec.template.metadata.labels`
 - `default-backend-deployment.yaml`:
   - Add `podlabels` and `global.pod.labels` to `.spec.template.metadata.labels`
+- Disable NGINX's default nodeSelectors.
