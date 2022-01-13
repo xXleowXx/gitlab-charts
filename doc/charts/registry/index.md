@@ -640,7 +640,7 @@ Within above code `options.privatekeySecret` is a `generic` Kubernetes secret co
 kubectl create secret generic cloudfront-secret-name --type=kubernetes.io/ssh-auth --from-file=private-key-ABC=pk-ABCEDFGHIJKLMNOPQRST.pem
 ```
 
-`privatekey` used upstream is being auto-populated by chart from the privatekey Secret and will be **ignored** if specified. 
+`privatekey` used upstream is being auto-populated by chart from the privatekey Secret and will be **ignored** if specified.
 
 #### `keypairid` variants
 
@@ -652,7 +652,7 @@ Various vendors use different field names for the same construct:
 | CloudFront | `keypairid` |
 
 NOTE:
-Only configuration of `middleware.storage` section is supported at this time. 
+Only configuration of `middleware.storage` section is supported at this time.
 
 ### debug
 
