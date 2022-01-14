@@ -58,6 +58,8 @@ stages:
 
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
+gemnasium-dependency_scanning:
+  needs: []
 
 before_script:
   - source scripts/ci/autodevops.sh
