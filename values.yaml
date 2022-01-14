@@ -362,6 +362,10 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
+      deliveryMethod: sidekiq
+      authToken: {}
+        # secret:
+        # key:
 
     ## https://docs.gitlab.com/charts/charts/gitlab/mailroom/index.html#service-desk-email
     serviceDeskEmail:
@@ -384,6 +388,10 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
+      deliveryMethod: sidekiq
+      authToken: {}
+        # secret:
+        # key:
 
     ## https://docs.gitlab.com/charts/charts/globals#ldap
     ldap:

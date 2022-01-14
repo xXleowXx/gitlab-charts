@@ -58,3 +58,27 @@ incomingEmail:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.serviceDesk.microsoftGraph */}}
+
+{{/*
+Ensure that incomingEmail's deliveryMethod is either sidekiq or webhook
+*/}}
+{{- define "gitlab.checkConfig.incomingEmail.deliveryMethod" -}}
+{{- if not (or (eq $.Values.global.appConfig.incomingEmail.deliveryMethod "sidekiq") (eq $.Values.global.appConfig.incomingEmail.deliveryMethod "webhook")) }}
+incomingEmail:
+    Delivery method should be either "sidekiq" or "webhook"
+    See https://docs.gitlab.com/charts/installation/command-line-options.html#incoming-email-configuration
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.incomingEmail.deliveryMethod */}}
+
+{{/*
+Ensure that serviceDeskEmail's deliveryMethod is either sidekiq or webhook
+*/}}
+{{- define "gitlab.checkConfig.serviceDeskEmail.deliveryMethod" -}}
+{{- if not (or (eq $.Values.global.appConfig.serviceDeskEmail.deliveryMethod "sidekiq") (eq $.Values.global.appConfig.serviceDeskEmail.deliveryMethod "webhook")) }}
+serviceDeskEmail:
+    Delivery method should be either "sidekiq" or "webhook"
+    See https://docs.gitlab.com/charts/installation/command-line-options.html#service-desk-email-configuration
+{{- end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.serviceDeskEmail.deliveryMethod */}}

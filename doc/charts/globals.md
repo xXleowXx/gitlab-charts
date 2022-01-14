@@ -883,6 +883,8 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
+      deliveryMethod: sidekiq
+      authToken: {}
 
     serviceDeskEmail:
       enabled: false
@@ -901,6 +903,8 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
+      deliveryMethod: sidekiq
+      authToken: {}
 
     pseudonymizer:
       configMap:
