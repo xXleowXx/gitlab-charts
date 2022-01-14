@@ -54,6 +54,10 @@ stages:
   - release-package
   - cleanup
   - report
+  - test
+
+include:
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
 
 before_script:
   - source scripts/ci/autodevops.sh
