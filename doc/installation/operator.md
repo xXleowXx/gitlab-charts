@@ -128,7 +128,11 @@ deployment manifests available in the
      name: example
    spec:
      chart:
-       version: "X.Y.Z" # https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/blob/0.3.0/CHART_VERSIONS
+       # Provided <Operator Version> is the released version from 
+       #  https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/releases
+       # obtain list of available chart versions from:
+       #  https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/blob/<Operator Version>/CHART_VERSIONS
+       version: "X.Y.Z" 
        values:
          global:
            hosts:
