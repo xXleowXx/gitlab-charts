@@ -621,7 +621,7 @@ Configuration is fairly generic and follows similar pattern:
 ```yaml
 middleware:
   # See https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#middleware
-  storage: 
+  storage:
     - name: cloudfront
       options:
         baseurl: https://abcdefghijklmn.cloudfront.net/
@@ -637,7 +637,7 @@ middleware:
 Within above code `options.privatekeySecret` is a `generic` Kubernetes secret contents of which corresponds to PEM file contents:
 
 ```shell
-kubectl create secret generic cloudfront-secret-name --type=kubernetes.io/ssh-auth --from-file=private-key-ABC=pk-ABCEDFGHIJKLMNOPQRST.pem
+kubectl create secret generic cloudfront-secret-name --type=kubernetes.io/ssh-auth --from-file=private-key-ABC.pem=pk-ABCEDFGHIJKLMNOPQRST.pem
 ```
 
 `privatekey` used upstream is being auto-populated by chart from the privatekey Secret and will be **ignored** if specified.
