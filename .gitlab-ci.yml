@@ -41,7 +41,6 @@ variables:
   REVIEW_REF_PREFIX: ""
 
 stages:
-  - test
   - prepare
   - preflight
   - review
@@ -58,8 +57,8 @@ stages:
 
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
-gemnasium-dependency_scanning:
-  needs: []
+dependency_scanning:
+  stage: qa
 
 before_script:
   - source scripts/ci/autodevops.sh
