@@ -34,7 +34,8 @@ Follow these steps for backing up a GitLab Helm chart based installation
 
 ## Cron based backup
 
-> **Note**: The Kubernetes CronJob created by the Helm Chart currently
+NOTE:
+The Kubernetes CronJob created by the Helm Chart
 sets the `cluster-autoscaler.kubernetes.io/safe-to-evict: "false"`
 annotation on the jobTemplate. Some Kubernetes environments, such as
 GKE Autopilot, don't allow this annotation to be set and will not create
