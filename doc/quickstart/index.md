@@ -54,7 +54,7 @@ After you create a cluster, you must [configure kubectl](https://cloud.google.co
 ### Installing Helm v3
 
 For this guide, we use of the latest release of Helm v3 (v3.3.1 or newer).
-To install helm, see the [Helm installation instructions](https://helm.sh/docs/intro/install/).
+To install Helm, see the [Helm installation instructions](https://helm.sh/docs/intro/install/).
 
 ## Adding the GitLab Helm repository
 
