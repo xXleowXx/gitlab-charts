@@ -13,7 +13,7 @@ smtp_settings = {
   domain: {{ .Values.global.smtp.domain | quote }},
   {{- end }}
   {{ if has .Values.global.smtp.authentication (list "login" "plain" "cram_md5") }}
-  authentication: :{{.Values.global.smtp.authentication}},
+  authentication: {{.Values.global.smtp.authentication}},
   user_name: {{ .Values.global.smtp.user_name | quote }},
   password: File.read("/etc/gitlab/smtp/smtp-password").strip,
   {{- end }}
