@@ -23,7 +23,7 @@ In order to complete this guide, you _must have_ the following:
 
 No folks, you can not use `example.com`.
 
-You have to have access to a internet accessible domain to which you can add
+You must have access to an internet accessible domain to which you can add
 a DNS record. This _can be a sub-domain_ such as `poc.domain.com`, but the
 Let's Encrypt servers have to be able to resolve the addresses to be able to
 issue certificates.
@@ -34,29 +34,27 @@ services can be used, but are not covered here.
 ### Getting a Kubernetes cluster
 
 This guide is not intended to cover how to create or obtain a Kubernetes cluster.
-We instead refer to Google's own [GKE cluster creation guide](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster).
+We instead refer to the Google [GKE cluster creation guide](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster).
 
 NOTE:
 A cluster with a total of 8vCPU and 30GB of RAM, or more is recommended.
 
 ### Installing kubectl
 
-We point right to the official Kubernetes documentation for
-[installing kubectl](https://kubernetes.io/docs/tasks/tools/).
-It is simple, covers most operating systems and also covers Google
+To install kubectl, see the [Kubernetes installation documentation](https://kubernetes.io/docs/tasks/tools/).
+The documentation covers most operating systems and Google
 Cloud SDK, which you may have installed during the previous step.
 
 Be sure to configure your `kubectl` to talk to your newly minted cluster, per
 Google's documentation:
 
 NOTE:
-After you create a cluster, you have to [configure kubectl](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#generate_kubeconfig_entry) before you can interact with the cluster from the command line.
+After you create a cluster, you must [configure kubectl](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#generate_kubeconfig_entry) before you can interact with the cluster from the command line.
 
 ### Installing Helm v3
 
-For this guide, we make use of the latest release of Helm v3 (v3.3.1 or newer).
-[Official installation instructions](https://helm.sh/docs/intro/install/)
-exist, and are sound, so we let you follow those.
+For this guide, we use of the latest release of Helm v3 (v3.3.1 or newer).
+To install helm, see the [Helm installation instructions](https://helm.sh/docs/intro/install/).
 
 ## Adding the GitLab Helm repository
 
@@ -72,12 +70,12 @@ helm repo add gitlab https://charts.gitlab.io/
 Here's the beauty of what this chart is capable of. One command. Poof! All
 of GitLab installed, and configured with SSL.
 
-In order to properly configure the chart, we need two things:
+To configure the chart, you need:
 
 1. The domain or subdomain for GitLab to operate under.
 1. Your email address, so Let's Encrypt can issue a certificate.
 
-In order to install the chart, we issue the install command with two
+To install the chart, issue the install command with two
 `--set` arguments:
 
 ```shell
@@ -124,7 +122,7 @@ suggest you set the TTL to `1` minute instead of `5` minutes.
 You can access GitLab at `gitlab.domain.tld`. For example, if you set
 `global.hosts.domain=my.domain.tld`, then you would visit `gitlab.my.domain.tld`.
 
-In order to sign in, we have to collect the password for the `root` user.
+To sign in, you must collect the password for the `root` user.
 This is automatically generated at installation time, and stored in a Kubernetes
 Secret. Let's fetch that password from the secret, and decode it:
 
