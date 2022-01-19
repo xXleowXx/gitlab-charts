@@ -12,8 +12,8 @@ describe 'GitLab Ingress configuration(s)' do
     template.dig("Ingress/#{ingress_name}", 'apiVersion')
   end
 
-  def get_ingress_class(template, ingressclass_name)
-    template.dig("IngressClass/#{ingressclass_name}")
+  def get_ingress_class_name(template, ingress_class_name)
+    template.dig("IngressClass/#{ingress_class_name}", 'metadata', 'name')
   end
 
   def get_ingress_class_annotation(template, ingress_name)
@@ -318,8 +318,9 @@ describe 'GitLab Ingress configuration(s)' do
         template = HelmTemplate.new(default_values)
         expect(template.exit_code).to eq(0)
 
-        ingress_class = get_ingress_class(template, 'test-nginx')
-        expect(ingress_class).not_to be_nil
+        expected_name = 'test-nginx'
+        name = get_ingress_class_name(template, expected_name)
+        expect(name).to eq(expected_name)
       end
     end
 
@@ -328,8 +329,9 @@ describe 'GitLab Ingress configuration(s)' do
         template = HelmTemplate.new(ingress_class_specified)
         expect(template.exit_code).to eq(0)
 
-        ingress_class = get_ingress_class(template, 'specified')
-        expect(ingress_class).not_to be_nil
+        expected_name = 'specified'
+        name = get_ingress_class_name(template, expected_name)
+        expect(name).to eq(expected_name)
       end
     end
   end
