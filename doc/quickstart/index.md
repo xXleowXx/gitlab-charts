@@ -6,9 +6,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Quick Start Guide
 
-This guide services as a concise but complete documentation on how to install the
+This guide serves as a concise but complete documentation about how to install the
 Cloud Native GitLab chart with default values onto Google Kubernetes Engine (GKE).
-We focus exclusively on GKE in order to keep it as direct and simple as possible.
+For clarity, we focus exclusively on GKE.
 
 ## Requirements
 
@@ -23,7 +23,7 @@ In order to complete this guide, you _must have_ the following:
 
 No folks, you can not use `example.com`.
 
-You must have access to an internet accessible domain to which you can add
+You must have access to an internet-accessible domain to which you can add
 a DNS record. This _can be a sub-domain_ such as `poc.domain.com`, but the
 Let's Encrypt servers have to be able to resolve the addresses to be able to
 issue certificates.
@@ -42,7 +42,7 @@ A cluster with a total of 8vCPU and 30GB of RAM, or more is recommended.
 ### Installing kubectl
 
 To install kubectl, see the [Kubernetes installation documentation](https://kubernetes.io/docs/tasks/tools/).
-The documentation covers most operating systems and Google
+The documentation covers most operating systems and the Google
 Cloud SDK, which you may have installed during the previous step.
 
 Be sure to configure your `kubectl` to talk to your newly minted cluster, per
@@ -53,7 +53,7 @@ After you create a cluster, you must [configure kubectl](https://cloud.google.co
 
 ### Installing Helm v3
 
-For this guide, we use of the latest release of Helm v3 (v3.3.1 or newer).
+For this guide, we use the latest release of Helm v3 (v3.3.1 or later).
 To install Helm, see the [Helm installation instructions](https://helm.sh/docs/intro/install/).
 
 ## Adding the GitLab Helm repository
@@ -72,10 +72,10 @@ of GitLab installed, and configured with SSL.
 
 To configure the chart, you need:
 
-1. The domain or subdomain for GitLab to operate under.
-1. Your email address, so Let's Encrypt can issue a certificate.
+- The domain or subdomain for GitLab to operate under.
+- Your email address, so Let's Encrypt can issue a certificate.
 
-To install the chart, issue the install command with two
+To install the chart, run the install command with two
 `--set` arguments:
 
 ```shell
@@ -110,7 +110,7 @@ gitlab-registry    registry.domain.tld   35.239.27.235   80, 443   118m
 gitlab-webservice  gitlab.domain.tld     35.239.27.235   80, 443   118m
 ```
 
-Notice there are 3 entries and they all have the same IP address.
+Notice there are three entries and they all have the same IP address.
 Take this IP address and add it to your DNS for the domain
 you have chosen to use. You can add 3 separate records of type `A`, but we
 suggest adding a single "wildcard" record for simplicity. In Google Cloud DNS,
