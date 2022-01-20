@@ -741,6 +741,8 @@ nginx-ingress:
     # `metadata.name` field.
     # ingressClassResource:
     #   name: "{{ .Release.Name }}-nginx"
+    ingressClassResource:
+      name: rvw-vendor-nginx-chart-nginx # workaround for this MR to be deleted
     resources:
       requests:
         cpu: 100m
