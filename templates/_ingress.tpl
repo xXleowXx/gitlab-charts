@@ -14,7 +14,7 @@ kubernetes.io/ingress.class: {{ $className }}
 {{- end -}}
 
 {{/*
-Calculates the IngressClass name based on the API version of Ingress.
+Calculates the IngressClass name.
 
 It expects a dictionary with two entries:
   - `global` which contains global ingress settings, e.g. .Values.global.ingress
