@@ -218,7 +218,7 @@ actually applied to the deployment.
     helm upgrade --install --values - YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
     ```
 
-### cannot patch "gitlab-kube-state-metrics" with kind Deployment
+### cannot patch `gitlab-kube-state-metrics` with kind Deployment
 
 Upgrading from **Prometheus** version `11.16.9` to `15.0.4` changes the selector labels
 used on the [kube-state-metrics Deployment](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics),
