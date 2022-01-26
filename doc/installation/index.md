@@ -10,11 +10,11 @@ Install GitLab on Kubernetes with the cloud native GitLab Helm chart.
 
 ## Helm chart only deployment creates a POC configuration
 
-Installing GitLab using only the Helm charts creates a POC implementation where all GitLab services are placed into the cluster. GitLabs Cloud Native Hybrid Reference Architectures specify that the stateful Git Repository Storage dataplane known as Gitaly must run on instance compute in order to scale and service the many varieties of Git workloads found in production environements. Additionally, it is allowable, and generally preferable to take advantage of Cloud PaaS for PostgreSQL, Redis and Object storage for all non Git Repository storages. 
+Installing GitLab using only the Helm charts creates a POC implementation where all GitLab services are placed into the cluster. GitLab's Cloud Native Hybrid Reference Architectures specify that the stateful components such as Postgres or Gitaly (Git Repository Storage dataplane) instance compute in order to scale and service the many varieties of Git workloads found in production environments. Additionally, it is allowable, and generally preferable to take advantage of Cloud PaaS for PostgreSQL, Redis and Object storage for all non Git Repository storages.
 
 ## Getting started for production Cloud Native Hybrid
 
-The reference architecture for deploying GitLab instances to Kubernetes is called Cloud Native Hybrid specifically because not all GitLab services can run in the cluster for production-grade implementations. Each Cloud Native Hybrid Reference Architecture is detailed within the overall architecture page. For instance, here is the [Cloud Native Hybrid reference architecture](https://docs.gitlab.com/ee/administration/reference_architectures/3k_users.html#cloud-native-hybrid-reference-architecture-with-helm-charts-alternative) alternative for the 3,000 user count.
+The Reference Architecture for deploying GitLab instances to Kubernetes is called Cloud Native Hybrid specifically because not all GitLab services can run in the cluster for production-grade implementations. Each Cloud Native Hybrid Reference Architecture is detailed within the overall architecture page. For instance, here is the [Cloud Native Hybrid reference architecture](https://docs.gitlab.com/ee/administration/reference_architectures/3k_users.html#cloud-native-hybrid-reference-architecture-with-helm-charts-alternative) alternative for the 3,000 user count.
 
 ## GitLab deployment with Infrastructure as Code (IaC)
 
