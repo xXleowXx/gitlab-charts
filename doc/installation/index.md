@@ -18,7 +18,7 @@ The reference architecture for deploying GitLab instances to Kubernetes is calle
 
 ## GitLab deployment with Infrastructure as Code (IaC)
 
-GitLab develops Infrastructure as Code IaC that is capable of configuring the combination of helm charts and supplemental cloud infrastructure via the [GitLab Environment Toolkit](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit). For AWS a second option is the [AWS Quick Start](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html#available-infrastructure-as-code-for-gitlab-cloud-native-hybrid). Regardless of how you are building Cloud Native Hybrid, there is AWS specific guidance and bills of materials in the implementation pattern [Provision GitLab Cloud Native Hybrid on AWS EKS](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html)
+GitLab develops Infrastructure as Code IaC that is capable of configuring the combination of Helm charts and supplemental cloud infrastructure via the [GitLab Environment Toolkit](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit). For AWS a second option is the [AWS Quick Start](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html#available-infrastructure-as-code-for-gitlab-cloud-native-hybrid). Regardless of how you are building Cloud Native Hybrid, there is AWS specific guidance and bills of materials in the implementation pattern [Provision GitLab Cloud Native Hybrid on AWS EKS](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html)
 
 ## Requirements
 
