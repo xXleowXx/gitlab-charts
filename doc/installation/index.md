@@ -8,6 +8,15 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Install GitLab on Kubernetes with the cloud native GitLab Helm chart.
 
+## Helm chart only deployment creates a POC configuration
+Installing GitLab using only the Helm charts creates a POC implementation where all GitLab services are placed into the cluster. GitLabs Cloud Native Hybrid Reference Architectures specify that the stateful Git Repository Storage dataplane known as Gitaly must run on instance compute in order to scale and service the many varieties of Git workloads found in production environements. Additionally, it is allowable, and generally preferable to take advantage of Cloud PaaS for PostgreSQL, Redis and Object storage for all non Git Repository storages. 
+
+## Getting started for production Cloud Native Hybrid
+The reference architecture for deploying GitLab instances to Kubernetes is called Cloud Native Hybrid specifically because not all GitLab services can run in the cluster for production-grade implementations. Each Cloud Native Hybrid Reference Architecture is detailed within the overall architecture page. For instance, here is the [Cloud Native Hybrid reference architecture](https://docs.gitlab.com/ee/administration/reference_architectures/3k_users.html#cloud-native-hybrid-reference-architecture-with-helm-charts-alternative) alternative for the 3,000 user count.
+
+## GitLab deployment with Infrastructure as Code (IaC)
+GitLab develops Infrastructure as Code IaC that is capable of configuring the combination of helm charts and supplemental cloud infrastructure via the [GitLab Environment Toolkit](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit). For AWS a second option is the [AWS Quick Start](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html#available-infrastructure-as-code-for-gitlab-cloud-native-hybrid). Regardless of how you are building Cloud Native Hybrid, there is AWS specific guidance and bills of materials in the implementation pattern [Provision GitLab Cloud Native Hybrid on AWS EKS](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html)
+
 ## Requirements
 
 To deploy GitLab on Kubernetes, the following are required:
