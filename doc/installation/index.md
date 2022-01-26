@@ -10,7 +10,7 @@ Install GitLab on Kubernetes with the cloud native GitLab Helm chart.
 
 ## Helm chart only deployment creates a POC configuration
 
-Installing GitLab using only the Helm charts creates a POC implementation where all GitLab services are placed into the cluster. GitLab's Cloud Native Hybrid Reference Architectures specify that the stateful components such as Postgres or Gitaly (Git Repository Storage dataplane) instance compute in order to scale and service the many varieties of Git workloads found in production environments. Additionally, it is allowable, and generally preferable to take advantage of Cloud PaaS for PostgreSQL, Redis and Object storage for all non Git Repository storages.
+Installing GitLab using only the Helm charts creates a POC implementation where all GitLab services are placed into the cluster. GitLab's Cloud Native Hybrid Reference Architectures specify that the stateful components such as Postgres or Gitaly (Git Repository Storage dataplane) run outside the cluster on PaaS or instance compute. This is required in order to scale and reliably service the many varieties of workloads found in production environments. Additionally, it is allowable, and generally preferable to take advantage of Cloud PaaS for PostgreSQL, Redis and Object storage for all non Git Repository storages.
 
 ## Getting started for production Cloud Native Hybrid
 
