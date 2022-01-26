@@ -220,8 +220,8 @@ a smaller cluster.
 The [minimal GKE example values file](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/values-gke-minimum.yaml) provides an example of tuning the resources
 to fit within a 3vCPU 12gb cluster.
 
-The [minimal Minikube example values file](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/values-minikube-minimum.yaml) provides an example of tuning the
-resources to fit within a 2vCPU, 4gb Minikube instance.
+The [minimal minikube example values file](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/values-minikube-minimum.yaml) provides an example of tuning the
+resources to fit within a 2vCPU, 4gb minikube instance.
 
 ## Deploy using Helm
 

@@ -42,6 +42,7 @@ variables:
 
 stages:
   - prepare
+  - test
   - preflight
   - review
   - staging
@@ -54,6 +55,16 @@ stages:
   - release-package
   - cleanup
   - report
+
+include:
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+dependency_scanning:
+  needs: []
+  before_script: []
+secret_detection:
+  needs: []
+  before_script: []
 
 before_script:
   - source scripts/ci/autodevops.sh

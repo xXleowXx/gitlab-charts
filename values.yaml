@@ -735,6 +735,8 @@ nginx-ingress:
     service:
       externalTrafficPolicy: "Local"
     ingressClassByName: false
+    ingressClassResource:
+      name: '{{ include "gitlab.ingress.className" . }}'
     resources:
       requests:
         cpu: 100m
