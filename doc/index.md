@@ -12,6 +12,9 @@ NOTE:
 It is not necessary to have GitLab installed on Kubernetes to use
 the [GitLab Kubernetes integration](https://docs.gitlab.com/ee/user/project/clusters/).
 
+NOTE:
+Please note that a charts-only installation of a GitLab instance places stateful services into the cluster - this is provided for the convenience of conducting POCs - but is not GitLab Reference Architecture compliant. Read more about details about how to deploy GitLab to Kubernetes for production-grade implementations in [Installing GitLab using Helm](installation/index.md).
+
 ## Introduction
 
 The `gitlab/gitlab` chart is the best way to operate GitLab on Kubernetes. This chart
