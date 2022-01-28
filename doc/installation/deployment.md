@@ -8,8 +8,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Before running `helm install`, you need to make some decisions about how you will run GitLab.
 Options can be specified using Helm's `--set option.name=value` command line option.
-A complete list of command line options can be found [here](command-line-options.md).
 This guide will cover required values and common options.
+For a complete list of options, read [Installation command line options](command-line-options.md).
 
 ## Selecting configuration options
 
@@ -62,9 +62,8 @@ static IP. For example if you choose `example.com` and you have a static IP
 of `10.10.10.10`, then `gitlab.example.com`, `registry.example.com` and
 `minio.example.com` (if using MinIO) should all resolve to `10.10.10.10`.
 
-If you are using GKE, there is some documentation [here](cloud/gke.md#creating-the-external-ip)
-for configuring static IPs and DNS. Consult your Cloud and/or DNS provider's
-documentation for more help on this process.
+If you are using GKE, read more on [creating the external IP and DNS entry](cloud/gke.md#creating-the-external-ip).
+Consult your Cloud and/or DNS provider's documentation for more help on this process.
 
 *Include these options in your Helm install command:*
 
@@ -85,7 +84,7 @@ You should be running GitLab using https which requires TLS certificates. By def
 chart will install and configure [cert-manager](https://github.com/jetstack/cert-manager)
 to obtain free TLS certificates.
 If you have your own wildcard certificate, you already have cert-manager installed, or you
-have some other way of obtaining TLS certificates, [read about more TLS options here](tls.md).
+have some other way of obtaining TLS certificates, read about more [TLS options](tls.md).
 
 For the default configuration, you must specify an email address to register your TLS
 certificates.
@@ -255,7 +254,7 @@ Note the following:
 
 You can also use `--version <installation version>` option if you would like to install a specific version of GitLab.
 
-Mappings between chart versions and GitLab versions can be found [here](../index.md#gitlab-version-mappings).
+For mappings between chart versions and GitLab versions, read [GitLab version mappings](version_mappings.md).
 
 Instructions for installing a development branch rather than a tagged release can be found in the [developer deploy documentation](../development/deploy.md).
 
