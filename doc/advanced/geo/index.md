@@ -237,6 +237,7 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
      install: false
    ```
 
+   <!-- markdownlint-disable MD044 -->
    - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
    - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
    - global.geo.nodeName must match
@@ -245,6 +246,7 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
      - [Configuring SSL/TLS](../../installation/deployment.md#tls-certificates)
      - [Using external Redis](../external-redis/index.md)
      - [using external Object Storage](../external-object-storage/index.md)
+   <!-- markdownlint-enable MD044 -->
 
 1. Deploy the chart using this configuration:
 
@@ -547,6 +549,7 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
      install: false
    ```
 
+   <!-- markdownlint-disable MD044 -->
    - [`global.hosts.domain`](../../charts/globals.md#configure-host-settings)
    - [`global.psql.host`](../../charts/globals.md#configure-postgresql-settings)
    - [`global.geo.psql.host`](../../charts/globals.md#configure-postgresql-settings)
@@ -557,6 +560,7 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
      - [Using external Redis](../external-redis/index.md)
      - [using external Object Storage](../external-object-storage/index.md)
    - For external databases, `global.psql.host` is the secondary, read-only replica database, while `global.geo.psql.host` is the Geo tracking database
+   <!-- markdownlint-enable MD044 -->
 
 1. Deploy the chart using this configuration:
 
