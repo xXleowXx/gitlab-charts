@@ -612,7 +612,9 @@ global:
     annotations: {}
 
   antiAffinity: soft
-  antiAffinityTopologyKey: "kubernetes.io/hostname"
+  affinity:
+    podAntiAffinity:
+      topologyKey: "kubernetes.io/hostname"
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-workhorse-settings
   ## Global settings related to Workhorse

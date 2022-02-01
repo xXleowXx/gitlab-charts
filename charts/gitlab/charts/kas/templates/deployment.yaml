@@ -50,7 +50,7 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: {{ default .Values.global.antiAffinityTopologyKey .Values.antiAffinityTopologyKey | quote }}
+            - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
               labelSelector:
                 matchLabels:
                   {{- include "gitlab.selectorLabels" . | nindent 18 }}
@@ -60,7 +60,7 @@ spec:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             podAffinityTerm:
-              topologyKey: {{ default .Values.global.antiAffinityTopologyKey .Values.antiAffinityTopologyKey | quote }}
+              topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
               labelSelector:
                 matchLabels:
                   {{- include "gitlab.selectorLabels" . | nindent 18 }}
