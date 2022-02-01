@@ -3,7 +3,7 @@ global:
   # See docs.gitlab.com/charts/charts/globals
   # Configure host & domain
   hosts:
-    hostSuffix: secondary
+    hostSuffix: gitlab
     domain: example.com
   # configure DB connection
   psql:
