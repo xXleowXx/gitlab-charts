@@ -2049,10 +2049,10 @@ More detailed examples can be found in the
 The `platform` key is reserved for specific features targeting a specific
 platform like GKE or EKS.
 
-## Pods anti affinity
+## Pod anti-affinity
 
-Pod anti affinity configuration is available via `global.antiAffinity` and `global.antiAffinityTopologyKey`.
-Inter-pod anti-affinity allow you to constrain which nodes your pod is eligible to be scheduled based on labels on pods that are already running. This allow spread pods accrosse the cluster ensuring more resilience in case of a failing node.
+Pod anti-affinity configuration is available via `global.antiAffinity` and `global.antiAffinityTopologyKey`.
+Inter-pod anti-affinity allows you to constrain which nodes your pod is eligible to be scheduled on, based on labels of pods that are already running on a node. This allow spread pods across the cluster, ensuring more resilience in case of a failing node.
 
 ```yaml
 global:
@@ -2062,13 +2062,13 @@ global:
 
 | Name                      | Type   | Default                   | Description                         |
 | :------------------------ | :--:   | :------------------------ | :---------------------------------- |
-| `antiAffinity`            | String |  `soft`                   | Pod anti affinity to apply on pods. |
-| `antiAffinityTopologyKey` | String |  `kubernetes.io/hostname` | Pod anti affinity topology key.     |
+| `antiAffinity`            | String |  `soft`                   | Pod anti-affinity to apply on pods. |
+| `antiAffinityTopologyKey` | String |  `kubernetes.io/hostname` | Pod anti-affinity topology key.     |
 
 - `global.antiAffinity` can take two values:
-  - `soft`: Define a `preferredDuringSchedulingIgnoredDuringExecution` anti affinity where the Kubernetes scheduler will try to enforce the rule but will not guarantee the result.
-  - `hard`: Defined a `requiredDuringSchedulingIgnoredDuringExecution` anti affinity where the rule must be met for a pod to be scheduled onto a node.
-- `global.antiAffinityTopologyKey` define a node attribute used two divide them into logical zone. Most common `topologyKey` are :
+  - `soft`: Define a `preferredDuringSchedulingIgnoredDuringExecution` anti-affinity where the Kubernetes scheduler will try to enforce the rule, but will not guarantee the result.
+  - `hard`: Define a `requiredDuringSchedulingIgnoredDuringExecution` anti-affinity where the rule _must_ be met for a pod to be scheduled onto a node.
+- `global.antiAffinityTopologyKey` define a node attribute used to divide them into logical zones. Most common `topologyKey` values are:
   - `kubernetes.io/hostname`
   - `topology.kubernetes.io/zone`
   - `topology.kubernetes.io/region`
