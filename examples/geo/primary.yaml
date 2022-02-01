@@ -13,6 +13,7 @@ global:
       key: postgresql-password
   # configure geo (primary)
   geo:
+    nodeName: London Office
     enabled: true
     role: primary
 # External DB, disable
