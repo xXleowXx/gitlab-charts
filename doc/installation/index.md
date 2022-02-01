@@ -10,11 +10,11 @@ Install GitLab on Kubernetes with the cloud native GitLab Helm chart.
 
 ## Helm chart only deployment creates a POC configuration
 
-Installing GitLab using only the Helm charts creates a POC implementation where all GitLab services are placed into the cluster. GitLab Cloud Native Hybrid Reference Architectures specify that the stateful components such as Postgres or Gitaly (Git Repository Storage dataplane) run outside the cluster on PaaS or instance compute. This is required in order to scale and reliably service the many varieties of workloads found in production environments. Additionally, it is allowable, and generally preferable to take advantage of Cloud PaaS for PostgreSQL, Redis and Object storage for all non Git Repository storages.
+Installing GitLab using only the Helm charts creates a proof of concept (POC) implementation where all GitLab services are placed into the cluster. GitLab Cloud Native Hybrid Reference Architectures specify that the stateful components such as PostgreSQL or Gitaly (Git repository storage dataplane) run outside the cluster on PaaS or instance compute. This is required in order to scale and reliably service the many varieties of workloads found in production environments. Additionally, it is allowable, and generally preferable to take advantage of Cloud PaaS for PostgreSQL, Redis, and object storage for all non Git repository storages.
 
 ## Helm charts are configurable to externalize stateful components
 
-There in only one set of GitLab Helm charts and they can be parameterized to point to external stateful storage for items such as the PostgreSQL, Redis, all Non-Git repository storage as well as Git repository storage (Gitaly). The Infrastructure as Code options below use this approach. For production-grade implementation by hand build or via custom IaC, the appropriate chart parameters should be used to point to prebuilt, externalized state stores that align with the choosen [Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures).
+There in only one set of GitLab Helm charts and they can be parameterized to point to external stateful storage for items such as the PostgreSQL, Redis, all Non-Git repository storage as well as Git repository storage (Gitaly). The Infrastructure as Code (IaC) options below use this approach. For production-grade implementation by hand build or via custom IaC, the appropriate chart parameters should be used to point to prebuilt, externalized state stores that align with the chosen [Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures/).
 
 ## Getting started for production Cloud Native Hybrid
 
@@ -22,7 +22,7 @@ The Reference Architecture for deploying GitLab instances to Kubernetes is calle
 
 ## GitLab deployment with Infrastructure as Code (IaC)
 
-GitLab develops Infrastructure as Code IaC that is capable of configuring the combination of Helm charts and supplemental cloud infrastructure via the [GitLab Environment Toolkit](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit). For AWS a second option is the [AWS Quick Start](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html#available-infrastructure-as-code-for-gitlab-cloud-native-hybrid). Regardless of how you are building Cloud Native Hybrid, there is AWS specific guidance and bills of materials in the implementation pattern [Provision GitLab Cloud Native Hybrid on AWS EKS](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html)
+GitLab develops Infrastructure as Code that is capable of configuring the combination of Helm charts and supplemental cloud infrastructure via the [GitLab Environment Toolkit](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit). For AWS, a second option is the [AWS Quick Start](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html#available-infrastructure-as-code-for-gitlab-cloud-native-hybrid). Regardless of how you are building Cloud Native Hybrid, there is AWS-specific guidance and bills of materials in the implementation pattern [Provision GitLab Cloud Native Hybrid on AWS EKS](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html)
 
 ## Requirements
 
