@@ -49,7 +49,7 @@ function crdExists() {
   if [ $status -eq 0 ]; then
     echo "GitLab Operator CRD exists."
   else
-    echo "GitLab Operator CRD does NOT exist."
+    echo "ERROR: GitLab Operator CRD does NOT exist."
   fi
   return $status
 }
@@ -301,7 +301,7 @@ function check_domain_ip() {
   # Expect the `DOMAIN` is a wildcard.
   domain_ip=$(nslookup gitlab$DOMAIN 2>/dev/null | grep "Address: \d" | awk '{print $2}')
   if [ -z $domain_ip ]; then
-    echo "There was a problem resolving the IP of 'gitlab$DOMAIN'. Be sure you have configured a DNS entry."
+    echo "ERROR: There was a problem resolving the IP of 'gitlab$DOMAIN'. Be sure you have configured a DNS entry."
     false
   else
     export DOMAIN_IP=$domain_ip
