@@ -51,8 +51,8 @@ The outline below should be followed in order:
 1. [Set the Geo primary site](#set-the-geo-primary-site)
 1. [Configure Secondary database](#configure-secondary-database)
 1. [Copy secrets from primary site to secondary site](#copy-secrets-from-the-primary-site-to-the-secondary-site)
-1. [Deploy chart as Geo Secondary site](#deploy-chart-as-geo-secondary)
-1. [Add Secondary Geo site via Primary](#add-secondary-geo-instance-via-primary)
+1. [Deploy chart as Geo Secondary site](#deploy-chart-as-geo-secondary-site)
+1. [Add Secondary Geo site via Primary](#add-secondary-geo-site-via-primary)
 1. [Confirm Operational Status](#confirm-operational-status)
 
 ## Set up Omnibus database nodes
