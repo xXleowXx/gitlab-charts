@@ -719,7 +719,8 @@ certmanager:
 ## Installation & configuration of charts/ingress-nginx:
 nginx-ingress:
   enabled: true
-  tcpExternalConfig: "true"
+  tcp:
+    22: '{{ include "gitlab.nginx.gitlab-shell-config" . }}'
   controller:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
@@ -735,8 +736,14 @@ nginx-ingress:
     service:
       externalTrafficPolicy: "Local"
     ingressClassByName: false
+    # We'll need this to be release-prefixed to support multiple instances,
+    # but the upstream chart doesn't currently use `tpl` in the IngressClass
+    # `metadata.name` field.
+    # ingressClassResource:
+    #   name: "{{ .Release.Name }}-nginx"
     ingressClassResource:
-      name: '{{ include "gitlab.ingress.className" . }}'
+      # name: '{{ include "gitlab.ingress.className" . }}'
+      name: rvw-vendor-nginx-chart-nginx # workaround for this MR to be deleted
     resources:
       requests:
         cpu: 100m

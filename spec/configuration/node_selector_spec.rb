@@ -58,6 +58,8 @@ describe 'Node Selector configuration' do
       'Job/test-certmanager-startupapicheck',
       'Deployment/test-gitlab-runner',
       'Deployment/test-prometheus-server',
+      'Deployment/test-nginx-ingress-controller',
+      'Deployment/test-nginx-ingress-defaultbackend',
       'StatefulSet/test-postgresql',
       'StatefulSet/test-redis-master'
     ]

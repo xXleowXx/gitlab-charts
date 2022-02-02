@@ -384,6 +384,14 @@ Overrides the ingress-nginx template to make sure our ingresses match
 {{ template "gitlab.ingress.className" . }}
 {{- end -}}
 
+{{/*
+Define the TCP configuration for NGINX Ingress
+to work with GitLab Shell.
+*/}}
+{{- define "gitlab.nginx.gitlab-shell-config" -}}
+{{ .Release.Namespace }}/gitlab-shell:{{ include "gitlab.shell.port" . | int }}{{ include "gitlab.shell.tcp.proxyProtocol" . }}
+{{- end -}}
+
 {{/* ######### annotations */}}
 
 {{/*

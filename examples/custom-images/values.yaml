@@ -66,8 +66,16 @@ minio:
     tag: custom-tag
 
 nginx-ingress:
-  controller: *custom
-  defaultBackend: *custom
+  controller:
+    image:
+      registry: custom-repository.io
+      image: custom-image
+      tag: 1-2-3-example
+  defaultBackend:
+    image:
+      registry: custom-repository.io
+      image: custom-image
+      tag: 1-2-3-example
 
 registry:
     <<: *custom
