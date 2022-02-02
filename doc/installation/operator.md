@@ -67,6 +67,11 @@ Before you install GitLab with GitLab Operator, you must:
      to create certificates used to secure the GitLab and Registry URLs. Follow
      the relevant instructions in the link based on your platform and preferred tooling.
 
+     Our codebase currently targets Cert Manager 1.6.1.
+
+     NOTE:
+     Cert Manager [1.6](https://github.com/jetstack/cert-manager/releases/tag/v1.6.0) removed some deprecated APIs. As a result, if deploying Cert Manager >= 1.6, you will need GitLab Operator >= 0.4.
+
    - **Metrics server**
 
      - Kubernetes: Install the [metrics server](https://github.com/kubernetes-sigs/metrics-server#installation) so the HorizontalPodAutoscalers can retrieve pod metrics.
@@ -96,7 +101,7 @@ deployment manifests available in the
    ```shell
    # Use latest version of operator released at
    #  https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/releases
-   GL_OPERATOR_VERSION=0.3.0 
+   GL_OPERATOR_VERSION=0.4.0
    PLATFORM=kubernetes # or "openshift"
    kubectl create namespace gitlab-system
    kubectl apply -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${PLATFORM}-${GL_OPERATOR_VERSION}.yaml
@@ -202,7 +207,7 @@ To remove the GitLab Operator and its associated resources:
    ```shell
    # Use latest version of operator released at
    #  https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/releases
-   GL_OPERATOR_VERSION=0.3.0 
+   GL_OPERATOR_VERSION=0.4.0
    PLATFORM=kubernetes # or "openshift"
    kubectl delete -f https://gitlab.com/api/v4/projects/18899486/packages/generic/gitlab-operator/${GL_OPERATOR_VERSION}/gitlab-operator-${PLATFORM}-${GL_OPERATOR_VERSION}.yaml
    ```
