@@ -7,7 +7,7 @@ It expects a dictionary with two entries:
 */}}
 {{- define "ingress.class.annotation" -}}
 {{-   $apiVersion := include "gitlab.ingress.apiVersion" . -}}
-{{-   $className := .global.class | default (printf "%s-nginx" .context.Release.Name) -}}
+{{-   $className := include "ingress.class.name" . -}}
 {{-   if not (eq $apiVersion "networking.k8s.io/v1") -}}
 kubernetes.io/ingress.class: {{ $className }}
 {{-   end -}}
