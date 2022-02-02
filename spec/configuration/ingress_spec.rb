@@ -12,6 +12,10 @@ describe 'GitLab Ingress configuration(s)' do
     template.dig("Ingress/#{ingress_name}", 'apiVersion')
   end
 
+  def get_ingress_class_name(template, ingress_class_name)
+    template.dig("IngressClass/#{ingress_class_name}", 'metadata', 'name')
+  end
+
   def get_ingress_class_annotation(template, ingress_name)
     template.dig("Ingress/#{ingress_name}", 'metadata', 'annotations', 'kubernetes.io/ingress.class')
   end
@@ -296,6 +300,38 @@ describe 'GitLab Ingress configuration(s)' do
           annotation = template.dig("Ingress/#{ingress_name}", 'metadata', 'annotations', 'kubernetes.io/ingress.class')
           expect(annotation).to eq(nil)
         end
+      end
+    end
+  end
+
+  describe 'ingress class name' do
+    let(:ingress_class_specified) do
+      default_values.deep_merge(YAML.safe_load(%(
+        global:
+          ingress:
+            class: specified
+      )))
+    end
+
+    context 'default' do
+      it 'populates the default name' do
+        template = HelmTemplate.new(default_values)
+        expect(template.exit_code).to eq(0)
+
+        expected_name = 'test-nginx'
+        name = get_ingress_class_name(template, expected_name)
+        expect(name).to eq(expected_name)
+      end
+    end
+
+    context 'specified' do
+      it 'populates the specified name' do
+        template = HelmTemplate.new(ingress_class_specified)
+        expect(template.exit_code).to eq(0)
+
+        expected_name = 'specified'
+        name = get_ingress_class_name(template, expected_name)
+        expect(name).to eq(expected_name)
       end
     end
   end
