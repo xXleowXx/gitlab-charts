@@ -20,7 +20,8 @@ It expects either:
   - a dictionary with two entries:
     - `global` which contains global ingress settings, e.g. .Values.global.ingress
     - `context` which is the parent context (either `.` or `$`)
-  - or, the parent context with access to both: `.Capabilities` and `.Release`
+  - the parent context ($ from caller)
+    - This detected by access to both `.Capabilities` and `.Release`
 */}}
 {{- define "ingress.class.name" -}}
 {{-   $here := dict }}
