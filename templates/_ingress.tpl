@@ -16,12 +16,20 @@ kubernetes.io/ingress.class: {{ $className }}
 {{/*
 Calculates the IngressClass name.
 
-It expects a dictionary with two entries:
-  - `global` which contains global ingress settings, e.g. .Values.global.ingress
-  - `context` which is the parent context (either `.` or `$`)
+It expects either:
+  - a dictionary with two entries:
+    - `global` which contains global ingress settings, e.g. .Values.global.ingress
+    - `context` which is the parent context (either `.` or `$`)
+  - or, the parent context with access to both: `.Capabilities` and `.Release`
 */}}
 {{- define "ingress.class.name" -}}
-{{-   .global.class | default (printf "%s-nginx" .context.Release.Name) -}}
+{{-   $here := dict }}
+{{-   if and (hasKey $ "Release") (hasKey $ "Capabilities") -}}
+{{-     $here = dict "global" $.Values.global.ingress "context" $ -}}
+{{-   else -}}
+{{-     $here = . -}}
+{{-   end -}}
+{{-   $here.global.class | default (printf "%s-nginx" $here.context.Release.Name) -}}
 {{- end -}}
 
 {{/*
