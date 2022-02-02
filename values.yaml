@@ -742,6 +742,7 @@ nginx-ingress:
     # ingressClassResource:
     #   name: "{{ .Release.Name }}-nginx"
     ingressClassResource:
+      # name: '{{ include "gitlab.ingress.className" . }}'
       name: rvw-vendor-nginx-chart-nginx # workaround for this MR to be deleted
     resources:
       requests:
