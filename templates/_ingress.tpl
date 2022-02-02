@@ -7,10 +7,30 @@ It expects a dictionary with two entries:
 */}}
 {{- define "ingress.class.annotation" -}}
 {{-   $apiVersion := include "gitlab.ingress.apiVersion" . -}}
-{{-   $className := .global.class | default (printf "%s-nginx" .context.Release.Name) -}}
+{{-   $className := include "ingress.class.name" . -}}
 {{-   if not (eq $apiVersion "networking.k8s.io/v1") -}}
 kubernetes.io/ingress.class: {{ $className }}
 {{-   end -}}
+{{- end -}}
+
+{{/*
+Calculates the IngressClass name.
+
+It expects either:
+  - a dictionary with two entries:
+    - `global` which contains global ingress settings, e.g. .Values.global.ingress
+    - `context` which is the parent context (either `.` or `$`)
+  - the parent context ($ from caller)
+    - This detected by access to both `.Capabilities` and `.Release`
+*/}}
+{{- define "ingress.class.name" -}}
+{{-   $here := dict }}
+{{-   if and (hasKey $ "Release") (hasKey $ "Capabilities") -}}
+{{-     $here = dict "global" $.Values.global.ingress "context" $ -}}
+{{-   else -}}
+{{-     $here = . -}}
+{{-   end -}}
+{{-   $here.global.class | default (printf "%s-nginx" $here.context.Release.Name) -}}
 {{- end -}}
 
 {{/*
@@ -22,8 +42,7 @@ It expects a dictionary with two entries:
 */}}
 {{- define "ingress.class.field" -}}
 {{-   $apiVersion := include "gitlab.ingress.apiVersion" . -}}
-{{-   $className := .global.class | default (printf "%s-nginx" .context.Release.Name) -}}
 {{-   if eq $apiVersion "networking.k8s.io/v1" -}}
-ingressClassName: {{ $className }}
+ingressClassName: {{ include "ingress.class.name" . }}
 {{-   end -}}
 {{- end -}}
