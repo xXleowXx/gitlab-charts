@@ -78,13 +78,6 @@ NOTICE: The GitLab toolbox is scaled to 0.
 
 {{ end }}
 
-{{/* WARN: global.operator REMOVED */}}
-{{- if .Values.global.operator.enabled -}}
-WARNING: global.operator.enabled is set.
-    The gitlab/gitlab-operator chart houses "gitlab-operator". This functionality was Alpha, and marked experimental. This is now REMOVED
-    in favor of https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.
-{{- end }}
-
 {{/* WARN: global.registry.notificationSecret */}}
 {{- if and (not (index .Values "shared-secrets" "enabled")) (not .Values.global.registry.notificationSecret) -}}
 WARNING: shared-secrets.enabled is false, no global.registry.notificationSecret provided.
