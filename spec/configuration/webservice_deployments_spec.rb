@@ -30,8 +30,6 @@ describe 'Webservice Deployments configuration' do
             labels:
               global: true
               foo: global
-          operator:
-            enabled: true
           pod:
             labels:
               global_pod: true

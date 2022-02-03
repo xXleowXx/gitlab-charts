@@ -156,8 +156,6 @@ describe 'Gitaly configuration' do
             labels:
               global: global
               foo: global
-          operator:
-            enabled: true
           pod:
             labels:
               global_pod: true

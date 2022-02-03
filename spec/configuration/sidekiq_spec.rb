@@ -438,11 +438,6 @@ describe 'Sidekiq configuration' do
         YAML.safe_load(%(
           certmanager-issuer:
             email: test@example.com
-          global:
-            operator:
-              enabled: true
-              rollout:
-                autoPause: true
         )).deep_merge(labels)
       end
 
@@ -471,11 +466,6 @@ describe 'Sidekiq configuration' do
         YAML.safe_load(%(
           certmanager-issuer:
             email: test@example.com
-          global:
-            operator:
-              enabled: true
-              rollout:
-                autoPause: true
           gitlab:
             sidekiq:
               pods:
