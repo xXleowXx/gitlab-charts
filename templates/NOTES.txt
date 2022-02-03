@@ -78,10 +78,11 @@ NOTICE: The GitLab toolbox is scaled to 0.
 
 {{ end }}
 
-{{/* WARN: global.operator DEPRECATED */}}
+{{/* WARN: global.operator REMOVED */}}
 {{- if .Values.global.operator.enabled -}}
 WARNING: global.operator.enabled is set.
-    The gitlab/gitlab-operator chart houses "gitlab-operator". This functionality was Alpha, and marked experimental. This is now DEPRECATED and will be removed in the future.
+    The gitlab/gitlab-operator chart houses "gitlab-operator". This functionality was Alpha, and marked experimental. This is now REMOVED
+    in favor of https://gitlab.com/gitlab-org/cloud-native/gitlab-operator.
 {{- end }}
 
 {{/* WARN: global.registry.notificationSecret */}}
