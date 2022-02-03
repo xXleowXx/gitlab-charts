@@ -15,3 +15,4 @@ metadata:
 data:
   generate-secrets: |
     {{- include (print $.Template.BasePath "/shared-secrets/_generate_secrets.sh.tpl") . | nindent 4 }}
+{{- end -}}
