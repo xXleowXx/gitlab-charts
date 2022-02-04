@@ -15,7 +15,7 @@ spec:
   ports:
     {{- if .Values.metrics.enabled }}
     - port: {{ .Values.metrics.port }}
-      targetPort: {{ .Values.metrics.port }}
+      targetPort: metrics
       protocol: TCP
       name: metrics
     {{- end }}
