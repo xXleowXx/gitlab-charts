@@ -38,6 +38,7 @@ for more information on how the global variables work.
 - [OAuth](#configure-oauth-settings)
 - [Outgoing email](#outgoing-email)
 - [Platform](#platform)
+- [Affinity](#affinity)
 
 ## Configure Host settings
 
@@ -2048,3 +2049,31 @@ More detailed examples can be found in the
 
 The `platform` key is reserved for specific features targeting a specific
 platform like GKE or EKS.
+
+## Affinity
+
+Affinity configuration is available via `global.antiAffinity` and `global.affinity`.
+Affinity allows you to constrain which nodes your pod is eligible to be scheduled on, based on node labels or labels of pods that are already running on a node. This allow spread pods across the cluster or select specific nodes, ensuring more resilience in case of a failing node.
+
+```yaml
+global:
+  antiAffinity: soft
+  affinity:
+    podAntiAffinity:
+      topologyKey: "kubernetes.io/hostname"
+```
+
+| Name                                   | Type   | Default                   | Description                         |
+| :------------------------------------- | :--:   | :------------------------ | :---------------------------------- |
+| `antiAffinity`                         | String |  `soft`                   | Pod anti-affinity to apply on pods. |
+| `affinity.podAntiAffinity.topologyKey` | String |  `kubernetes.io/hostname` | Pod anti-affinity topology key.     |
+
+- `global.antiAffinity` can take two values:
+  - `soft`: Define a `preferredDuringSchedulingIgnoredDuringExecution` anti-affinity where the Kubernetes scheduler will try to enforce the rule but will not guarantee the result.
+  - `hard`: Defined a `requiredDuringSchedulingIgnoredDuringExecution` anti-affinity where the rule _must_ be met for a pod to be scheduled onto a node.
+- `global.affinity.podAntiAffinity.topologyKey` define a node attribute used two divide them into logical zone. Most common `topologyKey` values are :
+  - `kubernetes.io/hostname`
+  - `topology.kubernetes.io/zone`
+  - `topology.kubernetes.io/region`
+
+Kubernetes references on [Inter-pod affinity and anti-affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity)
