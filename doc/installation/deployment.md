@@ -32,14 +32,10 @@ objects. You'll need to specify a domain which will contain records to resolve
 --set global.hosts.domain=example.com
 ```
 
-NOTE:
-If you enable custom domain support for GitLab Pages, `*.<pages domain>`
-sub-domains (by default, `<pages domain>` will be `pages.<global.hosts.domain>`)
-should be resolving to any of the external IP that is dedicated to Pages (set
-via `global.pages.externalHttp` or `global.pages.externalHttps`). This way,
-users who want to use custom domains for their GitLab Pages can add a CNAME
-record pointing their custom domain to corresponding `<namespace>.<pages domain>`
-domain.
+As an example:
+
+With custom domain support enabled, a `*.<pages domain>`
+sub-domain, which by default is `<pages domain>`, becomes `pages.<global.hosts.domain>`, and will need to resolve to the external IP assigned to Pages (by `--set global.pages.externalHttp` or `--set global.pages.externalHttps`). To use custom domains, GitLab Pages can use a CNAME record pointing the custom domain to a corresponding `<namespace>.<pages domain>` domain.
 
 #### Dynamic IPs with external-dns
 
