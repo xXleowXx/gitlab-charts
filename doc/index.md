@@ -56,6 +56,11 @@ but _does not_ meet production ready requirements. If you wish to deploy these c
 into production under sustained load, you should follow the complete
 [Installation guide](#installation) below.
 
+## Limitations
+
+1. 
+1. 
+
 ## Troubleshooting
 
 We've done our best to make these charts as seamless as possible, but occasionally
