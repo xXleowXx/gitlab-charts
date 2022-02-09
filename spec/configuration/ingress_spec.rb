@@ -308,71 +308,36 @@ describe 'GitLab Ingress configuration(s)' do
     end
   end
 
-  describe 'ingress class' do
-    context 'default (annotation)' do
-      it 'populates default ingress class annotation' do
-        template = HelmTemplate.new(enable_all_ingress)
-        expect(template.exit_code).to eq(0)
-
-        ingress_names.each do |ingress_name|
-          annotation = get_ingress_class_annotation(template, ingress_name)
-          expect(annotation).to eq('test-nginx')
-        end
+  describe 'ingress class v2' do
+    context 'when rendering ingress class configuration' do
+      using RSpec::Parameterized::TableSyntax
+      where(:api_version, :class_name, :expected_annotation, :expected_spec) do
+        'v1beta1' | nil    | 'test-nginx' | nil
+        'v1beta1' | 'foo'  | 'foo'        | nil
+        'v1'      | nil    | nil          | 'test-nginx'
+        'v1'      | 'foo'  | nil          | 'foo'
+        'v1'      | 'none' | nil          | nil
       end
-    end
 
-    context 'default (spec)' do
-      it 'populates default ingress class spec' do
-        values = enable_all_ingress.deep_merge(YAML.safe_load(%(
-            global:
-              ingress:
-                apiVersion: networking.k8s.io/v1
-          )))
+      with_them do
+        it 'populates expected result' do
+          values = enable_all_ingress.deep_merge(YAML.safe_load(%(
+              global:
+                ingress:
+                  apiVersion: networking.k8s.io/#{api_version}
+                  class: #{class_name}
+            )))
 
-        template = HelmTemplate.new(values)
-        expect(template.exit_code).to eq(0)
+          template = HelmTemplate.new(values)
+          expect(template.exit_code).to eq(0)
 
-        ingress_names.each do |ingress_name|
-          class_spec = get_ingress_class_spec(template, ingress_name)
-          expect(class_spec).to eq('test-nginx')
-        end
-      end
-    end
+          ingress_names.each do |ingress_name|
+            annotation = get_ingress_class_annotation(template, ingress_name)
+            expect(annotation).to eq(expected_annotation)
 
-    context 'disabled (annotation)' do
-      it 'does not populate any ingress class annotation' do
-        values = enable_all_ingress.deep_merge(YAML.safe_load(%(
-            global:
-              ingress:
-                apiVersion: networking.k8s.io/v1beta1
-                class: none
-          )))
-
-        template = HelmTemplate.new(values)
-        expect(template.exit_code).to eq(0)
-
-        ingress_names.each do |ingress_name|
-          annotation = get_ingress_class_annotation(template, ingress_name)
-          expect(annotation).to eq(nil)
-        end
-      end
-    end
-
-    context 'disabled (spec)' do
-      it 'does not populate any ingress class spec' do
-        values = enable_all_ingress.deep_merge(YAML.safe_load(%(
-            global:
-              ingress:
-                apiVersion: networking.k8s.io/v1
-                class: none
-          )))
-
-        template = HelmTemplate.new(values)
-        expect(template.exit_code).to eq(0)
-
-        ingress_names.each do |ingress_name|
-          class_spec = get_ingress_class_spec(template, ingress_name)
-          expect(class_spec).to eq(nil)
+            class_spec = get_ingress_class_spec(template, ingress_name)
+            expect(class_spec).to eq(expected_spec)
+          end
         end
       end
     end
