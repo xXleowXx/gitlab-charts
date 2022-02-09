@@ -156,5 +156,4 @@ Related Merge Requests:
 
 - [`charts/gitlab!1053`](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/1053)
 - [`build/CNG!329`](https://gitlab.com/gitlab-org/build/CNG/-/merge_requests/329)
-- [`charts/components/gitlab-operator!72`](https://gitlab.com/gitlab-org/charts/components/gitlab-operator/-/merge_requests/72)
 - [`gitlab-build-images!251`](https://gitlab.com/gitlab-org/gitlab-build-images/-/merge_requests/251)
