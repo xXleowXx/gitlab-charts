@@ -37,10 +37,11 @@ by the `gitlab:artifacts:migrate` script below.
    installation to object storage:
 
    1. Modify `/etc/gitlab/gitlab.rb` file and configure object storage for:
-      - [Uploads](https://docs.gitlab.com/ee/administration/uploads.html#s3-compatible-connection-settings)
       - [Artifacts](https://docs.gitlab.com/ee/administration/job_artifacts.html#s3-compatible-connection-settings)
+      - [Dependency Proxy](https://docs.gitlab.com/ee/administration/packages/dependency_proxy.html#using-object-storage)
       - [LFS](https://docs.gitlab.com/ee/administration/lfs/index.html#s3-for-omnibus-installations)
       - [Packages](https://docs.gitlab.com/ee/administration/packages/#using-object-storage)
+      - [Uploads](https://docs.gitlab.com/ee/administration/uploads.html#s3-compatible-connection-settings)
 
       This **must** be the same object storage service that the Helm charts based deployment is
       connected to.
@@ -55,6 +56,12 @@ by the `gitlab:artifacts:migrate` script below.
 
       ```shell
       sudo gitlab-rake gitlab:artifacts:migrate
+      ```
+
+   1. Migrate existing dependency proxy blobs and manifests to object storage:
+
+      ```shell
+      sudo gitlab-rake gitlab:dependency_proxy:migrate
       ```
 
    1. Migrate existing LFS objects to object storage:
