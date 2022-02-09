@@ -1808,8 +1808,6 @@ relevant charts packaged with Cloud Native GitLab.
 global:
   application:
     allowClusterRoles: false
-  operator:
-     enabled: false
 nginx:
   controller:
     scope:

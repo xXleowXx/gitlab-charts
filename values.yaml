@@ -31,12 +31,6 @@ global:
     # pullPolicy: IfNotPresent
     # pullSecrets: []
 
-  ## GitLab operator is DEPRECATED. DO NOT USE.
-  operator:
-    enabled: false
-    rollout:
-      autoPause: true
-
   ## Supplemental Pod labels. Will not be used for selectors.
   pod:
     labels: {}
