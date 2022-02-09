@@ -145,3 +145,7 @@ serviceAccount:
 
 deployment:
   strategy: {}
+
+affinity:
+  podAntiAffinity:
+    topologyKey:
