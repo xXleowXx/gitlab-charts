@@ -317,6 +317,7 @@ describe 'GitLab Ingress configuration(s)' do
         'v1'      | nil    | nil          | 'test-nginx'
         'v1'      | 'foo'  | nil          | 'foo'
         'v1'      | 'none' | nil          | nil
+        'v1'      | '""'   | nil          | ""
       end
 
       with_them do
