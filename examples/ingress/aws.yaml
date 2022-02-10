@@ -1,0 +1,13 @@
+# https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/guide/ingress/spec/
+global:
+  ingress:
+    class: none
+    annotations:
+      kubernetes.io/ingress.class: alb
+
+# Alternative:
+#   1. Create an IngressClass with a given name
+#   2. Set that class name under `global.ingress.class`
+# global:
+#   ingress:
+#     class: foo
