@@ -8,8 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ## UPGRADE FAILED: "$name" has no deployed releases
 
-This error will occur on your second install/upgrade if your initial
-install failed.
+This error occurs on your second install/upgrade if your initial install failed.
 
 If your initial install completely failed, and GitLab was never operational, you
 should first purge the failed install before installing again.
