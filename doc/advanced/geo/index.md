@@ -22,14 +22,14 @@ To use GitLab Geo with the GitLab Helm chart, the following requirements must be
   have WAL support required for replication.
 - The supplied database must:
   - Support replication.
-  - The primary database must reachable by the
+  - The primary database must be reachable by the
     [primary site](https://docs.gitlab.com/ee/administration/geo/glossary.html),
     and all secondary database nodes (for replication).
   - Secondary databases only need to be reachable by the
     [secondary sites](https://docs.gitlab.com/ee/administration/geo/glossary.html).
   - Support SSL between primary and secondary database nodes.
-- The primary site must be reachable via HTTPS by all secondary sites.
-  Secondary sites must be accessible to the primary site via HTTPS.
+- The primary site must be reachable via HTTP(S) by all secondary sites.
+  Secondary sites must be accessible to the primary site via HTTP(S).
 
 ## Overview
 
@@ -411,7 +411,7 @@ After configuration above is prepared:
    be preventing access to the server. Check the IP address, paying close
    attention to the difference between public and private addresses and ensure
    that, if a firewall is present, the **secondary** PostgreSQL node is
-   permitted to connect to the **primary** PostgreSQL node on port 5432.
+   permitted to connect to the **primary** PostgreSQL node on TCP port 5432.
 
 1. Place the content into `/etc/gitlab/gitlab.rb`
 1. Run `gitlab-ctl reconfigure`. If you experience any issues in regards to the
