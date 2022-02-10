@@ -168,7 +168,7 @@ for both distributions was based upon the following:
 
 - Why we ship Debian-based images:
   - Track record, precedent
-  - Familiarity of commands
+  - Familiarity with distribution
   - Community vs "enterprise"
   - Lack of perceived vendor lock-in
 - Why we ship UBI-based images:
