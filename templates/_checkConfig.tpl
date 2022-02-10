@@ -37,6 +37,8 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.incomingEmail.microsoftGraph" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.serviceDesk" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.serviceDesk.microsoftGraph" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.incomingEmail.deliveryMethod" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.serviceDeskEmail.deliveryMethod" .) -}}
 
 {{/* _checkConfig_geo.tpl*/}}
 {{- $messages = append $messages (include "gitlab.checkConfig.geo.database" .) -}}
