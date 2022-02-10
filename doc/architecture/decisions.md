@@ -168,6 +168,7 @@ for both distributions was based upon the following:
   - Track record, precedent
   - Familiarity of commands
   - Community vs "enterprise"
+  - Lack of perceived vendor lock-in
 - Why we ship UBI-based images:
   - Required in some customer environments
   - Required for RHEL certification and inclusion into the OpenShift Marketplace / RedHat Catalog
