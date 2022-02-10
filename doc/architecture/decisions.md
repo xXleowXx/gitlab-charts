@@ -161,6 +161,8 @@ Related Merge Requests:
 
 ## Image variants shipped with CNG
 
+Date: 2022-02-10
+
 The [CNG project](https://gitlab.com/gitlab-org/build/CNG) ships images based on both Debian and UBI. The decision to maintain configuration
 for both distributions was based upon the following:
 
