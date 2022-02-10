@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # GitLab Operator **(FREE SELF)**
 
 NOTE:
-The GitLab Operator is under active development and is not yet suitable for production use. See our [`Minimal` to `Viable` Epic](https://gitlab.com/groups/gitlab-org/cloud-native/-/epics/39) for more information.
+The [GitLab Operator](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator) is under active development and is not yet suitable for production use. See our [`Minimal` to `Viable` Epic](https://gitlab.com/groups/gitlab-org/cloud-native/-/epics/39) for more information.
 
 NOTE:
 If you want to integrate GitLab with OpenShift, see the [OpenShift and GitLab documentation](https://docs.gitlab.com/ee/install/openshift_and_gitlab/index.html).
