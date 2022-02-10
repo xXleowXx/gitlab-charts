@@ -24,10 +24,6 @@ describe 'GitLab Ingress configuration(s)' do
     template.dig("Ingress/#{ingress_name}", 'spec', 'ingressClassName')
   end
 
-  def get_ingress_class_spec(template, ingress_name)
-    template.dig("Ingress/#{ingress_name}", 'spec', 'ingressClassName')
-  end
-
   let(:default_values) do
     YAML.safe_load(%(
       certmanager-issuer:
