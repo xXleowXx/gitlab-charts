@@ -127,6 +127,9 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 | `pathType`                     | String  | `Prefix`       | A [Path Type](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) allows you to specify how a path should be matched. Our current default is `Prefix` but you can use `ImplementationSpecific` or `Exact` depending on your use case. |
 | `provider`                     | String  | `nginx`       | Global setting that defines the Ingress provider to use. `nginx` is used as the default provider.  |
 
+Sample [configurations for various cloud providers](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/ingress)
+can be found in the examples folder.
+
 ### Ingress Path
 
 This chart employs `global.ingress.path` as a means to assist those users that need to alter the definition of `path` entries for their Ingress objects.
