@@ -314,12 +314,12 @@ describe 'GitLab Ingress configuration(s)' do
       where(:api_version, :class_name, :expected_annotation, :expected_spec) do
         'v1beta1' | nil    | 'test-nginx' | nil
         'v1beta1' | 'foo'  | 'foo'        | nil
-        'v1beta1' | 'none' | nil          | nil
         'v1beta1' | '""'   | ""           | nil
+        'v1beta1' | 'none' | nil          | nil
         'v1'      | nil    | nil          | 'test-nginx'
         'v1'      | 'foo'  | nil          | 'foo'
-        'v1'      | 'none' | nil          | nil
         'v1'      | '""'   | nil          | ""
+        'v1'      | 'none' | nil          | nil
       end
 
       with_them do
