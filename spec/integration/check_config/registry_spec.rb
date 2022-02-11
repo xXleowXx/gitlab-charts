@@ -104,6 +104,51 @@ describe 'checkConfig registry' do
                      error_description: 'when migration disablemirrorfs is true, with database disabled'
   end
 
+  describe 'registry.migration (importnotification)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+          migration:
+            enabled: true
+            importnotification:
+              enabled: true
+              url: 'https://example.com/notification/{path}/status'
+              timeout: 10s
+              secret:
+                secret: gitlab-registry-notification
+                key: secret
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+          migration:
+            enabled: false
+            importnotification:
+              enabled: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Enabling importnotification requires the migration to be enabled' }
+
+    include_examples 'config validation',
+                     success_description: 'when migration is configured with import values',
+                     error_description: 'when importnotification is enabled but migration is disabled'
+  end
+
   describe 'registry.migration (enabled)' do
     let(:success_values) do
       YAML.safe_load(%(

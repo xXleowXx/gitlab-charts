@@ -337,6 +337,17 @@ migration:
   enabled: false
   disablemirrorfs: false
   # rootdirectory:
+  # tagconcurrency: 1
+  # maxconcurrentimports: 1
+  # importtimeout: 5m
+  # preimporttimeout: 1h
+  # importnotification:
+  #   enabled: true
+  #   url: 'https://gitlab.com/api/v4/internal/registry/repositories/{path}/migration/status'
+  #   timeout: 30s
+  #   secret: {}
+  #     secret: registry-authorization-header
+  #     key: password
 
 # Disable online garbage collection by default.
 # NOTE: This is an experimental feature and must not be used in production.
