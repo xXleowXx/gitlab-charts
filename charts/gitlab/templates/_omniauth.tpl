@@ -33,9 +33,11 @@ omniauth:
 {{-   range $index, $entry := .omniauth.providers }}
 - secret:
     name: {{ $entry.secret }}
+    {{- if $entry.secret != "group_saml" -}}
     items:
       - key: {{ default "provider" $entry.key }}
         path: {{ printf "omniauth/%s/%s" $entry.secret (default "provider" $entry.key) | quote }}
+{{- end -}}
 {{-   end }}
 {{- end -}}
 {{- end -}}
