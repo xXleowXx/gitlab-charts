@@ -13,6 +13,10 @@ While external database services can be used, these documents focus on
 the use of the [Omnibus GitLab](https://docs.gitlab.com/omnibus/) for PostgreSQL to provide the
 most platform agnostic guide, and make use of the automation included in `gitlab-ctl`.
 
+NOTE:
+See the [defined terms](https://docs.gitlab.com/ee/administration/geo/glossary.html)
+to describe all aspects of Geo (mainly the distinction between `site` and `node`).
+
 ## Requirements
 
 To use GitLab Geo with the GitLab Helm chart, the following requirements must be met:
@@ -23,18 +27,16 @@ To use GitLab Geo with the GitLab Helm chart, the following requirements must be
 - The supplied database must:
   - Support replication.
   - The primary database must be reachable by the
-    [primary site](https://docs.gitlab.com/ee/administration/geo/glossary.html),
+  - The primary database must be reachable by the primary site,
     and all secondary database nodes (for replication).
-  - Secondary databases only need to be reachable by the
-    [secondary sites](https://docs.gitlab.com/ee/administration/geo/glossary.html).
+  - Secondary databases only need to be reachable by the secondary sites.
   - Support SSL between primary and secondary database nodes.
 - The primary site must be reachable via HTTP(S) by all secondary sites.
   Secondary sites must be accessible to the primary site via HTTP(S).
 
 ## Overview
 
-This guide uses 2 Omnibus GitLab database
-[nodes](https://docs.gitlab.com/ee/administration/geo/glossary.html),
+This guide uses 2 Omnibus GitLab database nodes,
 configuring only the PostgreSQL services needed, and 2 deployments of the
 GitLab Helm chart. It is intended to be the _minimal_ required configuration.
 This documentation does not include SSL from application to database, support
