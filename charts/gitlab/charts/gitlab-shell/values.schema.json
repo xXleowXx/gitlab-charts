@@ -257,9 +257,9 @@
               "title": "Additional labels",
               "type": "object"
             },
-            "interval": {
-              "title": "Scrape interval",
-              "type": "string"
+            "endpointConfig": {
+              "title": "Endpoint config",
+              "type": "object"
             }
           },
           "title": "ServiceMonitor",
