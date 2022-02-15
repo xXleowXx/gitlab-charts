@@ -85,7 +85,7 @@ metrics:
     enabled: false
     additionalLabels: {}
     endpointConfig: {}
-  # DEPRECATED in favour of port
+  # DEPRECATED in favor of `metrics.port` as seen above
   metricsPort:
 
 ## Enable persistence using Persistent Volume Claims
