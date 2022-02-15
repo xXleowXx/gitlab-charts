@@ -126,7 +126,7 @@ spec:
             - containerPort: {{ coalesce .Values.service.internalPort .Values.global.gitaly.service.internalPort }}
               name: grcp-gitaly
            {{- if .Values.metrics.enabled }}
-            - containerPort: {{ .Values.metrics.port }}
+            - containerPort: {{ default $.Values.metrics.port $.Values.metrics.metricsPort }}
               name: metrics
            {{- end }}
           env:
