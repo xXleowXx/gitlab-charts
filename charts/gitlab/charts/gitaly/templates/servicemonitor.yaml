@@ -25,7 +25,7 @@ spec:
   endpoints:
     - port: metrics
       path: {{ .Values.metrics.path }}
-    {{- with .Values.serviceMonitor.endpointConfig }}
+    {{- with .Values.metrics.serviceMonitor.endpointConfig }}
       {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end -}}

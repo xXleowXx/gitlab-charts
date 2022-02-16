@@ -1,9 +1,9 @@
-{{- if and .Values.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled -}}
+{{- if and .Values.enabled (or .Values.metrics.enabled .Values.debug.prometheus.enabled) .Values.metrics.serviceMonitor.enabled -}}
 {{- if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" -}}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "registry.fullname" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
@@ -17,10 +17,11 @@ spec:
       - {{ $.Release.Namespace }}
   selector:
     matchLabels:
-      {{- include "gitlab.selectorLabels" . | nindent 6 }}
+      app: {{ template "name" . }}
+      release: {{ .Release.Name }}
   endpoints:
-    - port: gitlab-exporter
-      path: {{ .Values.metrics.path }}
+    - port: {{ .Values.service.name }}-prometheus
+      path: {{ default .Values.metrics.path .Values.debug.prometheus.path }}
     {{- with .Values.metrics.serviceMonitor.endpointConfig }}
       {{- toYaml . | nindent 6 }}
     {{- end }}

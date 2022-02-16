@@ -55,9 +55,9 @@ sshHostKeys:
   - ecdsa
   - ed25519
 
+# The service.internalPort is used for metrics
 metrics:
   enabled: true
-  # port: 8080 not required as uses service.internalPort
   path: /-/metrics
   serviceMonitor:
     enabled: false

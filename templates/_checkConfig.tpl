@@ -92,6 +92,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.hostWhenNoInstall" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.monitoringCrds" .) -}}
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -175,3 +176,17 @@ smtp:
 {{-   end }}
 {{- end -}}
 {{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}
+
+{{/*
+Ensure that the monitoring CRDs are installed if any ServiceMonitors or PodMonitors have been enabled
+*/}}
+{{- define "gitlab.checkConfig.monitoringCrds" -}}
+{{-   if or (and .Values.gitlab.gitaly.metrics.enabled .Values.gitlab.gitaly.metrics.serviceMonitor.enabled) (and (index .Values.gitlab "gitlab-exporter").enabled (index .Values.gitlab "gitlab-exporter").metrics.enabled (index .Values.gitlab "gitlab-exporter").metrics.serviceMonitor.enabled) (and .Values.global.pages.enabled (index .Values.gitlab "gitlab-pages").metrics.enabled (index .Values.gitlab "gitlab-pages").metrics.serviceMonitor.enabled) (and (index .Values.gitlab "gitlab-shell").enabled (index .Values.gitlab "gitlab-shell").metrics.enabled (index .Values.gitlab "gitlab-shell").metrics.serviceMonitor.enabled) (and .Values.global.kas.enabled .Values.gitlab.kas.metrics.enabled .Values.gitlab.kas.metrics.serviceMonitor.enabled) (and .Values.global.praefect.enabled .Values.gitlab.praefect.metrics.enabled .Values.gitlab.praefect.metrics.serviceMonitor.enabled) (and .Values.gitlab.webservice.enabled .Values.gitlab.webservice.metrics.enabled .Values.gitlab.webservice.metrics.serviceMonitor.enabled) (and .Values.registry.enabled (or .Values.registry.metrics.enabled .Values.registry.debug.prometheus.enabled) .Values.registry.metrics.serviceMonitor.enabled) (and .Values.gitlab.sidekiq.enabled .Values.gitlab.sidekiq.metrics.enabled .Values.gitlab.sidekiq.metrics.podMonitor.enabled) }}
+{{-     if not (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") -}} }}
+serviceMonitor:
+  When enabling ServiceMonitors or PodMonitors, you must have installed the CRDs.
+  See https://github.com/prometheus-operator/prometheus-operator#customresourcedefinitions
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.monitoringCrds */}}
