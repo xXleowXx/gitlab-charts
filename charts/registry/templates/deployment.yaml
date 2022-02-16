@@ -127,7 +127,7 @@ spec:
           livenessProbe:
             httpGet:
               path: {{ .Values.deployment.livenessProbe.path }}
-              port: {{ if and .Values.deployment.livenessProbe.port (ne .Values.deployment.livenessProbe.port .Values.debug.addr.port) }}{{ .Values.deployment.livenessProbe.port }}{{ else }}debug{{ end }}
+              port: {{ if .Values.deployment.livenessProbe.port }}{{ .Values.deployment.livenessProbe.port }}{{ else }}debug{{ end }}
               scheme: HTTP
             initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
@@ -139,7 +139,7 @@ spec:
           readinessProbe:
             httpGet:
               path: {{ .Values.deployment.readinessProbe.path }}
-              port: {{ if and .Values.deployment.readinessProbe.port (ne .Values.deployment.readinessProbe.port .Values.debug.addr.port) }}{{ .Values.deployment.readinessProbe.port }}{{ else }}debug{{ end }}
+              port: {{ if .Values.deployment.readinessProbe.port }}{{ .Values.deployment.readinessProbe.port }}{{ else }}debug{{ end }}
               scheme: HTTP
             initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
