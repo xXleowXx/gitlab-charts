@@ -20,9 +20,12 @@ The GitLab Helm charts [can be configured](https://docs.gitlab.com/charts/charts
 
 The Reference Architecture for deploying GitLab instances to Kubernetes is called Cloud Native Hybrid specifically because not all GitLab services can run in the cluster for production-grade implementations. Each Cloud Native Hybrid Reference Architecture is detailed within the overall architecture page. For instance, here is the [Cloud Native Hybrid reference architecture](https://docs.gitlab.com/ee/administration/reference_architectures/3k_users.html#cloud-native-hybrid-reference-architecture-with-helm-charts-alternative) alternative for the 3,000 user count.
 
-## GitLab deployment with Infrastructure as Code (IaC)
+## GitLab Cloud Native Hybrid deployment with Infrastructure as Code (IaC) and builder resources
 
-GitLab develops Infrastructure as Code that is capable of configuring the combination of Helm charts and supplemental cloud infrastructure via the [GitLab Environment Toolkit](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit). For AWS, a second option is the [AWS Quick Start](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html#available-infrastructure-as-code-for-gitlab-cloud-native-hybrid). Regardless of how you are building Cloud Native Hybrid, there is AWS-specific guidance and bills of materials in the implementation pattern [Provision GitLab Cloud Native Hybrid on AWS EKS](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html)
+GitLab develops Infrastructure as Code that is capable of configuring the combination of Helm charts and supplemental cloud infrastructure:
+- [GitLab Environment Toolkit IaC](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit).
+- [AWS Quick Start for GitLab Cloud Native Hybrid on EKS IaC](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html#available-infrastructure-as-code-for-gitlab-cloud-native-hybrid) - this tooling is under development, for GA status please follow this issue: [AWS Quick Start for GitLab Cloud Native Hybrid on EKS Status](https://gitlab.com/gitlab-com/alliances/aws/public-tracker/-/issues/11)
+- [Implementation Pattern: Provision GitLab Cloud Native Hybrid on AWS EKS](https://docs.gitlab.com/ee/install/aws/gitlab_hybrid_on_aws.html) - regardless of how you are building Cloud Native Hybrid, this resource provides a Bill of Materials tested with GitLab Performance Toolkit and budgets using AWS Cost Calculator.
 
 ## Requirements
 
