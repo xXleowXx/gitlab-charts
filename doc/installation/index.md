@@ -14,7 +14,7 @@ Installing GitLab using only the Helm charts creates a proof of concept (POC) im
 
 ## Helm charts are configurable to externalize stateful components
 
-The GitLab Helm charts [can be configured](https://docs.gitlab.com/charts/charts/) to point to external stateful storage for items such as the PostgreSQL, Redis, all Non-Git repository storage as well as Git repository storage (Gitaly). The Infrastructure as Code (IaC) options below use this approach. For production-grade implementation the appropriate chart parameters should be used to point to prebuilt, externalized state stores that align with the chosen [Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures/).
+The GitLab Helm charts [can be configured](../charts/charts/) to point to external stateful storage for items such as the PostgreSQL, Redis, all Non-Git repository storage as well as Git repository storage (Gitaly). The Infrastructure as Code (IaC) options below use this approach. For production-grade implementation the appropriate chart parameters should be used to point to prebuilt, externalized state stores that align with the chosen [Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures/).
 
 ## Getting started for production Cloud Native Hybrid
 
