@@ -6,10 +6,12 @@ It expects a dictionary with two entries:
   - `context` which is the parent context (either `.` or `$`)
 */}}
 {{- define "ingress.class.annotation" -}}
-{{-   $apiVersion := include "gitlab.ingress.apiVersion" . -}}
-{{-   $className := include "ingress.class.name" . -}}
-{{-   if not (eq $apiVersion "networking.k8s.io/v1") -}}
+{{-   if not (eq (default "" .global.class) "none" ) -}}
+{{-     $apiVersion := include "gitlab.ingress.apiVersion" . -}}
+{{-     $className := include "ingress.class.name" . -}}
+{{-       if not (eq $apiVersion "networking.k8s.io/v1") -}}
 kubernetes.io/ingress.class: {{ $className }}
+{{-       end -}}
 {{-   end -}}
 {{- end -}}
 
@@ -22,6 +24,9 @@ It expects either:
     - `context` which is the parent context (either `.` or `$`)
   - the parent context ($ from caller)
     - This detected by access to both `.Capabilities` and `.Release`
+
+If the value is not set or is set to nil, then it provides a default.
+Otherwise, it will use the given value (even an empty string "").
 */}}
 {{- define "ingress.class.name" -}}
 {{-   $here := dict }}
@@ -30,7 +35,11 @@ It expects either:
 {{-   else -}}
 {{-     $here = . -}}
 {{-   end -}}
-{{-   $here.global.class | default (printf "%s-nginx" $here.context.Release.Name) -}}
+{{-   if kindIs "invalid" $here.global.class -}}
+{{-     printf "%s-nginx" $here.context.Release.Name -}}
+{{-   else -}}
+{{-     $here.global.class | quote -}}
+{{-   end -}}
 {{- end -}}
 
 {{/*
@@ -41,8 +50,10 @@ It expects a dictionary with two entries:
   - `context` which is the parent context (either `.` or `$`)
 */}}
 {{- define "ingress.class.field" -}}
-{{-   $apiVersion := include "gitlab.ingress.apiVersion" . -}}
-{{-   if eq $apiVersion "networking.k8s.io/v1" -}}
+{{-   if not (eq (default "" .global.class) "none" ) -}}
+{{-     $apiVersion := include "gitlab.ingress.apiVersion" . -}}
+{{-     if eq $apiVersion "networking.k8s.io/v1" -}}
 ingressClassName: {{ include "ingress.class.name" . }}
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
