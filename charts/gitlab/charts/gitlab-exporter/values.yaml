@@ -82,3 +82,7 @@ extraEnv:
 
 deployment:
   strategy: {}
+
+affinity:
+  podAntiAffinity:
+    topologyKey:

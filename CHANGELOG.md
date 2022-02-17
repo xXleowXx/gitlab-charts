@@ -2,6 +2,18 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.7.3 (2022-02-15)
+
+No changes.
+
+## 5.7.2 (2022-02-08)
+
+No changes.
+
+## 5.7.1 (2022-02-03)
+
+No changes.
+
 ## 5.7.0 (2022-01-21)
 
 ### Added (3 changes)
@@ -23,6 +35,13 @@ entry.
 - [Update gitlab-org/container-registry from 3.20.0-gitlab to 3.21.0-gitlab](gitlab-org/charts/gitlab@52b9f0d5b6ae45cbf578dffd94cd1e544938a093) ([merge request](gitlab-org/charts/gitlab!2337))
 - [Update gitlab-org/container-registry from 3.19.0-gitlab to 3.20.0-gitlab](gitlab-org/charts/gitlab@4ae9e795d2ae3ceec5f2d75a9c5c9ecefb88f707) ([merge request](gitlab-org/charts/gitlab!2334))
 
+<<<<<<< HEAD
+=======
+## 5.6.4 (2022-02-03)
+
+No changes.
+
+>>>>>>> master
 ## 5.6.3 (2022-01-18)
 
 No changes.
@@ -46,6 +65,13 @@ No changes.
 - [Update gitlab-org/charts/gitlab-runner from 0.34.0 to 0.35.0](gitlab-org/charts/gitlab@12c4740147c25f788061176f124e5749eb9a7726) ([merge request](gitlab-org/charts/gitlab!2275))
 - [Update gitlab-org/container-registry from 3.15.0-gitlab to 3.16.0-gitlab](gitlab-org/charts/gitlab@3d2e013c2c37ee987fa064dacb8ae3f2f645aa4b) ([merge request](gitlab-org/charts/gitlab!2276))
 
+<<<<<<< HEAD
+=======
+## 5.5.4 (2022-02-03)
+
+No changes.
+
+>>>>>>> master
 ## 5.5.3 (2022-01-11)
 
 No changes.
