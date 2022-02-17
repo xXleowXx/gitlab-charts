@@ -10,11 +10,11 @@ Install GitLab on Kubernetes with the cloud native GitLab Helm chart.
 
 ## Helm chart only deployment creates a POC configuration
 
-Installing GitLab using only the Helm charts creates a proof of concept (POC) implementation where all GitLab services are placed into the cluster. GitLab Cloud Native Hybrid Reference Architectures specify that the stateful components such as PostgreSQL or Gitaly (Git repository storage dataplane) run outside the cluster on PaaS or instance compute. This is required in order to scale and reliably service the many varieties of workloads found in production environments. Additionally, it is allowable, and generally preferable to take advantage of Cloud PaaS for PostgreSQL, Redis, and object storage for all non Git repository storages.
+Installing GitLab using only the Helm charts creates a proof of concept (POC) implementation where all GitLab services are placed into the cluster. GitLab Cloud Native Hybrid Reference Architectures specify that the stateful components such as PostgreSQL or Gitaly (Git repository storage dataplane) run outside the cluster on PaaS or compute instances. This is required in order to scale and reliably service the many varieties of workloads found in production GitLab environments. Additionally it is allowable, and generally preferable, to take advantage of Cloud PaaS for PostgreSQL, Redis, and object storage for all non-Git repository storages.
 
 ## Helm charts are configurable to externalize stateful components
 
-There in only one set of GitLab Helm charts and they can be parameterized to point to external stateful storage for items such as the PostgreSQL, Redis, all Non-Git repository storage as well as Git repository storage (Gitaly). The Infrastructure as Code (IaC) options below use this approach. For production-grade implementation by hand build or via custom IaC, the appropriate chart parameters should be used to point to prebuilt, externalized state stores that align with the chosen [Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures/).
+The GitLab Helm charts [can be configured](https://docs.gitlab.com/charts/charts/) to point to external stateful storage for items such as the PostgreSQL, Redis, all Non-Git repository storage as well as Git repository storage (Gitaly). The Infrastructure as Code (IaC) options below use this approach. For production-grade implementation the appropriate chart parameters should be used to point to prebuilt, externalized state stores that align with the chosen [Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures/).
 
 ## Getting started for production Cloud Native Hybrid
 
