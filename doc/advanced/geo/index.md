@@ -593,12 +593,6 @@ replicating missing data from the **primary** site. This process is known as "ba
 Meanwhile, the **primary** site starts to notify each **secondary** site of any changes, so
 that the **secondary** site can replicate those changes promptly.
 
-## Use Geo proxying for secondary sites
-
-To serve read-write traffic by proxying to the primary site, you can
-[enable Geo secondary proxying](https://docs.gitlab.com/ee/administration/geo/secondary_proxy/)
-and use a single, unified URL for all Geo sites.
-
 ## Confirm Operational Status
 
 The final step is to double check the Geo configuration on the secondary site once fully
