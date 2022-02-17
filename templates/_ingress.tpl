@@ -38,7 +38,7 @@ Otherwise, it will use the given value (even an empty string "").
 {{-   if kindIs "invalid" $here.global.class -}}
 {{-     printf "%s-nginx" $here.context.Release.Name -}}
 {{-   else -}}
-{{-     printf "%q" $here.global.class -}}
+{{-     $here.global.class | quote -}}
 {{-   end -}}
 {{- end -}}
 
