@@ -337,10 +337,10 @@ migration:
   enabled: false
   disablemirrorfs: false
   # rootdirectory:
-  tagconcurrency: 1
-  maxconcurrentimports: 1
-  importtimeout: 5m
-  preimporttimeout: 1h
+  # tagconcurrency: 1
+  # maxconcurrentimports: 1
+  # importtimeout: 5m
+  # preimporttimeout: 1h
 
 # Disable online garbage collection by default.
 # NOTE: This is an experimental feature and must not be used in production.
