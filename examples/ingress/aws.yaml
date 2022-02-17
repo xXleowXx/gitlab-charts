@@ -1,4 +1,6 @@
 # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/guide/ingress/spec/
+nginx-ingress:
+  enabled: false
 global:
   ingress:
     class: none
