@@ -22,11 +22,4 @@ migration:
 {{-   if .Values.migration.maxconcurrentimports }}
   maxconcurrentimports: {{ .Values.migration.maxconcurrentimports }}
 {{-   end }}
-{{-   if .Values.migration.importnotification }}
-  importnotification:
-    enabled: {{ .Values.migration.importnotification.enabled | eq true }}
-    url: {{ .Values.migration.importnotification.url }}
-    timeout: {{ .Values.migration.importnotification.timeout  }}
-    secret: {{ .Values.migration.importnotification.secret }}
-{{- end -}}
 {{- end -}}

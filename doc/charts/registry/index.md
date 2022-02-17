@@ -211,11 +211,6 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `migration.preimporttimeout`                | `2h`                                      | The maximum duration that a pre import job may take to complete before it is aborted. This is an experimental feature and must not be used in production environments. |
 | `migration.tagconcurrency`                | `1`                                      | This parameter determines the number of concurrent tag details requests to the filesystem backend. This can greatly reduce the time spent importing a repository after a successful pre import has completed. Pre import is not affected by this parameter. This is an experimental feature and must not be used in production environments. |
 | `migration.maxconcurrentimports`                | `1`                                      | This parameter determines the maximum number of concurrent imports allowed per instance of the registry. This can help reduce the number of resources that the registry needs when the migration mode is enabled. This is an experimental feature and must not be used in production environments. |
-| `migration.importnotification.enabled`                | `false`                                      | When set to `true`, the import notification feature will be enabled. This requires the following parameters to be configured. This is an experimental feature and must not be used in production environments. |
-| `migration.importnotification.url`                | `''`                                      | The URL endpoint where the notification will be sent to. Required when `importnotification` is enabled. Must be a valid URL, including scheme. A placeholder can be defined as `{path}` to add the repository path in the URL. |
-| `migration.importnotification.timeout`                | `10s`                                      | A value for the HTTP timeout for the import notification. This is an experimental feature and must not be used in production environments. |
-| `migration.importnotification.secret`                | `''`                                      | This will be automatically created if
-not provided, when the `shared-secrets` feature is enabled. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
 | `serviceLabels`                            | `{}`                                         | Supplemental service labels                                                                          |
@@ -838,13 +833,6 @@ migration:
   preimporttimeout: 1h
   tagconcurrency: 10
   maxconcurrentimports: 10
-  importnotification:
-    enabled: true
-    url: 'https://example.com/notification/{path}/status'
-    timeout: 10s
-    secret:
-        secret: gitlab-registry-notification
-        key: secret
 ```
 
 ### gc
