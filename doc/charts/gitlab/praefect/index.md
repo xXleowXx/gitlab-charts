@@ -117,7 +117,7 @@ When migrating to Praefect, none of Praefect's virtual storages can be named `de
 This is because there must be at least one storage named `default` at all times,
 therefore the name is already taken by the non-Praefect configuration.
 
-The instructions to [migrate existing repositories to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-existing-repositories-to-gitaly-cluster)
+The instructions to [migrate to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/index.html#migrating-to-gitaly-cluster)
 can then be followed to move data from the `default` storage to `virtualStorage2`. If additional storages
 were defined under `global.gitaly.internal.names`, be sure to migrate repositories from those storages as well.
 
@@ -138,7 +138,7 @@ global:
       maxUnavailable: 2
 ```
 
-The instructions to [migrate existing repositories to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#migrate-existing-repositories-to-gitaly-cluster)
+The instructions to [migrate to Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/index.html#migrating-to-gitaly-cluster)
 can be followed again to move data from `virtualStorage2` to the newly-added `default` storage if desired.
 
 Finally, see the [repository storage paths documentation](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#choose-where-new-repositories-are-stored)
