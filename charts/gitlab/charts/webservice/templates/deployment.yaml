@@ -178,7 +178,11 @@ spec:
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ $.Values.service.internalPort }}
-              name: webservice
+              name: http-webservice
+          {{- if or $.Values.monitoring.exporter.enabled (and $.Values.metrics.enabled (eq $.Values.metrics.port $.Values.monitoring.exporter.port)) }}
+            - containerPort: {{ $.Values.monitoring.exporter.port }}
+              name: http-exporter
+          {{- end }}
           env:
             - name: GITLAB_WEBSERVER
               value: {{ $.Values.webServer }}
@@ -289,7 +293,11 @@ spec:
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ $.Values.service.workhorseInternalPort }}
-              name: workhorse
+              name: http-workhorse
+          {{- if or $.Values.workhorse.monitoring.exporter.enabled $.Values.workhorse.metrics.enabled }}
+            - containerPort: {{ $.Values.workhorse.monitoring.exporter.port }}
+              name: http-workhorse-exporter
+          {{- end }}
           env:
             - name: TMPDIR
               value: "/tmp/gitlab"
@@ -303,7 +311,7 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
-            {{- if .workhorse.monitoring.exporter.enabled }}
+            {{- if or $.Values.workhorse.monitoring.exporter.enabled $.Values.workhorse.metrics.enabled }}
             - name: GITLAB_WORKHORSE_PROM_LISTEN_ADDR
               value: "0.0.0.0:{{ $.Values.workhorse.monitoring.exporter.port }}"
             {{- end }}

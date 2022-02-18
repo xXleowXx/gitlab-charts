@@ -55,10 +55,10 @@ sshHostKeys:
   - ecdsa
   - ed25519
 
-# The service.internalPort is used for metrics
 metrics:
   enabled: true
-  path: /-/metrics
+  port: 8083
+  path: /metrics
   serviceMonitor:
     enabled: false
     additionalLabels: {}
@@ -164,6 +164,14 @@ workhorse:
     exporter:
       enabled: false
       port: 9229
+  metrics:
+    enabled: false
+    port: 9229
+    path: /metrics
+    serviceMonitor:
+      enabled: false
+      additionalLabels: {}
+      endpointConfig: {}
   imageScaler:
     maxProcs: 2 # aim for max(2, requested_cpus / 2)
     maxFileSizeBytes: 250000
