@@ -721,6 +721,8 @@ nginx-ingress:
   enabled: true
   tcp:
     22: '{{ include "gitlab.nginx.gitlab-shell-config" . }}'
+    # Below won't work because `tpl` isn't used in the Deployment port definitions
+    # '{{ include "gitlab.shell.port" . }}': '{{ include "gitlab.nginx.gitlab-shell-config" . }}'
   controller:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
