@@ -39,7 +39,7 @@ if there is a shared tls secret for all ingresses.
 
 {{/*
 Returns the minio URL.
-If `registry.redirect` is set to `true` it will return the external domain name of minio, 
+If `registry.redirect` is set to `true` it will return the external domain name of minio,
 e.g. `https://minio.example.com`, otherwise it will fallback to the internal minio service
 URL, e.g. `http://minio-svc:9000`.
 
