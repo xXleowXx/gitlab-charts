@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Using the GitLab-Kas chart **(FREE SELF)**
 
-The `kas` sub-chart provides a configurable deployment of the [GitLab Agent Server](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent#gitlab-kubernetes-agent-server-kas), which is the server-side component of the [GitLab Agent for Kubernetes](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent) implementation.
+The `kas` sub-chart provides a configurable deployment of the [GitLab agent server](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent#gitlab-kubernetes-agent-server-kas), which is the server-side component of the [GitLab agent for Kubernetes](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent) implementation.
 
 ## Requirements
 
@@ -18,7 +18,7 @@ The `kas` container used in this chart use a distroless image for minimal resour
 
 The route to access the service will depend on your [Ingress configuration](#ingress).
 
-Follow the link for further information about the [GitLab Agent for Kubernetes architecture](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/architecture.md).
+Follow the link for further information about the [GitLab agent for Kubernetes architecture](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/architecture.md).
 
 ## Configuration
 
@@ -99,8 +99,8 @@ To install the chart:
    ```
 
 1. Use the GDK to run the process to configure and use the
-   [GitLab Agent for Kubernetes](https://docs.gitlab.com/ee/user/clusters/agent/):
-   (You can also follow the steps to configure and use the Agent manually.)
+   [GitLab agent for Kubernetes](https://docs.gitlab.com/ee/user/clusters/agent/):
+   (You can also follow the steps to configure and use the agent manually.)
 
    1. From your GDK GitLab repository, move into the QA folder: `cd qa`.
    1. Run the following command to run the QA test:
