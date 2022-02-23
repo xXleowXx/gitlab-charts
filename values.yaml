@@ -277,6 +277,7 @@ global:
       matomoDisableCookies:
       oneTrustId:
       googleTagManagerNonceId:
+      bizible:
 
     ## https://docs.gitlab.com/charts/charts/globals#lfs-artifacts-uploads-packages-external-mr-diffs-and-dependency-proxy
     object_store:
