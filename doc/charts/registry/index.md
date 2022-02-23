@@ -153,7 +153,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `httpSecret`                               |                                              | Https secret                                                                                         |
 | `image.pullPolicy`                         |                                              | Pull policy for the registry image                                                                   |
 | `image.pullSecrets`                        |                                              | Secrets to use for image repository                                                                  |
-| `image.repository`                         | `registry`                                   | Registry image                                                                                       |
+| `image.repository`                         | `registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry`                                   | Registry image                                                                                       |
 | `image.tag`                                | `v3.28.2-gitlab`                              | Version of the image to use                                                                          |
 | `init.image.repository`                    |                                              | initContainer image                                                                                  |
 | `init.image.tag`                           |                                              | initContainer image tag                                                                              |
