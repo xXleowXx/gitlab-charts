@@ -831,6 +831,7 @@ global:
       matomoDisableCookies:
       oneTrustId:
       googleTagManagerNonceId:
+      bizible:
     object_store:
       enabled: false
       proxy_download: true
@@ -1014,6 +1015,7 @@ under the `extra` key below `appConfig`:
 | `extra.matomoDisableCookies`| Boolean | (empty) | Disable Matomo cookies (corresponds to `disableCookies` in the Matomo script) |
 | `extra.oneTrustId`         | String | (empty) | OneTrust ID. |
 | `extra.googleTagManagerNonceId` | String | (empty) | Google Tag Manager ID. |
+| `extra.bizible`            | Boolean | `false` | Set to true to enable Bizible script |
 
 ### Consolidated object storage
 
