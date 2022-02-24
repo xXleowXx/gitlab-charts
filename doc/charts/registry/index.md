@@ -207,6 +207,10 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `migration.enabled`                | `false`                                      | When set to `true`, migration mode is enabled. New repositories will be added to the database, while existing repositories will continue to use the filesystem. This is an experimental feature and must not be used in production environments. |
 | `migration.disablemirrorfs`                | `false`                                      | When set to `true`, the registry does not write metadata to the filesystem. Must be used in combination with the metadata database. This is an experimental feature and must not be used in production environments. |
 | `migration.rootdirectory`                |                                              | Allows repositories that have been migrated to the database to use separate storage paths. Using a distinct root directory from the main storage driver configuration allows online migrations. This is an experimental feature and must not be used in production environments. |
+| `migration.importtimeout`                | `5m`                                      | The maximum duration that an import job may take to complete before it is aborted. This is an experimental feature and must not be used in production environments. |
+| `migration.preimporttimeout`                | `1h`                                      | The maximum duration that a pre import job may take to complete before it is aborted. This is an experimental feature and must not be used in production environments. |
+| `migration.tagconcurrency`                | `1`                                      | This parameter determines the number of concurrent tag details requests to the filesystem backend. This can greatly reduce the time spent importing a repository after a successful pre import has completed. Pre import is not affected by this parameter. This is an experimental feature and must not be used in production environments. |
+| `migration.maxconcurrentimports`                | `1`                                      | This parameter determines the maximum number of concurrent imports allowed per instance of the registry. This can help reduce the number of resources that the registry needs when the migration mode is enabled. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                  | `1000`                                       | Group ID under which the pod should be started                                                       |
 | `securityContext.runAsUser`                | `1000`                                       | User ID under which the pod should be started                                                        |
 | `serviceLabels`                            | `{}`                                         | Supplemental service labels                                                                          |
@@ -392,6 +396,7 @@ kubectl create secret generic gitlab-registry-httpsecret --from-literal=secret=s
 
 Notification Secret is utilized for calling back to the GitLab application in various ways,
 such as for Geo to help manage syncing Container Registry data between primary and secondary sites.
+It is also used to send import notifications if the [migration](#migration) is enabled and the endpoint is configured.
 
 The `notificationSecret` secret object will be automatically created if
 not provided, when the `shared-secrets` feature is enabled.
@@ -824,6 +829,10 @@ migration:
   enabled: true
   disablemirrorfs: true
   rootdirectory: gitlab
+  importtimeout: 5m
+  preimporttimeout: 1h
+  tagconcurrency: 10
+  maxconcurrentimports: 10
 ```
 
 ### gc
