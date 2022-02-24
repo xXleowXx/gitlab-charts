@@ -24,7 +24,7 @@ The GitLab Helm charts [can be configured](../charts/) to point to external stat
 
 The Reference Architecture for deploying GitLab instances to Kubernetes is called Cloud Native Hybrid specifically because not all GitLab services can run in the cluster for production-grade implementations. Each Cloud Native Hybrid Reference Architecture is detailed within the overall architecture page. For instance, here is the [Cloud Native Hybrid reference architecture](https://docs.gitlab.com/ee/administration/reference_architectures/3k_users.html#cloud-native-hybrid-reference-architecture-with-helm-charts-alternative) alternative for the 3,000 user count.
 
-## GitLab Cloud Native Hybrid deployment with Infrastructure as Code (IaC) and builder resources
+### GitLab Cloud Native Hybrid deployment with Infrastructure as Code (IaC) and builder resources
 
 GitLab develops Infrastructure as Code that is capable of configuring the combination of Helm charts and supplemental cloud infrastructure:
 
