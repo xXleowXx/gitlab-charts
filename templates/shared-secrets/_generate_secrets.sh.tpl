@@ -192,6 +192,6 @@ generate_secret_if_needed {{ template "gitlab.praefect.dbSecret.secret" . }} --f
 {{ end }}
 
 {{ if .Values.global.praefect.enabled }}
-# Gitaly secret
+# Praefect auth token
 generate_secret_if_needed {{ template "gitlab.praefect.authToken.secret" . }} --from-literal={{ template "gitlab.praefect.authToken.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
