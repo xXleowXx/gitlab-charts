@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Install GitLab on Kubernetes with the cloud native GitLab Helm chart.
 
-## Important Considerations
+## Important considerations
 
 The following considerations should be well noted for implementing production GitLab environments.
 
