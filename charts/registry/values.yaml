@@ -1,6 +1,6 @@
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
-  tag: 'v3.27.1-gitlab'
+  tag: 'v3.30.0-gitlab'
   # pullPolicy: IfNotPresent
   # pullSecrets: []
 
@@ -337,6 +337,10 @@ migration:
   enabled: false
   disablemirrorfs: false
   # rootdirectory:
+  # tagconcurrency: 1
+  # maxconcurrentimports: 1
+  # importtimeout: 5m
+  # preimporttimeout: 1h
 
 # Disable online garbage collection by default.
 # NOTE: This is an experimental feature and must not be used in production.
