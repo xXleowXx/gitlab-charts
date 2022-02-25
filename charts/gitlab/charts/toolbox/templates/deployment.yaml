@@ -104,7 +104,7 @@ spec:
             {{- else if eq .Values.backups.objectStorage.backend "gcs" }}
             - sh /var/opt/gitlab/templates/configure-gsutil && while sleep 3600; do :; done
             {{- end }}
-          image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+          image: {{ include "image.fullpath" . }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           env:
             - name: ARTIFACTS_BUCKET_NAME

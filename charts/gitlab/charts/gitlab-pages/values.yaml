@@ -38,7 +38,8 @@ networkpolicy:
   annotations: {}
 
 image:
-  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-pages
+  # repository: gitlab-org/build/cng
+  name: gitlab-pages
   # tag: master
   # pullPolicy: IfNotPresent
   # pullSecrets: []

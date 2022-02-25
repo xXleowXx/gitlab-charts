@@ -67,7 +67,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}
-          image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+          image: {{ include "image.fullpath.migrations" . }}
           args:
             - /scripts/wait-for-deps
           {{- if include "gitlab.geo.secondary" $ }}

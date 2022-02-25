@@ -6,8 +6,8 @@
 {{- $name := default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- $releaseName := .Release.Name -}}
 {{- $releaseService := .Release.Service -}}
-{{- $fullname := include "fullname" . -}}
-{{- $image := printf "%s:%s" (coalesce .Values.image.repository (include "image.repository" .)) (coalesce .Values.image.tag (include "gitlab.versionTag" . ) | toString) -}}
+{{- $fullname := printf "%s-%s" $releaseName $name | trunc 63 | trimSuffix "-" -}}
+{{- $image := include "image.fullpath" . -}}
 {{- $concurrency := .Values.concurrency -}}
 {{- $timeout := .Values.timeout -}}
 {{- $resources := .Values.resources -}}

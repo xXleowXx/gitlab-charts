@@ -40,7 +40,8 @@ hpa:
       stabilizationWindowSeconds: 300
 
 image:
-  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-kas
+  # repository: gitlab-org/build/cng
+  name: gitlab-kas
   # tag: latest
   # pullPolicy: IfNotPresent
   # pullSecrets: []

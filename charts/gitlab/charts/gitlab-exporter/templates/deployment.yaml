@@ -99,7 +99,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag .Chart.AppVersion }}"
+          image: {{ include "image.fullpath" . }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           env:
             - name: CONFIG_TEMPLATE_DIRECTORY

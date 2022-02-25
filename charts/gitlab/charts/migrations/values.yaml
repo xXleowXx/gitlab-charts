@@ -1,10 +1,11 @@
 # Default values for migrations.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-image: {}
+image:
+  name: toolbox
   # pullPolicy: IfNotPresent
   # pullSecrets: []
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee
+  # repository: gitlab-org/build/cng
   # tag: master
 
 init:

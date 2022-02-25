@@ -143,7 +143,7 @@ spec:
           resources:
             {{- toYaml $.Values.init.resources | nindent 12 }}
         - name: dependencies
-          image: {{ include "webservice.image" $ }}
+          image: {{ include "image.fullpath" $ }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - /scripts/wait-for-deps
@@ -180,7 +180,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" $ | nindent 8 }}
         - name: {{ $.Chart.Name }}
-          image: {{ include "webservice.image" $ }}
+          image: {{ include "image.fullpath" $ }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             {{- if $.Values.http.enabled }}
@@ -330,7 +330,7 @@ spec:
           resources:
             {{- toYaml .resources | nindent 12 }}
         - name: gitlab-workhorse
-          image: "{{ coalesce $.Values.workhorse.image (include "workhorse.repository" $) }}:{{ coalesce $.Values.workhorse.tag (include "gitlab.versionTag" $ ) }}"
+          image: {{ include "image.fullpath.workhorse" $ }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ $.Values.service.workhorseInternalPort }}

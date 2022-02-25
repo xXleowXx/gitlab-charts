@@ -60,34 +60,6 @@ if there is a shared tls secret for all ingresses.
 {{- end -}}
 
 {{/*
-Returns the workhorse image repository depending on the value of global.edition.
-
-Used to switch the deployment from Enterprise Edition (default) to Community
-Edition. If global.edition=ce, returns the Community Edition image repository
-set in the Gitlab values.yaml, otherwise returns the Enterprise Edition
-image repository.
-*/}}
-{{- define "workhorse.repository" -}}
-{{- if eq "ce" $.Values.global.edition -}}
-{{ index $.Values "global" "communityImages" "workhorse" "repository" }}
-{{- else -}}
-{{ index $.Values "global" "enterpriseImages" "workhorse" "repository" }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Returns the webservice image depending on the value of global.edition.
-
-Used to switch the deployment from Enterprise Edition (default) to Community
-Edition. If global.edition=ce, returns the Community Edition image repository
-set in the Gitlab values.yaml, otherwise returns the Enterprise Edition
-image repository.
-*/}}
-{{- define "webservice.image" -}}
-{{ coalesce $.Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}
-{{- end -}}
-
-{{/*
 Returns ERB section for Workhorse direct object storage configuration.
 
 If Minio in use, set AWS and keys.

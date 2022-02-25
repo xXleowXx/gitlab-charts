@@ -172,7 +172,9 @@ workhorse:
       cpu: 100m
       memory: 100M
   # shutdownTimeout:
-  # image: registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee
+  image:
+    # repository: gitlab-org/build/cng
+    name: workhorse
   livenessProbe:
     initialDelaySeconds: 20
     periodSeconds: 60
