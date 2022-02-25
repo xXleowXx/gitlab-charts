@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.8.2 (2022-02-25)
+
+No changes.
+
 ## 5.8.1 (2022-02-23)
 
 No changes.
@@ -48,6 +52,10 @@ No changes.
 
 - [Add ERROR: to output message to make more visible](gitlab-org/charts/gitlab@6fe9d83f2d6be4266c26eb7b91f8e6efc54984ea) ([merge request](gitlab-org/charts/gitlab!2294))
 
+## 5.7.4 (2022-02-25)
+
+No changes.
+
 ## 5.7.3 (2022-02-15)
 
 No changes.
@@ -80,6 +88,10 @@ No changes.
 - [Add test specs](gitlab-org/charts/gitlab@0777257463d3f6169d7fbc47e2931a3347698630) ([merge request](gitlab-org/charts/gitlab!2304))
 - [Update gitlab-org/container-registry from 3.20.0-gitlab to 3.21.0-gitlab](gitlab-org/charts/gitlab@52b9f0d5b6ae45cbf578dffd94cd1e544938a093) ([merge request](gitlab-org/charts/gitlab!2337))
 - [Update gitlab-org/container-registry from 3.19.0-gitlab to 3.20.0-gitlab](gitlab-org/charts/gitlab@4ae9e795d2ae3ceec5f2d75a9c5c9ecefb88f707) ([merge request](gitlab-org/charts/gitlab!2334))
+
+## 5.6.5 (2022-02-25)
+
+No changes.
 
 ## 5.6.4 (2022-02-03)
 
