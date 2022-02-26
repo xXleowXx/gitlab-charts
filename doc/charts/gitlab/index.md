@@ -22,3 +22,12 @@ service sub-charts:
 - [Sidekiq](sidekiq/index.md)
 - [Toolbox](toolbox/index.md)
 - [Webservice](webservice/index.md)
+
+The parameters for each subchart must be under the `gitlab` key. For example, 
+Gitlab Shell parameters would be similar to:
+
+```yaml
+gitlab:
+  gitlab-shell:
+    ...
+```
