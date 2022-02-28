@@ -13,6 +13,7 @@ image:
   name: gitaly
   # pullPolicy: IfNotPresent
   # pullSecrets: []
+  prepend: "true"
 
 service:
   tls: {}

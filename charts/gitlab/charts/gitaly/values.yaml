@@ -24,6 +24,7 @@ image:
   # pullPolicy: IfNotPresent
   # pullSecrets: []
   # tag: master
+  prepend: "true"
 service:
   tls: {}
 annotations: {}

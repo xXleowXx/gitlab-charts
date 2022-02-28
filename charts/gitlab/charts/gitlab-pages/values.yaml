@@ -41,6 +41,7 @@ image:
   # repository: gitlab-org/build/cng
   name: gitlab-pages
   # tag: master
+  prepend: "true"
   # pullPolicy: IfNotPresent
   # pullSecrets: []
 

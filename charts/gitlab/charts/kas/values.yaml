@@ -43,6 +43,7 @@ image:
   # repository: gitlab-org/build/cng
   name: gitlab-kas
   # tag: latest
+  prepend: "true"
   # pullPolicy: IfNotPresent
   # pullSecrets: []
 ingress:

@@ -58,7 +58,8 @@ Defaults to using the information from the chart appVersion field, but can be
 overridden using the global.gitlabVersion field in values.
 */}}
 {{- define "image.tag" -}}
-{{-   $appVersion := include "gitlab.parseAppVersion" (dict "appVersion" $.Chart.AppVersion "prepend" "true") -}}
+{{-   $prepend := coalesce .Values.image.prepend "false" -}}
+{{-   $appVersion := include "gitlab.parseAppVersion" (dict "appVersion" $.Chart.AppVersion "prepend" $prepend) -}}
 {{-   coalesce .Values.image.tag $appVersion }}
 {{- end -}}
 
