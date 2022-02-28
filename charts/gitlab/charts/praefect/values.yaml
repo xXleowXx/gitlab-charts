@@ -44,6 +44,8 @@ serviceAccount:
   enabled: false
   create: false
   annotations: {}
+  ## Name to be used for serviceAccount, otherwise defaults to chart fullname
+  # name:
 
 ## Support for tolerations for pod scheduling
 tolerations: []
