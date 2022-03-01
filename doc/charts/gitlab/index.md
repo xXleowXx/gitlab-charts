@@ -24,7 +24,7 @@ service sub-charts:
 - [Webservice](webservice/index.md)
 
 The parameters for each subchart must be under the `gitlab` key. For example, 
-Gitlab Shell parameters would be similar to:
+GitLab Shell parameters would be similar to:
 
 ```yaml
 gitlab:
