@@ -1,7 +1,7 @@
 {{- $sharedSecretValues := index .Values "shared-secrets" -}}
 {{- if $sharedSecretValues.enabled }}
 {{-   if not (or .Values.global.ingress.configureCertmanager .Values.global.ingress.tls) -}}
-{{-     $imageCfgSelfsign := dict "global" .Values.global.image "local" $sharedSecretValues.selfsign.image -}}
+{{-     $imageCfgSelfsign := dict "global" .Values.global.image "local" $sharedSecretValues.selfsign.image "context" $ -}}
 {{-     $imageCfgKubectl := dict "global" .Values.global.image "local" .Values.global.kubectl.image "context" $ -}}
 {{-     $jointPullSecrets := concat (default (list) $sharedSecretValues.selfsign.image.pullSecrets) (default (list) .Values.global.kubectl.image.pullSecrets) -}}
 {{-     $imageCfg := dict "global" .Values.global.image "local" (dict "pullSecrets" $jointPullSecrets) -}}
@@ -42,7 +42,7 @@ spec:
       {{- include "gitlab.image.pullSecrets" $imageCfg | nindent 6 }}
       initContainers:
       - name: cfssl-self-sign
-        image: "{{ $sharedSecretValues.selfsign.image.repository }}:{{ $sharedSecretValues.selfsign.image.tag }}"
+        image: {{ include "image.fullpath" $imageCfgSelfsign }}
         {{- include "gitlab.image.pullPolicy" $imageCfgSelfsign | indent 8 }}
         env:
         - name: CA_SUBJECT

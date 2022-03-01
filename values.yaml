@@ -1026,12 +1026,10 @@ shared-secrets:
     image:
       # pullPolicy: IfNotPresent
       # pullSecrets: []
-      repository: registry.gitlab.com/gitlab-org/build/cng/cfssl-self-sign
-      # The digest below comes from a given tag pipeline because they are mirrored to .com,
-      # ensuring that the image tag is available from both instances. The digest can be
-      # found in the 'sync_images' job.
-      #   https://dev.gitlab.org/gitlab/charts/components/images/-/tags
-      tag: 1.6.1@sha256:e89392e13b4ef12cd48ba8c30326aacd89a8d0161cb081ac8dfbb77200d5ebac
+      # registry:
+      # repository:
+      name: cfssl-self-sign
+      tag: 1.2
     keyAlgorithm: "rsa"
     keySize: "4096"
     expiry: "3650d"
