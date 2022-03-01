@@ -1,4 +1,5 @@
 {{- if .Values.defaultBackend.enabled -}}
+{{- $imageCfg := dict "global" .Values.global.image "local" .Values.defaultBackend.image "context" $ -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -48,7 +49,7 @@ spec:
       containers:
         - name: {{ template "ingress-nginx.name" . }}-default-backend
           {{- with .Values.defaultBackend.image }}
-          image: "{{- if .repository -}}{{ .repository }}{{ else }}{{ .registry }}/{{ .image }}{{- end -}}:{{ .tag }}{{- if (.digest) -}} @{{.digest}} {{- end -}}"
+          image: {{ include "image.fullpath" $imageCfg }}
           {{- end }}
           imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy }}
         {{- if .Values.defaultBackend.extraArgs }}

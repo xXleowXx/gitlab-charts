@@ -63,6 +63,17 @@ overridden using the global.gitlabVersion field in values.
 {{- end -}}
 
 {{/*
+Return the image digest to use.
+*/}}
+{{- define "image.digest" -}}
+{{-   $digest := "" -}}
+{{-   if .local.digest -}}
+{{-     $digest = printf "@%s" .local.digest -}}
+{{-   end -}}
+{{-   $digest -}}
+{{- end -}}
+
+{{/*
 Creates the full image path for use in manifests.
 */}}
 {{- define "image.fullpath" -}}
@@ -70,5 +81,6 @@ Creates the full image path for use in manifests.
 {{-   $repository := include "image.repository" . -}}
 {{-   $name := include "image.name" . -}}
 {{-   $tag := include "image.tag" . -}}
-{{-   printf "%s/%s/%s:%s" $registry $repository $name $tag | quote -}}
+{{-   $digest := include "image.digest" . -}}
+{{-   printf "%s/%s/%s:%s%s" $registry $repository $name $tag $digest | quote -}}
 {{- end -}}
