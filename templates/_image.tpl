@@ -39,12 +39,8 @@ Defines the repository for a given image.
 {{- end -}}
 
 {{/*
-Returns the image repository depending on the value of global.edition.
-
-Used to switch the deployment from Enterprise Edition (default) to Community
-Edition. If global.edition=ce, returns the Community Edition image repository
-set in the Gitlab values.yaml, otherwise returns the Enterprise Edition
-image repository.
+Defines the name for a given image.
+Defaults to `gitlab-$chartName-$edition` if no local name is defined.
 */}}
 {{- define "image.name" -}}
 {{-   $defaultName := printf "gitlab-%s-%s" .context.Chart.Name .context.Values.global.edition -}}
