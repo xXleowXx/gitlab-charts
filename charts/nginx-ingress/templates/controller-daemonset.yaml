@@ -1,4 +1,5 @@
 {{- if or (eq .Values.controller.kind "DaemonSet") (eq .Values.controller.kind "Both") -}}
+{{- $imageCfg := dict "global" .Values.global.image "local" .Values.controller.image "context" $ -}}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -69,9 +70,7 @@ spec:
     {{- end }}
       containers:
         - name: {{ .Values.controller.containerName }}
-          {{- with .Values.controller.image }}
-          image: "{{- if .repository -}}{{ .repository }}{{ else }}{{ .registry }}/{{ .image }}{{- end -}}:{{ .tag }}{{- if (.digest) -}} @{{.digest}} {{- end -}}"
-          {{- end }}
+          image: {{ include "image.fullpath" $imageCfg }}
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
         {{- if .Values.controller.lifecycle }}
           lifecycle: {{ toYaml .Values.controller.lifecycle | nindent 12 }}
