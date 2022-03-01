@@ -63,7 +63,7 @@ spec:
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
       restartPolicy: OnFailure
-      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
+      {{- include "image.pullSecrets" $imageCfg | indent 6 }}
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}

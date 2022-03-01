@@ -91,7 +91,7 @@ spec:
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
-      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
+      {{- include "image.pullSecrets" $imageCfg | indent 6 }}
       {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
       {{- end }}

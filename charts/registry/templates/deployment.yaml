@@ -105,7 +105,7 @@ spec:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
         {{- end }}
-      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
+      {{- include "image.pullSecrets" $imageCfg | indent 6 }}
       containers:
         - name: registry
           image: {{ include "image.fullpath" $imageCfg }}

@@ -73,7 +73,7 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         runAsGroup: {{ .Values.securityContext.runAsGroup }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
-      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
+      {{- include "image.pullSecrets" $imageCfg | indent 6 }}
       initContainers:
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
       containers:

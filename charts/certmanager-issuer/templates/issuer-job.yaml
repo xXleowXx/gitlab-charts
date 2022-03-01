@@ -24,7 +24,7 @@ spec:
       serviceAccountName: {{ template "fullname" . }}
       {{- end }}
       restartPolicy: OnFailure
-      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6}}
+      {{- include "image.pullSecrets" $imageCfg | indent 6}}
       containers:
         - name: create-issuer
           image: {{ include "image.fullpath" $imageCfg }}

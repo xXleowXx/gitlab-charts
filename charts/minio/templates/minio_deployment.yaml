@@ -80,7 +80,7 @@ spec:
               mountPath: /minio
           resources:
 {{ toYaml .Values.init.resources | indent 12 }}
-      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6}}
+      {{- include "image.pullSecrets" $imageCfg | indent 6}}
       containers:
         - name: minio
           image: {{ .Values.image }}:{{ .Values.imageTag }}

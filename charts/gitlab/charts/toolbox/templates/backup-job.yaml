@@ -70,7 +70,7 @@ spec:
                   readOnly: false
               resources:
                 {{- toYaml .Values.init.resources | nindent 16 }}
-          {{- include "gitlab.image.pullSecrets" $imageCfg | indent 10 }}
+          {{- include "image.pullSecrets" $imageCfg | indent 10 }}
           containers:
             {{- include "gitlab.extraContainers" . | nindent 12 }}
             - name: {{ .Chart.Name }}-backup

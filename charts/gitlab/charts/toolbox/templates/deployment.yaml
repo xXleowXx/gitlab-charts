@@ -69,7 +69,7 @@ spec:
             readOnly: false
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
-      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
+      {{- include "image.pullSecrets" $imageCfg | indent 6 }}
       {{- if .Values.antiAffinityLabels.matchLabels }}
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
