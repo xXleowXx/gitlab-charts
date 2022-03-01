@@ -656,12 +656,10 @@ global:
   # configuration of certificates container & custom CA injection
   certificates:
     image:
-      repository: registry.gitlab.com/gitlab-org/build/cng/alpine-certificates
-      # The digest below comes from a given tag pipeline because they are mirrored to .com,
-      # ensuring that the image tag is available from both instances. The digest can be
-      # found in the 'sync_images' job.
-      #   https://dev.gitlab.org/gitlab/charts/components/images/-/tags
-      tag: 20191127-r2@sha256:367d437d024d7647432d67fb2442e3e5723af5930bad77d3535f4f8f4f8630d9
+      # registry: registry.gitlab.com
+      # repository: gitlab-org/build/cng
+      name: alpine-certificates
+      tag: 20191127-r2
       # pullPolicy: IfNotPresent
       # pullSecrets: []
     customCAs: []

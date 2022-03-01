@@ -5,9 +5,9 @@
 {{- $internalGitalyTLSEnabled := $.Values.global.gitaly.tls.enabled }}
 {{- $internalPraefectTLSEnabled := and $.Values.global.praefect.tls.enabled $.Values.global.praefect.tls.secretName }}
 {{- $certmanagerDisabled := not (or $.Values.global.ingress.configureCertmanager $.Values.global.ingress.tls) }}
-{{- $imageCfg := dict "global" .Values.global.image "local" .Values.global.certificates.image -}}
+{{- $imageCfg := dict "global" .Values.global.image "local" .Values.global.certificates.image "context" $ -}}
 - name: certificates
-  image: "{{ .Values.global.certificates.image.repository }}:{{ .Values.global.certificates.image.tag }}"
+  image: {{ include "image.fullpath" $imageCfg }}
   {{- include "gitlab.image.pullPolicy" $imageCfg | indent 2 }}
   env:
   {{- include "gitlab.extraEnv" . | nindent 2 }}
