@@ -51,7 +51,7 @@ spec:
             {{- include "gitlab.certificates.initContainer" . | nindent 12 }}
             - name: configure
               command: ['sh', '/config/configure']
-              image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
+              image: {{ include "image.fullpath" $initImageCfg }}
               {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 14 }}
               env:
                 {{- include "gitlab.extraEnv" $ | nindent 16 }}

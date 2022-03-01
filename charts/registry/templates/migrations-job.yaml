@@ -1,4 +1,6 @@
 {{- if and .Values.enabled .Values.database.enabled .Values.database.migrations.enabled }}
+{{- $imageCfg := dict "global" .Values.global.image "local" .Values.image "context" $ -}}
+{{- $initImageCfg := dict "global" .Values.global.busybox.image "local" .Values.init.image "context" $ -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -37,7 +39,7 @@ spec:
       {{- include "gitlab.extraInitContainers" . | nindent 6 }}
       {{- include "gitlab.certificates.initContainer" . | nindent 6 }}
       - name: configure
-        image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
+        image: {{ include "image.fullpath" $imageCfg }}
         imagePullPolicy: {{ .Values.init.image.pullPolicy }}
         command: ['sh', '/config/configure']
         volumeMounts:
