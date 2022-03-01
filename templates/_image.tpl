@@ -35,7 +35,7 @@ Defines the registry for a given image.
 Defines the repository for a given image.
 */}}
 {{- define "image.repository" -}}
-{{-  coalesce .local.repository .global.repository .context.Values.global.image.registry "gitlab-org/build/cng" -}}
+{{-  coalesce .local.repository .global.repository .context.Values.global.image.repository "gitlab-org/build/cng" -}}
 {{- end -}}
 
 {{/*
