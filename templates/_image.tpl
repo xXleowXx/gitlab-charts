@@ -121,7 +121,7 @@ imagePullSecrets:
     - `global` which contains global image settings, e.g. .Values.global.image
     - `local` which contains local image settings, e.g. .Values.image
 */}}
-{{- define "gitlab.image.pullPolicy" -}}
+{{- define "image.pullPolicy" -}}
 {{- $pullPolicy := coalesce .local.pullPolicy .global.pullPolicy -}}
 {{- if $pullPolicy }}
 imagePullPolicy: {{ $pullPolicy | quote }}

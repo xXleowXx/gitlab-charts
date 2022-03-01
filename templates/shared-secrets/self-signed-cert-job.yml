@@ -43,7 +43,7 @@ spec:
       initContainers:
       - name: cfssl-self-sign
         image: {{ include "image.fullpath" $imageCfgSelfsign }}
-        {{- include "gitlab.image.pullPolicy" $imageCfgSelfsign | indent 8 }}
+        {{- include "image.pullPolicy" $imageCfgSelfsign | indent 8 }}
         env:
         - name: CA_SUBJECT
           value: {{ $sharedSecretValues.selfsign.caSubject | quote }} # defaults to GitLab in container
@@ -69,7 +69,7 @@ spec:
       containers:
       - name: kubectl
         image: {{ include "image.fullpath" $imageCfgKubectl }}
-        {{- include "gitlab.image.pullPolicy" $imageCfgKubectl | indent 8 }}
+        {{- include "image.pullPolicy" $imageCfgKubectl | indent 8 }}
         command:
         - /bin/bash
         - -exc

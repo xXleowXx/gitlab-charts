@@ -117,7 +117,7 @@ spec:
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ include "image.fullpath" $initImageCfg }}
-          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
+          {{- include "image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" $ | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
@@ -139,7 +139,7 @@ spec:
             {{- toYaml $.Values.init.resources | nindent 12 }}
         - name: dependencies
           image: {{ $image }}
-          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
+          {{- include "image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - /scripts/wait-for-deps
           env:
@@ -180,7 +180,7 @@ spec:
         {{- include "gitlab.extraContainers" $ | nindent 8 }}
         - name: {{ $name }}
           image: {{ $image }}
-          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
+          {{- include "image.pullPolicy" $imageCfg | indent 10 }}
           env:
           {{- if $metricsEnabled }}
             - name: prometheus_multiproc_dir

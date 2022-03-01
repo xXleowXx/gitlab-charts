@@ -62,7 +62,7 @@ spec:
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ include "image.fullpath" $initImageCfg }}
-          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
+          {{- include "image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
@@ -122,7 +122,7 @@ spec:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}
           image: {{ include "image.fullpath" $imageCfg }}
-          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
+          {{- include "image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ coalesce .Values.service.internalPort .Values.global.gitaly.service.internalPort }}
               name: grpc-gitaly
