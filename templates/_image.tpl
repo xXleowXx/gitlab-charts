@@ -48,10 +48,14 @@ use the chart's name to calculate it.
 */}}
 {{- define "image.name" -}}
 {{-   $defaultName := printf "gitlab-%s-%s" .context.Chart.Name .context.Values.global.edition -}}
-{{-   if eq .local.name "toolbox" -}}
-{{-     printf "gitlab-%s-%s" "toolbox" .context.Values.global.edition -}}
+{{-   if .local.name -}}
+{{-     if eq .local.name "toolbox" -}}
+{{-       printf "gitlab-toolbox-%s" .context.Values.global.edition -}}
+{{-     else -}}
+{{-       .local.name -}}
+{{-     end -}}
 {{-   else -}}
-{{-     coalesce .local.name .global.name $defaultName -}}
+{{-     coalesce .global.name $defaultName -}}
 {{-   end -}}
 {{- end -}}
 
