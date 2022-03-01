@@ -70,5 +70,5 @@ Creates the full image path for use in manifests.
 {{-   $repository := include "image.repository" . -}}
 {{-   $name := include "image.name" . -}}
 {{-   $tag := include "image.tag" . -}}
-{{-   printf "%s/%s/%s:%s" $registry $repository $name $tag -}}
+{{-   printf "%s/%s/%s:%s" $registry $repository $name $tag | quote -}}
 {{- end -}}

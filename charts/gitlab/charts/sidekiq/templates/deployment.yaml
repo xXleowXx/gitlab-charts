@@ -138,7 +138,7 @@ spec:
           resources:
             {{- toYaml $.Values.init.resources | nindent 12 }}
         - name: dependencies
-          image: "{{ $image }}"
+          image: {{ $image }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - /scripts/wait-for-deps
@@ -179,7 +179,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" $ | nindent 8 }}
         - name: {{ $name }}
-          image: "{{ $image }}"
+          image: {{ $image }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           env:
           {{- if $metricsEnabled }}
