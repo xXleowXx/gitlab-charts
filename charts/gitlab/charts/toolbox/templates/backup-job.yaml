@@ -1,5 +1,5 @@
 {{- if and .Values.enabled .Values.backups.cron.enabled }}
-{{- $imageCfg := dict "global" .Values.global.image "local" .Values.image -}}
+{{- $imageCfg := dict "global" .Values.global.image "local" .Values.image "context" $ -}}
 {{- $initImageCfg := dict "global" .Values.global.busybox.image "local" .Values.init.image "context" $ -}}
 {{- include "database.datamodel.prepare" . -}}
 apiVersion: batch/v1beta1
