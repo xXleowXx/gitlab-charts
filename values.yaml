@@ -685,7 +685,9 @@ global:
       fsGroup: 65534
   busybox:
     image:
-      repository: registry.gitlab.com/gitlab-org/cloud-native/mirror/images/busybox
+      # registry:
+      repository: gitlab-org/cloud-native/mirror/images
+      name: busybox
       tag: latest
       # pullPolicy: IfNotPresent
       # pullSecrets: []
@@ -737,6 +739,8 @@ upgradeCheck:
     # tag:
     # pullPolicy: IfNotPresent
     # pullSecrets: []
+  init:
+    image: {}
   securityContext:
     # in alpine/debian/busybox based images, this is `nobody:nogroup`
     runAsUser: 65534

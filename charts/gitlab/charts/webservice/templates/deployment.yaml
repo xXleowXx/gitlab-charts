@@ -1,7 +1,7 @@
 {{- if $.Values.enabled }}
 {{- $imageCfg := dict "global" $.Values.global.image "local" $.Values.image "context" $ -}}
 {{- $workhorseImageCfg := dict "global" $.Values.global.image "local" $.Values.workhorse.image "context" $ -}}
-{{- $initImageCfg := dict "global" $.Values.global.busybox.image "local" $.Values.init.image -}}
+{{- $initImageCfg := dict "global" $.Values.global.busybox.image "local" $.Values.init.image "context" $ -}}
 {{- include "database.datamodel.prepare" $ -}}
 {{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
@@ -114,7 +114,7 @@ spec:
         - name: configure
           command: ['sh']
           args: [ '-c', 'sh -x /config-webservice/configure ; sh -x /config-workhorse/configure ; mkdir -p -m 3770 /tmp/gitlab']
-          image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global.busybox) | quote }}
+          image: {{ include "image.fullpath" $initImageCfg }}
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
