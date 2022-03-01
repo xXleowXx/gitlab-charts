@@ -1,5 +1,5 @@
 {{- if .Values.global.kas.enabled -}}
-{{- $imageCfg := dict "global" $.Values.global.image "local" $.Values.image -}}
+{{- $imageCfg := dict "global" $.Values.global.image "local" $.Values.image "context" $ -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -79,7 +79,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ template "name" . }}
-          image: {{ include "image.fullpath" . }}
+          image: {{ include "image.fullpath" $imageCfg }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - "--configuration-file=/etc/kas/config.yaml"

@@ -1,5 +1,5 @@
 {{- if .Values.enabled -}}
-{{- $imageCfg := dict "global" .Values.global.image "local" .Values.image -}}
+{{- $imageCfg := dict "global" .Values.global.image "local" .Values.image "context" $ -}}
 {{- $initImageCfg := dict "global" .Values.global.busybox.image "local" .Values.init.image -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -101,7 +101,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}
-          image: {{ include "image.fullpath" . }}
+          image: {{ include "image.fullpath" $imageCfg }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
           {{- if .Values.metrics.enabled }}

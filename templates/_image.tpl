@@ -28,14 +28,14 @@ Usage:
 Defines the registry for a given image.
 */}}
 {{- define "image.registry" -}}
-{{-   coalesce .Values.image.registry .Values.global.image.registry -}}
+{{-   coalesce .local.registry .global.registry -}}
 {{- end -}}
 
 {{/*
 Defines the repository for a given image.
 */}}
 {{- define "image.repository" -}}
-{{-  coalesce .Values.image.repository .Values.global.image.repository -}}
+{{-  coalesce .local.repository .global.repository -}}
 {{- end -}}
 
 {{/*
@@ -47,9 +47,9 @@ set in the Gitlab values.yaml, otherwise returns the Enterprise Edition
 image repository.
 */}}
 {{- define "image.name" -}}
-{{-   $component := coalesce .component .Chart.Name -}}
-{{-   $name := printf "gitlab-%s-%s" $component .Values.global.edition -}}
-{{-   coalesce .Values.image.name $name -}}
+{{-   $name := coalesce .name .context.Chart.Name -}}
+{{-   $defaultName := printf "gitlab-%s-%s" $name .context.Values.global.edition -}}
+{{-   coalesce .local.name $name -}}
 {{- end -}}
 
 {{/*
@@ -58,9 +58,9 @@ Defaults to using the information from the chart appVersion field, but can be
 overridden using the global.gitlabVersion field in values.
 */}}
 {{- define "image.tag" -}}
-{{-   $prepend := coalesce .Values.image.prepend "false" -}}
-{{-   $appVersion := include "gitlab.parseAppVersion" (dict "appVersion" $.Chart.AppVersion "prepend" $prepend) -}}
-{{-   coalesce .Values.image.tag $appVersion }}
+{{-   $prepend := coalesce .local.prepend "false" -}}
+{{-   $appVersion := include "gitlab.parseAppVersion" (dict "appVersion" .context.Chart.AppVersion "prepend" $prepend) -}}
+{{-   coalesce .local.tag $appVersion }}
 {{- end -}}
 
 {{/*
@@ -71,21 +71,5 @@ Creates the full image path for use in manifests.
 {{-   $repository := include "image.repository" . -}}
 {{-   $name := include "image.name" . -}}
 {{-   $tag := include "image.tag" . -}}
-{{-   printf "%s/%s/%s:%s" $registry $repository $name $tag -}}
-{{- end -}}
-
-{{- define "image.fullpath.workhorse" -}}
-{{-   $registry := coalesce .Values.workhorse.image.registry (include "image.registry" .) -}}
-{{-   $repository := coalesce .Values.workhorse.image.repository (include "image.repository" .) -}}
-{{-   $name := printf "gitlab-%s-%s" (coalesce .Values.workhorse.image.name "workhorse") .Values.global.edition -}}
-{{-   $tag := coalesce .Values.workhorse.image.tag (include "image.tag" .) -}}
-{{-   printf "%s/%s/%s:%s" $registry $repository $name $tag -}}
-{{- end -}}
-
-{{- define "image.fullpath.migrations" -}}
-{{-   $registry := coalesce .Values.image.registry (include "image.registry" .) -}}
-{{-   $repository := coalesce .Values.image.repository (include "image.repository" .) -}}
-{{-   $name := printf "gitlab-%s-%s" (coalesce .Values.image.name "migrations") .Values.global.edition -}}
-{{-   $tag := coalesce .Values.image.tag (include "image.tag" .) -}}
 {{-   printf "%s/%s/%s:%s" $registry $repository $name $tag -}}
 {{- end -}}

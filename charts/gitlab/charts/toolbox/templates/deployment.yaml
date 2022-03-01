@@ -1,5 +1,5 @@
 {{- if .Values.enabled }}
-{{- $imageCfg := dict "global" .Values.global.image "local" .Values.image -}}
+{{- $imageCfg := dict "global" .Values.global.image "local" .Values.image "context" $ -}}
 {{- $initImageCfg := dict "global" .Values.global.busybox.image "local" .Values.init.image -}}
 {{- include "database.datamodel.prepare" . -}}
 apiVersion: apps/v1
@@ -104,7 +104,7 @@ spec:
             {{- else if eq .Values.backups.objectStorage.backend "gcs" }}
             - sh /var/opt/gitlab/templates/configure-gsutil && while sleep 3600; do :; done
             {{- end }}
-          image: {{ include "image.fullpath" . }}
+          image: {{ include "image.fullpath" $imageCfg }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           env:
             - name: ARTIFACTS_BUCKET_NAME
