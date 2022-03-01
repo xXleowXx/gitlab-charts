@@ -90,7 +90,7 @@ spec:
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
         - name: dependencies
-          image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+          image: {{ include "image.fullpath" $imageCfg }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - /scripts/wait-for-deps
