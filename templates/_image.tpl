@@ -28,14 +28,14 @@ Usage:
 Defines the registry for a given image.
 */}}
 {{- define "image.registry" -}}
-{{-   coalesce .local.registry .global.registry -}}
+{{-   coalesce .local.registry .global.registry .context.Values.global.image.registry "registry.gitlab.com" -}}
 {{- end -}}
 
 {{/*
 Defines the repository for a given image.
 */}}
 {{- define "image.repository" -}}
-{{-  coalesce .local.repository .global.repository -}}
+{{-  coalesce .local.repository .global.repository .context.Values.global.image.registry "gitlab-org/build/cng" -}}
 {{- end -}}
 
 {{/*
@@ -60,7 +60,7 @@ overridden using the global.gitlabVersion field in values.
 {{- define "image.tag" -}}
 {{-   $prepend := coalesce .local.prepend "false" -}}
 {{-   $appVersion := include "gitlab.parseAppVersion" (dict "appVersion" .context.Chart.AppVersion "prepend" $prepend) -}}
-{{-   coalesce .local.tag $appVersion }}
+{{-   coalesce .local.tag .global.tag $appVersion }}
 {{- end -}}
 
 {{/*
