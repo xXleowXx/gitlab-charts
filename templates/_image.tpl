@@ -47,9 +47,8 @@ set in the Gitlab values.yaml, otherwise returns the Enterprise Edition
 image repository.
 */}}
 {{- define "image.name" -}}
-{{-   $name := coalesce .name .context.Chart.Name -}}
-{{-   $defaultName := printf "gitlab-%s-%s" $name .context.Values.global.edition -}}
-{{-   coalesce .local.name $name -}}
+{{-   $defaultName := printf "gitlab-%s-%s" .context.Chart.Name .context.Values.global.edition -}}
+{{-   coalesce .local.name .global.name $defaultName -}}
 {{- end -}}
 
 {{/*
