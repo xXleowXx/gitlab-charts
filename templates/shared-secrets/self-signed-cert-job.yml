@@ -2,7 +2,7 @@
 {{- if $sharedSecretValues.enabled }}
 {{-   if not (or .Values.global.ingress.configureCertmanager .Values.global.ingress.tls) -}}
 {{-     $imageCfgSelfsign := dict "global" .Values.global.image "local" $sharedSecretValues.selfsign.image -}}
-{{-     $imageCfgKubectl := dict "global" .Values.global.image "local" .Values.global.kubectl.image -}}
+{{-     $imageCfgKubectl := dict "global" .Values.global.image "local" .Values.global.kubectl.image "context" $ -}}
 {{-     $jointPullSecrets := concat (default (list) $sharedSecretValues.selfsign.image.pullSecrets) (default (list) .Values.global.kubectl.image.pullSecrets) -}}
 {{-     $imageCfg := dict "global" .Values.global.image "local" (dict "pullSecrets" $jointPullSecrets) -}}
 apiVersion: batch/v1
@@ -68,7 +68,7 @@ spec:
           {{- toYaml $sharedSecretValues.resources | nindent 10 }}
       containers:
       - name: kubectl
-        image: {{ include "gitlab.kubectl.image" . | quote }}
+        image: {{ include "image.fullpath" $imageCfgKubectl }}
         {{- include "gitlab.image.pullPolicy" $imageCfgKubectl | indent 8 }}
         command:
         - /bin/bash

@@ -669,7 +669,9 @@ global:
   ## kubectl image used by hooks to carry out specific jobs
   kubectl:
     image:
-      repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
+      # registry:
+      # repository:
+      name: kubectl
       # The digest below comes from a given tag pipeline because they are mirrored to .com,
       # ensuring that the image tag is available from both instances. The digest can be
       # found in the 'sync_images' job.

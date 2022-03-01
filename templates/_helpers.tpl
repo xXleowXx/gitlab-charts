@@ -506,13 +506,6 @@ Return true in any other case.
 {{- end -}}
 
 {{/*
-Constructs kubectl image name.
-*/}}
-{{- define "gitlab.kubectl.image" -}}
-{{- printf "%s:%s" .Values.global.kubectl.image.repository .Values.global.kubectl.image.tag -}}
-{{- end -}}
-
-{{/*
 Override upstream redis chart naming
 */}}
 {{- define "redis.secretName" -}}
