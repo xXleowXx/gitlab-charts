@@ -79,6 +79,7 @@ spec:
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
         - name: configure
           image: {{ include "image.fullpath" $initImageCfg }}
+          {{- include "image.pullPolicy" $initImageCfg | indent 10 }}
           command: ["sh", "/config/configure"]
           volumeMounts:
             - name: registry-secrets
