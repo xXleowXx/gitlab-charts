@@ -41,10 +41,18 @@ Defines the repository for a given image.
 {{/*
 Defines the name for a given image.
 Defaults to `gitlab-$chartName-$edition` if no local name is defined.
+If the local name is defined as `toolbox`, then prepend `gitlab-` and
+append `-$edition`. This ensures that charts such as Migrations that
+need to use the Toolbox image get the correct image path since we can't
+use the chart's name to calculate it.
 */}}
 {{- define "image.name" -}}
 {{-   $defaultName := printf "gitlab-%s-%s" .context.Chart.Name .context.Values.global.edition -}}
-{{-   coalesce .local.name .global.name $defaultName -}}
+{{-   if eq .local.name "toolbox" -}}
+{{-     printf "gitlab-%s-%s" "toolbox" .context.Values.global.edition -}}
+{{-   else -}}
+{{-     coalesce .local.name .global.name $defaultName -}}
+{{-   end -}}
 {{- end -}}
 
 {{/*
