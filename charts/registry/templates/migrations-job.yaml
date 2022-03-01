@@ -57,7 +57,7 @@ spec:
       containers:
       {{- include "gitlab.extraContainers" . | nindent 6 }}
       - name: migrations
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: {{ include "image.fullpath" $imageCfg }}
         imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
         args:
         - /scripts/wait-for-deps

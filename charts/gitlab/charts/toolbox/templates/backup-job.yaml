@@ -82,7 +82,7 @@ spec:
                 {{- else if eq .Values.backups.objectStorage.backend "gcs" }}
                 - sh /var/opt/gitlab/templates/configure-gsutil && backup-utility {{ .Values.backups.cron.extraArgs }}
                 {{- end }}
-              image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}"
+              image: {{ include "image.fullpath" $imageCfg }}
               {{- include "gitlab.image.pullPolicy" $imageCfg | indent 14 }}
               env:
                 {{- include "gitlab.extraEnv" $ | nindent 16 }}
