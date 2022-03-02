@@ -116,6 +116,9 @@ gitlab:
       - name: ps-kas
       registry: kas.registry.com
       repository: kas-repo
+      pullPolicy: pp-kas
+      pullSecrets:
+      - name: ps-kas
   mailroom:
     image:
       registry: mailroom.registry.com
@@ -140,6 +143,12 @@ gitlab:
     image:
       registry: praefect.registry.com
       repository: praefect-repo
+      pullPolicy: pp-praefect
+      pullSecrets:
+      - name: ps-praefect
+    init:
+      image:
+        pullPolicy: pp-praefect-init
   sidekiq:
     image:
       registry: sidekiq.registry.com
