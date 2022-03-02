@@ -6,9 +6,6 @@ global:
   hosts:
     domain: example.com
     https: true
-  image:
-    registry: registry.gitlab.com
-    repository: gitlab-org/build/cng
   # This exists to support template handling
   psql:
     knownDecompositions:
