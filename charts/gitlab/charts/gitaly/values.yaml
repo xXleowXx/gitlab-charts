@@ -19,11 +19,12 @@ gitaly: {}
 
 internal: {}
 image:
+  # registry: registry.gitlab.com
   # repository: gitlab-org/build/cng
   name: gitaly
+  # tag: master
   # pullPolicy: IfNotPresent
   # pullSecrets: []
-  # tag: master
   prepend: "true"
 service:
   tls: {}
@@ -36,6 +37,8 @@ serviceLabels: {}
 init:
   image: {}
     # repository:
+    # registry:
+    # name:
     # tag:
   resources:
     requests:

@@ -38,6 +38,7 @@ networkpolicy:
   annotations: {}
 
 image:
+  # registry: registry.gitlab.com
   # repository: gitlab-org/build/cng
   name: gitlab-pages
   # tag: master
@@ -68,7 +69,9 @@ service:
 
 init:
   image: {}
+    # registry:
     # repository:
+    # name:
     # tag:
   resources:
     requests:

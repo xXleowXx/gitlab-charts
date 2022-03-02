@@ -2,15 +2,19 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 image:
-  name: toolbox
+  # name: toolbox
   # pullPolicy: IfNotPresent
   # pullSecrets: []
+  # registry: registry.gitlab.com
   # repository: gitlab-org/build/cng
+  name: toolbox
   # tag: master
 
 init:
   image: {}
+    # registry:
     # repository:
+    # name:
     # tag:
   resources:
     requests:

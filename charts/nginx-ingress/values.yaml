@@ -10,7 +10,7 @@
 controller:
   name: controller
   image:
-    # registry:
+    # registry: registry.gitlab.com
     repository: gitlab-org/cloud-native/mirror/images
     name: ingress-nginx/controller
     tag: "v1.0.4"

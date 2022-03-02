@@ -9,8 +9,10 @@ failover:
 electionStrategy: sql
 
 image:
+  # registry: registry.gitlab.com
   # repository: gitlab-org/build/cng
   name: gitaly
+  # tag: master
   # pullPolicy: IfNotPresent
   # pullSecrets: []
   prepend: "true"
@@ -21,6 +23,10 @@ service:
 init:
   resources: {}
   image: {}
+    # registry:
+    # repository:
+    # name:
+    # tag:
     # pullPolicy: IfNotPresent
 
 metrics:

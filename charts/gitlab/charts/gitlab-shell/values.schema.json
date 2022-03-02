@@ -245,6 +245,10 @@
           "title": "Secrets to be used to pull image",
           "type": "array"
         },
+        "registry": {
+          "title": "Docker image registry",
+          "type": "string"
+        },
         "repository": {
           "title": "Docker image repository",
           "type": "string"

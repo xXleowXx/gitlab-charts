@@ -4,12 +4,16 @@
 image: {}
   # pullPolicy: IfNotPresent
   # pullSecrets: []
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee
+  # registry: registry.gitlab.com
+  # repository: gitlab-org/build/cng
+  # name: gitlab-webservice-ee
   # tag: master
 
 init:
   image: {}
+    # registry:
     # repository:
+    # name:
     # tag:
     # pullPolicy: IfNotPresent
   resources:
@@ -173,8 +177,10 @@ workhorse:
       memory: 100M
   # shutdownTimeout:
   image:
+    # registry: registry.gitlab.com
     # repository: gitlab-org/build/cng
     name: workhorse
+    # tag: master
   livenessProbe:
     initialDelaySeconds: 20
     periodSeconds: 60

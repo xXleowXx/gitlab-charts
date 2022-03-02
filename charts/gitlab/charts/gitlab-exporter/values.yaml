@@ -2,11 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 image:
+  # registry: registry.gitlab.com
   # repository: gitlab-org/build/cng
   name: gitlab-exporter
+  # tag: master
   # pullPolicy: IfNotPresent
   # pullSecrets: []
-  # tag: master
 
 service:
   name: gitlab-exporter
@@ -43,7 +44,9 @@ serviceLabels: {}
 
 init:
   image: {}
+    # registry:
     # repository:
+    # name:
     # tag:
   resources:
     requests:

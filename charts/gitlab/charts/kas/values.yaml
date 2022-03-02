@@ -17,7 +17,9 @@ global:
 
 init:
   image: {}
+    # registry:
     # repository:
+    # name:
     # tag:
   resources:
     requests:
@@ -40,6 +42,7 @@ hpa:
       stabilizationWindowSeconds: 300
 
 image:
+  # registry: registry.gitlab.com
   # repository: gitlab-org/build/cng
   name: gitlab-kas
   # tag: latest

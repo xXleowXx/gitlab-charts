@@ -1,12 +1,16 @@
 image: {}
   # pullPolicy: IfNotPresent
   # pullSecrets: []
-  # repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee
+  # registry: registry.gitlab.com
+  # repository: gitlab-org/build/cng
+  # name: gitlab-toolbox-ee
   # tag: master
 
 init:
   image: {}
+    # registry:
     # repository:
+    # name:
     # tag:
     # pullPolicy: IfNotPresent
   resources:

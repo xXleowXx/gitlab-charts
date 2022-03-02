@@ -2,12 +2,13 @@ certmanager-issuer:
   email: test@example.com
 
 global:
-  enabled: true
-  role: secondary
-  psql:
-    host: foo
-    password:
-      secret: bar
+  geo:
+    enabled: true
+    role: secondary
+    psql:
+      host: foo
+      password:
+        secret: bar
   pages:
     enabled: true
   kas:
@@ -19,13 +20,6 @@ global:
       enabled: true
       password:
         secret: foo
-  geo:
-    enabled: true
-    role: secondary
-    psql:
-      host: foo
-      password:
-        secret: bar
   psql:
     host: foo
     password:

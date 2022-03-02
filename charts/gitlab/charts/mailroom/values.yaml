@@ -1,4 +1,5 @@
 image:
+  # registry: registry.gitlab.com
   # repository: gitlab-org/build/cng
   name: gitlab-mailroom
   # tag: v0.9.1
@@ -9,7 +10,9 @@ enabled: true
 
 init:
   image: {}
+    # registry:
     # repository:
+    # name:
     # tag:
   resources:
     requests:
