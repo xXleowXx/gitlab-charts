@@ -650,8 +650,7 @@ global:
   kubectl:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
-      # tag: 1.16.15
-      tag: deps-5244820-b978f47
+      tag: 1.16.15
       # pullPolicy: IfNotPresent
       # pullSecrets: []
     securityContext:
