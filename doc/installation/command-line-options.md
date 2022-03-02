@@ -33,6 +33,8 @@ helm inspect values gitlab/gitlab
 | `global.imagePullPolicy`                       | DEPRECATED: Use `global.image.pullPolicy` instead                                           | `IfNotPresent`                                |
 | `global.image.pullPolicy`                      | Set default imagePullPolicy for all charts                                                  | _none_ (default behavior is `IfNotPresent`)   |
 | `global.image.pullSecrets`                     | Set default imagePullSecrets for all charts (use a list of `name` and value pairs)          | _none_                                        |
+| `global.image.registry`                        | Set default image registry for all charts                                                   | `registry.gitlab.com`                         |
+| `global.image.repository`                      | Set default image repository for all charts                                                 | `gitlab-org/build/cng`                        |
 | `global.minio.enabled`                         | MinIO enable flag                                                                           | `true`                                        |
 | `global.psql.host`                             | Global hostname of an external psql, overrides subcharts' psql configuration                | _Uses in-cluster non-production PostgreSQL_   |
 | `global.psql.password.key`                     | Key pointing to the psql password in the psql secret                                        | _Uses in-cluster non-production PostgreSQL_   |
@@ -293,7 +295,9 @@ GitLab external URL                                              |
 | `gitlab.gitaly.authToken.key`                                  | Key to Gitaly token in the secret                                    | `token`                                                          |
 | `gitlab.gitaly.authToken.secret`                               | Gitaly secret name                                                   | `{.Release.Name}-gitaly-secret`                                  |
 | `gitlab.gitaly.image.pullPolicy`                               | Gitaly image pull policy                                             |                                                                  |
-| `gitlab.gitaly.image.repository`                               | Gitaly image repository                                              | `registry.gitlab.com/gitlab-org/build/cng/gitaly`                |
+| `gitlab.gitaly.image.registry`                                 | Gitaly image registry                                                | `registry.gitlab.com`                                            |
+| `gitlab.gitaly.image.repository`                               | Gitaly image repository                                              | `gitlab-org/build/cng/gitaly`                                    |
+| `gitlab.gitaly.image.name`                                     | Gitaly image name                                                    | `gitlab-gitlay-{ce,ee}`                                          |
 | `gitlab.gitaly.image.tag`                                      | Gitaly image tag                                                     | `master`                                                         |
 | `gitlab.gitaly.persistence.accessMode`                         | Gitaly persistence access mode                                       | `ReadWriteOnce`                                                  |
 | `gitlab.gitaly.persistence.enabled`                            | Gitaly enable persistence flag                                       | true                                                             |
@@ -319,7 +323,9 @@ GitLab external URL                                              |
 | `gitlab.gitlab-shell.authToken.secret`                         | Shell auth secret                                                    | `{Release.Name}-gitlab-shell-secret`                             |
 | `gitlab.gitlab-shell.enabled`                                  | Shell enable flag                                                    | true                                                             |
 | `gitlab.gitlab-shell.image.pullPolicy`                         | Shell image pull policy                                              |                                                                  |
-| `gitlab.gitlab-shell.image.repository`                         | Shell image repository                                               | `registry.gitlab.com/gitlab-org/build/cng/gitlab-shell`          |
+| `gitlab.gitlab-shell.image.registry`                           | Shell image registry                                                 | `registry.gitlab.com`                                            |
+| `gitlab.gitlab-shell.image.repository`                         | Shell image repository                                               | `gitlab-org/build/cng`                                           |
+| `gitlab.gitlab-shell.image.name`                               | Shell image name                                                     | `gitlab-shell`                                                   |
 | `gitlab.gitlab-shell.image.tag`                                | Shell image tag                                                      | `master`                                                         |
 | `gitlab.gitlab-shell.replicaCount`                             | Shell replicas                                                       | `1`                                                              |
 | `gitlab.gitlab-shell.securityContext.fsGroup`                  | Group ID under which the pod should be started                       | `1000`                                                           |
@@ -334,7 +340,9 @@ GitLab external URL                                              |
 | `gitlab.migrations.bootsnap.enabled`                           | Migrations Bootsnap enable flag                                      | true                                                             |
 | `gitlab.migrations.enabled`                                    | Migrations enable flag                                               | true                                                             |
 | `gitlab.migrations.image.pullPolicy`                           | Migrations pull policy                                               |                                                                  |
-| `gitlab.migrations.image.repository`                           | Migrations image repository                                          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee`     |
+| `gitlab.migrations.image.registry`                             | Migrations image registry                                            | `registry.gitlab.com`                                            |
+| `gitlab.migrations.image.repository`                           | Migrations image repository                                          | `gitlab-org/build/cng`                                           |
+| `gitlab.migrations.image.name`                                 | Migrations image name                                                | `gitlab-toolbox-{ce,ee}`                                         |
 | `gitlab.migrations.image.tag`                                  | Migrations image tag                                                 | `master`                                                         |
 | `gitlab.migrations.psql.password.key`                          | key to psql password in psql secret                                  | `psql-password`                                                  |
 | `gitlab.migrations.psql.password.secret`                       | psql secret                                                          | `gitlab-postgres`                                                |
@@ -347,7 +355,9 @@ GitLab external URL                                              |
 | `gitlab.sidekiq.gitaly.authToken.secret`                       | Gitaly secret                                                        | `{.Release.Name}-gitaly-secret`                                  |
 | `gitlab.sidekiq.gitaly.serviceName`                            | Gitaly service name                                                  | `gitaly`                                                         |
 | `gitlab.sidekiq.image.pullPolicy`                              | Sidekiq image pull policy                                            |                                                                  |
-| `gitlab.sidekiq.image.repository`                              | Sidekiq image repository                                             | `registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee`     |
+| `gitlab.sidekiq.image.registry`                                | Sidekiq image registry                                               | `registry.gitlab.com`                                            |
+| `gitlab.sidekiq.image.repository`                              | Sidekiq image repository                                             | `gitlab-org/build/cng/gitlab-sidekiq-ee`                         |
+| `gitlab.sidekiq.image.name`                                    | Sidekiq image name                                                   | `gitlab-sidekiq-{ce,ee}`                                         |
 | `gitlab.sidekiq.image.tag`                                     | Sidekiq image tag                                                    | `master`                                                         |
 | `gitlab.sidekiq.psql.password.key`                             | key to psql password in psql secret                                  | `psql-password`                                                  |
 | `gitlab.sidekiq.psql.password.secret`                          | psql password secret                                                 | `gitlab-postgres`                                                |
@@ -380,9 +390,13 @@ GitLab external URL                                              |
 | `gitlab.toolbox.bootsnap.enabled`                          | Enable Bootsnap cache in Toolbox                                     | true                                                             |
 | `gitlab.toolbox.enabled`                                   | Toolbox enabled flag                                                 | true                                                             |
 | `gitlab.toolbox.image.pullPolicy`                          | Toolbox image pull policy                                            | `IfNotPresent`                                                   |
-| `gitlab.toolbox.image.repository`                          | Toolbox image repository                                             | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee` |
+| `gitlab.toolbox.image.registry`                            | Toolbox image registry                                               | `registry.gitlab.com`                                            |
+| `gitlab.toolbox.image.repository`                          | Toolbox image repository                                             | `gitlab-org/build/cng`                                           |
+| `gitlab.toolbox.image.name`                                | Toolbox image name                                                   | `gitlab-toolbox-{ce,ee}`                                         |
 | `gitlab.toolbox.image.tag`                                 | Toolbox image tag                                                    | `master`                                                         |
+| `gitlab.toolbox.init.image.registry`                       | Toolbox init image registry                                          |                                                                  |
 | `gitlab.toolbox.init.image.repository`                     | Toolbox init image repository                                        |                                                                  |
+| `gitlab.toolbox.init.image.name`                           | Toolbox init image name                                              |                                                                  |
 | `gitlab.toolbox.init.image.tag`                            | Toolbox init image tag                                               |                                                                  |
 | `gitlab.toolbox.init.resources.requests.cpu`               | Toolbox init minimum needed CPU                                      | `50m`                                                            |
 | `gitlab.toolbox.persistence.accessMode`                    | Toolbox persistence access mode                                      | `ReadWriteOnce`                                                  |
@@ -403,7 +417,9 @@ GitLab external URL                                              |
 | `gitlab.webservice.gitaly.authToken.secret`                    | Gitaly secret name                                                   | `{.Release.Name}-gitaly-secret`                                  |
 | `gitlab.webservice.gitaly.serviceName`                         | Gitaly service name                                                  | `gitaly`                                                         |
 | `gitlab.webservice.image.pullPolicy`                           | webservice image pull policy                                         |                                                                  |
-| `gitlab.webservice.image.repository`                           | webservice image repository                                          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee`  |
+| `gitlab.webservice.image.registry`                             | webservice image registry                                            | `registry.gitlab.com`                                            |
+| `gitlab.webservice.image.repository`                           | webservice image repository                                          | `gitlab-org/build/cng`                                           |
+| `gitlab.webservice.image.name`                                 | webservice image name                                                | `gitlab-webservice-{ce,ee}`                                      |
 | `gitlab.webservice.image.tag`                                  | webservice image tag                                                 | `master`                                                         |
 | `gitlab.webservice.psql.password.key`                          | Key to psql password in psql secret                                  | `psql-password`                                                  |
 | `gitlab.webservice.psql.password.secret`                       | psql secret name                                                     | `gitlab-postgres`                                                |

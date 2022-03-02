@@ -30,7 +30,7 @@ for more information on how the global variables work.
 - [Webservice](#configure-webservice)
 - [Custom Certificate Authorities](#custom-certificate-authorities)
 - [Application Resource](#application-resource)
-- [Busybox image](#busybox-image)
+- [Images](#images)
 - [Service Accounts](#service-accounts)
 - [Annotations](#annotations)
 - [Tracing](#tracing)
@@ -1844,22 +1844,50 @@ certmanager:
   install: false
 ```
 
-## Busybox image
+## Images
 
-By default, GitLab Helm charts use `busybox:latest` for booting up various
-initContainers. This is controlled by the following settings
+By default, GitLab Helm charts use:
+
+- `registry.gitlab.com` for the image registry
+- `gitlab-org/build/cng` for the image repository (`gitlab-org/cloud-native/mirror/images` is used for our [mirrored images](https://gitlab.com/gitlab-org/cloud-native/mirror/images/-/blob/main/mirrored-images))
+- `IfNotPresent` for the image pull policy
+- `[]` for the image pull secrets
+
+These values can be controlled globally by the following settings:
 
 ```yaml
 global:
+  image:
+    registry: custom.registry.com
+    repository: custom-repository
+    pullPolicy: Always
+    pullSecrets:
+    - name: custom-pull-secret
   busybox:
     image:
       repository: busybox
       tag: latest
+      pullPolicy: Always
 ```
 
-Many charts also provide `init.image.repository` and `init.image.tag` settings
-locally that can be used to override this global setting for that specific
-chart.
+GitLab Charts can also be configured locally, which overrides the global settings.
+For example, to configure specific image settings for Webservice:
+
+```yaml
+gitlab:
+  webservice:
+    image:
+      registry: webservice.registry.com
+      repository: webservice-repository
+      name: custom-webservice
+      tag: x.y.z
+    init:
+      image:
+        registry: webservice-init.registry.com
+        repository: webservice-init-repository
+        name: custom-init-webservice
+        tag: x.y.z
+```
 
 ## Service Accounts
 
