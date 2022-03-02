@@ -4,7 +4,6 @@ global:
   image:
     registry: custom.registry.com
     repository: custom-repository
-    tag: 1.2.3-example
 
 # --- Charts from requirements.yaml ---
 
