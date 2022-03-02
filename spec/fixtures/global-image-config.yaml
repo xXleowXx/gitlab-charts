@@ -9,15 +9,41 @@ global:
       host: foo
       password:
         secret: bar
+  pages:
+    enabled: true
+  kas:
+    enabled: true
+  praefect:
+    enabled: true
+  appConfig:
+    incomingEmail:
+      enabled: true
+      password:
+        secret: foo
   psql:
     host: foo
     password:
       secret: bar
-
   image:
+    registry: global.registry.com
+    repository: global-repo
     pullPolicy: pp-global
     pullSecrets:
     - name: ps-global
   busybox:
     image:
+      registry: global.busybox.registry.com
+      repository: global-busybox-repo
       pullPolicy: pp-busybox
+# Need to set NGINX-Ingress specifically because
+# it already has locally-set image configuration
+# in its values.yaml file.
+nginx-ingress:
+  controller:
+    image:
+      registry: global.registry.com
+      repository: global-repo
+  defaultBackend:
+    image:
+      registry: global.registry.com
+      repository: global-repo

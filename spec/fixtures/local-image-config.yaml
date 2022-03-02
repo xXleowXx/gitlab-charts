@@ -2,6 +2,23 @@ certmanager-issuer:
   email: test@example.com
 
 global:
+  enabled: true
+  role: secondary
+  psql:
+    host: foo
+    password:
+      secret: bar
+  pages:
+    enabled: true
+  kas:
+    enabled: true
+  praefect:
+    enabled: true
+  appConfig:
+    incomingEmail:
+      enabled: true
+      password:
+        secret: foo
   geo:
     enabled: true
     role: secondary
@@ -21,16 +38,22 @@ global:
 
   kubectl:
     image:
+      registry: kubectl.registry.com
+      repository: kubectl-repo
       pullPolicy: pp-kubectl
       pullSecrets:
       - name: ps-kubectl
   certificates:
     image:
+      registry: certificates.registry.com
+      repository: certificates-repo
       pullPolicy: pp-certificates
       pullSecrets:
       - name: ps-certificates
   busybox:
     image:
+      registry: busybox.registry.com
+      repository: busybox-repo
       pullPolicy: pp-busybox
       pullSecrets:
       - name: ps-busybox
@@ -38,6 +61,8 @@ global:
 gitlab:
   geo-logcursor:
     image:
+      registry: geo-logcursor.registry.com
+      repository: geo-logcursor-repo
       pullPolicy: pp-geo-logcursor
       pullSecrets:
       - name: ps-geo-logcursor
@@ -46,6 +71,8 @@ gitlab:
         pullPolicy: pp-geo-logcursor-init
   gitaly:
     image:
+      registry: gitaly.registry.com
+      repository: gitaly-repo
       pullPolicy: pp-gitaly
       pullSecrets:
       - name: ps-gitaly
@@ -54,6 +81,8 @@ gitlab:
         pullPolicy: pp-gitaly-init
   gitlab-exporter:
     image:
+      registry: gitlab-exporter.registry.com
+      repository: gitlab-exporter-repo
       pullPolicy: pp-gitlab-exporter
       pullSecrets:
       - name: ps-gitlab-exporter
@@ -62,6 +91,8 @@ gitlab:
         pullPolicy: pp-gitlab-exporter-init
   gitlab-pages:
     image:
+      registry: gitlab-pages.registry.com
+      repository: gitlab-pages-repo
       pullPolicy: pp-gitlab-pages
       pullSecrets:
       - name: ps-gitlab-pages
@@ -70,6 +101,8 @@ gitlab:
         pullPolicy: pp-gitlab-pages-init
   gitlab-shell:
     image:
+      registry: gitlab-shell.registry.com
+      repository: gitlab-shell-repo
       pullPolicy: Never
       pullSecrets:
       - name: ps-gitlab-shell
@@ -81,8 +114,12 @@ gitlab:
       pullPolicy: pp-kas
       pullSecrets:
       - name: ps-kas
+      registry: kas.registry.com
+      repository: kas-repo
   mailroom:
     image:
+      registry: mailroom.registry.com
+      repository: mailroom-repo
       pullPolicy: pp-mailroom
       pullSecrets:
       - name: ps-mailroom
@@ -91,14 +128,22 @@ gitlab:
         pullPolicy: pp-mailroom-init
   migrations:
     image:
+      registry: migrations.registry.com
+      repository: migrations-repo
       pullPolicy: pp-migrations
       pullSecrets:
       - name: ps-migrations
     init:
       image:
         pullPolicy: pp-migrations-init
+  praefect:
+    image:
+      registry: praefect.registry.com
+      repository: praefect-repo
   sidekiq:
     image:
+      registry: sidekiq.registry.com
+      repository: sidekiq-repo
       pullPolicy: pp-sidekiq
       pullSecrets:
       - name: ps-sidekiq
@@ -107,6 +152,8 @@ gitlab:
         pullPolicy: pp-sidekiq-init
   toolbox:
     image:
+      registry: toolbox.registry.com
+      repository: toolbox-repo
       pullPolicy: pp-toolbox
       pullSecrets:
       - name: ps-toolbox
@@ -115,19 +162,29 @@ gitlab:
         pullPolicy: pp-toolbox-init
   webservice:
     image:
+      registry: webservice.registry.com
+      repository: webservice-repo
       pullPolicy: pp-webservice
       pullSecrets:
       - name: ps-webservice
+    workhorse:
+      image:
+        registry: workhorse.registry.com
+        repository: workhorse-repo
     init:
       image:
         pullPolicy: pp-webservice-init
 upgradeCheck:
   image:
+    registry: upgradecheck.registry.com
+    repository: upgradecheck-repo
     pullPolicy: pp-gitlab
     pullSecrets:
     - name: ps-gitlab
 registry:
   image:
+    registry: registry.registry.com
+    repository: registry-repo
     pullPolicy: pp-registry
     pullSecrets:
     - name: ps-registry
@@ -141,3 +198,13 @@ minio:
   init:
     image:
       pullPolicy: pp-minio-init
+nginx-ingress:
+  controller:
+    kind: Both
+    image:
+      registry: nginx-ingress.registry.com
+      repository: nginx-ingress-repo
+  defaultBackend:
+    image:
+      registry: nginx-ingress.registry.com
+      repository: nginx-ingress-repo
