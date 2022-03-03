@@ -13,7 +13,18 @@ function gen_random(){
 
 # Args: yaml file, search path
 function fetch_rails_value(){
-  local value=$(yq read $1 "${2}")
+  # https://github.com/mikefarah/yq#notice-for-v4x-versions-prior-to-4181
+  syntax_change_version=4.18.1
+  current_version=$(yq --version | awk '{print $NF}')
+
+  if [ $(printf "%s\n" "$syntax_change_version" "$current_version" | sort -V -r | head -1) = "$current_version" ]; then
+    # Use new syntax
+    local value=$(yq ".${2}" $1)
+  else
+    # Use old syntax
+    local value=$(yq read $1 "${2}")
+  fi
+
   # Don't return null values
   if [ "${value}" != "null" ]; then echo "${value}"; fi
 }
