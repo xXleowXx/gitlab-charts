@@ -12,8 +12,8 @@ spec:
    {{- end }}
    {{- if .Values.metrics.enabled }}
     - port: {{ default .Values.metrics.port .Values.metrics.metricsPort }}
-      name: metrics
-      targetPort: metrics
+      name: http-metrics
+      targetPort: http-metrics
    {{- end }}
   selector:
     app: {{ template "name" . }}

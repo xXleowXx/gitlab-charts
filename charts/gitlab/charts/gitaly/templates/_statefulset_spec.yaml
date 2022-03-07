@@ -127,7 +127,7 @@ spec:
               name: grcp-gitaly
            {{- if .Values.metrics.enabled }}
             - containerPort: {{ default $.Values.metrics.port $.Values.metrics.metricsPort }}
-              name: metrics
+              name: http-metrics
            {{- end }}
           env:
             - name: CONFIG_TEMPLATE_DIRECTORY

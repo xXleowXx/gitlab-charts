@@ -105,7 +105,7 @@ spec:
           ports:
           {{- if .Values.metrics.enabled }}
             - containerPort: {{ .Values.metrics.port }}
-              name: metrics
+              name: http-metrics
           {{- end }}
             - containerPort: {{ .Values.service.internalPort }}
               name: ssh

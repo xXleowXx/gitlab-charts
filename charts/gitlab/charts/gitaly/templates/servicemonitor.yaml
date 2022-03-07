@@ -23,7 +23,7 @@ spec:
       storage: {{ .storage.name }}
     {{- end }}
   endpoints:
-    - port: metrics
+    - port: http-metrics
       path: {{ .Values.metrics.path }}
     {{- with .Values.metrics.serviceMonitor.endpointConfig }}
       {{- toYaml . | nindent 6 }}

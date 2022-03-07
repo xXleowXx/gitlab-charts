@@ -27,7 +27,7 @@ spec:
   - port: {{ .Values.debug.addr.port }}
     targetPort: debug
     protocol: TCP
-    name: {{ .Values.service.name }}-prometheus
+    name: http-metrics
   {{- end }}
   selector:
     app: {{ template "name" . }}

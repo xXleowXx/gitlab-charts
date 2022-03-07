@@ -219,7 +219,7 @@ spec:
         {{- if $metricsEnabled }}
           ports:
           - containerPort: {{ $metricsPort }}
-            name: metrics
+            name: http-metrics
         {{- end }}
           volumeMounts:
           {{- tpl (default "" .extraVolumeMounts) $ | nindent 10 }}

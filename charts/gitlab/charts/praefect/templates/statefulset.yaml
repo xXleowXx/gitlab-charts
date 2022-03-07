@@ -106,7 +106,7 @@ spec:
         {{- end }}
         {{- if .Values.metrics.enabled }}
           - containerPort: {{ .Values.metrics.port }}
-            name: metrics
+            name: http-metrics
         {{- end }}
         env:
         - name: CONFIG_TEMPLATE_DIRECTORY

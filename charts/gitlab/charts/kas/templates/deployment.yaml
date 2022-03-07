@@ -95,7 +95,7 @@ spec:
               name: {{ template "name" . }}-private-api
           {{- if .Values.metrics.enabled }}
             - containerPort: {{ .Values.metrics.port }}
-              name: {{ template "name" . }}-metrics
+              name: http-metrics
           {{- end }}
           readinessProbe:
             tcpSocket:

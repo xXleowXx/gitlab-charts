@@ -124,7 +124,7 @@ spec:
           {{- if .Values.metrics.enabled }}
           ports:
             - containerPort: {{ .Values.metrics.port | int }}
-              name: metrics
+              name: http-metrics
           {{- end }}
           # readinessProbe should always hit port used by `listen-http`, as k8s won't use TLS or ProxyV2
           {{- $externalHttp := $.Values.global.pages.externalHttp }}

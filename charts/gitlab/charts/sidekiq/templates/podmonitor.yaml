@@ -19,9 +19,9 @@ spec:
     matchLabels:
       {{- include "gitlab.selectorLabels" . | nindent 6 }}
   podMetricsEndpoints:
-    - port: metrics
+    - port: http-metrics
       path: {{ .Values.metrics.path }}
-    {{- with .Values.podMonitor.endpointConfig }}
+    {{- with .Values.metrics.podMonitor.endpointConfig }}
       {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end -}}

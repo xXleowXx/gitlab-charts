@@ -108,7 +108,7 @@ spec:
             {{- include "gitlab.extraEnv" . | nindent 12 }}
           ports:
           - containerPort: {{ .Values.service.internalPort }}
-            name: gitlab-exporter
+            name: http-metrics
           volumeMounts:
             - name: gitlab-exporter-config
               mountPath: /var/opt/gitlab-exporter/templates/gitlab-exporter.yml.erb

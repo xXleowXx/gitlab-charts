@@ -20,7 +20,7 @@ spec:
       app: {{ template "name" . }}
       release: {{ .Release.Name }}
   endpoints:
-    - port: {{ .Values.service.name }}-prometheus
+    - port: http-metrics
       path: {{ default .Values.metrics.path .Values.debug.prometheus.path }}
     {{- with .Values.metrics.serviceMonitor.endpointConfig }}
       {{- toYaml . | nindent 6 }}

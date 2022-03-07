@@ -181,7 +181,7 @@ spec:
               name: http-webservice
           {{- if or $.Values.monitoring.exporter.enabled (and $.Values.metrics.enabled (eq $.Values.metrics.port $.Values.monitoring.exporter.port)) }}
             - containerPort: {{ $.Values.monitoring.exporter.port }}
-              name: http-exporter
+              name: http-exporter-ws
           {{- end }}
           env:
             - name: GITLAB_WEBSERVER
@@ -296,7 +296,7 @@ spec:
               name: http-workhorse
           {{- if or $.Values.workhorse.monitoring.exporter.enabled $.Values.workhorse.metrics.enabled }}
             - containerPort: {{ $.Values.workhorse.monitoring.exporter.port }}
-              name: http-workhorse-exporter
+              name: http-exporter-wh
           {{- end }}
           env:
             - name: TMPDIR
@@ -311,9 +311,9 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
-            {{- if or $.Values.workhorse.monitoring.exporter.enabled $.Values.workhorse.metrics.enabled }}
+            {{- if or .workhorse.monitoring.exporter.enabled .workhorse.metrics.enabled }}
             - name: GITLAB_WORKHORSE_PROM_LISTEN_ADDR
-              value: "0.0.0.0:{{ $.Values.workhorse.monitoring.exporter.port }}"
+              value: "0.0.0.0:{{ .workhorse.monitoring.exporter.port }}"
             {{- end }}
             {{- if .workhorse.sentryDSN }}
             - name: GITLAB_WORKHORSE_SENTRY_DSN
