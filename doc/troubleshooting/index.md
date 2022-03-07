@@ -467,13 +467,12 @@ kubectl logs gitlab-webservice-default-pod -c certificates
 
 ### Check on the Rails console
 
-Use the task runner pod to verify if Rails trusts the certificates you supplied.
+Use the toolbox pod to verify if Rails trusts the certificates you supplied.
 
 1. Start a rails console:
 
    ```shell
-   kubectl get pods | grep task-runner
-   kubectl exec -it <task-runner-pod-name> -- bash
+   kubectl exec -ti $(kubectl get pod -n <namespace> -lapp=toolbox -o jsonpath='{.items[0].metadata.name}') -n <namespace> -- bash
    /srv/gitlab/bin/rails console
    ```
 
