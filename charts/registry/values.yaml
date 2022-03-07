@@ -340,6 +340,7 @@ database:
 migration:
   enabled: false
   disablemirrorfs: false
+  testslowimport: 0
   # rootdirectory:
   # tagconcurrency: 1
   # maxconcurrentimports: 1
