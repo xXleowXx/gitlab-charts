@@ -22,7 +22,7 @@ migration:
 {{-   if .Values.migration.maxconcurrentimports }}
   maxconcurrentimports: {{ .Values.migration.maxconcurrentimports }}
 {{-   end }}
-{{- if and .Values.migration.enabled }}
+{{- if and .Values.migration.enabled .Values.migration.importnotification.enabled }}
   importnotification:
     enabled: true
     {{- if .Values.migration.importnotification.url }}
@@ -30,7 +30,7 @@ migration:
     {{- else }}
     url:  "{{ template "gitlab.gitlab.url" . }}/api/v4/internal/registry/repositories/{path}/migration/status"
     {{- end }}
-    timeout: {{ .Values.migration.importnotification.timeout | default "5s" }}
+    timeout: {{ .Values.migration.importnotification.timeout }}
     secret: "NOTIFICATION_SECRET"
 {{- end -}}
 {{- end -}}

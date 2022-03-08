@@ -347,11 +347,8 @@ migration:
   # preimporttimeout: 1h
   importnotification:
     enabled: false
-  #   url: 'https://gitlab.example.com/api/v4/internal/registry/repositories/{path}/migration/status'
-  #   timeout: 30s
-  #   secret: {}
-  #     secret: registry-authorization-header
-  #     key: password
+    timeout: 5s
+    # url: 'https://gitlab.example.com/api/v4/internal/registry/repositories/{path}/migration/status'
 
 # Disable online garbage collection by default.
 # NOTE: This is an experimental feature and must not be used in production.

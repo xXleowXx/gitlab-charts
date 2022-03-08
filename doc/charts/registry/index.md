@@ -841,7 +841,7 @@ migration:
   importnotification:
     enabled: true
     url: 'https://example.com/notification/{path}/status'
-    timeout: 10s
+    timeout: 5s
     secret:
         secret: gitlab-registry-notification
         key: secret
