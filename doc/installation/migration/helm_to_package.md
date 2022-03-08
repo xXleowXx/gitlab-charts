@@ -19,8 +19,12 @@ To migrate from a Helm installation to a Linux package (Omnibus) installation:
    and make sure to [back up the secrets](../../backup-restore/backup.md#backup-the-secrets)
    as well.
 1. Back up `/etc/gitlab/gitlab-secrets.json` on your Omnibus GitLab instance.
-1. Use the `secrets.yaml` file from your GitLab Helm chart instance to fill
-   `/etc/gitlab/gitlab-secrets.json` on the new Omnibus GitLab instance:
+1. Run the below command replacing `toolpox-pod-name` with the name of your toolbox pod or task-runner pod if you are using GitLab 14.4 or older:
+
+   ```shell
+   kubectl exec -ti <toolpox-pod-name> -- cat ./srv/gitlab/config/secrets.yml >> helm_chart_secrets.yaml
+   ```
+1. Use the `helm_chart_secrets.yaml` file to fill `/etc/gitlab/gitlab-secrets.json` on the new Omnibus GitLab instance:
     1. In `/etc/gitlab/gitlab-secrets.json`, replace all the secrets in the
        section `gitlab_rails` with the secrets from `secrets.yaml`:
        - Make sure that the values of `secret_key_base`, `db_key_base`, `otp_key_base`, and
