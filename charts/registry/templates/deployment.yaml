@@ -202,5 +202,8 @@ spec:
           {{-   include "gitlab.registry.database.password.projectedVolume" . | nindent 10 }}
           {{-   include "gitlab.registry.psql.ssl" . | nindent 10 }}
           {{- end -}}
+          {{- if .Values.migration.enabled -}}
+          {{- include "gitlab.registry.notificationSecret.mount" $ | nindent 10 -}}
+          {{- end -}}
       {{- include "gitlab.certificates.volumes" . | nindent 6 }}
 {{- end -}}
