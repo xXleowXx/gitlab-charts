@@ -69,3 +69,7 @@ helm install gitlab gitlab/gitlab
   --set global.psql.password.secret=gitlab-postgresql-password
   --set global.psql.password.key=postgres-password
 ```
+
+After configuring the empty external database with the GitLab Helm chart,
+[restart GitLab](https://docs.gitlab.com/ee/administration/restart_gitlab.html#helm-chart-installations) by deleting all pods.
+Otherwise, some pods may still refer to the old database.
