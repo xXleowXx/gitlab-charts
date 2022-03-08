@@ -181,7 +181,7 @@ spec:
               name: http-webservice
           {{- if or $.Values.monitoring.exporter.enabled (and $.Values.metrics.enabled (eq $.Values.metrics.port $.Values.monitoring.exporter.port)) }}
             - containerPort: {{ $.Values.monitoring.exporter.port }}
-              name: http-exporter-ws
+              name: http-metrics-ws
           {{- end }}
           env:
             - name: GITLAB_WEBSERVER
@@ -296,7 +296,7 @@ spec:
               name: http-workhorse
           {{- if or $.Values.workhorse.monitoring.exporter.enabled $.Values.workhorse.metrics.enabled }}
             - containerPort: {{ $.Values.workhorse.monitoring.exporter.port }}
-              name: http-exporter-wh
+              name: http-metrics-wh
           {{- end }}
           env:
             - name: TMPDIR

@@ -20,7 +20,7 @@ spec:
       app: {{ template "name" $ }}
       release: {{ $.Release.Name }}
   endpoints:
-    - port: http-exporter-ws
+    - port: http-metrics-ws
       path: {{ .Values.metrics.path }}
     {{- with .Values.metrics.serviceMonitor.endpointConfig }}
       {{- toYaml . | nindent 6 }}
