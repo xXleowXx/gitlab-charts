@@ -206,7 +206,7 @@ describe 'checkConfig registry' do
       )).merge(default_required_values)
     end
 
-    let(:error_output) { 'Enabling importnotification requires the URL not not to be empty' }
+    let(:error_output) { 'Enabling importnotification requires the URL to not be empty' }
 
     include_examples 'config validation',
                      success_description: 'when import notification is enabled, with url',
