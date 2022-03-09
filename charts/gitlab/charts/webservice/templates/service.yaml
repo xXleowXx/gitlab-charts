@@ -48,7 +48,7 @@ spec:
       name: http-workhorse
   {{- if or $.Values.monitoring.exporter.enabled (and $.Values.metrics.enabled (eq $.Values.metrics.port $.Values.monitoring.exporter.port)) }}
     - port: {{ $.Values.monitoring.exporter.port }}
-      targetPort: http-expometricsrter-ws
+      targetPort: http-metrics-ws
       protocol: TCP
       name: http-metrics-ws
   {{- end }}
