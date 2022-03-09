@@ -21,7 +21,7 @@ This proxy allows long-lived connections with the external component,
 [`agentk`](https://docs.gitlab.com/ee/user/clusters/agent/install/index.html).
 `agentk` is the Kubernetes cluster-side agent counterpart.
 
-The route to access the service depends on your [Ingress configuration](#ingress).
+The route to access the service depends on your [Ingress configuration](#specify-an-ingress).
 
 For more information, see the
 [GitLab agent for Kubernetes architecture](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/architecture.md).
