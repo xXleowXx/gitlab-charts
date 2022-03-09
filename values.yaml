@@ -640,7 +640,7 @@ global:
   certificates:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/alpine-certificates
-      tag: 20191127-r2
+      tag: 20191127-r2@sha256:4678ac2a66f126b20362faddd333be907d4eded47a7fb8ea2653c1522ddbed49
       # pullPolicy: IfNotPresent
       # pullSecrets: []
     customCAs: []
@@ -651,7 +651,7 @@ global:
   kubectl:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
-      tag: 1.16.15
+      tag: 1.16.15@sha256:f0557c2a62ab4ee3dcfbd13baa8bafc8674ceaa86cd92344aa1f5d2df02bb2c0
       # pullPolicy: IfNotPresent
       # pullSecrets: []
     securityContext:
@@ -964,7 +964,7 @@ shared-secrets:
       # pullPolicy: IfNotPresent
       # pullSecrets: []
       repository: registry.gitlab.com/gitlab-org/build/cng/cfssl-self-sign
-      tag: 1.2
+      tag: 1.6.1@sha256:34714b9e5809c1a35c0530da70fa69d7caf04150e7168212611905d97902168e
     keyAlgorithm: "rsa"
     keySize: "4096"
     expiry: "3650d"
