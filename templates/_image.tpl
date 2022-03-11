@@ -50,7 +50,7 @@ This is needed since we can't rely on the chart name to calculate the image path
 {{- define "image.name" -}}
 {{-   $defaultName := printf "gitlab-%s-%s" .context.Chart.Name .context.Values.global.edition -}}
 {{-   if .local.name -}}
-{{-     if or (eq .local.name "toolbox") (eq .local.name "workhorse") -}}
+{{-     if has .local.name (list "toolbox" "workhorse") -}}
 {{-       printf "gitlab-%s-%s" .local.name .context.Values.global.edition -}}
 {{-     else -}}
 {{-       .local.name -}}
