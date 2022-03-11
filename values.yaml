@@ -27,11 +27,11 @@ global:
   common:
     labels: {}
 
-  image: {}
+  image:
     # pullPolicy: IfNotPresent
     # pullSecrets: []
-    # registry: registry.gitlab.com
-    # repository: gitlab-org/build/cng
+    registry: registry.gitlab.com
+    repository: gitlab-org/build/cng
 
   ## Supplemental Pod labels. Will not be used for selectors.
   pod:
@@ -687,7 +687,7 @@ global:
       fsGroup: 65534
   busybox:
     image:
-      # registry: registry.gitlab.com
+      registry: registry.gitlab.com
       repository: gitlab-org/cloud-native/mirror/images
       name: busybox
       tag: latest

@@ -28,14 +28,14 @@ Usage:
 Defines the registry for a given image.
 */}}
 {{- define "image.registry" -}}
-{{-   coalesce .local.registry .global.registry .context.Values.global.image.registry "registry.gitlab.com" -}}
+{{-   coalesce .local.registry .global.registry -}}
 {{- end -}}
 
 {{/*
 Defines the repository for a given image.
 */}}
 {{- define "image.repository" -}}
-{{-  coalesce .local.repository .global.repository .context.Values.global.image.repository "gitlab-org/build/cng" -}}
+{{-  coalesce .local.repository .global.repository -}}
 {{- end -}}
 
 {{/*
