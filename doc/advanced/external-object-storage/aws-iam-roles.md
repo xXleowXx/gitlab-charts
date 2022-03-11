@@ -89,6 +89,44 @@ this Helm chart in one of two ways:
 1. Chart-generated ServiceAccounts with annotations defined. We allow for the configuration
    of annotations on ServiceAccounts both globally and on a per-chart basis.
 
+The specific annotation needed to use IAM roles for ServiceAccounts in EKS clusters is `eks.amazonaws.com/role-arn: arn:aws:iam::<ACCOUNT_ID>:role/<IAM_ROLE_NAME>`.
+
+#### Enable IAM roles for Kubernetes ServiceAccount resources
+
+To use IAM roles for ServiceAccounts, an IAM OIDC provider must exist for your cluster. After you 
+[create an IAM OIDC provider for your EKS cluster](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html), 
+you can create an IAM role to associate to the ServiceAccount of the deployment.
+
+1. On the **Create Role** window, under **Select type of trusted entity**, select **Web Identity**.
+1. On the **Trusted Relationships tab** of the role:
+
+   - The **Trusted entities** section must have the format:
+     `arn:aws:iam::<ACCOUNT_ID>:oidc-provider/oidc.eks.<AWS_REGION>.amazonaws.com/id/<OIDC_ID>`.
+     The **OIDC ID** can be found on EKS cluster’s **Configuration** tab.
+
+   - The **Condition** section must have the ServiceAccount
+     name regardless of it being created manually or by the Helm chart:
+
+     | Condition         | Key      | Value |
+     |-------------------|----------|-------|
+     | `StringEquals`    |`oidc.eks.<AWS_REGION>.amazonaws.com/id/<OIDC_ID>:sub` | `system:serviceaccount:<GITLAB_DEPLOYMENT_NAMESPACE>:<SERVICE_ACCOUNT_NAME>` |
+
+To enable access to the S3 bucket, IAM role's policy must have below permissions:
+{
+    "Sid": "VisualEditor2",
+    "Effect": "Allow",
+    "Action": [
+        "s3:GetObjectVersion",
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+    ],
+    "Resource": [
+        "arn:aws:s3:::<BUCKET_NAME>/*",
+        "arn:aws:s3:::<BUCKET_NAME>"
+    ]
+}
+
 WARNING:
 Using the `backup-utility` as specified in the [backup documentation](../../backup-restore/backup.md)
 does not properly copy the backup file to the S3 bucket. The `backup-utility` uses
