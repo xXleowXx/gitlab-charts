@@ -27,7 +27,7 @@ spec:
       {{- include "image.pullSecrets" $imageCfg | indent 6}}
       containers:
         - name: create-issuer
-          image: {{ include "image.fullpath" $imageCfg }}
+          image: {{ include "image.fullPath" $imageCfg }}
           command: ['/bin/bash', '/scripts/create-issuer', '/scripts/issuer.yml']
           {{- include "image.pullPolicy" $imageCfg | indent 10 }}
           volumeMounts:

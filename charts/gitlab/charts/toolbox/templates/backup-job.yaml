@@ -51,7 +51,7 @@ spec:
             {{- include "gitlab.certificates.initContainer" . | nindent 12 }}
             - name: configure
               command: ['sh', '/config/configure']
-              image: {{ include "image.fullpath" $initImageCfg }}
+              image: {{ include "image.fullPath" $initImageCfg }}
               {{- include "image.pullPolicy" $initImageCfg | indent 14 }}
               env:
                 {{- include "gitlab.extraEnv" $ | nindent 16 }}
@@ -82,7 +82,7 @@ spec:
                 {{- else if eq .Values.backups.objectStorage.backend "gcs" }}
                 - sh /var/opt/gitlab/templates/configure-gsutil && backup-utility {{ .Values.backups.cron.extraArgs }}
                 {{- end }}
-              image: {{ include "image.fullpath" $imageCfg }}
+              image: {{ include "image.fullPath" $imageCfg }}
               {{- include "image.pullPolicy" $imageCfg | indent 14 }}
               env:
                 {{- include "gitlab.extraEnv" $ | nindent 16 }}

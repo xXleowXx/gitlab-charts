@@ -7,7 +7,7 @@
 {{- $releaseName := .Release.Name -}}
 {{- $releaseService := .Release.Service -}}
 {{- $fullname := printf "%s-%s" $releaseName $name | trunc 63 | trimSuffix "-" -}}
-{{- $image := include "image.fullpath" $imageCfg -}}
+{{- $image := include "image.fullPath" $imageCfg -}}
 {{- $concurrency := .Values.concurrency -}}
 {{- $timeout := .Values.timeout -}}
 {{- $resources := .Values.resources -}}
@@ -116,7 +116,7 @@ spec:
         {{- include "gitlab.certificates.initContainer" $ | nindent 8 }}
         - name: configure
           command: ['sh', '/config/configure']
-          image: {{ include "image.fullpath" $initImageCfg }}
+          image: {{ include "image.fullPath" $initImageCfg }}
           {{- include "image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" $ | nindent 10 }}

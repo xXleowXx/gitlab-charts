@@ -70,7 +70,7 @@ spec:
         {{- include "gitlab.certificates.initContainer" $ | nindent 8 }}
         - name: configure
           command: ['sh', '/config/configure']
-          image: {{ include "image.fullpath" $initImageCfg }}
+          image: {{ include "image.fullPath" $initImageCfg }}
           {{- include "image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" $ | nindent 10 }}
@@ -98,7 +98,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" . | nindent 6 }}
       - name: {{ $.Chart.Name }}
-        image: {{ include "image.fullpath" $imageCfg }}
+        image: {{ include "image.fullPath" $imageCfg }}
         {{- include "image.pullPolicy" $imageCfg | indent 8 }}
         ports:
           - containerPort: {{ include "gitlab.praefect.internalPort" $ }}

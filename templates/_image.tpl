@@ -85,7 +85,7 @@ Return the image digest to use.
 {{/*
 Creates the full image path for use in manifests.
 */}}
-{{- define "image.fullpath" -}}
+{{- define "image.fullPath" -}}
 {{-   $registry := include "image.registry" . -}}
 {{-   $repository := include "image.repository" . -}}
 {{-   $name := include "image.name" . -}}

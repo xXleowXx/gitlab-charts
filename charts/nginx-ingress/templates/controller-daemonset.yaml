@@ -70,7 +70,7 @@ spec:
     {{- end }}
       containers:
         - name: {{ .Values.controller.containerName }}
-          image: {{ include "image.fullpath" $imageCfg }}
+          image: {{ include "image.fullPath" $imageCfg }}
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
         {{- if .Values.controller.lifecycle }}
           lifecycle: {{ toYaml .Values.controller.lifecycle | nindent 12 }}
