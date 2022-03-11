@@ -30,6 +30,8 @@ global:
   image: {}
     # pullPolicy: IfNotPresent
     # pullSecrets: []
+    # registry: registry.gitlab.com
+    # repository: gitlab-org/build/cng
 
   ## Supplemental Pod labels. Will not be used for selectors.
   pod:
