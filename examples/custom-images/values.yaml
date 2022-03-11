@@ -25,17 +25,9 @@ gitlab-runner:
 minio:
   image: custom-repository
   imageTag: custom-tag
-  init: *custom
   minioMc:
     image: custom-repository
     tag: custom-tag
-
-nginx-ingress:
-  controller: *custom
-
-registry:
-    <<: *custom
-    init: *custom
 
 postgresql:
   image:
@@ -62,8 +54,6 @@ redis:
       registry: custom-registry
       repository: custom-image
       tag: custom-tag
-
-upgradeCheck: *custom
 
 # If `global.grafana.enabled=true`, uncomment below to set the custom image
 # grafana:
