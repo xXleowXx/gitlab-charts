@@ -15,7 +15,7 @@ controller:
     name: ingress-nginx/controller
     tag: "v1.0.4"
     digest: sha256:545cff00370f28363dad31e3b59a94ba377854d3a11f18988f5f9e56841ef9ef
-    pullPolicy: IfNotPresent
+    # pullPolicy: IfNotPresent
     # www-data -> uid 101
     runAsUser: 101
     allowPrivilegeEscalation: true
@@ -714,7 +714,7 @@ defaultBackend:
     name: defaultbackend-amd64
     tag: "1.5"
     digest: sha256:4dc5e07c8ca4e23bddb3153737d7b8c556e5fb2f29c4558b7cd6e6df99c512c7
-    pullPolicy: IfNotPresent
+    # pullPolicy: IfNotPresent
     # nobody user -> uid 65534
     runAsUser: 65534
     runAsNonRoot: true

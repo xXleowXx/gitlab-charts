@@ -207,7 +207,13 @@ nginx-ingress:
     image:
       registry: nginx-ingress.registry.com
       repository: nginx-ingress-repo
+      pullPolicy: pp-nginx-ingress
+      pullSecrets:
+      - name: ps-nginx-ingress
   defaultBackend:
     image:
       registry: nginx-ingress.registry.com
       repository: nginx-ingress-repo
+      pullPolicy: pp-nginx-ingress
+      pullSecrets:
+      - name: ps-nginx-ingress
