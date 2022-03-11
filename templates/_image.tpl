@@ -75,11 +75,9 @@ overridden using the global.gitlabVersion field in values.
 Return the image digest to use.
 */}}
 {{- define "image.digest" -}}
-{{-   $digest := "" -}}
 {{-   if .local.digest -}}
-{{-     $digest = printf "@%s" .local.digest -}}
+{{-     printf "@%s" .local.digest -}}
 {{-   end -}}
-{{-   $digest -}}
 {{- end -}}
 
 {{/*
