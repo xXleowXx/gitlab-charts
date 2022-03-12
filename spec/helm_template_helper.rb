@@ -1,7 +1,9 @@
 require 'yaml'
 require 'open3'
 
-class HelmTemplateError < RuntimeError; end
+# rubocop:disable Cop/CustomErrorClass
+class HelmTemplateError < StandardError; end
+# rubocop:enable Cop/CustomErrorClass
 
 class HelmTemplate
   @_helm_major_version = nil
@@ -91,9 +93,7 @@ class HelmTemplate
     yaml.select!{ |x| !x.nil? }
 
     # if we got any stderr then Helm misbehaved somehow
-    unless @stderr.empty?
-      raise HelmTemplateError, @stderr
-    end
+    raise HelmTemplateError, @stderr unless @stderr.empty?
 
     # create an indexed Hash keyed on Kind/metdata.name
     @mapped = yaml.to_h  { |doc|
