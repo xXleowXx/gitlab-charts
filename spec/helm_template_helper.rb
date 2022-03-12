@@ -91,7 +91,7 @@ class HelmTemplate
     yaml.select!{ |x| !x.nil? }
 
     # if we got any stderr then Helm misbehaved somehow
-    unless @stderr.nil?
+    unless @stderr.empty?
       raise HelmTemplateError, @stderr
     end
 
