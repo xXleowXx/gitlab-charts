@@ -24,7 +24,15 @@ Ensure that if `psql.password.useSecret` is set to false, a path to the password
 {{- $errorMsg := list -}}
 {{- $subcharts := pick .Values.gitlab "geo-logcursor" "gitlab-exporter" "migrations" "sidekiq" "toolbox" "webservice" -}}
 {{- range $name, $sub := $subcharts -}}
-{{-   $useSecret := include "gitlab.boolean.local" (dict "local" (pluck "useSecret" (index $sub "psql" "password") | first) "global" $.Values.global.psql.password.useSecret "default" true) -}}
+{{-   $main_useSecret := false -}}
+{{-   if hasKey $.Values.global.psql "main" -}}
+{{-     if hasKey $.Values.global.psql.main "password" -}}
+{{-       if hasKey $.Values.global.psql.main.password "useSecret" -}}
+{{-         $main_useSecret = default $.Values.global.psql.main.password.useSecret false -}}
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{-   $useSecret := include "gitlab.boolean.local" (dict "local" (pluck "useSecret" (index $sub "psql" "password") | first) "main" $main_useSecret "global" $.Values.global.psql.password.useSecret "default" true) -}}
 {{-   if and (not $useSecret) (not (pluck "file" (index $sub "psql" "password") ($.Values.global.psql.password) | first)) -}}
 {{-      $errorMsg = append $errorMsg (printf "%s: If `psql.password.useSecret` is set to false, you must specify a value for `psql.password.file`." $name) -}}
 {{-   end -}}
@@ -46,7 +54,15 @@ postgresql:
 Ensure that `postgresql.install: false` when `global.psql.load_balancing` defined
 */}}
 {{- define "gitlab.checkConfig.database.externalLoadBalancing" -}}
-{{- if hasKey .Values.global.psql "load_balancing" -}}
+{{- $load_balancing := dict -}}
+{{- if hasKey .Values.global.psql "main"  -}}
+{{-   if hasKey .Values.global.psql.main "load_balancing" -}}
+{{-     $load_balancing = .Values.global.psql.main.load_balancing -}}
+{{-   end -}}
+{{- else if hasKey .Values.global.psql "load_balancing" -}}
+{{-   $load_balancing = .Values.global.psql.load_balancing -}}
+{{- end -}}
+{{- if $load_balancing -}}
 {{-   with .Values.global.psql.load_balancing -}}
 {{-     if and $.Values.postgresql.install (kindIs "map" .) }}
 postgresql:
