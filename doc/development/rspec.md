@@ -52,6 +52,10 @@ obj.dig('ConfigMap/test-gitaly', 'data', 'config.toml.erb')
 This will return the contents of the `config.toml.erb` file contained in the
 `test-gitaly` ConfigMap.
 
+If Helm failed to generate YAML, typically because of template errors, then
+a `HelmTemplateError` exception is thrown with the stderr as the exception
+message.
+
 NOTE:
 Using the `HelmTemplate` class will always use the release name of "test"
 when executing the `helm template` command.

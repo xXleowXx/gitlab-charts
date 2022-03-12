@@ -1,6 +1,8 @@
 require 'yaml'
 require 'open3'
 
+class HelmTemplateError < RuntimeError; end
+
 class HelmTemplate
   @_helm_major_version = nil
   @_helm_minor_version = nil
@@ -87,6 +89,12 @@ class HelmTemplate
     yaml = YAML.load_stream(@stdout)
     # filter out any empty YAML documents (nil)
     yaml.select!{ |x| !x.nil? }
+
+    # if we got any stderr then Helm misbehaved somehow
+    unless @stderr.nil?
+      raise HelmTemplateError, @stderr
+    end
+
     # create an indexed Hash keyed on Kind/metdata.name
     @mapped = yaml.to_h  { |doc|
       [ "#{doc['kind']}/#{doc['metadata']['name']}" , doc ]
