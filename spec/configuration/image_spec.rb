@@ -209,8 +209,6 @@ describe 'image configuration' do
                               'busybox'
                             when 'gitlab-workhorse'
                               'workhorse'
-                            when 'run-check'
-                              'upgradecheck'
                             else
                               app_label
                             end

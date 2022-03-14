@@ -179,8 +179,8 @@ gitlab:
         pullPolicy: pp-webservice-init
 upgradeCheck:
   image:
-    registry: upgradecheck.registry.com
-    repository: upgradecheck-repo
+    registry: gitlab.registry.com
+    repository: gitlab-repo
     pullPolicy: pp-gitlab
     pullSecrets:
     - name: ps-gitlab
