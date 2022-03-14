@@ -19,16 +19,17 @@ To migrate from a Helm installation to a Linux package (Omnibus) installation:
    and make sure to [back up the secrets](../../backup-restore/backup.md#backup-the-secrets)
    as well.
 1. Back up `/etc/gitlab/gitlab-secrets.json` on your Omnibus GitLab instance.
-1. Install [yq](https://github.com/mikefarah/yq) tool on the work station where you are running `kubectl` commands.
+1. Install [yq](https://github.com/mikefarah/yq) tool (version 4.21.1 or newer) on the work station where you are running `kubectl` commands.
 1. Create a copy of your `/etc/gitlab/gitlab-secrets.json` on your workstation.
-1. Run the following command to obtain the secrets from your GitLab Helm chart instance:
+1. Run the following command to obtain the secrets from your GitLab Helm chart instance. 
+Make sure to replace `GITLAB_NAMESPACE` and `RELEASE` with appropriate values:
 
    ```shell
-   kubectl get secret RELEASE-rails-secret -ojsonpath='{.data.secrets\.yml}' | yq '@base64d | from_yaml | .production' -o json > rails-secrets.json
-   yq eval-all 'select(filename == "gitlab-secrets.json").gitlab_rails = select(filename == "rails-secrets.json") | select(filename == "gitlab-secrets.json")' -ojson  gitlab-secrets.json rails-secrets.json > update-secrets.json
+   kubectl get secret -n GITLAB_NAMESPACE RELEASE-rails-secret -ojsonpath='{.data.secrets\.yml}' | yq '@base64d | from_yaml | .production' -o json > rails-secrets.json
+   yq eval-all 'select(filename == "gitlab-secrets.json").gitlab_rails = select(filename == "rails-secrets.json") | select(filename == "gitlab-secrets.json")' -ojson  gitlab-secrets.json rails-secrets.json > gitlab-secrets-updated.json
    ```
    
-1. As a result, you will get `update-secrets.json` that you can use to replace the old version of `/etc/gitlab/gitlab-secrets.json` 
+1. As a result, you will get `gitlab-secrets-updated.json` that you can use to replace the old version of `/etc/gitlab/gitlab-secrets.json` 
 on your Omnibus GitLab instance.
 1. After replacing `/etc/gitlab/gitlab-secrets.json`, reconfigure Omnibus GitLab:
 
