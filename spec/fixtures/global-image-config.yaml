@@ -35,6 +35,8 @@ global:
       registry: global.busybox.registry.com
       repository: global-busybox-repo
       pullPolicy: pp-busybox
+      pullSecrets:
+      - name: ps-busybox
 # Need to set NGINX-Ingress specifically because
 # it already has locally-set image configuration
 # in its values.yaml file.
