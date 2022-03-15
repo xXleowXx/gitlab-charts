@@ -459,7 +459,7 @@ describe 'GitLab Pages' do
             gitlab:
               gitlab-pages:
                 artifactsServerTimeout: 50
-                serverShutdownTimeout: 50
+                serverShutdownTimeout: 50s
                 artifactsServerUrl: https://randomwebsite.com
                 domainConfigSource: disk
                 gitlabClientHttpTimeout: 25
