@@ -557,7 +557,7 @@ global:
       enabled: false
       # path: /srv/gitlab/shared/pages
     objectStore:
-      enabled: true
+      enabled: false
       bucket: gitlab-pages
       # proxy_download: true
       connection: {}
