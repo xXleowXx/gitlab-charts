@@ -281,6 +281,11 @@ spec:
           ports:
             - containerPort: {{ $.Values.service.workhorseInternalPort }}
               name: workhorse
+            {{- if eq $.Values.workhorse.monitoring.exporter.enabled true }}
+            # Workhorse exporter
+            - containerPort: {{ $.Values.workhorse.monitoring.exporter.port | int }}
+              name: wh-metrics
+            {{- end }}
           env:
             - name: TMPDIR
               value: "/tmp/gitlab"
