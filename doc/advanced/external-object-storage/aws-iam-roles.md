@@ -89,6 +89,11 @@ this Helm chart in one of two ways:
 1. Chart-generated ServiceAccounts with annotations defined. We allow for the configuration
    of annotations on ServiceAccounts both globally and on a per-chart basis.
 
+To use IAM roles for ServiceAccounts in EKS clusters, the specific annotation msut be `eks.amazonaws.com/role-arn: arn:aws:iam::<ACCOUNT_ID>:role/<IAM_ROLE_NAME>`.
+
+To enable IAM roles for ServiceAccounts for GitLab running in an AWS EKS cluster, follow the instructions on 
+[IAM roles for service accounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html).
+
 WARNING:
 Using the `backup-utility` as specified in the [backup documentation](../../backup-restore/backup.md)
 does not properly copy the backup file to the S3 bucket. The `backup-utility` uses
