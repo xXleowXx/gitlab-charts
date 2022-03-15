@@ -153,6 +153,8 @@ useHttp2: true
 #   expiration:
 #   refresh:
 
+# zipHTTPClientTimeout: 
+
 metrics:
   enabled: true
   port: 9235
