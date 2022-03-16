@@ -1107,20 +1107,8 @@ gitlab:
   ## https://docs.gitlab.com/charts/charts/gitlab/gitlab-grafana
   #   gitlab-grafana:
   ## https://docs.gitlab.com/charts/charts/gitlab/gitlab-pages
-  gitlab-pages:
-    metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: false
+  #   gitlab-pages:
   ## https://docs.gitlab.com/charts/charts/gitlab/kas
-  kas:
-    metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: false
+  #   kas:
   ## https://docs.gitlab.com/charts/charts/gitlab/praefect
-  praefect:
-    metrics:
-      enabled: true
-      serviceMonitor:
-        enabled: false
+  #   praefect:
