@@ -966,12 +966,8 @@ postgresql:
 ## Installation & configuration charts/registry
 ## https://docs.gitlab.com/charts/architecture/decisions#registry
 ## https://docs.gitlab.com/charts/charts/registry/
-registry:
-  enabled: true
-  metrics:
-    enabled: false
-    serviceMonitor:
-      enabled: false
+# registry:
+#   enabled: false
 
 ## Automatic shared secret generation
 ## https://docs.gitlab.com/charts/installation/secrets
