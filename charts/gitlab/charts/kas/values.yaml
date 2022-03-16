@@ -60,6 +60,10 @@ metrics:
   enabled: true
   port: 8151
   path: /metrics
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    endpointConfig: {}
 serviceAccount:
   enabled: false
   create: false
