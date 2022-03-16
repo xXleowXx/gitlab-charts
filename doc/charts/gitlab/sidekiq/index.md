@@ -69,7 +69,7 @@ to the `helm install` command using the `--set` flags:
 | `metrics.podMonitor.enabled`               | `false`                                                      | If a PodMonitor should be created to enable Prometheus Operator to manage the metrics scraping        |
 | `metrics.podMonitor.additionalLabels`      | `{}`                                                         | Additional labels to add to the PodMonitor                                                            |
 | `metrics.podMonitor.endpointConfig`        | `{}`                                                         | Additional endpoint configuration for the PodMonitor                                                  |
-| `metrics.annotations`                      |                                                              | **DEPRECATED** Allow the chart to set the correct metrics annotations                                 |
+| `metrics.annotations`                      |                                                              | **DEPRECATED** Set explicit metrics annotations. Replaced by template content.                        |
 | `psql.password.key`                        | `psql-password`                                              | key to psql password in psql secret                                                                   |
 | `psql.password.secret`                     | `gitlab-postgres`                                            | psql password secret                                                                                  |
 | `psql.port`                                |                                                              | Set PostgreSQL server port. Takes precedence over `global.psql.port`                                  |

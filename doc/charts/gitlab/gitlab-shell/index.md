@@ -87,7 +87,7 @@ controlled by `global.shell.port`.
 | `metrics.serviceMonitor.enabled`                | `false`                                          | If a ServiceMonitor should be created to enable Prometheus Operator to manage the metrics scraping, note that enabling this removes the `prometheus.io` scrape annotations      |
 | `metrics.serviceMonitor.additionalLabels`       | `{}`                                             | Additional labels to add to the ServiceMonitor                                                                                                                                  |
 | `metrics.serviceMonitor.endpointConfig`         | `{}`                                             | Additional endpoint configuration for the ServiceMonitor                                                                                                                        |
-| `metrics.annotations`                           |                                                  | **DEPRECATED** Allow the chart to set the correct metrics annotations                                                                                                           |
+| `metrics.annotations`                           |                                                  | **DEPRECATED** Set explicit metrics annotations. Replaced by template content.                                                                                                  |
 
 ## Chart configuration examples
 
