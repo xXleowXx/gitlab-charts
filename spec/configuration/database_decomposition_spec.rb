@@ -45,6 +45,7 @@ describe 'Database configuration' do
         db_config = database_config(t, 'webservice')
         expect(db_config['production'].keys).to contain_exactly('main')
         expect(db_config['production'].dig('main', 'host')).to eq('test-postgresql.default.svc')
+        expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
       end
     end
 
@@ -53,6 +54,7 @@ describe 'Database configuration' do
         t = HelmTemplate.new(default_values.deep_merge(YAML.safe_load(%(
           global:
             psql:
+              databaseTasks: true
               password:
                 secret: sekrit
                 key: pa55word
@@ -64,6 +66,7 @@ describe 'Database configuration' do
         db_config = database_config(t, 'webservice')
         expect(db_config['production'].dig('main', 'host')).to eq('server')
         expect(db_config['production'].dig('main', 'port')).to eq(9999)
+        expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
 
         webservice_secret_mounts = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets').select do |item|
           item['secret']['name'] == 'sekrit' && item['secret']['items'][0]['key'] == 'pa55word'
@@ -148,6 +151,7 @@ describe 'Database configuration' do
         expect(main_config['port']).to eq(9999)
         expect(main_config['username']).to eq('global-user')
         expect(main_config['application_name']).to eq('global-application')
+        expect(main_config['database_tasks']).to eq(true)
 
         # check `ci` stanza
         ci_config = db_config['production']['ci']
@@ -155,6 +159,7 @@ describe 'Database configuration' do
         expect(ci_config['port']).to eq(9999)
         expect(ci_config['username']).to eq('ci-user')
         expect(ci_config['application_name']).to eq('global-application')
+        expect(ci_config['database_tasks']).to eq(true)
       end
     end
 
@@ -191,7 +196,9 @@ describe 'Database configuration' do
         db_config = database_config(t, 'webservice')
         expect(db_config['production'].keys).to contain_exactly('main', 'ci')
         expect(db_config['production'].dig('main', 'host')).to eq('test-postgresql.default.svc')
+        expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
         expect(db_config['production'].dig('ci', 'host')).to eq('test-postgresql.default.svc')
+        expect(db_config['production'].dig('ci', 'database_tasks')).to eq(true)
       end
 
       it 'Places `main` stanza first' do
@@ -228,11 +235,14 @@ describe 'Database configuration' do
                 password:
                   secret: main-password
                 applicationName: main
+                preparedStatements: true
               ci:
                 username: ci-user
                 password:
                   secret: ci-password
                 applicationName: ci
+                preparedStatements: false
+                databaseTasks: false
           postgresql:
             install: false
         )))
@@ -252,6 +262,8 @@ describe 'Database configuration' do
         expect(main_config['username']).to eq('main-user')
         expect(main_config['application_name']).to eq('main')
         expect(main_config['load_balancing']).to eq({ 'hosts' => ['a.secondary.global', 'b.secondary.global'] })
+        expect(main_config['prepared_statements']).to eq(true)
+        expect(main_config['database_tasks']).to eq(true)
 
         # check `ci` stanza
         ci_config = db_config['production']['ci']
@@ -260,6 +272,8 @@ describe 'Database configuration' do
         expect(ci_config['username']).to eq('ci-user')
         expect(ci_config['application_name']).to eq('ci')
         expect(ci_config['load_balancing']).to eq({ 'hosts' => ['a.secondary.global', 'b.secondary.global'] })
+        expect(ci_config['prepared_statements']).to eq(false)
+        expect(ci_config['database_tasks']).to eq(false)
 
         # Check the secret mounts
         webservice_secret_mounts = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets').select do |item|

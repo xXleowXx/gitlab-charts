@@ -28,6 +28,7 @@ production:
     tcp_user_timeout: {{ template "gitlab.psql.tcpUserTimeout" $context }}
     application_name: {{ template "gitlab.psql.applicationName" $context }}
     prepared_statements: {{ template "gitlab.psql.preparedStatements" $context }}
+    database_tasks: {{ template "gitlab.psql.databaseTasks" $context }}
     {{- include "gitlab.database.loadBalancing" $context | nindent 4 }}
     {{- include "gitlab.psql.ssl.config" $context | nindent 4 }}
 {{- end }}
