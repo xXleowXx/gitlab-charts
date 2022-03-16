@@ -50,7 +50,7 @@ can use a different domain than the `global.hosts.domain`.
 Set `global.hosts.kas.name`, for example:
 
 ```shell
-global.hosts.kas.name=kas.my-other-domain.com
+global.hosts.kas.name: kas.my-other-domain.com
 ```
 
 This example uses `kas.my-other-domain.com` as the host for the KAS Ingress alone.
