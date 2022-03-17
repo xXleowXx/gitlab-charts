@@ -288,7 +288,7 @@ this as the Primary site. We will do this via the Toolbox Pod.
    kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rake geo:set_primary_node
    ```
 
-1. Set the primary site's Internal URL to a URL which is unique to the primary cluster. For example, you can use a URL with the primary cluster's ingress IP address with `kubectl exec`:
+1. Set the primary site's Internal URL to a URL which is unique to the primary cluster. For example, you can use a URL with the primary cluster's Ingress IP address with `kubectl exec`:
 
    ```shell
    kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: https://primary-cluster-ip"
@@ -593,7 +593,7 @@ the Primary site that the Secondary site exists:
 1. Select **Add site**.
 1. Add the **secondary** site. Use the full GitLab URL for the URL.
 1. Enter a Name with the `global.geo.nodeName` of the Secondary site. These values must always match exactly, character for character.
-1. Enter Internal URL with a URL which is unique to the secondary cluster. For example, you can use a URL with the secondary cluster's ingress IP address, like `https://secondary-cluster-ip`.
+1. Enter Internal URL with a URL which is unique to the secondary cluster. For example, you can use a URL with the secondary cluster's Ingress IP address, like `https://secondary-cluster-ip`.
 1. Optionally, choose which groups or storage shards should be replicated by the
    **secondary** site. Leave blank to replicate all.
 1. Select **Add node**.
