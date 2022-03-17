@@ -11,7 +11,7 @@ metadata:
 spec:
   containers:
   - name: test-runner
-    image: {{ include "image.fullPath" $imageCfg }}
+    image: {{ include "gitlab.image.fullPath" $imageCfg }}
     command: ['sh', '/tests/test_login']
     volumeMounts:
       - name: tests

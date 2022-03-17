@@ -47,7 +47,7 @@ spec:
       containers:
         - name: {{ template "ingress-nginx.name" . }}-default-backend
           {{- with .Values.defaultBackend.image }}
-          image: {{ include "image.fullPath" $imageCfg }}
+          image: {{ include "gitlab.image.fullPath" $imageCfg }}
           {{- end }}
           {{- include "image.pullPolicy" $imageCfg | nindent 10 }}
         {{- if .Values.defaultBackend.extraArgs }}

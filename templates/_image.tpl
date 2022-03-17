@@ -27,14 +27,14 @@ Usage:
 {{/*
 Defines the registry for a given image.
 */}}
-{{- define "image.registry" -}}
+{{- define "gitlab.image.registry" -}}
 {{-   coalesce .local.registry .global.registry -}}
 {{- end -}}
 
 {{/*
 Defines the repository for a given image.
 */}}
-{{- define "image.repository" -}}
+{{- define "gitlab.image.repository" -}}
 {{-  coalesce .local.repository .global.repository -}}
 {{- end -}}
 
@@ -47,7 +47,7 @@ append `-$edition`. This ensures that:
 - charts such as Webservice can get the correct reference to the Workhorse image
 This is needed since we can't rely on the chart name to calculate the image path in those cases.
 */}}
-{{- define "image.name" -}}
+{{- define "gitlab.image.name" -}}
 {{-   $defaultName := printf "gitlab-%s-%s" .context.Chart.Name .context.Values.global.edition -}}
 {{-   if .local.name -}}
 {{-     if has .local.name (list "toolbox" "workhorse") -}}
@@ -65,7 +65,7 @@ Return the version tag used to fetch the GitLab images
 Defaults to using the information from the chart appVersion field, but can be
 overridden using the global.gitlabVersion field in values.
 */}}
-{{- define "image.tag" -}}
+{{- define "gitlab.image.tag" -}}
 {{-   $prepend := coalesce .local.prepend "false" -}}
 {{-   $appVersion := include "gitlab.parseAppVersion" (dict "appVersion" .context.Chart.AppVersion "prepend" $prepend) -}}
 {{-   coalesce .local.tag .global.tag $appVersion }}
@@ -74,7 +74,7 @@ overridden using the global.gitlabVersion field in values.
 {{/*
 Return the image digest to use.
 */}}
-{{- define "image.digest" -}}
+{{- define "gitlab.image.digest" -}}
 {{-   if .local.digest -}}
 {{-     printf "@%s" .local.digest -}}
 {{-   end -}}
@@ -83,12 +83,12 @@ Return the image digest to use.
 {{/*
 Creates the full image path for use in manifests.
 */}}
-{{- define "image.fullPath" -}}
-{{-   $registry := include "image.registry" . -}}
-{{-   $repository := include "image.repository" . -}}
-{{-   $name := include "image.name" . -}}
-{{-   $tag := include "image.tag" . -}}
-{{-   $digest := include "image.digest" . -}}
+{{- define "gitlab.image.fullPath" -}}
+{{-   $registry := include "gitlab.image.registry" . -}}
+{{-   $repository := include "gitlab.image.repository" . -}}
+{{-   $name := include "gitlab.image.name" . -}}
+{{-   $tag := include "gitlab.image.tag" . -}}
+{{-   $digest := include "gitlab.image.digest" . -}}
 {{-   printf "%s/%s/%s:%s%s" $registry $repository $name $tag $digest | quote -}}
 {{- end -}}
 

@@ -79,7 +79,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ template "name" . }}
-          image: {{ include "image.fullPath" $imageCfg }}
+          image: {{ include "gitlab.image.fullPath" $imageCfg }}
           {{- include "image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - "--configuration-file=/etc/kas/config.yaml"

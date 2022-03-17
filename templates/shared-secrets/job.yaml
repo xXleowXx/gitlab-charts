@@ -39,7 +39,7 @@ spec:
       {{- include "image.pullSecrets" $imageCfg | nindent 6 }}
       containers:
         - name: {{ .Chart.Name }}
-          image: {{ include "image.fullPath" $imageCfg }}
+          image: {{ include "gitlab.image.fullPath" $imageCfg }}
           {{- include "image.pullPolicy" $imageCfg | indent 10 }}
           command: ['/bin/bash', '/scripts/generate-secrets']
           volumeMounts:

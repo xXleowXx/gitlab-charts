@@ -42,7 +42,7 @@ spec:
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
         - name: configure
           command: ['sh', '/config/configure']
-          image: {{ include "image.fullPath" $initImageCfg }}
+          image: {{ include "gitlab.image.fullPath" $initImageCfg }}
           {{- include "image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
@@ -67,7 +67,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}
-          image: {{ include "image.fullPath" $imageCfg }}
+          image: {{ include "gitlab.image.fullPath" $imageCfg }}
           args:
             - /scripts/wait-for-deps
           {{- if include "gitlab.geo.secondary" $ }}

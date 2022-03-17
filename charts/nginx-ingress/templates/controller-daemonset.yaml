@@ -68,7 +68,7 @@ spec:
     {{- end }}
       containers:
         - name: {{ .Values.controller.containerName }}
-          image: {{ include "image.fullPath" $imageCfg }}
+          image: {{ include "gitlab.image.fullPath" $imageCfg }}
         {{- include "image.pullPolicy" $imageCfg | nindent 10 }}
         {{- if .Values.controller.lifecycle }}
           lifecycle: {{ toYaml .Values.controller.lifecycle | nindent 12 }}

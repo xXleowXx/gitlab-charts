@@ -60,7 +60,7 @@ spec:
       {{- include "image.pullSecrets" $imagePullCfg | nindent 6}}
       containers:
         - name: run-check
-          image: {{ include "image.fullPath" $imageCfg }}
+          image: {{ include "gitlab.image.fullPath" $imageCfg }}
           command: ['/bin/sh', '/scripts/runcheck']
           {{- include "image.pullPolicy" $imagePullCfg | indent 10 }}
           env:

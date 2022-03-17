@@ -114,7 +114,7 @@ spec:
         - name: configure
           command: ['sh']
           args: [ '-c', 'sh -x /config-webservice/configure ; sh -x /config-workhorse/configure ; mkdir -p -m 3770 /tmp/gitlab']
-          image: {{ include "image.fullPath" $initImageCfg }}
+          image: {{ include "gitlab.image.fullPath" $initImageCfg }}
           {{- include "image.pullPolicy" $initImageCfg | indent 10 }}
           env:
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
@@ -144,7 +144,7 @@ spec:
           resources:
             {{- toYaml $.Values.init.resources | nindent 12 }}
         - name: dependencies
-          image: {{ include "image.fullPath" $imageCfg }}
+          image: {{ include "gitlab.image.fullPath" $imageCfg }}
           {{- include "image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - /scripts/wait-for-deps
@@ -181,7 +181,7 @@ spec:
       containers:
         {{- include "gitlab.extraContainers" $ | nindent 8 }}
         - name: {{ $.Chart.Name }}
-          image: {{ include "image.fullPath" $imageCfg }}
+          image: {{ include "gitlab.image.fullPath" $imageCfg }}
           {{- include "image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             {{- if $.Values.http.enabled }}
@@ -331,7 +331,7 @@ spec:
           resources:
             {{- toYaml .resources | nindent 12 }}
         - name: gitlab-workhorse
-          image: {{ include "image.fullPath" $workhorseImageCfg }}
+          image: {{ include "gitlab.image.fullPath" $workhorseImageCfg }}
           {{- include "image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ $.Values.service.workhorseInternalPort }}
