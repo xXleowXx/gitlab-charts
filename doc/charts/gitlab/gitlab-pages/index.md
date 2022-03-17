@@ -75,7 +75,6 @@ configurations that can be supplied to the `helm install` command using the
 | `gitlabCache.cleanup`            | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
 | `gitlabCache.expiry`             | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
 | `gitlabCache.refresh`            | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
-| `serverShutdownTimeout`          |     `30s`                  | GitLab Pages server shutdown timeout in seconds      |
 | `gitlabClientHttpTimeout`        |                       | GitLab API HTTP client connection timeout in seconds |
 | `gitlabClientJwtExpiry`          |                       | JWT Token expiry time in seconds                     |
 | `gitlabRetrieval.interval`       | int                   | See: [Pages Global Settings](https://docs.gitlab.com/ee/administration/pages/index.html#global-settings) |
@@ -94,6 +93,7 @@ configurations that can be supplied to the `helm install` command using the
 | `sentry.enabled`                 | `false`               | Enable Sentry reporting                              |
 | `sentry.dsn`                     |                       | The address for sending Sentry crash reporting to    |
 | `sentry.environment`             |                       | The environment for Sentry crash reporting           |
+| `serverShutdownTimeout`          |     `30s`             | GitLab Pages server shutdown timeout in seconds      |
 | `statusUri`                      |                       | The URL path for a status page                       |
 | `tls.minVersion`                 |                       | Specifies the minimum SSL/TLS version                |
 | `tls.maxVersion`                 |                       | Specifies the maximum SSL/TLS version                |
