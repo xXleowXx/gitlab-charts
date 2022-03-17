@@ -9,7 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 The `kas` sub-chart provides a configurable deployment of the
 [GitLab agent server (KAS)](https://docs.gitlab.com/ee/administration/clusters/kas.html).
 The agent server is a component you install together with GitLab. It is required to
-manages the [GitLab agent for Kubernetes](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent).
+manage the [GitLab agent for Kubernetes](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent).
 
 This chart depends on access to the GitLab API and the Gitaly Servers.
 When you enable this chart, an Ingress is deployed.
