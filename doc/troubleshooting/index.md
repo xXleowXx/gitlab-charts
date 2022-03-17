@@ -536,6 +536,7 @@ Run the certificates container using Docker.
         -v $(pwd)/etc/ssl/certs:/etc/ssl/certs \
         -v $(pwd)/usr/local/share/ca-certificates:/usr/local/share/ca-certificates \
         registry.gitlab.com/gitlab-org/build/cng/alpine-certificates:20191127-r2
+   ```
 
 1. Check your certificates have been correctly built:
 
