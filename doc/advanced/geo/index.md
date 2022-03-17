@@ -284,6 +284,12 @@ this as the Primary site. We will do this via the Toolbox Pod.
    kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rake geo:set_primary_node
    ```
 
+1. Set an Internal URL which is unique to the primary site with `kubectl exec`:
+
+   ```shell
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: <unique primary site URL here>"
+   ```
+
 1. Check the status of Geo configuration:
 
    ```shell
@@ -334,6 +340,7 @@ this example configuration:
 
 ```ruby
 ### Geo Secondary
+# external_url matches the Primary site
 external_url 'http://gitlab.example.com'
 roles ['geo_secondary_role']
 gitlab_rails['enable'] = true
@@ -372,8 +379,6 @@ gitlab_rails['db_password']='gitlab_user_password'
 
 We must replace several items:
 
-- `external_url` must be updated to reflect the host name of our Secondary
-  instance.
 - `gitlab_rails['geo_node_name']` must be replaced with a unique name for your site. See the Name field in
   [Common settings](https://docs.gitlab.com/ee/user/admin_area/geo_nodes.html#common-settings).
 - `gitlab_user_password_hash` must be replaced with the hashed form of the
@@ -584,6 +589,7 @@ the Primary site that the Secondary site exists:
 1. Select **Add site**.
 1. Add the **secondary** site. Use the full GitLab URL for the URL.
 1. Enter a Name with the `global.geo.nodeName` of the Secondary site. These values must always match exactly, character for character.
+1. Ensure Internal URL is set with a URL which is unique to this site.
 1. Optionally, choose which groups or storage shards should be replicated by the
    **secondary** site. Leave blank to replicate all.
 1. Select **Add node**.
