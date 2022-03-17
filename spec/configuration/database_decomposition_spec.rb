@@ -159,7 +159,7 @@ describe 'Database configuration' do
         expect(ci_config['port']).to eq(9999)
         expect(ci_config['username']).to eq('ci-user')
         expect(ci_config['application_name']).to eq('global-application')
-        expect(ci_config['database_tasks']).to eq(true)
+        expect(ci_config['database_tasks']).to eq(false)
       end
     end
 
@@ -198,7 +198,7 @@ describe 'Database configuration' do
         expect(db_config['production'].dig('main', 'host')).to eq('test-postgresql.default.svc')
         expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
         expect(db_config['production'].dig('ci', 'host')).to eq('test-postgresql.default.svc')
-        expect(db_config['production'].dig('ci', 'database_tasks')).to eq(true)
+        expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false), "since CI shared db/host/port with main:"
       end
 
       it 'Places `main` stanza first' do
@@ -281,6 +281,150 @@ describe 'Database configuration' do
         end
         psql_secret_mounts = webservice_secret_mounts.map { |x| x['secret']['name'] }
         expect(psql_secret_mounts).to contain_exactly('main-password', 'ci-password')
+      end
+    end
+
+    context 'when handling defaults for the databaseTasks:' do
+      where do
+        {
+          "when no databaseTasks: is defined, and main/ci: do share database, the default for ci is false" => {
+            psql_config: {},
+            expected: {
+              main: {
+                database_tasks: true
+              },
+              ci: {
+                database_tasks: false
+              }
+            }
+          },
+          "when databaseTasks=true, and main/ci: do share database, uses user provided value" => {
+            psql_config: {
+              ci: {
+                databaseTasks: true
+              }
+            },
+            expected: {
+              main: {
+                database_tasks: true
+              },
+              ci: {
+                database_tasks: true
+              }
+            }
+          },
+          "when databaseTasks=true is defined globally, and main/ci: do share database, uses user provided value" => {
+            psql_config: {
+              databaseTasks: true
+            },
+            expected: {
+              main: {
+                database_tasks: true
+              },
+              ci: {
+                database_tasks: true
+              }
+            }
+          },
+          "when databaseTasks=true is defined in main:, and main/ci: do share database, does inherit from main to use user provided value" => {
+            psql_config: {
+              main: {
+                databaseTasks: true
+              }
+            },
+            expected: {
+              main: {
+                database_tasks: true
+              },
+              ci: {
+                database_tasks: true
+              }
+            }
+          },
+          "when no databaseTasks: is defined, and ci: uses different host, the default for ci is true" => {
+            psql_config: {
+              ci: {
+                host: 'another-host'
+              }
+            },
+            expected: {
+              main: {
+                database_tasks: true
+              },
+              ci: {
+                host: 'another-host',
+                database_tasks: true
+              }
+            }
+          },
+          "when no databaseTasks: is defined, and ci: uses different port, the default for ci is true" => {
+            psql_config: {
+              ci: {
+                port: 11111
+              }
+            },
+            expected: {
+              main: {
+                port: 5432,
+                database_tasks: true
+              },
+              ci: {
+                port: 11111,
+                database_tasks: true
+              }
+            }
+          },
+          "when no databaseTasks: is defined, and ci: uses different database, the default for ci is true" => {
+            psql_config: {
+              ci: {
+                database: 'gitlab_ci'
+              }
+            },
+            expected: {
+              main: {
+                database_tasks: true
+              },
+              ci: {
+                database: 'gitlab_ci',
+                database_tasks: true
+              }
+            }
+          },
+          "when databaseTasks=false, and ci: uses different host, uses user provided value" => {
+            psql_config: {
+              ci: {
+                host: 'patroni-ci',
+                databaseTasks: false
+              }
+            },
+            expected: {
+              main: {
+                database_tasks: true
+              },
+              ci: {
+                host: 'patroni-ci',
+                database_tasks: false
+              }
+            }
+          }
+        }
+      end
+
+      with_them do
+        it 'does output expected configuration' do
+          config = { global: { psql: psql_config } }
+          config = JSON.parse(config.to_json) # deep_stringify_keys
+          config = decompose_ci.deep_merge(config)
+          t = HelmTemplate.new(config)
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+          db_config = database_config(t, 'webservice')
+          expect(db_config['production'].keys).to contain_exactly(*expected.keys.map(&:to_s))
+
+          expected.each do |database, expected_config|
+            expect(db_config['production'][database.to_s]).to include(expected_config.transform_keys(&:to_s))
+          end
+        end
       end
     end
   end
