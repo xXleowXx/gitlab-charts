@@ -651,8 +651,7 @@ global:
   kubectl:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
-      # tag: 1.16.15@sha256:f0557c2a62ab4ee3dcfbd13baa8bafc8674ceaa86cd92344aa1f5d2df02bb2c0
-      tag: update-yq-to-v4
+      tag: 1.18.20@sha256:824750f20381facb70cb90d3cd41da075d7ffde5a14de6f14f7037285fe0ddb7
       # pullPolicy: IfNotPresent
       # pullSecrets: []
     securityContext:
