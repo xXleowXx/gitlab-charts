@@ -534,7 +534,7 @@ check_docs_links:
       - *com_auto_deploy_branch_ref
 
 .review-docs:
-  image: ruby:2.6-alpine
+  image: ruby:2.7-alpine
   stage: review
   cache: {}
   dependencies: []

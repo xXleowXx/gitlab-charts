@@ -47,6 +47,7 @@ can be installed separately.
   - Automatically provisioned SSL via [Let's Encrypt](https://letsencrypt.org/), using [Jetstack](https://www.jetstack.io/)'s [cert-manager](https://cert-manager.io/docs/)
   - GitLab/[Praefect](charts/gitlab/praefect/index.md)
   - GitLab/[GitLab agent server (KAS)](charts/gitlab/kas/index.md)
+  - GitLab/[Spamcheck](charts/gitlab/spamcheck/index.md)
 
 ## GitLab Helm chart quick start guide
 

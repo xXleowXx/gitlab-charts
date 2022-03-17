@@ -57,13 +57,14 @@ sshHostKeys:
 
 metrics:
   enabled: true
-  annotations:
-    gitlab.com/prometheus_scrape: "true"
-    gitlab.com/prometheus_port: "8080"
-    gitlab.com/prometheus_path: "/-/metrics"
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "8080"
-    prometheus.io/path: "/-/metrics"
+  port: 8083
+  path: /metrics
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    endpointConfig: {}
+  # DEPRECATED
+  annotations: {}
 
 networkpolicy:
   enabled: false
@@ -163,6 +164,14 @@ workhorse:
     exporter:
       enabled: false
       port: 9229
+  metrics:
+    enabled: false
+    port: 9229
+    path: /metrics
+    serviceMonitor:
+      enabled: false
+      additionalLabels: {}
+      endpointConfig: {}
   imageScaler:
     maxProcs: 2 # aim for max(2, requested_cpus / 2)
     maxFileSizeBytes: 250000

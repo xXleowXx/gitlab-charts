@@ -1396,6 +1396,12 @@ args:
   name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
 ```
 
+[Group SAML](https://docs.gitlab.com/ee/integration/saml.html#configuring-group-saml-on-a-self-managed-gitlab-instance) configuration example:
+
+```yaml
+name: group_saml
+```
+
 This content can be saved as `provider.yaml`, and then a secret created from it:
 
 ```shell
