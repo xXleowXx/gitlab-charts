@@ -459,6 +459,7 @@ describe 'GitLab Pages' do
             gitlab:
               gitlab-pages:
                 artifactsServerTimeout: 50
+                serverShutdownTimeout: 50s
                 artifactsServerUrl: https://randomwebsite.com
                 domainConfigSource: disk
                 gitlabClientHttpTimeout: 25
@@ -521,6 +522,7 @@ describe 'GitLab Pages' do
             metrics-address=:9999
             max-conns=45
             max-uri-length=2048
+            server-shutdown-timeout=50s
             gitlab-client-http-timeout=25
             gitlab-client-jwt-expiry=35
             sentry-dsn=foobar
