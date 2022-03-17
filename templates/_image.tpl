@@ -99,7 +99,7 @@ Creates the full image path for use in manifests.
     - `global` which contains global image settings, e.g. .Values.global.image
     - `local` which contains local image settings, e.g. .Values.image
 */}}
-{{- define "image.pullSecrets" -}}
+{{- define "gitlab.image.pullSecrets" -}}
 {{- $pullSecrets := default (list) .global.pullSecrets -}}
 {{- if .local.pullSecrets -}}
 {{-   $pullSecrets = concat $pullSecrets .local.pullSecrets -}}
@@ -119,7 +119,7 @@ imagePullSecrets:
     - `global` which contains global image settings, e.g. .Values.global.image
     - `local` which contains local image settings, e.g. .Values.image
 */}}
-{{- define "image.pullPolicy" -}}
+{{- define "gitlab.image.pullPolicy" -}}
 {{- $pullPolicy := coalesce .local.pullPolicy .global.pullPolicy -}}
 {{- if $pullPolicy }}
 imagePullPolicy: {{ $pullPolicy | quote }}

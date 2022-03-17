@@ -57,12 +57,12 @@ spec:
         runAsUser: {{ .Values.upgradeCheck.securityContext.runAsUser }}
         fsGroup: {{ .Values.upgradeCheck.securityContext.fsGroup }}
       restartPolicy: Never
-      {{- include "image.pullSecrets" $imagePullCfg | nindent 6}}
+      {{- include "gitlab.image.pullSecrets" $imagePullCfg | nindent 6}}
       containers:
         - name: run-check
           image: {{ include "gitlab.image.fullPath" $imageCfg }}
           command: ['/bin/sh', '/scripts/runcheck']
-          {{- include "image.pullPolicy" $imagePullCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $imagePullCfg | indent 10 }}
           env:
             - name: GITLAB_VERSION
               value: '{{ coalesce .Values.global.gitlabVersion .Chart.AppVersion }}'

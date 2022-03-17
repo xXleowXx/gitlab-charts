@@ -115,7 +115,7 @@ spec:
           command: ['sh']
           args: [ '-c', 'sh -x /config-webservice/configure ; sh -x /config-workhorse/configure ; mkdir -p -m 3770 /tmp/gitlab']
           image: {{ include "gitlab.image.fullPath" $initImageCfg }}
-          {{- include "image.pullPolicy" $initImageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 12 }}
@@ -145,7 +145,7 @@ spec:
             {{- toYaml $.Values.init.resources | nindent 12 }}
         - name: dependencies
           image: {{ include "gitlab.image.fullPath" $imageCfg }}
-          {{- include "image.pullPolicy" $imageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           args:
             - /scripts/wait-for-deps
           env:
@@ -177,12 +177,12 @@ spec:
               readOnly: true
           resources:
             {{- toYaml $.Values.init.resources | nindent 12 }}
-      {{- include "image.pullSecrets" $imageCfg | indent 6 }}
+      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
       containers:
         {{- include "gitlab.extraContainers" $ | nindent 8 }}
         - name: {{ $.Chart.Name }}
           image: {{ include "gitlab.image.fullPath" $imageCfg }}
-          {{- include "image.pullPolicy" $imageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             {{- if $.Values.http.enabled }}
             - containerPort: {{ $.Values.service.internalPort }}
@@ -332,7 +332,7 @@ spec:
             {{- toYaml .resources | nindent 12 }}
         - name: gitlab-workhorse
           image: {{ include "gitlab.image.fullPath" $workhorseImageCfg }}
-          {{- include "image.pullPolicy" $imageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ $.Values.service.workhorseInternalPort }}
               name: http-workhorse

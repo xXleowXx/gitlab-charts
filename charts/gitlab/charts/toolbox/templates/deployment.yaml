@@ -50,7 +50,7 @@ spec:
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ include "gitlab.image.fullPath" $initImageCfg }}
-          {{- include "image.pullPolicy" $initImageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
@@ -69,7 +69,7 @@ spec:
             readOnly: false
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
-      {{- include "image.pullSecrets" $imageCfg | indent 6 }}
+      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
       {{- if .Values.antiAffinityLabels.matchLabels }}
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
@@ -105,7 +105,7 @@ spec:
             - sh /var/opt/gitlab/templates/configure-gsutil && while sleep 3600; do :; done
             {{- end }}
           image: {{ include "gitlab.image.fullPath" $imageCfg }}
-          {{- include "image.pullPolicy" $imageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           env:
             - name: ARTIFACTS_BUCKET_NAME
               value: {{ .Values.global.appConfig.artifacts.bucket }}
