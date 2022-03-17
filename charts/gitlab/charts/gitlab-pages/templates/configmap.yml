@@ -76,6 +76,9 @@ data:
     {{- if .Values.maxURILength }}
     max-uri-length={{ .Values.maxURILength }}
     {{- end }}
+    {{- if .Values.serverShutdownTimeout }}
+    server-shutdown-timeout={{ .Values.serverShutdownTimeout }}
+    {{- end }}
     {{- if .Values.gitlabClientHttpTimeout }}
     gitlab-client-http-timeout={{ .Values.gitlabClientHttpTimeout }}
     {{- end }}
