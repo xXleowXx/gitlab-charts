@@ -73,7 +73,7 @@ Changelog: added
 ```
 
 If your merge request doesn't warrant a CHANGELOG entry, consider adding any of
-the #{presented_no_changelog_labels} labels. More information on the available
+the #{presented_no_changelog_labels} labels. More information on these
 labels is available in #{SEE_DOC_WORKTYPE}.
 
 MSG
