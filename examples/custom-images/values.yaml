@@ -1,9 +1,20 @@
 # --- Global settings ---
 
-global:
+.custom-gitlab: &custom-gitlab
   image:
     registry: custom.registry.com
     repository: custom-repository
+
+global:
+  <<: *custom-gitlab
+  busybox: *custom-gitlab
+
+# Need to set NGINX-Ingress specifically because
+# it already has locally-set image configuration
+# in its values.yaml file.
+nginx-ingress:
+  controller: *custom-gitlab
+  defaultBackend: *custom-gitlab
 
 # --- Charts from requirements.yaml ---
 
