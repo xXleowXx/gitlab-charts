@@ -13,6 +13,8 @@ While external database services can be used, these documents focus on
 the use of the [Omnibus GitLab](https://docs.gitlab.com/omnibus/) for PostgreSQL to provide the
 most platform agnostic guide, and make use of the automation included in `gitlab-ctl`.
 
+In this guide, both clusters have the same external URL. See [Set up a Unified URL for Geo sites](https://docs.gitlab.com/ee/administration/geo/secondary_proxy/index.html#set-up-a-unified-url-for-geo-sites).
+
 NOTE:
 See the [defined terms](https://docs.gitlab.com/ee/administration/geo/glossary.html)
 to describe all aspects of Geo (mainly the distinction between `site` and `node`).
@@ -111,8 +113,10 @@ the rest of this documentation.
   - IP address
   - hostname (optional)
 - Primary cluster:
+  - Ingress IP address
   - IP addresses of nodes
 - Secondary cluster:
+  - Ingress IP address
   - IP addresses of nodes
 - Database Passwords (_must pre-decide the passwords_):
   - `gitlab` (used in `postgresql['sql_user_password']`, `global.psql.password`)
@@ -284,10 +288,10 @@ this as the Primary site. We will do this via the Toolbox Pod.
    kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rake geo:set_primary_node
    ```
 
-1. Set an Internal URL which is unique to the primary site with `kubectl exec`:
+1. Set the primary site's Internal URL to a URL which is unique to the primary cluster. For example, you can use a URL with the primary cluster's ingress IP address with `kubectl exec`:
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: <unique primary site URL here>"
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: https://primary-cluster-ip"
    ```
 
 1. Check the status of Geo configuration:
@@ -589,7 +593,7 @@ the Primary site that the Secondary site exists:
 1. Select **Add site**.
 1. Add the **secondary** site. Use the full GitLab URL for the URL.
 1. Enter a Name with the `global.geo.nodeName` of the Secondary site. These values must always match exactly, character for character.
-1. Ensure Internal URL is set with a URL which is unique to this site.
+1. Enter Internal URL with a URL which is unique to the secondary cluster. For example, you can use a URL with the secondary cluster's ingress IP address, like `https://secondary-cluster-ip`.
 1. Optionally, choose which groups or storage shards should be replicated by the
    **secondary** site. Leave blank to replicate all.
 1. Select **Add node**.
