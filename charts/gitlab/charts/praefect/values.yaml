@@ -24,6 +24,12 @@ init:
 metrics:
   enabled: true
   port: 9236
+  separate_database_metrics: true
+  path: /metrics
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    endpointConfig: {}
 
 ## Allow to overwrite under which User and Group we're running.
 securityContext:

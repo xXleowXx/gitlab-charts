@@ -493,6 +493,10 @@ describe 'GitLab Pages' do
                 rateLimitSourceIPBurst: 50
                 rateLimitDomain: 2000.5
                 rateLimitDomainBurst: 20000
+                rateLimitTLSSourceIP: 200.5
+                rateLimitTLSSourceIPBurst: 51
+                rateLimitTLSDomain: 1000.5
+                rateLimitTLSDomainBurst: 20001
           ))
         end
 
@@ -535,6 +539,10 @@ describe 'GitLab Pages' do
             rate-limit-source-ip-burst=50
             rate-limit-domain=2000.5
             rate-limit-domain-burst=20000
+            rate-limit-tls-source-ip=200.5
+            rate-limit-tls-source-ip-burst=51
+            rate-limit-tls-domain=1000.5
+            rate-limit-tls-domain-burst=20001
           MSG
 
           expect(pages_enabled_template.exit_code).to eq(0), "Unexpected error code #{pages_enabled_template.exit_code} -- #{pages_enabled_template.stderr}"
