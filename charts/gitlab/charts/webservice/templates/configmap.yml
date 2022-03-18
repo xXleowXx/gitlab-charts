@@ -128,7 +128,7 @@ data:
           {{ toYaml .Values.monitoring.ipWhitelist | nindent 10 | trim }}
           {{- end }}
         web_exporter:
-          enabled: {{ eq .Values.monitoring.exporter.enabled true }}
+          enabled: {{ or .Values.monitoring.exporter.enabled (and .Values.metrics.enabled (eq .Values.metrics.port .Values.monitoring.exporter.port)) }}
           address: 0.0.0.0
           port: {{ .Values.monitoring.exporter.port }}
         sidekiq_exporter:

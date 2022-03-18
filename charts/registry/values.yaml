@@ -1,6 +1,6 @@
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
-  tag: 'v3.31.0-gitlab'
+  tag: 'v3.32.0-gitlab'
   # pullPolicy: IfNotPresent
   # pullSecrets: []
 
@@ -10,7 +10,7 @@ deployment:
     enabled: true
     path: '/debug/health'
     # defaults to the debug port
-    # port: 5001
+    port:
     initialDelaySeconds: 5
     periodSeconds: 5
     timeoutSeconds: 1
@@ -20,7 +20,7 @@ deployment:
     enabled: true
     path: '/debug/health'
     # defaults to the debug port
-    # port: 5001
+    port:
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 1
@@ -275,9 +275,19 @@ log:
 debug:
   addr:
     port: 5001
+  # DEPRECATED in favor of `metrics`
   prometheus:
     enabled: false
-    path: '/metrics'
+    path:
+
+# The debug.addr.port is used for metrics
+metrics:
+  enabled: false
+  path: /metrics
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    endpointConfig: {}
 
 # Amount of time to wait for HTTP connections to drain after
 # receiving a SIGTERM signal
@@ -340,6 +350,7 @@ database:
 migration:
   enabled: false
   disablemirrorfs: false
+  testslowimport: "0s"
   # rootdirectory:
   # tagconcurrency: 1
   # maxconcurrentimports: 1
