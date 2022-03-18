@@ -325,6 +325,10 @@ global:
       enabled: false
       bucket: gitlab-terraform-state
       connection: {}
+    ciSecureFiles:
+      enabled: false
+      bucket: gitlab-ci-secure-files
+      connection: {}
     dependencyProxy:
       enabled: false
       proxy_download: true
