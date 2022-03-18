@@ -458,6 +458,7 @@ global:
       # appIdKey:
       # appSecretKey:
       # redirectUri:
+      # authScope:
 
   ## https://docs.gitlab.com/charts/advanced/geo/
   geo:

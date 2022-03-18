@@ -325,6 +325,12 @@ describe 'GitLab Pages' do
 
             expect(shared_secret_mount.length).to eq(1)
           end
+
+          it 'populates auth-scope in GitLab Pages config' do
+            config_data = pages_enabled_template.dig('ConfigMap/test-gitlab-pages', 'data', 'config.tpl')
+
+            expect(config_data).to include('auth-scope=api')
+          end
         end
       end
 
@@ -456,6 +462,9 @@ describe 'GitLab Pages' do
               pages:
                 enabled: true
                 accessControl: true
+              oauth:
+                gitlab-pages:
+                  authScope: read_api
             gitlab:
               gitlab-pages:
                 artifactsServerTimeout: 50
@@ -534,6 +543,7 @@ describe 'GitLab Pages' do
             auth-client-id={% file.Read "/etc/gitlab-secrets/pages/gitlab_appid" %}
             auth-client-secret={% file.Read "/etc/gitlab-secrets/pages/gitlab_appsecret" %}
             auth-secret={% file.Read "/etc/gitlab-secrets/pages/auth_secret" %}
+            auth-scope=read_api
             zip-cache-refresh=60s
             rate-limit-source-ip=100.5
             rate-limit-source-ip-burst=50

@@ -106,7 +106,8 @@ data:
     auth-redirect-uri={{ template "oauth.gitlab-pages.authRedirectUri" . }}
     auth-client-id={% file.Read "/etc/gitlab-secrets/pages/gitlab_appid" %}
     auth-client-secret={% file.Read "/etc/gitlab-secrets/pages/gitlab_appsecret" %}
-    auth-secret={% file.Read "/etc/gitlab-secrets/pages/auth_secret" %} 
+    auth-secret={% file.Read "/etc/gitlab-secrets/pages/auth_secret" %}
+    auth-scope={{ template "oauth.gitlab-pages.authScope" . }}
     {{- end }}
     {{- with .Values.zipCache }}
     {{- if .cleanup }}

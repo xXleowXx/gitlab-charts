@@ -2029,6 +2029,7 @@ global:
     # appid
     # appsecret
     # redirectUri
+    # authScope
 ```
 
 | Name           | Type   | Default | Description                                                                                            |
@@ -2037,6 +2038,7 @@ global:
 | `appIdKey`     | String |         | Key in the secret under which App ID of service is stored. Default value being set is `appid`.         |
 | `appSecretKey` | String |         | Key in the secret under which App Secret of service is stored. Default value being set is `appsecret`. |
 | `redirectUri`  | String |         | URI to which user should be redirected after successful authorization.                                 |
+| `authScope`    | String | `api`   | Scope used for authentication with GitLab API.                                                         |
 
 Check the [secrets documentation](../installation/secrets.md#oauth-integration) for more details on the secret.
 
