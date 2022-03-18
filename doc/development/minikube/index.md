@@ -173,7 +173,7 @@ In the following sections, we'll show how to install these charts from your loca
 Be sure that you have checked out the desired branch or tag, and are at the base folder of
 that checkout.
 
-### CLone GitLab chart repo
+### Clone GitLab chart repo
 
 ```shell
 git clone https://gitlab.com/gitlab-org/charts/gitlab.git
@@ -187,7 +187,6 @@ When using the recommended 4 CPU and 10 GB of RAM, use
 as a base.
 
 ```shell
-helm repo add bitnami https://charts.bitnami.com/bitnami
 helm dependency update
 helm upgrade --install gitlab . \
   --timeout 600s \
@@ -201,7 +200,6 @@ and disable unneeded services. See [`values-minikube-minimum.yaml`](https://gitl
 as a reasonable base.
 
 ```shell
-helm repo add bitnami https://charts.bitnami.com/bitnami
 helm dependency update
 helm upgrade --install gitlab . \
   --timeout 600s \
