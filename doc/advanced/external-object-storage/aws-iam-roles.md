@@ -180,7 +180,7 @@ gitlab:
 
 You can test if the IAM role is correctly set up and that GitLab is accessing
 S3 using the IAM role by logging into the `toolbox` pod and installing the
-`awscli` Python package:
+`awscli` Python package (replace `<namespace>` with the namespace where GitLab is installed):
 
 ```shell
 kubectl exec -ti $(kubectl get pod -n <namespace> -lapp=toolbox -o jsonpath='{.items[0].metadata.name}') -n <namespace> -- bash
