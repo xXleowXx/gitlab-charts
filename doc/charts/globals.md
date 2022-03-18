@@ -867,6 +867,10 @@ global:
       enabled: false
       bucket: gitlab-terraform-state
       connection: {}
+    ciSecureFiles:
+      enabled: false
+      bucket: gitlab-ci-secure-files
+      connection: {}
     dependencyProxy:
       enabled: false
       bucket: gitlab-dependency-proxy
@@ -1066,6 +1070,7 @@ By default, GitLab uses these bucket names for each type:
 | Uploads                      | `gitlab-uploads`          |
 | External merge request diffs | `gitlab-mr-diffs`         |
 | Terraform State              | `gitlab-terraform-state`  |
+| CI Secure Files              | `gitlab-ci-secure-files`  |
 | Dependency Proxy             | `gitlab-dependency-proxy` |
 | Pages                        | `gitlab-pages`            |
 
@@ -1078,6 +1083,7 @@ You can use these defaults or configure the bucket names:
 --set global.appConfig.uploads.bucket=<BUCKET NAME> \
 --set global.appConfig.externalDiffs.bucket=<BUCKET NAME> \
 --set global.appConfig.terraformState.bucket=<BUCKET NAME> \
+--set global.appConfig.ciSecureFiles.bucket=<BUCKET NAME> \
 --set global.appConfig.dependencyProxy.bucket=<BUCKET NAME>
 ```
 
