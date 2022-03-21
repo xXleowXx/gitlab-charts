@@ -13,7 +13,8 @@ function gen_random(){
 
 # Args: yaml file, search path
 function fetch_rails_value(){
-  local value=$(yq read $1 "${2}")
+  local value=$(yq ".${2}" $1)
+
   # Don't return null values
   if [ "${value}" != "null" ]; then echo "${value}"; fi
 }
