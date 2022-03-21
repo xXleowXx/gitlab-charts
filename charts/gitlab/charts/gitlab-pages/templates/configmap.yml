@@ -122,6 +122,9 @@ data:
     {{- if .Values.zipOpenTimeout }}
     zip-open-timeout={{ .Values.zipOpenTimeout }}
     {{- end }}
+    {{- if .Values.zipHTTPClientTimeout }}
+    zip-http-client-timeout={{ .Values.zipHTTPClientTimeout }}
+    {{- end }}
     {{- if .Values.rateLimitSourceIP }}
     rate-limit-source-ip={{ .Values.rateLimitSourceIP }}
     {{- end }}
