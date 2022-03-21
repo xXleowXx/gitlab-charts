@@ -489,6 +489,7 @@ describe 'GitLab Pages' do
                   port: 9999
                 zipCache:
                   refresh: 60s
+                zipHTTPClientTimeout: 30m
                 rateLimitSourceIP: 100.5
                 rateLimitSourceIPBurst: 50
                 rateLimitDomain: 2000.5
@@ -535,6 +536,7 @@ describe 'GitLab Pages' do
             auth-client-secret={% file.Read "/etc/gitlab-secrets/pages/gitlab_appsecret" %}
             auth-secret={% file.Read "/etc/gitlab-secrets/pages/auth_secret" %}
             zip-cache-refresh=60s
+            zip-http-client-timeout=30m
             rate-limit-source-ip=100.5
             rate-limit-source-ip-burst=50
             rate-limit-domain=2000.5
