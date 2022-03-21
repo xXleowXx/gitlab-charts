@@ -659,7 +659,7 @@ global:
   kubectl:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
-      tag: 1.18.20@sha256:824750f20381facb70cb90d3cd41da075d7ffde5a14de6f14f7037285fe0ddb7
+      tag: deps-5244820-9473bb2
       # pullPolicy: IfNotPresent
       # pullSecrets: []
     securityContext:
