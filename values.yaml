@@ -109,6 +109,7 @@ global:
     # database: gitlabhq_production
     # applicationName:
     # preparedStatements: false
+    # databaseTasks: true
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-redis-settings
   redis:
