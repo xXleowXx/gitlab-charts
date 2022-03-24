@@ -12,7 +12,7 @@ The [GitLab Operator](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator
 NOTE:
 If you want to integrate GitLab with OpenShift, see the [OpenShift and GitLab documentation](https://docs.gitlab.com/ee/install/openshift_and_gitlab/index.html).
 
-GitLab Operator is an implementation of the [Operator pattern](https://docs.openshift.com/container-platform/latest/operators/understanding/olm-what-operators-are.html)
+GitLab Operator is an implementation of the [Operator pattern](https://docs.openshift.com/container-platform/4.10/operators/understanding/olm-what-operators-are.html)
 for managing the lifecycle and upgrades of a GitLab instance. The GitLab Operator strengthens the support of OpenShift from GitLab, but is intended to be as native to Kubernetes as for OpenShift. The GitLab Operator provides a method of synchronizing and controlling various
 stages of cloud-native GitLab installation and upgrade procedures. Using the Operator provides the ability to perform
 rolling upgrades with minimal down time. The first goal is to support OpenShift, the subsequent goal will be for automation of day 2 operations like upgrades as noted.
@@ -78,7 +78,7 @@ Before you install GitLab with GitLab Operator, you must:
    - **Metrics server**
 
      - Kubernetes: Install the [metrics server](https://github.com/kubernetes-sigs/metrics-server#installation) so the HorizontalPodAutoscalers can retrieve pod metrics.
-     - OpenShift: OpenShift ships with [Prometheus Adapter](https://docs.openshift.com/container-platform/4.6/monitoring/understanding-the-monitoring-stack.html#default-monitoring-components_understanding-the-monitoring-stack) by default, so there is no manual action required here.
+     - OpenShift: OpenShift ships with [Prometheus Adapter](https://docs.openshift.com/container-platform/4.10/monitoring/monitoring-overview.html#understanding-the-monitoring-stack_monitoring-overview) by default, so there is no manual action required here.
 
 1. Configure the Domain Name services:
 

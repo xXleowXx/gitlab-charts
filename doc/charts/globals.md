@@ -293,7 +293,7 @@ This feature requires the use of an
 deploy PostgreSQL in an HA fashion.
 
 The Rails components in GitLab have the ability to [make use of PostgreSQL
-clusters to load balance read-only queries](https://docs.gitlab.com/ee/administration/database_load_balancing.html).
+clusters to load balance read-only queries](https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html).
 
 This feature can be configured in two fashions:
 
@@ -314,7 +314,7 @@ global:
 
 Configuration of service discovery can be more complex. For a complete
 details of this configuration, the parameters and their associated
-behaviors, see [Service Discovery](https://docs.gitlab.com/ee/administration/database_load_balancing.html#service-discovery)
+behaviors, see [Service Discovery](https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html#service-discovery)
 in the [GitLab Administration documentation](https://docs.gitlab.com/ee/administration/index.html).
 
 ```yaml
@@ -333,7 +333,7 @@ global:
 ```
 
 Further tuning is also available, in regards to the
-[handling of stale reads](https://docs.gitlab.com/ee/administration/database_load_balancing.html#handling-stale-reads).
+[handling of stale reads](https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html#handling-stale-reads).
 The GitLab Administration documentation covers these items in detail,
 and those properties can be added directly under `load_balancing`.
 
