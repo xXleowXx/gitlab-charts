@@ -1018,6 +1018,8 @@ shared-secrets:
   tolerations: []
   podLabels: {}
   annotations: {}
+  kubectl:
+    options: '--cache-dir /tmp/.kube/cache'
 
 ## Installation & configuration of gitlab/gitlab-runner
 ## See requirements.yaml for current version

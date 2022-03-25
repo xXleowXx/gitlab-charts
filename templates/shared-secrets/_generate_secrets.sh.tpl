@@ -4,6 +4,8 @@ namespace={{ .Release.Namespace }}
 release={{ .Release.Name }}
 env={{ index .Values "shared-secrets" "env" }}
 
+KUBECTL="kubectl ${KUBECTL_OPTS} --namespace=$namespace"
+
 pushd $(mktemp -d)
 
 # Args pattern, length
@@ -24,10 +26,10 @@ function label_secret(){
   local secret_name=$1
 {{ if not .Values.global.application.create -}}
   # Remove application labels if they exist
-  kubectl --namespace=$namespace label \
+  $KUBECTL label \
     secret $secret_name $(echo '{{ include "gitlab.application.labels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}' | sed -E 's/=[^ ]*/-/g')
 {{ end }}
-  kubectl --namespace=$namespace label \
+  $KUBECTL label \
     --overwrite \
     secret $secret_name {{ include "gitlab.standardLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }} {{ include "gitlab.commonLabels" . | replace ": " "=" | replace "\r\n" " " | replace "\n" " " }}
 }
@@ -37,8 +39,8 @@ function generate_secret_if_needed(){
   local secret_args=( "${@:2}")
   local secret_name=$1
 
-  if ! $(kubectl --namespace=$namespace get secret $secret_name > /dev/null 2>&1); then
-    kubectl --namespace=$namespace create secret generic $secret_name ${secret_args[@]}
+  if ! $($KUBECTL get secret $secret_name > /dev/null 2>&1); then
+    $KUBECTL create secret generic $secret_name ${secret_args[@]}
   else
     echo "secret \"$secret_name\" already exists."
 
@@ -48,16 +50,16 @@ function generate_secret_if_needed(){
       if [ -z "${from##*literal*}" ]; then
         local key=$(echo -n ${arg} | cut -d '=' -f2)
         local desiredValue=$(echo -n ${arg} | cut -d '=' -f3-)
-        local flags="--namespace=$namespace --allow-missing-template-keys=false"
+        local flags="--allow-missing-template-keys=false"
 
-        if ! $(kubectl $flags get secret $secret_name -ojsonpath="{.data.${key}}" > /dev/null 2>&1); then
+        if ! $($KUBECTL $flags get secret $secret_name -ojsonpath="{.data.${key}}" > /dev/null 2>&1); then
           echo "key \"${key}\" does not exist. patching it in."
 
           if [ "${desiredValue}" != "" ]; then
             desiredValue=$(echo -n "${desiredValue}" | base64 -w 0)
           fi
 
-          kubectl --namespace=$namespace patch secret ${secret_name} -p "{\"data\":{\"$key\":\"${desiredValue}\"}}"
+          $KUBECTL patch secret ${secret_name} -p "{\"data\":{\"$key\":\"${desiredValue}\"}}"
         fi
       fi
     done
@@ -136,8 +138,8 @@ if [ -n "$env" ]; then
   rails_secret={{ template "gitlab.rails-secrets.secret" . }}
 
   # Fetch the values from the existing secret if it exists
-  if $(kubectl --namespace=$namespace get secret $rails_secret > /dev/null 2>&1); then
-    kubectl --namespace=$namespace get secret $rails_secret -o jsonpath="{.data.secrets\.yml}" | base64 --decode > secrets.yml
+  if $($KUBECTL get secret $rails_secret > /dev/null 2>&1); then
+    $KUBECTL get secret $rails_secret -o jsonpath="{.data.secrets\.yml}" | base64 --decode > secrets.yml
     secret_key_base=$(fetch_rails_value secrets.yml "${env}.secret_key_base")
     otp_key_base=$(fetch_rails_value secrets.yml "${env}.otp_key_base")
     db_key_base=$(fetch_rails_value secrets.yml "${env}.db_key_base")
@@ -173,7 +175,7 @@ $(echo "${openid_connect_signing_key}" | awk '{print "        " $0}')
       ci_jwt_signing_key: |
 $(echo "${ci_jwt_signing_key}" | awk '{print "        " $0}')
 EOF
-  kubectl --validate=false --namespace=$namespace apply -f rails-secrets.yml
+  $KUBECTL --validate=false apply -f rails-secrets.yml
   label_secret $rails_secret
 fi
 
