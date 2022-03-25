@@ -16,7 +16,7 @@ Using this pod user can run commands using `kubectl exec -it <pod name> -- <arbi
 
 The Toolbox runs a container from the [Toolbox image](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-toolbox).
 
-The image contains some custom scripts that are to be called as commands by the user, these scripts can be found [here](https://gitlab.com/gitlab-org/build/CNG/-/tree/master/gitlab-toolbox/scripts/bin). These scripts are for running Rake tasks, backup, restore, and some helper scripts for interacting with object storage.
+The image contains some [custom scripts](https://gitlab.com/gitlab-org/build/CNG/-/tree/master/gitlab-toolbox/scripts/bin) that are to be called as commands by the user. Those scripts are for running Rake tasks, backup, restore, and some helper scripts for interacting with object storage.
 
 ## Backup utility
 
