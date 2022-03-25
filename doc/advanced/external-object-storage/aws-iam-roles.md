@@ -57,6 +57,12 @@ use_iam_profile: true
 region: us-east-1
 ```
 
+NOTE:
+Do NOT include `endpoint` in this configuration.
+IRSA makes use of [STS tokens, which use specialized endpoints](https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html).
+When `endpoint` is provided, the AWS client will attempt
+[to send an `AssumeRoleWithWebIdentity` message to this endpoint and will fail](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3148#note_889357676).
+
 ### Backups
 
 The Toolbox configuration allows for annotations to be set to upload backups to S3:
@@ -227,3 +233,9 @@ An error occurred (AccessDenied) when calling the AssumeRoleWithWebIdentity oper
 ```
 
 Otherwise, the STS credentials and IAM role information will be displayed.
+
+## `WebIdentityErr: failed to retrieve credentials`
+
+If you see this error in the logs, this suggests that `endpoint` has
+been configured in your [`object-storage.yaml`](../../charts/globals.md#connection) secret. Remove
+this setting and restart the `webservice` and `sidekiq` pods.
