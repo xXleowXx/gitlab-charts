@@ -15,14 +15,23 @@ global:
       # name: kas.example.com
       # https: true
 
+init:
+  image: {}
+    # repository:
+    # tag:
+  resources:
+    requests:
+      cpu: 50m
+
 hpa:
   targetAverageValue: 100m
 image:
-  repository: registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/kas
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-kas
   # tag: latest
   # pullPolicy: IfNotPresent
   # pullSecrets: []
 ingress:
+  apiVersion:
   annotations: {}
   tls: {}
   agentPath: /
@@ -51,6 +60,10 @@ metrics:
   enabled: true
   port: 8151
   path: /metrics
+  serviceMonitor:
+    enabled: false
+    additionalLabels: {}
+    endpointConfig: {}
 serviceAccount:
   enabled: false
   create: false
@@ -90,3 +103,7 @@ networkpolicy:
     enabled: false
     rules: []
   annotations: {}
+
+affinity:
+  podAntiAffinity:
+    topologyKey:

@@ -25,14 +25,14 @@ spec:
         {{- include "gitlab.podLabels" . | nindent 8 }}
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-        {{- if .Values.metrics.enabled }}
+      {{- if and .Values.metrics.enabled (not .Values.metrics.serviceMonitor.enabled) }}
         gitlab.com/prometheus_scrape: "true"
-        gitlab.com/prometheus_path: {{ .Values.metrics.path | quote }}
         gitlab.com/prometheus_port: {{ .Values.metrics.port | quote }}
+        gitlab.com/prometheus_path: {{ .Values.metrics.path }}
         prometheus.io/scrape: "true"
-        prometheus.io/path: {{ .Values.metrics.path | quote }}
         prometheus.io/port: {{ .Values.metrics.port | quote }}
-        {{- end }}
+        prometheus.io/path: {{ .Values.metrics.path }}
+      {{- end }}
       {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
@@ -46,11 +46,32 @@ spec:
       serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
       automountServiceAccountToken: false
       {{- end }}
+      {{- if eq (default .Values.global.antiAffinity .antiAffinity) "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
+              labelSelector:
+                matchLabels:
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }}
+      {{- else if eq (default .Values.global.antiAffinity .antiAffinity) "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
+              labelSelector:
+                matchLabels:
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }}
+      {{- end }}
       securityContext:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         runAsGroup: {{ .Values.securityContext.runAsGroup }}
         fsGroup: {{ .Values.securityContext.fsGroup }}
       {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
+      initContainers:
+        {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
       containers:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ template "name" . }}
@@ -68,12 +89,14 @@ spec:
           ports:
             - containerPort: {{ .Values.service.internalPort }}
               name: {{ template "name" . }}
-            - containerPort: {{ .Values.metrics.port }}
-              name: {{ template "name" . }}-metrics
             - containerPort: {{ .Values.service.kubernetesApiPort }}
               name: {{ template "name" . }}-k8s-api
             - containerPort: {{ .Values.service.privateApiPort }}
               name: {{ template "name" . }}-private-api
+          {{- if .Values.metrics.enabled }}
+            - containerPort: {{ .Values.metrics.port }}
+              name: http-metrics
+          {{- end }}
           readinessProbe:
             tcpSocket:
               port: {{ .Values.service.internalPort }}
@@ -91,8 +114,10 @@ spec:
               mountPath: /etc/kas
               readOnly: true
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
+            {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
       volumes:
       {{- include "gitlab.extraVolumes" . | nindent 6 }}
+      {{- include "gitlab.certificates.volumes" . | nindent 6 }}
       - name: init-etc-kas
         projected:
           defaultMode: 0440

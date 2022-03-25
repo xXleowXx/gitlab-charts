@@ -11,6 +11,7 @@ minioMc:
   tag: "RELEASE.2018-07-13T00-53-22Z"
 
 ingress:
+  apiVersion:
   enabled:
   proxyReadTimeout: 900
   proxyBodySize: "0"
@@ -144,6 +145,7 @@ defaultBuckets:
   - name: gitlab-pseudo
   - name: gitlab-mr-diffs
   - name: gitlab-terraform-state
+  - name: gitlab-ci-secure-files
   - name: gitlab-dependency-proxy
   - name: gitlab-pages
   #

@@ -8,8 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ## UPGRADE FAILED: "$name" has no deployed releases
 
-This error will occur on your second install/upgrade if your initial
-install failed.
+This error occurs on your second install/upgrade if your initial install failed.
 
 If your initial install completely failed, and GitLab was never operational, you
 should first purge the failed install before installing again.
@@ -180,6 +179,8 @@ Sidekiq pods did not receive a unique selector prior to chart release
 Upgrades to `3.0.0` using Helm will automatically delete the old Sidekiq deployments and create new ones by appending `-v1` to the
 name of the Sidekiq `Deployments`,`HPAs`, and `Pods`.
 
+Starting from `5.5.0` Helm will delete old Sidekiq deployments from prior versions and will use `-v2` suffix for `Pods`, `Deployments` and `HPAs`.
+
 If you continue to run into this error on the Sidekiq deployment when installing `3.0.0`, resolve these with the following
 steps:
 
@@ -216,6 +217,23 @@ actually applied to the deployment.
     helm upgrade --install --values - YOUR-RELEASE-NAME gitlab/gitlab < <(helm get values YOUR-RELEASE-NAME)
     ```
 
+### cannot patch `gitlab-kube-state-metrics` with kind Deployment
+
+Upgrading from **Prometheus** version `11.16.9` to `15.0.4` changes the selector labels
+used on the [kube-state-metrics Deployment](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-state-metrics),
+which is disabled by default (`prometheus.kubeStateMetrics.enabled=false`).
+
+If this error message is encountered, meaning `prometheus.kubeStateMetrics.enabled=true`, then upgrading
+requires [an additional step](https://artifacthub.io/packages/helm/prometheus-community/prometheus#to-15-0):
+
+1. Remove the old **kube-state-metrics** Deployment.
+
+   ```shell
+   kubectl delete deployments.apps -l app.kubernetes.io/instance=RELEASE_NAME,app.kubernetes.io/name=kube-state-metrics --cascade=orphan
+   ```
+
+1. Perform an upgrade via Helm.
+
 ## `ImagePullBackOff`, `Failed to pull image` and `manifest unknown` errors
 
 If you are using [`global.gitlabVersion`](../charts/globals.md#gitlab-version),
@@ -232,7 +250,7 @@ You can find the full explanation and workaround in [Migrating from Helm v2 to H
 
 You may face this error when restoring a backup on your Helm chart instance. Use the following steps as a workaround:
 
-1. Inside your `task-runner` pod open the DB console:
+1. Inside your `toolbox` pod open the DB console:
 
    ```shell
    /srv/gitlab/bin/rails dbconsole -p
@@ -270,6 +288,18 @@ version of the chart and then follow the steps in the [upgrade guide](../install
 upgrade the bundled PostgreSQL version. Once PostgreSQL is properly upgraded, try the GitLab Helm
 chart upgrade again.
 
+## Bundled NGINX Ingress pod fails to start: `Failed to watch *v1beta1.Ingress`
+
+The following error message may appear in the bundled NGINX Ingress controller pod if running Kubernetes version 1.22 or later:
+
+```plaintext
+Failed to watch *v1beta1.Ingress: failed to list *v1beta1.Ingress: the server could not find the requested resource
+```
+
+To address this, ensure the Kubernetes version is 1.21 or older. See
+[#2852](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2852) for
+more information regarding NGINX Ingress support for Kubernetes 1.22 or later.
+
 ## Increased load on `/api/v4/jobs/requests` endpoint
 
 You may face this issue if the option `workhorse.keywatcher` was set to `false` for the deployment servicing `/api/*`.
@@ -295,3 +325,231 @@ thus causing the extra load in the `/api/v4/jobs/requests` endpoint. To fix this
 workhorse:
   keywatcher: true
 ```
+
+## Git over SSH: `the remote end hung up unexpectedly`
+
+Git operations over SSH might fail intermittently with the following error:
+
+```plaintext
+fatal: the remote end hung up unexpectedly
+fatal: early EOF
+fatal: index-pack failed
+```
+
+There are a number of potential causes for this error:
+
+- **Network timeouts**:
+
+  Git clients sometimes open a connection and leave it idling, like when compressing objects.
+  Settings like `timeout client` in HAProxy might cause these idle connections to be terminated.
+
+  In [GitLab 14.0 (chart version 5.0)](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2049)
+  and later, you can set a keepalive in `sshd`:
+
+  ```yaml
+  gitlab:
+    gitlab-shell:
+      config:
+        clientAliveInterval: 15
+  ```
+
+- **`gitlab-shell` memory**:
+
+  By default, the chart does not set a limit on GitLab Shell memory.
+  If `gitlab.gitlab-shell.resources.limits.memory` is set too low, Git operations over SSH may fail with these errors.
+
+  Run `kubectl describe nodes` to confirm that this is caused by memory limits rather than
+  timeouts over the network.
+
+  ```plaintext
+  System OOM encountered, victim process: gitlab-shell
+  Memory cgroup out of memory: Killed process 3141592 (gitlab-shell)
+  ```
+
+## YAML configuration: `mapping values are not allowed in this context`
+
+The following error message may appear when YAML configuration contains leading spaces:
+
+```plaintext
+template: /var/opt/gitlab/templates/workhorse-config.toml.tpl:16:98:
+  executing \"/var/opt/gitlab/templates/workhorse-config.toml.tpl\" at <data.YAML>:
+    error calling YAML:
+      yaml: line 2: mapping values are not allowed in this context
+```
+
+To address this, ensure that there are no leading spaces in configuration.
+
+For example, change this:
+
+```yaml
+  key1: value1
+  key2: value2
+```
+
+... to this:
+
+```yaml
+key1: value1
+key2: value2
+```
+
+This change ensures that the configuration can be populated correctly by
+[gomplate](https://gomplate.ca), which was added in GitLab 14.5 (chart version 5.5.0)
+via [MR 2218](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2218).
+
+## TLS and certificates
+
+If your GitLab instance needs to trust a private TLS certificate authority, GitLab might
+fail to handshake with other services like object storage, Elasticsearch, Jira, or Jenkins:
+
+```plaintext
+error: certificate verify failed (unable to get local issuer certificate)
+```
+
+Partial trust of certificates signed by private certificate authorities can occur if:
+
+- The supplied certificates are not in separate files.
+- The certificates init container doesn't perform all the required steps.
+
+Also, GitLab is mostly written in Ruby on Rails and Golang, and each language's
+TLS libraries work differently. This difference can result in issues like job logs
+failing to render in the GitLab UI but raw job logs downloading without issue.
+
+Additionally, depending on the `proxy_download` configuration, your browser is
+redirected to the object storage with no issues if the trust store is correctly configured.
+At the same time, TLS handshakes by one or more GitLab components could still fail.
+
+### Certificate trust setup and troubleshooting
+
+As part of troubleshooting certificate issues, be sure to:
+
+- Create secrets for each certificate you need to trust.
+- Provide only one certificate per file.
+
+  ```plaintext
+  kubectl create secret generic custom-ca --from-file=unique_name=/path/to/cert
+  ```
+
+  In this example, the certificate is stored using the key name `unique_name`
+
+If you supply a bundle or a chain, some GitLab components won't work.
+
+Query secrets with `kubectl get secrets` and `kubectl describe secrets/secretname`,
+which shows the key name for the certificate under `Data`.
+
+Supply additional certificates to trust using `global.certificates.customCAs`
+[in the chart globals](../charts/globals.md#custom-certificate-authorities).
+
+When a pod is deployed, an init container mounts the certificates and sets them up so the GitLab
+components can use them. The init container is`registry.gitlab.com/gitlab-org/build/cng/alpine-certificates`.
+
+Additional certificates are mounted into the container at `/usr/local/share/ca-certificates`,
+using the secret key name as the certificate filename.
+
+The init container runs `/scripts/bundle-certificates` ([source](https://gitlab.com/gitlab-org/build/CNG-mirror/-/blob/master/alpine-certificates/scripts/bundle-certificates)).
+In that script, `update-ca-certificates`:
+
+1. Copies custom certificates from `/usr/local/share/ca-certificates` to `/etc/ssl/certs`.
+1. Compiles a bundle `ca-certificates.crt`.
+1. Generates hashes for each certificate and creates a symlink using the hash,
+   which is required for Rails. Certificate bundles are skipped with a warning:
+
+   ```plaintext
+   WARNING: unique_name does not contain exactly one certificate or CRL: skipping
+   ```
+
+[Troubleshoot the init container's status and logs](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-init-containers/#getting-details-about-init-containers).
+For example, to view the logs for the certificates init container and check for warnings:
+
+```plaintext
+kubectl logs gitlab-webservice-default-pod -c certificates
+```
+
+### Check on the Rails console
+
+Use the toolbox pod to verify if Rails trusts the certificates you supplied.
+
+1. Start a Rails console (replace `<namespace>` with the namespace where GitLab is installed):
+
+   ```shell
+   kubectl exec -ti $(kubectl get pod -n <namespace> -lapp=toolbox -o jsonpath='{.items[0].metadata.name}') -n <namespace> -- bash
+   /srv/gitlab/bin/rails console
+   ```
+
+1. Verify the location Rails checks for certificate authorities:
+
+   ```ruby
+   OpenSSL::X509::DEFAULT_CERT_DIR
+   ```
+
+1. Execute an HTTPS query in the Rails console:
+
+   ```ruby
+   ## Configure a web server to connect to:
+   uri = URI.parse("https://myservice.example.com")
+
+   require 'openssl'
+   require 'net/http'
+   Rails.logger.level = 0
+   OpenSSL.debug=1
+   http = Net::HTTP.new(uri.host, uri.port)
+   http.set_debug_output($stdout)
+   http.use_ssl = true
+
+   http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+   # http.verify_mode = OpenSSL::SSL::VERIFY_NONE # TLS verification disabled
+
+   response = http.request(Net::HTTP::Get.new(uri.request_uri))
+   ```
+
+### Troubleshoot the init container
+
+Run the certificates container using Docker.
+
+1. Set up a directory structure and populate it with your certificates:
+
+   ```shell
+   mkdir -p etc/ssl/certs usr/local/share/ca-certificates
+
+     # The secret name is: my-root-ca
+     # The key name is: corporate_root
+
+   kubectl get secret my-root-ca -ojsonpath='{.data.corporate_root}' | \
+        base64 --decode > usr/local/share/ca-certificates/corporate_root
+
+     # Check the certificate is correct:
+
+   openssl x509 -in usr/local/share/ca-certificates/corporate_root -text -noout
+   ```
+
+1. Determine the correct container version:
+
+   ```shell
+   kubectl get deployment -lapp=webservice -ojsonpath='{.items[0].spec.template.spec.initContainers[0].image}'
+   ```
+
+1. Run container, which performs the preparation of `etc/ssl/certs` content:
+
+   ```shell
+   docker run -ti --rm \
+        -v $(pwd)/etc/ssl/certs:/etc/ssl/certs \
+        -v $(pwd)/usr/local/share/ca-certificates:/usr/local/share/ca-certificates \
+        registry.gitlab.com/gitlab-org/build/cng/alpine-certificates:20191127-r2
+   ```
+
+1. Check your certificates have been correctly built:
+
+   - `etc/ssl/certs/ca-cert-corporate_root.pem` should have been created.
+   - There should be a hashed filename, which is a symlink to the certificate itself (such as `etc/ssl/certs/1234abcd.0`).
+   - The file and the symbolic link should display with:
+
+     ```shell
+     ls -l etc/ssl/certs/ | grep corporate_root
+     ```
+
+     For example:
+
+     ```plaintext
+     lrwxrwxrwx   1 root root      20 Oct  7 11:34 28746b42.0 -> ca-cert-corporate_root.pem
+     -rw-r--r--   1 root root    1948 Oct  7 11:34 ca-cert-corporate_root.pem
+     ```

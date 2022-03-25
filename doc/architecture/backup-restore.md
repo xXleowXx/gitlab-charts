@@ -8,13 +8,13 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This document explains the technical implementation of the backup and restore into/from CNG.
 
-## Task runner pod
+## Toolbox pod
 
-The [task runner chart](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/charts/gitlab/charts/task-runner) deploys a pod into the cluster. This pod will act as an entry point for interaction with other containers in the cluster.
+The [toolbox chart](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/charts/gitlab/charts/toolbox) deploys a pod into the cluster. This pod will act as an entry point for interaction with other containers in the cluster.
 
 Using this pod user can run commands using `kubectl exec -it <pod name> -- <arbitrary command>`
 
-The Task Runner runs a container from the [Task Runner image](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-task-runner).
+The Toolbox runs a container from the [Toolbox image](https://gitlab.com/gitlab-org/build/CNG/tree/master/gitlab-toolbox).
 
 The image contains some custom scripts that are to be called as commands by the user, these scripts can be found [here](https://gitlab.com/gitlab-org/build/CNG/-/tree/master/gitlab-toolbox/scripts/bin). These scripts are for running Rake tasks, backup, restore, and some helper scripts for interacting with object storage.
 
@@ -45,7 +45,7 @@ Backups are made using the following steps, in order:
 
 - `--skip <component>`
 
-  You can skip parts of the backup process by using `--skip <component>` for every component that you want to skip in the backup process. Skippable components are the database (`db`), repositories (`repositories`), and any of the object storages (`registry`, `uploads`, `artifacts`, `lfs`, `packages`, `external_diffs`, or `terraform_state`).
+  You can skip parts of the backup process by using `--skip <component>` for every component that you want to skip in the backup process. Skippable components are the database (`db`), repositories (`repositories`), and any of the object storages (`registry`, `uploads`, `artifacts`, `lfs`, `packages`, `external_diffs`, `terraform_state`, or `ci_secure_files`).
 
 - `-t <timestamp-override-value>`
 

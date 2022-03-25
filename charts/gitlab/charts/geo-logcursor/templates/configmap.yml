@@ -16,12 +16,7 @@ data:
     {{- include "gitlab.geo.database.yml" . | nindent 4 }}
   smtp_settings.rb: |
     {{- include "gitlab.smtp_settings" . | nindent 4 }}
-  {{- include "gitlab.rails.redis.resque" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.cache" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.sharedState" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.queues" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.cable" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.traceChunks" . | nindent 2 }}
+  {{- include "gitlab.rails.redis.all" . | nindent 2 }}
   gitlab.yml.erb: |
     production: &base
       gitlab:
@@ -56,10 +51,10 @@ data:
         email_reply_to: {{ template "gitlab.email.reply_to" . }}
         email_subject_suffix: {{ .Values.global.email.subject_suffix | quote }}
       {{- with .Values.global.appConfig }}
-      {{- if eq .incomingEmail.enabled true }}
+      {{- if .incomingEmail.enabled }}
       {{- include "gitlab.appConfig.incoming_email" . | nindent 6 }}
       {{- end }}
-      {{- if eq .serviceDeskEmail.enabled true }}
+      {{- if .serviceDeskEmail.enabled }}
       {{- include "gitlab.appConfig.service_desk_email" . | nindent 6 }}
       {{- end }}
       {{- include "gitlab.appConfig.cronJobs" . | nindent 6 }}

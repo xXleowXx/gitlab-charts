@@ -9,8 +9,11 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 This is the official, recommended, and supported method to install GitLab on a cloud native environment.
 
 NOTE:
-It is not necessary to have GitLab installed on Kubernetes in order to use
+It is not necessary to have GitLab installed on Kubernetes to use
 the [GitLab Kubernetes integration](https://docs.gitlab.com/ee/user/project/clusters/).
+
+NOTE:
+A charts-only installation of a GitLab instance places stateful services into the cluster. This is provided for the convenience of conducting proof of concepts, but is not GitLab [Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures/) compliant. Read more about details about how to deploy GitLab to Kubernetes for production-grade implementations in the [GitLab Helm chart documentation](installation/index.md).
 
 ## Introduction
 
@@ -31,7 +34,7 @@ can be installed separately.
   - GitLab/[Mailroom](charts/gitlab/mailroom/index.md)
   - GitLab/[Migrations](charts/gitlab/migrations/index.md)
   - GitLab/[Sidekiq](charts/gitlab/sidekiq/index.md)
-  - GitLab/[Task Runner](charts/gitlab/task-runner/index.md)
+  - GitLab/[Toolbox](charts/gitlab/toolbox/index.md)
   - GitLab/[Webservice](charts/gitlab/webservice/index.md)
 - Optional dependencies:
   - [PostgreSQL](https://artifacthub.io/packages/helm/bitnami/postgresql)
@@ -43,7 +46,8 @@ can be installed separately.
   - [_Unprivileged_](https://docs.gitlab.com/runner/install/kubernetes.html#running-docker-in-docker-containers-with-gitlab-runner) [GitLab Runner](https://docs.gitlab.com/runner/) using the Kubernetes executor
   - Automatically provisioned SSL via [Let's Encrypt](https://letsencrypt.org/), using [Jetstack](https://www.jetstack.io/)'s [cert-manager](https://cert-manager.io/docs/)
   - GitLab/[Praefect](charts/gitlab/praefect/index.md)
-  - GitLab/[Kubernetes Agent Server (KAS)](charts/gitlab/kas/index.md)
+  - GitLab/[GitLab agent server (KAS)](charts/gitlab/kas/index.md)
+  - GitLab/[Spamcheck](charts/gitlab/spamcheck/index.md)
 
 ## GitLab Helm chart quick start guide
 
@@ -73,7 +77,7 @@ may want to enable optional features or [advanced configuration](#advanced-confi
 This guide walks all of the options and features of these charts in great depth.
 
 If you are just looking to deploy a Proof of Concept for testing, we strongly suggest
-you follow our [Quick Start](#gitlab-helm-chart-quick-start-guide) for your first iteration.
+you follow our [Quick Start](quickstart/index.md) for your first iteration.
 
 1. [Preparation](installation/index.md)
 1. [Deployment](installation/deployment.md)

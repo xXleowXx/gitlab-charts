@@ -30,8 +30,6 @@ describe 'Webservice Deployments configuration' do
             labels:
               global: true
               foo: global
-          operator:
-            enabled: true
           pod:
             labels:
               global_pod: true
@@ -114,15 +112,6 @@ describe 'Webservice Deployments configuration' do
       expect(t.labels('NetworkPolicy/test-webservice-v1')).to include('global' => 'webservice')
 
       expect(t.labels('PodDisruptionBudget/test-webservice-default')).to include('global' => 'webservice')
-
-      expect(t.labels('ServiceAccount/test-webservice-pause')).to include('global' => 'webservice')
-      expect(t.labels('ServiceAccount/test-webservice-pause')).to include('global' => 'webservice')
-
-      expect(t.labels('Role/test-webservice-pause')).to include('global' => 'webservice')
-
-      expect(t.labels('RoleBinding/test-webservice-pause')).to include('global' => 'webservice')
-
-      expect(t.labels('Job/test-webservice-pause')).to include('global' => 'webservice')
     end
 
     it 'Populates the additional labels on on all objects per deployment' do
@@ -508,6 +497,59 @@ describe 'Webservice Deployments configuration' do
         end
       end
     end
+
+    context 'local ingress provider annotations' do
+      let(:deployments_values) do
+        YAML.safe_load(%(
+          gitlab:
+            webservice:
+              deployments:
+                default:
+                  ingress:
+                    path: /
+                second:
+                  ingress:
+                    path: /second
+                    provider: second-provider
+        )).deep_merge(default_values)
+      end
+
+      it 'properly sets the ingress providers' do
+        t = HelmTemplate.new(deployments_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'nginx')
+        expect(t.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
+      end
+    end
+
+    context 'global ingress provider annotations' do
+      let(:deployments_values) do
+        YAML.safe_load(%(
+          global:
+            ingress:
+              provider: global-provider
+          gitlab:
+            webservice:
+              deployments:
+                default:
+                  ingress:
+                    path: /
+                second:
+                  ingress:
+                    path: /second
+                    provider: second-provider
+        )).deep_merge(default_values)
+      end
+
+      it 'properly sets the ingress providers' do
+        t = HelmTemplate.new(deployments_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.annotations('Ingress/test-webservice-default')).to include('kubernetes.io/ingress.provider' => 'global-provider')
+        expect(t.annotations('Ingress/test-webservice-second')).to include('kubernetes.io/ingress.provider' => 'second-provider')
+      end
+    end
   end
 
   context 'shutdown.blackoutSeconds' do
@@ -595,7 +637,7 @@ describe 'Webservice Deployments configuration' do
       configmaps = t.resources_by_kind('ConfigMap')
       workhorse_config = {}
       ['default', 'api', 'git'].each do |container|
-        workhorse_config[container] = configmaps.fetch("ConfigMap/test-workhorse-#{container}").fetch("data").fetch("workhorse-config.toml.erb")
+        workhorse_config[container] = configmaps.fetch("ConfigMap/test-workhorse-#{container}").fetch("data").fetch("workhorse-config.toml.tpl")
       end
 
       expect(workhorse_config['default']).not_to include("[redis]")

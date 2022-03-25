@@ -17,7 +17,8 @@
 {{- $railsSecretName := include "gitlab.rails-secrets.secret" . -}}
 {{- $metricsEnabled := .Values.metrics.enabled -}}
 {{- $metricsPort := .Values.metrics.port -}}
-{{- $metricsAnnotations := .Values.metrics.annotations -}}
+{{- $metricsPath := .Values.metrics.path -}}
+{{- $healthChecksPort := .Values.health_checks.port | default $metricsPort -}}
 {{- $configMapChecksum := include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 {{- range .Values.pods -}}
 {{-   $queueName := printf "%s-%s" $fullname .name | trunc 63 }}
@@ -27,7 +28,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ printf "%s-v1" ($queueName | trunc 60) }}
+  name: {{ printf "%s-v2" ($queueName | trunc 60) }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "gitlab.standardLabels" $ | nindent 4 }}
@@ -36,9 +37,6 @@ metadata:
   annotations:
     {{- include "gitlab.deploymentAnnotations" $ | nindent 4 }}
 spec:
-  {{- if $.Values.global.operator.enabled }}
-  paused: true
-  {{- end }}
   selector:
     matchLabels:
       {{- include "gitlab.selectorLabels" $ | nindent 6 }}
@@ -59,9 +57,18 @@ spec:
       {{- range $key, $value := $.Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
-{{- if $metricsEnabled }}
-        {{- toYaml $metricsAnnotations | nindent 8 }}
-{{- end }}
+      {{- if and $metricsEnabled (not $.Values.metrics.podMonitor.enabled) }}
+      {{- if $.Values.metrics.annotations }}
+        {{- toYaml $.Values.metrics.annotations | nindent 8 }}
+      {{- else }}
+        gitlab.com/prometheus_scrape: "true"
+        gitlab.com/prometheus_port: {{ $metricsPort | quote }}
+        gitlab.com/prometheus_path: {{ $metricsPath }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ $metricsPort | quote }}
+        prometheus.io/path: {{ $metricsPath }}
+      {{- end }}
+      {{- end }}
     spec:
       {{- if $.Values.tolerations }}
       tolerations:
@@ -77,17 +84,18 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: "kubernetes.io/hostname"
+            - topologyKey: {{ default $.Values.global.affinity.podAntiAffinity.topologyKey $.Values.affinity.podAntiAffinity.topologyKey | quote }}
               labelSelector:
                 matchLabels:
                   {{- include "gitlab.selectorLabels" $ | nindent 18 }}
+                  queue-pod-name: {{ .name }}
       {{- else if eq (default $.Values.global.antiAffinity .antiAffinity) "soft" }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
+              topologyKey: {{ default $.Values.global.affinity.podAntiAffinity.topologyKey $.Values.affinity.podAntiAffinity.topologyKey | quote }}
               labelSelector:
                 matchLabels:
                   {{- include "gitlab.selectorLabels" $ | nindent 18 }}
@@ -138,10 +146,6 @@ spec:
               value: {{ default $concurrency .concurrency | quote }}
             - name: SIDEKIQ_TIMEOUT
               value: {{ default $timeout .timeout | quote }}
-{{- if $.Values.global.operator.enabled }}
-            - name: BYPASS_SCHEMA_VERSION
-              value: 'true'
-{{- end }}
             {{- if $.Values.global.rails.bootsnap.enabled }}
             - name: ENABLE_BOOTSNAP
               value: "1"
@@ -150,6 +154,7 @@ spec:
           volumeMounts:
           {{- tpl (default "" .extraVolumeMounts) $ | nindent 10 }}
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
+          {{- include "gitlab.certificates.volumeMount" $ | nindent 10 }}
           - name: sidekiq-config
             mountPath: '/var/opt/gitlab/templates'
             readOnly: true
@@ -169,10 +174,10 @@ spec:
           image: "{{ $image }}"
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           env:
-{{- if $metricsEnabled }}
+          {{- if $metricsEnabled }}
             - name: prometheus_multiproc_dir
               value: /metrics
-{{- end }}
+          {{- end }}
             - name: GITALY_FEATURE_DEFAULT_ON
               value: "1"
             - name: CONFIG_TEMPLATE_DIRECTORY
@@ -210,19 +215,19 @@ spec:
               value: "1"
             {{- end }}
             {{- include "gitlab.tracing.env" $ | nindent 12 }}
-            {{- include "sidekiq.podExtraEnv" (dict "local" . "parent" $) | nindent 12 }}
-{{- if $metricsEnabled }}
+            {{- include "sidekiq.podExtraEnv" (dict "local" . "context" $) | nindent 12 }}
+        {{- if $metricsEnabled }}
           ports:
           - containerPort: {{ $metricsPort }}
-            name: metrics
-{{- end }}
+            name: http-metrics
+        {{- end }}
           volumeMounts:
           {{- tpl (default "" .extraVolumeMounts) $ | nindent 10 }}
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
-{{- if $metricsEnabled }}
+        {{- if $metricsEnabled }}
           - name: sidekiq-metrics
             mountPath: '/metrics'
-{{- end }}
+        {{- end }}
           - name: sidekiq-config
             mountPath: '/var/opt/gitlab/templates'
             readOnly: true
@@ -247,7 +252,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /liveness
-              port: {{ $.Values.metrics.port }}
+              port: {{ $healthChecksPort }}
             initialDelaySeconds: {{ $.Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ $.Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ $.Values.livenessProbe.timeoutSeconds }}
@@ -256,7 +261,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /readiness
-              port: {{ $.Values.metrics.port }}
+              port: {{ $healthChecksPort }}
             initialDelaySeconds: {{ $.Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ $.Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ $.Values.readinessProbe.timeoutSeconds }}
@@ -273,11 +278,11 @@ spec:
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       {{- include "gitlab.psql.ssl.volume" $ | nindent 6 }}
       {{- include "gitlab.geo.psql.ssl.volume" $ | nindent 6 }}
-{{- if $metricsEnabled }}
+    {{- if $metricsEnabled }}
       - name: sidekiq-metrics
         emptyDir:
           medium: "Memory"
-{{- end }}
+    {{- end }}
       - name: sidekiq-config
         projected:
           sources:
@@ -324,6 +329,7 @@ spec:
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "packages" "config" $.Values.global.appConfig.packages) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "external_diffs" "config" $.Values.global.appConfig.externalDiffs) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "terraform_state" "config" $.Values.global.appConfig.terraformState) | nindent 10 }}
+          {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "ci_secure_files" "config" $.Values.global.appConfig.ciSecureFiles) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "dependency_proxy" "config" $.Values.global.appConfig.dependencyProxy) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "pages" "config" $.Values.global.pages.objectStore) | nindent 10 }}
           {{- include "gitlab.appConfig.pseudonymizer.mountSecrets" $ | nindent 10 }}

@@ -46,19 +46,25 @@ If you're upgrading to the `5.0` version of the chart, follow the [manual upgrad
 If you're upgrading to the `4.0` version of the chart, follow the [manual upgrade steps for 4.0](#upgrade-steps-for-40-release).
 If you're upgrading to an older version of the chart, follow the [upgrade steps for older versions](upgrade_old.md).
 
+Before you upgrade, reflect on your set values and if you've possibly "over-configured" your settings. We expect you to maintain a small list of modified values, and leverage most of the chart defaults. If you've explicitly set a large number of settings by:
+
+- Copying computed settings
+- Copying all settings and explicitly defining values that are actually the same as the default values
+
+This will almost certainly cause issues during the upgrade as the configuration structure could have changed across versions, and that will cause problems applying the settings. We cover how to check this in the following steps.
+
 The following are the steps to upgrade GitLab to a newer version:
 
-1. Check the [change log](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/CHANGELOG.md) for the specific version you would like to upgrade to
-1. Go through [deployment documentation](deployment.md) step by step
-1. Extract your previous `--set` arguments with
+1. Check the [change log](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/CHANGELOG.md) for the specific version you would like to upgrade to.
+1. Go through the [deployment documentation](deployment.md) step by step.
+1. Extract your previously provided values:
 
    ```shell
    helm get values gitlab > gitlab.yaml
    ```
 
-1. Decide on all the values you need to set
-1. If you were using the GitLab Operator, it is [**deprecated**](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2210), and will be removed in the future.
-1. Perform the upgrade, with all `--set` arguments extracted in step 4
+1. Decide on all the values you need to carry through as you upgrade. GitLab has reasonable default values, and while upgrading, you can attempt to pass in all values from the above command, but it could create a scenario where a configuration has changed across chart versions and it might not map cleanly. We advise keeping a minimal set of values that you want to explicitly set, and passing those during the upgrade process.
+1. Perform the upgrade, with values extracted in the previous step:
 
    ```shell
    helm upgrade gitlab gitlab/gitlab \
@@ -94,6 +100,28 @@ The steps have been documented in the [5.0 upgrade steps](#upgrade-steps-for-50-
 
 As part of the `4.0.0` release of this chart, we upgraded the bundled [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) from `7.7.0` to `8.9.4`. This is not a drop in replacement. Manual steps need to be performed to upgrade the database.
 The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-release).
+
+## Upgrade steps for 5.5 release
+
+The `task-runner` chart [was renamed](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2099/diffs)
+to `toolbox` and removed in `5.5.0`. As a result, any mention of `task-runner`
+in your configuration should be renamed to `toolbox`. In version 5.5 and newer,
+use the `toolbox` chart, and in version 5.4 and older, use the `task-runner` chart.
+
+### Missing object storage secret error
+
+Upgrading to 5.5 or newer might cause an error similar to the following:
+
+```shell
+Error: UPGRADE FAILED: execution error at (gitlab/charts/gitlab/charts/toolbox/templates/deployment.yaml:227:23): A valid backups.objectStorage.config.secret is needed!
+```
+
+If the secret mentioned in the error already exists and is correct, then this error
+is likely because there is an object storage configuration value that still references
+`task-runner` instead of the new `toolbox`. Rename `task-runner` to `toolbox` in your
+configuration to fix this.
+
+There is an [open issue about clarifying the error message](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3004).
 
 ## Upgrade steps for 5.0 release
 

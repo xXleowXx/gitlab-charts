@@ -271,6 +271,20 @@ Defaults to false
 {{- end -}}
 
 {{/*
+Return if database tasks should be used by GitLab Rails for a given configuration.
+Defaults to true
+*/}}
+{{- define "gitlab.psql.databaseTasks" -}}
+{{-   $local := pluck "psql" $.Values | first -}}
+{{-   $databaseTasks := pluck "databaseTasks" $local .Values.global.psql | first -}}
+{{-   if not ( kindIs "invalid" $databaseTasks ) -}}
+{{-     eq true $databaseTasks -}}
+{{-   else -}}
+{{-     true -}}
+{{-   end -}}
+{{- end -}}
+
+{{/*
 Return connect_timeout value
 Defaults to nil
 */}}
@@ -327,10 +341,40 @@ Defaults to nil
 {{/* ######### ingress templates */}}
 
 {{/*
-Returns the nginx ingress class
+Return the appropriate apiVersion for Ingress.
+
+It expects a dictionary with three entries:
+  - `global` which contains global ingress settings, e.g. .Values.global.ingress
+  - `local` which contains local ingress settings, e.g. .Values.ingress
+  - `context` which is the parent context (either `.` or `$`)
+
+Example usage:
+{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "context" . -}}
+kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
 */}}
-{{- define "gitlab.ingressclass" -}}
-{{- pluck "class" .Values.global.ingress (dict "class" (printf "%s-nginx" .Release.Name)) | first -}}
+{{- define "gitlab.ingress.apiVersion" -}}
+{{-   if .local.apiVersion -}}
+{{-     .local.apiVersion -}}
+{{-   else if .global.apiVersion -}}
+{{-     .global.apiVersion -}}
+{{-   else if .context.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
+{{-     print "networking.k8s.io/v1" -}}
+{{-   else if .context.Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" -}}
+{{-     print "networking.k8s.io/v1beta1" -}}
+{{-   else -}}
+{{-     print "extensions/v1beta1" -}}
+{{-   end -}}
+{{- end -}}
+
+{{/*
+Returns the ingress provider
+
+It expects a dictionary with two entries:
+  - `global` which contains global ingress settings, e.g. .Values.global.ingress
+  - `local` which contains local ingress settings, e.g. .Values.ingress
+*/}}
+{{- define "gitlab.ingress.provider" -}}
+{{- default .global.provider .local.provider -}}
 {{- end -}}
 
 {{/*
@@ -338,13 +382,6 @@ Overrides the ingress-nginx template to make sure gitlab-shell name matches
 */}}
 {{- define "ingress-nginx.tcp-configmap" -}}
 {{ .Release.Name}}-nginx-ingress-tcp
-{{- end -}}
-
-{{/*
-Overrides the ingress-nginx template to make sure our ingresses match
-*/}}
-{{- define "ingress-nginx.controller.ingress-class" -}}
-{{ template "gitlab.ingressclass" . }}
 {{- end -}}
 
 {{/* ######### annotations */}}
@@ -510,19 +547,6 @@ Override upstream redis secret key name
 */}}
 {{- define "redis.secretPasswordKey" -}}
 {{ template "gitlab.redis.password.key" . }}
-{{- end -}}
-
-{{/*
-Return the appropriate apiVersion for Ingress.
-*/}}
-{{- define "ingress.apiVersion" -}}
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
-{{- print "networking.k8s.io/v1" -}}
-{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" -}}
-{{- print "networking.k8s.io/v1beta1" -}}
-{{- else -}}
-{{- print "extensions/v1beta1" -}}
-{{- end -}}
 {{- end -}}
 
 {{/*

@@ -172,7 +172,7 @@ Let's look at two snippet examples, which easily exemplify the reasoning:
         time_zone: {{ .Values.global.time_zone | quote }}
         {{- include "gitlab.outgoing_email_settings" . | nindent 8 }}
       {{- with .Values.global.appConfig }}
-      {{- if eq .incomingEmail.enabled true }}
+      {{- if .incomingEmail.enabled }}
       {{- include "gitlab.appConfig.incoming_email" . | nindent 6 }}
       {{- end }}
       {{- include "gitlab.appConfig.cronJobs" . | nindent 6 }}
@@ -208,7 +208,7 @@ Let's look at two snippet examples, which easily exemplify the reasoning:
         time_zone: {{ .Values.global.time_zone | quote }}
 {{- include "gitlab.outgoing_email_settings" . | indent 8 }}
 {{- with .Values.global.appConfig }}
-{{- if eq .incomingEmail.enabled true }}
+{{- if .incomingEmail.enabled }}
 {{- include "gitlab.appConfig.incoming_email" . | indent 6 }}
 {{- end }}
 {{- include "gitlab.appConfig.cronJobs" . | indent 6 }}
@@ -267,7 +267,7 @@ minimize their own configuration files without it being cumbersome.
 A charts template helpers are located in `templates/_helpers.tpl`. These contain the [named templates](https://helm.sh/docs/chart_template_guide/named_templates/)
 used within the chart.
 
-When using these templates, there a few things to keep in mind regarding the [golang templating syntax](https://golang.org/pkg/text/template/).
+When using these templates, there a few things to keep in mind regarding the [golang templating syntax](https://pkg.go.dev/text/template).
 
 ### Trapping non-printed values from actions
 
@@ -290,7 +290,7 @@ template would try to output the result of `set` (which returns the Map it modif
 
 ### Passing variables between control structures
 
-The go templating syntax [strongly differentiates between initialization (`:=`) and assignment (`=`)](https://golang.org/pkg/text/template/#hdr-Variables), and this is impacted by scope.
+The go templating syntax [strongly differentiates between initialization (`:=`) and assignment (`=`)](https://pkg.go.dev/text/template#hdr-Variables), and this is impacted by scope.
 
 As a result you can re-initialize a variable that existed outside your control structure (if/with/range), but know that
 variables declared within your control structure are not available outside.
@@ -365,4 +365,96 @@ And then pulling the above into a variable and configuration:
 {{- $barVar := merge $.Values.global.some.config $fooVar -}}
 config:
 {{ $barVar }}
+```
+
+## Templating Configuration Files
+
+These charts make use of the Cloud Native GitLab ("CNG") containers.
+Those containers support the use of either [ERB](https://docs.ruby-lang.org/en/2.7.0/ERB.html)
+or [gomplate](https://docs.gomplate.ca/).
+
+**Guidelines:**
+
+1. Use template files within ConfigMaps (example: `gitlab.yml.erb`, `config.toml.tpl`)
+    - Entries _must_ use the expected extensions in order to be handled as templates.
+1. Use templates to populate Secret contents from mounted file locations. (example: [GitLab Pages `config`](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/charts/gitlab/charts/gitlab-pages/templates/configmap.yml))
+1. ERB (`.erb`) can be used for any container using Ruby during run-time execution
+1. gomplate (`.tpl`) can be used for any container.
+
+**ERB usage:**
+
+We make use of standard ERB, and you can expect [`json`](https://docs.ruby-lang.org/en/2.7.0/JSON.html) and [`yaml`](https://docs.ruby-lang.org/en/2.7.0/YAML.html) modules to have been pre-loaded.
+
+**gomplate usage:**
+
+We make use of gomplate in order to remove the size and surface of Ruby within
+containers. We configure gomplate [syntax](https://docs.gomplate.ca/syntax/) with alternate delimiters of `{% %}`, so not
+to collide with Helm's use of `{{ }}`.
+
+### Templating sensitive content
+
+Secrets have the potential contain characters that could result invalid YAML if
+not properly encoded or quoted. Especially for complex passwords, we must be
+careful how these strings are added into various configuration formats.
+
+**Guidelines:**
+
+1. Quote in the ERB / Gomplate output, _not_ surrounding it.
+1. Use a format-native encoder whenever possible.
+    - For rendered YAML, use JSON strings because YAML is a superset of JSON.
+    - For rendered TOML, use JSON strings because
+    [TOML strings](https://toml.io/en/v0.3.0#string) escape similarly.
+1. Be wary of complexity, such as quoted strings _inside_ quoted stings such
+as database connection strings.
+
+#### Example of encoding passwords
+
+Using Gitaly's client secret token as an example. This value is, `gitaly_token`,
+is templated into both YAML and TOML.
+
+Let's use `my"$pec!@l"p#assword%'` as an example:
+
+```erb
+# YAML
+gitaly:
+  token: "<%= File.read('gitaly_token').strip =>"
+
+# TOML
+[auth]
+token = "<%= File.read('gitaly_token').strip %>"
+```
+
+Renders to be invalid YAML, and invalid TOML.
+
+```yaml
+# YAML
+gitaly:
+  token: "my"$pec!@l"p#assword%'"
+```
+
+> `(<unknown>): did not find expected key while parsing a block mapping at line 3 column 3`
+
+```toml
+[auth]
+token = "my"$pec!@l"p#assword%'"
+```
+
+> `Error on line 2: Expected Comment, Newline, Whitespace, or end of input but "$" found.`
+
+This changed to `<%= File.read('gitaly_token').strip.to_json %>` results valid
+content format for YAML and TOML. Note the removal of `"` from outside of `<% %>`.
+
+```yaml
+gitaly:
+  token: "my\"$pec!@l\"p#assword%'"
+```
+
+This same can be done with gomplate: `{% file.Read "gitaly_token" | strings.TrimSpace | data.ToJSON %}`
+
+```yaml
+gitaly:
+  # gomplate
+  token: {% file.Read "./token" | strings.TrimSpace | data.ToJSON %}
+  # ERB
+  token: <%= File.read('gitaly_token').strip.to_json %>
 ```

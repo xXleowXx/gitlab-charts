@@ -8,8 +8,8 @@ export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
 
 # Derive the Helm RELEASE argument from CI_ENVIRONMENT_SLUG
 if [[ $CI_ENVIRONMENT_SLUG =~ ^.{3}-review ]]; then
-  # if a "review", use CI_COMMIT_REF_SLUG
-  RELEASE_NAME=rvw-${CI_COMMIT_REF_SLUG}
+  # if a "review", use $REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+  RELEASE_NAME=rvw-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}
   # Trim release name to leave room for prefixes/suffixes
   RELEASE_NAME=${RELEASE_NAME:0:30}
   # Trim any hyphens in the suffix
@@ -42,32 +42,11 @@ function previousDeployFailed() {
   return $status
 }
 
-function crdExists() {
-  echo "Checking for existing GitLab Operator CRD"
-  kubectl get crd/gitlabs.${RELEASE_NAME}.gitlab.com >/dev/null 2>&1
-  status=$?
-  if [ $status -eq 0 ]; then
-    echo "GitLab Operator CRD exists."
-  else
-    echo "GitLab Operator CRD does NOT exist."
-  fi
-  return $status
-}
-
 function deploy() {
   # Enable / disable KAS based on environment
   local enable_kas=()
   if [[ -n "$KAS_ENABLED" ]]; then
     enable_kas=("--set" "global.kas.enabled=true")
-  fi
-
-  # Enable / disable gitlab-operator (old) based on environment
-  local enable_operator=()
-  if [[ -n "$OPERATOR_ENABLED" ]]; then
-    enable_operator=(
-      "--set" "global.operator.enabled=true"
-      "--set" "gitlab.operator.crdPrefix=${RELEASE_NAME}"
-    )
   fi
 
   # Use the gitlab version from the environment or use stable images when on the stable branch
@@ -106,11 +85,6 @@ function deploy() {
   kubectl create secret generic "${RELEASE_NAME}-gitlab-license" --from-file=license=/tmp/license.gitlab -o yaml --dry-run | kubectl replace --force -f -
 
   # YAML_FILE=""${KUBE_INGRESS_BASE_DOMAIN//\./-}.yaml"
-
-  # Ensure the CRD if OPERATOR_ENABLED
-  if [[ -n "$OPERATOR_ENABLED" ]]; then
-    if ! crdExists ; then scripts/crdctl create "${RELEASE_NAME}" ; fi
-  fi
 
   helm repo add gitlab https://charts.gitlab.io/
   helm repo add jetstack https://charts.jetstack.io
@@ -158,7 +132,7 @@ CIYAML
     gitlab-shell:
       minReplicas: 1    # 2
       maxReplicas: 2    # 10
-    task-runner:
+    toolbox:
       enabled: true
   nginx-ingress:
     controller:
@@ -185,10 +159,13 @@ CIYAML
     --set global.ingress.tls.secretName=helm-charts-win-tls \
     --set global.ingress.configureCertmanager=false \
     --set global.appConfig.initialDefaults.signupEnabled=false \
+    --set nginx-ingress.controller.electionID="$RELEASE_NAME" \
+    --set nginx-ingress.controller.ingressClassByName=true \
+    --set nginx-ingress.controller.ingressClassResource.controllerValue="ci.gitlab.com/$RELEASE_NAME" \
     --set certmanager.install=false \
     --set prometheus.install=$PROMETHEUS_INSTALL \
+    --set prometheus.server.retention="4d" \
     --set global.gitlab.license.secret="$RELEASE_NAME-gitlab-license" \
-    "${enable_operator[@]}" \
     "${enable_kas[@]}" \
     --namespace="$NAMESPACE" \
     "${gitlab_version_args[@]}" \
@@ -219,36 +196,18 @@ function check_kas_status() {
 function wait_for_deploy {
   iteration=0
 
-  if [[ -n "$OPERATOR_ENABLED" ]]; then
-    # Watch the status according to the operator
-    revision=0
-    observedRevision=-1
-    while [ "$observedRevision" != "$revision" ]; do
-      IFS=$','
-      status=($(kubectl get gitlabs.${RELEASE_NAME}.gitlab.com "${RELEASE_NAME}-operator" -n ${NAMESPACE} -o jsonpath='{.status.deployedRevision}{","}{.spec.revision}'))
-      unset IFS
-      observedRevision=${status[0]}
-      revision=${status[1]}
-      if [ $iteration -eq 0 ]; then
-        echo -n "Waiting for deploy revision ${revision} to complete.";
-      else
-        echo -n "."
-     fi
-    done
-  else
-    # Watch for a `webservice` Pod to come online.
-    webserviceState=0
-    while [ "$webserviceState" -lt 2 ]; do
-      # This will always return at least one line, `NAME`
-      webserviceState=($(kubectl get pods -n "$NAMESPACE" -lrelease=${RELEASE_NAME},app=webservice --field-selector status.phase=Running -o=custom-columns=NAME:.metadata.name | wc -l))
-      if [ $iteration -eq 0 ]; then
-        echo -n "Waiting for deploy to complete.";
-      else
-        echo -n "."
-      fi
-      sleep 5;
-    done
-  fi
+  # Watch for a `webservice` Pod to come online.
+  webserviceState=0
+  while [ "$webserviceState" -lt 2 ]; do
+    # This will always return at least one line, `NAME`
+    webserviceState=($(kubectl get pods -n "$NAMESPACE" -lrelease=${RELEASE_NAME},app=webservice --field-selector status.phase=Running -o=custom-columns=NAME:.metadata.name | wc -l))
+    if [ $iteration -eq 0 ]; then
+      echo -n "Waiting for deploy to complete.";
+    else
+      echo -n "."
+    fi
+    sleep 5;
+  done
 
   if [[ -n "$KAS_ENABLED" ]]; then
     check_kas_status
@@ -257,13 +216,13 @@ function wait_for_deploy {
   echo ""
 }
 
-function restart_task_runner() {
-  # restart the task-runner pods, by deleting them
+function restart_toolbox() {
+  # restart the toolbox pods, by deleting them
   # the ReplicaSet of the Deployment will re-create them
   # this ensure we run up-to-date on tags like `master` when there
   # have been no changes to the configuration to warrant a restart
   # via metadata checksum annotations
-  kubectl -n ${NAMESPACE} delete pods -lapp=task-runner,release=${RELEASE_NAME}
+  kubectl -n ${NAMESPACE} delete pods -lapp=toolbox,release=${RELEASE_NAME}
   # always "succeed" so not to block.
   return 0
 }
@@ -284,7 +243,7 @@ function ensure_namespace() {
 
 function check_kube_domain() {
   if [ -z ${KUBE_INGRESS_BASE_DOMAIN+x} ]; then
-    echo "In order to deploy, KUBE_INGRESS_BASE_DOMAIN must be set as a variable at the group or project level, or manually added in .gitlab-cy.yml"
+    echo "ERROR: In order to deploy, KUBE_INGRESS_BASE_DOMAIN must be set as a variable at the group or project level, or manually added in .gitlab-cy.yml"
     false
   else
     true
@@ -301,7 +260,7 @@ function check_domain_ip() {
   # Expect the `DOMAIN` is a wildcard.
   domain_ip=$(nslookup gitlab$DOMAIN 2>/dev/null | grep "Address: \d" | awk '{print $2}')
   if [ -z $domain_ip ]; then
-    echo "There was a problem resolving the IP of 'gitlab$DOMAIN'. Be sure you have configured a DNS entry."
+    echo "ERROR: There was a problem resolving the IP of 'gitlab$DOMAIN'. Be sure you have configured a DNS entry."
     false
   else
     export DOMAIN_IP=$domain_ip
@@ -358,12 +317,7 @@ function delete() {
 }
 
 function cleanup() {
-  gitlabs=''
-  if crdExists ; then
-    gitlabs=',gitlabs'
-  fi
-
-  kubectl -n "$NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,job,pod,secret,configmap,pvc,secret,clusterrole,clusterrolebinding,role,rolebinding,sa,crd${gitlabs} 2>&1 \
+  kubectl -n "$NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,job,pod,secret,configmap,pvc,secret,clusterrole,clusterrolebinding,role,rolebinding,sa 2>&1 \
     | grep "$RELEASE_NAME" \
     | awk '{print $1}' \
     | xargs kubectl -n "$NAMESPACE" delete \

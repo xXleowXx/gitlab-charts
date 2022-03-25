@@ -84,13 +84,16 @@ helm inspect values gitlab/gitlab
 
 ### Common settings
 
-| Parameter                                        | Description                                                                                            | Default       |
-|--------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------|
-| `global.appConfig.incomingEmail.address`         | The email address to reference the item being replied to (example: `gitlab-incoming+%{key}@gmail.com`) | empty         |
-| `global.appConfig.incomingEmail.enabled`         | Enable incoming email                                                                                  | false         |
-| `global.appConfig.incomingEmail.expungeDeleted`  | Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery | false         |
-| `global.appConfig.incomingEmail.logger.logPath`  | Path to write JSON structured logs to; set to "" to disable this logging                               | `/dev/stdout` |
-| `global.appConfig.incomingEmail.inboxMethod`     | Read mail with IMAP (`imap`) or Microsoft Graph API with OAuth2 (`microsoft_graph`)                    | `imap`        |
+| Parameter                                         | Description                                                                                            | Default                                                    |
+|---------------------------------------------------|--------------------------------------------------------------------------------------------------------|------------------------------------------------------------|
+| `global.appConfig.incomingEmail.address`          | The email address to reference the item being replied to (example: `gitlab-incoming+%{key}@gmail.com`) | empty                                                      |
+| `global.appConfig.incomingEmail.enabled`          | Enable incoming email                                                                                  | false                                                      |
+| `global.appConfig.incomingEmail.expungeDeleted`   | Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery | false                                                      |
+| `global.appConfig.incomingEmail.logger.logPath`   | Path to write JSON structured logs to; set to "" to disable this logging                               | `/dev/stdout`                                              |
+| `global.appConfig.incomingEmail.inboxMethod`      | Read mail with IMAP (`imap`) or Microsoft Graph API with OAuth2 (`microsoft_graph`)                    | `imap`                                                     |
+| `global.appConfig.incomingEmail.deliveryMethod`   | How mailroom can send an email content to Rails app for processing. Either `sidekiq` or `webhook`      | `sidekiq`                                                  |
+| `gitlab.appConfig.incomingEmail.authToken.key`    | Key to incoming email token in incoming email secret. Effective when the delivery method is webhook.   | `authToken`                                                |
+| `gitlab.appConfig.incomingEmail.authToken.secret` | Incoming email authentication secret. Effective when the delivery method is webhook.                   | `{Release.Name}-incoming-email-auth-token`                 |
 
 ### IMAP settings
 
@@ -115,6 +118,8 @@ helm inspect values gitlab/gitlab
 | `global.appConfig.incomingEmail.clientSecret.key`    | Key in `appConfig.incomingEmail.clientSecret.secret` that contains the OAuth2 client secret              | empty      |
 | `global.appConfig.incomingEmail.clientSecret.secret` | Name of a `Secret` containing the OAuth2 client secret                                                   | secret     |
 | `global.appConfig.incomingEmail.pollInterval`        | The interval in seconds how often to poll for new mail                                                   | 60         |
+| `global.appConfig.incomingEmail.azureAdEndpoint`     | The URL of the Azure Active Directory endpoint (example: `https://login.microsoftonline.com`)            | empty      |
+| `global.appConfig.incomingEmail.graphEndpoint`       | The URL of the Microsoft Graph endpoint (example: `https://graph.microsoft.com`)                         | empty      |
 
 See the [instructions for creating secrets](secrets.md).
 
@@ -128,13 +133,16 @@ must be `+%{key}`.
 
 ### Common settings
 
-| Parameter                                           | Description                                                                                            | Default       |
-|-----------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------|
-| `global.appConfig.serviceDeskEmail.address`         | The email address to reference the item being replied to (example: `project_contact+%{key}@gmail.com`) | empty         |
-| `global.appConfig.serviceDeskEmail.enabled`         | Enable service desk email                                                                              | false         |
-| `global.appConfig.serviceDeskEmail.expungeDeleted`  | Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery | false         |
-| `global.appConfig.serviceDeskEmail.logger.logPath`  | Path to write JSON structured logs to; set to "" to disable this logging                               | `/dev/stdout` |
-| `global.appConfig.serviceDeskEmail.inboxMethod`     | Read mail with IMAP (`imap`) or Microsoft Graph API with OAuth2 (`microsoft_graph`)                    | `imap`        |
+| Parameter                                            | Description                                                                                                  | Default                                                        |
+|------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
+| `global.appConfig.serviceDeskEmail.address`          | The email address to reference the item being replied to (example: `project_contact+%{key}@gmail.com`)       | empty                                                          |
+| `global.appConfig.serviceDeskEmail.enabled`          | Enable service desk email                                                                                    | false                                                          |
+| `global.appConfig.serviceDeskEmail.expungeDeleted`   | Whether to expunge (permanently remove) messages from the mailbox when they are deleted after delivery       | false                                                          |
+| `global.appConfig.serviceDeskEmail.logger.logPath`   | Path to write JSON structured logs to; set to "" to disable this logging                                     | `/dev/stdout`                                                  |
+| `global.appConfig.serviceDeskEmail.inboxMethod`      | Read mail with IMAP (`imap`) or Microsoft Graph API with OAuth2 (`microsoft_graph`)                          | `imap`                                                         |
+| `global.appConfig.serviceDeskEmail.deliveryMethod`   | How mailroom can send an email content to Rails app for processing. Either `sidekiq` or `webhook`            | `sidekiq`                                                      |
+| `gitlab.appConfig.serviceDeskEmail.authToken.key`    | Key to service desk email token in service desk email secret. Effective when the delivery method is webhook. | `authToken`                                                    |
+| `gitlab.appConfig.serviceDeskEmail.authToken.secret` | service-desk email authentication secret. Effective when the delivery method is webhook.                     | `{Release.Name}-service-desk-email-auth-token`                 |
 
 ### IMAP settings
 
@@ -159,6 +167,8 @@ must be `+%{key}`.
 | `global.appConfig.serviceDeskEmail.clientSecret.key`    | Key in `appConfig.serviceDeskEmail.clientSecret.secret` that contains the OAuth2 client secret              | empty      |
 | `global.appConfig.serviceDeskEmail.clientSecret.secret` | Name of a `Secret` containing the OAuth2 client secret                                                      | secret     |
 | `global.appConfig.serviceDeskEmail.pollInterval`        | The interval in seconds how often to poll for new mail                                                      | 60         |
+| `global.appConfig.serviceDeskEmail.azureAdEndpoint`     | The URL of the Azure Active Directory endpoint (example: `https://login.microsoftonline.com`)               | empty      |
+| `global.appConfig.serviceDeskEmail.graphEndpoint`       | The URL of the Microsoft Graph endpoint (example: `https://graph.microsoft.com`)                            | empty      |
 
 See the [instructions for creating secrets](secrets.md).
 
@@ -324,7 +334,7 @@ GitLab external URL                                              |
 | `gitlab.migrations.bootsnap.enabled`                           | Migrations Bootsnap enable flag                                      | true                                                             |
 | `gitlab.migrations.enabled`                                    | Migrations enable flag                                               | true                                                             |
 | `gitlab.migrations.image.pullPolicy`                           | Migrations pull policy                                               |                                                                  |
-| `gitlab.migrations.image.repository`                           | Migrations image repository                                          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task_runner-ee` |
+| `gitlab.migrations.image.repository`                           | Migrations image repository                                          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee`     |
 | `gitlab.migrations.image.tag`                                  | Migrations image tag                                                 | `master`                                                         |
 | `gitlab.migrations.psql.password.key`                          | key to psql password in psql secret                                  | `psql-password`                                                  |
 | `gitlab.migrations.psql.password.secret`                       | psql secret                                                          | `gitlab-postgres`                                                |
@@ -348,46 +358,46 @@ GitLab external URL                                              |
 | `gitlab.sidekiq.securityContext.fsGroup`                       | Group ID under which the pod should be started                       | `1000`                                                           |
 | `gitlab.sidekiq.securityContext.runAsUser`                     | User ID under which the pod should be started                        | `1000`                                                           |
 | `gitlab.sidekiq.timeout`                                       | Sidekiq job timeout                                                  | `5`                                                              |
-| `gitlab.task-runner.annotations`                               | Annotations to add to the task runner                                | {}                                                               |
-| `gitlab.task-runner.backups.cron.enabled`                      | Backup CronJob enabled flag                                          | false                                                            |
-| `gitlab.task-runner.backups.cron.extraArgs`                    | String of arguments to pass to the backup utility                    |                                                                  |
-| `gitlab.task-runner.backups.cron.persistence.accessMode`       | Backup cron persistence access mode                                  | `ReadWriteOnce`                                                  |
-| `gitlab.task-runner.backups.cron.persistence.enabled`          | Backup cron enable persistence flag                                  | false                                                            |
-| `gitlab.task-runner.backups.cron.persistence.matchExpressions` | Label-expression matches to bind                                     |                                                                  |
-| `gitlab.task-runner.backups.cron.persistence.matchLabels`      | Label-value matches to bind                                          |                                                                  |
-| `gitlab.task-runner.backups.cron.persistence.size`             | Backup cron persistence volume size                                  | `10Gi`                                                           |
-| `gitlab.task-runner.backups.cron.persistence.storageClass`     | storageClassName for provisioning                                    |                                                                  |
-| `gitlab.task-runner.backups.cron.persistence.subPath`          | Backup cron persistence volume mount path                            |                                                                  |
-| `gitlab.task-runner.backups.cron.persistence.volumeName`       | Existing persistent volume name                                      |                                                                  |
-| `gitlab.task-runner.backups.cron.resources.requests.cpu`       | Backup cron minimum needed CPU                                       | `50m`                                                            |
-| `gitlab.task-runner.backups.cron.resources.requests.memory`    | Backup cron minimum needed memory                                    | `350M`                                                           |
-| `gitlab.task-runner.backups.cron.schedule`                     | Cron style schedule string                                           | `0 1 * * *`                                                      |
-| `gitlab.task-runner.backups.objectStorage.backend`             | Object storage provider to use (`s3` or `gcs`)                       | `s3`                                                             |
-| `gitlab.task-runner.backups.objectStorage.config.gcpProject`   | GCP Project to use when backend is `gcs`                             | ""                                                               |
-| `gitlab.task-runner.backups.objectStorage.config.key`          | key containing credentials in secret                                 | ""                                                               |
-| `gitlab.task-runner.backups.objectStorage.config.secret`       | Object storage credentials secret                                    | ""                                                               |
-| `gitlab.task-runner.backups.objectStorage.config`              | Authentication information for object storage                        | {}                                                               |
-| `gitlab.task-runner.bootsnap.enabled`                          | Enable Bootsnap cache in Task runner                                 | true                                                             |
-| `gitlab.task-runner.enabled`                                   | Task runner enabled flag                                             | true                                                             |
-| `gitlab.task-runner.image.pullPolicy`                          | Task runner image pull policy                                        | `IfNotPresent`                                                   |
-| `gitlab.task-runner.image.repository`                          | Task runner image repository                                         | `registry.gitlab.com/gitlab-org/build/cng/gitlab-task-runner-ee` |
-| `gitlab.task-runner.image.tag`                                 | Task runner image tag                                                | `master`                                                         |
-| `gitlab.task-runner.init.image.repository`                     | Task runner init image repository                                    |                                                                  |
-| `gitlab.task-runner.init.image.tag`                            | Task runner init image tag                                           |                                                                  |
-| `gitlab.task-runner.init.resources.requests.cpu`               | Task runner init minimum needed CPU                                  | `50m`                                                            |
-| `gitlab.task-runner.persistence.accessMode`                    | Task runner persistence access mode                                  | `ReadWriteOnce`                                                  |
-| `gitlab.task-runner.persistence.enabled`                       | Task runner enable persistence flag                                  | false                                                            |
-| `gitlab.task-runner.persistence.matchExpressions`              | Label-expression matches to bind                                     |                                                                  |
-| `gitlab.task-runner.persistence.matchLabels`                   | Label-value matches to bind                                          |                                                                  |
-| `gitlab.task-runner.persistence.size`                          | Task runner persistence volume size                                  | `10Gi`                                                           |
-| `gitlab.task-runner.persistence.storageClass`                  | storageClassName for provisioning                                    |                                                                  |
-| `gitlab.task-runner.persistence.subPath`                       | Task runner persistence volume mount path                            |                                                                  |
-| `gitlab.task-runner.persistence.volumeName`                    | Existing persistent volume name                                      |                                                                  |
-| `gitlab.task-runner.psql.port`                                 | Set PostgreSQL server port. Takes precedence over `global.psql.port` |                                                                  |
-| `gitlab.task-runner.resources.requests.cpu`                    | Task runner minimum needed CPU                                       | `50m`                                                            |
-| `gitlab.task-runner.resources.requests.memory`                 | Task runner minimum needed memory                                    | `350M`                                                           |
-| `gitlab.task-runner.securityContext.fsGroup`                   | Group ID under which the pod should be started                       | `1000`                                                           |
-| `gitlab.task-runner.securityContext.runAsUser`                 | User ID under which the pod should be started                        | `1000`                                                           |
+| `gitlab.toolbox.annotations`                               | Annotations to add to the toolbox                                    | {}                                                               |
+| `gitlab.toolbox.backups.cron.enabled`                      | Backup CronJob enabled flag                                          | false                                                            |
+| `gitlab.toolbox.backups.cron.extraArgs`                    | String of arguments to pass to the backup utility                    |                                                                  |
+| `gitlab.toolbox.backups.cron.persistence.accessMode`       | Backup cron persistence access mode                                  | `ReadWriteOnce`                                                  |
+| `gitlab.toolbox.backups.cron.persistence.enabled`          | Backup cron enable persistence flag                                  | false                                                            |
+| `gitlab.toolbox.backups.cron.persistence.matchExpressions` | Label-expression matches to bind                                     |                                                                  |
+| `gitlab.toolbox.backups.cron.persistence.matchLabels`      | Label-value matches to bind                                          |                                                                  |
+| `gitlab.toolbox.backups.cron.persistence.size`             | Backup cron persistence volume size                                  | `10Gi`                                                           |
+| `gitlab.toolbox.backups.cron.persistence.storageClass`     | storageClassName for provisioning                                    |                                                                  |
+| `gitlab.toolbox.backups.cron.persistence.subPath`          | Backup cron persistence volume mount path                            |                                                                  |
+| `gitlab.toolbox.backups.cron.persistence.volumeName`       | Existing persistent volume name                                      |                                                                  |
+| `gitlab.toolbox.backups.cron.resources.requests.cpu`       | Backup cron minimum needed CPU                                       | `50m`                                                            |
+| `gitlab.toolbox.backups.cron.resources.requests.memory`    | Backup cron minimum needed memory                                    | `350M`                                                           |
+| `gitlab.toolbox.backups.cron.schedule`                     | Cron style schedule string                                           | `0 1 * * *`                                                      |
+| `gitlab.toolbox.backups.objectStorage.backend`             | Object storage provider to use (`s3` or `gcs`)                       | `s3`                                                             |
+| `gitlab.toolbox.backups.objectStorage.config.gcpProject`   | GCP Project to use when backend is `gcs`                             | ""                                                               |
+| `gitlab.toolbox.backups.objectStorage.config.key`          | key containing credentials in secret                                 | ""                                                               |
+| `gitlab.toolbox.backups.objectStorage.config.secret`       | Object storage credentials secret                                    | ""                                                               |
+| `gitlab.toolbox.backups.objectStorage.config`              | Authentication information for object storage                        | {}                                                               |
+| `gitlab.toolbox.bootsnap.enabled`                          | Enable Bootsnap cache in Toolbox                                     | true                                                             |
+| `gitlab.toolbox.enabled`                                   | Toolbox enabled flag                                                 | true                                                             |
+| `gitlab.toolbox.image.pullPolicy`                          | Toolbox image pull policy                                            | `IfNotPresent`                                                   |
+| `gitlab.toolbox.image.repository`                          | Toolbox image repository                                             | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee` |
+| `gitlab.toolbox.image.tag`                                 | Toolbox image tag                                                    | `master`                                                         |
+| `gitlab.toolbox.init.image.repository`                     | Toolbox init image repository                                        |                                                                  |
+| `gitlab.toolbox.init.image.tag`                            | Toolbox init image tag                                               |                                                                  |
+| `gitlab.toolbox.init.resources.requests.cpu`               | Toolbox init minimum needed CPU                                      | `50m`                                                            |
+| `gitlab.toolbox.persistence.accessMode`                    | Toolbox persistence access mode                                      | `ReadWriteOnce`                                                  |
+| `gitlab.toolbox.persistence.enabled`                       | Toolbox enable persistence flag                                      | false                                                            |
+| `gitlab.toolbox.persistence.matchExpressions`              | Label-expression matches to bind                                     |                                                                  |
+| `gitlab.toolbox.persistence.matchLabels`                   | Label-value matches to bind                                          |                                                                  |
+| `gitlab.toolbox.persistence.size`                          | Toolbox persistence volume size                                      | `10Gi`                                                           |
+| `gitlab.toolbox.persistence.storageClass`                  | storageClassName for provisioning                                    |                                                                  |
+| `gitlab.toolbox.persistence.subPath`                       | Toolbox persistence volume mount path                                |                                                                  |
+| `gitlab.toolbox.persistence.volumeName`                    | Existing persistent volume name                                      |                                                                  |
+| `gitlab.toolbox.psql.port`                                 | Set PostgreSQL server port. Takes precedence over `global.psql.port` |                                                                  |
+| `gitlab.toolbox.resources.requests.cpu`                    | Toolbox minimum needed CPU                                           | `50m`                                                            |
+| `gitlab.toolbox.resources.requests.memory`                 | Toolbox minimum needed memory                                        | `350M`                                                           |
+| `gitlab.toolbox.securityContext.fsGroup`                   | Group ID under which the pod should be started                       | `1000`                                                           |
+| `gitlab.toolbox.securityContext.runAsUser`                 | User ID under which the pod should be started                        | `1000`                                                           |
 | `gitlab.webservice.enabled`                                    | webservice enabled flag                                              | true                                                             |
 | `gitlab.webservice.gitaly.authToken.key`                       | Key to Gitaly token in Gitaly secret                                 | `token`                                                          |
 | `gitlab.webservice.gitaly.authToken.secret`                    | Gitaly secret name                                                   | `{.Release.Name}-gitaly-secret`                                  |

@@ -1,10 +1,10 @@
 ---
 stage: Enablement
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
 ---
 
-# Configure Charts using Globals
+# Configure Charts using Globals **(FREE SELF)**
 
 To reduce configuration duplication when installing our wrapper Helm chart, several
 configuration settings are available to be set in the `global` section of `values.yaml`.
@@ -38,6 +38,7 @@ for more information on how the global variables work.
 - [OAuth](#configure-oauth-settings)
 - [Outgoing email](#outgoing-email)
 - [Platform](#platform)
+- [Affinity](#affinity)
 
 ## Configure Host settings
 
@@ -115,15 +116,22 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 
 | Name                           | Type    | Default        | Description |
 |:------------------------------ |:-------:|:-------        |:----------- |
+| `apiVersion`                   | String  |                | API version to use in the Ingress object definitions.
 | `annotations.*annotation-key*` | String  |                | Where `annotation-key` is a string that will be used with the value as an annotation on every Ingress. For Example: `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. No global annotations are provided by default. |
 | `configureCertmanager`         | Boolean | `true`         | [See below](#globalingressconfigurecertmanager). |
-| `class`                        | String  | `gitlab-nginx` | Global setting that controls `kubernetes.io/ingress.class` annotation in `Ingress` resources. |
+| `class`                        | String  | `gitlab-nginx` | Global setting that controls `kubernetes.io/ingress.class` annotation or `spec.IngressClassName` in `Ingress` resources. Set to `none` to disable, or `""` for empty. Note: for `none` or `""`, set `nginx-ingress.enabled=false` to prevent the Charts from deploying unnecessary Ingress resources. |
 | `enabled`                      | Boolean | `true`         | Global setting that controls whether to create Ingress objects for services that support them. |
 | `tls.enabled`                  | Boolean | `true`         | When set to `false`, this disables TLS in GitLab. This is useful for cases in which you cannot use TLS termination of Ingresses, such as when you have a TLS-terminating proxy before the Ingress Controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#configure-host-settings). |
 | `tls.secretName`               | String  |                | The name of the [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) that contains a **wildcard** certificate and key for the domain used in `global.hosts.domain`. |
 | `path`                         | String  | `/`            | Default for `path` entries in [Ingress objects](https://kubernetes.io/docs/concepts/services-networking/ingress/) |
 | `pathType`                     | String  | `Prefix`       | A [Path Type](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) allows you to specify how a path should be matched. Our current default is `Prefix` but you can use `ImplementationSpecific` or `Exact` depending on your use case. |
 | `provider`                     | String  | `nginx`       | Global setting that defines the Ingress provider to use. `nginx` is used as the default provider.  |
+
+Sample [configurations for various cloud providers](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples)
+can be found in the examples folder.
+
+- [`AWS`](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/ingress.yaml)
+- [`GKE`](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/gke/ingress.yaml)
 
 ### Ingress Path
 
@@ -193,6 +201,7 @@ global:
     username: gitlab
     applicationName:
     preparedStatements: false
+    databaseTasks: true
     connectTimeout:
     keepalives:
     keepalivesIdle:
@@ -211,13 +220,14 @@ global:
 | `host`               | String    |                        | The hostname of the PostgreSQL server with the database to use. This can be omitted if using PostgreSQL deployed by this chart.                                                                |
 | `serviceName`        | String    |                        | The name of the `service` which is operating the PostgreSQL database. If this is present, and `host` is not, the chart will template the hostname of the service in place of the `host` value. |
 | `database`           | String    | `gitlabhq_production`  | The name of the database to use on the PostgreSQL server.                                                                                                                                      |
-| `password.useSecret` | Boolean      | `true`                 | Controls whether the password for PostgreSQL is read from a secret or file.                                                                                                                    |
+| `password.useSecret` | Boolean   | `true`                 | Controls whether the password for PostgreSQL is read from a secret or file.                                                                                                                    |
 | `password.file`      | String    |                        | Defines the path to the file that contains the password for PostgreSQL. Ignored if `password.useSecret` is true                                                                                |
 | `password.key`       | String    |                        | The `password.key` attribute for PostgreSQL defines the name of the key in the secret (below) that contains the password. Ignored if `password.useSecret` is false.                            |
 | `password.secret`    | String    |                        | The `password.secret` attribute for PostgreSQL defines the name of the Kubernetes `Secret` to pull from. Ignored if `password.useSecret` is false.                                             |
 | `port`               | Integer   | `5432`                 | The port on which to connect to the PostgreSQL server.                                                                                                                                         |
 | `username`           | String    | `gitlab`               | The username with which to authenticate to the database.                                                                                                                                       |
-| `preparedStatements` | Boolean      | `false`                | If prepared statements should be used when communicating with the PostgreSQL server.                                                                                                           |
+| `preparedStatements` | Boolean   | `false`                | If prepared statements should be used when communicating with the PostgreSQL server.                                                                                                           |
+| `databaseTasks`      | Boolean   | `true`                 | If GitLab should perform database tasks for a given database. Automatically disabled when sharing host/port/database match `main`.                                                   |
 | `connectTimeout`     | Integer   |                        | The number of seconds to wait for a database connection.                                                                                                                                       |
 | `keepalives`         | Integer   |                        | Controls whether client-side TCP keepalives are used (1, meaning on, 0, meaning off).                                                                                                          |
 | `keepalivesIdle`     | Integer   |                        | The number of seconds of inactivity after which TCP should send a keepalive message to the server. A value of zero uses the system default.                                                    |
@@ -283,7 +293,7 @@ This feature requires the use of an
 deploy PostgreSQL in an HA fashion.
 
 The Rails components in GitLab have the ability to [make use of PostgreSQL
-clusters to load balance read-only queries](https://docs.gitlab.com/ee/administration/database_load_balancing.html).
+clusters to load balance read-only queries](https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html).
 
 This feature can be configured in two fashions:
 
@@ -304,7 +314,7 @@ global:
 
 Configuration of service discovery can be more complex. For a complete
 details of this configuration, the parameters and their associated
-behaviors, see [Service Discovery](https://docs.gitlab.com/ee/administration/database_load_balancing.html#service-discovery)
+behaviors, see [Service Discovery](https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html#service-discovery)
 in the [GitLab Administration documentation](https://docs.gitlab.com/ee/administration/index.html).
 
 ```yaml
@@ -323,7 +333,7 @@ global:
 ```
 
 Further tuning is also available, in regards to the
-[handling of stale reads](https://docs.gitlab.com/ee/administration/database_load_balancing.html#handling-stale-reads).
+[handling of stale reads](https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html#handling-stale-reads).
 The GitLab Administration documentation covers these items in detail,
 and those properties can be added directly under `load_balancing`.
 
@@ -437,16 +447,17 @@ continue to apply with the Sentinel support unless re-specified in the table abo
 ### Multiple Redis support
 
 The GitLab chart includes support for running with separate Redis instances
-for different persistence classes, currently: `cache`, `queues`, `sharedState`,
-`actioncable` and `traceChunks`.
+for different persistence classes, currently:
 
-| Instance     | Purpose                                             |
-|:-------------|:----------------------------------------------------|
-| `cache`        | Store cached data                                   |
-| `queues`       | Store Sidekiq background jobs                       |
-| `sharedState`  | Store session-related and other persistent data     |
-| `actioncable`  | Pub/Sub queue backend for ActionCable               |
-| `traceChunks`  | Store job traces temporarily                        |
+| Instance       | Purpose                                                         |
+|:---------------|:----------------------------------------------------------------|
+| `cache`        | Store cached data                                               |
+| `queues`       | Store Sidekiq background jobs                                   |
+| `sharedState`  | Store various persistent data such as distributed locks         |
+| `actioncable`  | Pub/Sub queue backend for ActionCable                           |
+| `traceChunks`  | Store job traces temporarily                                    |
+| `rateLimiting` | Store rate-limiting usage for RackAttack and Application Limits |
+| `sessions`     | Store user session data                                         |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -499,6 +510,20 @@ global:
         enabled: true
         secret: traceChunks-secret
         key: traceChunks-password
+    rateLimiting:
+      host: rateLimiting.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: rateLimiting-secret
+        key: rateLimiting-password
+    sessions:
+      host: sessions.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: sessions-secret
+        key: sessions-password
 ```
 
 The following table describes the attributes for each dictionary of the
@@ -529,6 +554,20 @@ global:
   redis:
     scheme: rediss
   --set global.redis.scheme=rediss
+```
+
+### Password-less Redis Servers
+
+Some Redis services such as Google Cloud Memorystore do not make use of passwords and the associated `AUTH` command. The use and requirement for a password can be disabled via the following configuration setting:
+
+```yaml
+global:
+  redis:
+    password:
+      enabled: false
+    host: ${REDIS_PRIVATE_IP}
+redis:
+  enabled: false
 ```
 
 ## Configure Grafana integration
@@ -792,6 +831,9 @@ global:
       matomoUrl:
       matomoSiteId:
       matomoDisableCookies:
+      oneTrustId:
+      googleTagManagerNonceId:
+      bizible:
     object_store:
       enabled: false
       proxy_download: true
@@ -827,6 +869,10 @@ global:
       enabled: false
       bucket: gitlab-terraform-state
       connection: {}
+    ciSecureFiles:
+      enabled: false
+      bucket: gitlab-ci-secure-files
+      connection: {}
     dependencyProxy:
       enabled: false
       bucket: gitlab-dependency-proxy
@@ -850,6 +896,8 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
+      deliveryMethod: sidekiq
+      authToken: {}
 
     serviceDeskEmail:
       enabled: false
@@ -868,6 +916,8 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
+      deliveryMethod: sidekiq
+      authToken: {}
 
     pseudonymizer:
       configMap:
@@ -897,7 +947,7 @@ application are described below:
 | `contentSecurityPolicy`             | Struct  |         | [See below](#content-security-policy). |
 | `enableUsagePing`                   | Boolean | `true`  | A flag to disable the [usage ping support](https://docs.gitlab.com/ee/user/admin_area/settings/usage_statistics.html). |
 | `enableSeatLink`                    | Boolean | `true`  | A flag to disable the [seat link support](https://docs.gitlab.com/ee/subscriptions/#seat-link). |
-| `enableImpersonation`               |         | `nil`   | A flag to disable [user impersonation by Administrators](https://docs.gitlab.com/ee/api/README.html#disable-impersonation). |
+| `enableImpersonation`               |         | `nil`   | A flag to disable [user impersonation by Administrators](https://docs.gitlab.com/ee/api/index.html#disable-impersonation). |
 | `applicationSettingsCacheSeconds`   | Integer | 60      | An interval value (in seconds) to invalidate the [application settings cache](https://docs.gitlab.com/ee/administration/application_settings_cache.html). |
 | `defaultCanCreateGroup`             | Boolean | `true`  | A flag to decide if users are allowed to create groups. |
 | `usernameChangingEnabled`           | Boolean | `true`  | A flag to decide if users are allowed to change their username. |
@@ -923,7 +973,7 @@ global:
       directives:
         default_src: "'self'"
         script_src: "'self' 'unsafe-inline' 'unsafe-eval' https://www.recaptcha.net https://apis.google.com"
-        frame_ancestor: "'self'"
+        frame_ancestors: "'self'"
         frame_src: "'self' https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com"
         img_src: "* data: blob:"
         style_src: "'self' 'unsafe-inline'"
@@ -969,6 +1019,9 @@ under the `extra` key below `appConfig`:
 | `extra.matomoSiteId`       | String | (empty) | Matomo Site ID. |
 | `extra.matomoUrl`          | String | (empty) | Matomo URL. |
 | `extra.matomoDisableCookies`| Boolean | (empty) | Disable Matomo cookies (corresponds to `disableCookies` in the Matomo script) |
+| `extra.oneTrustId`         | String | (empty) | OneTrust ID. |
+| `extra.googleTagManagerNonceId` | String | (empty) | Google Tag Manager ID. |
+| `extra.bizible`            | Boolean | `false` | Set to true to enable Bizible script |
 
 ### Consolidated object storage
 
@@ -1019,6 +1072,7 @@ By default, GitLab uses these bucket names for each type:
 | Uploads                      | `gitlab-uploads`          |
 | External merge request diffs | `gitlab-mr-diffs`         |
 | Terraform State              | `gitlab-terraform-state`  |
+| CI Secure Files              | `gitlab-ci-secure-files`  |
 | Dependency Proxy             | `gitlab-dependency-proxy` |
 | Pages                        | `gitlab-pages`            |
 
@@ -1031,6 +1085,7 @@ You can use these defaults or configure the bucket names:
 --set global.appConfig.uploads.bucket=<BUCKET NAME> \
 --set global.appConfig.externalDiffs.bucket=<BUCKET NAME> \
 --set global.appConfig.terraformState.bucket=<BUCKET NAME> \
+--set global.appConfig.ciSecureFiles.bucket=<BUCKET NAME> \
 --set global.appConfig.dependencyProxy.bucket=<BUCKET NAME>
 ```
 
@@ -1294,7 +1349,7 @@ omniauth:
 | Name                      | Type    | Default     | Description |
 |:------------------------- |:-------:|:----------- |:----------- |
 | `allowBypassTwoFactor`    |         |             | Allows users to log in with the specified providers without two factor authentication. Can be set to `true`, `false`, or an array of providers. See [Bypassing two factor authentication](https://docs.gitlab.com/ee/integration/omniauth.html#bypassing-two-factor-authentication). |
-| `allowSingleSignOn`       | Boolean | `false`     | Enable the automatic creation of accounts when signing in with OmniAuth. |
+| `allowSingleSignOn`       | Array | `['saml']`     | Enable the automatic creation of accounts when signing in with OmniAuth. Input the [name of the OmniAuth Provider](https://docs.gitlab.com/ee/integration/omniauth.html#supported-providers). |
 | `autoLinkLdapUser`        | Boolean | `false`     | Can be used if you have LDAP / ActiveDirectory integration enabled. When enabled, users automatically created through OmniAuth will be linked to their LDAP entry as well. |
 | `autoLinkSamlUser`        | Boolean | `false`     | Can be used if you have SAML integration enabled. When enabled, users automatically created through OmniAuth will be linked to their SAML entry as well. |
 | `autoLinkUser`            |         |             | Allows users authenticating via an OmniAuth provider to be automatically linked to a current GitLab user if their emails match. Can be set to `true`, `false`, or an array of providers. |
@@ -1347,6 +1402,12 @@ args:
   idp_sso_target_url: 'https://SAML_IDP/app/xxxxxxxxx/xxxxxxxxx/sso/saml'
   issuer: 'https://gitlab.example.com'
   name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
+```
+
+[Group SAML](https://docs.gitlab.com/ee/integration/saml.html#configuring-group-saml-on-a-self-managed-gitlab-instance) configuration example:
+
+```yaml
+name: group_saml
 ```
 
 This content can be saved as `provider.yaml`, and then a secret created from it:
@@ -1449,7 +1510,7 @@ sample [`gitlab.yml`](https://gitlab.com/gitlab-org/gitlab/blob/master/config/gi
 for more job examples.
 
 These settings are shared between Sidekiq, Webservice (for showing tooltips in UI)
-and Task Runner (for debugging purposes) pods.
+and Toolbox (for debugging purposes) pods.
 
 ```yaml
 global:
@@ -1773,8 +1834,6 @@ relevant charts packaged with Cloud Native GitLab.
 global:
   application:
     allowClusterRoles: false
-  operator:
-     enabled: false
 nginx:
   controller:
     scope:
@@ -2014,3 +2073,31 @@ More detailed examples can be found in the
 
 The `platform` key is reserved for specific features targeting a specific
 platform like GKE or EKS.
+
+## Affinity
+
+Affinity configuration is available via `global.antiAffinity` and `global.affinity`.
+Affinity allows you to constrain which nodes your pod is eligible to be scheduled on, based on node labels or labels of pods that are already running on a node. This allow spread pods across the cluster or select specific nodes, ensuring more resilience in case of a failing node.
+
+```yaml
+global:
+  antiAffinity: soft
+  affinity:
+    podAntiAffinity:
+      topologyKey: "kubernetes.io/hostname"
+```
+
+| Name                                   | Type   | Default                   | Description                         |
+| :------------------------------------- | :--:   | :------------------------ | :---------------------------------- |
+| `antiAffinity`                         | String |  `soft`                   | Pod anti-affinity to apply on pods. |
+| `affinity.podAntiAffinity.topologyKey` | String |  `kubernetes.io/hostname` | Pod anti-affinity topology key.     |
+
+- `global.antiAffinity` can take two values:
+  - `soft`: Define a `preferredDuringSchedulingIgnoredDuringExecution` anti-affinity where the Kubernetes scheduler will try to enforce the rule but will not guarantee the result.
+  - `hard`: Defined a `requiredDuringSchedulingIgnoredDuringExecution` anti-affinity where the rule _must_ be met for a pod to be scheduled onto a node.
+- `global.affinity.podAntiAffinity.topologyKey` define a node attribute used two divide them into logical zone. Most common `topologyKey` values are :
+  - `kubernetes.io/hostname`
+  - `topology.kubernetes.io/zone`
+  - `topology.kubernetes.io/region`
+
+Kubernetes references on [Inter-pod affinity and anti-affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity)

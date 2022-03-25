@@ -13,7 +13,8 @@ function gen_random(){
 
 # Args: yaml file, search path
 function fetch_rails_value(){
-  local value=$(yq read $1 "${2}")
+  local value=$(yq ".${2}" $1)
+
   # Don't return null values
   if [ "${value}" != "null" ]; then echo "${value}"; fi
 }
@@ -115,6 +116,16 @@ generate_secret_if_needed {{ template "gitlab.kas.secret" . }} --from-literal={{
 generate_secret_if_needed {{ template "gitlab.kas.privateApi.secret" . }} --from-literal={{ template "gitlab.kas.privateApi.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
 {{ end }}
 
+{{ if .Values.global.appConfig.incomingEmail.enabled -}}
+# Gitlab-mailroom incomingEmail webhook secret
+generate_secret_if_needed {{ template "gitlab.appConfig.incomingEmail.authToken.secret" . }} --from-literal={{ template "gitlab.appConfig.incomingEmail.authToken.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
+{{ end }}
+
+{{ if .Values.global.appConfig.serviceDeskEmail.enabled -}}
+# Gitlab-mailroom serviceDeskEmail webhook secret
+generate_secret_if_needed {{ template "gitlab.appConfig.serviceDeskEmail.authToken.secret" . }} --from-literal={{ template "gitlab.appConfig.serviceDeskEmail.authToken.key" . }}=$(gen_random 'a-zA-Z0-9' 32 | base64)
+{{ end }}
+
 # Registry certificates
 mkdir -p certs
 openssl req -new -newkey rsa:4096 -subj "/CN=gitlab-issuer" -nodes -x509 -keyout certs/registry-example-com.key -out certs/registry-example-com.crt -days 3650
@@ -186,10 +197,12 @@ generate_secret_if_needed {{ template "gitlab.registry.notificationSecret.secret
 generate_secret_if_needed "gitlab-grafana-initial-password" --from-literal=password=$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
 
-{{ if .Values.global.praefect.enabled }}
+{{ if .Values.global.praefect.enabled -}}
+{{   if not .Values.global.praefect.psql.host -}}
 # Praefect DB password
 generate_secret_if_needed {{ template "gitlab.praefect.dbSecret.secret" . }} --from-literal={{ template "gitlab.praefect.dbSecret.key" . }}=$(gen_random 'a-zA-Z0-9', 32)
+{{   end }}
 
-# Gitaly secret
+# Praefect auth token
 generate_secret_if_needed {{ template "gitlab.praefect.authToken.secret" . }} --from-literal={{ template "gitlab.praefect.authToken.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}

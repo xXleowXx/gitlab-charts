@@ -19,12 +19,7 @@ data:
   {{- end }}
   smtp_settings.rb: |
     {{- include "gitlab.smtp_settings" . | nindent 4 }}
-  {{- include "gitlab.rails.redis.resque" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.cache" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.sharedState" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.queues" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.cable" . | nindent 2 }}
-  {{- include "gitlab.rails.redis.traceChunks" . | nindent 2 }}
+  {{- include "gitlab.rails.redis.all" . | nindent 2 }}
   gitlab.yml.erb: |
     production: &base
       gitlab:
@@ -56,10 +51,10 @@ data:
         time_zone: {{ .Values.global.time_zone | quote }}
         {{- include "gitlab.outgoing_email_settings" . | indent 8 }}
       {{- with .Values.global.appConfig }}
-      {{-   if eq .incomingEmail.enabled true }}
+      {{-   if .incomingEmail.enabled }}
       {{-     include "gitlab.appConfig.incoming_email" . | nindent 6 }}
       {{-   end }}
-      {{-   if eq .serviceDeskEmail.enabled true }}
+      {{-   if .serviceDeskEmail.enabled }}
       {{-     include "gitlab.appConfig.service_desk_email" . | nindent 6 }}
       {{-   end }}
       {{-   include "gitlab.appConfig.cronJobs" . | nindent 6 }}
@@ -80,6 +75,7 @@ data:
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "packages" "config" $.Values.global.appConfig.packages) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "external_diffs" "config" $.Values.global.appConfig.externalDiffs) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "terraform_state" "config" $.Values.global.appConfig.terraformState) | nindent 10 -}}
+          {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "ci_secure_files" "config" $.Values.global.appConfig.ciSecureFiles) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "dependency_proxy" "config" $.Values.global.appConfig.dependencyProxy) | nindent 10 -}}
           {{- include "gitlab.appConfig.objectStorage.object" (dict "name" "pages" "config" $.Values.global.pages.objectStore) | nindent 10 -}}
       {{- end }}
@@ -89,6 +85,7 @@ data:
       {{- include "gitlab.appConfig.packages.configuration" (dict "config" $.Values.global.appConfig.packages "context" $) | nindent 6 }}
       {{- include "gitlab.appConfig.external_diffs.configuration" (dict "config" $.Values.global.appConfig.externalDiffs "context" $) | nindent 6 }}
       {{- include "gitlab.appConfig.terraformState.configuration" (dict "config" $.Values.global.appConfig.terraformState "context" $) | nindent 6 }}
+      {{- include "gitlab.appConfig.ciSecureFiles.configuration" (dict "config" $.Values.global.appConfig.ciSecureFiles "context" $) | nindent 6 }}
       {{- include "gitlab.appConfig.dependencyProxy.configuration" (dict "config" $.Values.global.appConfig.dependencyProxy "context" $) | nindent 6 }}
       {{- include "gitlab.appConfig.pseudonymizer.configuration" $ | nindent 6 }}
       {{- include "gitlab.geo.config" $ | nindent 6 }}
@@ -123,6 +120,12 @@ data:
           enabled: true
           address: 0.0.0.0
           port: {{ .Values.metrics.port }}
+{{- end }}
+        sidekiq_health_checks:
+{{- if .Values.health_checks.enabled }}
+          enabled: true
+          address: 0.0.0.0
+          port: {{ .Values.health_checks.port | default .Values.metrics.port }}
 {{- end }}
   configure: |
     {{- include "gitlab.scripts.configure.secrets" (dict "required" "gitaly registry rails-secrets") | nindent 4 -}}

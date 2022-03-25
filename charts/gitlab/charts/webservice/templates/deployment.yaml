@@ -29,9 +29,6 @@ metadata:
     {{-   toYaml .deployment.annotations | nindent 4 }}
     {{- end }}
 spec:
-  {{- if $.Values.global.operator.enabled }}
-  paused: true
-  {{- end }}
   # Don't provide replicas when HPA are present
   # replicas: {{ .hpa.minReplicas }}
   selector:
@@ -56,8 +53,17 @@ spec:
       {{- range $key, $value := .pod.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
-      {{- if $.Values.metrics.enabled }}
+      {{- if and $.Values.metrics.enabled (not $.Values.metrics.serviceMonitor.enabled) }}
+      {{- if $.Values.metrics.annotations }}
         {{- toYaml $.Values.metrics.annotations | nindent 8 }}
+      {{- else }}
+        gitlab.com/prometheus_scrape: "true"
+        gitlab.com/prometheus_port: {{ $.Values.service.internalPort | quote }}
+        gitlab.com/prometheus_path: {{ $.Values.metrics.path }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: {{ $.Values.service.internalPort | quote }}
+        prometheus.io/path: {{ $.Values.metrics.path }}
+      {{- end }}
       {{- end }}
     spec:
       {{- if .tolerations }}
@@ -76,7 +82,7 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: "kubernetes.io/hostname"
+            - topologyKey: {{ default $.Values.global.affinity.podAntiAffinity.topologyKey $.Values.affinity.podAntiAffinity.topologyKey | quote }}
               labelSelector:
                 matchLabels:
                   {{- include "gitlab.selectorLabels" $ | nindent 18 }}
@@ -87,7 +93,7 @@ spec:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
+              topologyKey: {{ default $.Values.global.affinity.podAntiAffinity.topologyKey $.Values.affinity.podAntiAffinity.topologyKey | quote }}
               labelSelector:
                 matchLabels:
                   {{- include "gitlab.selectorLabels" $ | nindent 18 }}
@@ -137,10 +143,6 @@ spec:
           args:
             - /scripts/wait-for-deps
           env:
-            {{- if $.Values.global.operator.enabled }}
-            - name: BYPASS_SCHEMA_VERSION
-              value: 'true'
-            {{- end }}
             - name: GITALY_FEATURE_DEFAULT_ON
               value: "1"
             - name: CONFIG_TEMPLATE_DIRECTORY
@@ -156,6 +158,7 @@ spec:
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
           volumeMounts:
             {{- include "gitlab.extraVolumeMounts" $ | nindent 12 }}
+            {{- include "gitlab.certificates.volumeMount" $ | nindent 12 }}
             - name: webservice-config
               mountPath: '/var/opt/gitlab/templates'
             - name: webservice-secrets
@@ -175,7 +178,11 @@ spec:
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ $.Values.service.internalPort }}
-              name: webservice
+              name: http-webservice
+          {{- if or $.Values.monitoring.exporter.enabled (and $.Values.metrics.enabled (eq $.Values.metrics.port $.Values.monitoring.exporter.port)) }}
+            - containerPort: {{ $.Values.monitoring.exporter.port }}
+              name: http-metrics-ws
+          {{- end }}
           env:
             - name: GITLAB_WEBSERVER
               value: {{ $.Values.webServer }}
@@ -286,7 +293,11 @@ spec:
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
             - containerPort: {{ $.Values.service.workhorseInternalPort }}
-              name: workhorse
+              name: http-workhorse
+          {{- if or $.Values.workhorse.monitoring.exporter.enabled $.Values.workhorse.metrics.enabled }}
+            - containerPort: {{ $.Values.workhorse.monitoring.exporter.port }}
+              name: http-metrics-wh
+          {{- end }}
           env:
             - name: TMPDIR
               value: "/tmp/gitlab"
@@ -300,9 +311,9 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
-            {{- if .workhorse.monitoring.exporter.enabled }}
+            {{- if or .workhorse.monitoring.exporter.enabled .workhorse.metrics.enabled }}
             - name: GITLAB_WORKHORSE_PROM_LISTEN_ADDR
-              value: "0.0.0.0:{{ $.Values.workhorse.monitoring.exporter.port }}"
+              value: "0.0.0.0:{{ .workhorse.monitoring.exporter.port }}"
             {{- end }}
             {{- if .workhorse.sentryDSN }}
             - name: GITLAB_WORKHORSE_SENTRY_DSN
@@ -381,6 +392,8 @@ spec:
               items:
                 - key: {{ template "gitlab.gitlab-shell.authToken.key" $ }}
                   path: shell/.gitlab_shell_secret
+          {{- include "gitlab.appConfig.incomingEmail.mountSecrets" $ | nindent 10 }}
+          {{- include "gitlab.appConfig.serviceDeskEmail.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.gitaly.clientSecrets" $ | nindent 10 }}
           {{- include "gitlab.redis.secrets" $ | nindent 10 }}
           {{- range $.Values.local.psql }}
@@ -414,6 +427,7 @@ spec:
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "packages" "config" $.Values.global.appConfig.packages) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "external_diffs" "config" $.Values.global.appConfig.externalDiffs) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "terraform_state" "config" $.Values.global.appConfig.terraformState) | nindent 10 }}
+          {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "ci_secure_files" "config" $.Values.global.appConfig.ciSecureFiles) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "dependency_proxy" "config" $.Values.global.appConfig.dependencyProxy) | nindent 10 }}
           {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "pages" "config" $.Values.global.pages.objectStore) | nindent 10 }}
           {{- include "gitlab.appConfig.ldap.servers.mountSecrets" $ | nindent 10 }}

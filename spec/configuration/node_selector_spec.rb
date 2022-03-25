@@ -21,22 +21,14 @@ describe 'Node Selector configuration' do
             enabled: true  # DELETE THIS WHEN KAS BECOMES ENABLED BY DEFAULT
           pages:
             enabled: true
+          spamcheck:
+            enabled: true
           praefect:
             enabled: true
 
         # ensures inclusion of shared-secrets/templates/_self-signed-cert-job.yml
         ingress:
           configureCertmanager: false
-
-        # ensures inclusion of:
-        # - gitlab/charts/webservice/templates/pause_job.yaml
-        # - gitlab/charts/sidekiq/templates/pause_job.yaml
-        # - gitlab/charts/gitaly/templates/pause_job.yaml
-        # - gitlab/charts/operator/templates/deployment.yaml
-        operator:
-          enabled: true
-          rollout:
-            autoPause: true
 
       # ensures inclusion of:
       # - nginx-ingress/templates/admission-webhooks/job-patch/job-createSecret.yaml
@@ -55,6 +47,7 @@ describe 'Node Selector configuration' do
       'Deployment/test-certmanager-cainjector',
       'Deployment/test-certmanager-webhook',
       'Deployment/test-certmanager',
+      'Job/test-certmanager-startupapicheck',
       'Deployment/test-gitlab-runner',
       'Deployment/test-prometheus-server',
       'StatefulSet/test-postgresql',

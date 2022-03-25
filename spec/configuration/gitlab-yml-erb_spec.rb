@@ -32,7 +32,7 @@ describe 'gitlab.yml.erb configuration' do
               report_only: false
               directives:
                 connect_src: "'self'"
-                frame_ancestor: "'self'"
+                frame_ancestors: "'self'"
                 frame_src: "'self'"
                 img_src: "* data: blob:"
                 object_src: "'none'"
@@ -118,6 +118,99 @@ describe 'gitlab.yml.erb configuration' do
           'data',
           'gitlab.yml.erb'
         )).not_to include('matomo_disable_cookies')
+      end
+    end
+  end
+
+  context 'oneTrustId' do
+    let(:required_values) do
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            extra:
+              oneTrustId: #{value}
+      )).merge(default_values)
+    end
+
+    context 'when configured' do
+      let(:value) { 'foo' }
+
+      it 'populates the gitlab.yml.erb with id' do
+        t = HelmTemplate.new(required_values)
+        expect(t.dig(
+          'ConfigMap/test-webservice',
+          'data',
+          'gitlab.yml.erb'
+        )).to include('one_trust_id: "foo"')
+      end
+    end
+
+    context 'when not configured' do
+      let(:value) { nil }
+
+      it 'does not populate the gitlab.yml.erb' do
+        t = HelmTemplate.new(required_values)
+
+        expect(t.exit_code).to eq(0)
+        expect(t.dig(
+          'ConfigMap/test-webservice',
+          'data',
+          'gitlab.yml.erb'
+        )).not_to include('one_trust_id')
+      end
+    end
+  end
+
+  context 'bizible' do
+    let(:required_values) do
+      YAML.safe_load(%(
+        global:
+          appConfig:
+            extra:
+              bizible: #{value}
+      )).merge(default_values)
+    end
+
+    context 'when true' do
+      let(:value) { true }
+
+      it 'populates the gitlab.yml.erb with true' do
+        t = HelmTemplate.new(required_values)
+        expect(t.dig(
+          'ConfigMap/test-webservice',
+          'data',
+          'gitlab.yml.erb'
+        )).to include('bizible: true')
+      end
+    end
+
+    context 'when false' do
+      let(:value) { false }
+
+      it 'does not populate the gitlab.yml.erb' do
+        t = HelmTemplate.new(required_values)
+
+        expect(t.exit_code).to eq(0)
+        expect(t.dig(
+          'ConfigMap/test-webservice',
+          'data',
+          'gitlab.yml.erb'
+        )).not_to include('bizible')
+      end
+    end
+
+    context 'when nil' do
+      let(:value) { nil }
+
+      it 'does not populate the gitlab.yml.erb' do
+        t = HelmTemplate.new(required_values)
+
+        expect(t.exit_code).to eq(0)
+        expect(t.dig(
+          'ConfigMap/test-webservice',
+          'data',
+          'gitlab.yml.erb'
+        )).not_to include('bizible')
       end
     end
   end

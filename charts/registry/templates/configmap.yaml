@@ -19,8 +19,8 @@ data:
       debug:
         addr: ':{{ .Values.debug.addr.port | int }}'
         prometheus:
-          enabled: {{ eq true .Values.debug.prometheus.enabled }}
-          path: {{ .Values.debug.prometheus.path }}
+          enabled: {{ (or .Values.metrics.enabled .Values.debug.prometheus.enabled) }}
+          path: {{ default .Values.metrics.path .Values.debug.prometheus.path }}
       {{- end }}
       draintimeout: {{ .Values.draintimeout }}
       headers:
@@ -49,6 +49,20 @@ data:
     {{- end }}
     validation:
       disabled: {{ eq true .Values.validation.disabled }}
+      {{- with .Values.validation.manifests }}
+      manifests:
+        referencelimit: {{ .referencelimit }}
+        payloadsizelimit: {{ .payloadsizelimit }}
+        urls:
+          allow:
+        {{- range .urls.allow }}
+          - {{ . }}
+        {{- end }}
+          deny:
+        {{- range .urls.deny }}
+          - {{ . }}
+        {{- end }}
+      {{- end }}
     {{- include "registry.notifications.config" $ | nindent 4 }}
     reporting:
       {{- if .Values.reporting.sentry.enabled }}
@@ -111,6 +125,15 @@ data:
       {{- else }}
       {{- include (print $.Template.BasePath "/_storage_default.yaml") . | nindent 6}}
       {{- end }}
+    middleware:
+    {{- if .Values.middleware.storage }}
+      storage:
+      {{ range $index, $v := .Values.middleware.storage }}
+      - name: {{ $v.name }}
+        options: {{ omit $v.options "privatekeySecret" "privatekey" | toYaml | nindent 10 }}
+          privatekey: {{ printf "/etc/docker/registry/middleware.storage/%d/%s" $index $v.options.privatekeySecret.key }}
+      {{ end }}
+    {{- end }}
     {{- include "registry.database.config" $ | nindent 4 }}
     {{- include "registry.gc.config" $ | nindent 4 }}
     {{- include "registry.migration.config" $ | nindent 4 }}

@@ -93,6 +93,10 @@ describe 'Praefect configuration' do
       end
     end
 
+    it 'enables prometheus_exclude_database_from_default_metrics by default' do
+      expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.erb')).to include('prometheus_exclude_database_from_default_metrics = true')
+    end
+
     context 'without replacing Gitaly' do
       let(:values_with_internal_gitaly) do
         YAML.safe_load(%(
@@ -145,36 +149,26 @@ describe 'Praefect configuration' do
           expect(template.dig(r)).to be_truthy
         end
       end
+    end
 
-      context 'with operator enabled' do
-        let(:values_operator_enabled) do
-          YAML.safe_load(%(
-            global:
-              operator:
-                enabled: true
-          )).deep_merge(values_multiple_virtual_storages)
-        end
+    context 'with separate_database_metrics false' do
+      let(:values_separate_db_metrics) do
+        YAML.safe_load(%(
+          gitlab:
+            praefect:
+              metrics:
+                separate_database_metrics: false
+        )).deep_merge(values_praefect_enabled)
+      end
 
-        let(:operator_resources) do
-          [
-            'ServiceAccount/test-gitaly-pause',
-            'Role/test-gitaly-pause',
-            'RoleBinding/test-gitaly-pause',
-            'Job/test-gitaly-pause'
-          ]
-        end
+      let(:template) { HelmTemplate.new(values_separate_db_metrics) }
 
-        let(:template) { HelmTemplate.new(values_operator_enabled) }
+      it 'templates successfully' do
+        expect(template.exit_code).to eq(0)
+      end
 
-        it 'templates successfully' do
-          expect(template.exit_code).to eq(0)
-        end
-
-        it 'generates operator-related resources' do
-          operator_resources.each do |r|
-            expect(template.dig(r)).to be_truthy
-          end
-        end
+      it 'disables prometheus_exclude_database_from_default_metrics' do
+        expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.erb')).to include('prometheus_exclude_database_from_default_metrics = false')
       end
     end
 

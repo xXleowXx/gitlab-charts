@@ -1,7 +1,7 @@
 {{- define "gitlab.appConfig.gitaly" -}}
 gitaly:
   client_path: /home/git/gitaly/bin
-  token: "<%= File.read('/etc/gitlab/gitaly/gitaly_token').strip.dump[1..-2] %>"
+  token: <%= File.read('/etc/gitlab/gitaly/gitaly_token').strip.to_json %>
 {{- end -}}
 
 {{- define "gitlab.appConfig.repositories" -}}
@@ -18,12 +18,18 @@ repositories:
 incoming_email:
   enabled: {{ eq .incomingEmail.enabled true }}
   address: {{ .incomingEmail.address | quote }}
+  {{- if eq .incomingEmail.deliveryMethod "webhook" }}
+  secret_file: /etc/gitlab/mailroom/incoming_email_webhook_secret
+  {{- end }}
 {{- end -}}
 
 {{- define "gitlab.appConfig.service_desk_email" -}}
 service_desk_email:
   enabled: {{ eq .serviceDeskEmail.enabled true }}
   address: {{ .serviceDeskEmail.address | quote }}
+  {{- if eq .serviceDeskEmail.deliveryMethod "webhook" }}
+  secret_file: /etc/gitlab/mailroom/service_desk_email_webhook_secret
+  {{- end }}
 {{- end -}}
 
 {{- define "gitlab.appConfig.kas" -}}
@@ -65,6 +71,15 @@ extra:
   {{- end }}
   {{- if .extra.matomoDisableCookies }}
   matomo_disable_cookies: {{ eq true .extra.matomoDisableCookies }}
+  {{- end }}
+  {{ if .extra.oneTrustId }}
+  one_trust_id: {{ .extra.oneTrustId | quote }}
+  {{- end }}
+  {{ if .extra.googleTagManagerNonceId }}
+  google_tag_manager_nonce_id: {{ .extra.googleTagManagerNonceId | quote }}
+  {{- end }}
+  {{ if .extra.bizible }}
+  bizible: {{ eq true .extra.bizible }}
   {{- end }}
 {{- end -}}
 

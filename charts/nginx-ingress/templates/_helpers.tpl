@@ -1,4 +1,6 @@
 {{/* vim: set filetype=mustache: */}}
+{{/* GitLab additions included at end of file */}}
+
 {{/*
 Expand the name of the chart.
 */}}
@@ -35,7 +37,7 @@ Create a default fully qualified controller name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "ingress-nginx.controller.fullname" -}}
-{{- printf "%s-%s" (include "ingress-nginx.fullname" .) "controller" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "ingress-nginx.fullname" .) .Values.controller.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -58,7 +60,7 @@ Create a default fully qualified default backend name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
 {{- define "ingress-nginx.defaultBackend.fullname" -}}
-{{- printf "%s-%s" (include "ingress-nginx.fullname" .) "default-backend" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "ingress-nginx.fullname" .) .Values.defaultBackend.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -128,16 +130,18 @@ Check the ingress controller version tag is at most three versions behind the la
 {{- end -}}
 {{- end -}}
 
+{{/*
+IngressClass parameters.
+*/}}
+{{- define "ingressClass.parameters" -}}
+  {{- if .Values.controller.ingressClassResource.parameters -}}
+          parameters:
+{{ toYaml .Values.controller.ingressClassResource.parameters | indent 4}}
+  {{ end }}
+{{- end -}}
+
 {{/* GitLab-provided partials starting below */}}
 
 {{- define "ingress-nginx.tcp-configmap" -}}
 {{ default (printf "%s-%s" (include "ingress-nginx.fullname" .) "tcp") .Values.tcpExternalConfig }}
-{{- end -}}
-
-{{- define "ingress-nginx.controller.ingress-class" -}}
-{{- if not .Values.controller.ingressClass -}}
-{{ .Release.Name }}-nginx
-{{- else -}}
-nginx
-{{- end -}}
 {{- end -}}

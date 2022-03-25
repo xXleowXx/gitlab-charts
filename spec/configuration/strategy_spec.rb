@@ -29,6 +29,8 @@ describe 'Strategy configuration' do
             secret: foobar
         pages:
           enabled: true
+        spamcheck:
+          enabled: true
         praefect:
           enabled: true
         appConfig:
@@ -69,6 +71,10 @@ describe 'Strategy configuration' do
           deployment:
             strategy:
               type: Recreate
+        spamcheck:
+          deployment:
+            strategy:
+              type: Recreate
         gitlab-shell:
           deployment:
             strategy:
@@ -99,8 +105,8 @@ describe 'Strategy configuration' do
       'Deployment/test-certmanager',
       'Deployment/test-prometheus-server',
       'Deployment/test-nginx-ingress-controller',
-      'Deployment/test-nginx-ingress-default-backend',
-      'Deployment/test-task-runner',
+      'Deployment/test-nginx-ingress-defaultbackend',
+      'Deployment/test-toolbox',
       'Deployment/test-minio',
       'Deployment/test-gitlab-runner',
       'StatefulSet/test-redis-master',
@@ -143,7 +149,9 @@ describe 'Strategy configuration' do
       resources_by_kind = local_template.resources_by_kind('Deployment').reject { |key, _| ignored_charts.include? key }
 
       resources_by_kind.each do |key, _|
-        expect(local_template.dig(key, 'spec', 'strategy')['type']).to eq('Recreate')
+        resource = local_template.dig(key, 'spec', 'strategy')
+        expect(resource).not_to be_nil, "Unable to find strategy for #{key}"
+        expect(resource['type']).to eq('Recreate'), "#{key} Deployment strategy: #{resource['type']}"
       end
     end
 

@@ -41,7 +41,7 @@ gcloud container clusters get-credentials <cluster-name> --zone <zone> --project
 For the most up to date instructions, follow the Amazon EKS documentation on
 [connecting to a cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html#eks-configure-kubectl).
 
-#### Minikube
+#### minikube
 
 If you are doing local development, you can use `minikube` as your
 local cluster. If `kubectl cluster-info` is not showing `minikube` as the current
@@ -66,7 +66,7 @@ The Distribution Team has a [training presentation for Helm Charts](https://docs
 
 ### Templates
 
-Templating in Helm is done via golang's [text/template](https://golang.org/pkg/text/template/)
+Templating in Helm is done via golang's [text/template](https://pkg.go.dev/text/template)
 and [sprig](https://pkg.go.dev/github.com/Masterminds/sprig?utm_source=godoc%27).
 
 Some information on how all the inner workings behave:

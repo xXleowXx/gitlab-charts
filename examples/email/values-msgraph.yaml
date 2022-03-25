@@ -8,11 +8,15 @@ global:
       user: example-incoming@example.onmicrosoft.com
       mailbox: inbox
       inboxMethod: microsoft_graph
+      azureAdEndpoint: https://login.microsoftonline.com
+      graphEndpoint: https://graph.microsoft.com
       tenantId: "YOUR-TENANT-ID"
       clientId: "YOUR-CLIENT-ID"
       clientSecret:
         secret: my-incoming-mail-client-secret
         key: secret
+      deliveryMethod: sidekiq
+      authToken: {}
     serviceDeskEmail:
       enabled: true
       address: example-servicedesk+%{key}@@example.onmicrosoft.com
@@ -24,3 +28,5 @@ global:
       clientSecret:
         secret: my-service-desk-client-secret
         key: secret
+      deliveryMethod: sidekiq
+      authToken: {}

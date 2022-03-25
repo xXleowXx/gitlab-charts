@@ -45,11 +45,17 @@ networkpolicy:
 metrics:
   enabled: true
   port: 3807
-  annotations:
-    gitlab.com/prometheus_scrape: "true"
-    gitlab.com/prometheus_port: "3807"
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "3807"
+  path: /metrics
+  podMonitor:
+    enabled: false
+    additionalLabels: {}
+    endpointConfig: {}
+  # DEPRECATED
+  annotations: {}
+
+health_checks:
+  enabled: true
+
 redis:
   password: {}
 
@@ -99,6 +105,7 @@ global:
     # username: 'gitlab'
     # applicationName:
     # preparedStatements: false
+    # databaseTasks: true
     # password:
     #   secret: gitlab-postgres
     #   key: psql-password
@@ -250,7 +257,7 @@ deployment:
 
 hpa:
   targetAverageValue: 350m
-timeout: 5
+timeout: 25
 resources:
   # limits:
   #  memory: 5G
@@ -298,3 +305,7 @@ serviceAccount:
 ## Allow configuring pods' priorityClassName. This is used to control pod priority in case of eviction:
 #  https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 priorityClassName: ""
+
+affinity:
+  podAntiAffinity:
+    topologyKey:
