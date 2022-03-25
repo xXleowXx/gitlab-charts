@@ -42,6 +42,9 @@ spec:
           image: {{ include "gitlab.kubectl.image" . | quote }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           command: ['/bin/bash', '/scripts/generate-secrets']
+          env:
+          - name: KUBECTL_OPTS
+            value: "{{ $sharedSecretValues.kubectl.options }}"
           volumeMounts:
             - name: scripts
               mountPath: /scripts
