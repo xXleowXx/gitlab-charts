@@ -120,6 +120,14 @@ NOTICE: The in-chart NGINX Ingress Controller has the following requirements:
     - Ingress objects must be in group/version `networking.k8s.io/v1`.
 {{ end }}
 
+{{/* WARN: Usage of unsupported persistence with minio */}}
+{{- if .Values.minio.persistence.annotations }}
+{{- if eq (index .Values.minio.persistence.annotations "helm.sh/resource-policy") "keep" }}
+WARN: You've told Helm to keep the MinIO PVC, as a reminder the in-chart MinIO should not be used for production deployments and is unsupported for production deployments.
+    See https://docs.gitlab.com/charts/installation/deployment.html#minio for more details.
+{{- end }}
+{{- end }}
+
 {{/* run deprecations */}}
 {{ include "gitlab.deprecations" . }}
 {{/* run checkConfig */}}

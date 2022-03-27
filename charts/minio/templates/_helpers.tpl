@@ -52,3 +52,12 @@ if there is a shared tls secret for all ingresses.
 {{- end -}}
 {{- pluck "secretName" .Values.ingress.tls .Values.global.ingress.tls $defaultName | first -}}
 {{- end -}}
+
+{{/*
+Return the formatted 
+*/}}
+{{- define "minio.persistance.annotations" -}}
+{{- if $.Values.persistence.annotations -}}
+{{- toYaml $.Values.persistence.annotations -}}
+{{- end -}}
+{{- end -}}
