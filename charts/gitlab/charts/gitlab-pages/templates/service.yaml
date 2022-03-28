@@ -21,4 +21,8 @@ spec:
   selector:
     app: {{ template "name" . }}
     release: {{ .Release.Name }}
+  {{- if .Values.service.sessionAffinity.enabled }}
+  sessionAffinity: ClientIP
+  sessionAffinityConfig: {{- .Values.service.sessionAffinity.config | toYaml | nindent 4 }}
+  {{- end }}
 {{- end }}

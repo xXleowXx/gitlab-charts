@@ -41,6 +41,12 @@ service:
     nodePort: {}
       # http
       # https
+  # Allow the gitlab-pages to be configured with session affinity
+  sessionAffinity:
+    enabled: false
+    config:
+      clientIP:
+        timeoutSeconds: 60
 
 init:
   image: {}
