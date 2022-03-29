@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.9.1 (2022-03-23)
+
+No changes.
+
 ## 5.9.0 (2022-03-21)
 
 ### Added (7 changes)
@@ -102,6 +106,10 @@ No changes.
 ### change (1 change)
 
 - [Add ERROR: to output message to make more visible](gitlab-org/charts/gitlab@6fe9d83f2d6be4266c26eb7b91f8e6efc54984ea) ([merge request](gitlab-org/charts/gitlab!2294))
+
+## 5.7.6 (2022-03-24)
+
+No changes.
 
 ## 5.7.5 (2022-03-09)
 
