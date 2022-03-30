@@ -298,6 +298,29 @@ describe 'Database configuration' do
               }
             }
           },
+          "when no databaseTasks: is defined, and main/ci: do share database, and load_balancing is defined, the default for ci is false and items are properly inherited" => {
+            psql_config: {
+              main: {
+                load_balancing: {
+                  hosts: %w[postgres postgres2]
+                }
+              }
+            },
+            expected: {
+              main: {
+                database_tasks: true,
+                load_balancing: {
+                  hosts: %w[postgres postgres2]
+                }
+              },
+              ci: {
+                database_tasks: false,
+                load_balancing: {
+                  hosts: %w[postgres postgres2]
+                }
+              }
+            }
+          },
           "when databaseTasks=true, and main/ci: do share database, uses user provided value" => {
             psql_config: {
               ci: {
@@ -310,6 +333,32 @@ describe 'Database configuration' do
               },
               ci: {
                 database_tasks: true
+              }
+            }
+          },
+          "when databaseTasks=true, and main/ci: do share database, and load_balancing is defined, uses user provided value, and properly inherited" => {
+            psql_config: {
+              main: {
+                load_balancing: {
+                  hosts: %w[postgres postgres2]
+                }
+              },
+              ci: {
+                databaseTasks: true
+              }
+            },
+            expected: {
+              main: {
+                database_tasks: true,
+                load_balancing: {
+                  hosts: %w[postgres postgres2]
+                }
+              },
+              ci: {
+                database_tasks: true,
+                load_balancing: {
+                  hosts: %w[postgres postgres2]
+                }
               }
             }
           },
@@ -422,7 +471,8 @@ describe 'Database configuration' do
           expect(db_config['production'].keys).to contain_exactly(*expected.keys.map(&:to_s))
 
           expected.each do |database, expected_config|
-            expect(db_config['production'][database.to_s]).to include(expected_config.transform_keys(&:to_s))
+            expected_config = JSON.parse(expected_config.to_json) # deep_stringify_keys
+            expect(db_config['production'][database.to_s]).to include(expected_config)
           end
         end
       end
