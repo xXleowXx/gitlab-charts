@@ -50,7 +50,7 @@ as 'main:', where the db, host and port do match.
 {{-     $currentPort := include "gitlab.psql.port" $context -}}
 {{-     if and (not (hasKey $context.Values.psql "databaseTasks")) (not (hasKey $context.Values.global.psql "databaseTasks")) -}}
 {{-       if and (eq $currentDB $mainDB) (eq $currentHost $mainHost) (eq $currentPort $mainPort) -}}
-{{-         $_ := set $context.Values.psql "databaseTasks" false -}}
+{{-         $_ := set $context.Values.global.psql "databaseTasks" false -}}
 {{-       end -}}
 {{-     end -}}
 {{-   end -}}
