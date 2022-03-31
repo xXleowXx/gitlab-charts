@@ -52,7 +52,7 @@ Certain jobs in CI use a backup of GitLab during testing. Complete the steps bel
 
 1. Generate the desired backup by running a CI pipeline for the matching stable branch.
    1. For example: run a CI pipeline for branch `5-4-stable` if current release is `5-5-stable` to create a backup of 14.4.
-   1. Note that this will require maintainer permission.
+   1. Note that this will require the Maintainer role.
 1. In that pipeline, cancel the QA jobs (but leave the spec tests) so that we don't get extra data in the backup.
 1. Let the spec tests finish. They will have installed the old backup, and migrated the instance to the version we want.
 1. Edit the `gitlab-runner` Deployment replicas to 0, so the Runner turns off.
@@ -60,7 +60,7 @@ Certain jobs in CI use a backup of GitLab during testing. Complete the steps bel
 1. [Ensure the background migrations all complete](https://docs.gitlab.com/ee/update/#checking-for-background-migrations-before-upgrading), forcing them to complete if needed.
 1. Delete the `toolbox` Pod to ensure there is no existing `tmp` data, keeping the backup small.
 1. If any manual work is needed to modify the contents of the backup, complete it before moving on to the next step.
-1. [Create a new backup](https://docs.gitlab.com/charts/backup-restore/backup.html#create-the-backup) from the new `toolbox` Pod.
+1. [Create a new backup](../backup-restore/backup.md) from the new `toolbox` Pod.
 1. Download the new backup from the CI instance of MinIO in the `gitlab-backups` bucket.
 1. Rename and upload the backup to the proper location in Google Cloud Storage (GCS):
    1. Project: `cloud-native-182609`, path: `gitlab-charts-ci/test-backups/`
