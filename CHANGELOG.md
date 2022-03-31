@@ -53,6 +53,10 @@ No changes.
 - [Update Operator docs for version 0.5.0](gitlab-org/charts/gitlab@bffc825cf4730c78e4127e3b0cd8983f7d0545ea) ([merge request](gitlab-org/charts/gitlab!2407))
 - [Update link to Gitaly Cluster migration](gitlab-org/charts/gitlab@0901cb209b15f7ed43eb04576e249940c3afb608) ([merge request](gitlab-org/charts/gitlab!2399))
 
+## 5.8.5 (2022-03-31)
+
+No changes.
+
 ## 5.8.4 (2022-03-16)
 
 No changes.
