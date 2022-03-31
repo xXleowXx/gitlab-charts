@@ -27,11 +27,19 @@ The backup utility provided by GitLab Helm chart supports restoring a tarball fr
 
 ### Restore the rails secrets
 
-The GitLab chart expects rails secrets to be provided as a Kubernetes Secret with content in YAML. On Omnibus GitLab instance, secrets are stored in JSON format in the `/etc/gitlab/gitlab-secrets.json` file, but you may use the YAML file `/var/opt/gitlab/gitlab-rails/etc/secrets.yml` generated from `gitlab-secrets.json` to create a Kubernetes Secret. For other install types the location of the `secrets.yml` file can be different.
+The GitLab chart expects rails secrets to be provided as a Kubernetes Secret with content in YAML. On Omnibus GitLab instance, secrets are stored in JSON format in the `/etc/gitlab/gitlab-secrets.json` file. To convert the file and create the secret:
 
-1. Copy the file `/var/opt/gitlab/gitlab-rails/etc/secrets.yml` to your workstation where you run `kubectl` commands.
+1. Copy the file `/etc/gitlab/gitlab-secrets.json` to the workstation where you run `kubectl` commands.
 
-1. Delete all the lines before `production` section. The file should have the following content:
+1. Install the [yq](https://github.com/mikefarah/yq) tool (version 4.21.1 or later) on your workstation.
+
+1. Run the following command to convert your `gitlab-secrets.json` to YAML format:
+
+    ```shell
+   yq -P '{"production": .gitlab_rails}' gitlab-secrets.json >> gitlab-secrets-updated.yaml
+    ```
+
+1. Check that the new file `gitlab-secrets-updated.yaml` has the contents like below:
 
    ```YAML
    production:
@@ -42,13 +50,13 @@ The GitLab chart expects rails secrets to be provided as a Kubernetes Secret wit
      ci_jwt_signing_key: <your ci jwt signing key>
    ```
 
-1. Find the object name for the rails secrets
+1. Find the object name for the rails secrets:
 
    ```shell
    kubectl get secrets | grep rails-secret
    ```
 
-1. Delete the existing secret
+1. Delete the existing secret:
 
    ```shell
    kubectl delete secret <rails-secret-name>
@@ -57,7 +65,7 @@ The GitLab chart expects rails secrets to be provided as a Kubernetes Secret wit
 1. Create the new secret using the same name as the old, and passing in your local YAML file
 
    ```shell
-   kubectl create secret generic <rails-secret-name> --from-file=secrets.yml=<local-yaml-filepath>
+   kubectl create secret generic <rails-secret-name> --from-file=secrets.yml=gitlab-secrets-updated.yaml
    ```
 
 ### Restart the pods
