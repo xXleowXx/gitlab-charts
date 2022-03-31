@@ -59,9 +59,7 @@ Certain jobs in CI use a backup of GitLab during testing. Complete the steps bel
 1. Log in to the UI and delete the Runner from the admin section. This should help avoid cipher errors later.
 1. [Ensure the background migrations all complete](https://docs.gitlab.com/ee/update/#checking-for-background-migrations-before-upgrading), forcing them to complete if needed.
 1. Delete the `toolbox` Pod to ensure there is no existing `tmp` data, keeping the backup small.
-1. [Optional] If the backup requires updating the artifact traces `expire_at` to `nil`, run the following steps:
-   1. Scale down the Sidekiq Deployment to `0` prior to the spec tests running so the artifacts won't be cleaned up.
-   1. After the specs tests have finished, log into the `toolbox` Pod and run `gitlab-rails console`. Update all the artifact traces to have an `expire_at` set to `nil`.
+1. If any manual work is needed to modify the contents of the backup, complete it before moving on to the next step.
 1. [Create a new backup](https://docs.gitlab.com/charts/backup-restore/backup.html#create-the-backup) from the new `toolbox` Pod.
 1. Download the new backup from the CI instance of MinIO in the `gitlab-backups` bucket.
 1. Rename and upload the backup to the proper location in Google Cloud Storage (GCS):
