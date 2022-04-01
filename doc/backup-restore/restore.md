@@ -27,7 +27,7 @@ The backup utility provided by GitLab Helm chart supports restoring a tarball fr
 
 ### Restore the rails secrets
 
-The GitLab chart expects rails secrets to be provided as a Kubernetes Secret with content in YAML. On Omnibus GitLab instance, secrets are stored in JSON format in the `/etc/gitlab/gitlab-secrets.json` file. To convert the file and create the secret:
+The GitLab chart expects rails secrets to be provided as a Kubernetes Secret with content in YAML. On an Omnibus GitLab instance, secrets are stored in JSON format in the `/etc/gitlab/gitlab-secrets.json` file. To convert the file and create the secret:
 
 1. Copy the file `/etc/gitlab/gitlab-secrets.json` to the workstation where you run `kubectl` commands.
 
@@ -37,8 +37,9 @@ The GitLab chart expects rails secrets to be provided as a Kubernetes Secret wit
 
    ```shell
    yq -P '{"production": .gitlab_rails}' gitlab-secrets.json >> gitlab-secrets-updated.yaml
+```
 
-1. Check that the new file `gitlab-secrets-updated.yaml` has the contents like below:
+1. Check that the new `gitlab-secrets-updated.yaml` file has the following contents:
 
    ```YAML
    production:
