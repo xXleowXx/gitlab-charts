@@ -37,7 +37,7 @@ The GitLab chart expects rails secrets to be provided as a Kubernetes Secret wit
 
    ```shell
    yq -P '{"production": .gitlab_rails}' gitlab-secrets.json >> gitlab-secrets-updated.yaml
-```
+   ```
 
 1. Check that the new `gitlab-secrets-updated.yaml` file has the following contents:
 
