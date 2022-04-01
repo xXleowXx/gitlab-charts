@@ -923,24 +923,6 @@ qa_eks_manual_full_suite:
     on_stop: stop_review_eks
   when: manual
 
-create_operator_mr:
-  stage: release-package
-  timeout: 2h
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:2.15.0
-  allow_failure: true
-  before_script:
-    - bundle install
-  script:
-    - git fetch origin --tags
-    - bash scripts/create_operator_mr.sh
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+\+[^ ]{7,}\.[^ ]{7,}$/'
-      when: never
-    - if: '$CI_COMMIT_TAG && $CI_PROJECT_PATH == "gitlab/charts/gitlab"'
-      when: manual
-    - when: never
-  needs: []
-
 issue-bot:
   stage: report
   image: registry.gitlab.com/gitlab-org/distribution/issue-bot:latest
