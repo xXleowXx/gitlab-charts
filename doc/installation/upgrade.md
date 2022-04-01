@@ -101,6 +101,10 @@ The steps have been documented in the [5.0 upgrade steps](#upgrade-steps-for-50-
 As part of the `4.0.0` release of this chart, we upgraded the bundled [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) from `7.7.0` to `8.9.4`. This is not a drop in replacement. Manual steps need to be performed to upgrade the database.
 The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-release).
 
+## Upgrade steps for the 5.10 release
+
+Prior to upgrading to `5.10` you need to first upgrade to `5.9` (GitLab `14.9`), and wait for all [batched background migrations](https://docs.gitlab.com/ee/update/#batched-background-migrations) to complete. `5.10` (GitLab `14.10`) includes a [migration that will fail](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/82176) if the background migration from the previous release is not completed.
+
 ## Upgrade steps for 5.9 release
 
 ### Sidekiq pod never becomes ready
