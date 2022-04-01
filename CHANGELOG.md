@@ -164,6 +164,10 @@ No changes.
 - [Update gitlab-org/container-registry from 3.20.0-gitlab to 3.21.0-gitlab](gitlab-org/charts/gitlab@52b9f0d5b6ae45cbf578dffd94cd1e544938a093) ([merge request](gitlab-org/charts/gitlab!2337))
 - [Update gitlab-org/container-registry from 3.19.0-gitlab to 3.20.0-gitlab](gitlab-org/charts/gitlab@4ae9e795d2ae3ceec5f2d75a9c5c9ecefb88f707) ([merge request](gitlab-org/charts/gitlab!2334))
 
+## 5.6.7 (2022-03-31)
+
+No changes.
+
 ## 5.6.6 (2022-03-01)
 
 No changes.
