@@ -50,10 +50,10 @@ if there is a shared tls secret for all ingresses.
 {{- end -}}
 
 {{/*
-Return the formatted 
+Return the formatted annotations for the PersistentVolumeClaim.
 */}}
 {{- define "minio.persistance.annotations" -}}
-{{- if $.Values.persistence.annotations -}}
-{{- toYaml $.Values.persistence.annotations -}}
-{{- end -}}
+{{-   if $.Values.persistence.annotations -}}
+{{-     toYaml $.Values.persistence.annotations -}}
+{{-   end -}}
 {{- end -}}
