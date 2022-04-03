@@ -14,7 +14,7 @@ describe 'MinIO configuration' do
       )))
     end
 
-    it 'Populates the additinoal annotations in the expected manner' do
+    it 'Populates the additional annotations in the expected manner' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0)
       expect(t.annotations('PersistentVolumeClaim/test-minio')).to include('helm.sh/resource-policy' => 'keep')
