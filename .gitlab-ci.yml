@@ -36,7 +36,7 @@ variables:
   # AUTO_DEVOPS_DOMAIN: domain.example.com
   GIT_CLONE_PATH: $CI_BUILDS_DIR/gitlab
   HELM_MAX_HISTORY: 20
-  TEST_BACKUP_PREFIX: "14.4.2"
+  TEST_BACKUP_PREFIX: "14.9.2"
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
 
@@ -111,7 +111,7 @@ update-trigger-branch:
     - if: '$TRIGGER_UPDATE' # Allow us to manually trigger this job in a pipeline if we wish using this CI variable
 
 dependency_update:
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:2.15.0
   stage: prepare
   script:
     - curl https://deps.app/install.sh | bash -s -- -b $HOME/bin
@@ -729,7 +729,7 @@ production_specs_eks:
     KNAPSACK_GENERATE_REPORT: "true"
 
 .qa:
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:2.15.0
   stage: qa
   services:
   - docker:dind
@@ -764,7 +764,7 @@ production_specs_eks:
 wait_for_dev_images:
   # Remove after https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2370 is complete
   timeout: 2h
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:2.15.0
   stage: prepare
   services:
   - docker:dind
@@ -823,7 +823,7 @@ publish_devel_package:
 release_package:
   stage: release-package
   timeout: 2h
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:2.15.0
   script:
     - |
       if [[ $CI_COMMIT_REF_NAME =~ $AUTO_DEPLOY_TAG_REGEX ]]; then
@@ -926,7 +926,7 @@ qa_eks_manual_full_suite:
 create_operator_mr:
   stage: release-package
   timeout: 2h
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:2.15.0
   allow_failure: true
   before_script:
     - bundle install

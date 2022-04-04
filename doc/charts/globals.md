@@ -1325,7 +1325,7 @@ If the LDAP server uses a custom CA or self-signed certificate, you must:
 1. Then, specify:
 
    ```shell
-   --set global.certificates.customCAs[0].secret=my-custom-ca.pem
+   --set global.certificates.customCAs[0].secret=my-custom-ca
    --set global.appConfig.ldap.servers.main.ca_file=/etc/ssl/certs/ca-cert-my-custom-ca.pem
    ```
 

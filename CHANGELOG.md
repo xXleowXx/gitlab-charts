@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.9.2 (2022-03-31)
+
+No changes.
+
 ## 5.9.1 (2022-03-23)
 
 No changes.
@@ -48,6 +52,10 @@ No changes.
 - [Add troubleshooting docs for YAML parse errors](gitlab-org/charts/gitlab@b9947210a310b2eb69cd0a3727d69f0378b6b3ce) ([merge request](gitlab-org/charts/gitlab!2414))
 - [Update Operator docs for version 0.5.0](gitlab-org/charts/gitlab@bffc825cf4730c78e4127e3b0cd8983f7d0545ea) ([merge request](gitlab-org/charts/gitlab!2407))
 - [Update link to Gitaly Cluster migration](gitlab-org/charts/gitlab@0901cb209b15f7ed43eb04576e249940c3afb608) ([merge request](gitlab-org/charts/gitlab!2399))
+
+## 5.8.5 (2022-03-31)
+
+No changes.
 
 ## 5.8.4 (2022-03-16)
 
@@ -107,6 +115,10 @@ No changes.
 
 - [Add ERROR: to output message to make more visible](gitlab-org/charts/gitlab@6fe9d83f2d6be4266c26eb7b91f8e6efc54984ea) ([merge request](gitlab-org/charts/gitlab!2294))
 
+## 5.7.7 (2022-03-31)
+
+No changes.
+
 ## 5.7.6 (2022-03-24)
 
 No changes.
@@ -151,6 +163,10 @@ No changes.
 - [Add test specs](gitlab-org/charts/gitlab@0777257463d3f6169d7fbc47e2931a3347698630) ([merge request](gitlab-org/charts/gitlab!2304))
 - [Update gitlab-org/container-registry from 3.20.0-gitlab to 3.21.0-gitlab](gitlab-org/charts/gitlab@52b9f0d5b6ae45cbf578dffd94cd1e544938a093) ([merge request](gitlab-org/charts/gitlab!2337))
 - [Update gitlab-org/container-registry from 3.19.0-gitlab to 3.20.0-gitlab](gitlab-org/charts/gitlab@4ae9e795d2ae3ceec5f2d75a9c5c9ecefb88f707) ([merge request](gitlab-org/charts/gitlab!2334))
+
+## 5.6.7 (2022-03-31)
+
+No changes.
 
 ## 5.6.6 (2022-03-01)
 
