@@ -272,8 +272,11 @@ describe 'Webservice Deployments configuration' do
         )).deep_merge(default_values)
       end
 
-      it 'template fails' do
-        expect(datamodel.exit_code).not_to eq(0)
+      it 'template fails', :focus => true do
+        expect {
+          datamodel
+        }.to raise_error(HelmTemplateError)
+        # expect(datamodel.exit_code).not_to eq(0)
       end
     end
 

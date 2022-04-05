@@ -114,9 +114,13 @@ describe 'Database configuration' do
       end
 
       it 'fail due to checkConfig' do
-        t = HelmTemplate.new(values)
-        expect(t.exit_code).not_to eq(0)
-        expect(t.stderr).to include("PostgreSQL is set to install, but database load balancing is also enabled.")
+        expect {
+          t = HelmTemplate.new(values)
+        }.to raise_error(HelmTemplateError)
+
+        expect {
+          t = HelmTemplate.new(values)
+        }.to raise_error.with_message(/PostgreSQL is set to install, but database load balancing is also enabled./)
       end
     end
 

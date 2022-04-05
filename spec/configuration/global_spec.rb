@@ -21,8 +21,9 @@ describe 'global configuration' do
 
   context 'default settings' do
     it 'fails to create a helm release' do
-      t = HelmTemplate.new({})
-      expect(t.exit_code).to eq(256), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+      expect {
+        t = HelmTemplate.new({})
+      }.to raise_error(HelmTemplateError)
     end
   end
 
