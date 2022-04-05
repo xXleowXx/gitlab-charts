@@ -114,13 +114,10 @@ describe 'Database configuration' do
       end
 
       it 'fail due to checkConfig' do
-        expect {
-          t = HelmTemplate.new(values)
-        }.to raise_error(HelmTemplateError)
+        expect { HelmTemplate.new(values) }.to raise_error(HelmTemplateError)
 
-        expect {
-          t = HelmTemplate.new(values)
-        }.to raise_error.with_message(/PostgreSQL is set to install, but database load balancing is also enabled./)
+        expect { HelmTemplate.new(values) }.to raise_error.with_message(
+          /PostgreSQL is set to install, but database load balancing is also enabled./)
       end
     end
 

@@ -61,9 +61,7 @@ describe 'Redis configuration' do
       end
 
       it 'fails to template (checkConfig)' do
-        expect {
-          t = HelmTemplate.new(values)
-        }.to raise_error(HelmTemplateError)
+        expect { HelmTemplate.new(values) }.to raise_error(HelmTemplateError)
       end
     end
 

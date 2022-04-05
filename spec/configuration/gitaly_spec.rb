@@ -137,7 +137,7 @@ describe 'Gitaly configuration' do
 
         let(:gitaly_stateful_set) { 'StatefulSet/test-gitaly' }
 
-        it 'should render securityContext correctly', :focus => true do
+        it 'should render securityContext correctly' do
           t = HelmTemplate.new(values)
           gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
           security_context = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['securityContext']

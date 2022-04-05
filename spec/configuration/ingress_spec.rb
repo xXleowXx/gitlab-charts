@@ -118,9 +118,7 @@ describe 'GitLab Ingress configuration(s)' do
       end
 
       it 'fails due to gitlab.webservice.ingress.requireBasePath' do
-        expect {
-          template = HelmTemplate.new(bogus)
-        }.to raise_error(HelmTemplateError)
+        expect { HelmTemplate.new(bogus) }.to raise_error(HelmTemplateError)
       end
     end
 
