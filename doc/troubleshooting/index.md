@@ -397,6 +397,23 @@ This change ensures that the configuration can be populated correctly by
 [gomplate](https://gomplate.ca), which was added in GitLab 14.5 (chart version 5.5.0)
 via [MR 2218](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2218).
 
+
+## Error: `UPGRADE FAILED: type mismatch on mailroom: %!t(<nil>)`
+
+Check if you have empty values in your ```values.yml``` file. 
+
+
+*Example:* Helm doesn't like the empty value 'mailroom:'.
+
+```yaml
+gitlab:
+  mailroom: # <--- not good, leads to type mismatch errors
+
+  gitlab-exporter:
+    enabled: false
+
+```
+
 ## TLS and certificates
 
 If your GitLab instance needs to trust a private TLS certificate authority, GitLab might
