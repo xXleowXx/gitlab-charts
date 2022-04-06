@@ -41,7 +41,11 @@ service:
     nodePort: {}
       # http
       # https
-  # Allow the gitlab-pages to be configured with session affinity
+  # Allow the gitlab-pages to be configured with session affinity.
+  # Note that this setting only affects traffic originating within the cluster.
+  # To enable session affinity for traffic originating from outside the cluster
+  # when using NGINX, see the NGINX documentation on sticky sessions:
+  # https://kubernetes.github.io/ingress-nginx/examples/affinity/cookie/
   sessionAffinity:
     enabled: false
     config:
