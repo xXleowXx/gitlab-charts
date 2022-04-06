@@ -145,6 +145,10 @@ global:
   registry:
     bucket: example-registry-storage
 
+# Run Prometheus
+prometheus:
+  install: true
+
 # https://docs.gitlab.com/ee/ci/runners/#configuring-runners-in-gitlab
 gitlab-runner:
   install: false
