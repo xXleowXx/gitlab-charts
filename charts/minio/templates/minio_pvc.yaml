@@ -8,7 +8,7 @@ metadata:
 {{- include "gitlab.standardLabels" . | nindent 4 }}
 {{- include "gitlab.commonLabels" . | nindent 4 }}
   annotations:
-{{- include "minio.persistance.annotations" . | nindent 4 }}
+{{- include "minio.persistence.annotations" . | nindent 4 }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessMode | quote }}
