@@ -19,7 +19,7 @@ source "${SCRIPT_PATH}/common.sh"
 # Documentation: doc/installation/cloud/eks.md
 cluster_name=${CLUSTER_NAME-gitlab-cluster}
 nodes=${NUM_NODES-2}
-kubernetes_version=${CLUSTER_VERSION-1.18}
+kubernetes_version=${CLUSTER_VERSION-1.21}
 region="${REGION-us-east-2}"
 node_type="${MACHINE_TYPE-m5.xlarge}"
 kubeconfig="${KUBECONFIG:-$HOME/.kube/config}"
