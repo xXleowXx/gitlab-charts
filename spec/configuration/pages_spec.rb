@@ -937,7 +937,7 @@ describe 'GitLab Pages' do
       end
 
       context 'gitlab-pages Service session affinity' do
-        describe 'session affinity disabled' do
+        describe 'session affinity enabled' do
           let(:pages_enabled_values) do
             YAML.safe_load(%(
               global:
@@ -946,11 +946,10 @@ describe 'GitLab Pages' do
               gitlab:
                 gitlab-pages:
                   service:
-                    sessionAffinity:
-                      enabled: true
-                      config:
-                        clientIP:
-                          timeoutSeconds: 60
+                    sessionAffinity: ClientIP
+                    sessionAffinityConfig:
+                      clientIP:
+                        timeoutSeconds: 60
             ))
           end
 
@@ -961,7 +960,7 @@ describe 'GitLab Pages' do
           end
         end
 
-        describe 'session affinity enabled' do
+        describe 'session affinity disabled' do
           let(:pages_enabled_values) do
             YAML.safe_load(%(
               global:
@@ -970,13 +969,12 @@ describe 'GitLab Pages' do
               gitlab:
                 gitlab-pages:
                   service:
-                    sessionAffinity:
-                      enabled: false
+                    sessionAffinity: None
             ))
           end
 
           it 'session affinity config is missing' do
-            expect(pages_enabled_template.dig('Service/test-gitlab-pages', 'spec', 'sessionAffinity')).to be_nil
+            expect(pages_enabled_template.dig('Service/test-gitlab-pages', 'spec', 'sessionAffinity')).to eq('None')
             expect(pages_enabled_template.dig('Service/test-gitlab-pages', 'spec', 'sessionAffinityConfig')).to be_nil
           end
         end
