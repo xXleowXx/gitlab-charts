@@ -81,10 +81,16 @@ service:
   type: ClusterIP
   externalPort: 8080
   internalPort: 8080
+  http:
+    enabled: true
   workhorseExternalPort: 8181
   workhorseInternalPort: 8181
   # loadBalancerIP:
   # loadBalancerSourceRanges:
+  tls:
+    enabled: false
+    externalPort: 8081
+    internalPort: 8081
 enabled: true
 ingress:
   apiVersion:
