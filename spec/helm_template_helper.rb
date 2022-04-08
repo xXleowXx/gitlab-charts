@@ -93,7 +93,9 @@ class HelmTemplate
     yaml.select!{ |x| !x.nil? }
 
     # if we got any stderr then Helm misbehaved somehow
-    raise HelmTemplateError, @stderr unless @stderr.empty?
+    # but ignore any warnings that are produced
+    errors = @stderr.split("\n").filter { |line| !line.include? 'warning' }
+    raise HelmTemplateError, @stderr unless errors
 
     # create an indexed Hash keyed on Kind/metdata.name
     @mapped = yaml.to_h  { |doc|
