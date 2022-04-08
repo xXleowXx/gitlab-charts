@@ -148,16 +148,14 @@ describe 'Gitaly configuration' do
             # Helm 3.2+ renders the full security context. So we check given
             # the expected context from the table above and then check the
             # additional attributes that are not specified in the table above.
-            fullContext = {"runAsUser"=>1000, "fsGroup"=>1000}
-            unless expectedContext.nil?
-              expectedContext.keys.each do |expected_key|
-                expect(security_context[expected_key]).to eq(expectedContext[expected_key])
-                fullContext.delete(expected_key)
-              end
+            full_context = { "runAsUser" => 1000, "fsGroup" => 1000 }
+            expectedContext&.each_key do |expected_key|
+              expect(security_context[expected_key]).to eq(expectedContext[expected_key])
+              full_context.delete(expected_key)
             end
 
-            fullContext.keys.each do |unexpected_key|
-              expect(security_context[unexpected_key]).to eq(fullContext[unexpected_key])
+            full_context.each_key do |unexpected_key|
+              expect(security_context[unexpected_key]).to eq(full_context[unexpected_key])
             end
           else
             expect(security_context).to eq(expectedContext)

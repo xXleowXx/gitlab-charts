@@ -2,21 +2,21 @@ require 'yaml'
 require 'open3'
 
 class HelmTemplate
-  @@_helm_major_version = nil
-  @@_helm_minor_version = nil
+  @_helm_major_version = nil
+  @_helm_minor_version = nil
 
   def self.helm_major_version
-    if @@_helm_major_version.nil?
+    if @_helm_major_version.nil?
       parts = `helm version -c`.match('Ver(sion)?:"v(\d)\.(\d+)\.')
-      @@_helm_major_version = parts[2].to_i
-      @@_helm_minor_version = parts[3].to_i
+      @_helm_major_version = parts[2].to_i
+      @_helm_minor_version = parts[3].to_i
     end
 
-    @@_helm_major_version
+    @_helm_major_version
   end
 
   def self.helm_minor_version
-    @@_helm_minor_version
+    @_helm_minor_version
   end
 
   def self.helm_template_call(release_name: 'test', path: '-', namespace: nil, extra_args: nil)
