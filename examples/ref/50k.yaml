@@ -65,9 +65,9 @@ gitlab:
       port: example-postgresql-primary-port
 
 global:
-  # Set pods to deploy on support node pool by default
-  # This ensures that only the Webservice and Sidekiq workloads.
-  # are deployed to their respective pools and have sufficient resources
+  # Set pods to deploy on support node pool by default.
+  # This ensures that only the Webservice and Sidekiq workloads
+  # are deployed to their respective pools and have sufficient resources.
   nodeSelector:
     workload: support
   appConfig:
