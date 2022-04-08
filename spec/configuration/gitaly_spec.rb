@@ -142,7 +142,26 @@ describe 'Gitaly configuration' do
           gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
           security_context = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['securityContext']
 
-          expect(security_context).to eq(expectedContext)
+          # This if statement can be simplified when testing support is
+          # dropped for Helm 3.1.x
+          if HelmTemplate.helm_major_version == 3 && HelmTemplate.helm_minor_version > 1
+            # Helm 3.2+ renders the full security context. So we check given
+            # the expected context from the table above and then check the
+            # additional attributes that are not specified in the table above.
+            fullContext = {"runAsUser"=>1000, "fsGroup"=>1000}
+            unless expectedContext.nil?
+              expectedContext.keys.each do |expected_key|
+                expect(security_context[expected_key]).to eq(expectedContext[expected_key])
+                fullContext.delete(expected_key)
+              end
+            end
+
+            fullContext.keys.each do |unexpected_key|
+              expect(security_context[unexpected_key]).to eq(fullContext[unexpected_key])
+            end
+          else
+            expect(security_context).to eq(expectedContext)
+          end
         end
       end
     end
