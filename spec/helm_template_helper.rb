@@ -95,7 +95,7 @@ class HelmTemplate
     # if we got any stderr then Helm misbehaved somehow
     # but ignore any warnings that are produced
     errors = @stderr.split("\n").filter { |line| !line.include? 'warning' }
-    raise HelmTemplateError, @stderr unless errors
+    raise HelmTemplateError, @stderr unless errors.empty?
 
     # create an indexed Hash keyed on Kind/metdata.name
     @mapped = yaml.to_h  { |doc|
