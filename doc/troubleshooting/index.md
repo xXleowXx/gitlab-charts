@@ -399,18 +399,21 @@ via [MR 2218](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2218)
 
 ## Error: `UPGRADE FAILED: type mismatch on mailroom: %!t(<nil>)`
 
-Check if you have empty values in your ```values.yml``` file. 
+An error like this can happen if you do not provide a valid map for a key that expects a map. 
 
-*Example:* Helm doesn't like the empty value 'mailroom:'.
+For example, the configuration below will cause this error:
 
 ```yaml
 gitlab:
-  mailroom: # <--- not good, leads to type mismatch errors
-
-  gitlab-exporter:
-    enabled: false
-
+  mailroom:
 ```
+
+To fix this, either:
+
+1. Provide a valid map for `gitlab.mailroom`.
+1. Remove the `mailroom` key entirely.
+
+Note that for optional keys, an empty map (`{}`) is a valid value.
 
 ## TLS and certificates
 
