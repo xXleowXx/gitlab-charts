@@ -274,6 +274,24 @@ follow the same steps above to drop and re-create it.
 
 You can find more details about this error in issue [#2469](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2469).
 
+## `UPGRADE FAILED: type mismatch on mailroom: %!t(<nil>)`
+
+An error like this can happen if you do not provide a valid map for a key that expects a map. 
+
+For example, the configuration below will cause this error:
+
+```yaml
+gitlab:
+  mailroom:
+```
+
+To fix this, either:
+
+1. Provide a valid map for `gitlab.mailroom`.
+1. Remove the `mailroom` key entirely.
+
+Note that for optional keys, an empty map (`{}`) is a valid value.
+
 ## Bundled PostgreSQL pod fails to start: `database files are incompatible with server`
 
 The following error message may appear in the bundled PostgreSQL pod after upgrading to a new version of the GitLab Helm chart:
@@ -396,24 +414,6 @@ key2: value2
 This change ensures that the configuration can be populated correctly by
 [gomplate](https://gomplate.ca), which was added in GitLab 14.5 (chart version 5.5.0)
 via [MR 2218](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2218).
-
-## Error: `UPGRADE FAILED: type mismatch on mailroom: %!t(<nil>)`
-
-An error like this can happen if you do not provide a valid map for a key that expects a map. 
-
-For example, the configuration below will cause this error:
-
-```yaml
-gitlab:
-  mailroom:
-```
-
-To fix this, either:
-
-1. Provide a valid map for `gitlab.mailroom`.
-1. Remove the `mailroom` key entirely.
-
-Note that for optional keys, an empty map (`{}`) is a valid value.
 
 ## TLS and certificates
 
