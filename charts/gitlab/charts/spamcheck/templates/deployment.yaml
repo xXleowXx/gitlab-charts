@@ -66,15 +66,11 @@ spec:
       initContainers:
         {{- include "gitlab.extraInitContainers" . | nindent 8 }}
         {{- include "gitlab.certificates.initContainer" $ | nindent 8 }}
-        - name: configure
+        - name: spamcheck-init
           command: ["sh"]
-          args: ["-c", "wget -P /var/lib/spamcheck $(STORAGE_URL)"]
-          image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global.busybox) | quote }}
+          args: ["-c", "cp -r /data/model/issues/tflite/* /var/lib/spamcheck"]
+          image: registry.gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck/model:1.0.0
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
-          env:
-            - name: STORAGE_URL
-              value: {{ .Values.storageUrl | quote }}
-            {{- include "gitlab.extraEnv" . | nindent 12 }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
           - name: spamcheck-data-volume
@@ -92,10 +88,6 @@ spec:
               containerPort: {{ $.Values.service.internalPort }}
             - name: monitor
               containerPort: {{ $.Values.metrics.port }}
-          env:
-            - name: STORAGE_URL
-              value: {{ .Values.storageUrl | quote }}
-            {{- include "gitlab.extraEnv" . | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
