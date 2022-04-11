@@ -120,6 +120,10 @@ configurations that can be supplied to the `helm install` command using the
 | `rateLimitTLSSourceIPBurst` |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits)                                                                                                                                      |
 | `rateLimitTLSDomain`        |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits). To enable rate-limiting use `extraEnv=["FF_ENFORCE_DOMAIN_TLS_RATE_LIMITS=true"]`                                                   |
 | `rateLimitTLSDomainBurst`   |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits)                                                                                                                                      |
+| `serverReadTimeout`         | `5s`     | ReadTimeout is the maximum duration for reading the entire request, including the body. A zero or negative value means there will be no timeout.                                                                                             |
+| `serverReadHeaderTimeout`   | `1s`     | ReadHeaderTimeout is the amount of time allowed to read request headers. A zero or negative value means there will be no timeout.                                                                                                            |
+| `serverWriteTimeout`        | `5m`     | WriteTimeout is the maximum duration before timing out writes of the response. A zero or negative value means there will be no timeout.                                                                                                      |
+| `serverKeepAlive`           | `15s`    | KeepAlive specifies the keep-alive period for network connections accepted by this listener. If zero, keep-alives are enabled if supported by the protocol and operating system. If negative, keep-alives are disabled.                      |
 
 ### Configuring the `ingress`
 

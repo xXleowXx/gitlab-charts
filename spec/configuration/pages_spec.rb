@@ -507,6 +507,10 @@ describe 'GitLab Pages' do
                 rateLimitTLSSourceIPBurst: 51
                 rateLimitTLSDomain: 1000.5
                 rateLimitTLSDomainBurst: 20001
+                serverReadTimeout: 30m
+                serverReadHeaderTimeout: 30m
+                serverWriteTimeout: 30m
+                serverKeepAlive: 30m
           ))
         end
 
@@ -555,6 +559,10 @@ describe 'GitLab Pages' do
             rate-limit-tls-source-ip-burst=51
             rate-limit-tls-domain=1000.5
             rate-limit-tls-domain-burst=20001
+            server-read-timeout=30m
+            server-read-header-timeout=30m
+            server-write-timeout=30m
+            server-keep-alive=30m
           MSG
 
           expect(pages_enabled_template.exit_code).to eq(0), "Unexpected error code #{pages_enabled_template.exit_code} -- #{pages_enabled_template.stderr}"
