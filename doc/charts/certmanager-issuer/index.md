@@ -1,0 +1,48 @@
+---
+stage: Enablement
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
+---
+
+# Using certmanager-issuer for CertManager Issuer creation **(FREE SELF)**
+
+This chart is a helper for [Jetstack's CertManager Helm Chart](https://cert-manager.io/docs/installation/helm/).
+It automatically provisions an Issuer object, used by CertManager when requesting TLS certificates for
+GitLab Ingresses.
+
+## Configuration
+
+We will describe all the major sections of the configuration below. When configuring
+from the parent chart, these values will be:
+
+```yaml
+certmanager-issuer:
+  # Configure an ACME Issuer in cert-manager. Only used if configure==true
+  server: https://acme-v02.api.letsencrypt.org/directory
+
+  # Provide an email to associate with your TLS certificates
+  # email:
+
+  rbac:
+    create: true
+
+  resources:
+    requests:
+      cpu: 50m
+
+  common:
+    labels: {}
+```
+
+## Installation parameters
+
+The table below contains all the possible charts configurations that can be supplied
+to the `helm install` command using the `--set` flags:
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `server` | `https://acme-v02.api.letsencrypt.org/directory` | LetsEncrypt server for use with the [ACME CertManager Issuer](https://cert-manager.io/docs/configuration/acme/). |
+| `email` | | You must provide an email to associate with your TLS certificates. Let's Encrypt will use this to contact you about expiring certificates, and issues related to your account. |
+| `rbac.create` | `true` | When `true`, will create RBAC-related resources to allow for manipulation of CertManager Issuer objects. |
+| `resources.requests.cpu` | `50m` | Requested CPU resources for the Issuer creation Job. |
+| `common.labels` | | Common labels to apply to the ServiceAccount, Job, ConfigMap, and Issuer. |
