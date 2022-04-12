@@ -109,10 +109,11 @@ Upgrading to `5.9.0` or `5.9.1` may lead to a situation where the Sidekiq pod do
 
 This can be resolved from the **Admin Area**: 
 
-  1. Browse to **Settings** > **Metrics and profiling** 
-  1. Expand  **Metrics - Prometheus**
-  1. Ensure that **Enable health and performance metrics endpoint** is enabled
-  1. Restart affected pods
+  1. On the top bar, select **Menu > Admin**.
+  1. On the left sidebar, select **Settings > Metrics and profiling**.
+  1. Expand  **Metrics - Prometheus**.
+  1. Ensure that **Enable health and performance metrics endpoint** is enabled.
+  1. Restart the affected pods.
 
 There is additional conversation about this scenario in a [closed issue](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3198). 
 
