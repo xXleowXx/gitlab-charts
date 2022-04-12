@@ -165,10 +165,10 @@ useHttp2: true
 
 # zipHTTPClientTimeout:
 
-# server-read-timeout:
-# server-read-header-timeout:
-# server-write-timeout:
-# server-keep-alive:
+# serverReadTimeout:
+# serverReadHeaderTimeout:
+# serverWriteTimeout:
+# serverKeepAlive:
 
 metrics:
   enabled: true
