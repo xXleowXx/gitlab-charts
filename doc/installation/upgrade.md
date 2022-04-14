@@ -105,7 +105,7 @@ The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-
 
 ### Sidekiq pod never becomes ready
 
-Upgrading to `5.9.0` or `5.9.1` may lead to a situation where the Sidekiq pod does not become ready. The pod starts and appears to work properly but never listens on the `3807`, the default metrics endpoint port (`metrics.port`). As a result, the Sidekiq pod is not considered to be ready. 
+Upgrading to `5.9.x` may lead to a situation where the Sidekiq pod does not become ready. The pod starts and appears to work properly but never listens on the `3807`, the default metrics endpoint port (`metrics.port`). As a result, the Sidekiq pod is not considered to be ready. 
 
 This can be resolved from the **Admin Area**: 
 
