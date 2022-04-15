@@ -35,6 +35,7 @@ for more information on how the global variables work.
 - [Annotations](#annotations)
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
+- [extraEnvFrom](#extraEnvFrom)
 - [OAuth](#configure-oauth-settings)
 - [Outgoing email](#outgoing-email)
 - [Platform](#platform)
@@ -2023,6 +2024,37 @@ global:
   extraEnv:
     SOME_KEY: some_value
     SOME_OTHER_KEY: some_other_value
+```
+
+## extraEnvFrom
+
+`extraEnvFrom` allows you to expose additional environment variables form other data source in all
+containers in the pods. Extra environment variables set at
+the chart level will be merged into those provided at the global level, with precedence given
+to those provided at the chart level.
+
+Below is an example use of `extraEnvFrom`:
+
+```yaml
+global:
+  extraEnvFrom:
+    MY_NODE_NAME:
+      fieldRef:
+        fieldPath: spec.nodeName
+    MY_CPU_REQUEST:
+      resourceFieldRef:
+        containerName: test-container
+        resource: requests.cpu
+    SECRET_THING:
+      secretKeyRef:
+        name: special-secret
+        key: special_token
+        # optional: boolean
+    CONFIG_STRING:
+      configMapKeyRef:
+        name: useful-config
+        key: some-string
+        # optional: boolean
 ```
 
 ## Configure OAuth settings
