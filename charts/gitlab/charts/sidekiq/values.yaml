@@ -55,6 +55,7 @@ metrics:
 
 health_checks:
   enabled: true
+  port: 3808
 
 redis:
   password: {}
