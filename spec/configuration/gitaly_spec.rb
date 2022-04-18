@@ -157,8 +157,6 @@ describe 'Gitaly configuration' do
             full_context.each_key do |unexpected_key|
               expect(security_context[unexpected_key]).to eq(full_context[unexpected_key])
             end
-          else
-            expect(security_context).to eq(expectedContext)
           end
         end
       end

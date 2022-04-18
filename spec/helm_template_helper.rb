@@ -10,6 +10,11 @@ class HelmTemplate
       parts = `helm version -c`.match('Ver(sion)?:"v(\d)\.(\d+)\.')
       @_helm_major_version = parts[2].to_i
       @_helm_minor_version = parts[3].to_i
+
+      # Check for Helm version below minimum supported version
+      if @_helm_major_version == 3 and @_helm_minor_version < 3
+        raise RuntimeError("Helm version needs to be greater than 3.3.1")
+      end
     end
 
     @_helm_major_version
