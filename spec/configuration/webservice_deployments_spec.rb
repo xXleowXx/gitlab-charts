@@ -412,9 +412,9 @@ describe 'Webservice Deployments configuration' do
           expect(env_1).to include(env_value('CHART', 'present'))
           expect(env_1).not_to include(env_value('DEPLOYMENT', 'a'))
 
-          expect(env_1).to include({ 'name' => 'SECRETGLOBAL', 'valueFrom' => { 'secretKeyRef' => { 'name' => 'secretPresent', 'key' => 'secretPresent' } } })
-          expect(env_1).to include({ 'name' => 'SECRETCHART', 'valueFrom' => { 'secretKeyRef' => { 'name' => 'secretPresent', 'key' => 'secretPresent' } } })
-          expect(env_1).not_to include({ 'name' => 'SECRETDEPLOYMENT', 'valueFrom' => { 'secretKeyRef' => { 'name' => 'secretA', 'key' => 'secretA' } } })
+          expect(env_1).to include({ "name" => "SECRETGLOBAL", "valueFrom" => { "secretKeyRef" => { "name" => "secretPresent", "key" => "secretPresent" } } })
+          expect(env_1).to include({ "name" => "SECRETCHART", "valueFrom" => { "secretKeyRef" => { "name" => "secretPresent", "key" => "secretPresent" } } })
+          expect(env_1).not_to include({ "name" => "SECRETDEPLOYMENT", "valueFrom" => { "secretKeyRef" => { "name" => "secretA", "key" => "secretA" } } })
         end
 
         it 'merges when present' do
@@ -423,9 +423,9 @@ describe 'Webservice Deployments configuration' do
           expect(env_1).to include(env_value('CHART', 'present'))
           expect(env_1).to include(env_value('DEPLOYMENT', 'b'))
 
-          expect(env_1).to include({ 'name' => 'SECRETGLOBAL', 'valueFrom' => { 'secretKeyRef' => { 'name' => 'secretPresent', 'key' => 'secretPresent' } } })
-          expect(env_1).to include({ 'name' => 'SECRETCHART', 'valueFrom' => { 'secretKeyRef' => { 'name' => 'secretPresent', 'key' => 'secretPresent' } } })
-          expect(env_1).to include({ 'name' => 'SECRETDEPLOYMENT', 'valueFrom' => { 'secretKeyRef' => { 'name' => 'secretC', 'key' => 'secretC' } } })
+          expect(env_1).to include({ "name" => "SECRETGLOBAL", "valueFrom" => { "secretKeyRef" => { "name" => "secretPresent", "key" => "secretPresent" } } })
+          expect(env_1).to include({ "name" => "SECRETCHART", "valueFrom" => { "secretKeyRef" => { "name" => "secretPresent", "key" => "secretPresent" } } })
+          expect(env_1).to include({ "name" => "SECRETDEPLOYMENT", "valueFrom" => { "secretKeyRef" => { "name" => "secretC", "key" => "secretC" } } })
         end
 
         it 'override when present' do
@@ -434,9 +434,9 @@ describe 'Webservice Deployments configuration' do
           expect(env_1).to include(env_value('CHART', 'overridden'))
           expect(env_1).to include(env_value('DEPLOYMENT', 'c'))
 
-          expect(env_1).to include({ 'name' => 'SECRETGLOBAL', 'valueFrom' => { 'secretKeyRef' => { 'name' => 'secretPresent', 'key' => 'secretPresent' } } })
-          expect(env_1).to include({ 'name' => 'SECRETCHART', 'valueFrom' => { 'secretKeyRef' => { 'name' => 'SecretOverridden', 'key' => 'SecretOverridden' } } })
-          expect(env_1).to include({ 'name' => 'SECRETDEPLOYMENT', 'valueFrom' => { 'secretKeyRef' => { 'name' => 'secretC', 'key' => 'secretC' } } })
+          expect(env_1).to include({ "name" => "SECRETGLOBAL", "valueFrom" => { "secretKeyRef" => { "name" => "secretPresent", "key" => "secretPresent" } } })
+          expect(env_1).to include({ "name" => "SECRETCHART", "valueFrom" => { "secretKeyRef" => { "name" => "SecretOverridden", "key" => "SecretOverridden" } } })
+          expect(env_1).to include({ "name" => "SECRETDEPLOYMENT", "valueFrom" => { "secretKeyRef" => { "name" => "secretC", "key" => "secretC" } })
       end
 
       context 'nodeSelector settings (map)' do
