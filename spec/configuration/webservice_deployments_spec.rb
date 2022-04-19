@@ -436,7 +436,7 @@ describe 'Webservice Deployments configuration' do
 
           expect(env_1).to include({ "name" => "SECRETGLOBAL", "valueFrom" => { "secretKeyRef" => { "name" => "secretPresent", "key" => "secretPresent" } } })
           expect(env_1).to include({ "name" => "SECRETCHART", "valueFrom" => { "secretKeyRef" => { "name" => "SecretOverridden", "key" => "SecretOverridden" } } })
-          expect(env_1).to include({ "name" => "SECRETDEPLOYMENT", "valueFrom" => { "secretKeyRef" => { "name" => "secretC", "key" => "secretC" } })
+          expect(env_1).to include({ "name" => "SECRETDEPLOYMENT", "valueFrom" => { "secretKeyRef" => { "name" => "secretC", "key" => "secretC" } } })
       end
 
       context 'nodeSelector settings (map)' do
