@@ -425,7 +425,7 @@ describe 'Webservice Deployments configuration' do
 
           expect(env_1).to include({ "name" => "SECRETGLOBAL", "valueFrom" => { "secretKeyRef" => { "name" => "secretPresent", "key" => "secretPresent" } } })
           expect(env_1).to include({ "name" => "SECRETCHART", "valueFrom" => { "secretKeyRef" => { "name" => "secretPresent", "key" => "secretPresent" } } })
-          expect(env_1).to include({ "name" => "SECRETDEPLOYMENT", "valueFrom" => { "secretKeyRef" => { "name" => "secretC", "key" => "secretC" } } })
+          expect(env_1).to include({ "name" => "SECRETDEPLOYMENT", "valueFrom" => { "secretKeyRef" => { "name" => "secretB", "key" => "secretB" } } })
         end
 
         it 'override when present' do
