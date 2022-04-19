@@ -326,9 +326,7 @@ spec:
             {{- end }}
             {{- include "gitlab.tracing.env" $ | nindent 12 }}
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
-          {{- if .enableExtraSecretEnv }}
             {{- include "webservice.extraSecretEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
-          {{- end }}
           volumeMounts:
             - name: workhorse-config
               mountPath: '/var/opt/gitlab/templates'
