@@ -159,9 +159,7 @@ spec:
               value: "1"
             {{- end }}
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
-          {{- if .enableExtraSecretEnv }}
             {{- include "webservice.extraSecretEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
-          {{- end }}
           volumeMounts:
             {{- include "gitlab.extraVolumeMounts" $ | nindent 12 }}
             {{- include "gitlab.certificates.volumeMount" $ | nindent 12 }}
