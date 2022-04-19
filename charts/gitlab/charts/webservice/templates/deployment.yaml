@@ -232,9 +232,7 @@ spec:
             - name: WORKHORSE_ARCHIVE_CACHE_DISABLED
               value: "true"
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
-          {{- if .enableExtraSecretEnv }}
             {{- include "webservice.extraSecretEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
-          {{- end }}
           volumeMounts:
             {{- if .sshHostKeys.mount }}
             - name: {{ .sshHostKeys.mountName }}
