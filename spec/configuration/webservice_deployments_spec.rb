@@ -414,7 +414,6 @@ describe 'Webservice Deployments configuration' do
 
           expect(env_1).to include('name' => 'SECRETGLOBAL', 'valueFrom' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent'))
           expect(env_1).to include('name' => 'SECRETCHART', 'valueFrom' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent'))
-
         end
 
         it 'merges when present' do
