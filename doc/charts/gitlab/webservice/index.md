@@ -179,14 +179,6 @@ extraSecretEnv:
     secretName: some_other_key 
 ```
 
-When the container is started, you can confirm that the environment variables are exposed:
-
-```shell
-env | grep SOME
-SOME_KEY=some_value
-SOME_OTHER_KEY=some_other_value
-```
-
 ### image.pullSecrets
 
 `pullSecrets` allows you to authenticate to a private registry to pull images for a pod.
