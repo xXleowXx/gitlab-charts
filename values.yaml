@@ -702,6 +702,11 @@ global:
   #   SOME_KEY: some_value
   #   SOME_OTHER_KEY: some_other_value
 
+  ## https://docs.gitlab.com/charts/charts/globals
+  extraSecretEnv: {}
+    # SOME_KEY:
+    #   secretKey: some_value     # Secret key 
+    #   secretName: some_value    # Secret name 
 ## End of global
 
 upgradeCheck:
