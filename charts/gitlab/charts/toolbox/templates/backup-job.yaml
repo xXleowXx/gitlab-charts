@@ -19,6 +19,10 @@ spec:
   suspend: {{ .Values.backups.cron.suspend }}
   jobTemplate:
     spec:
+      backoffLimit: {{ .Values.backups.cron.backoffLimit }}
+      {{- if .Values.backups.cron.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ .Values.backups.cron.activeDeadlineSeconds }}
+      {{- end }}
       template:
         metadata:
           labels:
@@ -31,7 +35,7 @@ spec:
             {{ $key }}: {{ $value | quote }}
           {{- end }}
         spec:
-          restartPolicy: "OnFailure"
+          restartPolicy: {{ .Values.backups.cron.restartPolicy }}
           {{- if .Values.tolerations }}
           tolerations:
             {{- toYaml .Values.tolerations | nindent 12 }}
