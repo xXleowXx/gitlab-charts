@@ -412,8 +412,9 @@ describe 'Webservice Deployments configuration' do
           expect(env_1).to include(env_value('CHART', 'present'))
           expect(env_1).not_to include(env_value('DEPLOYMENT', 'a'))
 
-          expect(env_1).to include('name' => 'SECRETGLOBAL', 'valueFrom' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent'))
-          expect(env_1).to include('name' => 'SECRETCHART', 'valueFrom' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent'))
+          expect(env_1).to include('name' => 'SECRETGLOBAL', 'valueFrom' => hash_including('secretKeyRef' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent')))
+          expect(env_1).to include('name' => 'SECRETCHART', 'valueFrom' => hash_including('secretKeyRef' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent')))
+          expect(env_1).not_to include('name' => 'SECRETDEPLOYMENT', 'valueFrom' => hash_including('secretKeyRef' => hash_including('name' => 'secretA', 'key' => 'secretA')))
         end
 
         it 'merges when present' do
@@ -421,6 +422,10 @@ describe 'Webservice Deployments configuration' do
           expect(env_1).to include(env_value('GLOBAL', 'present'))
           expect(env_1).to include(env_value('CHART', 'present'))
           expect(env_1).to include(env_value('DEPLOYMENT', 'b'))
+
+          expect(env_1).to include('name' => 'SECRETGLOBAL', 'valueFrom' => hash_including('secretKeyRef' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent')))
+          expect(env_1).to include('name' => 'SECRETCHART', 'valueFrom' => hash_including('secretKeyRef' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent')))
+          expect(env_1).to include('name' => 'SECRETDEPLOYMENT', 'valueFrom' => hash_including('secretKeyRef' => hash_including('name' => 'secretC', 'key' => 'secretC')))
         end
 
         it 'override when present' do
@@ -428,7 +433,10 @@ describe 'Webservice Deployments configuration' do
           expect(env_1).to include(env_value('GLOBAL', 'present'))
           expect(env_1).to include(env_value('CHART', 'overridden'))
           expect(env_1).to include(env_value('DEPLOYMENT', 'c'))
-        end
+
+          expect(env_1).to include('name' => 'SECRETGLOBAL', 'valueFrom' => hash_including('secretKeyRef' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent')))
+          expect(env_1).to include('name' => 'SECRETCHART', 'valueFrom' => hash_including('secretKeyRef' => hash_including('name' => 'SecretOverridden', 'key' => 'SecretOverridden')))
+          expect(env_1).to include('name' => 'SECRETDEPLOYMENT', 'valueFrom' => hash_including('secretKeyRef' => hash_including('name' => 'secretC', 'key' => 'secretC')))
       end
 
       context 'nodeSelector settings (map)' do
