@@ -283,6 +283,10 @@ describe 'Webservice Deployments configuration' do
         global:
           extraEnv:
             GLOBAL: present
+          extraSecretEnv:
+            SECRETGLOBAL: 
+              secretKey: "secretPresent"
+              secretName: "secretPresent"
         gitlab:
           webservice:
             # "base" configuration
@@ -311,6 +315,10 @@ describe 'Webservice Deployments configuration' do
                 effect: "NoSchedule"
             extraEnv:
               CHART: "present"
+            extraSecretEnv:
+              SECRETCHART:
+                secretKey: "secretPresent"
+                secretName: "secretPresent"
             # individual configurations
             deployments:
               a:
@@ -339,6 +347,10 @@ describe 'Webservice Deployments configuration' do
                     effect: "NoExecute"
                 extraEnv:
                   DEPLOYMENT: "b"
+                extraSecretEnv:
+                  SECRETDEPLOYMENT:
+                    secretKey: "secretB"
+                    secretName: "secretB"
                 sshHostKeys:
                   mount: true
                   mountName: ssh-host-keys-b
@@ -354,6 +366,13 @@ describe 'Webservice Deployments configuration' do
                 extraEnv:
                   DEPLOYMENT: "c"
                   CHART: "overridden"
+                extraSecretEnv:
+                  SECRETDEPLOYMENT:
+                    secretKey: "secretC"
+                    secretName: "secretC"
+                  SECRETCHART:
+                    secretKey: "SecretOverridden"
+                    secretName: "SecretOverridden"
         )).deep_merge(default_values)
       end
 
@@ -392,6 +411,10 @@ describe 'Webservice Deployments configuration' do
           expect(env_1).to include(env_value('GLOBAL', 'present'))
           expect(env_1).to include(env_value('CHART', 'present'))
           expect(env_1).not_to include(env_value('DEPLOYMENT', 'a'))
+
+          expect(env_1).to include('name' => 'SECRETGLOBAL', 'valueFrom' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent'))
+          expect(env_1).to include('name' => 'SECRETCHART', 'valueFrom' => hash_including('name' => 'secretPresent', 'key' => 'secretPresent'))
+
         end
 
         it 'merges when present' do

@@ -113,9 +113,7 @@ spec:
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
-          {{- if .enableExtraSecretEnv }}
             {{- include "webservice.extraSecretEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}
-          {{- end }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
           {{- include "gitlab.psql.ssl.volumeMount" $ | nindent 10 }}
