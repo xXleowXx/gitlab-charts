@@ -284,7 +284,7 @@ describe 'Webservice Deployments configuration' do
           extraEnv:
             GLOBAL: present
           extraSecretEnv:
-            SECRETGLOBAL: 
+            SECRETGLOBAL:
               secretKey: "secretPresent"
               secretName: "secretPresent"
         gitlab:
