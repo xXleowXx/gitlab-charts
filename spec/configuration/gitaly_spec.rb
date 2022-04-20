@@ -142,8 +142,6 @@ describe 'Gitaly configuration' do
           gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
           security_context = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['securityContext']
 
-          # This if statement can be simplified when testing support is
-          # dropped for Helm 3.1.x
           if HelmTemplate.helm_major_version == 3 && HelmTemplate.helm_minor_version > 1
             # Helm 3.2+ renders the full security context. So we check given
             # the expected context from the table above and then check the
