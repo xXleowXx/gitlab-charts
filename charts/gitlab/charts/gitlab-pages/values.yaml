@@ -163,7 +163,12 @@ useHttp2: true
 #   expiration:
 #   refresh:
 
-# zipHTTPClientTimeout: 
+# zipHTTPClientTimeout:
+
+# serverReadTimeout:
+# serverReadHeaderTimeout:
+# serverWriteTimeout:
+# serverKeepAlive:
 
 metrics:
   enabled: true
