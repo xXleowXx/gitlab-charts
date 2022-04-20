@@ -150,5 +150,17 @@ data:
     {{- if .Values.rateLimitTLSDomainBurst }}
     rate-limit-tls-domain-burst={{ .Values.rateLimitTLSDomainBurst }}
     {{- end }}
+    {{- if .Values.serverReadTimeout }}
+    server-read-timeout={{ .Values.serverReadTimeout }}
+    {{- end }}
+    {{- if .Values.serverReadHeaderTimeout }}
+    server-read-header-timeout={{ .Values.serverReadHeaderTimeout }}
+    {{- end }}
+    {{- if .Values.serverWriteTimeout }}
+    server-write-timeout={{ .Values.serverWriteTimeout }}
+    {{- end }}
+    {{- if .Values.serverKeepAlive }}
+    server-keep-alive={{ .Values.serverKeepAlive }}
+    {{- end }}
   configure: |
     {{- include "gitlab.scripts.configure.secrets" (dict "required" "pages" "optional" "pages") | nindent 4 -}}
