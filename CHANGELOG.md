@@ -2,6 +2,47 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.10.0 (2022-04-21)
+
+### Added (4 changes)
+
+- [Add pages http server timeout options](gitlab-org/charts/gitlab@5b0882f64abdd677df3271bf138439536f017868) ([merge request](gitlab-org/charts/gitlab!2504))
+- [Pages: set auth-scope when access-control](gitlab-org/charts/gitlab@e269539220c1df693dd99d963b8fadcbf105904e) ([merge request](gitlab-org/charts/gitlab!2457))
+- [Add pages zip http client timeout option](gitlab-org/charts/gitlab@0559137be04f56ae33d9f789d5c597ef6054bcda) ([merge request](gitlab-org/charts/gitlab!2442))
+- [Add `databaseTasks: boolean` to `gitlab.psql.` config](gitlab-org/charts/gitlab@5b525c5dbbb23bfa76635688aa8d8382c3a91274) ([merge request](gitlab-org/charts/gitlab!2450))
+
+### Fixed (6 changes)
+
+- [Fix fullname of sidekiq](gitlab-org/charts/gitlab@30fc64733e55fb24ca275eb1049544fe4bb476f1) by @dsonck ([merge request](gitlab-org/charts/gitlab!2495))
+- [Set GITLAB_ASSUME_YES=1 in database-backup script](gitlab-org/charts/gitlab@aea1da17562814583b2e021bb1bf62d607af760f) ([merge request](gitlab-org/charts/gitlab!2492))
+- [Fix the `database_tasks: <default>` to not change `load_balancing:` behavior](gitlab-org/charts/gitlab@44c3c828ccc3432cb004219a03b4a707592ee4ef) ([merge request](gitlab-org/charts/gitlab!2480))
+- [docs: Drop custom awscli install instructions](gitlab-org/charts/gitlab@ef8f130493cbf640f86b0c97877c52035f0b443c) ([merge request](gitlab-org/charts/gitlab!2472))
+- [Allow empty directives for the CSP](gitlab-org/charts/gitlab@bcd7bc9c257e80c949f42869f4126fa2df136daa) ([merge request](gitlab-org/charts/gitlab!2469))
+- [Fix ineffectual service desk auth token secret key](gitlab-org/charts/gitlab@0cd15f8ce0aa6e2fa9dd74dab1a2787bdbb54e39) ([merge request](gitlab-org/charts/gitlab!2453))
+
+### Changed (12 changes)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.39.0 to 0.40.0](gitlab-org/charts/gitlab@5ebb3121cbd8bb231851dbc57757c9cdc6413197) ([merge request](gitlab-org/charts/gitlab!2521))
+- [Sidekiq: set health check port by default](gitlab-org/charts/gitlab@5d93340fac5c067177fdb1761f518143f087c236) ([merge request](gitlab-org/charts/gitlab!2479))
+- [Update gitlab-org/container-registry from 3.38.0-gitlab to 3.39.0-gitlab](gitlab-org/charts/gitlab@a1cd07c72e6fa1b27ba47cc2a6565027bd157e4c) ([merge request](gitlab-org/charts/gitlab!2510))
+- [eks_bootstrap_script: Update default Kubernetes version to v1.21](gitlab-org/charts/gitlab@73cbcad37d54d325ea85b254c59961e3e543cc79) ([merge request](gitlab-org/charts/gitlab!2499))
+- [Update gitlab-org/container-registry from 3.37.0-gitlab to 3.37.1-gitlab](gitlab-org/charts/gitlab@775548c3377ce985d0a49bb8514048c71e46f720) ([merge request](gitlab-org/charts/gitlab!2497))
+- [Update gitlab-org/gitlab-exporter from 11.13.1 to 11.14.0](gitlab-org/charts/gitlab@107f894d6c14066bfcbf9c32e60113b596d53a9e) ([merge request](gitlab-org/charts/gitlab!2498))
+- [Update gitlab-org/container-registry from 3.36.1-gitlab to 3.37.0-gitlab](gitlab-org/charts/gitlab@adb5ce914c6853a6ecdf9f3e4fc3e5a980b5edba) ([merge request](gitlab-org/charts/gitlab!2482))
+- [Update gitlab-org/gitlab-exporter from 11.13.0 to 11.13.1](gitlab-org/charts/gitlab@4160937ddaa8ac4d8b4958ec2927de836b899e5b) ([merge request](gitlab-org/charts/gitlab!2481))
+- [Update gitlab-org/charts/gitlab-runner from 0.38.1 to 0.39.0](gitlab-org/charts/gitlab@2797875754d610a7088a48e5e995833f774ecfe6) ([merge request](gitlab-org/charts/gitlab!2467))
+- [Update gitlab-org/gitlab-exporter from 11.12.0 to 11.13.0](gitlab-org/charts/gitlab@89158a9032600900ae8378230d0570a784c75601) ([merge request](gitlab-org/charts/gitlab!2466))
+- [Bump container registry to v3.36.1](gitlab-org/charts/gitlab@7c9ca769cc7a6db88a411831c9fc70d48f097899) ([merge request](gitlab-org/charts/gitlab!2461))
+- [Update gitlab-org/container-registry from 3.32.0-gitlab to 3.35.0-gitlab](gitlab-org/charts/gitlab@75f4f63175590048b61930297f12fb199025ddda) ([merge request](gitlab-org/charts/gitlab!2458))
+
+### Other (5 changes)
+
+- [Use new kubectl image with HOME=/tmp/kube](gitlab-org/charts/gitlab@9832a34d01ae33153ae4f37069b1b14afa135048) ([merge request](gitlab-org/charts/gitlab!2486))
+- [Update the backup to 14.9.2](gitlab-org/charts/gitlab@20927df38646ed779bf677c4ffff9f19b88510ec) ([merge request](gitlab-org/charts/gitlab!2485))
+- [Update Operator install docs for version 0.6.1](gitlab-org/charts/gitlab@17243ad2f7d29ca48c712d7a81773c090124349d) ([merge request](gitlab-org/charts/gitlab!2464))
+- [Use image digest from dev tag pipeline](gitlab-org/charts/gitlab@403b765779a8d43cc471ff9d35d6a0e23f9eea21) ([merge request](gitlab-org/charts/gitlab!2463))
+- [Update Operator install docs for version 0.6.0](gitlab-org/charts/gitlab@43398259cef8be83f88ec132b3471ca8dccaf73e) ([merge request](gitlab-org/charts/gitlab!2460))
+
 ## 5.9.3 (2022-04-12)
 
 No changes.
