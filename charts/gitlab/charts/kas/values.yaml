@@ -6,7 +6,7 @@ annotations: {}
 global:
   ingress: {}
   kas:
-    enabled: false
+    enabled: true
   redis:
     # host: '0.0.0.0'
     password: {}
