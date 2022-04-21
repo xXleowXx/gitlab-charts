@@ -36,9 +36,10 @@ variables:
   # AUTO_DEVOPS_DOMAIN: domain.example.com
   GIT_CLONE_PATH: $CI_BUILDS_DIR/gitlab
   HELM_MAX_HISTORY: 20
-  TEST_BACKUP_PREFIX: "14.9.2"
+  TEST_BACKUP_PREFIX: "14.9.2-incr"
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
+  ISSUE_BOT_LABELS_EXTRA: "group::distribution"
 
 stages:
   - prepare
@@ -493,7 +494,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 check_docs_markdown:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.15-vale-2.15.0-markdownlint-0.31.0
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.15-vale-2.15.5-markdownlint-0.31.1
   stage: prepare
   cache: {}
   dependencies: []

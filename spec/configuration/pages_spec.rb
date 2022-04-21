@@ -507,6 +507,10 @@ describe 'GitLab Pages' do
                 rateLimitTLSSourceIPBurst: 51
                 rateLimitTLSDomain: 1000.5
                 rateLimitTLSDomainBurst: 20001
+                serverReadTimeout: 1h
+                serverReadHeaderTimeout: 2h
+                serverWriteTimeout: 3h
+                serverKeepAlive: 4h
           ))
         end
 
@@ -555,6 +559,10 @@ describe 'GitLab Pages' do
             rate-limit-tls-source-ip-burst=51
             rate-limit-tls-domain=1000.5
             rate-limit-tls-domain-burst=20001
+            server-read-timeout=1h
+            server-read-header-timeout=2h
+            server-write-timeout=3h
+            server-keep-alive=4h
           MSG
 
           expect(pages_enabled_template.exit_code).to eq(0), "Unexpected error code #{pages_enabled_template.exit_code} -- #{pages_enabled_template.stderr}"
@@ -932,6 +940,50 @@ describe 'GitLab Pages' do
           it 'exposes proper listeners' do
             expect(pages_config_data).to match(/listen-proxy=0.0.0.0:8090/)
             expect(pages_config_data).not_to match(/listen-http=0.0.0.0:8090/)
+          end
+        end
+      end
+
+      context 'gitlab-pages Service session affinity' do
+        describe 'session affinity enabled' do
+          let(:pages_enabled_values) do
+            YAML.safe_load(%(
+              global:
+                pages:
+                  enabled: true
+              gitlab:
+                gitlab-pages:
+                  service:
+                    sessionAffinity: ClientIP
+                    sessionAffinityConfig:
+                      clientIP:
+                        timeoutSeconds: 60
+            ))
+          end
+
+          it 'session affinity config is available' do
+            expect(pages_enabled_template.dig('Service/test-gitlab-pages', 'spec', 'sessionAffinity')).to eq('ClientIP')
+            expect(pages_enabled_template.dig('Service/test-gitlab-pages', 'spec', 'sessionAffinityConfig')).not_to be_nil
+            expect(pages_enabled_template.dig('Service/test-gitlab-pages', 'spec', 'sessionAffinityConfig', 'clientIP', 'timeoutSeconds')).to eq(60)
+          end
+        end
+
+        describe 'session affinity disabled' do
+          let(:pages_enabled_values) do
+            YAML.safe_load(%(
+              global:
+                pages:
+                  enabled: true
+              gitlab:
+                gitlab-pages:
+                  service:
+                    sessionAffinity: None
+            ))
+          end
+
+          it 'session affinity config is missing' do
+            expect(pages_enabled_template.dig('Service/test-gitlab-pages', 'spec', 'sessionAffinity')).to eq('None')
+            expect(pages_enabled_template.dig('Service/test-gitlab-pages', 'spec', 'sessionAffinityConfig')).to be_nil
           end
         end
       end
