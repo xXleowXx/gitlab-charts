@@ -246,7 +246,7 @@ and specify a compatible version of the `gitlab/gitlab` chart in your `helm` com
 This is a known issue. After migrating a Helm 2 release to Helm 3, the subsequent upgrades may fail.
 You can find the full explanation and workaround in [Migrating from Helm v2 to Helm v3](../installation/migration/helm.md#known-issues).
 
-## UPGRADE FAILED: type mismatch on mailroom: %!t(<nil>)
+## UPGRADE FAILED: type mismatch on mailroom: `%!t(<nil>)`
 
 An error like this can happen if you do not provide a valid map for a key that expects a map. 
 
