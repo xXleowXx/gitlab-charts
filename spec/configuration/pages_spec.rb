@@ -446,7 +446,6 @@ describe 'GitLab Pages' do
             gitlab-server=https://gitlab.example.com
             internal-gitlab-server=http://test-webservice-default.default.svc:8181
             api-secret-key=/etc/gitlab-secrets/pages/secret
-            domain-config-source=gitlab
             metrics-address=:9235
             pages-status=/-/readiness
           MSG
@@ -470,7 +469,6 @@ describe 'GitLab Pages' do
                 artifactsServerTimeout: 50
                 serverShutdownTimeout: 50s
                 artifactsServerUrl: https://randomwebsite.com
-                domainConfigSource: disk
                 gitlabClientHttpTimeout: 25
                 gitlabClientJwtExpiry: 35
                 gitlabRetrieval:
@@ -532,7 +530,6 @@ describe 'GitLab Pages' do
             gitlab-server=https://randomgitlabserver.com
             internal-gitlab-server=https://int.randomgitlabserver.com
             api-secret-key=/etc/gitlab-secrets/pages/secret
-            domain-config-source=disk
             metrics-address=:9999
             max-conns=45
             max-uri-length=2048
