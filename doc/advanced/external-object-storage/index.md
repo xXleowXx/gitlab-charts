@@ -82,6 +82,9 @@ Then, disable MinIO and set these global settings:
 
 Be sure to create Azure containers for the [default names or set the container names in the bucket configuration](../../charts/globals.md#specify-buckets).
 
+> **Note**: Should you experience requests failing with `Requests to the local network are not allowed`,
+> please see the [Troubleshooting section](#troubleshooting)
+
 ## Docker Registry images
 
 Configuration of object storage for the `registry` chart is done via the `registry.storage` key, and the `global.registry.bucket` key.
