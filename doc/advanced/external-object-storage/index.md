@@ -82,14 +82,6 @@ Then, disable MinIO and set these global settings:
 
 Be sure to create Azure containers for the [default names or set the container names in the bucket configuration](../../charts/globals.md#specify-buckets).
 
-### Troubleshooting
-
-#### URL [FILTERED] is blocked: Requests to the local network are not allowed
-
-This happens when the Azure Blob hostname is resolved to a RFC1918 (local) IP address. As a workaround,
-please allow [Outbound requests](https://docs.gitlab.com/ee/security/webhooks.html#allowlist-for-local-requests)
-for your Azure Blob hostname (`yourinstance.blob.core.windows.net`).
-
 ## Docker Registry images
 
 Configuration of object storage for the `registry` chart is done via the `registry.storage` key, and the `global.registry.bucket` key.
@@ -282,3 +274,11 @@ configured to authenticate as a user with sufficient access to read/write to all
    ```shell
    kubectl create secret generic storage-config --from-file=config=storage.config
    ```
+
+## Troubleshooting
+
+### Azure Blob: URL [FILTERED] is blocked: Requests to the local network are not allowed
+
+This happens when the Azure Blob hostname is resolved to a RFC1918 (local) IP address. As a workaround,
+please allow [Outbound requests](https://docs.gitlab.com/ee/security/webhooks.html#allowlist-for-local-requests)
+for your Azure Blob hostname (`yourinstance.blob.core.windows.net`).
