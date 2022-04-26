@@ -282,6 +282,6 @@ See the [backup/restore object storage documentation](../../backup-restore/index
 
 ### Azure Blob: URL [FILTERED] is blocked: Requests to the local network are not allowed
 
-This happens when the Azure Blob hostname is resolved to a RFC1918 (local) IP address. As a workaround,
+This happens when the Azure Blob hostname is resolved to a RFC1918 (local / private) IP address. As a workaround,
 please allow [Outbound requests](https://docs.gitlab.com/ee/security/webhooks.html#allowlist-for-local-requests)
 for your Azure Blob hostname (`yourinstance.blob.core.windows.net`).
