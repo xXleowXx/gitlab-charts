@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 GitLab relies on object storage for highly-available persistent data in Kubernetes.
 By default, an S3-compatible storage solution named `minio` is deployed with the
-chart, but for production quality deployments, we recommend using a hosted
+chart. For production quality deployments, we recommend using a hosted
 object storage solution like Google Cloud Storage or AWS S3.
 
 To disable MinIO, set this option and then follow the related documentation below:
@@ -33,9 +33,8 @@ You can enable this in two ways:
 - In AWS, [configure the S3 bucket to use default encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html).
 - In GitLab, enable [server side encryption headers](../../charts/globals.md#storage_options).
 
-These two options are not mutually exclusive. If you choose the first option, you do not need to do
-the other option, unless you want to [set an S3 bucket policy to require encrypted objects](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
-You can set a default encryption policy but also enable server-side encryption headers to override those defaults.
+These two options are not mutually exclusive. You can set a default encryption
+policy but also enable server-side encryption headers to override those defaults.
 
 See the [GitLab documentation on encrypted S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets)
 for more details.
@@ -157,15 +156,16 @@ diffs, and pseudonymizer is done via the `global.appConfig.lfs`,
 --set global.appConfig.dependencyProxy.connection.key=connection
 ```
 
-Notes:
-
-- Currently a different bucket is needed for each, otherwise performing a restore from backup will not properly function.
-- Storing MR diffs on external storage is not enabled by default. So,
-  for the object storage settings for `externalDiffs` to take effect,
-  `global.appConfig.externalDiffs.enabled` key should have a `true` value.
-- The dependency proxy feature is not enabled by default. So,
-  for the object storage settings for `dependencyProxy` to take effect,
-  `global.appConfig.dependencyProxy.enabled` key should have a `true` value.
+> **Notes**:
+>
+> - A different bucket is needed for each, otherwise performing a restore from 
+>   backup woulnd't function properly.
+> - Storing MR diffs on external storage is not enabled by default. So,
+>   for the object storage settings for `externalDiffs` to take effect,
+>   `global.appConfig.externalDiffs.enabled` key should have a `true` value.
+> - The dependency proxy feature is not enabled by default. So,
+>   for the object storage settings for `dependencyProxy` to take effect,
+>   `global.appConfig.dependencyProxy.enabled` key should have a `true` value.
 
 See the [charts/globals documentation on appConfig](../../charts/globals.md#configure-appconfig-settings) for full details.
 
@@ -189,11 +189,11 @@ Examples for [AWS](https://fog.io/storage/#using-amazon-s3-and-fog) (any S3 comp
 
 ## Backups
 
-Backups are also stored in object storage, and need to be configured to point
+Backups are also stored in object storage, and must be configured to point
 externally rather than the included MinIO service. The backup/restore procedure makes
 use of two separate buckets. A bucket for storing backups (`global.appConfig.backups.bucket`)
 and a temporary bucket for preserving existing data during the restore process (`global.appConfig.backups.tmpBucket`).
-Currently AWS S3-compatible object storage systems and Google Cloud Storage are supported backends
+AWS S3-compatible object storage systems and Google Cloud Storage are supported backends.
 The backend type is configurable by setting `global.appConfig.backups.objectStorage.backend` to `s3` and `gcs` respectively.
 A connection configuration through the `gitlab.toolbox.backups.objectStorage.config` key must also be provided.
 When using Google Cloud Storage, the GCP project must be set with the `global.appConfig.backups.objectStorage.config.gcpProject` value.
@@ -220,9 +220,9 @@ For Google Cloud Storage (GCS):
 
 See the [backup/restore object storage documentation](../../backup-restore/index.md#object-storage) for full details.
 
-NOTE:
-To backup or restore files from the other object storage locations, the configuration file needs to be
-configured to authenticate as a user with sufficient access to read/write to all GitLab buckets.
+> **Note**:
+> To backup or restore files from the other object storage locations, the configuration file needs to be
+> configured to authenticate as a user with sufficient access to read/write to all GitLab buckets.
 
 ### Backups storage example
 
@@ -239,7 +239,7 @@ configured to authenticate as a user with sufficient access to read/write to all
      ```
 
    - On Google Cloud Storage, you can create the file by creating a service account
-     with the storage.admin role and then
+     with the `storage.admin` role and then
      [creating a service account key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys).
      Below is an example of using the `gcloud` CLI to create the file.
 
