@@ -29,8 +29,6 @@ class HelmTemplate
     namespace_arg = namespace.nil? ? '' : "--namespace #{namespace}"
 
     case helm_major_version
-    when 2 then
-      "helm template -n #{release_name} -f #{path} #{namespace_arg} #{extra_args} ."
     when 3 then
       "helm template #{release_name} . -f #{path} #{namespace_arg} #{extra_args}"
     else
