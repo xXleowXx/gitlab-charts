@@ -17,7 +17,7 @@ from the parent chart, these values will be:
 
 ```yaml
 certmanager-issuer:
-  # Configure an ACME Issuer in cert-manager. Only used if configure==true
+  # Configure an ACME Issuer in cert-manager. Only used if global.ingress.configureCertmanager is true.
   server: https://acme-v02.api.letsencrypt.org/directory
 
   # Provide an email to associate with your TLS certificates
