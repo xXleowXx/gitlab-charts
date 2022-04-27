@@ -248,7 +248,7 @@ You can find the full explanation and workaround in [Migrating from Helm v2 to H
 
 ## UPGRADE FAILED: type mismatch on mailroom: `%!t(<nil>)`
 
-An error like this can happen if you do not provide a valid map for a key that expects a map. 
+An error like this can happen if you do not provide a valid map for a key that expects a map.
 
 For example, the configuration below will cause this error:
 
