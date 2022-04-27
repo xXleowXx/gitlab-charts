@@ -193,10 +193,6 @@ global:
       providers: []
       # - secret: gitlab-google-oauth2
       #   key: provider
-    pseudonymizer:
-      configMap:
-      bucket:
-      connection: {}
     sentry:
       enabled: false
       dsn:

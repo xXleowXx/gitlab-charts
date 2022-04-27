@@ -224,9 +224,6 @@ global:
       ## Verify custom GitLab Pages domains
       # pages_domain_verification_cron_worker:
       #   cron: "*/15 * * * *"
-      ## Export pseudonymized data
-      # pseudonymizer_worker:
-      #   cron: "0 * * * *"
       # schedule_migrate_external_diffs_worker:
       #   cron: "15 * * * *"
       ### GitLab Geo
@@ -336,13 +333,6 @@ global:
       bucket: gitlab-dependency-proxy
       connection: {}
 
-    ## https://docs.gitlab.com/charts/charts/globals#pseudonymizer-settings
-    pseudonymizer:
-      configMap:
-      bucket: gitlab-pseudo
-      connection: {}
-        # secret:
-        # key:
     backups:
       bucket: gitlab-backups
       tmpBucket: tmp
