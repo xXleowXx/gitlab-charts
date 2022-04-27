@@ -22,6 +22,8 @@ Removed:
 {{/*
 database.datamodel.prepare
 
+Also documented in doc/development/datamodels.md with examples.
+
 Result:
   `.Values.local.psql` contains a fully composed datamodel of psql properties
   to be passed as the context to other helpers. Which Schema you are in can
@@ -32,7 +34,7 @@ How:
   - ensure `main` exists in both global and local, if not present.
   - mergeOverwrite `.global.psql` `.global.psql.x`
   - mergeOverwrite `.psql` `.psql.x`
-  - build $context dict, with .Release .Values.global.psql .Values.psql 
+  - build $context dict, with .Release .Values.global.psql .Values.psql
 
 Example object -
   local:
