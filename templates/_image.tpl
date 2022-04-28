@@ -12,16 +12,16 @@ Usage:
 2. Else we just use the version passed as the image tag
 */}}
 {{- define "gitlab.parseAppVersion" -}}
-{{- $appVersion := coalesce .appVersion "master" -}}
-{{- if regexMatch "^\\d+\\.\\d+\\.\\d+(-rc\\d+)?(-pre)?$" $appVersion -}}
-{{-   if eq .prepend "true" -}}
-{{-      printf "v%s" $appVersion -}}
+{{-   $appVersion := coalesce .appVersion "master" -}}
+{{-   if regexMatch "^\\d+\\.\\d+\\.\\d+(-rc\\d+)?(-pre)?$" $appVersion -}}
+{{-     if eq .prepend "true" -}}
+{{-       printf "v%s" $appVersion -}}
+{{-     else -}}
+{{-        $appVersion -}}
+{{-     end -}}
 {{-   else -}}
-{{-      $appVersion -}}
+{{-     $appVersion -}}
 {{-   end -}}
-{{- else -}}
-{{- $appVersion -}}
-{{- end -}}
 {{- end -}}
 
 {{/*
@@ -35,7 +35,7 @@ Defines the registry for a given image.
 Defines the repository for a given image.
 */}}
 {{- define "gitlab.image.repository" -}}
-{{-  coalesce .local.repository .global.repository -}}
+{{-   coalesce .local.repository .global.repository -}}
 {{- end -}}
 
 {{/*
@@ -100,16 +100,16 @@ Creates the full image path for use in manifests.
     - `local` which contains local image settings, e.g. .Values.image
 */}}
 {{- define "gitlab.image.pullSecrets" -}}
-{{- $pullSecrets := default (list) .global.pullSecrets -}}
-{{- if .local.pullSecrets -}}
+{{-   $pullSecrets := default (list) .global.pullSecrets -}}
+{{-   if .local.pullSecrets -}}
 {{-   $pullSecrets = concat $pullSecrets .local.pullSecrets -}}
-{{- end -}}
-{{- if $pullSecrets }}
+{{-   end -}}
+{{-   if $pullSecrets }}
 imagePullSecrets:
-{{-   range $index, $entry := $pullSecrets }}
+{{-     range $index, $entry := $pullSecrets }}
 - name: {{ $entry.name }}
+{{-     end }}
 {{-   end }}
-{{- end }}
 {{- end -}}
 
 {{/*
@@ -120,8 +120,8 @@ imagePullSecrets:
     - `local` which contains local image settings, e.g. .Values.image
 */}}
 {{- define "gitlab.image.pullPolicy" -}}
-{{- $pullPolicy := coalesce .local.pullPolicy .global.pullPolicy -}}
-{{- if $pullPolicy }}
+{{-   $pullPolicy := coalesce .local.pullPolicy .global.pullPolicy -}}
+{{-   if $pullPolicy }}
 imagePullPolicy: {{ $pullPolicy | quote }}
-{{- end -}}
+{{-   end -}}
 {{- end -}}
