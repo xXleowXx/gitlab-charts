@@ -5,8 +5,8 @@ image:
   # name: toolbox
   # pullPolicy: IfNotPresent
   # pullSecrets: []
-  # registry: registry.gitlab.com
-  # repository: gitlab-org/build/cng
+  # registry:
+  # repository: registry.gitlab.com/gitlab-org/build/cng
   name: toolbox
   # tag: master
 

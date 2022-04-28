@@ -30,8 +30,8 @@ global:
   image:
     # pullPolicy: IfNotPresent
     # pullSecrets: []
-    registry: registry.gitlab.com
-    repository: gitlab-org/build/cng
+    # registry:
+    repository: registry.gitlab.com/gitlab-org/build/cng
 
   ## Supplemental Pod labels. Will not be used for selectors.
   pod:
@@ -658,8 +658,8 @@ global:
   # configuration of certificates container & custom CA injection
   certificates:
     image:
-      # registry: registry.gitlab.com
-      # repository: gitlab-org/build/cng
+      # registry:
+      # repository: registry.gitlab.com/gitlab-org/build/cng
       name: alpine-certificates
       tag: 20191127-r2
       # pullPolicy: IfNotPresent
@@ -672,7 +672,7 @@ global:
   kubectl:
     image:
       # registry:
-      # repository:
+      # repository: registry.gitlab.com/gitlab-org/build/cng
       name: kubectl
       # The digest below comes from a given tag pipeline because they are mirrored to .com,
       # ensuring that the image tag is available from both instances. The digest can be
@@ -687,8 +687,8 @@ global:
       fsGroup: 65534
   busybox:
     image:
-      registry: registry.gitlab.com
-      repository: gitlab-org/cloud-native/mirror/images
+      # registry:
+      repository: registry.gitlab.com/gitlab-org/cloud-native/mirror/images
       name: busybox
       tag: latest
       # pullPolicy: IfNotPresent
@@ -1028,8 +1028,8 @@ shared-secrets:
     image:
       # pullPolicy: IfNotPresent
       # pullSecrets: []
-      # registry: registry.gitlab.com
-      # repository: gitlab-org/build/cng
+      # registry:
+      # repository: registry.gitlab.com/gitlab-org/build/cng
       name: cfssl-self-sign
       tag: 1.2
     keyAlgorithm: "rsa"

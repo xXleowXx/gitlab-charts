@@ -38,8 +38,8 @@ networkpolicy:
   annotations: {}
 
 image:
-  # registry: registry.gitlab.com
-  # repository: gitlab-org/build/cng
+  # registry:
+  # repository: registry.gitlab.com/gitlab-org/build/cng
   name: gitlab-pages
   # tag: master
   prepend: "true"

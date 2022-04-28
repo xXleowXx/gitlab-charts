@@ -78,12 +78,11 @@ describe 'image configuration' do
               # We only control MinIO's `configure` initContainer.
               next if container_name.include?('minio')
 
-              registry = 'registry.gitlab.com'
-              repository = 'gitlab-org/build/cng'
-              repository = 'gitlab-org/cloud-native/mirror/images' if MIRRORED_IMAGES.any? { |i| container_image.include? i }
+              repository = 'registry.gitlab.com/gitlab-org/build/cng'
+              repository = 'registry.gitlab.com/gitlab-org/cloud-native/mirror/images' if MIRRORED_IMAGES.any? { |i| container_image.include? i }
 
-              it 'should use default registry and repository' do
-                expect(container&.dig('image')).to start_with("#{registry}/#{repository}/")
+              it 'should use default repository' do
+                expect(container&.dig('image')).to start_with("#{repository}/")
               end
 
               it 'should use nil or `IfNotPresent` imagePullPolicy' do
@@ -130,17 +129,15 @@ describe 'image configuration' do
               # We only control MinIO's `configure` initContainer.
               next if container_name.include?('minio')
 
-              it 'should use the global registry and repository' do
+              it 'should use the global repository' do
                 case container_name
                 when 'configure', 'run-check'
-                  registry = 'global.busybox.registry.com'
-                  repository = 'global-busybox-repo'
+                  repository = 'global.busybox.registry.com/global-busybox-repo'
                 else
-                  registry = 'global.registry.com'
-                  repository = 'global-repo'
+                  repository = 'global.registry.com/global-repo'
                 end
 
-                expect(container&.dig('image')).to start_with("#{registry}/#{repository}/")
+                expect(container&.dig('image')).to start_with("#{repository}/")
               end
 
               it 'should use the global imagePullPolicy' do
@@ -191,7 +188,7 @@ describe 'image configuration' do
             context "container: #{container_type}/#{container&.dig('name')}" do
               let(:container) { container }
 
-              it 'should use the local registry' do
+              it 'should use the local repository' do
                 container_name = container&.dig('name')
 
                 # We only control MinIO's `configure` initContainer.
@@ -213,10 +210,9 @@ describe 'image configuration' do
                               app_label
                             end
 
-                registry = "#{app_label}.registry.com"
-                repository = "#{app_label}-repo"
+                repository = "#{app_label}.registry.com/#{app_label}-repo"
 
-                expect(container&.dig('image')).to start_with("#{registry}/#{repository}/")
+                expect(container&.dig('image')).to start_with("#{repository}/")
               end
 
               it 'should use the local imagePullPolicy' do

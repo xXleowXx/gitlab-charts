@@ -42,8 +42,8 @@ hpa:
       stabilizationWindowSeconds: 300
 
 image:
-  # registry: registry.gitlab.com
-  # repository: gitlab-org/build/cng
+  # registry:
+  # repository: registry.gitlab.com/gitlab-org/build/cng
   name: gitlab-kas
   # tag: latest
   prepend: "true"

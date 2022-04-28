@@ -19,8 +19,8 @@ gitaly: {}
 
 internal: {}
 image:
-  # registry: registry.gitlab.com
-  # repository: gitlab-org/build/cng
+  # registry:
+  # repository: registry.gitlab.com/gitlab-org/build/cng
   name: gitaly
   # tag: master
   # pullPolicy: IfNotPresent

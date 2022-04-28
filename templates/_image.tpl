@@ -28,7 +28,7 @@ Usage:
 Defines the registry for a given image.
 */}}
 {{- define "gitlab.image.registry" -}}
-{{-   coalesce .local.registry .global.registry -}}
+{{-   coalesce .local.registry .global.registry "none" -}}
 {{- end -}}
 
 {{/*
@@ -89,7 +89,11 @@ Creates the full image path for use in manifests.
 {{-   $name := include "gitlab.image.name" . -}}
 {{-   $tag := include "gitlab.image.tag" . -}}
 {{-   $digest := include "gitlab.image.digest" . -}}
-{{-   printf "%s/%s/%s:%s%s" $registry $repository $name $tag $digest | quote -}}
+{{-   if eq $registry "none" -}}
+{{-     printf "%s/%s:%s%s" $repository $name $tag $digest | quote -}}
+{{-   else -}}
+{{-     printf "%s/%s/%s:%s%s" $registry $repository $name $tag $digest | quote -}}
+{{-   end -}}
 {{- end -}}
 
 {{/*
