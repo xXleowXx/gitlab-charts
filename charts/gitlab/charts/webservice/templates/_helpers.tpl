@@ -209,6 +209,22 @@ Global values will override any chart-specific values.
 {{- end -}}
 
 {{/*
+Returns the extraSecretEnv keys and values to inject into containers.
+
+Global values will override any chart-specific values.
+*/}}
+{{- define "webservice.extraSecretEnv" -}}
+{{- $allExtraSecretEnv := merge (default (dict) .local.extraSecretEnv) .global.extraSecretEnv -}}
+{{- range $key, $value := $allExtraSecretEnv }}
+- name: {{ $key }}
+  valueFrom: 
+    secretKeyRef:
+      name: {{ $value.secretName }}
+      key: {{ $value.secretKey }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 
 */}}
 {{/*

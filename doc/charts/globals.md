@@ -35,6 +35,7 @@ for more information on how the global variables work.
 - [Annotations](#annotations)
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
+- [extraSecretEnv](#extrasecretenv)
 - [OAuth](#configure-oauth-settings)
 - [Outgoing email](#outgoing-email)
 - [Platform](#platform)
@@ -2023,6 +2024,23 @@ global:
   extraEnv:
     SOME_KEY: some_value
     SOME_OTHER_KEY: some_other_value
+```
+
+## extraSecretEnv
+
+`extraSecretEnv` allows you to expose additional environment variables form Secrets in all containers in the pods
+that are deployed via GitLab charts (`charts/gitlab/charts`). Extra environment variables set at
+the global level will be merged into those provided at the chart level, with precedence given
+to those provided at the chart level.
+
+Below is an example use of `extraSecretEnv`:
+
+```yaml
+global:
+  extraSecretEnv:
+    SOME_KEY:
+      secretKey: some_value     # Secret key 
+      secretName: some_value    # Secret name 
 ```
 
 ## Configure OAuth settings
