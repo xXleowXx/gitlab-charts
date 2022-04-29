@@ -52,6 +52,7 @@ to the `helm install` command using the `--set` flags:
 | `extraVolumes`                             |                                                              | String template of extra volumes to configure                                                         |
 | `extraEnv`                                 |                                                              | List of extra environment variables to expose                                                         |
 | `gitaly.serviceName`                       | `gitaly`                                                     | Gitaly service name                                                                                   |
+| `health_checks.port`                       | `3808`                                                       | Health check server port                                                                                 |
 | `hpa.targetAverageValue`                   | `350m`                                                       | Set the autoscaling target value                                                                      |
 | `minReplicas`                              | `2`                                                          | Minimum number of replicas                                                                            |
 | `maxReplicas`                              | `10`                                                         | Maximum number of replicas                                                                            |

@@ -54,7 +54,6 @@ metrics:
   annotations: {}
 
 health_checks:
-  enabled: true
   port: 3808
 
 redis:
