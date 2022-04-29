@@ -47,6 +47,12 @@ No changes.
 - [Use image digest from dev tag pipeline](gitlab-org/charts/gitlab@403b765779a8d43cc471ff9d35d6a0e23f9eea21) ([merge request](gitlab-org/charts/gitlab!2463))
 - [Update Operator install docs for version 0.6.0](gitlab-org/charts/gitlab@43398259cef8be83f88ec132b3471ca8dccaf73e) ([merge request](gitlab-org/charts/gitlab!2460))
 
+## 5.9.4 (2022-04-29)
+
+### Other (1 change)
+
+- [Use new kubectl image with HOME=/tmp/kube](gitlab-org/security/charts/gitlab@f300425610dbef3f1a4d6272c9f572a96424dcfa)
+
 ## 5.9.3 (2022-04-12)
 
 No changes.
