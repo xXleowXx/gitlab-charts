@@ -1867,7 +1867,7 @@ global:
       pullPolicy: Always
 ```
 
-See [spec/fixtures/global-image-config.yaml](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/spec/fixtures/global-image-config.yaml) for a more complete example.
+See [`spec/fixtures/global-image-config.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/spec/fixtures/global-image-config.yaml) for a more complete example.
 
 GitLab Charts can also be configured locally, which overrides the global settings.
 For example, to configure specific image settings for Webservice:
@@ -1886,7 +1886,7 @@ gitlab:
         tag: x.y.z
 ```
 
-See [spec/fixtures/local-image-config.yaml](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/spec/fixtures/global-image-config.yaml) for a more complete example.
+See [`spec/fixtures/local-image-config.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/spec/fixtures/global-image-config.yaml) for a more complete example.
 
 ## Service Accounts
 

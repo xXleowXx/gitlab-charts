@@ -36,6 +36,7 @@ global:
       pullPolicy: pp-busybox
       pullSecrets:
       - name: ps-busybox
+
 # Need to override the repository for each component,
 # removing the registry prefix now that it's defined globally.
 gitlab:
@@ -78,6 +79,7 @@ gitlab:
     workhorse:
       image:
         repository: workhorse-repo
+
 # Need to set NGINX-Ingress specifically because
 # it already has locally-set image configuration
 # in its values.yaml file.

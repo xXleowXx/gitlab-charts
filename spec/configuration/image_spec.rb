@@ -212,7 +212,7 @@ describe 'image configuration' do
 
                 repository = "#{app_label}.registry.com/#{app_label}-repo"
 
-                expect(container&.dig('image')).to start_with("#{repository}")
+                expect(container&.dig('image')).to start_with(repository)
               end
 
               it 'should use the local imagePullPolicy' do
