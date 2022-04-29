@@ -66,7 +66,6 @@ data:
     gitlab-server={{ template "gitlab.pages.gitlabServer" . }}
     internal-gitlab-server={{ template "gitlab.pages.internalGitlabServer" . }}
     api-secret-key=/etc/gitlab-secrets/pages/secret
-    domain-config-source={{ default "gitlab" .Values.domainConfigSource }}
     {{- if and .Values.metrics.enabled .Values.metrics.port }}
     metrics-address=:{{ .Values.metrics.port | int }}
     {{- end }}
