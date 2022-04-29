@@ -129,15 +129,15 @@ describe 'image configuration' do
               # We only control MinIO's `configure` initContainer.
               next if container_name.include?('minio')
 
-              it 'should use the global repository' do
+              it 'should use the global registry' do
                 case container_name
                 when 'configure', 'run-check'
-                  repository = 'global.busybox.registry.com/global-busybox-repo'
+                  registry = 'global.busybox.registry.com'
                 else
-                  repository = 'global.registry.com/global-repo'
+                  registry = 'global.registry.com'
                 end
 
-                expect(container&.dig('image')).to start_with("#{repository}/")
+                expect(container&.dig('image')).to start_with("#{registry}/")
               end
 
               it 'should use the global imagePullPolicy' do
@@ -212,7 +212,7 @@ describe 'image configuration' do
 
                 repository = "#{app_label}.registry.com/#{app_label}-repo"
 
-                expect(container&.dig('image')).to start_with("#{repository}/")
+                expect(container&.dig('image')).to start_with("#{repository}")
               end
 
               it 'should use the local imagePullPolicy' do

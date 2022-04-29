@@ -1848,8 +1848,6 @@ certmanager:
 
 By default, GitLab Helm charts use:
 
-- `registry.gitlab.com` for the image registry
-- `gitlab-org/build/cng` for the image repository (`gitlab-org/cloud-native/mirror/images` is used for our [mirrored images](https://gitlab.com/gitlab-org/cloud-native/mirror/images/-/blob/main/mirrored-images))
 - `IfNotPresent` for the image pull policy
 - `[]` for the image pull secrets
 
@@ -1859,7 +1857,6 @@ These values can be controlled globally by the following settings:
 global:
   image:
     registry: custom.registry.com
-    repository: custom-repository
     pullPolicy: Always
     pullSecrets:
     - name: custom-pull-secret
@@ -1878,14 +1875,12 @@ gitlab:
   webservice:
     image:
       registry: webservice.registry.com
-      repository: webservice-repository
-      name: custom-webservice
+      repository: webservice-repository/custom-webservice
       tag: x.y.z
     init:
       image:
         registry: webservice-init.registry.com
-        repository: webservice-init-repository
-        name: custom-init-webservice
+        repository: webservice-init-repository/custom/init-webservice
         tag: x.y.z
 ```
 

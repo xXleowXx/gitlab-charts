@@ -19,7 +19,6 @@ init:
   image: {}
     # registry:
     # repository:
-    # name:
     # tag:
   resources:
     requests:
@@ -43,8 +42,7 @@ hpa:
 
 image:
   # registry:
-  # repository: registry.gitlab.com/gitlab-org/build/cng
-  name: gitlab-kas
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-kas
   # tag: latest
   prepend: "true"
   # pullPolicy: IfNotPresent

@@ -39,8 +39,7 @@ networkpolicy:
 
 image:
   # registry:
-  # repository: registry.gitlab.com/gitlab-org/build/cng
-  name: gitlab-pages
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-pages
   # tag: master
   prepend: "true"
   # pullPolicy: IfNotPresent
@@ -71,7 +70,6 @@ init:
   image: {}
     # registry:
     # repository:
-    # name:
     # tag:
   resources:
     requests:

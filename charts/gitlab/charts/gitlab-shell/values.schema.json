@@ -252,14 +252,10 @@
         "repository": {
           "title": "Docker image repository",
           "type": "string"
-        },
-        "name": {
-          "title": "Docker image name",
-          "type": "string"
         }
       },
       "required": [
-        "name"
+        "repository"
       ],
       "title": "Docker image details",
       "type": "object"

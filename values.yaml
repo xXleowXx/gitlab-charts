@@ -27,11 +27,10 @@ global:
   common:
     labels: {}
 
-  image:
+  image: {}
     # pullPolicy: IfNotPresent
     # pullSecrets: []
     # registry:
-    repository: registry.gitlab.com/gitlab-org/build/cng
 
   ## Supplemental Pod labels. Will not be used for selectors.
   pod:
@@ -659,9 +658,12 @@ global:
   certificates:
     image:
       # registry:
-      # repository: registry.gitlab.com/gitlab-org/build/cng
-      name: alpine-certificates
-      tag: 20191127-r2
+      repository: registry.gitlab.com/gitlab-org/build/cng/alpine-certificates
+      # The digest below comes from a given tag pipeline because they are mirrored to .com,
+      # ensuring that the image tag is available from both instances. The digest can be
+      # found in the 'sync_images' job.
+      #   https://dev.gitlab.org/gitlab/charts/components/images/-/tags
+      tag: 20191127-r2@sha256:367d437d024d7647432d67fb2442e3e5723af5930bad77d3535f4f8f4f8630d9
       # pullPolicy: IfNotPresent
       # pullSecrets: []
     customCAs: []
@@ -672,8 +674,7 @@ global:
   kubectl:
     image:
       # registry:
-      # repository: registry.gitlab.com/gitlab-org/build/cng
-      name: kubectl
+      repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
       # The digest below comes from a given tag pipeline because they are mirrored to .com,
       # ensuring that the image tag is available from both instances. The digest can be
       # found in the 'sync_images' job.
@@ -688,8 +689,7 @@ global:
   busybox:
     image:
       # registry:
-      repository: registry.gitlab.com/gitlab-org/cloud-native/mirror/images
-      name: busybox
+      repository: registry.gitlab.com/gitlab-org/cloud-native/mirror/images/busybox
       tag: latest
       # pullPolicy: IfNotPresent
       # pullSecrets: []
@@ -1029,9 +1029,12 @@ shared-secrets:
       # pullPolicy: IfNotPresent
       # pullSecrets: []
       # registry:
-      # repository: registry.gitlab.com/gitlab-org/build/cng
-      name: cfssl-self-sign
-      tag: 1.2
+      repository: registry.gitlab.com/gitlab-org/build/cng/cfssl-self-sign
+      # The digest below comes from a given tag pipeline because they are mirrored to .com,
+      # ensuring that the image tag is available from both instances. The digest can be
+      # found in the 'sync_images' job.
+      #   https://dev.gitlab.org/gitlab/charts/components/images/-/tags
+      tag: 1.6.1@sha256:e89392e13b4ef12cd48ba8c30326aacd89a8d0161cb081ac8dfbb77200d5ebac
     keyAlgorithm: "rsa"
     keySize: "4096"
     expiry: "3650d"

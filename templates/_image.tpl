@@ -39,28 +39,6 @@ Defines the repository for a given image.
 {{- end -}}
 
 {{/*
-Defines the name for a given image.
-Defaults to `gitlab-$chartName-$edition` if no local name is defined.
-If the local name is defined as `toolbox` or `workhorse`, then prepend `gitlab-` and
-append `-$edition`. This ensures that:
-- charts such as Migrations can get the correct reference to the Toolbox image
-- charts such as Webservice can get the correct reference to the Workhorse image
-This is needed since we can't rely on the chart name to calculate the image path in those cases.
-*/}}
-{{- define "gitlab.image.name" -}}
-{{-   $defaultName := printf "gitlab-%s-%s" .context.Chart.Name .context.Values.global.edition -}}
-{{-   if .local.name -}}
-{{-     if has .local.name (list "toolbox" "workhorse") -}}
-{{-       printf "gitlab-%s-%s" .local.name .context.Values.global.edition -}}
-{{-     else -}}
-{{-       .local.name -}}
-{{-     end -}}
-{{-   else -}}
-{{-     coalesce .global.name $defaultName -}}
-{{-   end -}}
-{{- end -}}
-
-{{/*
 Return the version tag used to fetch the GitLab images
 Defaults to using the information from the chart appVersion field, but can be
 overridden using the global.gitlabVersion field in values.
@@ -82,17 +60,22 @@ Return the image digest to use.
 
 {{/*
 Creates the full image path for use in manifests.
+Will replace the `-ee` edition suffix if `global.edition=ce`.
 */}}
 {{- define "gitlab.image.fullPath" -}}
 {{-   $registry := include "gitlab.image.registry" . -}}
 {{-   $repository := include "gitlab.image.repository" . -}}
-{{-   $name := include "gitlab.image.name" . -}}
 {{-   $tag := include "gitlab.image.tag" . -}}
 {{-   $digest := include "gitlab.image.digest" . -}}
+{{-   if hasSuffix "-ee" $repository -}}
+{{-      if eq .context.Values.global.edition "ce" -}}
+{{-        $repository = print $repository | replace "-ee" "-ce" -}}
+{{-      end -}}
+{{-   end -}}
 {{-   if eq $registry "none" -}}
-{{-     printf "%s/%s:%s%s" $repository $name $tag $digest | quote -}}
+{{-     printf "%s:%s%s" $repository $tag $digest | quote -}}
 {{-   else -}}
-{{-     printf "%s/%s/%s:%s%s" $registry $repository $name $tag $digest | quote -}}
+{{-     printf "%s/%s:%s%s" $registry $repository $tag $digest | quote -}}
 {{-   end -}}
 {{- end -}}
 

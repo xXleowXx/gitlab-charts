@@ -26,7 +26,6 @@ global:
       secret: bar
   image:
     registry: global.registry.com
-    repository: global-repo
     pullPolicy: pp-global
     pullSecrets:
     - name: ps-global
@@ -37,6 +36,48 @@ global:
       pullPolicy: pp-busybox
       pullSecrets:
       - name: ps-busybox
+# Need to override the repository for each component,
+# removing the registry prefix now that it's defined globally.
+gitlab:
+  geo-logcursor:
+    image:
+      repository: geo-logcursor-repo
+  gitaly:
+    image:
+      repository: gitaly-repo
+  gitlab-exporter:
+    image:
+      repository: gitlab-exporter-repo
+  gitlab-pages:
+    image:
+      repository: gitlab-pages-repo
+  gitlab-shell:
+    image:
+      repository: gitlab-shell-repo
+  kas:
+    image:
+      repository: kas-repo
+  mailroom:
+    image:
+      repository: mailroom-repo
+  migrations:
+    image:
+      repository: migrations-repo
+  praefect:
+    image:
+      repository: praefect-repo
+  sidekiq:
+    image:
+      repository: sidekiq-repo
+  toolbox:
+    image:
+      repository: toolbox-repo
+  webservice:
+    image:
+      repository: webservice-repo
+    workhorse:
+      image:
+        repository: workhorse-repo
 # Need to set NGINX-Ingress specifically because
 # it already has locally-set image configuration
 # in its values.yaml file.

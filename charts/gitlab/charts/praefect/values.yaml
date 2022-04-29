@@ -10,8 +10,7 @@ electionStrategy: sql
 
 image:
   # registry:
-  # repository: registry.gitlab.com/gitlab-org/build/cng
-  name: gitaly
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitaly
   # tag: master
   # pullPolicy: IfNotPresent
   # pullSecrets: []
@@ -25,7 +24,6 @@ init:
   image: {}
     # registry:
     # repository:
-    # name:
     # tag:
     # pullPolicy: IfNotPresent
 

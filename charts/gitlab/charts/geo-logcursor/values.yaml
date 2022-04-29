@@ -5,14 +5,12 @@ image:
   # pullPolicy: IfNotPresent
   # pullSecrets: []
   # registry:
-  # repository: registry.gitlab.com/gitlab-org/build/cng
-  name: gitlab-geo-logcursor
+  repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-geo-logcursor
   # tag: master
 init:
   image: {}
     # registry:
     # repository:
-    # name:
     # tag:
   resources:
     requests:
