@@ -35,7 +35,7 @@ for more information on how the global variables work.
 - [Annotations](#annotations)
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
-- [extraEnvFrom](#extraEnvFrom)
+- [extraEnvFrom](#extraenvfrom)
 - [OAuth](#configure-oauth-settings)
 - [Outgoing email](#outgoing-email)
 - [Platform](#platform)
