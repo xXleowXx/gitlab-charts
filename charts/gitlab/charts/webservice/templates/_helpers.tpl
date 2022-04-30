@@ -208,15 +208,6 @@ Global values will override any chart-specific values.
 {{- end -}}
 {{- end -}}
 
-{{- define "gitlab.extraEnvFrom" -}}
-{{- $allExtraEnvFrom := mergeOverwrite (default (dict) .root.Values.global.extraEnvFrom) (default (dict) .root.Values.extraEnvFrom) (default (dict) .local.extraEnvFrom) -}}
-{{- range $key, $value := $allExtraEnvFrom }}
-- name: {{ $key }}
-  valueFrom: 
-{{ toYaml $value | nindent 4 }}
-{{- end -}}
-{{- end -}}
-
 {{/*
 
 */}}
