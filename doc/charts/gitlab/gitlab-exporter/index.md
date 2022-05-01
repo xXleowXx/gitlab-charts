@@ -82,6 +82,7 @@ extraEnv:
   SOME_KEY: some_value
   SOME_OTHER_KEY: some_other_value
 ```
+
 When the container is started, you can confirm that the environment variables are exposed:
 
 ```shell
@@ -89,7 +90,9 @@ env | grep SOME
 SOME_KEY=some_value
 SOME_OTHER_KEY=some_other_value
 ```
+
 ### extraEnvFrom
+
 
 `extraEnvFrom` allows you to expose additional environment variables from other data source in all containers in the pods.
 
@@ -115,8 +118,6 @@ extraEnvFrom:
       key: some-string
       # optional: boolean
 ```
-
-
 
 `pullSecrets` allows you to authenticate to a private registry to pull images for a pod.
 
