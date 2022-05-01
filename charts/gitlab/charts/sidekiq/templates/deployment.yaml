@@ -114,6 +114,7 @@ spec:
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" $ | nindent 10 }}
+          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
           volumeMounts:
           {{- tpl (default "" .extraVolumeMounts) $ | nindent 10 }}
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
@@ -151,6 +152,7 @@ spec:
               value: "1"
             {{- end }}
             {{- include "gitlab.extraEnv" $ | nindent 12 }}
+            {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
           volumeMounts:
           {{- tpl (default "" .extraVolumeMounts) $ | nindent 10 }}
           {{- include "gitlab.extraVolumeMounts" $ | nindent 10 }}
