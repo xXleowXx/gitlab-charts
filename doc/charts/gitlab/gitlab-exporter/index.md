@@ -93,7 +93,6 @@ SOME_OTHER_KEY=some_other_value
 
 ### extraEnvFrom
 
-
 `extraEnvFrom` allows you to expose additional environment variables from other data source in all containers in the pods.
 
 Below is an example use of `extraEnvFrom`:
