@@ -2043,11 +2043,13 @@ global:
       resourceFieldRef:
         containerName: test-container
         resource: requests.cpu
-    SECRET_THING:
-      secretKeyRef:
-        name: special-secret
-        key: special_token
-        # optional: boolean
+extraEnvFrom:
+  SECRET_THING:
+    secretKeyRef:
+      name: special-secret
+      key: special_token
+webservice:
+  extraEnvFrom:
     CONFIG_STRING:
       configMapKeyRef:
         name: useful-config
