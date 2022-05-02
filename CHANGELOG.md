@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.9.4 (2022-04-29)
+
+### Other (1 change)
+
+- [Use new kubectl image with HOME=/tmp/kube](gitlab-org/security/charts/gitlab@f300425610dbef3f1a4d6272c9f572a96424dcfa)
+
 ## 5.9.3 (2022-04-12)
 
 No changes.
