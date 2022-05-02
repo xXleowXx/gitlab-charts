@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.10.1 (2022-04-29)
+
+No changes.
+
 ## 5.10.0 (2022-04-21)
 
 ### Added (4 changes)
@@ -42,6 +46,12 @@ entry.
 - [Update Operator install docs for version 0.6.1](gitlab-org/charts/gitlab@17243ad2f7d29ca48c712d7a81773c090124349d) ([merge request](gitlab-org/charts/gitlab!2464))
 - [Use image digest from dev tag pipeline](gitlab-org/charts/gitlab@403b765779a8d43cc471ff9d35d6a0e23f9eea21) ([merge request](gitlab-org/charts/gitlab!2463))
 - [Update Operator install docs for version 0.6.0](gitlab-org/charts/gitlab@43398259cef8be83f88ec132b3471ca8dccaf73e) ([merge request](gitlab-org/charts/gitlab!2460))
+
+## 5.9.4 (2022-04-29)
+
+### Other (1 change)
+
+- [Use new kubectl image with HOME=/tmp/kube](gitlab-org/security/charts/gitlab@f300425610dbef3f1a4d6272c9f572a96424dcfa)
 
 ## 5.9.3 (2022-04-12)
 
@@ -97,6 +107,10 @@ No changes.
 - [Add troubleshooting docs for YAML parse errors](gitlab-org/charts/gitlab@b9947210a310b2eb69cd0a3727d69f0378b6b3ce) ([merge request](gitlab-org/charts/gitlab!2414))
 - [Update Operator docs for version 0.5.0](gitlab-org/charts/gitlab@bffc825cf4730c78e4127e3b0cd8983f7d0545ea) ([merge request](gitlab-org/charts/gitlab!2407))
 - [Update link to Gitaly Cluster migration](gitlab-org/charts/gitlab@0901cb209b15f7ed43eb04576e249940c3afb608) ([merge request](gitlab-org/charts/gitlab!2399))
+
+## 5.8.6 (2022-04-29)
+
+No changes.
 
 ## 5.8.5 (2022-03-31)
 
