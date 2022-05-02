@@ -2028,8 +2028,7 @@ global:
 
 ## extraEnvFrom
 
-`extraEnvFrom` allows you to expose additional environment variables form other data source in all
-containers in the pods. Extra environment variables can be set up at `global` level (`global.extraEnvFrom`), gitlab chart top level (`extraEnvFrom`) or sub-chart level (`<subchart_name>.extraEnvFrom`) ```
+`extraEnvFrom` allows you to expose additional environment variables form other data source in all containers in the pods. Extra environment variables can be set up at `global` level (`global.extraEnvFrom`), gitlab chart top level (`extraEnvFrom`) or sub-chart level (`<subchart_name>.extraEnvFrom`) ```
 
 Below is an example use of `extraEnvFrom`:
 
