@@ -728,6 +728,7 @@ upgradeCheck:
     runAsUser: 65534
     fsGroup: 65534
   tolerations: []
+  annotations: {}
   resources:
     requests:
       cpu: 50m
