@@ -1,0 +1,5 @@
+---
+title: Add annotations support to the upgrade check hook and minio job template.
+merge_request:
+author: Kristopher Flint
+type: other
