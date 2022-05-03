@@ -112,13 +112,13 @@ Examples for [S3](https://docs.docker.com/registry/storage-drivers/s3/)(S3 compa
 1. Follow [registry chart documentation on storage](../../charts/registry/index.md#storage) for creating the secret.
 1. Configure the chart as documented.
 
-## LFS, Artifacts, Uploads, Packages, External Diffs, Pseudonymizer, Terraform State, Dependency Proxy
+## LFS, Artifacts, Uploads, Packages, External Diffs, Terraform State, Dependency Proxy
 
-Configuration of object storage for LFS, artifacts, uploads, packages, external
-diffs, and pseudonymizer is done via the `global.appConfig.lfs`,
+Configuration of object storage for LFS, artifacts, uploads, packages, and external
+diffs is done via the `global.appConfig.lfs`,
 `global.appConfig.artifacts`, `global.appConfig.uploads`,
-`global.appConfig.packages`, `global.appConfig.externalDiffs`,
-`global.appConfig.dependencyProxy` and `global.appConfig.pseudonymizer` keys.
+`global.appConfig.packages`, `global.appConfig.externalDiffs`, and
+`global.appConfig.dependencyProxy` keys.
 
 ```shell
 --set global.appConfig.lfs.bucket=gitlab-lfs-storage
@@ -144,10 +144,6 @@ diffs, and pseudonymizer is done via the `global.appConfig.lfs`,
 --set global.appConfig.terraformState.bucket=gitlab-terraform-state
 --set global.appConfig.terraformState.connection.secret=object-storage
 --set global.appConfig.terraformState.connection.key=connection
-
---set global.appConfig.pseudonymizer.bucket=gitlab-pseudonymizer-storage
---set global.appConfig.pseudonymizer.connection.secret=object-storage
---set global.appConfig.pseudonymizer.connection.key=connection
 
 --set global.appConfig.dependencyProxy.bucket=gitlab-dependencyproxy-storage
 --set global.appConfig.dependencyProxy.connection.secret=object-storage
