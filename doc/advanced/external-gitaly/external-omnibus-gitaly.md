@@ -36,6 +36,7 @@ _**NOTE**: The values below should be replaced_
 <!--
 updates to following example must also be made at
 https://gitlab.com/gitlab-org/gitlab/blob/master/doc/administration/gitaly/index.md#gitaly-server-configuration
+& reference architecture pages
 -->
 
 ```ruby
