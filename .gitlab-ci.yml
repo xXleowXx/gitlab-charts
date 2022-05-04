@@ -679,7 +679,7 @@ specs_without_cluster:
   variables:
     RSPEC_TAGS: ~type:feature
   needs: []
-  parallel: 5
+  parallel: 6
   except:
     refs:
       - /(^docs[\/-].+|.+-docs$)/
@@ -697,7 +697,7 @@ production_specs_without_cluster:
   extends: .production_specs
   variables:
     RSPEC_TAGS: ~type:feature
-  parallel: 5
+  parallel: 6
   except:
     refs:
       - /(^docs[\/-].+|.+-docs$)/
@@ -848,7 +848,7 @@ release_package:
   extends:
     - .qa
     - .knapsack-variables
-  parallel: 8
+  parallel: 10
   except:
     refs:
       - master
@@ -859,7 +859,7 @@ release_package:
   extends:
     - .qa
     - .knapsack-variables
-  parallel: 8
+  parallel: 10
   only:
     refs:
       - master
