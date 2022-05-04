@@ -476,7 +476,7 @@ In that script, `update-ca-certificates`:
    WARNING: unique_name does not contain exactly one certificate or CRL: skipping
    ```
 
-[Troubleshoot the init container's status and logs](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-init-containers/#getting-details-about-init-containers).
+[Troubleshoot the init container's status and logs](https://kubernetes.io/docs/tasks/debug/debug-application/debug-init-containers/).
 For example, to view the logs for the certificates init container and check for warnings:
 
 ```plaintext
