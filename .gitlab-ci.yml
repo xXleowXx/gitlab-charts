@@ -60,6 +60,10 @@ stages:
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
+  - project: gitlab-org/quality/pipeline-common
+    ref: 0.6.0
+    file:
+      - /ci/knapsack-report.yml
 dependency_scanning:
   needs: []
   before_script: []
@@ -915,6 +919,17 @@ qa_eks_manual_full_suite:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
   when: manual
+
+knapsack-report:
+  extends:
+    - .generate-knapsack-report-base
+  stage: report
+  variables:
+    # knapsack report upload uses gitlab-qa image with code already there
+    GIT_STRATEGY: none
+    QA_KNAPSACK_REPORT_FILE_PATTERN: $CI_PROJECT_DIR/qa/tmp/knapsack/*/*.json
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
 
 issue-bot:
   stage: report
