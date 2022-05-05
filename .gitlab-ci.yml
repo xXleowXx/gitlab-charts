@@ -60,10 +60,6 @@ stages:
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
-  - project: gitlab-org/quality/pipeline-common
-    ref: 0.6.0
-    file:
-      - /ci/knapsack-report.yml
 dependency_scanning:
   needs: []
   before_script: []
@@ -727,7 +723,7 @@ production_specs_eks:
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "eks-production"
 
-.qa_base:
+.qa:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:2.15.0
   stage: qa
   services:
@@ -844,7 +840,7 @@ release_package:
 
 .qa_branch:
   extends:
-    - .qa_base
+    - .qa
   parallel: 10
   except:
     refs:
@@ -854,7 +850,7 @@ release_package:
 
 .qa_production:
   extends:
-    - .qa_base
+    - .qa
   parallel: 10
   only:
     refs:
@@ -921,15 +917,21 @@ qa_eks_manual_full_suite:
   when: manual
 
 knapsack-report:
-  extends:
-    - .generate-knapsack-report-base
+  image:
+    name: registry.gitlab.com/gitlab-org/gitlab/gitlab-ee-qa:master
+    entrypoint: [""]
+  before_script:
+    - cd /home/gitlab/qa
+  allow_failure: true
   stage: report
   variables:
     # knapsack report upload uses gitlab-qa image with code already there
     GIT_STRATEGY: none
     QA_KNAPSACK_REPORT_FILE_PATTERN: $CI_PROJECT_DIR/qa/tmp/knapsack/*/*.json
+  script:
+    - bundle exec rake "knapsack:upload[$QA_KNAPSACK_REPORT_FILE_PATTERN]"
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $KNAPSACK_GENERATE_REPORT == "true"'
 
 issue-bot:
   stage: report
