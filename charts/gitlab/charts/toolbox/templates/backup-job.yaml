@@ -142,10 +142,6 @@ spec:
                 sources:
                   - configMap:
                       name: {{ template "fullname" . }}
-                  {{- if .Values.global.appConfig.pseudonymizer.configMap }}
-                  - configMap:
-                      name: {{ .Values.global.appConfig.pseudonymizer.configMap }}
-                  {{- end }}
             - name: toolbox-tmp
               {{- if .Values.backups.cron.persistence.enabled }}
               persistentVolumeClaim:
@@ -205,7 +201,6 @@ spec:
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "ci_secure_files" "config" $.Values.global.appConfig.ciSecureFiles) | nindent 16 }}
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "dependency_proxy" "config" $.Values.global.appConfig.dependencyProxy) | nindent 16 }}
                 {{- include "gitlab.appConfig.objectStorage.mountSecrets" (dict "name" "pages" "config" $.Values.global.pages.objectStore) | nindent 16 }}
-                {{- include "gitlab.appConfig.pseudonymizer.mountSecrets" $ | nindent 16 }}
                 {{- include "gitlab.appConfig.ldap.servers.mountSecrets" $ | nindent 16 }}
                 {{- include "gitlab.appConfig.omniauth.mountSecrets" $ | nindent 16 }}
             - name: toolbox-secrets
