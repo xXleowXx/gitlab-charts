@@ -727,7 +727,7 @@ production_specs_eks:
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "eks-production"
 
-.qa:
+.qa_base:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:2.15.0
   stage: qa
   services:
@@ -844,7 +844,7 @@ release_package:
 
 .qa_branch:
   extends:
-    - .qa
+    - .qa_base
   parallel: 10
   except:
     refs:
@@ -854,7 +854,7 @@ release_package:
 
 .qa_production:
   extends:
-    - .qa
+    - .qa_base
   parallel: 10
   only:
     refs:
