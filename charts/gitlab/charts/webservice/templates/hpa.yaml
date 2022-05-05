@@ -8,7 +8,7 @@ From here on:
 - `.name` is the key (xyz)
 */}}
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "webservice.fullname.withSuffix" . }}
@@ -29,7 +29,9 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageValue: {{ .hpa.targetAverageValue }}
+      target:
+        type: AverageValue
+        averageValue: {{ .hpa.targetAverageValue }}
   {{- else }}
     {{- toYaml .hpa.customMetrics | nindent 4 -}}
   {{- end }}

@@ -1,5 +1,5 @@
 {{- if .Values.global.spamcheck.enabled -}}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "fullname" . }}
@@ -19,7 +19,9 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        targetAverageValue: {{ .Values.hpa.targetAverageValue }}
+        target:
+          type: AverageValue
+          averageValue: {{ .Values.hpa.targetAverageValue }}
   {{- else -}}
     {{- toYaml .Values.hpa.customMetrics | nindent 4 -}}
   {{- end -}}

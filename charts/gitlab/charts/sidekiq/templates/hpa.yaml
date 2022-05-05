@@ -7,7 +7,7 @@
 {{-   $hpa := default dict .hpa }}
 {{-   include "sidekiq.pod.common.labels" . }}
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ printf "%s-v2" ($queueName | trunc 60) }}
@@ -26,6 +26,8 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageValue: {{ default $.Values.hpa.targetAverageValue $hpa.targetAverageValue }}
+      target:
+        type: AverageValue
+        averageValue: {{ default $.Values.hpa.targetAverageValue $hpa.targetAverageValue }}
 {{- end }}
 {{- end -}}
