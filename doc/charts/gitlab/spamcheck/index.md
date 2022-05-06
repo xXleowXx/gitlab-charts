@@ -56,6 +56,7 @@ The table below contains all the possible charts configurations that can be supp
 | `deployment.readinessProbe.successThreshold`    | 1      | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
 | `deployment.readinessProbe.failureThreshold`    | 3      | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded |
 | `deployment.strategy`      | `{}`                  | Allows one to configure the update strategy used by the deployment. When not provided, the cluster default is used. |
+| `hpa.scaleDownStabilizationWindowSeconds`       | `300`  | Set the scaledown stabilization window in seconds (max 3600) |
 | `hpa.targetAverageValue`    | `100m`         | Set the autoscaling target value (CPU) |
 | `image.repository`          | `registry.gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck` | Spamcheck image repository |
 | `logging.format`         | `json`      | Log format  |
