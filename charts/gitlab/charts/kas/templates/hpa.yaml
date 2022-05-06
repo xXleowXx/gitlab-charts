@@ -21,4 +21,7 @@ spec:
       target:
         type: AverageValue
         averageValue: {{ .Values.hpa.targetAverageValue }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.hpa.scaleDownStabilizationWindowSeconds }}
 {{- end -}}

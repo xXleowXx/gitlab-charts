@@ -68,6 +68,7 @@ You can pass these parameters to the `helm install` command by using the `--set`
 | `extraContainers` |  | List of extra containers to include. |
 | `image.repository` | `registry.gitlab.com/gitlab-org/build/cng/gitlab-kas` | Image repository. |
 | `image.tag` | `v13.7.0` | Image tag. |
+| `hpa.scaleDownStabilizationWindowSeconds` | `300` | Set the scaledown stabilization window in seconds (max 3600) |
 | `hpa.targetAverageValue` | `100m` | Set the autoscaling target value (CPU). |
 | `ingress.enabled` | `true` if `global.kas.enabled=true` | You can use `kas.ingress.enabled` to explicitly turn it on or off. If not set, you can optionally use `global.ingress.enabled` for the same purpose. |
 | `ingress.apiVersion` |  | Value to use in the `apiVersion` field. |
