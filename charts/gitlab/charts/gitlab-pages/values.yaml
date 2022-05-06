@@ -13,7 +13,9 @@ hpa:
   maxReplicas: 10
   minReplicas: 1
   targetAverageValue: 100m
-  customMetrics: []
+  customMetrics: [] # overrides targetAverageValue
+  scaleDownStabilizationWindowSeconds: 300
+  customBehavior: {} # overrides scaleDownStabilizationWindowSeconds
 
 networkpolicy:
   enabled: false
