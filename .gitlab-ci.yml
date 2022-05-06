@@ -927,7 +927,7 @@ knapsack-report:
   variables:
     # knapsack report upload uses gitlab-qa image with code already there
     GIT_STRATEGY: none
-    QA_KNAPSACK_REPORT_FILE_PATTERN: $CI_PROJECT_DIR/qa/tmp/knapsack/*/*.json
+    QA_KNAPSACK_REPORT_FILE_PATTERN: $CI_PROJECT_DIR/gitlab-qa-run-*/gitlab-*-qa-*/knapsack/*/*.json
   script:
     - bundle exec rake "knapsack:upload[$QA_KNAPSACK_REPORT_FILE_PATTERN]"
   rules:
