@@ -40,7 +40,7 @@ spec:
     scaleDown:
       stabilizationWindowSeconds: {{ .hpa.scaleDownStabilizationWindowSeconds }}
   {{- else }}
-    {{- toYaml .hpa.customBehvior | nindent 4 -}}
+    {{- toYaml .hpa.customBehavior | nindent 4 -}}
   {{- end }}
 {{- end }}
 {{/* END range deployments */}}
