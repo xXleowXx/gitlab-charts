@@ -189,10 +189,15 @@
         "targetAverageValue": {
           "title": "Autoscaling target value",
           "type": "string"
+        },
+        "scaleDownStabilizationWindowSeconds": {
+          "title": "Autoscaling scale down stabilization window in seconds",
+          "type": "number"
         }
       },
       "required": [
-        "targetAverageValue"
+        "targetAverageValue",
+        "scaleDownStabilizationWindowSeconds"
       ],
       "title": "Horizontal Pod Autoscaler settings",
       "type": "object"
