@@ -25,4 +25,11 @@ spec:
   {{- else -}}
     {{- toYaml .Values.hpa.customMetrics | nindent 4 -}}
   {{- end -}}
+  behavior:
+  {{- if not Values.hpa.customBehavior }}
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.hpa.scaleDownStabilizationWindowSeconds }}
+  {{- else }}
+    {{- toYaml .Values.hpa.customBehavior | nindent 4 -}}
+  {{- end }}
 {{- end -}}

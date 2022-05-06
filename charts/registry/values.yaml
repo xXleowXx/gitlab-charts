@@ -224,9 +224,11 @@ hpa:
   maxReplicas: 10
   cpu:
     targetAverageUtilization: 75
+  scaleDownStabilizationWindowSeconds: 300
 
-  # Note that the HPA is limited to autoscaling/v2beta2
-  customMetrics: []
+  # Note that the HPA is limited to autoscaling/v2beta2.
+  customMetrics: [] # Overrides targetAverageUtilization
+  customBehavior: {} # Overrides scaleDownStabilizationWindowSeconds
 
 storage: {}
 # secret:
