@@ -37,9 +37,11 @@ hpa:
   maxReplicas: 2
   cpu:
     targetAverageUtilization: 75
+  scaleDownStabilizationWindowSeconds: 300
 
   # Note that the HPA is limited to autoscaling/v2beta2
   customMetrics: []
+  customBehavior: {}
 
 networkpolicy:
   enabled: false
@@ -79,7 +81,9 @@ serviceAccount:
 | `enabled`                            | Mailroom enablement flag                         | `true`                      |
 | `hpa.minReplicas`                    | Minimum number of replicas                       | `1`                         |
 | `hpa.maxReplicas`                    | Maximum number of replicas                       | `2`                         |
+| `hpa.cpu.scaleDownStabilizationWindowSeconds` | Set the scaledown stabilization window in seconds (max 3600) | `300`  |
 | `hpa.cpu.targetAverageUtilization`   | Target value of the average of the resource metric | `75`                      |
+| `hpa.customBehavior`                 | autoscaling/v2beta2 Behavior contains the specifications for up- and downscaling behavior (overrides the default use of `scaleDownStabilizationWindowSeconds`) | `{}` |
 | `hpa.customMetrics`                  | autoscaling/v2beta2 Metrics contains the specifications for which to use to calculate the desired replica count (overrides the default use of Average CPU Utilization configured in `targetAverageUtilization`) | `[]`  |
 | `image.pullPolicy`                   | Mailroom image pull policy                       | `IfNotPresent`              |
 | `extraEnvFrom`                       | List of extra environment variables from other data sources to expose|          |
