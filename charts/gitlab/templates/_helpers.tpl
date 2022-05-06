@@ -68,7 +68,10 @@ image repository.
 {{- end -}}
 
 {{- define "gitlab.extraEnvFrom" -}}
-{{- $allExtraEnvFrom := mergeOverwrite (default (dict) .root.Values.global.extraEnvFrom) (default (dict) .root.Values.extraEnvFrom) (default (dict) .local.extraEnvFrom) -}}
+{{- $global := deepCopy (get .root.Values.global "extraEnvFrom" | default (dict)) -}}
+{{- $values := deepCopy (get .root.Values "extraEnvFrom" | default (dict)) -}}
+{{- $local  := deepCopy (get .local "extraEnvFrom" | default (dict)) -}}
+{{- $allExtraEnvFrom := mergeOverwrite $global $values $local -}}
 {{- range $key, $value := $allExtraEnvFrom }}
 - name: {{ $key }}
   valueFrom: 
