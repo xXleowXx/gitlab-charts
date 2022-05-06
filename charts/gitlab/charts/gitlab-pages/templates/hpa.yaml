@@ -21,9 +21,9 @@ spec:
         target:
           type: AverageValue
           averageValue: {{ .Values.hpa.targetAverageValue }}
-  {{- else -}}
+  {{- else }}
     {{- toYaml .Values.hpa.customMetrics | nindent 4 -}}
-  {{- end -}}
+  {{- end }}
   behavior:
   {{- if not .Values.hpa.customBehavior }}
     scaleDown:

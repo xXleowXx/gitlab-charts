@@ -24,12 +24,12 @@ spec:
           averageUtilization: {{ .Values.hpa.cpu.targetAverageUtilization }}
   {{- else -}}
     {{- toYaml .Values.hpa.customMetrics | nindent 4 -}}
-  {{- end -}}
+  {{- end }}
   behavior:
-  {{- if not Values.hpa.customBehavior }}
+  {{- if not .Values.hpa.customBehavior }}
     scaleDown:
       stabilizationWindowSeconds: {{ .Values.hpa.scaleDownStabilizationWindowSeconds }}
   {{- else }}
     {{- toYaml .Values.hpa.customBehavior | nindent 4 -}}
   {{- end }}
-{{- end -}}
+{{- end }}
