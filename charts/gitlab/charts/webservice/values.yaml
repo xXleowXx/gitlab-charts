@@ -123,6 +123,8 @@ puma:
 hpa:
   targetAverageValue: 1
   customMetrics: # optional replacement of HPA metrics definition
+  scaleDownStabilizationWindowSeconds: 300
+  customBehavior: # optional replacement of HPA behavior definition
 
 deployment:
   # terminationGracePeriodSeconds: 30

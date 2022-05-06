@@ -35,6 +35,13 @@ spec:
   {{- else }}
     {{- toYaml .hpa.customMetrics | nindent 4 -}}
   {{- end }}
+  behavior:
+  {{- if not .hpa.customBehavior }}
+    scaleDown:
+      stabilizationWindowSeconds: {{ .hpa.scaleDownStabilizationWindowSeconds }}
+  {{- else }}
+    {{- toYaml .hpa.customBehvior | nindent 4 -}}
+  {{- end }}
 {{- end }}
 {{/* END range deployments */}}
 {{- end }}
