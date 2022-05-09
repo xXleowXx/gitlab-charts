@@ -184,6 +184,7 @@ global:
   ## Rails based portions of this chart share many settings
   appConfig:
     ## https://docs.gitlab.com/charts/charts/globals#general-application-settings
+    # cdnHost:
     enableUsagePing: true
     enableSeatLink: true
     enableImpersonation:
