@@ -82,6 +82,7 @@ logging:
   sshdLogLevel: "ERROR"
 
 config:
+  proxyProtocol: false
   clientAliveInterval: 0
   loginGraceTime: 120
   maxStartups:
