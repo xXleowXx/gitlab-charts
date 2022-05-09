@@ -103,6 +103,9 @@ By default, the GitLab Chart includes an in-cluster PostgreSQL deployment that
 is provided by [`bitnami/PostgreSQL`](https://artifacthub.io/packages/helm/bitnami/postgresql).
 This is for trial purposes only and **not recommended for use in production**.
 
+NOTE:
+As of GitLab Chart 6.0, PostgreSQL 13 is the recommended default version.
+
 ### Redis
 
 It's recommended to set up an
@@ -231,6 +234,7 @@ helm upgrade --install gitlab gitlab/gitlab \
   --set global.hosts.domain=example.com \
   --set global.hosts.externalIP=10.10.10.10 \
   --set certmanager-issuer.email=me@example.com
+  --set postgresql.image.tag=13.3
 ```
 
 Note the following:
