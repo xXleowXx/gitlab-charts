@@ -2056,7 +2056,8 @@ webservice:
         # optional: boolean
 ```
 
-**Note:** The implementation does not support re-using a value name with different content types. You can override the same name with similar content, but no not mix sources (`secretKeyRef`, `configMapKeyRef`, ...).
+Note:  
+The implementation does not support re-using a value name with different content types. You can override the same name with similar content, but no not mix sources (`secretKeyRef`, `configMapKeyRef`, ...).
 
 ## Configure OAuth settings
 
