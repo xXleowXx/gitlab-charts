@@ -131,7 +131,7 @@ podAnnotations: {}
 # Additional pod labels
 podLabels: {}
 
-# Addition job annotations
+# Additional job annotations
 jobAnnotations: {}
 
 ## Create a buckets after minio install
