@@ -226,6 +226,9 @@ global:
       #   cron: "*/15 * * * *"
       # schedule_migrate_external_diffs_worker:
       #   cron: "15 * * * *"
+      ## Prune stale group runners on opted-in namespaces
+      # ci_runners_stale_group_runners_prune_worker_cron:
+      #   cron: "30 * * * *"
       ### GitLab Geo
       # Geo Primary only!
       # geo_prune_event_log_worker:
