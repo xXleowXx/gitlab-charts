@@ -34,6 +34,7 @@ shutdown:
   blackoutSeconds: 10
 
 extraEnv: {}
+extraEnvFrom: {}
 
 annotations: {}
 
