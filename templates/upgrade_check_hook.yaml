@@ -36,10 +36,10 @@ spec:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
       {{- if .Values.upgradeCheck.annotations }}
-      {{- range $key, $value := .Values.upgradeCheck.annotations }}
+      {{-   range $key, $value := .Values.upgradeCheck.annotations }}
       annotations:
         {{ $key }}: {{ $value | quote }}
-      {{- end }}
+      {{-   end }}
       {{- end }}
 
     spec:
