@@ -582,7 +582,6 @@ the Primary site that the Secondary site exists:
 1. On the left sidebar, select **Geo**.
 1. Select **Add site**.
 1. Add the **secondary** site. Use the full URL for the URL.
-   **Do not** select the **This is a primary node** checkbox.
 1. Enter a Name with the `global.geo.nodeName` of the Secondary site. These values must always match exactly, character for character.
 1. Optionally, choose which groups or storage shards should be replicated by the
    **secondary** site. Leave blank to replicate all.
