@@ -679,7 +679,7 @@ specs_without_cluster:
   variables:
     RSPEC_TAGS: ~type:feature
   needs: []
-  parallel: 5
+  parallel: 6
   except:
     refs:
       - /(^docs[\/-].+|.+-docs$)/
@@ -697,7 +697,7 @@ production_specs_without_cluster:
   extends: .production_specs
   variables:
     RSPEC_TAGS: ~type:feature
-  parallel: 5
+  parallel: 6
   except:
     refs:
       - /(^docs[\/-].+|.+-docs$)/
@@ -722,12 +722,6 @@ production_specs_eks:
     name: eks_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "eks-production"
-
-.knapsack-variables:
-  variables:
-    KNAPSACK_REPORT_PATH: "knapsack/master_report.json"
-    KNAPSACK_TEST_FILE_PATTERN: "qa/specs/features/**/*_spec.rb"
-    KNAPSACK_GENERATE_REPORT: "true"
 
 .qa:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:2.15.0
@@ -847,8 +841,7 @@ release_package:
 .qa_branch:
   extends:
     - .qa
-    - .knapsack-variables
-  parallel: 4
+  parallel: 10
   except:
     refs:
       - master
@@ -858,8 +851,7 @@ release_package:
 .qa_production:
   extends:
     - .qa
-    - .knapsack-variables
-  parallel: 4
+  parallel: 10
   only:
     refs:
       - master
@@ -870,7 +862,7 @@ qa_gke:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_gke"
-    TEST_SUITE: '--tag smoke --tag reliable'
+    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke
@@ -879,7 +871,7 @@ qa_eks:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_eks"
-    TEST_SUITE: '--tag smoke --tag reliable'
+    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
@@ -888,7 +880,7 @@ qa_gke_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_gke"
-    TEST_SUITE: '--tag smoke --tag reliable'
+    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
   environment:
     name: gke_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
 
@@ -896,7 +888,7 @@ qa_eks_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: '--tag smoke --tag reliable'
+    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
   environment:
     name: eks_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
 

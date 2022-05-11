@@ -439,7 +439,6 @@ describe 'GitLab Pages' do
             log-format=json
             log-verbose=false
             redirect-http=false
-            use-http2=true
             insecure-ciphers=false
             artifacts-server=http://test-webservice-default.default.svc:8181/api/v4
             artifacts-server-timeout=10
@@ -491,7 +490,6 @@ describe 'GitLab Pages' do
                 tls:
                   minVersion: tls1.0
                   maxVersion: tls1.2
-                useHttp2: false
                 metrics:
                   port: 9999
                 zipCache:
@@ -523,7 +521,6 @@ describe 'GitLab Pages' do
             log-format=text
             log-verbose=true
             redirect-http=true
-            use-http2=false
             insecure-ciphers=true
             artifacts-server=https://randomwebsite.com
             artifacts-server-timeout=50

@@ -224,9 +224,6 @@ global:
       ## Verify custom GitLab Pages domains
       # pages_domain_verification_cron_worker:
       #   cron: "*/15 * * * *"
-      ## Export pseudonymized data
-      # pseudonymizer_worker:
-      #   cron: "0 * * * *"
       # schedule_migrate_external_diffs_worker:
       #   cron: "15 * * * *"
       ### GitLab Geo
@@ -336,13 +333,6 @@ global:
       bucket: gitlab-dependency-proxy
       connection: {}
 
-    ## https://docs.gitlab.com/charts/charts/globals#pseudonymizer-settings
-    pseudonymizer:
-      configMap:
-      bucket: gitlab-pseudo
-      connection: {}
-        # secret:
-        # key:
     backups:
       bucket: gitlab-backups
       tmpBucket: tmp
@@ -669,7 +659,7 @@ global:
       # ensuring that the image tag is available from both instances. The digest can be
       # found in the 'sync_images' job.
       #   https://dev.gitlab.org/gitlab/charts/components/images/-/tags
-      tag: 1.18.20@sha256:f0bc9adaccd131d993fdabf6aa39fe4ff0e22035c2deca20341074c9e2e40a5b
+      tag: 1.18.20@sha256:8d27c191af306cafddba2f293c5613f8966363f779d79a5599ad0231e60069e4
       # pullPolicy: IfNotPresent
       # pullSecrets: []
     securityContext:
@@ -702,6 +692,25 @@ global:
   #   SOME_KEY: some_value
   #   SOME_OTHER_KEY: some_other_value
 
+  ## https://docs.gitlab.com/charts/charts/globals
+  extraEnvFrom: {}
+  #   MY_NODE_NAME:
+  #     fieldRef:
+  #       fieldPath: spec.nodeName
+  #   MY_CPU_REQUEST:
+  #     resourceFieldRef:
+  #       containerName: test-container
+  #       resource: requests.cpu
+  #   SECRET_THING:
+  #     secretKeyRef:
+  #       name: special-secret
+  #       key: special_token
+  #       # optional: boolean
+  #   CONFIG_STRING:
+  #     configMapKeyRef:
+  #       name: useful-config
+  #       key: some-string
+  #       # optional: boolean
 ## End of global
 
 upgradeCheck:
