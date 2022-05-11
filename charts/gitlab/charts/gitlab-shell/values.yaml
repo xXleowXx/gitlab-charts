@@ -89,6 +89,7 @@ config:
     rate: 30
     full: 100
   proxyProtocol: false
+  proxyPolicy: "use"
 
 ## Allow to overwrite under which User and Group we're running.
 securityContext:
