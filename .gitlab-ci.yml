@@ -916,7 +916,7 @@ qa_eks_manual_full_suite:
     on_stop: stop_review_eks
   when: manual
 
-knapsack-report:
+knapsack-qa-report:
   image:
     name: registry.gitlab.com/gitlab-org/gitlab/gitlab-ee-qa:master
     entrypoint: [""]
