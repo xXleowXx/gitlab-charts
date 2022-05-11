@@ -263,7 +263,8 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
    the application is reachable, log in.
 
 1. Log in to GitLab, and upload your GitLab license file by navigating to
-   `/admin/license`. **This step is required for Geo to function.**
+   `admin/application_settings/general` and expanding the `Add License` section.
+   **This step is required for Geo to function.**
 
 ## Set the Geo Primary site
 
