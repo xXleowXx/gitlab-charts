@@ -35,6 +35,7 @@ for more information on how the global variables work.
 - [Annotations](#annotations)
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
+- [extraEnvFrom](#extraenvfrom)
 - [OAuth](#configure-oauth-settings)
 - [Outgoing email](#outgoing-email)
 - [Platform](#platform)
@@ -1980,6 +1981,39 @@ global:
     SOME_KEY: some_value
     SOME_OTHER_KEY: some_other_value
 ```
+
+## extraEnvFrom
+
+`extraEnvFrom` allows you to expose additional environment variables form other data source in all containers in the pods. Extra environment variables can be set up at `global` level (`global.extraEnvFrom`), GitLab chart top level (`extraEnvFrom`) or sub-chart level (`<subchart_name>.extraEnvFrom`) ```
+
+Below is an example use of `extraEnvFrom`:
+
+```yaml
+global:
+  extraEnvFrom:
+    MY_NODE_NAME:
+      fieldRef:
+        fieldPath: spec.nodeName
+    MY_CPU_REQUEST:
+      resourceFieldRef:
+        containerName: test-container
+        resource: requests.cpu
+extraEnvFrom:
+  SECRET_THING:
+    secretKeyRef:
+      name: special-secret
+      key: special_token
+webservice:
+  extraEnvFrom:
+    CONFIG_STRING:
+      configMapKeyRef:
+        name: useful-config
+        key: some-string
+        # optional: boolean
+```
+
+NOTE:
+The implementation does not support re-using a value name with different content types. You can override the same name with similar content, but no not mix sources (`secretKeyRef`, `configMapKeyRef`, ...).
 
 ## Configure OAuth settings
 

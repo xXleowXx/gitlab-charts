@@ -692,6 +692,25 @@ global:
   #   SOME_KEY: some_value
   #   SOME_OTHER_KEY: some_other_value
 
+  ## https://docs.gitlab.com/charts/charts/globals
+  extraEnvFrom: {}
+  #   MY_NODE_NAME:
+  #     fieldRef:
+  #       fieldPath: spec.nodeName
+  #   MY_CPU_REQUEST:
+  #     resourceFieldRef:
+  #       containerName: test-container
+  #       resource: requests.cpu
+  #   SECRET_THING:
+  #     secretKeyRef:
+  #       name: special-secret
+  #       key: special_token
+  #       # optional: boolean
+  #   CONFIG_STRING:
+  #     configMapKeyRef:
+  #       name: useful-config
+  #       key: some-string
+  #       # optional: boolean
 ## End of global
 
 upgradeCheck:
