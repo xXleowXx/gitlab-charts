@@ -465,7 +465,7 @@ After configuration above is prepared:
 of your Primary PostgreSQL node:
 
    ```shell
-   gitlab-ctl replicate-geo-database --slot-name=geo_2 --host=PRIMARY_DATABASE_HOST
+   gitlab-ctl replicate-geo-database --slot-name=geo_2 --host=PRIMARY_DATABASE_HOST --sslmode=verify-ca
    ```
 
 1. After replication has finished, we must reconfigure the Omnibus GitLab one last time
