@@ -68,6 +68,7 @@ global:
     pages:
       name: pages.example.com
       https: false
+    ssh: gitlab.example.com
 ```
 
 | Name                   | Type    | Default       | Description |
@@ -94,6 +95,7 @@ global:
 | `kas.https`            | Boolean | `false`       | If `hosts.https` or `kas.https` are `true`, the KAS external URL will use `wss://` instead of `ws://`. |
 | `pages.name`           | String  | `pages`       | The hostname for GitLab Pages. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 | `pages.https`          | String  |               | If `global.pages.https` or `global.hosts.pages.https` or `global.hosts.https` are `true`, then URL for GitLab Pages in the Project settings UI will use `https://` instead of `http://`. |
+| `ssh`                  | String  |               | The hostname for SSH. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings.
 
 ### hostSuffix
 
