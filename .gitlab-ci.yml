@@ -68,6 +68,9 @@ dependency_scanning:
 secret_detection:
   needs: []
   before_script: []
+sast:
+  needs: []
+  before_script: []
 
 before_script:
   - source scripts/ci/autodevops.sh
