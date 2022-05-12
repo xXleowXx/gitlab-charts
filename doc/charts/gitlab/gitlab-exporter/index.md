@@ -41,7 +41,7 @@ to the `helm install` command using the `--set` flags.
 | `extraVolumeMounts`                       |                                                            | List of extra volumes mounts to do                                                                                                                                         |
 | `extraVolumes`                            |                                                            | List of extra volumes to create                                                                                                                                            |
 | `extraEnv`                                |                                                            | List of extra environment variables to expose                                                                                                                              |
-| `extraEnvFrom`                            |                                            | List of extra environment variables from other data source to expose                                                                                                                                  |
+| `extraEnvFrom`                            |                                                            | List of extra environment variables from other data sources to expose                                                                                                      |
 | `image.pullPolicy`                        | `IfNotPresent`                                             | GitLab image pull policy                                                                                                                                                   |
 | `image.pullSecrets`                       |                                                            | Secrets for the image repository                                                                                                                                           |
 | `image.repository`                        | `registry.gitlab.com/gitlab-org/build/cng/gitlab-exporter` | GitLab Exporter image repository                                                                                                                                           |
@@ -93,7 +93,7 @@ SOME_OTHER_KEY=some_other_value
 
 ### extraEnvFrom
 
-`extraEnvFrom` allows you to expose additional environment variables from other data source in all containers in the pods.
+`extraEnvFrom` allows you to expose additional environment variables from other data sources in all containers in the pods.
 
 Below is an example use of `extraEnvFrom`:
 

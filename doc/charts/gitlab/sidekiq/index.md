@@ -51,7 +51,7 @@ to the `helm install` command using the `--set` flags:
 | `extraVolumeMounts`                        |                                                              | String template of extra volume mounts to configure                                                   |
 | `extraVolumes`                             |                                                              | String template of extra volumes to configure                                                         |
 | `extraEnv`                                 |                                                              | List of extra environment variables to expose                                                         |
-| `extraEnvFrom`                            |                                            | List of extra environment variables from other data source to expose                                                                                                                                  |
+| `extraEnvFrom`                             |                                                              | List of extra environment variables from other data sources to expose                                 |
 | `gitaly.serviceName`                       | `gitaly`                                                     | Gitaly service name                                                                                   |
 | `health_checks.port`                       | `3808`                                                       | Health check server port                                                                                 |
 | `hpa.targetAverageValue`                   | `350m`                                                       | Set the autoscaling target value                                                                      |
@@ -163,7 +163,7 @@ pod. Pod-level `extraEnv` settings are not added to [init containers](https://ku
 
 ### extraEnvFrom
 
-`extraEnvFrom` allows you to expose additional environment variables from other data source in all containers in the pods.
+`extraEnvFrom` allows you to expose additional environment variables from other data sources in all containers in the pods.
 
 Below is an example use of `extraEnvFrom`:
 
