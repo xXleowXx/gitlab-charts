@@ -57,7 +57,7 @@ Table below contains all the possible charts configurations that can be supplied
 | `extraVolumes`              | List of extra volumes to create          |                   |
 | `extraVolumeMounts`         | List of extra volumes mounts to do      |                   |
 | `extraEnv`                  | List of extra environment variables to expose |              |
-| `extraEnvFrom`              | List of extra environment variables from other data source to expose|                              |
+| `extraEnvFrom`              | List of extra environment variables from other data sources to expose|                              |
 | `bootsnap.enabled`          | Enable the Bootsnap cache for Rails      | `true`            |
 
 ## Chart configuration examples
@@ -84,7 +84,7 @@ SOME_OTHER_KEY=some_other_value
 
 ### extraEnvFrom
 
-`extraEnvFrom` allows you to expose additional environment variables from other data source in all containers in the pods.
+`extraEnvFrom` allows you to expose additional environment variables from other data sources in all containers in the pods.
 
 Below is an example use of `extraEnvFrom`:
 
