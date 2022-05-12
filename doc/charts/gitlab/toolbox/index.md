@@ -107,7 +107,7 @@ gitlab:
 | `serviceAccount.create`                     | Flag for creating a ServiceAccount           | false                        |
 | `serviceAccount.name`                       | Name of ServiceAccount to use                |                              |
 | `tolerations`                               | Tolerations to add to the Toolbox        |                              |
-| `extraEnvFrom`                              | List of extra environment variables from other data source to expose  | | 
+| `extraEnvFrom`                              | List of extra environment variables from other data sources to expose  | |
 
 ## Configuring backups
 

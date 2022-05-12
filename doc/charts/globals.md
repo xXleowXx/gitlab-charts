@@ -1984,7 +1984,7 @@ global:
 
 ## extraEnvFrom
 
-`extraEnvFrom` allows you to expose additional environment variables form other data source in all containers in the pods. Extra environment variables can be set up at `global` level (`global.extraEnvFrom`), GitLab chart top level (`extraEnvFrom`) or sub-chart level (`<subchart_name>.extraEnvFrom`) ```
+`extraEnvFrom` allows you to expose additional environment variables from other data sources in all containers in the pods. Extra environment variables can be set up at `global` level (`global.extraEnvFrom`), GitLab chart top level (`extraEnvFrom`) or sub-chart level (`<subchart_name>.extraEnvFrom`).
 
 Below is an example use of `extraEnvFrom`:
 
@@ -2013,7 +2013,7 @@ webservice:
 ```
 
 NOTE:
-The implementation does not support re-using a value name with different content types. You can override the same name with similar content, but no not mix sources (`secretKeyRef`, `configMapKeyRef`, ...).
+The implementation does not support re-using a value name with different content types. You can override the same name with similar content, but no not mix sources like `secretKeyRef`, `configMapKeyRef`, etc.
 
 ## Configure OAuth settings
 
