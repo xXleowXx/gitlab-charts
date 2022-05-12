@@ -60,11 +60,25 @@ describe 'gitlab-shell configuration' do
   context 'when PROXY protocol is set' do
     using RSpec::Parameterized::TableSyntax
 
-    where(:in_proxy_protocol, :out_proxy_protocol, :expected_suffix) do
-      false | false | "::"
-      true  | false | ":PROXY:"
-      true  | true  | ":PROXY:PROXY"
-      false | true  | "::PROXY"
+    where(:ssh_daemon, :in_proxy_protocol, :out_proxy_protocol, :proxy_policy, :expected_suffix) do
+      "openssh"     | false | false | "use"     | "::"
+      "openssh"     | true  | false | "use"     | ":PROXY:"
+      "openssh"     | true  | true  | "use"     | ":PROXY:PROXY"
+      "openssh"     | false | true  | "use"     | "::PROXY"
+      "openssh"     | false | false | "use"     | "::"
+      "openssh"     | true  | false | "use"     | ":PROXY:"
+      "openssh"     | true  | true  | "use"     | ":PROXY:PROXY"
+      "openssh"     | false | true  | "use"     | "::PROXY"
+
+      "gitlab-sshd" | false | false | "use"     | "::PROXY"
+      "gitlab-sshd" | false | true  | "use"     | "::PROXY"
+      "gitlab-sshd" | true  | false | "use"     | ":PROXY:PROXY"
+      "gitlab-sshd" | true  | false | "require" | ":PROXY:PROXY"
+      "gitlab-sshd" | true  | true  | "require" | ":PROXY:PROXY"
+      "gitlab-sshd" | true  | true  | "ignore"  | ":PROXY:PROXY"
+      "gitlab-sshd" | true  | false | "ignore"  | ":PROXY:PROXY"
+      "gitlab-sshd" | true  | false | "reject"  | ":PROXY:"
+      "gitlab-sshd" | true  | true  | "reject"  | ":PROXY:PROXY"
     end
 
     with_them do
@@ -76,8 +90,10 @@ describe 'gitlab-shell configuration' do
                 proxyProtocol: #{in_proxy_protocol}
           gitlab:
             gitlab-shell:
+              sshDaemon: "#{ssh_daemon}"
               config:
                 proxyProtocol: #{out_proxy_protocol}
+                proxyPolicy: #{proxy_policy}
         )).deep_merge(default_values)
       end
 
