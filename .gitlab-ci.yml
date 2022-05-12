@@ -743,7 +743,7 @@ production_specs_eks:
     - fi
     - SIGNUP_DISABLED=true QA_DEBUG=true GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD GITLAB_ADMIN_USERNAME=root GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD EE_LICENSE=$REVIEW_APPS_EE_LICENSE gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL -- $TEST_SUITE
   artifacts:
-    when: on_failure
+    when: always
     expire_in: 7d
     paths:
     - ./gitlab-qa-run-*
@@ -915,6 +915,23 @@ qa_eks_manual_full_suite:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
   when: manual
+
+knapsack-qa-report:
+  image:
+    name: registry.gitlab.com/gitlab-org/gitlab/gitlab-ee-qa:master
+    entrypoint: [""]
+  before_script:
+    - cd /home/gitlab/qa
+  allow_failure: true
+  stage: report
+  variables:
+    # knapsack report upload uses gitlab-qa image with code already there
+    GIT_STRATEGY: none
+    QA_KNAPSACK_REPORT_FILE_PATTERN: $CI_PROJECT_DIR/gitlab-qa-run-*/gitlab-*-qa-*/knapsack/*/*.json
+  script:
+    - bundle exec rake "knapsack:upload[$QA_KNAPSACK_REPORT_FILE_PATTERN]"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $KNAPSACK_GENERATE_REPORT == "true"'
 
 issue-bot:
   stage: report
