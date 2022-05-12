@@ -419,7 +419,7 @@ describe 'kas configuration' do
       context 'when deployment.minReadySeconds is given' do
         let(:deployment_values) { { 'minReadySeconds' => 60 } }
 
-        it 'contains the loadBalancerIP customization' do
+        it 'contains the minReadySeconds customization' do
           expect(deployment['spec']).to include('minReadySeconds' => 60)
         end
       end
