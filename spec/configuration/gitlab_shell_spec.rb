@@ -59,8 +59,8 @@ describe 'gitlab-shell configuration' do
     using RSpec::Parameterized::TableSyntax
 
     where(:in_proxy_protocol, :out_proxy_protocol, :expected_suffix) do
-      false | false | ""
-      true  | false | ":PROXY"
+      false | false | "::"
+      true  | false | ":PROXY:"
       true  | true  | ":PROXY:PROXY"
       false | true  | "::PROXY"
     end

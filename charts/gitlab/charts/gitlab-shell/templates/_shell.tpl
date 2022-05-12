@@ -14,11 +14,5 @@ See: https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-serv
 {{- if .Values.config.proxyProtocol -}}
 {{-   $outbound = "PROXY" -}}
 {{- end -}}
-{{- if (not (empty $inbound)) -}}
-:{{ $inbound }}
-{{- end -}}
-{{- if (not (empty $outbound)) -}}
-{{-   if (empty $inbound) -}}:{{- end -}}
-:{{ $outbound }}
-{{- end -}}
+:{{ $inbound }}:{{ $outbound }}
 {{- end -}}
