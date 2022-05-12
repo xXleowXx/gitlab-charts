@@ -40,6 +40,7 @@ variables:
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
+  SCAN_KUBERNETES_MANIFESTS: "true"
 
 stages:
   - prepare
@@ -60,6 +61,7 @@ stages:
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
 dependency_scanning:
   needs: []
   before_script: []
