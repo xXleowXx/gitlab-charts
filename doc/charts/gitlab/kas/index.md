@@ -105,6 +105,7 @@ You can pass these parameters to the `helm install` command by using the `--set`
 | `service.type` | `ClusterIP` | Service type. |
 | `tolerations` | `[]` | Toleration labels for pod assignment. |
 | `customConfig` | `{}` | When given, merges the default `kas` configuration with these values giving precedence to those defined here. |
+| `deployment.minReadySeconds` | `0` | Minimum number of seconds that must pass before a `kas` pod is considered ready. |
 | `deployment.strategy` | `{}` | Allows one to configure the update strategy utilized by the deployment. |
 
 ## Test the `kas` chart
