@@ -85,7 +85,7 @@ privateApi: {}
 
 deployment:
   strategy: {}
-  # minReadySeconds: 300
+  # minReadySeconds: 0
 
 ## Allow to overwrite under which User and Group we're running.
 securityContext:
