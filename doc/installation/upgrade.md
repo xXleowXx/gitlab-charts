@@ -18,14 +18,14 @@ Ongoing work to support this feature can be tracked via
 [the GitLab Operator issue](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/59).
 
 WARNING:
+If you are upgrading from the `5.x` version of the chart to the latest `6.0` release, you need
+to first update to the latest `5.10.x` patch release in order for the upgrade to work.
+The [6.0 release notes](../releases/6_0.md) describe the supported upgrade path.
+
+WARNING:
 If you are upgrading from the `4.x` version of the chart to the latest `5.0` release, you need
 to first update to the latest `4.12.x` patch release in order for the upgrade to work.
 The [5.0 release notes](../releases/5_0.md) describe the supported upgrade path.
-
-WARNING:
-If you are upgrading from the `3.x` version of the chart to the latest `4.0` release, you need
-to first update to the latest `3.3.x` patch release in order for the upgrade to work.
-The [4.0 release notes](../releases/4_0.md) describe the supported upgrade path.
 
 We also recommend that you take a [backup](../backup-restore/index.md) first. Also note that you
 must provide all values using `helm upgrade --set key=value` syntax or `-f values.yaml` instead of
@@ -77,19 +77,19 @@ The following are the steps to upgrade GitLab to a newer version:
 During a major database upgrade, we ask you to set `gitlab.migrations.enabled` set to `false`.
 Ensure that you explicitly set it back to `true` for future updates.
 
-## Upgrade the bundled PostgreSQL to version 12
+## Upgrade the bundled PostgreSQL to version 13
 
 NOTE:
 If you aren't using the bundled PostgreSQL chart (`postgresql.install` is false), you do not need to
 perform this step.
 
-Upgrading to PostgreSQL 12 for GitLab 14.x is required. PostgreSQL 12 is supported by GitLab 13.4 and later. [PostgreSQL 12 brings significant performance improvements](https://www.postgresql.org/about/news/postgresql-12-released-1976/).
+PostgreSQL 13 is supported by GitLab 14.1 and later. [PostgreSQL 13 brings significant performance improvements](https://www.postgresql.org/about/news/postgresql-13-released-2077/).
 
-To upgrade the bundled PostgreSQL to version 12, the following steps are required:
+To upgrade the bundled PostgreSQL to version 13, the following steps are required:
 
 1. [Prepare the existing database](database_upgrade.md#prepare-the-existing-database).
 1. [Delete existing PostgreSQL data](database_upgrade.md#delete-existing-postgresql-data).
-1. Update the `postgresql.image.tag` value to `12.4.0` and [reinstall the chart](database_upgrade.md#upgrade-gitlab) to create a new PostgreSQL 12 database.
+1. Update the `postgresql.image.tag` value to `13.6.0` and [reinstall the chart](database_upgrade.md#upgrade-gitlab) to create a new PostgreSQL 13 database.
 1. [Restore the database](database_upgrade.md#restore-the-database).
 
 ## Upgrade the bundled PostgreSQL chart
