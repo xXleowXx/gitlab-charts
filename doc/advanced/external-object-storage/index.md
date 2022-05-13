@@ -175,7 +175,6 @@ Below is an example of the configuration options:
 --set global.appConfig.dependencyProxy.connection.key=connection
 ```
 
-
 See the [charts/globals documentation on appConfig](../../charts/globals.md#configure-appconfig-settings) for full details.
 
 Create the secret(s) per the [connection details documentation](../../charts/globals.md#connection), and then configure the chart to use the provided secrets. Note, the same secret can be used for all of them.
