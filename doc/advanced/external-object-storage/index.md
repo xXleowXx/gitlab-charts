@@ -34,7 +34,7 @@ You can enable this in two ways:
 - In GitLab, enable [server side encryption headers](../../charts/globals.md#storage_options).
 
 These two options are not mutually exclusive. You can set a default encryption
-policy but also enable server-side encryption headers to override those defaults.
+policy, but also enable server-side encryption headers to override those defaults.
 
 See the [GitLab documentation on encrypted S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets)
 for more details.
@@ -81,8 +81,9 @@ Then, disable MinIO and set these global settings:
 
 Be sure to create Azure containers for the [default names or set the container names in the bucket configuration](../../charts/globals.md#specify-buckets).
 
-> **Note**: Should you experience requests failing with `Requests to the local network are not allowed`,
-> please see the [Troubleshooting section](#troubleshooting)
+NOTE:
+If you experience requests failing with `Requests to the local network are not allowed`,
+see the [Troubleshooting section](#troubleshooting).
 
 ## Docker Registry images
 
@@ -117,10 +118,28 @@ Examples for [S3](https://docs.docker.com/registry/storage-drivers/s3/)(S3 compa
 ## LFS, Artifacts, Uploads, Packages, External Diffs, Pseudonymizer, Terraform State, Dependency Proxy
 
 Configuration of object storage for LFS, artifacts, uploads, packages, external
-diffs, and pseudonymizer is done via the `global.appConfig.lfs`,
-`global.appConfig.artifacts`, `global.appConfig.uploads`,
-`global.appConfig.packages`, `global.appConfig.externalDiffs`,
-`global.appConfig.dependencyProxy` and `global.appConfig.pseudonymizer` keys.
+diffs, and pseudonymizer is done via the following keys:
+
+- `global.appConfig.lfs`
+- `global.appConfig.artifacts`
+- `global.appConfig.uploads`
+- `global.appConfig.packages`
+- `global.appConfig.externalDiffs`
+- `global.appConfig.dependencyProxy`
+- `global.appConfig.pseudonymizer`
+
+Note also that:
+
+- A different bucket is needed for each, otherwise performing a restore from 
+  backup doesn't function properly.
+- Storing MR diffs on external storage is not enabled by default, so,
+  for the object storage settings for `externalDiffs` to take effect,
+  `global.appConfig.externalDiffs.enabled` key should have a `true` value.
+- The dependency proxy feature is not enabled by default, so,
+  for the object storage settings for `dependencyProxy` to take effect,
+  `global.appConfig.dependencyProxy.enabled` key should have a `true` value.
+
+Below is an example of the configuration options:
 
 ```shell
 --set global.appConfig.lfs.bucket=gitlab-lfs-storage
@@ -156,16 +175,6 @@ diffs, and pseudonymizer is done via the `global.appConfig.lfs`,
 --set global.appConfig.dependencyProxy.connection.key=connection
 ```
 
-> **Notes**:
->
-> - A different bucket is needed for each, otherwise performing a restore from 
->   backup woulnd't function properly.
-> - Storing MR diffs on external storage is not enabled by default. So,
->   for the object storage settings for `externalDiffs` to take effect,
->   `global.appConfig.externalDiffs.enabled` key should have a `true` value.
-> - The dependency proxy feature is not enabled by default. So,
->   for the object storage settings for `dependencyProxy` to take effect,
->   `global.appConfig.dependencyProxy.enabled` key should have a `true` value.
 
 See the [charts/globals documentation on appConfig](../../charts/globals.md#configure-appconfig-settings) for full details.
 
@@ -220,9 +229,9 @@ For Google Cloud Storage (GCS):
 
 See the [backup/restore object storage documentation](../../backup-restore/index.md#object-storage) for full details.
 
-> **Note**:
-> To backup or restore files from the other object storage locations, the configuration file needs to be
-> configured to authenticate as a user with sufficient access to read/write to all GitLab buckets.
+NOTE:
+To backup or restore files from the other object storage locations, the configuration file needs to be
+configured to authenticate as a user with sufficient access to read/write to all GitLab buckets.
 
 ### Backups storage example
 
@@ -283,5 +292,5 @@ See the [backup/restore object storage documentation](../../backup-restore/index
 ### Azure Blob: URL [FILTERED] is blocked: Requests to the local network are not allowed
 
 This happens when the Azure Blob hostname is resolved to a [RFC1918 (local / private) IP address](https://docs.microsoft.com/en-us/azure/storage/common/storage-private-endpoints#dns-changes-for-private-endpoints). As a workaround,
-please allow [Outbound requests](https://docs.gitlab.com/ee/security/webhooks.html#allowlist-for-local-requests)
+allow [Outbound requests](https://docs.gitlab.com/ee/security/webhooks.html#allowlist-for-local-requests)
 for your Azure Blob hostname (`yourinstance.blob.core.windows.net`).
