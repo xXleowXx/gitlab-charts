@@ -248,7 +248,7 @@ You can find the full explanation and workaround in [Migrating from Helm v2 to H
 
 ## UPGRADE FAILED: type mismatch on mailroom: `%!t(<nil>)`
 
-An error like this can happen if you do not provide a valid map for a key that expects a map. 
+An error like this can happen if you do not provide a valid map for a key that expects a map.
 
 For example, the configuration below will cause this error:
 
@@ -476,7 +476,7 @@ In that script, `update-ca-certificates`:
    WARNING: unique_name does not contain exactly one certificate or CRL: skipping
    ```
 
-[Troubleshoot the init container's status and logs](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-init-containers/#getting-details-about-init-containers).
+[Troubleshoot the init container's status and logs](https://kubernetes.io/docs/tasks/debug/debug-application/debug-init-containers/).
 For example, to view the logs for the certificates init container and check for warnings:
 
 ```plaintext

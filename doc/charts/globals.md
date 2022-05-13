@@ -35,6 +35,7 @@ for more information on how the global variables work.
 - [Annotations](#annotations)
 - [Tracing](#tracing)
 - [extraEnv](#extraenv)
+- [extraEnvFrom](#extraenvfrom)
 - [OAuth](#configure-oauth-settings)
 - [Outgoing email](#outgoing-email)
 - [Platform](#platform)
@@ -919,10 +920,6 @@ global:
       deliveryMethod: sidekiq
       authToken: {}
 
-    pseudonymizer:
-      configMap:
-      bucket: gitlab-pseudo
-      connection: {}
     cron_jobs: {}
     sentry:
       enabled: false
@@ -1444,46 +1441,6 @@ Example configuration `--set` items, when using the global chart:
 
 Due to the complexity of using `--set` arguments, a user may wish to use a YAML snippet,
 passed to `helm` with `-f omniauth.yaml`.
-
-### Pseudonymizer settings
-
-Use these settings to configure the [Pseudonymizer service](https://docs.gitlab.com/ee/administration/pseudonymizer.html).
-
-```yaml
-global:
-  appConfig:
-    pseudonymizer:
-      configMap:
-      bucket: gitlab-pseudo
-      connection: {}
-```
-
-| Name          | Type    | Default         | Description |
-|:------------- |:-------:|:--------------- |:----------- |
-| `bucket`      | String  | `gitlab-pseudo` | Name of the bucket to use from the object storage provider. |
-| `configMap`   | String  |                 | [See Below](#configmap). |
-| `connnection` |         | `{}`            | [See Below](#connection). |
-
-#### configMap
-
-Name of the `configMap` containing a custom manifest file. Defaults to empty.
-
-GitLab ships with a [default manifest file for Pseudonymizer](https://gitlab.com/gitlab-org/gitlab/blob/master/config/pseudonymizer.yml).
-Users can provide a custom one as a configMap:
-
-1. First, create a configMap:
-
-   ```shell
-   kubectl create configmap <name of the configmap> --from-file=pseudonymizer.yml=<path to pseudonymizer_config.yml>
-   ```
-
-   Make sure the key specified in the above command to create configMap is `pseudonymizer.yml`.
-   It is used to point the service to the correct location and an incorrect key will cause
-   Pseudonymizer to not work.
-
-1. Then, pass the argument `--set global.appConfig.pseudonymizer.configMap=<name of the configmap>`
-   to the `helm install` command to instruct GitLab to use this manifest instead of the
-   default one.
 
 #### connection
 
@@ -2024,6 +1981,39 @@ global:
     SOME_KEY: some_value
     SOME_OTHER_KEY: some_other_value
 ```
+
+## extraEnvFrom
+
+`extraEnvFrom` allows you to expose additional environment variables from other data sources in all containers in the pods. Extra environment variables can be set up at `global` level (`global.extraEnvFrom`), GitLab chart top level (`extraEnvFrom`) or sub-chart level (`<subchart_name>.extraEnvFrom`).
+
+Below is an example use of `extraEnvFrom`:
+
+```yaml
+global:
+  extraEnvFrom:
+    MY_NODE_NAME:
+      fieldRef:
+        fieldPath: spec.nodeName
+    MY_CPU_REQUEST:
+      resourceFieldRef:
+        containerName: test-container
+        resource: requests.cpu
+extraEnvFrom:
+  SECRET_THING:
+    secretKeyRef:
+      name: special-secret
+      key: special_token
+webservice:
+  extraEnvFrom:
+    CONFIG_STRING:
+      configMapKeyRef:
+        name: useful-config
+        key: some-string
+        # optional: boolean
+```
+
+NOTE:
+The implementation does not support re-using a value name with different content types. You can override the same name with similar content, but no not mix sources like `secretKeyRef`, `configMapKeyRef`, etc.
 
 ## Configure OAuth settings
 

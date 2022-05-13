@@ -26,7 +26,6 @@ To use GitLab Geo with the GitLab Helm chart, the following requirements must be
   have WAL support required for replication.
 - The supplied database must:
   - Support replication.
-  - The primary database must be reachable by the
   - The primary database must be reachable by the primary site,
     and all secondary database nodes (for replication).
   - Secondary databases only need to be reachable by the secondary sites.

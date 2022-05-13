@@ -105,9 +105,9 @@ The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-
 
 ### Sidekiq pod never becomes ready
 
-Upgrading to `5.9.x` may lead to a situation where the Sidekiq pod does not become ready. The pod starts and appears to work properly but never listens on the `3807`, the default metrics endpoint port (`metrics.port`). As a result, the Sidekiq pod is not considered to be ready. 
+Upgrading to `5.9.x` may lead to a situation where the Sidekiq pod does not become ready. The pod starts and appears to work properly but never listens on the `3807`, the default metrics endpoint port (`metrics.port`). As a result, the Sidekiq pod is not considered to be ready.
 
-This can be resolved from the **Admin Area**: 
+This can be resolved from the **Admin Area**:
 
   1. On the top bar, select **Menu > Admin**.
   1. On the left sidebar, select **Settings > Metrics and profiling**.
@@ -115,7 +115,7 @@ This can be resolved from the **Admin Area**:
   1. Ensure that **Enable health and performance metrics endpoint** is enabled.
   1. Restart the affected pods.
 
-There is additional conversation about this scenario in a [closed issue](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3198). 
+There is additional conversation about this scenario in a [closed issue](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3198).
 
 ## Upgrade steps for 5.5 release
 
