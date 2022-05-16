@@ -841,7 +841,7 @@ release_package:
 .qa_branch:
   extends:
     - .qa
-  parallel: 10
+  parallel: 7
   except:
     refs:
       - master
@@ -851,7 +851,7 @@ release_package:
 .qa_production:
   extends:
     - .qa
-  parallel: 10
+  parallel: 7
   only:
     refs:
       - master
