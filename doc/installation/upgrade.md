@@ -77,11 +77,13 @@ The following are the steps to upgrade GitLab to a newer version:
 During a major database upgrade, we ask you to set `gitlab.migrations.enabled` set to `false`.
 Ensure that you explicitly set it back to `true` for future updates.
 
-## Upgrade the bundled PostgreSQL to version 13
+## Upgrade the bundled PostgreSQL chart
 
 NOTE:
 If you aren't using the bundled PostgreSQL chart (`postgresql.install` is false), you do not need to
 perform this step.
+
+### Upgrade the bundled PostgreSQL to version 13
 
 PostgreSQL 13 is supported by GitLab 14.1 and later. [PostgreSQL 13 brings significant performance improvements](https://www.postgresql.org/about/news/postgresql-13-released-2077/).
 
@@ -92,14 +94,20 @@ To upgrade the bundled PostgreSQL to version 13, the following steps are require
 1. Update the `postgresql.image.tag` value to `13.6.0` and [reinstall the chart](database_upgrade.md#upgrade-gitlab) to create a new PostgreSQL 13 database.
 1. [Restore the database](database_upgrade.md#restore-the-database).
 
-## Upgrade the bundled PostgreSQL chart
+### Upgrade the bundled PostgreSQL to version 12
 
 As part of the `5.0.0` release of this chart, we upgraded the bundled PostgreSQL version from `11.9.0` to `12.7.0`. This is
  not a drop in replacement. Manual steps need to be performed to upgrade the database.
 The steps have been documented in the [5.0 upgrade steps](#upgrade-steps-for-50-release).
 
+### Upgrade the bundled PostgreSQL to version 11
+
 As part of the `4.0.0` release of this chart, we upgraded the bundled [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) from `7.7.0` to `8.9.4`. This is not a drop in replacement. Manual steps need to be performed to upgrade the database.
 The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-release).
+
+## Upgrade steps for the 6.0 release
+
+To upgrade to the `6.0` release you must first be on the latest `5.10.x` patch release. There isn't any additional manual changes required in `6.0` so you can [follow the regular release upgrade steps](#steps).
 
 ## Upgrade steps for 5.9 release
 
