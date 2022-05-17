@@ -11,7 +11,8 @@ See: https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-serv
 {{-   $inbound = "PROXY" -}}
 {{- end -}}
 {{- $outbound := "" -}}
-{{- if .Values.config.proxyProtocol -}}
+{{- $proxySupported := not (eq .Values.config.proxyPolicy "reject" ) }}
+{{- if (or .Values.config.proxyProtocol (and $proxySupported (eq .Values.sshDaemon "gitlab-sshd"))) }}
 {{-   $outbound = "PROXY" -}}
 {{- end -}}
 :{{ $inbound }}:{{ $outbound }}

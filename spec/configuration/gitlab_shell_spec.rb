@@ -25,7 +25,11 @@ describe 'gitlab-shell configuration' do
   end
 
   context 'when gitlab-sshd is enabled' do
+    using RSpec::Parameterized::TableSyntax
+
     let(:proxy_protocol) { true }
+    let(:proxy_policy) { "require" }
+
     let(:values) do
       YAML.safe_load(%(
         gitlab:
@@ -33,36 +37,42 @@ describe 'gitlab-shell configuration' do
             sshDaemon: "gitlab-sshd"
             config:
               proxyProtocol: #{proxy_protocol}
+              proxyPolicy: #{proxy_policy}
       )).deep_merge(default_values)
     end
 
-    shared_examples 'gitlab-sshd config' do
-      let(:config) { t.dig('ConfigMap/test-gitlab-shell', 'data', 'config.yml.tpl') }
+    let(:config) { t.dig('ConfigMap/test-gitlab-shell', 'data', 'config.yml.tpl') }
 
-      it 'renders gitlab-sshd config' do
-        expect_successful_exit_code
-        expect(config).to match(/^sshd:$/)
-        expect(config).to include("proxy_protocol: #{proxy_protocol}")
-      end
-    end
-
-    it_behaves_like 'gitlab-sshd config'
-
-    context 'when proxyProtocol is disabled' do
-      let(:proxy_protocol) { false }
-
-      it_behaves_like 'gitlab-sshd config'
+    it 'renders gitlab-sshd config' do
+      expect_successful_exit_code
+      expect(config).to match(/^sshd:$/)
+      expect(config).to include("proxy_protocol: #{proxy_protocol}")
+      expect(config).to include("proxy_policy: #{proxy_policy}")
     end
   end
 
   context 'when PROXY protocol is set' do
     using RSpec::Parameterized::TableSyntax
 
-    where(:in_proxy_protocol, :out_proxy_protocol, :expected_suffix) do
-      false | false | "::"
-      true  | false | ":PROXY:"
-      true  | true  | ":PROXY:PROXY"
-      false | true  | "::PROXY"
+    where(:ssh_daemon, :in_proxy_protocol, :out_proxy_protocol, :proxy_policy, :expected_suffix) do
+      "openssh"     | false | false | "use"     | "::"
+      "openssh"     | true  | false | "use"     | ":PROXY:"
+      "openssh"     | true  | true  | "use"     | ":PROXY:PROXY"
+      "openssh"     | false | true  | "use"     | "::PROXY"
+
+      "gitlab-sshd" | false | false | "use"     | "::PROXY"
+      "gitlab-sshd" | true  | false | "use"     | ":PROXY:PROXY"
+      "gitlab-sshd" | true  | true  | "use"     | ":PROXY:PROXY"
+      "gitlab-sshd" | false | true  | "use"     | "::PROXY"
+
+      "gitlab-sshd" | true  | true  | "require" | ":PROXY:PROXY"
+      "gitlab-sshd" | true  | false | "require" | ":PROXY:PROXY"
+
+      "gitlab-sshd" | true  | true  | "ignore"  | ":PROXY:PROXY"
+      "gitlab-sshd" | true  | false | "ignore"  | ":PROXY:PROXY"
+
+      "gitlab-sshd" | true  | false | "reject"  | ":PROXY:"
+      # out_proxy_protocol = false and "reject" case handled by checkConfig
     end
 
     with_them do
@@ -74,8 +84,10 @@ describe 'gitlab-shell configuration' do
                 proxyProtocol: #{in_proxy_protocol}
           gitlab:
             gitlab-shell:
+              sshDaemon: "#{ssh_daemon}"
               config:
                 proxyProtocol: #{out_proxy_protocol}
+                proxyPolicy: #{proxy_policy}
         )).deep_merge(default_values)
       end
 
