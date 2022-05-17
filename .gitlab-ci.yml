@@ -40,7 +40,6 @@ variables:
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
-  SCAN_KUBERNETES_MANIFESTS: "true"
 
 stages:
   - prepare
