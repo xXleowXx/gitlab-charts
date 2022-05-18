@@ -262,8 +262,8 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
 1. Wait for the deployment to complete, and the application to come online. When
    the application is reachable, log in.
 
-1. Log in to GitLab, and upload your GitLab license file by navigating to
-   `admin/application_settings/general` and expanding the `Add License` section.
+1. Sign in to GitLab, and [activate your GitLab subscription](https://docs.gitlab.com/ee/user/admin_area/license.html).
+
    NOTE:
    **This step is required for Geo to function.**
 
