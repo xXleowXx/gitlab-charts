@@ -396,6 +396,34 @@ describe 'kas configuration' do
         end
       end
     end
+
+    describe 'templates/deployment.yaml' do
+      subject(:deployment) { kas_enabled_template.resources_by_kind('Deployment')['Deployment/test-kas'] }
+
+      let(:deployment_values) { {} }
+
+      let(:kas_values) do
+        default_kas_values.deep_merge!(
+          'gitlab' => {
+            'kas' => {
+              'deployment' => {}.merge!(deployment_values)
+            }
+          }
+        )
+      end
+
+      it 'does not specify minReadySeconds' do
+        expect(deployment['spec']).not_to have_key('minReadySeconds')
+      end
+
+      context 'when deployment.minReadySeconds is given' do
+        let(:deployment_values) { { 'minReadySeconds' => 60 } }
+
+        it 'contains the minReadySeconds customization' do
+          expect(deployment['spec']).to include('minReadySeconds' => 60)
+        end
+      end
+    end
   end
 
   describe 'gitlab.yml.erb/gitlab_kas' do
