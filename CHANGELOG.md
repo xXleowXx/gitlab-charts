@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.10.3 (2022-05-20)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.40.0 to 0.40.1](gitlab-org/charts/gitlab@a25e1d00d2ef7b4d620a352661c7aacd6d2bdcf1) ([merge request](gitlab-org/charts/gitlab!2550))
+
 ## 5.10.2 (2022-05-04)
 
 No changes.
