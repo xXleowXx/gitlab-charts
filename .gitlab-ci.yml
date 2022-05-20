@@ -40,6 +40,7 @@ variables:
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
+  SAST_EXCLUDED_PATHS: "/docs,/examples,/specs"
 
 stages:
   - prepare
