@@ -38,7 +38,7 @@ spec:
     {{- end }}
   {{- end }}
   ports:
-    {{- if $.Values.service.http.enabled }}
+    {{- if $.Values.http.enabled }}
     - port: {{ $.Values.service.externalPort }}
       targetPort: http-webservice
       protocol: TCP
@@ -48,7 +48,7 @@ spec:
       targetPort: http-workhorse
       protocol: TCP
       name: http-workhorse
-    {{- if $.Values.service.tls.enabled }}
+    {{- if $.Values.tls.enabled }}
     - port: {{ $.Values.service.tls.externalPort }}
       targetPort: https-ws
       protocol: TCP

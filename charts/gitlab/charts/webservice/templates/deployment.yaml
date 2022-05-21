@@ -179,11 +179,11 @@ spec:
           image: {{ include "webservice.image" $ }}
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           ports:
-            {{- if $.Values.service.http.enabled }}
+            {{- if $.Values.http.enabled }}
             - containerPort: {{ $.Values.service.internalPort }}
               name: http-webservice
             {{- end }}
-            {{- if $.Values.service.tls.enabled }}
+            {{- if $.Values.tls.enabled }}
             - containerPort: {{ $.Values.service.tls.internalPort }}
               name: https-ws
             {{- end }}
@@ -214,11 +214,11 @@ spec:
               value: "{{ .workerProcesses }}"
             - name: WORKER_TIMEOUT
               value: "{{ $.Values.global.webservice.workerTimeout }}"
-            {{- if $.Values.service.http.enabled }}
+            {{- if $.Values.http.enabled }}
             - name: INTERNAL_PORT
               value: "{{ $.Values.service.internalPort }}"
             {{- end }}
-            {{- if $.Values.service.tls.enabled }}
+            {{- if $.Values.tls.enabled }}
             - name: SSL_INTERNAL_PORT
               value: {{ $.Values.service.tls.internalPort | quote }}
             - name: PUMA_SSL_KEY
@@ -264,7 +264,7 @@ spec:
             - name: webservice-secrets
               mountPath: /srv/gitlab/config/secrets.yml
               subPath: rails-secrets/secrets.yml
-            {{- if $.Values.service.tls.enabled }}
+            {{- if $.Values.tls.enabled }}
             - name: webservice-secrets
               mountPath: /srv/gitlab/config/puma.crt
               subPath: puma/puma.crt
@@ -329,7 +329,7 @@ spec:
             - name: TMPDIR
               value: "/tmp/gitlab"
             - name: GITLAB_WORKHORSE_AUTH_BACKEND
-              {{- if and (not $.Values.service.http.enabled) $.Values.service.tls.enabled }}
+              {{- if and (not $.Values.http.enabled) $.Values.tls.enabled }}
               value: "https://localhost:{{ $.Values.service.tls.internalPort }}"
               {{- else }}
               value: "http://localhost:{{ $.Values.service.internalPort }}"
@@ -426,7 +426,7 @@ spec:
               items:
                 - key: {{ template "gitlab.gitlab-shell.authToken.key" $ }}
                   path: shell/.gitlab_shell_secret
-          {{- if $.Values.service.tls.enabled }}
+          {{- if $.Values.tls.enabled }}
           - secret:
               name: {{ template "webservice.tls.secret" $ }}
               items:

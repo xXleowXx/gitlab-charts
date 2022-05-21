@@ -97,8 +97,8 @@ to the `helm install` command using the `--set` flags.
 | `resources.requests.cpu`                            | `300m`                                                          | Webservice minimum CPU                                                                                                                                                                                                                                                                                                          |
 | `resources.requests.memory`                         | `1.5G`                                                          | Webservice minimum memory                                                                                                                                                                                                                                                                                                       |
 | `service.externalPort`                              | `8080`                                                          | Webservice exposed port |
-| `service.tls.enabled`                               | false`                                                          | Webservice TLS enabled |
-| `service.tls.secretName`                            | `gitlab-webservice-secret`                                      | Webservice TLS secrets. `tls.crt` and `tls.key` must be specified. |
+| `tls.enabled`                                       | `false`                                                         | Webservice TLS enabled |
+| `tls.secretName`                                    | `gitlab-webservice-secret`                                      | Webservice TLS secrets. `tls.crt` and `tls.key` must be specified. |
 | `securityContext.fsGroup`                           | `1000`                                                          | Group ID under which the pod should be started                                                                                                                                                                                                                                                                                  |
 | `securityContext.runAsUser`                         | `1000`                                                          | User ID under which the pod should be started                                                                                                                                                                                                                                                                                   |
 | `serviceLabels`                                     | `{}`                                                            | Supplemental service labels                                                                                                                                                                                                                                                                                                     |
@@ -272,26 +272,21 @@ A Webservice pod runs two containers:
 The primary use case for enabling TLS is to provide encryption via HTTPS
 for [scraping Prometheus metrics](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_metrics.html).
 
-TLS can be enabled on the `webservice` container by the settings `gitlab.webservice.service.tls.enabled` and `gitlab.webservice.service.tls.secretName`:
+TLS can be enabled on the `webservice` container by the settings `gitlab.webservice.tls.enabled` and `gitlab.webservice.tls.secretName`:
 
 ```yaml
 gitlab:
   webservice:
-    service:
-      tls:
-        enabled: true
-        secretName: gitlab-webservice-tls
+    tls:
+      enabled: true
+      secretName: gitlab-webservice-tls
 ```
 
-`secretName` must point to a Kubernetes secret with the following keys:
-
-- `tls.crt`
-- `tls.key`
-
-For example:
+`secretName` must point to a [Kubernetes TLS secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets).
+For example, to create a TLS secret with a local certificate and key:
 
 ```shell
-kubectl create secret generic <secret name> --from-file=tls.crt=puma.crt --from-file=tls.key=puma.key
+kubectl create secret tls <secret name> --cert=puma.crt --key=puma.key
 ```
 
 ## Using the Community Edition of this chart

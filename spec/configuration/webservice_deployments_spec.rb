@@ -745,11 +745,12 @@ describe 'Webservice Deployments configuration' do
       YAML.safe_load(%(
         gitlab:
           webservice:
+            http:
+              enabled: #{http_enabled}
+            tls:
+              enabled: true
             service:
-              http:
-                enabled: #{http_enabled}
               tls:
-                enabled: true
                 externalPort: 8081
                 internalPort: 8081
       )).deep_merge(default_values)
