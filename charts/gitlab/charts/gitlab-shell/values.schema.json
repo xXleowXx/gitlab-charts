@@ -99,7 +99,7 @@
         "terminationGracePeriodSeconds": {
           "type": "integer",
           "minimum": 5
-	}
+	      }
       },
       "required": [
         "livenessProbe"
