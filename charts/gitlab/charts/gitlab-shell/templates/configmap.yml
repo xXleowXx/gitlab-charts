@@ -63,6 +63,8 @@ data:
       # The server waits for this time (in seconds) for the ongoing connections to complete before shutting down
       # The period is 5 seconds smaller than the Kubernetes termination period in order to allow gitlab-sshd exit gracefully
       grace_period: {{ sub .Values.deployment.terminationGracePeriodSeconds 5 }}
+      # Sets an interval after which server will send keepalive message to a client
+      client_alive_interval: {{ .Values.config.clientAliveInterval }}
       # The ciphers allowed
       ciphers:
         {{- .Values.config.ciphers | toYaml | nindent 8 }}
