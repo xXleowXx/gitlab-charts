@@ -95,7 +95,11 @@
           },
           "title": "Liveness probe settings",
           "type": "object"
-        }
+        },
+        "terminationGracePeriodSeconds": {
+          "type": "integer",
+          "minimum": 5
+	      }
       },
       "required": [
         "livenessProbe"

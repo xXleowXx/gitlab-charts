@@ -29,12 +29,15 @@ describe 'gitlab-shell configuration' do
 
     let(:proxy_protocol) { true }
     let(:proxy_policy) { "require" }
+    let(:grace_period) { 30 }
 
     let(:values) do
       YAML.safe_load(%(
         gitlab:
           gitlab-shell:
             sshDaemon: "gitlab-sshd"
+            deployment:
+              terminationGracePeriodSeconds: #{grace_period}
             config:
               proxyProtocol: #{proxy_protocol}
               proxyPolicy: #{proxy_policy}
@@ -48,6 +51,10 @@ describe 'gitlab-shell configuration' do
       expect(config).to match(/^sshd:$/)
       expect(config).to include("proxy_protocol: #{proxy_protocol}")
       expect(config).to include("proxy_policy: #{proxy_policy}")
+    end
+
+    it 'sets 5 seconds smaller grace period' do
+      expect(config).to include("grace_period: #{grace_period - 5}")
     end
   end
 

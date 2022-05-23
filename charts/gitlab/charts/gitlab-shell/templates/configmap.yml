@@ -58,7 +58,11 @@ data:
       concurrent_sessions_limit: {{ .Values.config.maxStartups.full }}
       # PROXY protocol support for correct IP address detection
       proxy_protocol: {{ .Values.config.proxyProtocol }}
+      # PROXY protocol policy ("use", "require", "reject", "ignore"), "use" is the default value
       proxy_policy: {{ .Values.config.proxyPolicy }}
+      # The server waits for this time (in seconds) for the ongoing connections to complete before shutting down
+      # The period is 5 seconds smaller than the Kubernetes termination period in order to allow gitlab-sshd exit gracefully
+      grace_period: {{ sub .Values.deployment.terminationGracePeriodSeconds 5 }}
       # SSH host key files.
       host_key_files:
       {%- range file.Walk "/etc/ssh" %}
