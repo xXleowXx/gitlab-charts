@@ -64,6 +64,41 @@
           },
           "title": "Maximum number of concurrent unauthenticated connections to the SSH daemon",
           "type": "object"
+        },
+        "proxyProtocol": {
+          "title": "Enable PROXY support for gitlab-sshd",
+          "type": "boolean"
+        },
+        "proxyPolicy": {
+          "title": "The policy for handling PROXY protocol in gitlab-sshd",
+          "type": "string",
+          "enum": [
+            "use",
+            "require",
+            "ignore",
+            "reject"
+          ]
+        },
+        "ciphers": {
+          "title": "The available ciphers in gitlab-sshd",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kexAlgorithms": {
+          "title": "The available KEX (Key Exchange) algorithms in gitlab-sshd",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "macs": {
+          "title": "The available MAC (message authentication code) algorithms in gitlab-sshd",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": [
