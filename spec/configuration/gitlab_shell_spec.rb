@@ -51,6 +51,9 @@ describe 'gitlab-shell configuration' do
       expect(config).to match(/^sshd:$/)
       expect(config).to include("proxy_protocol: #{proxy_protocol}")
       expect(config).to include("proxy_policy: #{proxy_policy}")
+      expect(config).to match(/ciphers:\n    - aes128-gcm@openssh.com/m)
+      expect(config).to match(/kex_algorithms:\n    - curve25519-sha256/m)
+      expect(config).to match(/macs:\n    - hmac-sha2-256-etm@openssh.com/m)
     end
 
     it 'sets 5 seconds smaller grace period' do
