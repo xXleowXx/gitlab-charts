@@ -30,6 +30,7 @@ describe 'gitlab-shell configuration' do
     let(:proxy_protocol) { true }
     let(:proxy_policy) { "require" }
     let(:grace_period) { 30 }
+    let(:client_alive_interval) { 15 }
 
     let(:values) do
       YAML.safe_load(%(
@@ -39,6 +40,7 @@ describe 'gitlab-shell configuration' do
             deployment:
               terminationGracePeriodSeconds: #{grace_period}
             config:
+              clientAliveInterval: #{client_alive_interval}
               proxyProtocol: #{proxy_protocol}
               proxyPolicy: #{proxy_policy}
       )).deep_merge(default_values)
@@ -51,6 +53,7 @@ describe 'gitlab-shell configuration' do
       expect(config).to match(/^sshd:$/)
       expect(config).to include("proxy_protocol: #{proxy_protocol}")
       expect(config).to include("proxy_policy: #{proxy_policy}")
+      expect(config).to include("client_alive_interval: #{client_alive_interval}")
       expect(config).to match(/ciphers:\n    - aes128-gcm@openssh.com/m)
       expect(config).to match(/kex_algorithms:\n    - curve25519-sha256/m)
       expect(config).to match(/macs:\n    - hmac-sha2-256-etm@openssh.com/m)
