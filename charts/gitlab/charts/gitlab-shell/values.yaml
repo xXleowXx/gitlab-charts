@@ -62,7 +62,7 @@ hpa:
   targetAverageValue: 100m
 
 deployment:
-  # terminationGracePeriodSeconds: 30
+  terminationGracePeriodSeconds: 30
   livenessProbe:
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -89,6 +89,7 @@ config:
     rate: 30
     full: 100
   proxyProtocol: false
+  proxyPolicy: "use"
 
 ## Allow to overwrite under which User and Group we're running.
 securityContext:

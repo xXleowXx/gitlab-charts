@@ -139,6 +139,9 @@ backups:
     startingDeadlineSeconds: null
     successfulJobsHistoryLimit: 3
     suspend: false
+    backoffLimit: 6
+    # activeDeadlineSeconds:
+    restartPolicy: "OnFailure"
     extraArgs: ""
     resources:
       # limits:

@@ -494,7 +494,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 check_docs_markdown:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.15-vale-2.15.5-markdownlint-0.31.1
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.15-vale-2.16.1-markdownlint-0.31.1
   stage: prepare
   cache: {}
   dependencies: []
@@ -513,7 +513,7 @@ check_docs_markdown:
 
 # Perform link checks on published HTML files
 check_docs_links:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.15-ruby-2.7.5-cee62c13
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.15-ruby-2.7.5-e6a8a48a
   stage: prepare
   cache: {}
   dependencies: []
@@ -595,7 +595,6 @@ review-docs-cleanup:
   services:
   - docker:dind
   variables:
-    DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://docker:2375
     GITLAB_PASSWORD: $ROOT_PASSWORD
     S3_CONFIG_PATH: /etc/gitlab/minio
@@ -729,7 +728,6 @@ production_specs_eks:
   services:
   - docker:dind
   variables:
-    DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://docker:2375
     QA_ARTIFACTS_DIR: $CI_PROJECT_DIR
   script:
@@ -765,7 +763,6 @@ wait_for_dev_images:
   - docker:dind
   before_script: []
   variables:
-    DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://docker:2375
     CNG_REGISTRY: dev.gitlab.org:5005/gitlab/charts/components/images
   script:

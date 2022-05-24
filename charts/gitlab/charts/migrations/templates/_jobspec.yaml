@@ -128,7 +128,7 @@ spec:
         projected:
           defaultMode: 0400
           sources:
-          {{- if eq $.Values.global.pages.accessControl true }}
+          {{ if and (eq $.Values.global.pages.enabled true) (eq $.Values.global.pages.accessControl true) }}
           - secret:
               name: {{ template "oauth.gitlab-pages.secret" . }}
               items:
