@@ -859,7 +859,7 @@ qa_gke:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_gke"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated --tag ~requires_praefect'
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke
@@ -868,7 +868,7 @@ qa_eks:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_eks"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated --tag ~requires_praefect'
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
@@ -877,7 +877,7 @@ qa_gke_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_gke"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated --tag ~requires_praefect'
   environment:
     name: gke_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
 
@@ -885,7 +885,7 @@ qa_eks_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated --tag ~requires_praefect'
   environment:
     name: eks_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
 
@@ -896,7 +896,7 @@ qa_gke_manual_full_suite:
   parallel: 6
   variables:
     VARIABLES_FILE: "variables/review_gke"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient --tag ~requires_praefect'
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke
@@ -907,7 +907,7 @@ qa_eks_manual_full_suite:
   parallel: 6
   variables:
     VARIABLES_FILE: "variables/review_eks"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient --tag ~requires_praefect'
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
