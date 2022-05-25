@@ -21,9 +21,9 @@ spec:
         {{- include "gitlab.podLabels" . | nindent 8 }}
       {{- if .Values.jobAnnotations }}
       annotations:
-      {{- range $key, $value := .Values.jobAnnotations }}
+      {{-   range $key, $value := .Values.jobAnnotations }}
         {{ $key }}: {{ $value | quote }}
-      {{- end }}
+      {{-   end }}
       {{- end }}
 
     spec:
