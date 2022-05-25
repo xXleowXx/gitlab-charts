@@ -79,6 +79,11 @@
             "reject"
           ]
         },
+        "proxyHeaderTimeout": {
+          "title": "The maximum duration gitlab-sshd will wait before giving up on reading the PROXY protocol header",
+          "pattern": "^[0-9]+(ms|s|m)$",
+          "type": "string"
+        },
         "ciphers": {
           "title": "The available ciphers in gitlab-sshd",
           "type": "array",
