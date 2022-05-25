@@ -83,7 +83,7 @@ logging:
 
 config:
   clientAliveInterval: 0
-  loginGraceTime: 120
+  loginGraceTime: 60
   maxStartups:
     start: 10
     rate: 30
