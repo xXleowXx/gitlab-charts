@@ -40,6 +40,7 @@ variables:
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
   ISSUE_BOT_LABELS_EXTRA: "group::distribution"
+  SAST_EXCLUDED_PATHS: "/doc,/examples,/spec"
 
 stages:
   - prepare
@@ -60,13 +61,23 @@ stages:
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/SAST-IaC.latest.gitlab-ci.yml
 dependency_scanning:
   needs: []
   before_script: []
 secret_detection:
   needs: []
   before_script: []
-
+sast:
+  needs: []
+  before_script: []
+sast:
+  needs: []
+  before_script: []
+iac-sast:
+  needs: []
+  before_script: []
 before_script:
   - source scripts/ci/autodevops.sh
 
