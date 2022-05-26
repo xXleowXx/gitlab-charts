@@ -29,6 +29,7 @@ describe 'gitlab-shell configuration' do
 
     let(:proxy_protocol) { true }
     let(:proxy_policy) { "require" }
+    let(:proxy_header_timeout) { "1s" }
     let(:grace_period) { 30 }
     let(:client_alive_interval) { 15 }
     let(:login_grace_time) { 60 }
@@ -44,6 +45,7 @@ describe 'gitlab-shell configuration' do
               clientAliveInterval: #{client_alive_interval}
               proxyProtocol: #{proxy_protocol}
               proxyPolicy: #{proxy_policy}
+              proxyHeaderTimeout: #{proxy_header_timeout}
               loginGraceTime: #{login_grace_time}
       )).deep_merge(default_values)
     end
@@ -56,6 +58,7 @@ describe 'gitlab-shell configuration' do
       expect(config).to include("proxy_protocol: #{proxy_protocol}")
       expect(config).to include("proxy_policy: #{proxy_policy}")
       expect(config).to include("client_alive_interval: #{client_alive_interval}")
+      expect(config).to include("proxy_header_timeout: #{proxy_header_timeout}")
       expect(config).to match(/ciphers:\n    - aes128-gcm@openssh.com/m)
       expect(config).to match(/kex_algorithms:\n    - curve25519-sha256/m)
       expect(config).to match(/macs:\n    - hmac-sha2-256-etm@openssh.com/m)
