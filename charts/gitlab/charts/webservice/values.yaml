@@ -333,14 +333,14 @@ registry:
     serviceName: registry
     port: 5000
   tokenIssuer: gitlab-issuer
-extra: {}
+extra: 
   # google_analytics_id: '_your_tracking_id'
   # matomo_url: '_your_matomo_url'
   # matomo_site_id: '_your_matomo_site_id'
   # matomo_disable_cookies: false
   # one_trust_id: '_your_one_trust_id'
   # google_tag_manager_nonce_id: '_your_google_tag_manager_id'
-  # bizible: false
+  # bizible: true
 rack_attack:
   git_basic_auth:
     enabled: false
