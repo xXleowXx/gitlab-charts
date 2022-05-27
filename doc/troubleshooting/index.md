@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 ### Error: UPGRADE FAILED: Job failed: BackoffLimitExceeded
 
-If you received this error when [upgrading to the 6.0 version of the chart](https://docs.gitlab.com/charts/releases/6_0.html#upgrade-path-from-5x),
+If you received this error when [upgrading to the 6.0 version of the chart](../releases/6_0.md#upgrade-path-from-5x),
 then it's probably you didn't follow the right upgrade path, as you first need to upgrade to the latest 5.10.x
 
 ```shell
