@@ -22,7 +22,7 @@ dependencies:
   version: 8.9.4
 - name: gitlab-runner
   repository: https://charts.gitlab.io/
-  version: 0.41.0
+  version: 0.40.0
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 6.9.1

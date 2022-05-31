@@ -9,6 +9,7 @@ dependencies:
     - name: .* # everything else
       enabled: true
   settings:
+    gitlab_target_branch: 'test-update-chart-deps'
     before_commit: helm dependency update
     # Assign to WarheadsSE (jplum) and twk3 (dmountney) by default
     gitlab_assignee_ids:
