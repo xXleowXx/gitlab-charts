@@ -41,6 +41,10 @@ functionality of the chart.
 
 [Read more in the GitLab QA chart docs](gitlab-qa/index.md).
 
+### Updating chart dependencies
+
+See the [dependencies guide](dependencies.md) for instructions on how to update the chart dependencies bundles with the chart.
+
 ### ChaosKube
 
 ChaosKube can be used to test the fault tolerance of highly available cloud native GitLab installations.
