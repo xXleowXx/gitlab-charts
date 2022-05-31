@@ -48,14 +48,3 @@ webservice:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.webservice.loadBalancer */}}
-
-{{/*
-Ensure a certificate is provided when the Webservice is enabled and is instructed to listen over TLS
-*/}}
-{{- define "gitlab.checkConfig.webservice.tls" -}}
-{{- if and (and .Values.gitlab.webservice.tls.enabled) (not .Values.gitlab.webservice.tls.secretName) }}
-webservice: server enabled with TLS, no TLS certificate provided
-    It appears Webservice is specified to listen over TLS, but no certificate was specified.
-{{- end -}}
-{{- end -}}
-{{/* END gitlab.checkConfig.webservice.tls */}}

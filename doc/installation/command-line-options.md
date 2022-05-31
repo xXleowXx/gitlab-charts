@@ -422,7 +422,7 @@ GitLab external URL                                              |
 | `gitlab.webservice.service.externalPort`                       | webservice exposed port                                              | `8080`                                                           |
 | `gitlab.webservice.service.internalPort`                       | webservice internal port                                             | `8080`                                                           |
 | `gitlab.webservice.tls.enabled`                                | webservice TLS enabled                                               | false                                                            |
-| `gitlab.webservice.tls.secretName`                             | webservice secret name of TLS key                                    |                                                                  |
+| `gitlab.webservice.tls.secretName`                             | webservice secret name of TLS key                                    | `{Release.Name}-webservice-tls`                                  |
 | `gitlab.webservice.service.tls.externalPort`                   | webservice TLS exposed port                                          | `8081`                                                           |
 | `gitlab.webservice.service.tls.internalPort`                   | webservice TLS internal port                                         | `8081`                                                           |
 | `gitlab.webservice.service.type`                               | webservice service type                                              | `ClusterIP`                                                      |
@@ -436,8 +436,6 @@ GitLab external URL                                              |
 | `gitlab.webservice.workhorse.image`                            | Workhorse image repository                                           | `registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee`   |
 | `gitlab.webservice.workhorse.sentryDSN`                        | DSN for Sentry instance for error reporting                          | ""                                                               |
 | `gitlab.webservice.workhorse.tag`                              | Workhorse image tag                                                  |                                                                  |
-| `gitlab.webservice.workhorse.tls.enabled`                      | Whether TLS is enabled for Workhorse                                 | false                                                            |
-| `gitlab.webservice.workhorse.tls.secretName`                   | Workhorse secret name for TLS key                                    |                                                                  |
 
 ## External Charts
 

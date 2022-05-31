@@ -96,9 +96,7 @@ to the `helm install` command using the `--set` flags.
 | `replicaCount`                                      | `1`                                                             | Webservice number of replicas                                                                                                                                                                                                                                                                                                   |
 | `resources.requests.cpu`                            | `300m`                                                          | Webservice minimum CPU                                                                                                                                                                                                                                                                                                          |
 | `resources.requests.memory`                         | `1.5G`                                                          | Webservice minimum memory                                                                                                                                                                                                                                                                                                       |
-| `service.externalPort`                              | `8080`                                                          | Webservice exposed port |
-| `tls.enabled`                                       | `false`                                                         | Webservice TLS enabled |
-| `tls.secretName`                                    | `gitlab-webservice-secret`                                      | Webservice TLS secrets. `tls.crt` and `tls.key` must be specified. |
+| `service.externalPort`                              | `8080`                                                          | Webservice exposed port                                                                                                                                                                                                                                                                                                         |
 | `securityContext.fsGroup`                           | `1000`                                                          | Group ID under which the pod should be started                                                                                                                                                                                                                                                                                  |
 | `securityContext.runAsUser`                         | `1000`                                                          | User ID under which the pod should be started                                                                                                                                                                                                                                                                                   |
 | `serviceLabels`                                     | `{}`                                                            | Supplemental service labels                                                                                                                                                                                                                                                                                                     |
@@ -109,9 +107,11 @@ to the `helm install` command using the `--set` flags.
 | `service.loadBalancerIP`                            |                                                                 | IP address to assign to LoadBalancer (if supported by cloud provider)                                                                                                                                                                                                                                                           |
 | `service.loadBalancerSourceRanges`                  |                                                                 | List of IP CIDRs allowed access to LoadBalancer (if supported) Required for service.type = LoadBalancer                                                                                                                                                                                                                         |
 | `shell.authToken.key`                               | `secret`                                                        | Key to shell token in shell secret                                                                                                                                                                                                                                                                                              |
-| `shell.authToken.secret`                            | `gitlab-shell-secret`                                           | Shell token secret                                                                                                                                                                                                                                                                                                              |
+| `shell.authToken.secret`                            | `{Release.Name}-gitlab-shell-secret`                            | Shell token secret                                                                                                                                                                                                                                                                                                              |
 | `shell.port`                                        | `nil`                                                           | Port number to use in SSH URLs generated by UI                                                                                                                                                                                                                                                                                  |
 | `shutdown.blackoutSeconds`                          | `10`                                                            | Number of seconds to keep Webservice running after receiving shutdown, note this must shorter than `deployment.terminationGracePeriodSeconds`                                                                                                                                                                                   |
+| `tls.enabled`                                       | `false`                                                         | Webservice TLS enabled |
+| `tls.secretName`                                    | `{Release.Name}-webservice-tls`                                 | Webservice TLS secrets. `secretName` must point to a [Kubernetes TLS secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets). |
 | `tolerations`                                       | `[]`                                                            | Toleration labels for pod assignment                                                                                                                                                                                                                                                                                            |
 | `trusted_proxies`                                   | `[]`                                                            | See [GitLab documentation](https://docs.gitlab.com/ee/install/installation.html#adding-your-trusted-proxies) for details                                                                                                                                                                                                        |
 | `workhorse.logFormat`                               | `json`                                                          | Logging format. Valid formats: `json`, `structured`, `text`                                                                                                                                                                                                                                                                     |
@@ -267,10 +267,21 @@ A Webservice pod runs two containers:
 - `gitlab-workhorse`
 - `webservice`
 
+#### `gitlab-workhorse`
+
+Workhorse supports TLS, but the [Webservice Chart does not yet support configuring these settings](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3316).
+
 #### `webservice`
 
 The primary use case for enabling TLS is to provide encryption via HTTPS
 for [scraping Prometheus metrics](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_metrics.html).
+For this reason, the TLS certificate should include the Webservice
+hostname (ex: `RELEASE-webservice-default.default.svc`) in the Common
+Name (CN) or Subject Alternate Name (SAN).
+
+NOTE:
+[The Prometheus server bundled with the Chart](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3335) does not yet
+support scraping of HTTPS endpoints.
 
 TLS can be enabled on the `webservice` container by the settings `gitlab.webservice.tls.enabled` and `gitlab.webservice.tls.secretName`:
 
@@ -286,7 +297,7 @@ gitlab:
 For example, to create a TLS secret with a local certificate and key:
 
 ```shell
-kubectl create secret tls <secret name> --cert=puma.crt --key=puma.key
+kubectl create secret tls <secret name> --cert=path/to/puma.crt --key=path/to/puma.key
 ```
 
 ## Using the Community Edition of this chart
