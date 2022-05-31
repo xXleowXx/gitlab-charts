@@ -733,6 +733,7 @@ production_specs_eks:
   variables:
     DOCKER_HOST: tcp://docker:2375
     QA_ARTIFACTS_DIR: $CI_PROJECT_DIR
+    QA_CAN_TEST_PRAEFECT: "false"
   script:
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - gem install gitlab-qa
@@ -840,7 +841,7 @@ release_package:
 .qa_branch:
   extends:
     - .qa
-  parallel: 10
+  parallel: 7
   except:
     refs:
       - master
@@ -850,7 +851,7 @@ release_package:
 .qa_production:
   extends:
     - .qa
-  parallel: 10
+  parallel: 7
   only:
     refs:
       - master
