@@ -67,6 +67,7 @@ dependency_scanning:
   needs: []
   before_script: []
 secret_detection:
+  image: registry.gitlab.com/gitlab-org/security-products/analyzers/secrets/tmp:16dc1648c0c568ac5c856cc7f69cf1b4679dda76
   needs: []
   before_script: []
 sast:
