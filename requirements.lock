@@ -22,7 +22,7 @@ dependencies:
   version: 8.9.4
 - name: gitlab-runner
   repository: https://charts.gitlab.io/
-  version: 0.41.0
+  version: 0.39.0
 - name: grafana
   repository: https://grafana.github.io/helm-charts
   version: 6.9.1
@@ -32,5 +32,5 @@ dependencies:
 - name: nginx-ingress
   repository: ""
   version: '*.*.*'
-digest: sha256:cec4f9a8b79085c8f7310f37e51f77af53ddad40079115de1bb902b76ca84359
-generated: "2022-05-31T10:03:26.721586305-07:00"
+digest: sha256:7ab3dcdd7227a7f52882792b71f38c4493fa4a6621b00b4b75d4b832d5f76e4c
+generated: "2022-06-01T15:16:17.69349188-07:00"
