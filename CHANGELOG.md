@@ -109,6 +109,10 @@ No changes.
 - [Use image digest from dev tag pipeline](gitlab-org/charts/gitlab@403b765779a8d43cc471ff9d35d6a0e23f9eea21) ([merge request](gitlab-org/charts/gitlab!2463))
 - [Update Operator install docs for version 0.6.0](gitlab-org/charts/gitlab@43398259cef8be83f88ec132b3471ca8dccaf73e) ([merge request](gitlab-org/charts/gitlab!2460))
 
+## 5.9.5 (2022-06-01)
+
+No changes.
+
 ## 5.9.4 (2022-04-29)
 
 ### Other (1 change)
