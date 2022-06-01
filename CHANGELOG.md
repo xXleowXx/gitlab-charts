@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.0.1 (2022-06-01)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.40.1 to 0.41.0](gitlab-org/security/charts/gitlab@cbe93d80ae69f991efd3c0535c359db4aef13b38)
+
 ## 6.0.0 (2022-05-20)
 
 ### Added (5 changes)
@@ -43,6 +49,10 @@ entry.
 - [Update 'Add License' location](gitlab-org/charts/gitlab@53f38975abef245735162df2f3208bd8547703cd) ([merge request](gitlab-org/charts/gitlab!2568))
 - [Add docs on certmanager-issuer chart](gitlab-org/charts/gitlab@74413b7abc3f6c9896fd7a7e0af86b869764411d) ([merge request](gitlab-org/charts/gitlab!2507))
 - [Update kubectl image to use yq v4.23.1](gitlab-org/charts/gitlab@966e02d12b1177888607f0d224caa97adcdc3940) ([merge request](gitlab-org/charts/gitlab!2459))
+
+## 5.10.4 (2022-06-01)
+
+No changes.
 
 ## 5.10.3 (2022-05-20)
 
@@ -98,6 +108,10 @@ No changes.
 - [Update Operator install docs for version 0.6.1](gitlab-org/charts/gitlab@17243ad2f7d29ca48c712d7a81773c090124349d) ([merge request](gitlab-org/charts/gitlab!2464))
 - [Use image digest from dev tag pipeline](gitlab-org/charts/gitlab@403b765779a8d43cc471ff9d35d6a0e23f9eea21) ([merge request](gitlab-org/charts/gitlab!2463))
 - [Update Operator install docs for version 0.6.0](gitlab-org/charts/gitlab@43398259cef8be83f88ec132b3471ca8dccaf73e) ([merge request](gitlab-org/charts/gitlab!2460))
+
+## 5.9.5 (2022-06-01)
+
+No changes.
 
 ## 5.9.4 (2022-04-29)
 
