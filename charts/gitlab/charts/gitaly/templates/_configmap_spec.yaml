@@ -109,6 +109,14 @@ data:
     catfile_cache_size = {{ .catFileCacheSize }}
     {{-   end }}
     {{- end }}
+    {{- if .Values.git.config }}
+    {{-   range .Values.git.config }}
+
+    [[git.config]]
+    key = "{{ .key }}"
+    value = "{{ .value }}"
+    {{-   end }}
+    {{- end }}
 
     [gitaly-ruby]
     # The directory where gitaly-ruby is installed
