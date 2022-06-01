@@ -104,6 +104,7 @@ data:
 
     [git]
     use_bundled_binaries = true
+    ignore_gitconfig = true
     {{- with .Values.git }}
     {{-   if .catFileCacheSize }}
     catfile_cache_size = {{ .catFileCacheSize }}
