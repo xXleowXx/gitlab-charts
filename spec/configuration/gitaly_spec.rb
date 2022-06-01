@@ -159,6 +159,37 @@ describe 'Gitaly configuration' do
     end
   end
 
+  context 'With additional gitconfig' do
+    let(:values) do
+      YAML.safe_load(%(
+        gitlab:
+          gitaly:
+            git:
+              config:
+              - {key: "pack.threads", value: "4"}
+              - {key: "fetch.fsckObjects", value: "false"}
+      )).deep_merge(default_values)
+    end
+
+    it 'populates [[git.config]] sections' do
+      t = HelmTemplate.new(values)
+      expect(t.exit_code).to eq(0)
+
+      config = t.dig('ConfigMap/test-gitaly', 'data', 'config.toml.erb')
+      expect(config).to include(
+        <<~CONFIG
+        [[git.config]]
+        key = "pack.threads"
+        value = "4"
+
+        [[git.config]]
+        key = "fetch.fsckObjects"
+        value = "false"
+        CONFIG
+      )
+    end
+  end
+
   context 'When customer provides additional labels' do
     let(:labeled_values) do
       YAML.safe_load(%(
