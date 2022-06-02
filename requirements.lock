@@ -18,7 +18,7 @@ dependencies:
   repository: https://prometheus-community.github.io/helm-charts
   version: 15.0.4
 - name: postgresql
-  repository: https://charts.bitnami.com/bitnami
+  repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami
   version: 8.9.4
 - name: gitlab-runner
   repository: https://charts.gitlab.io/
@@ -27,10 +27,10 @@ dependencies:
   repository: https://grafana.github.io/helm-charts
   version: 6.9.1
 - name: redis
-  repository: https://charts.bitnami.com/bitnami
+  repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami
   version: 11.3.4
 - name: nginx-ingress
   repository: ""
   version: '*.*.*'
-digest: sha256:8997f97274e86f4a87b6df8e0916b7e6706dff0e8b590105fe585a29dbb39198
-generated: "2022-06-01T15:14:25.025421733-07:00"
+digest: sha256:351d07dd9bade797ec45781c102a0d4252bc29cdc069c3354cf5e72b2f8acd89
+generated: "2022-06-07T08:28:21.309523028-07:00"
