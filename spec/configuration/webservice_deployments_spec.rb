@@ -399,8 +399,8 @@ describe 'Webservice Deployments configuration' do
           expect(env_2).to include(env_value('PUMA_THREADS_MAX', 4))
           expect(env_3).to include(env_value('PUMA_THREADS_MAX', 8))
 
-          expect(env_1).to include(env_value('PUMA_WORKER_MAX_MEMORY', 1024))
-          expect(env_2).to include(env_value('PUMA_WORKER_MAX_MEMORY', 1024))
+          expect(env_1).to include(env_value('PUMA_WORKER_MAX_MEMORY', ''))
+          expect(env_2).to include(env_value('PUMA_WORKER_MAX_MEMORY', ''))
           expect(env_3).to include(env_value('PUMA_WORKER_MAX_MEMORY', 2048))
 
           expect(env_1).to include(env_value('DISABLE_PUMA_WORKER_KILLER', true))

@@ -105,11 +105,11 @@ ingress:
 workerProcesses: 2
 
 puma:
-  workerMaxMemory: 1024 # in MB units
   threads:
     min: 4
     max: 4
-  disableWorkerKiller: false
+  disableWorkerKiller: true
+  # workerMaxMemory: 1024 # in MB units
 
 hpa:
   targetAverageValue: 1
