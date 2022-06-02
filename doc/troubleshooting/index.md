@@ -11,11 +11,17 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 If you received this error when [upgrading to the 6.0 version of the chart](../releases/6_0.md#upgrade-path-from-5x),
 then it's probably you didn't follow the right upgrade path, as you first need to upgrade to the latest 5.10.x
 
-```shell
-helm rollback gitlab 1
-```
+1. Roll back:
 
-Then re-run the `helm upgrade` command, specifying the version as `--version=14.10.x`.
+   ```shell
+   helm rollback gitlab 1
+   ```
+
+1. Re-run the upgrade command by replacing `<x>` with the appropriate patch version:
+
+   ```shell
+   helm upgrade --version=14.10.<x>
+   ```
 
 ## UPGRADE FAILED: "$name" has no deployed releases
 
