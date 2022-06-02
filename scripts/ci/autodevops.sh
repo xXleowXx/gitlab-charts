@@ -80,6 +80,10 @@ function deploy() {
 
   # YAML_FILE=""${KUBE_INGRESS_BASE_DOMAIN//\./-}.yaml"
 
+  helm repo add gitlab https://charts.gitlab.io/
+  helm repo add jetstack https://charts.jetstack.io
+  helm dep update .
+
   WAIT="--wait --timeout 900s"
 
   # Only enable Prometheus on `master`
@@ -212,6 +216,16 @@ function restart_toolbox() {
   kubectl -n ${NAMESPACE} delete pods -lapp=toolbox,release=${RELEASE_NAME}
   # always "succeed" so not to block.
   return 0
+}
+
+function download_chart() {
+  mkdir -p chart/
+
+  helm repo add gitlab https://charts.gitlab.io
+  helm repo add jetstack https://charts.jetstack.io
+
+  helm dependency update chart/
+  helm dependency build chart/
 }
 
 function ensure_namespace() {
