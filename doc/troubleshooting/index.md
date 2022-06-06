@@ -40,8 +40,8 @@ then it's probably because you didn't follow the right upgrade path, as you firs
    helm upgrade --install gitlab gitlab/gitlab <other_options>
    ```
 
-More information about command line arguments can be found in our [Deploy using Helm](../installation/deployment.html#deploy-using-helm) section.
-For mappings between chart versions and GitLab versions, read [GitLab version mappings](../installation/version_mappings.html).
+More information about command line arguments can be found in our [Deploy using Helm](../installation/deployment.md#deploy-using-helm) section.
+For mappings between chart versions and GitLab versions, read [GitLab version mappings](../installation/version_mappings.md).
 
 ## UPGRADE FAILED: "$name" has no deployed releases
 
