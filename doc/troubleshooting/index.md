@@ -34,9 +34,15 @@ then it's probably because you didn't follow the right upgrade path, as you firs
    ```shell
    helm upgrade --version=5.10.<x>
    ```
+1. At this point you can use the `--version` option to pass a specific 6.x.x chart version or remove the option for upgrading to the latest version of GitLab:
 
-    More information about command line arguments can be found in our [Deploy using Helm](../installation/deployment.html#deploy-using-helm) section.
+   ```shell
+   helm upgrade --install gitlab gitlab/gitlab <other_options>
+   ```
+
+More information about command line arguments can be found in our [Deploy using Helm](../installation/deployment.html#deploy-using-helm) section.
 For mappings between chart versions and GitLab versions, read [GitLab version mappings](../installation/version_mappings.html).
+
 ## UPGRADE FAILED: "$name" has no deployed releases
 
 This error occurs on your second install/upgrade if your initial install failed.
