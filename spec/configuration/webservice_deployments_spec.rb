@@ -721,6 +721,16 @@ describe 'Webservice Deployments configuration' do
       expect(webservice_env).to include(env_value('INTERNAL_PORT', '8080'))
       expect(env_keys).not_to include('SSL_INTERNAL_PORT', 'PUMA_SSL_KEY', 'PUMA_SSL_CERT')
 
+      liveness_probe = containers[0].dig('livenessProbe', 'httpGet')
+      expect(liveness_probe['host']).to be_nil
+      expect(liveness_probe['scheme']).to be_nil
+      expect(liveness_probe['port']).to eq(8080)
+
+      readiness_probe = containers[0].dig('readinessProbe', 'httpGet')
+      expect(readiness_probe['host']).to be_nil
+      expect(readiness_probe['scheme']).to be_nil
+      expect(readiness_probe['port']).to eq(8080)
+
       webservice_ports = containers[0]['ports']
       port_names = webservice_ports.map { |entry| entry['name'] }
       expect(webservice_ports).to include({ "containerPort" => 8080, "name" => 'http-webservice' })
@@ -806,6 +816,16 @@ describe 'Webservice Deployments configuration' do
         expect(webservice_env).to include(env_value('SSL_INTERNAL_PORT', '8081'))
         expect(webservice_env).to include(env_value('PUMA_SSL_KEY', '/srv/gitlab/config/puma.key'))
         expect(webservice_env).to include(env_value('PUMA_SSL_CERT', '/srv/gitlab/config/puma.crt'))
+
+        liveness_probe = containers[0].dig('livenessProbe', 'httpGet')
+        expect(liveness_probe['host']).to be_nil
+        expect(liveness_probe['scheme']).to eq('HTTPS')
+        expect(liveness_probe['port']).to eq(8081)
+
+        readiness_probe = containers[0].dig('readinessProbe', 'httpGet')
+        expect(readiness_probe['host']).to be_nil
+        expect(readiness_probe['scheme']).to eq('HTTPS')
+        expect(readiness_probe['port']).to eq(8081)
 
         webservice_ports = containers[0]['ports']
         port_names = webservice_ports.map { |entry| entry['name'] }

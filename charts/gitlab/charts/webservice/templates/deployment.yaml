@@ -294,7 +294,12 @@ spec:
           livenessProbe:
             httpGet:
               path: /-/liveness
+              {{- if and (not $.Values.http.enabled) $.Values.tls.enabled }}
+              scheme: HTTPS
+              port: {{ $.Values.service.tls.internalPort }}
+              {{- else }}
               port: {{ $.Values.service.internalPort }}
+              {{- end }}
             initialDelaySeconds: {{ .deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .deployment.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .deployment.livenessProbe.timeoutSeconds }}
@@ -303,7 +308,12 @@ spec:
           readinessProbe:
             httpGet:
               path: /-/readiness
+              {{- if and (not $.Values.http.enabled) $.Values.tls.enabled }}
+              scheme: HTTPS
+              port: {{ $.Values.service.tls.internalPort }}
+              {{- else }}
               port: {{ $.Values.service.internalPort }}
+              {{- end }}
             initialDelaySeconds: {{ .deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .deployment.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .deployment.readinessProbe.timeoutSeconds }}
