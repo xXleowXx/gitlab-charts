@@ -6,12 +6,12 @@ require 'hash_deep_merge'
 describe 'MinIO configuration' do
   context 'When customer provides additional persistence annotations' do
     let(:values) do
-      HelmTemplate.certmanager_issuer.deep_merge(YAML.safe_load(%(
+      HelmTemplate.yaml_values(%(
         minio:
           persistence:
             annotations:
               "helm.sh/resource-policy": keep
-      )))
+      ))
     end
 
     it 'Populates the additional annotations in the expected manner' do
