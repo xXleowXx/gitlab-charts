@@ -246,7 +246,7 @@ base64-encoded. Replace `<name>` with the name of the release.
 kubectl create secret generic <name>-gitlab-workhorse-secret --from-literal=shared_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
 ```
 
-This secret is referenced by the `global.workhorse.key` setting.
+This secret is referenced by the `global.workhorse.secret` setting.
 
 ### GitLab Runner secret
 
