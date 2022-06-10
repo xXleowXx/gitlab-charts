@@ -13,9 +13,11 @@ hpa:
   maxReplicas: 10
   minReplicas: 1
   targetAverageValue: 100m
-  customMetrics: [] # overrides targetAverageValue
-  scaleDownStabilizationWindowSeconds: 300
-  customBehavior: {} # overrides scaleDownStabilizationWindowSeconds
+  # Note that the HPA is limited to autoscaling/v2beta1 and autoscaling/v2beta2
+  customMetrics: []  # Overrides HPA metrics definition
+  behaviour:
+    scaleDown:
+      stabilizationWindowSeconds: 300
 
 networkpolicy:
   enabled: false

@@ -25,7 +25,10 @@ init:
 
 hpa:
   targetAverageValue: 100m
-  scaleDownStabilizationWindowSeconds: 300
+  behaviour:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+
 image:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-kas
   # tag: latest

@@ -1,5 +1,10 @@
 {{- if .Values.enabled -}}
+---
+{{- if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
 apiVersion: autoscaling/v2beta2
+{{- else }}
+apiVersion: autoscaling/v2beta1
+{{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "registry.fullname" . }}
@@ -19,17 +24,20 @@ spec:
     - type: Resource
       resource:
         name: cpu
+        {{- if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
         target:
           type: Utilization
           averageUtilization: {{ .Values.hpa.cpu.targetAverageUtilization }}
+        {{- else }}
+        targetAverageUtilization: {{ .Values.hpa.cpu.targetAverageUtilization }}
+        {{- end }}
   {{- else -}}
     {{- toYaml .Values.hpa.customMetrics | nindent 4 -}}
   {{- end }}
+  {{- if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
+  {{- with .Values.hpa.behaviour }}
   behavior:
-  {{- if not .Values.hpa.customBehavior }}
-    scaleDown:
-      stabilizationWindowSeconds: {{ .Values.hpa.scaleDownStabilizationWindowSeconds }}
-  {{- else }}
-    {{- toYaml .Values.hpa.customBehavior | nindent 4 -}}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- end }}
 {{- end -}}

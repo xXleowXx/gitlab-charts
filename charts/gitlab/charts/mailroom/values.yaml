@@ -87,11 +87,11 @@ hpa:
   maxReplicas: 2
   cpu:
     targetAverageUtilization: 75
-  scaleDownStabilizationWindowSeconds: 300
-
-  # Note that the HPA is limited to autoscaling/v2beta2
-  customMetrics: []
-  customBehavior: {}
+  # Note that the HPA is limited to autoscaling/v2beta1 and autoscaling/v2beta2
+  customMetrics: []  # Overrides HPA metrics definition
+  behaviour:
+    scaleDown:
+      stabilizationWindowSeconds: 300
 
 # Mailroom does not require inbound connections
 # This service only requires outgoing connections to the

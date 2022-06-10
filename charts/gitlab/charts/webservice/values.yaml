@@ -122,9 +122,11 @@ puma:
 
 hpa:
   targetAverageValue: 1
-  customMetrics: # optional replacement of HPA metrics definition
-  scaleDownStabilizationWindowSeconds: 300
-  customBehavior: # optional replacement of HPA behavior definition
+  # Note that the HPA is limited to autoscaling/v2beta1 and autoscaling/v2beta2
+  customMetrics: []  # Overrides HPA metrics definition
+  behaviour:
+    scaleDown:
+      stabilizationWindowSeconds: 300
 
 deployment:
   # terminationGracePeriodSeconds: 30

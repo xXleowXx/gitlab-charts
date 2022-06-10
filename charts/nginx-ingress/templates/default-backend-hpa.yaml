@@ -1,5 +1,10 @@
 {{- if and .Values.defaultBackend.enabled .Values.defaultBackend.autoscaling.enabled }}
+---
+{{- if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
 apiVersion: autoscaling/v2beta2
+{{- else }}
+apiVersion: autoscaling/v2beta1
+{{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
@@ -18,20 +23,34 @@ spec:
   minReplicas: {{ .Values.defaultBackend.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.defaultBackend.autoscaling.maxReplicas }}
   metrics:
-{{- with .Values.defaultBackend.autoscaling.targetCPUUtilizationPercentage }}
+  {{- with .Values.defaultBackend.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
+        {{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
         target:
           type: Utilization
           averageUtilization: {{ . }}
-{{- end }}
-{{- with .Values.defaultBackend.autoscaling.targetMemoryUtilizationPercentage }}
+        {{- else }}
+        targetAverageUtilization: {{ . }}
+        {{- end }}
+  {{- end }}
+  {{- with .Values.defaultBackend.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
+        {{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
         target:
           type: Utilization
           averageUtilization: {{ . }}
-{{- end }}
+        {{- else }}
+        targetAverageUtilization: {{ . }}
+        {{- end }}
+  {{- end }}
+  {{- if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
+  {{- with .Values.defaultBackend.autoscaling.behaviour }}
+  behavior:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
 {{- end }}

@@ -8,7 +8,11 @@ From here on:
 - `.name` is the key (xyz)
 */}}
 ---
+{{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
 apiVersion: autoscaling/v2beta2
+{{- else }}
+apiVersion: autoscaling/v2beta1
+{{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "webservice.fullname.withSuffix" . }}
@@ -26,21 +30,24 @@ spec:
   maxReplicas: {{ .hpa.maxReplicas }}
   metrics:
   {{- if not .hpa.customMetrics }}
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: AverageValue
-        averageValue: {{ .hpa.targetAverageValue }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
+        target:
+          type: AverageValue
+          averageValue: {{ .hpa.targetAverageValue }}
+        {{- else }}
+        targetAverageValue: {{ .hpa.targetAverageValue }}
+        {{- end }}
   {{- else }}
-    {{- toYaml .hpa.customMetrics | nindent 4 -}}
+    {{- toYaml .hpa.customMetrics | nindent 4 }}
   {{- end }}
+  {{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
+  {{- with .hpa.behaviour }}
   behavior:
-  {{- if not .hpa.customBehavior }}
-    scaleDown:
-      stabilizationWindowSeconds: {{ .hpa.scaleDownStabilizationWindowSeconds }}
-  {{- else }}
-    {{- toYaml .hpa.customBehavior | nindent 4 -}}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- end }}
 {{- end }}
 {{/* END range deployments */}}
