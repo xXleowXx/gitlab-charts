@@ -834,7 +834,7 @@ describe 'Webservice Deployments configuration' do
         expect(port_names).to_not include('http-webservice')
 
         workhorse_env = containers[1]['env']
-        expect(workhorse_env).to include(env_value('GITLAB_WORKHORSE_AUTH_BACKEND', 'https://localhost:8081'))
+        expect(workhorse_env).to include(env_value('GITLAB_WORKHORSE_AUTH_BACKEND', 'http://localhost:8080'))
 
         service_ports = t.dig('Service/test-webservice-default', 'spec', 'ports')
         service_port_names = service_ports.map { |entry| entry['name'] }
