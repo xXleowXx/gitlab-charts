@@ -363,7 +363,7 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
-      deliveryMethod: sidekiq
+      deliveryMethod: webhook
       authToken: {}
         # secret:
         # key:
@@ -389,7 +389,7 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
-      deliveryMethod: sidekiq
+      deliveryMethod: webhook
       authToken: {}
         # secret:
         # key:
