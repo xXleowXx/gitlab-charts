@@ -325,7 +325,7 @@ networkpolicy:
   ingress:
     enabled: true
     rules:
-      - to:
+      - from:
         - ipBlock:
             cidr: 0.0.0.0/0
         ports:
