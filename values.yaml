@@ -432,6 +432,10 @@ global:
       clientside_dsn:
       environment:
 
+    gitlab_docs:
+      enabled: false
+      host: ""
+
     smartcard:
       enabled: false
       CASecret:

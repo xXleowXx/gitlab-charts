@@ -929,6 +929,9 @@ global:
       dsn:
       clientside_dsn:
       environment:
+    gitlab_docs:
+      enabled: false
+      host: ""
     smartcard:
       enabled: false
       CASecret:
@@ -1514,6 +1517,23 @@ global:
 | `dsn`            | String  |        | Sentry DSN for backend errors |
 | `clientside_dsn` | String  |        | Sentry DSN for front-end errors |
 | `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/product/sentry-basics/environments/) |
+
+### gitlab_docs settings
+
+Use these settings to enable `gitlab_docs`.
+
+```yaml
+global:
+  appConfig:
+    gitlab_docs:
+      enabled:
+      host:
+```
+
+| Name        | Type    | Default | Description |
+|:----------- |:-------:|:------- |:----------- |
+| `enabled`         | Boolean | `false`  | Enable or Disable the gitlab_docs |
+| `host`            | String  |  ""        | docs host                       |
 
 ### Smartcard Authentication settings
 
