@@ -25,7 +25,7 @@ include:
 <sup>1</sup> In Kubernetes 1.11, [expanding the storage size of your volume is supported](https://kubernetes.io/blog/2018/07/12/resizing-persistent-volumes-using-kubernetes/)
 if you have `allowVolumeExpansion` configured to true in your [Storage Class](https://kubernetes.io/docs/concepts/storage/storage-classes/).
 
-Automating theses changes is complicated due to:
+Automating these changes is complicated because:
 
 1. Kubernetes does not allow changes to most fields in an existing [PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims)
 1. Unless [manually configured](../../installation/storage.md), the [PVC](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) is the only reference to dynamically provisioned [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes)
@@ -271,7 +271,7 @@ status:
 
 Shortly after making the change to the [Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes), the terminal watching the claim status should show `Bound`.
 
-Finally, [apply the changes to the GitLab chart](#apply-the-changes-to-the-gitlab-chart)
+Finally, [apply the changes to the GitLab chart](#apply-the-changes-to-the-gitlab-chart).
 
 ### Switching to a different Volume
 
@@ -310,7 +310,7 @@ spec:
       fsType: ext4
 ```
 
-What you actually want, is to create a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes), like so:
+What you actually want is to create a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes), like so:
 
 ```yaml
 apiVersion: v1
