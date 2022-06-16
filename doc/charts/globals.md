@@ -1622,6 +1622,7 @@ global:
 | scheme | String | `http` | Scheme of the API endpoint |
 | host | String | | Fully qualified hostname or IP address of an API endpoint. Overrides the presence of `serviceName`. |
 | port | Integer | `8181` | Port number of associated API server. |
+| tls.enabled | Boolean | `false` | When set to `true`, enables TLS support for Workhorse. |
 
 ### Bootsnap Cache
 

@@ -354,10 +354,6 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
-            {{- if or .workhorse.monitoring.exporter.enabled .workhorse.metrics.enabled }}
-            - name: GITLAB_WORKHORSE_PROM_LISTEN_ADDR
-              value: "0.0.0.0:{{ .workhorse.monitoring.exporter.port }}"
-            {{- end }}
             {{- if .workhorse.sentryDSN }}
             - name: GITLAB_WORKHORSE_SENTRY_DSN
               value: {{ .workhorse.sentryDSN }}
@@ -444,6 +440,15 @@ spec:
                   path: "puma/puma.crt"
                 - key: "tls.key"
                   path: "puma/puma.key"
+          {{- end }}
+          {{- if $.Values.global.workhorse.tls.enabled }}
+          - secret:
+              name: {{ .workhorse.tls.secretName }}
+              items:
+                - key: "tls.crt"
+                  path: "gitlab-workhorse/tls.crt"
+                - key: "tls.key"
+                  path: "gitlab-workhorse/tls.key"
           {{- end }}
           {{- if $.Values.metrics.tls.enabled }}
           - secret:

@@ -130,6 +130,7 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.livenessProbe.failureThreshold`          | 3                                                               | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded                                                                                                                                                                                                                              |
 | `workhorse.monitoring.exporter.enabled`             | `false`                                                         | Enable workhorse to expose Prometheus metrics, this is overridden by `workhorse.metrics.enabled`                                                                                                                                                                                                                                |
 | `workhorse.monitoring.exporter.port`                | `9229`                                                          | Port number to use for workhorse Prometheus metrics                                                                                                                                                                                                                                                                             |
+| `workhorse.monitoring.exporter.tls.enabled`         | `false`                                                         | When set to `true`, enables TLS on metrics endpoint. It requires [TLS to be enabled for Workhorse](#gitlab-workhorse). |
 | `workhorse.metrics.enabled`                         | `true`                                                          | If a workhorse metrics endpoint should be made available for scraping                                                                                                                                                                                                                                                           |
 | `workhorse.metrics.port`                            | `8083`                                                          | Workhorse metrics endpoint port                                                                                                                                                                                                                                                                                                 |
 | `workhorse.metrics.path`                            | `/metrics`                                                      | Workhorse metrics endpoint path                                                                                                                                                                                                                                                                                                 |
@@ -143,6 +144,9 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.readinessProbe.failureThreshold`         | 3                                                               | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded                                                                                                                                                                                                                             |
 | `workhorse.imageScaler.maxProcs`                    | 2                                                               | The maximum number of image scaling processes that may run concurrently                                                                                                                                                                                                                                                         |
 | `workhorse.imageScaler.maxFileSizeBytes`            | 250000                                                          | The maximum file size in bytes for images to be processed by the scaler                                                                                                                                                                                                                                                         |
+| `workhorse.tls.verify` | `true` | When set to `true` forces NGINX Ingress to verify the TLS certificate of Workhorse. For custom CA you need to set `workhorse.tls.caSecretName` as well. Must be set to `false` for self-signed certificates. |
+| `workhorse.tls.secretName` |  | The name of the [TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets) that contains the TLS key and certificate pair. This is required when Workhorse TLS is enabled.  |
+| `workhorse.tls.caSecretName` |  | The name of the Secret that contains the CA certificate. This **is not** a [TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets), and must have only `ca.crt` key. This is used for TLS verification by NGINX. |
 | `webServer`                                         | `puma`                                                          | Selects web server (Webservice/Puma) that would be used for request handling                                                                                                                                                                                                                                                    |
 | `priorityClassName`                                 | `""`                                                            | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction                                                                                                                                                                                                                            |
 
@@ -272,7 +276,55 @@ A Webservice pod runs two containers:
 
 #### `gitlab-workhorse`
 
-Workhorse supports TLS, but the [Webservice Chart does not yet support configuring these settings](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3316).
+Workhorse supports TLS for both web and metrics endpoints. This will secure the
+communication between Workhorse and other components, in particular `nginx-ingress`,
+`gitlab-shell`, and `gitaly`. The TLS certificate should include the Workhorse
+Service host name (e.g. `RELEASE-webservice-default.default.svc`) in the Common
+Name (CN) or Subject Alternate Name (SAN).
+
+Note that [multiple deployments of Webservice](#deployments-settings) can exist,
+so you need to prepare the TLS certificate for different service names. This
+can be achieved by either multiple SAN or wildcard certificate.
+
+Once the TLS certificate is generated, create a [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets) for it. You also need to create
+another Secret that only contains the CA certificate of the TLS certificate
+with `ca.crt` key.
+
+The TLS can be enabled for `gitlab-workhorse` container by setting `global.workhorse.tls.enabled`
+to `true` as well as passing the Secret names to `gitlab.webservice.workhorse.tls.secretName` and
+`global.certificates.customCAs` accordingly.
+
+When `gitlab.webservice.workhorse.tls.verify` is `true` (it is by default), you
+also need to pass the CA certificate Secret name to `gitlab.webservice.workhorse.tls.caSecretName`.
+This is necessary for self-signed certificates and custom CA. This Secret is used
+by NGINX to verify the TLS certificate of Workhorse.
+
+```yaml
+global:
+  workhorse:
+    tls:
+      enabled: true
+  certificates:
+    customCAs:
+      - secret: gitlab-workhorse-ca
+gitlab:
+  webservice:
+    workhorse:
+      tls:
+        verify: true
+        secretName: gitlab-workhorse-tls
+        caSecretName: gitlab-workhorse-ca
+      monitoring:
+        exporter:
+          enabled: true
+          tls:
+            enabled: true
+```
+
+TLS can be enabled on metrics endpoints for `gitlab-workhorse` container by setting
+`gitlab.webservice.workhorse.monitoring.tls.enabled` to `true`. Note that TLS on
+metrics endpoint is only available when TLS is enabled for Workhorse. The metrics
+listener uses the same TLS certificate that is specified by `gitlab.webservice.workhorse.tls.secretName`.
 
 #### `webservice`
 
