@@ -121,8 +121,13 @@ puma:
   disableWorkerKiller: false
 
 hpa:
+  minReplicas: 2
+  maxReplicas: 10
   targetAverageValue: 1
   customMetrics: # optional replacement of HPA metrics definition
+
+pdb:
+  maxUnavailable: 1
 
 deployment:
   # terminationGracePeriodSeconds: 30
@@ -366,9 +371,7 @@ resources:
   requests:
     cpu: 300m
     memory: 2.5G
-maxUnavailable: 1
-minReplicas: 2
-maxReplicas: 10
+
 helmTests:
   enabled: true
 

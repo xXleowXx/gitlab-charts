@@ -87,11 +87,11 @@ service:
     {{ toYaml .Values.service.annotations | nindent 4 }}
     {{- end }}
 hpa:
-  minReplicas: {{ .Values.minReplicas }} # defaults to .minReplicas
-  maxReplicas: {{ .Values.maxReplicas }} # defaults to .maxReplicas
+  minReplicas: {{ .Values.hpa.minReplicas }} # defaults to .hpa.minReplicas
+  maxReplicas: {{ .Values.hpa.maxReplicas }} # defaults to .hpa.maxReplicas
   {{- .Values.hpa | toYaml | nindent 2 }}
 pdb:
-  maxUnavailable: {{ .Values.maxUnavailable }} # defaults to .maxUnavailable
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }} # defaults to .pdb.maxUnavailable
 resources: # resources for `webservice` container
   {{- .Values.resources | toYaml | nindent 2 }}
 sharedTmpDir: {{ .Values.sharedTmpDir | toYaml | nindent 2 }}
