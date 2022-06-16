@@ -24,7 +24,7 @@
 # `.buildpacks` that contains the URLs, one on each line, in order.
 # Note: Auto CI does not work with multiple buildpacks yet
 
-image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3
+image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.7
 
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
@@ -778,7 +778,7 @@ wait_for_dev_images:
 .publish_chart_package:
   # publish chart into repo's Packages
   stage: package
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.7"
   variables:
     # **Required** variable to set channel to which chart will be published:
     # CHANNEL: "unstable"
