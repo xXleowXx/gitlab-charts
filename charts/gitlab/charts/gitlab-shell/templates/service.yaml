@@ -29,6 +29,10 @@ spec:
   {{- if or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer") }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
   {{- end }}
+{{- if .Values.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml .Values.service.ipFamilies | nindent 4  }}
+{{- end }}
 {{- if .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
 {{- end }}

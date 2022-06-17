@@ -355,6 +355,10 @@
           "title": "Service internal port",
           "type": "number"
         },
+        "ipFamilies": {
+          "title": "IP family to use for single stack or IP families for dual-stack",
+          "type": "array"
+        },
         "loadBalancerIP": {
           "title": "IP address to assign to LoadBalancer",
           "type": "string"

@@ -81,6 +81,7 @@ controlled by `global.shell.port`.
 | `service.nodePort`                              |                                                  | Sets shell nodePort if set                                                                                                                                                      |
 | `service.name`                                  | `gitlab-shell`                                   | Shell service name                                                                                                                                                              |
 | `service.type`                                  | `ClusterIP`                                      | Shell service type                                                                                                                                                              |
+| `service.ipFamilies`                            |                                                  | IP family to use for single stack or IP families for dual-stack                                                                                                                 |
 | `service.loadBalancerIP`                        |                                                  | IP address to assign to LoadBalancer (if supported)                                                                                                                             |
 | `service.loadBalancerSourceRanges`              |                                                  | List of IP CIDRs allowed access to LoadBalancer (if supported)                                                                                                                  |
 | `securityContext.fsGroup`                       | `1000`                                           | Group ID under which the pod should be started                                                                                                                                  |
@@ -285,6 +286,8 @@ Additional information about the `LoadBalancer` service type can be found in
 ```yaml
 service:
   type: LoadBalancer
+  ipFamilies:
+  - IPv4
   loadBalancerIP: 1.2.3.4
   loadBalancerSourceRanges:
   - 5.6.7.8/32
