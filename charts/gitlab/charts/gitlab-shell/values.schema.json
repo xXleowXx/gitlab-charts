@@ -359,6 +359,10 @@
           "title": "IP family to use for single stack or IP families for dual-stack",
           "type": "array"
         },
+        "ipFamilyPolicy": {
+          "title": "The dual-stack-ness requested or required by this Service",
+          "type": "string"
+        },
         "loadBalancerIP": {
           "title": "IP address to assign to LoadBalancer",
           "type": "string"

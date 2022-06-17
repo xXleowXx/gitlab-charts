@@ -82,6 +82,7 @@ controlled by `global.shell.port`.
 | `service.name`                                  | `gitlab-shell`                                   | Shell service name                                                                                                                                                              |
 | `service.type`                                  | `ClusterIP`                                      | Shell service type                                                                                                                                                              |
 | `service.ipFamilies`                            |                                                  | IP family to use for single stack or IP families for dual-stack                                                                                                                 |
+| `service.ipFamilyPolicy`                        |                                                  | The dual-stack-ness requested or required by this Service                                                                                                                       |
 | `service.loadBalancerIP`                        |                                                  | IP address to assign to LoadBalancer (if supported)                                                                                                                             |
 | `service.loadBalancerSourceRanges`              |                                                  | List of IP CIDRs allowed access to LoadBalancer (if supported)                                                                                                                  |
 | `securityContext.fsGroup`                       | `1000`                                           | Group ID under which the pod should be started                                                                                                                                  |
@@ -288,6 +289,7 @@ service:
   type: LoadBalancer
   ipFamilies:
   - IPv4
+  ipFamilyPolicy: SingleStack
   loadBalancerIP: 1.2.3.4
   loadBalancerSourceRanges:
   - 5.6.7.8/32

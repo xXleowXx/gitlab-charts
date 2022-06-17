@@ -29,9 +29,14 @@ spec:
   {{- if or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer") }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
   {{- end }}
+{{- if semverCompare ">=1.20.0-0" .Capabilities.KubeVersion.Version -}}
 {{- if .Values.service.ipFamilies }}
   ipFamilies:
     {{- toYaml .Values.service.ipFamilies | nindent 4  }}
+{{- end }}
+{{- if .Values.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.service.ipFamilyPolicy }}
+{{- end }}
 {{- end }}
 {{- if .Values.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
