@@ -8,7 +8,9 @@ From here on:
 - `.name` is the key (xyz)
 */}}
 ---
-{{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
+{{- if $.Capabilities.APIVersions.Has "autoscaling/v2" }}
+apiVersion: autoscaling/v2
+{{- else if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
 apiVersion: autoscaling/v2beta2
 {{- else }}
 apiVersion: autoscaling/v2beta1
@@ -33,7 +35,7 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        {{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
+        {{- if or ($.Capabilities.APIVersions.Has "autoscaling/v2") ($.Capabilities.APIVersions.Has "autoscaling/v2beta2") }}
         target:
           type: AverageValue
           averageValue: {{ .hpa.targetAverageValue }}
@@ -43,7 +45,7 @@ spec:
   {{- else }}
     {{- toYaml .hpa.customMetrics | nindent 4 }}
   {{- end }}
-  {{- if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
+  {{- if or ($.Capabilities.APIVersions.Has "autoscaling/v2") (and ($.Capabilities.APIVersions.Has "autoscaling/v2beta2") (semverCompare ">=1.18.0-0" $.Capabilities.KubeVersion.Version)) }}
   {{- with .hpa.behaviour }}
   behavior:
     {{- toYaml . | nindent 4 }}

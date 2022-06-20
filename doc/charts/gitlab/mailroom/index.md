@@ -38,7 +38,7 @@ hpa:
   cpu:
     targetAverageUtilization: 75
 
-  # Note that the HPA is limited to autoscaling/v2beta1 and autoscaling/v2beta2
+  # Note that the HPA is limited to autoscaling/v2beta1, autoscaling/v2beta2 and autoscaling/v2
   customMetrics: []
   behavior: {}
 
