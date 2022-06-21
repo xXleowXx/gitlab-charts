@@ -253,6 +253,10 @@ deployment:
 
 hpa:
   targetAverageValue: 350m
+  behaviour:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+
 timeout: 25
 resources:
   # limits:
@@ -280,6 +284,9 @@ pods:
     # priorityClassName: ""
     # hpa:
     #   targetAverageValue:
+    #   behaviour:
+    #     scaleDown:
+    #       stabilizationWindowSeconds:
     # common:
     #   labels: {}
     # podLabels: {}

@@ -38,8 +38,9 @@ hpa:
   cpu:
     targetAverageUtilization: 75
 
-  # Note that the HPA is limited to autoscaling/v2beta1
+  # Note that the HPA is limited to autoscaling/v2beta1, autoscaling/v2beta2 and autoscaling/v2
   customMetrics: []
+  behavior: {}
 
 networkpolicy:
   enabled: false
@@ -73,38 +74,39 @@ serviceAccount:
   # name:
 ```
 
-| Parameter                            | Description                                      | Default                     |
-|--------------------------------------|--------------------------------------------------|-----------------------------|
-| `deployment.strategy`                | Allows one to configure the update strategy utilized by the deployment | `{}`  |
-| `enabled`                            | Mailroom enablement flag                         | `true`                      |
-| `hpa.minReplicas`                    | Minimum number of replicas                       | `1`                         |
-| `hpa.maxReplicas`                    | Maximum number of replicas                       | `2`                         |
-| `hpa.cpu.targetAverageUtilization`   | Target value of the average of the resource metric | `75`                      |
-| `hpa.customMetrics`                  | autoscaling/v2beta1 Metrics contains the specifications for which to use to calculate the desired replica count (overrides the default use of Average CPU Utilization configured in `targetAverageUtilization`) | `[]`  |
-| `image.pullPolicy`                   | Mailroom image pull policy                       | `IfNotPresent`              |
-| `extraEnvFrom`                       | List of extra environment variables from other data sources to expose|          |
-| `image.pullSecrets`                  | Mailroom image pull secrets                      |                             |
-| `image.repository`                   | Mailroom image repository                        | `registry.gitlab.com/gitlab-org/build/cng/gitlab-mailroom` |
-| `image.tag`                          | Mailroom image tag                               | `master`                    |
-| `init.image.repository`              | Mailroom init image repository                   |                             |
-| `init.image.tag`                     | Mailroom init image tag                          |                             |
-| `init.resources`                     | Mailroom init container resource requirements    | `{ requests: { cpu: 50m }}` |
-| `podLabels`                          | Labels for running Mailroom Pods                 | `{}`                          |
-| `common.labels`                      | Supplemental labels that are applied to all objects created by this chart. | `{}` |
-| `resources`                          | Mailroom resource requirements                   | `{ requests: { cpu: 50m, memory: 150M }}` |
-| `networkpolicy.annotations`          | Annotations to add to the NetworkPolicy          | `{}`                          |
-| `networkpolicy.egress.enabled`       | Flag to enable egress rules of NetworkPolicy     | `false`                     |
-| `networkpolicy.egress.rules`         | Define a list of egress rules for NetworkPolicy  | `[]`                          |
-| `networkpolicy.enabled`              | Flag for using NetworkPolicy                     | `false`                     |
-| `networkpolicy.ingress.enabled`      | Flag to enable `ingress` rules of NetworkPolicy  | `false`                     |
-| `networkpolicy.ingress.rules`        | Define a list of `ingress` rules for NetworkPolicy | `[]`                          |
-| `securityContext.fsGroup`            | Group ID under which the pod should be started   | `1000`                      |
-| `securityContext.runAsUser`          | User ID under which the pod should be started    | `1000`                      |
-| `serviceAccount.annotations`         | Annotations for ServiceAccount                   | `{}`                          |
-| `serviceAccount.enabled`             | Flag for using ServiceAccount                    | `false`                       |
-| `serviceAccount.create`              | Flag for creating a ServiceAccount               | `false`                       |
-| `serviceAccount.name`                | Name of ServiceAccount to use                    |                             |
-| `tolerations`                        | Tolerations to add to the Mailroom               |                             |
+| Parameter                              | Description                                                                                                                                                                                 | Default                                                    |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `deployment.strategy`                  | Allows one to configure the update strategy utilized by the deployment                                                                                                                      | `{}`                                                       |
+| `enabled`                              | Mailroom enablement flag                                                                                                                                                                    | `true`                                                     |
+| `hpa.behaviour`                        | Behavior contains the specifications for up- and downscaling behavior (requires `autoscaling/v2beta2` or higher)                                                                            | `{scaleDown: {stabilizationWindowSeconds: 300 }}`
+| `hpa.cpu.targetAverageUtilization`     | Target value of the average of the resource metric                                                                                                                                          | `75`                                                       |
+| `hpa.customMetrics`                    | Custom metrics contains the specifications for which to use to calculate the desired replica count (overrides the default use of Average CPU Utilization configured in `targetAverageUtilization`) | `[]`                                                       |
+| `hpa.maxReplicas`                      | Maximum number of replicas                                                                                                                                                                  | `2`                                                        |
+| `hpa.minReplicas`                      | Minimum number of replicas                                                                                                                                                                  | `1`                                                        |
+| `image.pullPolicy`                     | Mailroom image pull policy                                                                                                                                                                  | `IfNotPresent`                                             |
+| `extraEnvFrom`                         | List of extra environment variables from other data sources to expose                                                                                                                       |                                                            |
+| `image.pullSecrets`                    | Mailroom image pull secrets                                                                                                                                                                 |                                                            |
+| `image.repository`                     | Mailroom image repository                                                                                                                                                                   | `registry.gitlab.com/gitlab-org/build/cng/gitlab-mailroom` |
+| `image.tag`                            | Mailroom image tag                                                                                                                                                                          | `master`                                                   |
+| `init.image.repository`                | Mailroom init image repository                                                                                                                                                              |                                                            |
+| `init.image.tag`                       | Mailroom init image tag                                                                                                                                                                     |                                                            |
+| `init.resources`                       | Mailroom init container resource requirements                                                                                                                                               | `{ requests: { cpu: 50m }}`                                |
+| `podLabels`                            | Labels for running Mailroom Pods                                                                                                                                                            | `{}`                                                       |
+| `common.labels`                        | Supplemental labels that are applied to all objects created by this chart.                                                                                                                  | `{}`                                                       |
+| `resources`                            | Mailroom resource requirements                                                                                                                                                              | `{ requests: { cpu: 50m, memory: 150M }}`                  |
+| `networkpolicy.annotations`            | Annotations to add to the NetworkPolicy                                                                                                                                                     | `{}`                                                       |
+| `networkpolicy.egress.enabled`         | Flag to enable egress rules of NetworkPolicy                                                                                                                                                | `false`                                                    |
+| `networkpolicy.egress.rules`           | Define a list of egress rules for NetworkPolicy                                                                                                                                             | `[]`                                                       |
+| `networkpolicy.enabled`                | Flag for using NetworkPolicy                                                                                                                                                                | `false`                                                    |
+| `networkpolicy.ingress.enabled`        | Flag to enable `ingress` rules of NetworkPolicy                                                                                                                                             | `false`                                                    |
+| `networkpolicy.ingress.rules`          | Define a list of `ingress` rules for NetworkPolicy                                                                                                                                          | `[]`                                                       |
+| `securityContext.fsGroup`              | Group ID under which the pod should be started                                                                                                                                              | `1000`                                                     |
+| `securityContext.runAsUser`            | User ID under which the pod should be started                                                                                                                                               | `1000`                                                     |
+| `serviceAccount.annotations`           | Annotations for ServiceAccount                                                                                                                                                              | `{}`                                                       |
+| `serviceAccount.enabled`               | Flag for using ServiceAccount                                                                                                                                                               | `false`                                                    |
+| `serviceAccount.create`                | Flag for creating a ServiceAccount                                                                                                                                                          | `false`                                                    |
+| `serviceAccount.name`                  | Name of ServiceAccount to use                                                                                                                                                               |                                                            |
+| `tolerations`                          | Tolerations to add to the Mailroom                                                                                                                                                          |                                                            |
 
 ## Incoming email
 

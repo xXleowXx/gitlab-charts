@@ -189,6 +189,10 @@
         "targetAverageValue": {
           "title": "Autoscaling target value",
           "type": "string"
+        },
+        "behaviour": {
+          "title": "Autoscaling behaviour definition",
+          "type": "object"
         }
       },
       "required": [
