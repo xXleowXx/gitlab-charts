@@ -143,6 +143,11 @@ data:
     {{- include "gitlab.scripts.configure.secrets" (dict) | nindent 4 -}}
     {{- include "gitlab.psql.ssl.initScript" . | nindent 4 }}
     {{- include "gitlab.geo.psql.ssl.initScript" . | nindent 4 }}
+    {{- if $.Values.tls.enabled }}
+      mkdir -p /init-secrets/puma
+      cp -v -L /init-config/puma/puma.crt /init-secrets/puma/puma.crt
+      cp -v -L /init-config/puma/puma.key /init-secrets/puma/puma.key
+    {{- end }}
 
 {{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
