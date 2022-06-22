@@ -7,7 +7,13 @@
 {{-   $hpa := default dict .hpa }}
 {{-   include "sidekiq.pod.common.labels" . }}
 ---
+{{- if $.Capabilities.APIVersions.Has "autoscaling/v2" }}
+apiVersion: autoscaling/v2
+{{- else if $.Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
+apiVersion: autoscaling/v2beta2
+{{- else }}
 apiVersion: autoscaling/v2beta1
+{{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ printf "%s-v2" ($queueName | trunc 60) }}
@@ -23,9 +29,21 @@ spec:
   minReplicas: {{ default $.Values.minReplicas .minReplicas }}
   maxReplicas: {{ default $.Values.maxReplicas .maxReplicas }}
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      targetAverageValue: {{ default $.Values.hpa.targetAverageValue $hpa.targetAverageValue }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if or ($.Capabilities.APIVersions.Has "autoscaling/v2") ($.Capabilities.APIVersions.Has "autoscaling/v2beta2") }}
+        target:
+          type: AverageValue
+          averageValue: {{ default $.Values.hpa.targetAverageValue $hpa.targetAverageValue }}
+        {{- else }}
+        targetAverageValue: {{ default $.Values.hpa.targetAverageValue $hpa.targetAverageValue }}
+        {{- end }}
+  {{- if or ($.Capabilities.APIVersions.Has "autoscaling/v2") (and ($.Capabilities.APIVersions.Has "autoscaling/v2beta2") (semverCompare ">=1.18.0-0" $.Capabilities.KubeVersion.Version)) }}
+  {{- with default $.Values.hpa.behaviour $hpa.behaviour }}
+  behavior:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
 {{- end }}
 {{- end -}}
