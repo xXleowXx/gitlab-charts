@@ -113,16 +113,26 @@ the rest of this documentation.
   - IP address
   - hostname (optional)
 - Primary cluster:
-  - Ingress IP address
+  - External URL
+  - Internal URL
   - IP addresses of nodes
 - Secondary cluster:
-  - Ingress IP address
+  - Internal URL
   - IP addresses of nodes
 - Database Passwords (_must pre-decide the passwords_):
   - `gitlab` (used in `postgresql['sql_user_password']`, `global.psql.password`)
   - `gitlab_geo` (used in `geo_postgresql['sql_user_password']`, `global.geo.psql.password`)
   - `gitlab_replicator` (needed for replication)
 - Your GitLab license file
+
+The Internal URL of each cluster must be unique to the cluster, so that all
+clusters can make requests to all other clusters. For example:
+
+- External URL of all clusters: `https://gitlab.example.com`
+- Primary cluster's Internal URL: `https://london.gitlab.example.com`
+- Secondary cluster's Internal URL: `https://shanghai.gitlab.example.com`
+
+This guide does not cover setting up DNS.
 
 The `gitlab` and `gitlab_geo` database user passwords must exist in two
 forms: bare password, and PostgreSQL hashed password. To obtain the hashed form,
@@ -288,10 +298,10 @@ this as the Primary site. We will do this via the Toolbox Pod.
    kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rake geo:set_primary_node
    ```
 
-1. Set the primary site's Internal URL to a URL which is unique to the primary cluster. For example, you can use a URL with the primary cluster's Ingress IP address with `kubectl exec`:
+1. Set the primary site's Internal URL with a Rails runner command. Replace `https://primary.gitlab.example.com` with the actual Internal URL:
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: https://primary-cluster-ip"
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: 'https://primary.gitlab.example.com'"
    ```
 
 1. Check the status of Geo configuration:
@@ -344,7 +354,7 @@ this example configuration:
 
 ```ruby
 ### Geo Secondary
-# external_url matches the Primary site
+# external_url must match the Primary cluster's external_url
 external_url 'http://gitlab.example.com'
 roles ['geo_secondary_role']
 gitlab_rails['enable'] = true
@@ -593,7 +603,7 @@ the Primary site that the Secondary site exists:
 1. Select **Add site**.
 1. Add the **secondary** site. Use the full GitLab URL for the URL.
 1. Enter a Name with the `global.geo.nodeName` of the Secondary site. These values must always match exactly, character for character.
-1. Enter Internal URL with a URL which is unique to the secondary cluster. For example, you can use a URL with the secondary cluster's Ingress IP address, like `https://secondary-cluster-ip`.
+1. Enter Internal URL, for example `https://shanghai.gitlab.example.com`.
 1. Optionally, choose which groups or storage shards should be replicated by the
    **secondary** site. Leave blank to replicate all.
 1. Select **Add node**.
