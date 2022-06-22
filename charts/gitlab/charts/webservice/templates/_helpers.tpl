@@ -124,8 +124,8 @@ provider = "{% $provider %}"
 # AWS / S3 object storage configuration.
 [object_storage.s3]
 # access/secret can be blank!
-aws_access_key_id = "{% $aws_access_key_id %}"
-aws_secret_access_key = "{% $aws_secret_access_key %}"
+aws_access_key_id = {% $aws_access_key_id | strings.TrimSpace | data.ToJSON %}
+aws_secret_access_key = {% $aws_secret_access_key | strings.TrimSpace | data.ToJSON %}
 {%-   else if eq $provider "AzureRM" %}
 # Azure Blob storage configuration.
 [object_storage.azurerm]
