@@ -60,6 +60,9 @@ minReplicas: 2
 maxReplicas: 10
 hpa:
   targetAverageValue: 100m
+  behaviour:
+    scaleDown:
+      stabilizationWindowSeconds: 300
 
 deployment:
   terminationGracePeriodSeconds: 30

@@ -41,44 +41,45 @@ helm upgrade --force --install gitlab . \
 
 The table below contains all the possible charts configurations that can be supplied to the `helm install` command using the `--set` flags.
 
-| Parameter                   | Default        | Description                      |
-| --------------------------- | -------------- | ---------------------------------|
-| `annotations`               | `{}`           | Pod annotations                  |
-| `common.labels`             | `{}`           | Supplemental labels that are applied to all objects created by this chart.  |
-| `deployment.livenessProbe.initialDelaySeconds`  | 20     | Delay before liveness probe is initiated       |
-| `deployment.livenessProbe.periodSeconds`        | 60     | How often to perform the liveness probe        |
-| `deployment.livenessProbe.timeoutSeconds`       | 30     | When the liveness probe times out              |
-| `deployment.livenessProbe.successThreshold`     | 1      | Minimum consecutive successes for the liveness probe to be considered successful after having failed |
-| `deployment.livenessProbe.failureThreshold`     | 3      | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded |
-| `deployment.readinessProbe.initialDelaySeconds` | 0      | Delay before readiness probe is initiated      |
-| `deployment.readinessProbe.periodSeconds`       | 10     | How often to perform the readiness probe       |
-| `deployment.readinessProbe.timeoutSeconds`      | 2      | When the readiness probe times out             |
-| `deployment.readinessProbe.successThreshold`    | 1      | Minimum consecutive successes for the readiness probe to be considered successful after having failed |
-| `deployment.readinessProbe.failureThreshold`    | 3      | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded |
-| `deployment.strategy`      | `{}`                  | Allows one to configure the update strategy used by the deployment. When not provided, the cluster default is used. |
-| `hpa.targetAverageValue`    | `100m`         | Set the autoscaling target value (CPU) |
-| `image.repository`          | `registry.gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck` | Spamcheck image repository |
-| `logging.format`         | `json`      | Log format  |
-| `logging.level`   | `info`     | Log level |
-| `metrics.enabled`           | `true`         | Toggle Prometheus metrics exporter |
-| `metrics.port`              | `8003`         | Port number to use for the metrics exporter |
-| `metrics.path`              | `/metrics`     | Path to use for the metrics exporter |
-| `maxReplicas`               | `10`           | HPA `maxReplicas`                |
-| `maxUnavailable`            | `1`            | HPA `maxUnavailable`             |
-| `minReplicas`               | `2`            | HPA `maxReplicas`                |
-| `podLabels`                 | `{}`           | Supplemental Pod labels. Not used for selectors. |
-| `resources.requests.cpu`    | `100m`         | Spamcheck minimum CPU                    |
-| `resources.requests.memory` | `100M`         | Spamcheck minimum memory                 |
-| `securityContext.fsGroup`        | `1000`                | Group ID under which the pod should be started |
-| `securityContext.runAsUser`      | `1000`                | User ID under which the pod should be started  |
-| `serviceLabels`                  | `{}`                  | Supplemental service labels |
-| `service.externalPort`           | `8001`                | Spamcheck external port |
-| `service.internalPort`           | `8001`                | Spamcheck internal port |
-| `service.type`                   | `ClusterIP`           | Spamcheck service type |
-| `serviceAccount.enabled`             | Flag for using ServiceAccount                    | `false`                       |
-| `serviceAccount.create`              | Flag for creating a ServiceAccount               | `false`                       |
-| `tolerations`                    | `[]`                  | Toleration labels for pod assignment |
-| `extraEnvFrom`              | `{}`|List of extra environment variables from other data sources to expose|
+| Parameter                                       | Default                                                                                              | Description                                                                                                         |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `annotations`                                   | `{}`                                                                                                 | Pod annotations                                                                                                     |
+| `common.labels`                                 | `{}`                                                                                                 | Supplemental labels that are applied to all objects created by this chart.                                          |
+| `deployment.livenessProbe.initialDelaySeconds`  | 20                                                                                                   | Delay before liveness probe is initiated                                                                            |
+| `deployment.livenessProbe.periodSeconds`        | 60                                                                                                   | How often to perform the liveness probe                                                                             |
+| `deployment.livenessProbe.timeoutSeconds`       | 30                                                                                                   | When the liveness probe times out                                                                                   |
+| `deployment.livenessProbe.successThreshold`     | 1                                                                                                    | Minimum consecutive successes for the liveness probe to be considered successful after having failed                |
+| `deployment.livenessProbe.failureThreshold`     | 3                                                                                                    | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded                  |
+| `deployment.readinessProbe.initialDelaySeconds` | 0                                                                                                    | Delay before readiness probe is initiated                                                                           |
+| `deployment.readinessProbe.periodSeconds`       | 10                                                                                                   | How often to perform the readiness probe                                                                            |
+| `deployment.readinessProbe.timeoutSeconds`      | 2                                                                                                    | When the readiness probe times out                                                                                  |
+| `deployment.readinessProbe.successThreshold`    | 1                                                                                                    | Minimum consecutive successes for the readiness probe to be considered successful after having failed               |
+| `deployment.readinessProbe.failureThreshold`    | 3                                                                                                    | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded                 |
+| `deployment.strategy`                           | `{}`                                                                                                 | Allows one to configure the update strategy used by the deployment. When not provided, the cluster default is used. |
+| `hpa.behaviour`                                 | `{scaleDown: {stabilizationWindowSeconds: 300 }}`                                                    | Behavior contains the specifications for up- and downscaling behavior (requires `autoscaling/v2beta2` or higher)    |
+| `hpa.targetAverageValue`                        | `100m`                                                                                               | Set the autoscaling target value (CPU)                                                                              |
+| `image.repository`                              | `registry.gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck` | Spamcheck image repository                                                                                          |
+| `logging.format`                                | `json`                                                                                               | Log format                                                                                                          |
+| `logging.level`                                 | `info`                                                                                               | Log level                                                                                                           |
+| `metrics.enabled`                               | `true`                                                                                               | Toggle Prometheus metrics exporter                                                                                  |
+| `metrics.port`                                  | `8003`                                                                                               | Port number to use for the metrics exporter                                                                         |
+| `metrics.path`                                  | `/metrics`                                                                                           | Path to use for the metrics exporter                                                                                |
+| `maxReplicas`                                   | `10`                                                                                                 | HPA `maxReplicas`                                                                                                   |
+| `maxUnavailable`                                | `1`                                                                                                  | HPA `maxUnavailable`                                                                                                |
+| `minReplicas`                                   | `2`                                                                                                  | HPA `maxReplicas`                                                                                                   |
+| `podLabels`                                     | `{}`                                                                                                 | Supplemental Pod labels. Not used for selectors.                                                                    |
+| `resources.requests.cpu`                        | `100m`                                                                                               | Spamcheck minimum CPU                                                                                               |
+| `resources.requests.memory`                     | `100M`                                                                                               | Spamcheck minimum memory                                                                                            |
+| `securityContext.fsGroup`                       | `1000`                                                                                               | Group ID under which the pod should be started                                                                      |
+| `securityContext.runAsUser`                     | `1000`                                                                                               | User ID under which the pod should be started                                                                       |
+| `serviceLabels`                                 | `{}`                                                                                                 | Supplemental service labels                                                                                         |
+| `service.externalPort`                          | `8001`                                                                                               | Spamcheck external port                                                                                             |
+| `service.internalPort`                          | `8001`                                                                                               | Spamcheck internal port                                                                                             |
+| `service.type`                                  | `ClusterIP`                                                                                          | Spamcheck service type                                                                                              |
+| `serviceAccount.enabled`                        | Flag for using ServiceAccount                                                                        | `false`                                                                                                             |
+| `serviceAccount.create`                         | Flag for creating a ServiceAccount                                                                   | `false`                                                                                                             |
+| `tolerations`                                   | `[]`                                                                                                 | Toleration labels for pod assignment                                                                                |
+| `extraEnvFrom`                                  | `{}`                                                                                                 | List of extra environment variables from other data sources to expose                                               |
 
 ## Chart configuration examples
 
