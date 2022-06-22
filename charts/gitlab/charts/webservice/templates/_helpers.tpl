@@ -129,8 +129,8 @@ aws_secret_access_key = {% $aws_secret_access_key | strings.TrimSpace | data.ToJ
 {%-   else if eq $provider "AzureRM" %}
 # Azure Blob storage configuration.
 [object_storage.azurerm]
-azure_storage_account_name = "{% $azure_storage_account_name %}"
-azure_storage_access_key = "{% $azure_storage_access_key %}"
+azure_storage_account_name = {% $azure_storage_account_name | strings.TrimSpace | data.ToJSON %}
+azure_storage_access_key = {% $azure_storage_access_key | strings.TrimSpace | data.ToJSON %}
 {%-   end %}
 {%- end %}
 {{- end -}}
