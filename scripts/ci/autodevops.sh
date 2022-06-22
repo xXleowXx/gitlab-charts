@@ -80,8 +80,6 @@ function deploy() {
 
   # YAML_FILE=""${KUBE_INGRESS_BASE_DOMAIN//\./-}.yaml"
 
-  helm repo add gitlab https://charts.gitlab.io/
-  helm repo add jetstack https://charts.jetstack.io
   helm dep update .
 
   WAIT="--wait --timeout 900s"
