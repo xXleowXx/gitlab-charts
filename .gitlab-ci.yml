@@ -330,7 +330,6 @@ stop_review_eks:
   script:
     - check_kube_domain
     - check_domain_ip
-#    - download_chart
     - ensure_namespace
     - create_secret
     - deploy
@@ -358,7 +357,6 @@ stop_review_eks:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
     - check_domain_ip
-#    - download_chart
     - ensure_namespace
     - create_secret
     - deploy

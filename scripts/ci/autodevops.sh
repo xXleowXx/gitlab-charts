@@ -218,16 +218,6 @@ function restart_toolbox() {
   return 0
 }
 
-function download_chart() {
-  mkdir -p chart/
-
-  helm repo add gitlab https://charts.gitlab.io
-  helm repo add jetstack https://charts.jetstack.io
-
-  helm dependency update chart/
-  helm dependency build chart/
-}
-
 function ensure_namespace() {
   kubectl describe namespace "$NAMESPACE" || kubectl create namespace "$NAMESPACE"
 }
