@@ -289,3 +289,7 @@ By default, the Helm charts use the Enterprise Edition of GitLab. The Enterprise
 ```shell
 --set global.edition=ce
 ```
+
+## Install the product documentation
+
+This is an optional step. See how to [self-host the product documentation](https://docs.gitlab.com/ee/administration/docs_self_host.html).

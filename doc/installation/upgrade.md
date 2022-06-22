@@ -74,6 +74,8 @@ The following are the steps to upgrade GitLab to a newer version:
      --set ...
    ```
 
+1. [Upgrade the product documentation](https://docs.gitlab.com/ee/administration/docs_self_host.html#upgrade-the-product-documentation-to-a-later-version).
+
 During a major database upgrade, we ask you to set `gitlab.migrations.enabled` set to `false`.
 Ensure that you explicitly set it back to `true` for future updates.
 
