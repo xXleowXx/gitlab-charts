@@ -20,7 +20,7 @@ Checked-in but modified sources of third-party charts. Follow the [forked charts
 
 ## Upstream chart dependencies
 
-These are dependencies checked into the `charts` folder as `.tgz` files, but are downloaded copies of charts available in public repositories. The versions and locations from where these are downloaded is controlled by the `requirements.yml` file. These have been checked into the source code repository so that our build and test pipelines do not need to depend on the availability of the Helm repositories these are typically downloaded from.
+These are dependencies bundled into the `charts` folder as `.tgz` files during packaging or prior to a deployment of the git checkout, and are downloaded copies of charts available in public repositories. The versions and locations from where these are downloaded is controlled by the `requirements.yml` file.
 
 ### Update upstream chart dependency
 
