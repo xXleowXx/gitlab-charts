@@ -275,7 +275,10 @@
     },
     "maxUnavailable": {
       "title": "Maximum number of unavailable pods",
-      "type": "number"
+      "anyOf": [
+        { "type": "string" },
+        { "type": "number" }
+      ]
     },
     "minReplicas": {
       "title": "Minimum number of pod replicas",
