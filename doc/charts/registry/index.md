@@ -615,7 +615,7 @@ kubectl create secret generic registry-storage \
     --from-file=gcs.json=example-project-382839-gcs-bucket.json
 ```
 
-You can [disable redirect for the storage driver](https://docs.gitlab.com/ee/administration/packages/container_registry.html#disable-redirect-for-storage-driver),
+You can [disable the redirect for the storage driver](https://docs.gitlab.com/ee/administration/packages/container_registry.html#disable-redirect-for-storage-driver),
 ensuring that all traffic flows through the Registry service instead of redirecting to another backend:
 
 ```yaml
