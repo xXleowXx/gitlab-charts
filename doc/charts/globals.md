@@ -900,7 +900,7 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
-      deliveryMethod: sidekiq
+      deliveryMethod: webhook
       authToken: {}
 
     serviceDeskEmail:
@@ -920,7 +920,7 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
-      deliveryMethod: sidekiq
+      deliveryMethod: webhook
       authToken: {}
 
     cron_jobs: {}
