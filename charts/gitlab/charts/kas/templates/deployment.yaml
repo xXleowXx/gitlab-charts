@@ -47,8 +47,8 @@ spec:
       {{- end }}
       {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
-      automountServiceAccountToken: false
       {{- end }}
+      automountServiceAccountToken: false
       {{- if eq (default .Values.global.antiAffinity .antiAffinity) "hard" }}
       affinity:
         podAntiAffinity:
