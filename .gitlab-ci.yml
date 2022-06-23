@@ -254,6 +254,7 @@ review_gke_dev:
 review_eks:
   variables:
     DNS_PROVIDER: "aws"
+    TRACE: "1" # Debug on CI
   extends: .review_template
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
