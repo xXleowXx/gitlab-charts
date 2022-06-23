@@ -80,7 +80,7 @@ function deploy() {
 
   # YAML_FILE=""${KUBE_INGRESS_BASE_DOMAIN//\./-}.yaml"
 
-  WAIT="--wait --timeout 900s"
+  WAIT="--wait --timeout 9000s"
 
   # Only enable Prometheus on `master`
   PROMETHEUS_INSTALL="false"
@@ -137,7 +137,7 @@ CIYAML
         cpu: 100m
 CIYAML
 
-  helm upgrade --install \
+  time helm upgrade --install \
     $WAIT \
     -f ci.details.yaml \
     -f ci.scale.yaml \
