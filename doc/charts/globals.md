@@ -34,6 +34,7 @@ for more information on how the global variables work.
 - [Service Accounts](#service-accounts)
 - [Annotations](#annotations)
 - [Tracing](#tracing)
+- [Error Tracking](#error-tracking)
 - [extraEnv](#extraenv)
 - [extraEnvFrom](#extraenvfrom)
 - [OAuth](#configure-oauth-settings)
@@ -1989,6 +1990,20 @@ global:
 
 - `global.tracing.connection.string` is used to configure where tracing spans would be sent. You can read more about that in [GitLab tracing documentation](https://docs.gitlab.com/ee/development/distributed_tracing.html)
 - `global.tracing.urlTemplate` is used as a template for tracing info URL rendering in GitLab performance bar.
+
+## Error Tracking
+
+Gitlab Helm charts support error tracking, and you can configure it with:
+
+```yaml
+global:
+  errortracking:
+    apiUrl: 'http://localhost:8080'
+    sharedSecret: 'some_shared_secret'
+```
+
+- `global.errortracking.apiUrl` is used to configure our error tracking backend.
+- `global.errortracking.sharedSecret` is used to configure authentication for the error tracking service.
 
 ## extraEnv
 

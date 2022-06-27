@@ -695,6 +695,11 @@ global:
       string: ""
     urlTemplate: ""
 
+  ## https://docs.gitlab.com/charts/charts/globals/#error-tracking
+  errortracking:
+    apiUrl: ""
+    sharedSecret: ""
+
   ## https://docs.gitlab.com/charts/charts/globals
   extraEnv: {}
   #   SOME_KEY: some_value
