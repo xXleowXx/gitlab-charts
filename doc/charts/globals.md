@@ -189,7 +189,7 @@ the `global.gitlabVersion` key:
 This impacts the default image tag used in the `webservice`, `sidekiq`, and `migration`
 charts. The version set here will be resolved to the following images:
 
-```text
+```plaintext
 registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee:v14.7.0
 registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee:v14.7.0
 registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee:v14.7.0
