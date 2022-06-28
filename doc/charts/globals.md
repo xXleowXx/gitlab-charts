@@ -183,12 +183,28 @@ The GitLab version used in the default image tag for the charts can be changed u
 the `global.gitlabVersion` key:
 
 ```shell
---set global.gitlabVersion=11.0.1
+--set global.gitlabVersion=14.7.0
 ```
 
 This impacts the default image tag used in the `webservice`, `sidekiq`, and `migration`
-charts. Note that the `gitaly`, `gitlab-shell` and `gitlab-runner` image tags should
+charts. The version set here will be resolved to the following images:
+
+```
+registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ee:v14.7.0
+registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ee:v14.7.0
+registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ee:v14.7.0
+...
+```
+
+For a list of available tags you can browse the [GitLab Container Registry](https://gitlab.com/groups/gitlab-org/-/container_registries/).
+
+Note that the `gitaly`, `gitlab-shell` and `gitlab-runner` image tags should
 be separately updated to versions compatible with the GitLab version.
+
+Similarly, if you wish to use images built from GitLab branches, which are published to different
+image repositories, you will have to set `gitlab.<component>.image.repository`
+and `gitlab.<component>.image.tag` accordingly. The repository and tag can be obtained
+from the CI/CD logs of the merge request that triggered the build.
 
 ## Configure PostgreSQL settings
 
