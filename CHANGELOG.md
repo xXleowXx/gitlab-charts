@@ -36,6 +36,10 @@ No changes.
 - [Update gitlab-org/charts/gitlab-runner from 0.40.1 to 0.41.0](gitlab-org/charts/gitlab@6c34ec8cdd54b165f50444ff1d75dcad480d53c2) ([merge request](gitlab-org/charts/gitlab!2584))
 - [Update gitlab-org/container-registry from 3.41.1-gitlab to 3.42.0-gitlab](gitlab-org/charts/gitlab@2a0747412050b8f5b94dc23dd1e40bd5cf78496f) ([merge request](gitlab-org/charts/gitlab!2580))
 
+## 6.0.4 (2022-06-30)
+
+No changes.
+
 ## 6.0.3 (2022-06-16)
 
 No changes.
