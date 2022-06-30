@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.1.1 (2022-06-30)
+
+No changes.
+
 ## 6.1.0 (2022-06-21)
 
 ### Added (5 changes)
@@ -31,6 +35,10 @@ entry.
 - [Update gitlab-org/container-registry from 3.42.0-gitlab to 3.43.0-gitlab](gitlab-org/charts/gitlab@2bde33a3218c0cc3045462934db150c07d881c9e) ([merge request](gitlab-org/charts/gitlab!2588))
 - [Update gitlab-org/charts/gitlab-runner from 0.40.1 to 0.41.0](gitlab-org/charts/gitlab@6c34ec8cdd54b165f50444ff1d75dcad480d53c2) ([merge request](gitlab-org/charts/gitlab!2584))
 - [Update gitlab-org/container-registry from 3.41.1-gitlab to 3.42.0-gitlab](gitlab-org/charts/gitlab@2a0747412050b8f5b94dc23dd1e40bd5cf78496f) ([merge request](gitlab-org/charts/gitlab!2580))
+
+## 6.0.4 (2022-06-30)
+
+No changes.
 
 ## 6.0.3 (2022-06-16)
 
@@ -87,6 +95,12 @@ No changes.
 - [Update 'Add License' location](gitlab-org/charts/gitlab@53f38975abef245735162df2f3208bd8547703cd) ([merge request](gitlab-org/charts/gitlab!2568))
 - [Add docs on certmanager-issuer chart](gitlab-org/charts/gitlab@74413b7abc3f6c9896fd7a7e0af86b869764411d) ([merge request](gitlab-org/charts/gitlab!2507))
 - [Update kubectl image to use yq v4.23.1](gitlab-org/charts/gitlab@966e02d12b1177888607f0d224caa97adcdc3940) ([merge request](gitlab-org/charts/gitlab!2459))
+
+## 5.10.5 (2022-06-30)
+
+### Changed (1 change)
+
+- [Makes 14.9 a required upgrade before moving to 14.10](gitlab-org/security/charts/gitlab@ddbd9cfaebe6f84ab132ebb444b16511108e844e)
 
 ## 5.10.4 (2022-06-01)
 
