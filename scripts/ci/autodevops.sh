@@ -80,7 +80,7 @@ function deploy() {
 
   # YAML_FILE=""${KUBE_INGRESS_BASE_DOMAIN//\./-}.yaml"
 
-  helm dep update .
+  helm dependency update .
 
   WAIT="--wait --timeout 900s"
 
