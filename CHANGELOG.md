@@ -96,6 +96,12 @@ No changes.
 - [Add docs on certmanager-issuer chart](gitlab-org/charts/gitlab@74413b7abc3f6c9896fd7a7e0af86b869764411d) ([merge request](gitlab-org/charts/gitlab!2507))
 - [Update kubectl image to use yq v4.23.1](gitlab-org/charts/gitlab@966e02d12b1177888607f0d224caa97adcdc3940) ([merge request](gitlab-org/charts/gitlab!2459))
 
+## 5.10.5 (2022-06-30)
+
+### Changed (1 change)
+
+- [Makes 14.9 a required upgrade before moving to 14.10](gitlab-org/security/charts/gitlab@ddbd9cfaebe6f84ab132ebb444b16511108e844e)
+
 ## 5.10.4 (2022-06-01)
 
 No changes.
