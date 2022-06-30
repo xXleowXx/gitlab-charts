@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 5.10.5 (2022-06-30)
+
+### Changed (1 change)
+
+- [Makes 14.9 a required upgrade before moving to 14.10](gitlab-org/security/charts/gitlab@ddbd9cfaebe6f84ab132ebb444b16511108e844e)
+
 ## 5.10.4 (2022-06-01)
 
 No changes.
