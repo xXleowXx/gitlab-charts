@@ -9,6 +9,7 @@ dependencies:
     - name: .* # everything else
       enabled: true
   settings:
+    before_commit: helm dependency update
     # Assign to WarheadsSE (jplum) and twk3 (dmountney) by default
     gitlab_assignee_ids:
       - 597578
