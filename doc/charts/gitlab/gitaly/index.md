@@ -219,7 +219,8 @@ git:
   config:
     - key: "pack.threads"
       value: 4
-    - {key: "fsck.missingSpaceBeforeDate", value: "ignore"}
+    - key: "fsck.missingSpaceBeforeDate"
+      value: ignore
 ```
 
 ### Altering security contexts
