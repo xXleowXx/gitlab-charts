@@ -54,6 +54,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated = append $deprecated (include "certmanager.createCustomResource" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.global.imagePullPolicy" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.task-runner" .) -}}
+{{- $deprecated = append $deprecated (include "gitlab.deprecate.gitaly-gitconfig-volume" .) -}}
 
 {{- /* prepare output */}}
 {{- $deprecated = without $deprecated "" -}}
@@ -421,6 +422,15 @@ global.imagePullPolicy:
 gitlab.task-runner:
     The configuration of `gitlab.task-runner` has been renamed. Please use `gitlab.toolbox` instead.
     If you have enabled persistence for `task-runner` and/or its CronJob for backups, you may need to manually bind the new `toolbox` PVC to the previous `task-runner` PV.
+{{-   end -}}
+{{- end -}}
+
+{{- define "gitlab.deprecate.gitaly-gitconfig-volume" -}}
+{{-   if hasKey .Values.gitlab.gitaly "extraVolumes" -}}
+{{-     if regexMatch "- *name:[^\n]*git-?config" .Values.gitlab.gitaly.extraVolumes -}}
+gitaly:
+    Git commands spawned by Gitaly have stopped reading `gitconfig` files. Please stop mounting `gitconfig` volumes and use the `git.config` value to inject Git configuration.
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
 
