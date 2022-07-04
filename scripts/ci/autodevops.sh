@@ -60,6 +60,7 @@ function deploy() {
       "--set" "gitlab.gitaly.image.tag=${image_branch}"
       "--set" "gitlab.gitlab-shell.image.tag=${image_branch}"
       "--set" "gitlab.gitlab-exporter.image.tag=${image_branch}"
+      "--set" "gitlab.kas.image.tag=${image_branch}"
       "--set" "registry.image.tag=${image_branch}"
     )
   fi
