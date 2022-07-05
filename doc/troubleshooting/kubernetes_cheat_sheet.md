@@ -201,9 +201,7 @@ and they will assist you with any issues you are having.
   helm upgrade <release name> <chart path> -f gitlab.yaml
   ```
 
-  After <https://gitlab.com/gitlab-org/charts/gitlab/-/issues/780> is fixed, it should
-  be possible to use [Updating GitLab using the Helm Chart](../index.md#updating-gitlab-using-the-helm-chart)
-  for upgrades.
+  See also [Updating GitLab using the Helm Chart](../installation/upgrade.md).
 
 - How to apply changes to GitLab configuration:
 
