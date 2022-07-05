@@ -80,7 +80,7 @@ and they will assist you with any issues you are having.
   kubectl get cronjobs
   ```
 
-  When one configures [cron-based backups](../../backup-restore/backup.md#cron-based-backup),
+  When one configures [cron-based backups](../backup-restore/backup.md#cron-based-backup),
   you will be able to see the new schedule here. Some details about the schedules can be found
   in [Running Automated Tasks with a CronJob](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#creating-a-cron-job)
 
@@ -202,7 +202,7 @@ and they will assist you with any issues you are having.
   ```
 
   After <https://gitlab.com/gitlab-org/charts/gitlab/-/issues/780> is fixed, it should
-  be possible to use [Updating GitLab using the Helm Chart](../../index.md#updating-gitlab-using-the-helm-chart)
+  be possible to use [Updating GitLab using the Helm Chart](../index.md#updating-gitlab-using-the-helm-chart)
   for upgrades.
 
 - How to apply changes to GitLab configuration:
@@ -223,8 +223,8 @@ all Kubernetes resources and dependent charts:
 
 ## Installation of minimal GitLab configuration via minikube on macOS
 
-This section is based on [Developing for Kubernetes with minikube](../../development/minikube/index.md)
-and [Helm](../../installation/tools.md#helm). Refer
+This section is based on [Developing for Kubernetes with minikube](../development/minikube/index.md)
+and [Helm](../installation/tools.md#helm). Refer
 to those documents for details.
 
 - Install Kubectl via Homebrew:
@@ -278,7 +278,7 @@ to those documents for details.
   on your workstation.
 
 - When all the pods show either a `Running` or `Completed` status, get the GitLab password as
-  described in [Initial login](../../installation/deployment.md#initial-login),
+  described in [Initial login](../installation/deployment.md#initial-login),
   and log in to GitLab via the UI. It will be accessible via `https://gitlab.domain`
   where `domain` is the value provided in the YAML file.
 
