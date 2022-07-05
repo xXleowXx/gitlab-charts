@@ -423,7 +423,7 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `priorityClassName`             | String  | `""`                                                                | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction                                                                                                                                                                    |
 | `hpa.targetAverageValue`        | String  |                                                                     | Overrides the autoscaling target value for the given pod.                                                                                                                                                                                                               |
 | `extraEnv`                      |   Map   |                                                                     | List of extra environment variables to expose. The chart-wide value is merged into this, with values from the pod taking precedence                                                                                                                                     |
-| `extraEnvFrom`                  |   Map   | | List of extra environment variables from other data source to expose          | 
+| `extraEnvFrom`                  |   Map   | | List of extra environment variables from other data source to expose          |
 | `terminationGracePeriodSeconds` |  `30`   | Optional duration in seconds the pod needs to terminate gracefully. |
 
 ### queues
