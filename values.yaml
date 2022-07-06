@@ -764,14 +764,6 @@ nginx-ingress:
   enabled: true
   tcpExternalConfig: "true"
   controller:
-
-    # Test UBI variant of NGINX Ingress Controller image.
-    # TODO: remove after testing in CI.
-    image:
-      repository: registry.gitlab.com/gitlab-org/cloud-native/charts/gitlab-ingress-nginx/controller
-      tag: 991c5ba4
-      digest: "sha256:8219ebd16a2f3560647d2c7689b11d3c6f6ceee037d5afc04e34cee9335a7051"
-
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
     config:
