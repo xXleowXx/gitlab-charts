@@ -136,12 +136,12 @@ must be `+%{key}`.
 | Parameter                                            | Description                                                                                                            | Default                                                        |
 |------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
 | `global.appConfig.serviceDeskEmail.address`          | The email address to reference the item being replied to (example: `project_contact+%{key}@gmail.com`)                 | empty                                                          |
-| `global.appConfig.serviceDeskEmail.enabled`          | Enable service desk email                                                                                              | false                                                          |
+| `global.appConfig.serviceDeskEmail.enabled`          | Enable Service Desk email                                                                                              | false                                                          |
 | `global.appConfig.serviceDeskEmail.expungeDeleted`   | Whether to expunge (permanently remove) messages from the mailbox when they are marked as deleted after delivery       | false                                                          |
 | `global.appConfig.serviceDeskEmail.logger.logPath`   | Path to write JSON structured logs to; set to "" to disable this logging                                               | `/dev/stdout`                                                  |
 | `global.appConfig.serviceDeskEmail.inboxMethod`      | Read mail with IMAP (`imap`) or Microsoft Graph API with OAuth2 (`microsoft_graph`)                                    | `imap`                                                         |
 | `global.appConfig.serviceDeskEmail.deliveryMethod`   | How mailroom can send an email content to Rails app for processing. Either `sidekiq` or `webhook`                      | `webhook`                                                      |
-| `gitlab.appConfig.serviceDeskEmail.authToken.key`    | Key to service desk email token in service desk email secret. Effective when the delivery method is webhook.           | `authToken`                                                    |
+| `gitlab.appConfig.serviceDeskEmail.authToken.key`    | Key to Service Desk email token in Service Desk email secret. Effective when the delivery method is webhook.           | `authToken`                                                    |
 | `gitlab.appConfig.serviceDeskEmail.authToken.secret` | service-desk email authentication secret. Effective when the delivery method is webhook.                               | `{Release.Name}-service-desk-email-auth-token`                 |
 
 ### IMAP settings
@@ -150,7 +150,7 @@ must be `+%{key}`.
 |-----------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------|
 | `global.appConfig.serviceDeskEmail.host`            | Host for IMAP                                                                                          | empty      |
 | `global.appConfig.serviceDeskEmail.idleTimeout`     | The IDLE command timeout                                                                               | `60`       |
-| `global.appConfig.serviceDeskEmail.mailbox`         | Mailbox where service desk mail will end up.                                                           | `inbox`    |
+| `global.appConfig.serviceDeskEmail.mailbox`         | Mailbox where Service Desk mail will end up.                                                           | `inbox`    |
 | `global.appConfig.serviceDeskEmail.password.key`    | Key in `global.appConfig.serviceDeskEmail.password.secret` that contains the IMAP password             | `password` |
 | `global.appConfig.serviceDeskEmail.password.secret` | Name of a `Secret` containing the IMAP password                                                        | empty      |
 | `global.appConfig.serviceDeskEmail.port`            | Port for IMAP                                                                                          | `993`      |
