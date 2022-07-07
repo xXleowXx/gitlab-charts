@@ -193,7 +193,7 @@ is blocked](https://cloud.google.com/compute/docs/tutorials/sending-mail/#using_
 
 The configuration of incoming email is now documented in the [mailroom chart](../charts/gitlab/mailroom/index.md#incoming-email).
 
-### Service desk email
+### Service Desk email
 
 The configuration of incoming email is now documented in the [mailroom chart](../charts/gitlab/mailroom/index.md#service-desk-email).
 
