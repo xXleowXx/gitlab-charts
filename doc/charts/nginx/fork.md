@@ -26,3 +26,7 @@ The following adjustments were made to the NGINX fork:
   - Add `podlabels` and `global.pod.labels` to `.spec.template.metadata.labels`
 - Disable NGINX's default nodeSelectors.
 - Added support for PDB `maxUnavailable`.
+- Remove NGINX's `isControllerTagValid` helper in `charts/nginx-ingress/templates/_helpers.tpl`
+  - The check had not been updated since it was [implemented](https://github.com/kubernetes/ingress-nginx/pull/5252) in 2020.
+  - As part of [#3383](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3383), we need to refer to a tag that will contain `ubi`,
+    meaning that the `semverCompare` would not work as expected anyway.
