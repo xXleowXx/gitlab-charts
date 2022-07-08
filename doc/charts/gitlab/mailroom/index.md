@@ -153,9 +153,9 @@ To use the reply-by-email feature, where users can reply to notification emails 
 comment on issues and MRs, you need to configure both [outgoing email](../../../installation/command-line-options.md#outgoing-email-configuration)
 and incoming email settings.
 
-### Service desk email
+### Service Desk email
 
-By default, the service desk email is disabled.
+By default, the Service Desk email is disabled.
 
 As with incoming e-mail, enable it by setting the [common settings](../../../installation/command-line-options.md#common-settings-1).
 Then configure the [IMAP settings](../../../installation/command-line-options.md#imap-settings-1) or
@@ -163,10 +163,10 @@ Then configure the [IMAP settings](../../../installation/command-line-options.md
 
 These options can also be configured in `values.yaml`. See the following examples:
 
-- [Service desk with IMAP](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/email/values-service-desk-email.yaml)
-- [Service desk with Microsoft Graph](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/email/values-msgraph.yaml)
+- [Service Desk with IMAP](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/email/values-service-desk-email.yaml)
+- [Service Desk with Microsoft Graph](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/email/values-msgraph.yaml)
 
-Service desk email _requires_ that [Incoming email](#incoming-email) be configured.
+Service Desk email _requires_ that [Incoming email](#incoming-email) be configured.
 
 #### IMAP
 
