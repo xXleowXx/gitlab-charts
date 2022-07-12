@@ -16,8 +16,8 @@ data:
       listen_port: {{ .Values.service.internalPort }}
       {{ if .Values.tls.enabled -}}
       tls_enabled: true
-      tls_cert_path: /etc/gitlab/gitlab-exporter/gitlab-exporter.crt
-      tls_key_path: /etc/gitlab/gitlab-exporter/gitlab-exporter.key
+      tls_cert_path: /etc/gitlab/gitlab-exporter/tls.crt
+      tls_key_path: /etc/gitlab/gitlab-exporter/tls.key
       {{- end }}
 
     probes:
