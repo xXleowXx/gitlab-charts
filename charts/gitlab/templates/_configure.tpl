@@ -3,7 +3,7 @@
   {{ include "gitlab.scripts.configure" (
             dict
                 "required" "your required secrets dirs" // optional, default "redis shell gitaly registry rails-secrets gitlab-workhorse"
-                "optional" "your optional secrets dirs" // optional, default "minio objectstorage postgres ldap omniauth smtp kas mailroom"
+                "optional" "your optional secrets dirs" // optional, default "minio objectstorage postgres ldap omniauth smtp kas mailroom gitlab-exporter"
     ) }}
 */}}
 {{- define "gitlab.scripts.configure.secrets" -}}
