@@ -60,6 +60,9 @@ metrics:
   enabled: true
   port: 8083
   path: /metrics
+  tls:
+    enabled: false
+    # secretName:
   serviceMonitor:
     enabled: false
     additionalLabels: {}
