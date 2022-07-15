@@ -133,6 +133,11 @@ data:
           enabled: {{ or .Values.monitoring.exporter.enabled (and .Values.metrics.enabled (eq .Values.metrics.port .Values.monitoring.exporter.port)) }}
           address: 0.0.0.0
           port: {{ .Values.monitoring.exporter.port }}
+          {{- if $.Values.metrics.tls.enabled }}
+          tls_enabled: true
+          tls_cert_path: "/etc/gitlab/webservice-metrics/webservice-metrics.crt"
+          tls_key_path: "/etc/gitlab/webservice-metrics/webservice-metrics.key"
+          {{- end }}
         sidekiq_exporter:
       shutdown:
         blackout_seconds: <%= ENV["SHUTDOWN_BLACKOUT_SECONDS"] %>
@@ -148,6 +153,11 @@ data:
       mkdir -p /init-secrets/puma
       cp -v -L /init-config/puma/puma.crt /init-secrets/puma/puma.crt
       cp -v -L /init-config/puma/puma.key /init-secrets/puma/puma.key
+    {{- end }}
+    {{- if $.Values.metrics.tls.enabled }}
+      mkdir -p /init-secrets/webservice-metrics
+      cp -v -L /init-config/webservice-metrics/webservice-metrics.crt /init-secrets/webservice-metrics/webservice-metrics.crt
+      cp -v -L /init-config/webservice-metrics/webservice-metrics.key /init-secrets/webservice-metrics/webservice-metrics.key
     {{- end }}
 
 {{- include "webservice.datamodel.prepare" $ -}}

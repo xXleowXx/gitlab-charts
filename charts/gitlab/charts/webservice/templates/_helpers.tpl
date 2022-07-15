@@ -240,3 +240,10 @@ Return the webservice TLS secret name
 {{- define "webservice.tls.secret" -}}
 {{- default (printf "%s-webservice-tls" .Release.Name) $.Values.tls.secretName | quote -}}
 {{- end -}}
+
+{{/*
+Return the webservice-metrics TLS secret name
+*/}}
+{{- define "webservice-metrics.tls.secret" -}}
+{{- default (printf "%s-webservice-metrics-tls" .Release.Name) $.Values.metrics.tls.secretName | quote -}}
+{{- end -}}

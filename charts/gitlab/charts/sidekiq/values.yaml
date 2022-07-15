@@ -52,6 +52,9 @@ metrics:
     endpointConfig: {}
   # DEPRECATED
   annotations: {}
+  tls:
+    enabled: false
+    # secretName:
 
 health_checks:
   port: 3808
