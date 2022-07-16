@@ -1320,20 +1320,32 @@ To disable the use of LDAP for web sign-in, set `global.appConfig.ldap.preventSi
 
 If the LDAP server uses a custom CA or self-signed certificate, you must:
 
-1. Ensure that the custom CA/Self-Signed certificate is created as a secret in the cluster/namespace:
+1. Ensure that the custom CA/Self-Signed certificate is created as a secret or configmap in the cluster/namespace:
 
    ```shell
+   # Secret
    kubectl -n gitlab create secret generic my-custom-ca --from-file=my-custom-ca.pem
+
+   # Configmap
+   kubectl -n gitlab create configmap my-custom-ca --from-file=my-custom-ca.pem
    ```
 
 1. Then, specify:
 
    ```shell
-   --set global.certificates.customCAs[0].secret=my-custom-ca
+   # Configure a custom CA from a secret
+   --set global.certificates.customCAs[0].secret=my-custom-ca-secret
+
+   # Or from a configmap
+   --set global.certificates.customCAs[0].configMap=my-custom-ca-configmap
+
+   # Configure the LDAP integration to trust the custom CA
    --set global.appConfig.ldap.servers.main.ca_file=/etc/ssl/certs/ca-cert-my-custom-ca.pem
    ```
 
 This will ensure that the CA is mounted in the relevant pods under `/etc/ssl/certs/ca-cert-my-custom-ca.pem` and specifies its use in the LDAP configuration.
+
+See [Custom Certificate Authorities](#custom-certificate-authorities) for more info.
 
 ### OmniAuth
 
@@ -1772,32 +1784,49 @@ These settings do not affect charts from outside of this repository, via `requir
 
 Some users may need to add custom certificate authorities, such as when using internally
 issued SSL certificates for TLS services. To provide this functionality, we provide
-a mechanism for injecting these custom root certificate authorities into the application via secrets.
+a mechanism for injecting these custom root certificate authorities into the application via secrets or configmaps.
 
 ```yaml
 global:
   certificates:
     customCAs:
-      - secret: internal-cas
-      - secret: other-custom-cas
+      - secret: custom-CA                   # Mount all keys of a secret
+      - secret: more-custom-CAs             # Mount only the specified keys of a secret
+        keys:
+          - custom-ca-1.crt
+      - configMap: custom-CAs-cm            # Mount all keys of a configmap
+      - configMap: more-custom-CAs-cm       # Mount only the specified keys of a configmap
+        keys:
+          - custom-ca-2.crt
+          - custom-ca-3.crt
 ```
 
-A user can provide any number of secrets, each containing any number of keys that hold
+A user can provide any number of secrets and/or configmaps, each containing any number of keys that hold
 PEM encoded CA certificates. These are configured as entries under `global.certificates.customCAs`.
-All keys within the secret will be mounted, so all keys across all secrets must be unique.
-These secrets can be named in any fashion, but they *must not* contain key names that collide.
+If `keys:` is specified, then only the listed keys will be mounted, otherwise all keys will be mounted. All mounted keys across all secrets and configmaps must be unique.
+The secrets or configmaps can be named in any fashion, but they *must not* contain key names that collide.
 
-To create a secret:
+To create a secret or configmap:
 
 ```shell
-kubectl create secret generic custom-ca --from-file=unique_name=/path/to/cert
+# Create a secret from a certificate file
+kubectl create secret generic secret-custom-ca --from-file=unique_name=/path/to/cert
+
+# Create a configmap from a certificate file
+kubectl create configmap cm-custom-ca --from-file=unique_name=/path/to/cert
 ```
 
-To configure the secret:
+To configure a secret and/or configmap:
 
 ```shell
+# Configure a secret with all keys mounted
 helm install gitlab gitlab/gitlab \
   --set global.certificates.customCAs[0].secret=custom-ca
+
+# Configure a configmap with two keys mounted
+helm install gitlab gitlab/gitlab \
+  --set global.certificates.customCAs[0].configMap=custom-ca
+  --set global.certificates.customCAs[0].keys=[ca1.crt\\,ca2\\.crt]
 ```
 
 ## Application Resource

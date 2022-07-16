@@ -658,6 +658,13 @@ global:
     customCAs: []
     # - secret: custom-CA
     # - secret: more-custom-CAs
+    #   keys:
+    #     - custom-ca-1.crt
+    # - configMap: custom-CA-cm
+    # - configMap: more-custom-CAs-cm
+    #   keys:
+    #     - custom-ca-2.crt
+    #     - custom-ca-3.crt
 
   ## kubectl image used by hooks to carry out specific jobs
   kubectl:
