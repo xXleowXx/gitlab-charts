@@ -181,6 +181,7 @@ workhorse:
     exporter:
       enabled: false
       port: 9229
+      tls: {}
   metrics:
     enabled: false
     port: 9229
@@ -192,6 +193,10 @@ workhorse:
   imageScaler:
     maxProcs: 2 # aim for max(2, requested_cpus / 2)
     maxFileSizeBytes: 250000
+  tls: {}
+    # verify: true
+    # secretName:
+    # caSecretName:
 
 psql: {}
   # port: 5432
