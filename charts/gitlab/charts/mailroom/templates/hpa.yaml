@@ -1,12 +1,7 @@
 {{- if and .Values.enabled .Values.global.appConfig.incomingEmail.enabled }}
+{{- $hpaCfg := (dict "global" $.Values.global.hpa "local" .Values.hpa "context" $) -}}
 ---
-{{- if .Capabilities.APIVersions.Has "autoscaling/v2" }}
-apiVersion: autoscaling/v2
-{{- else if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
-apiVersion: autoscaling/v2beta2
-{{- else }}
-apiVersion: autoscaling/v2beta1
-{{- end }}
+apiVersion: {{ template "gitlab.hpa.apiVersion" $hpaCfg }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "fullname" . }}
@@ -21,25 +16,6 @@ spec:
     name: {{ template "fullname" . }}
   minReplicas: {{ .Values.hpa.minReplicas }}
   maxReplicas: {{ .Values.hpa.maxReplicas }}
-  metrics:
-  {{- if not .Values.hpa.customMetrics }}
-    - type: Resource
-      resource:
-        name: cpu
-        {{- if or (.Capabilities.APIVersions.Has "autoscaling/v2") (.Capabilities.APIVersions.Has "autoscaling/v2beta2") }}
-        target:
-          type: Utilization
-          averageUtilization: {{ .Values.hpa.cpu.targetAverageUtilization }}
-        {{- else }}
-        targetAverageUtilization: {{ .Values.hpa.cpu.targetAverageUtilization }}
-        {{- end }}
-  {{- else -}}
-    {{- toYaml .Values.hpa.customMetrics | nindent 4 -}}
-  {{- end }}
-  {{- if or (.Capabilities.APIVersions.Has "autoscaling/v2") (and (.Capabilities.APIVersions.Has "autoscaling/v2beta2") (semverCompare ">=1.18.0-0" .Capabilities.KubeVersion.Version)) }}
-  {{- with .Values.hpa.behaviour }}
-  behavior:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
-  {{- end }}
+  {{- include "gitlab.hpa.metrics" $hpaCfg | nindent 2 }}
+  {{- include "gitlab.hpa.behavior" $hpaCfg | nindent 2 }}
 {{- end }}

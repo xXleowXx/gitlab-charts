@@ -75,6 +75,10 @@ global:
     path: /
     pathType: Prefix
 
+  # Override the API version to use for HorizontalPodAutoscaler
+  hpa:
+    apiVersion: ""
+
   gitlab:
     ## Enterprise license for this GitLab installation
     ## Secret created according to https://docs.gitlab.com/charts/installation/secrets#initial-enterprise-license
