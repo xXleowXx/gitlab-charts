@@ -184,6 +184,9 @@ metrics:
   enabled: true
   port: 9235
   path: /metrics
+  tls:
+    enabled: false
+    # secretName:
   serviceMonitor:
     enabled: false
     additionalLabels: {}
