@@ -188,6 +188,12 @@ init:
       chmod 700 /registry/ssl
       chmod 600 /registry/ssl/*.pem
     fi
+    # Copy TLS certificates if present
+    if [ -d /config/tls ]; then
+      cp -r /config/tls/ /registry/tls
+      chmod 700 /registry/tls
+      chmod 600 /registry/tls/tls.*
+    fi
 
 # define some sane resource requests and limitations
 resources:
@@ -374,3 +380,15 @@ migration:
 # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc
 gc:
   disabled: true
+
+
+## Configure TLS on the instance itself
+## WARNING: All clients must trust the certificate used for service.
+tls:
+  enabled: false
+  secretName: # Kubernetes secret, type kubernetes.io/tls
+  clientCAs: []
+  minimumTLS: "tls1.2"
+  # NGINX Ingress related
+  verify: true
+  caSecretName: # Kubernetes secret, type Opaque, with `ca.crt` key

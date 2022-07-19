@@ -128,6 +128,11 @@ registry:
     ingress:
       enabled: false
       rules: []
+  tls:
+    enabled: false
+    secretName:
+    verify: true 
+    caSecretName:
 ```
 
 If you chose to deploy this chart as a standalone, remove the `registry` at the top level.
@@ -338,6 +343,44 @@ This section controls the registry Ingress.
 | `enabled`              | Boolean | `false` | Setting that controls whether to create Ingress objects for services that support them. When `false` the `global.ingress.enabled` setting is used.                                                                                    |
 | `tls.enabled`          | Boolean | `true`  | When set to `false`, you disable TLS for the Registry subchart. This is mainly useful for cases in which you cannot use TLS termination at `ingress-level`, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `tls.secretName`       | String  |         | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the registry URL. When not set, the `global.ingress.tls.secretName` is used instead. Defaults to not being set.                                   |
+
+## Configuring TLS
+
+Registry supports TLS. This will secure its communication with other components,
+including `nginx-ingress`. The TLS certificate should include the Registry
+Service host name (e.g. `RELEASE-registry.default.svc`) in the Common
+Name (CN) or Subject Alternate Name (SAN).
+
+Once the TLS certificate is generated, create a [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets)
+for it. You also need to create another Secret that only contains the CA
+certificate of the TLS certificate with `ca.crt` key.
+
+TLS can be enabled for by setting `registry.tls.enabled` to `true`. You also
+need to tell other components that Registry is using HTTPS by setting
+`global.hosts.registry.protocol` to `https`. You also need to pass the Secret
+names to `registry.tls.secretName` and `global.certificates.customCAs` accordingly.
+
+When `registry.tls.verify` is `true`, you need to pass the CA certificate Secret
+name to `registry.tls.caSecretName`. This is necessary for self-signed
+certificates and custom CA. This Secret is used by NGINX to verify the TLS
+certificate of Registry.
+
+```yaml
+global:
+  certificates:
+    customCAs:
+    - secret: registry-tls-ca
+  hosts:
+    registry:
+      protocol: https
+
+registry:
+  tls:
+    enabled: true
+    secretName: registry-tls
+    verify: true
+    caSecretName: registry-tls-ca
+```
 
 ## Configuring the `networkpolicy`
 
