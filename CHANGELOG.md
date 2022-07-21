@@ -2,6 +2,42 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.2.0 (2022-07-21)
+
+### Added (7 changes)
+
+- [Registry: add support for TLS on the Pod service](gitlab-org/charts/gitlab@2f16a8e0f001c7dc647b6e6b86323c36e41809f2) ([merge request](gitlab-org/charts/gitlab!2673))
+- [Add support for memory and custom metrics in all HPAs](gitlab-org/charts/gitlab@be718a614bcdcc8290fa8f96058df07348bfb90e) ([merge request](gitlab-org/charts/gitlab!2621))
+- [Add TLS support configuration to Workhorse](gitlab-org/charts/gitlab@a3f09d98f6a81c3e14ed77ef1a57d8cebbb95eb0) ([merge request](gitlab-org/charts/gitlab!2628))
+- [Add TLS settings for sidekiq exporter/metrics endpoint](gitlab-org/charts/gitlab@b544e3d4a2ae451d72ee9e8865e2442d44791681) ([merge request](gitlab-org/charts/gitlab!2656))
+- [Add NGINX UBI image settings to UBI example values](gitlab-org/charts/gitlab@8537803ba2d443f048fb883e45ebbf4c2c32f6fc) ([merge request](gitlab-org/charts/gitlab!2661))
+- [Support configuring TLS for GitLab Exporter](gitlab-org/charts/gitlab@c13693818c3832d920f88b2b9fabf501071e626f) ([merge request](gitlab-org/charts/gitlab!2665))
+- [gitaly: Enable admins to inject their own Git configuration](gitlab-org/charts/gitlab@b7aef369dfd57046ff831ba17ca97f0978c51b07) ([merge request](gitlab-org/charts/gitlab!2602))
+
+### Fixed (5 changes)
+
+- [Add a relabel_config to target __scheme__ in the default values](gitlab-org/charts/gitlab@cedee2096d5558aad731c76ffb4f7122db0f9697) ([merge request](gitlab-org/charts/gitlab!2672))
+- [Fix custom certificate authorities not working on UBI containers](gitlab-org/charts/gitlab@faed05de75b98269deabf1336e9e613348417c37) ([merge request](gitlab-org/charts/gitlab!2650))
+- [Add KAS configmap checksum to deployment spec](gitlab-org/charts/gitlab@180b80d2f1b64614c52b69988c4c7358cfa6abe4) ([merge request](gitlab-org/charts/gitlab!2654))
+- [Allow shell maxUnavailable to be a percentage](gitlab-org/charts/gitlab@9758097c837ba2c5dbe4823bde327be82ada51ff) ([merge request](gitlab-org/charts/gitlab!2627))
+- [Fix Workhorse config.toml rendering for AWS access and secret keys](gitlab-org/charts/gitlab@a5c1218e3b3339744152e9a5923ce49cf9a02ab6) ([merge request](gitlab-org/charts/gitlab!2639))
+
+### Changed (8 changes)
+
+- [Update gitlab-org/container-registry from 3.51.0-gitlab to 3.51.1-gitlab](gitlab-org/charts/gitlab@7dfa82a79b8bf4ca0fb26b37f0e665209fa7b5a6) ([merge request](gitlab-org/charts/gitlab!2677))
+- [Update gitlab-org/gitlab-exporter from 11.16.0 to 11.17.1](gitlab-org/charts/gitlab@6c20f5c34f3d632163f085b333653a11d9ca0a3d) ([merge request](gitlab-org/charts/gitlab!2670))
+- [Update gitlab-org/container-registry from 3.49.0-gitlab to 3.51.0-gitlab](gitlab-org/charts/gitlab@8be4ba635aa759b080b462d032c30963f65f2645) ([merge request](gitlab-org/charts/gitlab!2663))
+- [gitaly: Start ignoring gitconfig files](gitlab-org/charts/gitlab@757862b50b7f29184379ed2972bc58bb4421b4e7) ([merge request](gitlab-org/charts/gitlab!2602))
+- [Update gitlab-org/container-registry from 3.48.0-gitlab to 3.49.0-gitlab](gitlab-org/charts/gitlab@c2862cccefcfc4278c1e1f093fa020e6395437a9) ([merge request](gitlab-org/charts/gitlab!2645))
+- [Ensure Azure access and secret keys are JSON in Workhorse config.toml](gitlab-org/charts/gitlab@d53ebf1a569e1d92383c89362aaeb7c97a94e33c) ([merge request](gitlab-org/charts/gitlab!2640))
+- [Update gitlab-org/charts/gitlab-runner from 0.41.0 to 0.42.0](gitlab-org/charts/gitlab@c1eb6efccfe738cd8987fb00de30d18b56c1e17a) ([merge request](gitlab-org/charts/gitlab!2634))
+- [Set webhook as MailRoom's default delivery strategy](gitlab-org/charts/gitlab@de907f875d74ddd08f90c4fa563262c3d05dccde) ([merge request](gitlab-org/charts/gitlab!2622))
+
+### Removed (2 changes)
+
+- [config: Remove mentions of deprecated `self_signed_cert` config](gitlab-org/charts/gitlab@58bf47825841c482e874c13fd4e729b523fe99f4) ([merge request](gitlab-org/charts/gitlab!2664))
+- [Remove NGINX's `isControllerTagValid` helper](gitlab-org/charts/gitlab@f099651db6f1d57cdc9a78a2744ad6c36680fe0a) ([merge request](gitlab-org/charts/gitlab!2668))
+
 ## 6.1.3 (2022-07-19)
 
 No changes.
