@@ -1,4 +1,4 @@
-# ubi/values.yaml
+# fips/values.yaml
 
 certmanager:
   install: false
@@ -12,9 +12,11 @@ redis:
 nginx-ingress:
   controller:
     image:
+      # NGINX Ingress controller fork:
+      #   https://gitlab.com/gitlab-org/cloud-native/charts/gitlab-ingress-nginx:
       repository: registry.gitlab.com/gitlab-org/cloud-native/charts/gitlab-ingress-nginx/controller
-      tag: v1.2.1-ubi8
-      digest: sha256:44233b030d0d4d2c1d2e59d5695489cb56bb912161342d3c7f5cb1ef046173cd
+      tag: v1.2.1-fips
+      digest: sha256:c4222b7ab3836b9be2a7649cff4b2e6ead34286dfdf3a7b04eb34fdd3abb0334
 
 prometheus:
   install: false
@@ -34,17 +36,19 @@ global:
 
   kubectl:
     image:
-      tag: 1.12.10-ubi8
+      tag: 1.18.20-fips
 
   certificates:
     image:
-      tag: master-ubi8
+      tag: master-fips
 
   # See: https://gitlab.com/gitlab-org/charts/gitlab/blob/master/doc/installation/tls.md#option-2-use-your-own-wildcard-certificate
   ingress:
     configureCertmanager: false
     tls:
       secretName: my-wildcard-cert-secret  # Your wildcard certificate.
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-ssl-protocols: "TLSv1.3 TLSv1.2" # restrict NGINX to TLSv1.2+
 
   # See: https://gitlab.com/gitlab-org/charts/gitlab/tree/master/doc/advanced/external-db
   psql:
@@ -99,31 +103,31 @@ gitlab:
 
   gitaly:
     image:
-      tag: master-ubi8
+      tag: master-fips
 
   gitlab-exporter:
     image:
-      tag: master-ubi8
+      tag: master-fips
 
   gitlab-shell:
     image:
-      tag: main-ubi8 # gitlab-shell's default branch is main, not master!
+      tag: main-fips # gitlab-shell's default branch is main, not master!
 
   gitlab-mailroom:
     image:
-      tag: master-ubi8
+      tag: master-fips
 
   migrations:
     image:
-      tag: master-ubi8
+      tag: master-fips
 
   sidekiq:
     image:
-      tag: master-ubi8
+      tag: master-fips
 
   toolbox:
     image:
-      tag: master-ubi8
+      tag: master-fips
 
     # See: https://gitlab.com/gitlab-org/charts/gitlab/tree/master/doc/advanced/external-object-storage
     backups:
@@ -134,14 +138,14 @@ gitlab:
 
   webservice:
     image:
-      tag: master-ubi8
+      tag: master-fips
     workhorse:
-      tag: master-ubi8
+      tag: master-fips
 
 # See: https://gitlab.com/gitlab-org/charts/gitlab/tree/master/doc/advanced/external-object-storage
 registry:
   image:
-    tag: v3.51.1-gitlab-ubi8
+    tag: v3.51.1-gitlab-fips
   storage:
     secret: my-objectstore-registry-secret # Registry storage secret.
     key: config
