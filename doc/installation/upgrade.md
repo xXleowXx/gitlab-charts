@@ -17,16 +17,6 @@ NOTE:
 Ongoing work to support this feature can be tracked via
 [the GitLab Operator issue](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/59).
 
-WARNING:
-If you are upgrading from the `5.x` version of the chart to the latest `6.0` release, you need
-to first update to the latest `5.10.x` patch release in order for the upgrade to work.
-The [6.0 release notes](../releases/6_0.md) describe the supported upgrade path.
-
-WARNING:
-If you are upgrading from the `4.x` version of the chart to the latest `5.0` release, you need
-to first update to the latest `4.12.x` patch release in order for the upgrade to work.
-The [5.0 release notes](../releases/5_0.md) describe the supported upgrade path.
-
 We also recommend that you take a [backup](../backup-restore/index.md) first. Also note that you
 must provide all values using `helm upgrade --set key=value` syntax or `-f values.yaml` instead of
 using `--reuse-values`, because some of the current values might be deprecated.
@@ -110,6 +100,11 @@ The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-
 
 ## Upgrade steps for the 6.0 release
 
+WARNING:
+If you are upgrading from the `5.x` version of the chart to the latest `6.0` release, you need
+to first update to the latest `5.10.x` patch release in order for the upgrade to work.
+The [6.0 release notes](../releases/6_0.md) describe the supported upgrade path.
+
 To upgrade to the `6.0` release you must first be on the latest `5.10.x` patch release. There isn't any additional manual changes required in `6.0` so you can [follow the regular release upgrade steps](#steps).
 
 ## Upgrade steps for 5.9 release
@@ -151,6 +146,11 @@ configuration to fix this.
 There is an [open issue about clarifying the error message](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3004).
 
 ## Upgrade steps for 5.0 release
+
+WARNING:
+If you are upgrading from the `4.x` version of the chart to the latest `5.0` release, you need
+to first update to the latest `4.12.x` patch release in order for the upgrade to work.
+The [5.0 release notes](../releases/5_0.md) describe the supported upgrade path.
 
 The `5.0.0` release requires manual steps in order to perform the upgrade. If you're using the
 bundled PostgreSQL, the best way to perform this upgrade is to back up your old database, and
