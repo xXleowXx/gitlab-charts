@@ -1320,23 +1320,23 @@ To disable the use of LDAP for web sign-in, set `global.appConfig.ldap.preventSi
 
 If the LDAP server uses a custom CA or self-signed certificate, you must:
 
-1. Ensure that the custom CA/Self-Signed certificate is created as a secret or configmap in the cluster/namespace:
+1. Ensure that the custom CA/Self-Signed certificate is created as a Secret or ConfigMap in the cluster/namespace:
 
    ```shell
    # Secret
    kubectl -n gitlab create secret generic my-custom-ca --from-file=my-custom-ca.pem
 
-   # Configmap
+   # ConfigMap
    kubectl -n gitlab create configmap my-custom-ca --from-file=my-custom-ca.pem
    ```
 
 1. Then, specify:
 
    ```shell
-   # Configure a custom CA from a secret
+   # Configure a custom CA from a Secret
    --set global.certificates.customCAs[0].secret=my-custom-ca-secret
 
-   # Or from a configmap
+   # Or from a ConfigMap
    --set global.certificates.customCAs[0].configMap=my-custom-ca-configmap
 
    # Configure the LDAP integration to trust the custom CA
@@ -1784,46 +1784,46 @@ These settings do not affect charts from outside of this repository, via `requir
 
 Some users may need to add custom certificate authorities, such as when using internally
 issued SSL certificates for TLS services. To provide this functionality, we provide
-a mechanism for injecting these custom root certificate authorities into the application via secrets or configmaps.
+a mechanism for injecting these custom root certificate authorities into the application via Secrets or ConfigMaps.
 
 ```yaml
 global:
   certificates:
     customCAs:
-      - secret: custom-CA                   # Mount all keys of a secret
-      - secret: more-custom-CAs             # Mount only the specified keys of a secret
+      - secret: custom-CA                   # Mount all keys of a Secret
+      - secret: more-custom-CAs             # Mount only the specified keys of a Secret
         keys:
           - custom-ca-1.crt
-      - configMap: custom-CAs-cm            # Mount all keys of a configmap
-      - configMap: more-custom-CAs-cm       # Mount only the specified keys of a configmap
+      - configMap: custom-CAs-cm            # Mount all keys of a ConfigMap
+      - configMap: more-custom-CAs-cm       # Mount only the specified keys of a ConfigMap
         keys:
           - custom-ca-2.crt
           - custom-ca-3.crt
 ```
 
-A user can provide any number of secrets and/or configmaps, each containing any number of keys that hold
+A user can provide any number of Secrets and/or ConfigMaps, each containing any number of keys that hold
 PEM encoded CA certificates. These are configured as entries under `global.certificates.customCAs`.
-If `keys:` is specified, then only the listed keys will be mounted, otherwise all keys will be mounted. All mounted keys across all secrets and configmaps must be unique.
-The secrets or configmaps can be named in any fashion, but they *must not* contain key names that collide.
+If `keys:` is specified, then only the listed keys will be mounted, otherwise all keys will be mounted. All mounted keys across all Secrets and ConfigMaps must be unique.
+The Secrets or ConfigMaps can be named in any fashion, but they *must not* contain key names that collide.
 
-To create a secret or configmap:
+To create a Secret or ConfigMap:
 
 ```shell
-# Create a secret from a certificate file
+# Create a Secret from a certificate file
 kubectl create secret generic secret-custom-ca --from-file=unique_name=/path/to/cert
 
-# Create a configmap from a certificate file
+# Create a ConfigMap from a certificate file
 kubectl create configmap cm-custom-ca --from-file=unique_name=/path/to/cert
 ```
 
-To configure a secret and/or configmap:
+To configure a Secret and/or ConfigMap:
 
 ```shell
-# Configure a secret with all keys mounted
+# Configure a Secret with all keys mounted
 helm install gitlab gitlab/gitlab \
   --set global.certificates.customCAs[0].secret=custom-ca
 
-# Configure a configmap with two keys mounted
+# Configure a ConfigMap with two keys mounted
 helm install gitlab gitlab/gitlab \
   --set global.certificates.customCAs[0].configMap=custom-ca
   --set global.certificates.customCAs[0].keys=[ca1.crt\\,ca2\\.crt]
