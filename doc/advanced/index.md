@@ -18,3 +18,4 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 - Using [FIPS-compliant images](fips/index.md)
 - Making use of [GitLab Geo functionality](geo/index.md)
 - Bringing your own [Docker images](custom-images/index.md)
+- Enabling [internal TLS between services](internal-tls/index.md)
