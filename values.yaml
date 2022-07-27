@@ -810,9 +810,6 @@ nginx-ingress:
     admissionWebhooks:
       enabled: false
   defaultBackend:
-    enabled: true
-    minAvailable: 1
-    replicaCount: 1
     resources:
       requests:
         cpu: 5m
