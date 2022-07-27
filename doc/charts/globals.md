@@ -1694,7 +1694,7 @@ nginx-ingress:
 
 ### TCP proxy protocol
 
-You can enable handling [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/) on the SSH Ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header.
+You can enable handling [proxy protocol](https://www.haproxy.com/blog/use-the-proxy-protocol-to-preserve-a-clients-ip-address/) on the SSH Ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header.
 By doing so, this will prevent SSH from receiving the additional headers and not break SSH.
 
 One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [AWS layer 4 loadbalancer example](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/aws/elb-layer4-loadbalancer.yaml) to properly set it up.
