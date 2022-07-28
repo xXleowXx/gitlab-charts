@@ -775,6 +775,7 @@ nginx-ingress:
   controller:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
+    allowSnippetAnnotations: false
     config:
       hsts: "true"
       hsts-include-subdomains: "false"
