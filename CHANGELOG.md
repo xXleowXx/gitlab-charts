@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.2.1 (2022-07-28)
+
+No changes.
+
 ## 6.2.0 (2022-07-21)
 
 ### Added (7 changes)
@@ -37,6 +41,10 @@ entry.
 
 - [config: Remove mentions of deprecated `self_signed_cert` config](gitlab-org/charts/gitlab@58bf47825841c482e874c13fd4e729b523fe99f4) ([merge request](gitlab-org/charts/gitlab!2664))
 - [Remove NGINX's `isControllerTagValid` helper](gitlab-org/charts/gitlab@f099651db6f1d57cdc9a78a2744ad6c36680fe0a) ([merge request](gitlab-org/charts/gitlab!2668))
+
+## 6.1.4 (2022-07-28)
+
+No changes.
 
 ## 6.1.3 (2022-07-19)
 
@@ -79,6 +87,10 @@ No changes.
 - [Update gitlab-org/container-registry from 3.42.0-gitlab to 3.43.0-gitlab](gitlab-org/charts/gitlab@2bde33a3218c0cc3045462934db150c07d881c9e) ([merge request](gitlab-org/charts/gitlab!2588))
 - [Update gitlab-org/charts/gitlab-runner from 0.40.1 to 0.41.0](gitlab-org/charts/gitlab@6c34ec8cdd54b165f50444ff1d75dcad480d53c2) ([merge request](gitlab-org/charts/gitlab!2584))
 - [Update gitlab-org/container-registry from 3.41.1-gitlab to 3.42.0-gitlab](gitlab-org/charts/gitlab@2a0747412050b8f5b94dc23dd1e40bd5cf78496f) ([merge request](gitlab-org/charts/gitlab!2580))
+
+## 6.0.5 (2022-07-28)
+
+No changes.
 
 ## 6.0.4 (2022-06-30)
 
