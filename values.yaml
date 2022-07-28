@@ -1081,6 +1081,9 @@ gitlab-runner:
 ## See requirements.yaml for current version
 ## Controlled by `global.grafana.enabled`
 grafana:
+  # Overrides the Grafana image tag for the 7.5.16 security update
+  image:
+    tag: 7.5.16
   ## Override and provide "bogus" administation secrets
   ## gitlab/gitlab-grafana provides overrides via shared-secrets
   nameOverride: grafana-app
