@@ -1324,10 +1324,10 @@ If the LDAP server uses a custom CA or self-signed certificate, you must:
 
    ```shell
    # Secret
-   kubectl -n gitlab create secret generic my-custom-ca --from-file=my-custom-ca.pem
+   kubectl -n gitlab create secret generic my-custom-ca-secret --from-file=unique_name=my-custom-ca.pem
 
    # ConfigMap
-   kubectl -n gitlab create configmap my-custom-ca --from-file=my-custom-ca.pem
+   kubectl -n gitlab create configmap my-custom-ca-configmap --from-file=unique_name=my-custom-ca.pem
    ```
 
 1. Then, specify:
@@ -1340,10 +1340,10 @@ If the LDAP server uses a custom CA or self-signed certificate, you must:
    --set global.certificates.customCAs[0].configMap=my-custom-ca-configmap
 
    # Configure the LDAP integration to trust the custom CA
-   --set global.appConfig.ldap.servers.main.ca_file=/etc/ssl/certs/ca-cert-my-custom-ca.pem
+   --set global.appConfig.ldap.servers.main.ca_file=/etc/ssl/certs/unique_name.pem
    ```
 
-This will ensure that the CA is mounted in the relevant pods under `/etc/ssl/certs/ca-cert-my-custom-ca.pem` and specifies its use in the LDAP configuration.
+This will ensure that the CA is mounted in the relevant pods at `/etc/ssl/certs/ca-cert-unique_name.pem` and specifies its use in the LDAP configuration.
 
 See [Custom Certificate Authorities](#custom-certificate-authorities) for more info.
 
