@@ -787,6 +787,10 @@ nginx-ingress:
       server-tokens: "false"
     service:
       externalTrafficPolicy: "Local"
+    image:
+      repository: registry.gitlab.com/gitlab-org/cloud-native/charts/gitlab-ingress-nginx/controller
+      tag: v1.2.1
+      digest: sha256:ec5cded8516196f7f263919f632227fef1e346d5c1671ae6cfbe96f4223da775
     ingressClassByName: false
     ingressClassResource:
       name: '{{ include "ingress.class.name" $ }}'
