@@ -303,8 +303,8 @@ This feature requires the use of an
 [external PostgreSQL](../advanced/external-db/), as this chart does not
 deploy PostgreSQL in an HA fashion.
 
-The Rails components in GitLab have the ability to [make use of PostgreSQL
-clusters to load balance read-only queries](https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html).
+The Rails components in GitLab have the ability to
+[make use of PostgreSQL clusters to load balance read-only queries](https://docs.gitlab.com/ee/administration/postgresql/database_load_balancing.html).
 
 This feature can be configured in two fashions:
 
@@ -423,8 +423,8 @@ support using sentinels. If sentinel support is desired, a Redis cluster
 needs to be created separately from the GitLab chart install. This can be
 done inside or outside the Kubernetes cluster.
 
-An issue to track the [supporting of sentinels in a GitLab deployed
-Redis cluster](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1810) has
+An issue to track the
+[supporting of sentinels in a GitLab deployed Redis cluster](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1810) has
 been created for tracking purposes.
 
 ```yaml
@@ -1114,12 +1114,12 @@ You can use these defaults or configure the bucket names:
 
 > Introduced in GitLab 13.4.
 
-The `storage_options` are used to configure [S3 Server Side
-Encryption](https://docs.gitlab.com/ee/administration/object_storage.html#server-side-encryption-headers).
+The `storage_options` are used to configure
+[S3 Server Side Encryption](https://docs.gitlab.com/ee/administration/object_storage.html#server-side-encryption-headers).
 
 Setting a default encryption on an S3 bucket is the easiest way to
-enable encryption, but you may want to [set a bucket policy to ensure
-only encrypted objects are uploaded](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
+enable encryption, but you may want to
+[set a bucket policy to ensure only encrypted objects are uploaded](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
 To do this, you must configure GitLab to send the proper encryption headers
 in the `storage_options` configuration section:
 
