@@ -121,6 +121,14 @@ The GitLab global host settings for HPA are located under the `global.hpa` key:
 | :----------- | :-------: | :------ | :-------------------------------------------------------------------- |
 | `apiVersion` | String    |         | API version to use in the HorizontalPodAutoscaler object definitions. |
 
+## Configure PodDisruptionBudget settings
+
+The GitLab global host settings for PDB are located under the `global.pdb` key:
+
+| Name         | Type      | Default | Description                                                           |
+| :----------- | :-------: | :------ | :-------------------------------------------------------------------- |
+| `apiVersion` | String    |         | API version to use in the PodDisruptionBudget object definitions. |
+
 ## Configure Ingress settings
 
 The GitLab global host settings for Ingress are located under the `global.ingress` key:
