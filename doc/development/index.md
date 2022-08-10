@@ -67,8 +67,8 @@ for our use *should not* be forked into this repository.
 #### Sensitive information
 
 If a given chart expects that sensitive communication secrets will be presented
-from within environment, such as passwords or cryptographic keys, [we prefer to
-use initContainers](../architecture/decisions.md#preference-of-secrets-in-initcontainer-over-environment).
+from within environment, such as passwords or cryptographic keys,
+[we prefer to use `initContainers`](../architecture/decisions.md#preference-of-secrets-in-initcontainer-over-environment).
 
 #### Extending functionality
 
