@@ -6,7 +6,10 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab cloud native Helm Chart **(FREE SELF)**
 
-This is the official, recommended, and supported method to install GitLab on a cloud native environment.
+This is the official method to install GitLab on a cloud native environment.
+
+Please consult the [GitLab reference architectures](/ee/administration/reference_architectures/#available-reference-architectures) and follow their recommendations. Only certain GitLab components should be deployed on Kubernetes, and [deviating from reference architectures will limit GitLab's ability to provide support](/ee/administration/reference_architectures/#deviating-from-the-suggested-reference-architectures).
+{: .alert .alert-warning}
 
 NOTE:
 It is not necessary to have GitLab installed on Kubernetes to use
