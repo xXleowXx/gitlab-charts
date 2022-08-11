@@ -1336,20 +1336,32 @@ To disable the use of LDAP for web sign-in, set `global.appConfig.ldap.preventSi
 
 If the LDAP server uses a custom CA or self-signed certificate, you must:
 
-1. Ensure that the custom CA/Self-Signed certificate is created as a secret in the cluster/namespace:
+1. Ensure that the custom CA/Self-Signed certificate is created as a Secret or ConfigMap in the cluster/namespace:
 
    ```shell
-   kubectl -n gitlab create secret generic my-custom-ca --from-file=my-custom-ca.pem
+   # Secret
+   kubectl -n gitlab create secret generic my-custom-ca-secret --from-file=unique_name=my-custom-ca.pem
+
+   # ConfigMap
+   kubectl -n gitlab create configmap my-custom-ca-configmap --from-file=unique_name=my-custom-ca.pem
    ```
 
 1. Then, specify:
 
    ```shell
-   --set global.certificates.customCAs[0].secret=my-custom-ca
-   --set global.appConfig.ldap.servers.main.ca_file=/etc/ssl/certs/ca-cert-my-custom-ca.pem
+   # Configure a custom CA from a Secret
+   --set global.certificates.customCAs[0].secret=my-custom-ca-secret
+
+   # Or from a ConfigMap
+   --set global.certificates.customCAs[0].configMap=my-custom-ca-configmap
+
+   # Configure the LDAP integration to trust the custom CA
+   --set global.appConfig.ldap.servers.main.ca_file=/etc/ssl/certs/ca-cert-unique_name.pem
    ```
 
-This will ensure that the CA is mounted in the relevant pods under `/etc/ssl/certs/ca-cert-my-custom-ca.pem` and specifies its use in the LDAP configuration.
+This will ensure that the CA certificate is mounted in the relevant pods at `/etc/ssl/certs/ca-cert-unique_name.pem` and specifies its use in the LDAP configuration.
+
+See [Custom Certificate Authorities](#custom-certificate-authorities) for more info.
 
 ### OmniAuth
 
@@ -1789,33 +1801,39 @@ These settings do not affect charts from outside of this repository, via `requir
 
 Some users may need to add custom certificate authorities, such as when using internally
 issued SSL certificates for TLS services. To provide this functionality, we provide
-a mechanism for injecting these custom root certificate authorities into the application via secrets.
+a mechanism for injecting these custom root certificate authorities into the application through Secrets or ConfigMaps.
+
+To create a Secret or ConfigMap:
+
+```shell
+# Create a Secret from a certificate file
+kubectl create secret generic secret-custom-ca --from-file=unique_name=/path/to/cert
+
+# Create a ConfigMap from a certificate file
+kubectl create configmap cm-custom-ca --from-file=unique_name=/path/to/cert
+```
+
+To configure a Secret or ConfigMap, or both, specify them in globals:
 
 ```yaml
 global:
   certificates:
     customCAs:
-      - secret: internal-cas
-      - secret: other-custom-cas
+      - secret: secret-custom-CAs           # Mount all keys of a Secret
+      - secret: secret-custom-CAs           # Mount only the specified keys of a Secret
+        keys:
+          - unique_name
+      - configMap: cm-custom-CAs            # Mount all keys of a ConfigMap
+      - configMap: cm-custom-CAs            # Mount only the specified keys of a ConfigMap
+        keys:
+          - unique_name_1
+          - unique_name_2
 ```
 
-A user can provide any number of secrets, each containing any number of keys that hold
-PEM encoded CA certificates. These are configured as entries under `global.certificates.customCAs`.
-All keys within the secret will be mounted, so all keys across all secrets must be unique.
-These secrets can be named in any fashion, but they *must not* contain key names that collide.
-
-To create a secret:
-
-```shell
-kubectl create secret generic custom-ca --from-file=unique_name=/path/to/cert
-```
-
-To configure the secret:
-
-```shell
-helm install gitlab gitlab/gitlab \
-  --set global.certificates.customCAs[0].secret=custom-ca
-```
+You can provide any number of Secrets or ConfigMaps, each containing any number of keys that hold
+PEM-encoded CA certificates. These are configured as entries under `global.certificates.customCAs`.
+All keys are mounted unless `keys:` is provided with a list of specific keys to be mounted. All mounted keys across all Secrets and ConfigMaps must be unique.
+The Secrets and ConfigMaps can be named in any fashion, but they *must not* contain key names that collide.
 
 ## Application Resource
 
