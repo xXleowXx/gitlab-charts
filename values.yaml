@@ -541,6 +541,9 @@ global:
     notificationSecret: {}
       # secret:
       # key:
+    redis:
+      cache:
+        password: {}
     # https://docs.docker.com/registry/notifications/#configuration
     notifications: {}
       # endpoints:
