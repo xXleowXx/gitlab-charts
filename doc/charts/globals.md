@@ -129,6 +129,14 @@ The GitLab global host settings for PDB are located under the `global.pdb` key:
 | :----------- | :-------: | :------ | :-------------------------------------------------------------------- |
 | `apiVersion` | String    |         | API version to use in the PodDisruptionBudget object definitions. |
 
+## Configure CronJob settings
+
+The GitLab global host settings for CronJobs are located under the `global.batch.cronJob` key:
+
+| Name         | Type      | Default | Description                                                           |
+| :----------- | :-------: | :------ | :-------------------------------------------------------------------- |
+| `apiVersion` | String    |         | API version to use in the CronJob object definitions. |
+
 ## Configure Ingress settings
 
 The GitLab global host settings for Ingress are located under the `global.ingress` key:
