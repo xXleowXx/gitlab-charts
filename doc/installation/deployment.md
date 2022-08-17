@@ -4,10 +4,10 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Deployment Guide **(FREE SELF)**
+# Deploy the GitLab Helm chart **(FREE SELF)**
 
 Before running `helm install`, you need to make some decisions about how you will run GitLab.
-Options can be specified using Helm's `--set option.name=value` command line option.
+Options can be specified using Helm's `--set option.name=value` command-line option.
 This guide will cover required values and common options.
 For a complete list of options, read [Installation command line options](command-line-options.md).
 
