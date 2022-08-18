@@ -360,24 +360,30 @@ This section controls the registry Ingress.
 
 ## Configuring TLS
 
-Registry supports TLS. This will secure its communication with other components,
-including `nginx-ingress`. The TLS certificate should include the Registry
-Service host name (e.g. `RELEASE-registry.default.svc`) in the Common
-Name (CN) or Subject Alternate Name (SAN).
+Container Registry supports TLS which secures its communication with other components,
+including `nginx-ingress`.
 
-Once the TLS certificate is generated, create a [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets)
-for it. You also need to create another Secret that only contains the CA
-certificate of the TLS certificate with `ca.crt` key.
+Prerequisites to configure TLS:
 
-TLS can be enabled for by setting `registry.tls.enabled` to `true`. You also
-need to tell other components that Registry is using HTTPS by setting
-`global.hosts.registry.protocol` to `https`. You also need to pass the Secret
-names to `registry.tls.secretName` and `global.certificates.customCAs` accordingly.
+- The TLS certificate must include the Registry Service host name
+  (for example, `RELEASE-registry.default.svc`) in the Common
+  Name (CN) or Subject Alternate Name (SAN).
+- After the TLS certificate generates:
+  - Create a [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets)
+  - Create another Secret that only contains the CA certificate of the TLS certificate with `ca.crt` key.
 
-When `registry.tls.verify` is `true`, you need to pass the CA certificate Secret
+To enable TLS:
+
+1. Set `registry.tls.enabled` to `true`.
+1. Set `global.hosts.registry.protocol` to `https`.
+1. Pass the Secret names to `registry.tls.secretName` and `global.certificates.customCAs` accordingly.
+
+When `registry.tls.verify` is `true`, you must pass the CA certificate Secret
 name to `registry.tls.caSecretName`. This is necessary for self-signed
-certificates and custom CA. This Secret is used by NGINX to verify the TLS
+certificates and custom Certificate Authorities. This Secret is used by NGINX to verify the TLS
 certificate of Registry.
+
+For example:
 
 ```yaml
 global:
