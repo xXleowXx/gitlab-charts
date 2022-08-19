@@ -67,6 +67,122 @@ describe 'registry configuration' do
     end
   end
 
+  describe 'service TLS is configured' do
+    let(:tls_values) do
+      YAML.safe_load(%(
+        global:
+          hosts:
+            registry:
+              protocol: https
+        registry:
+          tls:
+            enabled: true
+      )).deep_merge(default_values)
+    end
+
+    context 'when enabled without configuration' do
+      let(:values) do
+        YAML.safe_load(%(
+          registry:
+            tls:
+              enabled: true
+        )).deep_merge(default_values)
+      end
+
+      it 'fails to render' do
+        expect(HelmTemplate.new(tls_values).exit_code).not_to eq(0)
+      end
+    end
+
+    context 'when provided minimum configuration' do
+      let(:values) do
+        YAML.safe_load(%(
+          registry:
+            tls:
+              secretName: registry-service-tls
+        )).deep_merge(tls_values)
+      end
+
+      it 'renders default configuration, volume content, ingress annotations, port definitions' do
+        t = HelmTemplate.new(values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          <<~TLS_CONFIG
+          http:
+            addr: :5000
+            # `host` is not configurable
+            # `prefix` is not configurable
+            tls:
+              certificate: /etc/docker/registry/tls/tls.crt
+              key: /etc/docker/registry/tls/tls.key
+              minimumTLS: "tls1.2"
+          TLS_CONFIG
+        )
+
+        tls_crt = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'registry-service-tls', 'tls.crt')
+        expect(tls_crt).not_to be_empty
+
+        ingress_annotations = t.annotations('Ingress/test-registry')
+        expect(ingress_annotations).to include(YAML.safe_load(%(
+          nginx.ingress.kubernetes.io/backend-protocol: https
+          nginx.ingress.kubernetes.io/proxy-ssl-verify: "on"
+          nginx.ingress.kubernetes.io/proxy-ssl-name: test-registry.default.svc
+        )))
+
+        service_ports = t.dig('Service/test-registry', 'spec', 'ports')
+        expect(service_ports[0]['targetPort']).to eq('https')
+
+        container_ports = t.find_container('Deployment/test-registry', 'registry')['ports']
+        expect(container_ports).to include({ 'containerPort' => 5000, 'name' => 'https' })
+      end
+    end
+
+    context 'when provided extended TLS configuration' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            host:
+              registry:
+                protocol: https
+          registry:
+            tls:
+              secretName: registry-service-tls
+              clientCAs: [one, two, three]
+              minimumTLS: "tls1.3"
+              caSecretName: service-tls-ca
+        )).deep_merge(tls_values)
+      end
+
+      it 'renders configuration, ingress as expected' do
+        t = HelmTemplate.new(values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          <<~TLS_CONFIG
+          http:
+            addr: :5000
+            # `host` is not configurable
+            # `prefix` is not configurable
+            tls:
+              certificate: /etc/docker/registry/tls/tls.crt
+              key: /etc/docker/registry/tls/tls.key
+              clientCAs:
+                - one
+                - two
+                - three
+              minimumTLS: "tls1.3"
+          TLS_CONFIG
+        )
+
+        ingress_annotations = t.annotations('Ingress/test-registry')
+        expect(ingress_annotations).to include(
+          'nginx.ingress.kubernetes.io/proxy-ssl-secret' => 'default/service-tls-ca'
+        )
+      end
+    end
+  end
+
   describe 'templates/configmap.yaml' do
     describe 'redis cache config' do
       context 'when cache is enabled using global settings' do

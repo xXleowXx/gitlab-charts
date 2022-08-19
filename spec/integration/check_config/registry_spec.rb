@@ -343,4 +343,63 @@ describe 'checkConfig registry' do
                      success_description: 'when redis cache is enabled, with addr',
                      error_description: 'when redis cache is enabled, with empty addr'
   end
+
+  describe 'registry.tls (secretName)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        global:
+          hosts:
+            registry:
+              protocol: https
+        registry:
+          tls:
+            enabled: true
+            secretName: registry-service-tls
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        registry:
+          tls:
+            enabled: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Enabling the service level TLS requires secretName be provided.' }
+
+    include_examples 'config validation',
+                     success_description: 'when tls is enabled, with secretName',
+                     error_description: 'when tls is enabled, without secretName'
+  end
+
+  describe 'registry.tls (hosts.protocol)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        global:
+          hosts:
+            registry:
+              protocol: https
+        registry:
+          tls:
+            enabled: true
+            secretName: registry-service-tls
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        registry:
+          tls:
+            enabled: true
+            secretName: registry-service-tls
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Enabling the service level TLS requires \'global.hosts.registry.protocol\'' }
+
+    include_examples 'config validation',
+                     success_description: 'when tls is enabled, with global.hosts.protocol',
+                     error_description: 'when tls is enabled, without global.hosts.protocol'
+  end
 end

@@ -105,3 +105,24 @@ registry:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.redis.cache */}}
+
+
+{{/*
+Ensure Registry TLS has a secret when enabled
+*/}}
+{{- define "gitlab.checkConfig.registry.tls" -}}
+{{-   if $.Values.registry.tls.enabled }}
+{{-     if  not $.Values.registry.tls.secretName }}
+registry:
+    Enabling the service level TLS requires secretName be provided.
+    See https://docs.gitlab.com/charts/charts/registry/#configuring-tls
+{{-     end -}}
+{{-     if  not (eq (default "http" $.Values.global.hosts.registry.protocol) "https") }}
+registry:
+    Enabling the service level TLS requires 'global.hosts.registry.protocol'
+    be set to 'https'.
+    See https://docs.gitlab.com/charts/charts/registry/#configuring-tls
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.registry.tls */}}
