@@ -507,7 +507,8 @@ rubocop:
       - triggers
       - *com_auto_deploy_branch_ref
   script:
-    - bundle config set path 'gems'
+    - bundle config set --local path 'gems'
+    - bundle config set --local frozen 'true'
     - bundle install -j $(nproc)
     - bundle exec rubocop --parallel
   cache:
