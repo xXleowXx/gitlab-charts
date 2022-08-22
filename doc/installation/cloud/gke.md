@@ -31,8 +31,8 @@ The script will:
 1. Allow the cluster to modify DNS records.
 1. Setup `kubectl`, and connect it to the cluster.
 
-The script reads various parameters from environment variables and an argument
-`up` or `down` for bootstrap and clean up respectively.
+The script reads various parameters from environment variables and the argument
+`up` for bootstrap or `down` for clean up.
 
 The table below describes all variables.
 
