@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.3.1 (2022-08-22)
+
+No changes.
+
 ## 6.3.0 (2022-08-19)
 
 ### Added (4 changes)
@@ -36,6 +40,10 @@ entry.
 ### Other (1 change)
 
 - [Ensures that whitespace is chomped to the left](gitlab-org/charts/gitlab@0e65e3393b244bf8a5f04a631865a2f1487e34ab) ([merge request](gitlab-org/charts/gitlab!2651))
+
+## 6.2.3 (2022-08-22)
+
+No changes.
 
 ## 6.2.2 (2022-08-01)
 
@@ -80,6 +88,10 @@ No changes.
 
 - [config: Remove mentions of deprecated `self_signed_cert` config](gitlab-org/charts/gitlab@58bf47825841c482e874c13fd4e729b523fe99f4) ([merge request](gitlab-org/charts/gitlab!2664))
 - [Remove NGINX's `isControllerTagValid` helper](gitlab-org/charts/gitlab@f099651db6f1d57cdc9a78a2744ad6c36680fe0a) ([merge request](gitlab-org/charts/gitlab!2668))
+
+## 6.1.5 (2022-08-22)
+
+No changes.
 
 ## 6.1.4 (2022-07-28)
 
