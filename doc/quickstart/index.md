@@ -42,7 +42,7 @@ A cluster with a total of 8vCPU and 30GB of RAM, or more is recommended.
 This guide is not intended to cover how to create or obtain a Kubernetes cluster.
 Instead, refer to the Google [GKE cluster creation guide](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster).
 
-### Instal kubectl
+### Install kubectl
 
 To install kubectl, see the [Kubernetes installation documentation](https://kubernetes.io/docs/tasks/tools/).
 The documentation covers most operating systems and the Google
