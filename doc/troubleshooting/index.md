@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Troubleshooting
+# Troubleshooting the GitLab chart
 
 ## UPGRADE FAILED: Job failed: BackoffLimitExceeded
 
@@ -14,7 +14,7 @@ then it's probably because you didn't follow the right upgrade path, as you firs
 1. List all your releases to identify your GitLab Helm release name (you will need to include `-n <namespace>` if your release was not deployed to the `default` K8s namespace):
 
     ```shell
-    helm ls 
+    helm ls
     ```
 
 1. Assuming that your GitLab Helm release is called `gitlab` you then need to look at the release history and identify the last successful revision (you can see the status of a revision under `DESCRIPTION`):
@@ -612,7 +612,7 @@ Run the certificates container using Docker.
 
 ## `308: Permanent Redirect` causing a redirect loop
 
-`308: Permanent Redirect` can happen if your Load Balancer is configured to send unencrypted traffic (HTTP) to NGINX. 
-Because NGINX defaults to redirecting `HTTP` to `HTTPS`, you may end up in a "redirect loop". 
+`308: Permanent Redirect` can happen if your Load Balancer is configured to send unencrypted traffic (HTTP) to NGINX.
+Because NGINX defaults to redirecting `HTTP` to `HTTPS`, you may end up in a "redirect loop".
 
-To fix this, [enable NGINX's `use-forward-headers` setting](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers). 
+To fix this, [enable NGINX's `use-forward-headers` setting](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers).
