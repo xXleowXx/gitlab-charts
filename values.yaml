@@ -460,7 +460,7 @@ global:
       requiredForGitAccess: false
 
     sidekiq:
-      routingRules: []
+      routingRules: [["*", "default"]]
 
     # Config that only applies to the defaults on initial install
     initialDefaults: {}
