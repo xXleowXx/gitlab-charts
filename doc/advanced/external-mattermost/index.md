@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Configure This Chart with Mattermost Team Edition
+# Configure the GitLab chart with Mattermost Team Edition
 
 This document describes how to install Mattermost Team Edition Helm Chart in proximity with an existing GitLab Helm Chart deployment.
 

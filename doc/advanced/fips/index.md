@@ -4,12 +4,10 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# GitLab with FIPS-compliant images
+# Configure the GitLab chart with FIPS-compliant images
 
 GitLab offers [FIPS-compliant](https://docs.gitlab.com/ee/development/fips_compliance.html)
 versions of its images, allowing you to run GitLab on FIPS-enabled clusters.
-
-We meet this need via our [FIPS-compatible images](../fips/index.md).
 
 ## Sample values
 

@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Configure this chart with External Redis
+# Configure the GitLab chart with an external Redis
 
 This document intends to provide documentation on how to configure this Helm chart with an external Redis service.
 
