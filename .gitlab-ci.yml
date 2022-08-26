@@ -71,6 +71,10 @@ include:
   - template: Security/Secret-Detection.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/SAST-IaC.latest.gitlab-ci.yml
+  - project: 'gitlab-org/quality/pipeline-common'
+    file:
+      - '/ci/danger-review.yml'
+
 dependency_scanning:
   needs: []
   before_script: []
@@ -492,23 +496,7 @@ debug_review:
       - *com_auto_deploy_branch_ref
 
 danger-review:
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
   stage: prepare
-  cache: {}
-  only:
-    variables:
-      - $DANGER_GITLAB_API_TOKEN
-  except:
-    <<: *deps_pipeline
-    refs:
-      - master
-      - tags
-      - triggers
-      - *com_auto_deploy_branch_ref
-      - *stable_branch_ref
-  script:
-    - git version
-    - danger --fail-on-errors=true
 
 rubocop:
   image: ruby:2.7.4-alpine
