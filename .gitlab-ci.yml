@@ -497,6 +497,17 @@ debug_review:
 
 danger-review:
   stage: prepare
+  only:
+    variables:
+      - $DANGER_GITLAB_API_TOKEN
+  except:
+    <<: *deps_pipeline
+    refs:
+      - master
+      - tags
+      - triggers
+      - *com_auto_deploy_branch_ref
+      - *stable_branch_ref
 
 rubocop:
   image: ruby:2.7.4-alpine
