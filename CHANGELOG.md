@@ -97,6 +97,10 @@ No changes.
 - [config: Remove mentions of deprecated `self_signed_cert` config](gitlab-org/charts/gitlab@58bf47825841c482e874c13fd4e729b523fe99f4) ([merge request](gitlab-org/charts/gitlab!2664))
 - [Remove NGINX's `isControllerTagValid` helper](gitlab-org/charts/gitlab@f099651db6f1d57cdc9a78a2744ad6c36680fe0a) ([merge request](gitlab-org/charts/gitlab!2668))
 
+## 6.1.6 (2022-08-30)
+
+No changes.
+
 ## 6.1.5 (2022-08-22)
 
 No changes.
