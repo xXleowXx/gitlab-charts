@@ -45,6 +45,10 @@ No changes.
 
 - [Ensures that whitespace is chomped to the left](gitlab-org/charts/gitlab@0e65e3393b244bf8a5f04a631865a2f1487e34ab) ([merge request](gitlab-org/charts/gitlab!2651))
 
+## 6.2.4 (2022-08-30)
+
+No changes.
+
 ## 6.2.3 (2022-08-22)
 
 No changes.
