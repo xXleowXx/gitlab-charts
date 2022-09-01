@@ -1,4 +1,4 @@
-{{- if and .Values.global.pages.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled -}}
+{{- if .Values.metrics.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
