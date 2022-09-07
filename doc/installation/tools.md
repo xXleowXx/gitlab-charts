@@ -85,6 +85,11 @@ For example, use the following with `helm install`:
 --set global.hosts.externalIP=10.10.10.10
 ```
 
+#### Compatibility with Istio protocol selection
+
+Service port names follow the convention that is compatible with Istio's [explicit port selection](https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/#explicit-protocol-selection).
+They look like `<protocol>-<suffix>`, for example `grpc-gitaly` or `https-metrics`.
+
 ### Persistence
 
 By default the GitLab chart creates Volume Claims with the expectation that a

@@ -657,8 +657,8 @@ global:
     ## https://docs.gitlab.com/charts/installation/secrets#gitlab-workhorse-secret
     # secret:
     # key:
-    tls: {}
-      # enabled: true
+    tls:
+      enabled: false
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-webservice
   webservice:

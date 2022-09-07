@@ -17,7 +17,7 @@ spec:
     - port: {{ .Values.metrics.port | int }}
       targetPort: http-metrics
       protocol: TCP
-      name: http-metrics
+      name: {{ .Values.metrics.tls.enabled | ternary "https" "http" }}-metrics
   selector:
     app: {{ template "name" . }}
     release: {{ .Release.Name }}
