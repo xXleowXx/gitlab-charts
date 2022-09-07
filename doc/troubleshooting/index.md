@@ -276,7 +276,7 @@ requires [an additional step](https://artifacthub.io/packages/helm/prometheus-co
 
 If you are using [`global.gitlabVersion`](../charts/globals.md#gitlab-version),
 start by removing that property.
-Check the [version mappings between the chart and GitLab](../index.md#gitlab-version-mappings)
+Check the [version mappings between the chart and GitLab](../installation/version_mappings.md)
 and specify a compatible version of the `gitlab/gitlab` chart in your `helm` command.
 
 ## UPGRADE FAILED: "cannot patch ..." after `helm 2to3 convert`

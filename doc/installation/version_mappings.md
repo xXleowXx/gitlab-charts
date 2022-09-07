@@ -6,6 +6,21 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab version mappings **(FREE SELF)**
 
+The GitLab chart doesn't have the same version number as GitLab itself.
+Breaking changes are anticipated that may have to be introduced to the chart
+that would warrant a major version bump, and the requirement for these changes
+could completely block other development on these charts until completed.
+
+To quickly see the full list of the `gitlab` chart versions and the GitLab version
+they map to, run the following command with [Helm](tools.md):
+
+```shell
+helm repo add gitlab https://charts.gitlab.io/
+helm search repo -l gitlab/gitlab
+```
+
+## Previous chart versions
+
 The table below maps some of the key previous chart versions and GitLab versions.
 
 | Chart version | GitLab version |
