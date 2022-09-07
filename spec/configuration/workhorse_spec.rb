@@ -65,6 +65,14 @@ describe 'Workhorse configuration' do
   end
 
   context 'TLS support' do
+    let(:tls_enabled) { false }
+    let(:tls_verify) {}
+    let(:monitoring_enabled) { true }
+    let(:monitoring_tls_enabled) { false }
+    let(:tls_secret_name) {}
+    let(:tls_ca_secret_name) {}
+    let(:tls_custom_ca) {}
+
     let(:tls_values) do
       YAML.safe_load(%(
         global:
@@ -91,14 +99,6 @@ describe 'Workhorse configuration' do
     end
 
     context 'when TLS is disabled' do
-      let(:tls_enabled) {}
-      let(:tls_verify) {}
-      let(:tls_secret_name) {}
-      let(:tls_ca_secret_name) {}
-      let(:tls_custom_ca) {}
-      let(:monitoring_enabled) { true }
-      let(:monitoring_tls_enabled) {}
-
       let(:template) { HelmTemplate.new(tls_values) }
 
       it 'renders a TOML configuration file' do
@@ -115,12 +115,6 @@ describe 'Workhorse configuration' do
 
     context 'when TLS is enabled but custom CA and TLS Secrets are not specified' do
       let(:tls_enabled) { true }
-      let(:tls_verify) {}
-      let(:tls_secret_name) {}
-      let(:tls_ca_secret_name) {}
-      let(:tls_custom_ca) {}
-      let(:monitoring_enabled) {}
-      let(:monitoring_tls_enabled) {}
 
       let(:template) { HelmTemplate.new(tls_values) }
 
@@ -136,7 +130,6 @@ describe 'Workhorse configuration' do
       let(:tls_secret_name) { 'webservice-tls-secret' }
       let(:tls_ca_secret_name) { 'custom-ca-secret' }
       let(:tls_custom_ca) { 'secret: custom-ca-secret' }
-      let(:monitoring_enabled) { true }
       let(:monitoring_tls_enabled) { true }
 
       let(:template) { HelmTemplate.new(tls_values) }
@@ -176,8 +169,7 @@ describe 'Workhorse configuration' do
       let(:tls_secret_name) { 'webservice-tls-secret' }
       let(:tls_ca_secret_name) { 'custom-ca-secret' }
       let(:tls_custom_ca) { 'secret: custom-ca-secret' }
-      let(:monitoring_enabled) {}
-      let(:monitoring_tls_enabled) {}
+      let(:monitoring_enabled) { false }
 
       let(:template) { HelmTemplate.new(tls_values) }
 
