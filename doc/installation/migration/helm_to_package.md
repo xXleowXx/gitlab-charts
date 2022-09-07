@@ -57,5 +57,5 @@ To migrate from a Helm installation to a Linux package (Omnibus) installation:
    [perform the restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-gitlab-installations).
 1. After the restore is complete, run the [doctor Rake tasks](https://docs.gitlab.com/ee/administration/raketasks/check.html)
    to make sure that the secrets are valid.
-1. After everything is verified, you may [uninstall](../../index.md#uninstall)
+1. After everything is verified, you may [uninstall](../uninstall.md)
    the GitLab Helm chart instance.
