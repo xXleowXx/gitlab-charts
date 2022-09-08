@@ -103,6 +103,13 @@ registry:
     See https://docs.gitlab.com/charts/charts/registry#redis-cache
 {{-     end -}}
 {{- end -}}
+{{-   if and $.Values.registry.database.enabled $.Values.registry.redis.cache.enabled $.Values.registry.redis.cache.sentinels}}
+{{-     if  not $.Values.registry.redis.cache.host }}
+registry:
+    Enabling the Redis cache with sentinels requires the registry.redis.cache.host to be set.
+    See https://docs.gitlab.com/charts/charts/registry#redis-cache
+{{-     end -}}
+{{- end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.redis.cache */}}
 

@@ -33,14 +33,16 @@ Return migration configuration.
 redis:
   cache:
     enabled: {{ .Values.redis.cache.enabled | eq true }}
-    {{- /*TODO: Refactor once https://gitlab.com/gitlab-org/container-registry/-/issues/749 is fixed */ -}}
-    {{- if .Values.redis.cache.host }}
-    addr: {{ printf "%s:%d" .Values.redis.cache.host (int .Values.redis.cache.port | default 6379) | quote }}
-    {{- else if not .redisMergedConfig.sentinels }}
-    addr: {{ printf "%s:%s" ( include "gitlab.redis.host" . ) ( include "gitlab.redis.port" . ) | quote }}
-    {{- else }}
-    addr:  {{ include "registry.redis.host.sentinels" .redisMergedConfig | quote }}
+    {{- if .Values.redis.cache.sentinels }}
+    addr: {{ include "registry.redis.host.sentinels" .Values.redis.cache | quote }}
+    mainName: {{ .Values.redis.cache.host }}
+    {{- else if .redisMergedConfig.sentinels }}
+    addr: {{ include "registry.redis.host.sentinels" .redisMergedConfig | quote }}
     mainName: {{ template "gitlab.redis.host" . }}
+    {{- else if .Values.redis.cache.host  }}
+    addr: {{ printf "%s:%d" .Values.redis.cache.host (int .Values.redis.cache.port | default 6379) | quote }}
+    {{- else }}
+    addr: {{ printf "%s:%s" ( include "gitlab.redis.host" . ) ( include "gitlab.redis.port" . ) | quote }}
     {{- end }}
     {{- if .redisMergedConfig.password.enabled }}
     password: "REDIS_CACHE_PASSWORD"

@@ -296,7 +296,7 @@ describe 'registry configuration' do
         end
       end
 
-      context 'when customer provides a custom redis cache configuration with using sentinels' do
+      context 'when customer provides a custom redis cache configuration with global sentinels' do
         let(:values) do
           YAML.safe_load(%(
             global:
@@ -324,8 +324,84 @@ describe 'registry configuration' do
             redis:
               cache:
                 enabled: true
-                addr:  "sentinel1.example.com:26379,sentinel2.example.com:26379"
+                addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
                 mainName: redis.example.com
+                password: "REDIS_CACHE_PASSWORD"
+            CONFIG
+          )
+        end
+      end
+
+      context 'when customer provides a custom redis cache configuration with local sentinels' do
+        let(:values) do
+          YAML.safe_load(%(
+            registry:
+              database:
+                enabled: true
+              redis:
+                cache:
+                  enabled: true
+                  host: redis.example.com
+                  sentinels:
+                    - host: sentinel1.example.com
+                      port: 26379
+                    - host: sentinel2.example.com
+                      port: 26379
+        )).deep_merge(default_values)
+        end
+
+        it 'populates the redis cache settings in the expected manner' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+            <<~CONFIG
+            redis:
+              cache:
+                enabled: true
+                addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
+                mainName: redis.example.com
+                password: "REDIS_CACHE_PASSWORD"
+            CONFIG
+          )
+        end
+      end
+
+      context 'when customer provides a custom redis cache configuration with local and global sentinels' do
+        let(:values) do
+          YAML.safe_load(%(
+            global:
+              redis:
+                host: redis.example.com
+                sentinels:
+                  - host: global1.example.com
+                    port: 26379
+                  - host: global2.example.com
+                    port: 26379
+            registry:
+              database:
+                enabled: true
+              redis:
+                cache:
+                  enabled: true
+                  host: local.example.com
+                  sentinels:
+                    - host: local1.example.com
+                      port: 26379
+                    - host: local2.example.com
+                      port: 26379
+        )).deep_merge(default_values)
+        end
+
+        it 'populates the redis cache settings with the local sentinels' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+            <<~CONFIG
+            redis:
+              cache:
+                enabled: true
+                addr: "local1.example.com:26379,local2.example.com:26379"
+                mainName: local.example.com
                 password: "REDIS_CACHE_PASSWORD"
             CONFIG
           )

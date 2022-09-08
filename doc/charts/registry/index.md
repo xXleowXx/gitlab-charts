@@ -246,7 +246,9 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `tolerations`                                                                                                                                | `[]`                                                                           | Toleration labels for pod assignment                                                                                                                                                                                                                                                                                                         |
 | `middleware.storage`                                                                                                                         |                                                                                | configuration layer for midleware storage ([s3 for instance](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#example-middleware-configuration))                                                                                                                                                         |
 | `redis.cache.enabled`                                                                                                                          | `false`                                                                        | When set to `true`, the Redis cache is enabled. This feature is dependent on the [metadata database](#database) being enabled. Repository metadata will be cached on the configured Redis instance.                                                                                              |
-| `redis.cache.addr`                                                                                                                          | `<Redis URL>`                                                                        | The address (host and port) of the Redis instance. If empty, the value will be filled as `global.redis.host:global.redis.port`, or a comma separated list of Sentinel addresses if enabled.                                                                                            |
+| `redis.cache.host`                                                                                                                          | `<Redis URL>`                                                                        | The hostname of the Redis instance. If empty, the value will be filled as `global.redis.host:global.redis.port`.                                                                                      |
+| `redis.cache.port` | `6379` | The port of the Redis instance. |
+| `redis.cache.sentinels` | `[]` | List sentinels with host and port. |
 | `redis.cache.mainName`                                                                                                                          |                                                                         | The main server name. Only applicable for Sentinel.                                                                                             |
 | `redis.cache.password.secret`                                                                                                                          | `gitlab-redis-secret`                                                                        | Name of the secret containing the Redis password.                                                                                              |
 | `redis.cache.password.key`                                                                                                                          | `redis-password`                                                                        | Secret key in which the Redis password is stored.                                                                                              |
@@ -989,7 +991,8 @@ For example:
 redis:
   cache:
     enabled: true
-    addr: localhost:16379
+    host: localhost
+    port: 16379
     password:
       secret: gitlab-redis-secret
       key: redis-password
@@ -1004,6 +1007,23 @@ redis:
       size: 10
       maxlifetime: 1h
       idletimeout: 300s
+```
+
+#### Sentinels
+
+The `redis.cache` can use the `global.redis.sentinels` configuration. Local values can be provided and
+will take precedence over the global values. For example:
+
+```yaml
+redis:
+  cache:
+    enabled: true
+    host: redis.example.com
+    sentinels:
+      - host: sentinel1.example.com
+        port: 16379
+      - host: sentinel2.example.com
+        port: 16379
 ```
 
 ## Garbage Collection
