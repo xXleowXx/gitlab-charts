@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Configure the GitLab Chart with an external object storage
+# Configure the GitLab chart with an external object storage
 
 GitLab relies on object storage for highly-available persistent data in Kubernetes.
 By default, an S3-compatible storage solution named `minio` is deployed with the

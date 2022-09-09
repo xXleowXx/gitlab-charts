@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Test the GitLab chart on GKE or EKS
 
 This guide serves as a concise but complete documentation about how to install the
-Cloud Native GitLab chart with default values on Google Kubernetes Engine (GKE)
+GitLab chart with default values on Google Kubernetes Engine (GKE)
 or Amazon Elastic Kubernetes Service (EKS).
 
 By default, the GitLab chart includes an in-cluster PostgreSQL, Redis, and
@@ -41,7 +41,7 @@ We'll instead refer to the cloud providers' own instructions:
 
 - [Google GKE cluster creation guide](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster).
 - [Amazon AWS Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html).
-  Use EC2 managed nodes for the EKS cluster, and not Fargate. Fargate [has a number of limitations](https://docs.aws.amazon.com/en_us/eks/latest/userguide/fargate.html) and is not supported for use with the GitLab Helm Chart.
+  Use EC2 managed nodes for the EKS cluster, and not Fargate. Fargate [has a number of limitations](https://docs.aws.amazon.com/en_us/eks/latest/userguide/fargate.html) and is not supported for use with the GitLab Helm chart.
 
 ### Install kubectl
 

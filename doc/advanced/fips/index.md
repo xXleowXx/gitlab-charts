@@ -11,7 +11,7 @@ versions of its images, allowing you to run GitLab on FIPS-enabled clusters.
 
 ## Sample values
 
-We provide an example for GitLab Chart values in
+We provide an example for GitLab chart values in
 [`examples/fips/values.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/fips/values.yaml)
 which can help you to build a FIPS-compatible GitLab deployment.
 

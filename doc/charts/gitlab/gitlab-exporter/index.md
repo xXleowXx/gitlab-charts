@@ -21,7 +21,7 @@ from the Kubernetes cluster on which this chart is deployed.
 ## Configuration
 
 The `gitlab-exporter` chart is configured as follows:
-[Global Settings](#global-settings) and [Chart Settings](#chart-settings).
+[Global settings](#global-settings) and [Chart settings](#chart-settings).
 
 ## Installation command line options
 

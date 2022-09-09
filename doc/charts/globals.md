@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
 ---
 
-# Configure Charts using Globals **(FREE SELF)**
+# Configure charts using globals **(FREE SELF)**
 
 To reduce configuration duplication when installing our wrapper Helm chart, several
 configuration settings are available to be set in the `global` section of `values.yaml`.
@@ -146,7 +146,7 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 | `apiVersion`                   | String  |                | API version to use in the Ingress object definitions.
 | `annotations.*annotation-key*` | String  |                | Where `annotation-key` is a string that will be used with the value as an annotation on every Ingress. For Example: `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. No global annotations are provided by default. |
 | `configureCertmanager`         | Boolean | `true`         | [See below](#globalingressconfigurecertmanager). |
-| `class`                        | String  | `gitlab-nginx` | Global setting that controls `kubernetes.io/ingress.class` annotation or `spec.IngressClassName` in `Ingress` resources. Set to `none` to disable, or `""` for empty. Note: for `none` or `""`, set `nginx-ingress.enabled=false` to prevent the Charts from deploying unnecessary Ingress resources. |
+| `class`                        | String  | `gitlab-nginx` | Global setting that controls `kubernetes.io/ingress.class` annotation or `spec.IngressClassName` in `Ingress` resources. Set to `none` to disable, or `""` for empty. Note: for `none` or `""`, set `nginx-ingress.enabled=false` to prevent the charts from deploying unnecessary Ingress resources. |
 | `enabled`                      | Boolean | `true`         | Global setting that controls whether to create Ingress objects for services that support them. |
 | `tls.enabled`                  | Boolean | `true`         | When set to `false`, this disables TLS in GitLab. This is useful for cases in which you cannot use TLS termination of Ingresses, such as when you have a TLS-terminating proxy before the Ingress Controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#configure-host-settings). |
 | `tls.secretName`               | String  |                | The name of the [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) that contains a **wildcard** certificate and key for the domain used in `global.hosts.domain`. |
@@ -1212,7 +1212,7 @@ kubectl create secret generic gitlab-rails-storage \
 
 `externalDiffs` setting has an additional key `when` to
 [conditionally store specific diffs on object storage](https://docs.gitlab.com/ee/administration/merge_request_diffs.html#alternative-in-database-storage).
-This setting is left empty by default in the Charts, for a default value to be
+This setting is left empty by default in the charts, for a default value to be
 assigned by the Rails code.
 
 ### Incoming email settings

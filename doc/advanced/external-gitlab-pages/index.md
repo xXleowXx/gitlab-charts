@@ -44,7 +44,7 @@ Omnibus GitLab package.
 
 1. Apply the changes by running `sudo gitlab-ctl reconfigure`.
 
-## Configure the Chart
+## Configure the chart
 
 1. Create a bucket named `gitlab-pages` in the object storage for storing Pages
    deployments.
