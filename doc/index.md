@@ -9,9 +9,13 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 To install GitLab in a cloud-native environment, use the GitLab Helm chart.
 This chart contains all the required components to get started and can scale to large deployments.
 
+Use this installation method if your infrastructure is built
+on Kubernetes and you're familiar with how it works. This method of deployment has different
+management, observability, and concepts than traditional deployments.
+
 NOTE:
-The default chart is for proof-of-concept deployments only. For production deployments,
-you must do additional setup and configuration. [View details](installation/index.md).
+Use the **default** chart for proof-of-concept deployments only. For production deployments,
+additional setup and configuration is required. [View details](installation/index.md).
 
 ## Subcharts
 
