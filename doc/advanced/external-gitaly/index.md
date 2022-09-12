@@ -15,7 +15,7 @@ NOTE:
 External Gitaly _services_ can be provided by Gitaly nodes, or
 [Praefect](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) clusters.
 
-## Configure the Chart
+## Configure the chart
 
 Disable the `gitaly` chart and the Gitaly service it provides, and point the other services to the external service.
 
