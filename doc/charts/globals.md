@@ -2113,14 +2113,19 @@ Check the [secrets documentation](../installation/secrets.md#oauth-integration) 
 
 ## Kerberos
 
-Kerberos integration is enabled by setting
-`global.appConfig.kerberos.enabled` to `true`.
+To configure the Kerberos integration in the GitLab Helm chart, you must provide a secret in the `global.appConfig.kerberos.keytab.secret` setting containing a Kerberos [keytab](https://web.mit.edu/kerberos/krb5-devel/doc/basic/keytab_def.html) with a service principal for your GitLab host. Your Kerberos administrators can help with creating a keytab file if you don't have one.
 
-You must provide a secret containing a keytab with
-`global.appConfig.kerberos.keytab.secret`
+You can create a secret using the following snippet (assuming that you are installing the chart in the `gitlab` namespace and `gitlab.keytab` is the keytab file containing the service principal):
 
-You may want to provide your Kerberos configuration in
-`global.appConfig.kerberos.krb5Config`.
+```shell
+kubectl create secret generic gitlab-kerberos-keytab --namespace=gitlab --from-file=keytab=./gitlab.keytab
+```
+
+Kerberos integration for Git is enabled by setting `global.appConfig.kerberos.enabled=true`. This will also add the `kerberos` provider to the list of enabled [OmniAuth](https://docs.gitlab.com/ee/integration/omniauth.html) providers for ticket-based authentication in the browser.
+
+If left as `false` the Helm chart will still mount the `keytab` in the toolbox, Sidekiq, and webservice Pods, which can be used with manually configured [OmniAuth settings](#omniauth) for Kerberos.
+
+You can provide a Kerberos client configuration in `global.appConfig.kerberos.krb5Config`.
 
 ```yaml
 global:
@@ -2128,14 +2133,14 @@ global:
     kerberos:
       enabled: true
       keytab:
-        secret: gitlab-keytab
+        secret: gitlab-kerberos-keytab
         key: keytab
-      servicePrincipalName: HTTP/gitlab.example.com@EXAMPLE.COM
+      servicePrincipalName: ""
       krb5Config: |
         [libdefaults]
             default_realm = EXAMPLE.COM
       dedicatedPort:
-        enabled: true
+        enabled: false
         port: 8443
         https: true
       simpleLdapLinkingAllowedRealms:
@@ -2143,6 +2148,34 @@ global:
 ```
 
 Check the [Kerberos documentation](https://docs.gitlab.com/ee/integration/kerberos.html) for more details.
+
+### Dedicated port for Kerberos
+
+GitLab supports the use of a [dedicated port for Kerberos negotiation](https://docs.gitlab.com/ee/integration/kerberos.html#http-git-access-with-kerberos-token-passwordless-authentication) when using the HTTP protocol for Git operations to workaround a limitation in Git falling back to Basic Authentication when presented with the `negotiate` headers in the authentication exchange.
+
+Use of the dedicated port is currently required when using GitLab CI/CD - as the GitLab Runner helper relies on in-URL credentials to clone from GitLab.
+
+This can be enabled with the `global.appConfig.kerberos.dedicatedPort` settings:
+
+```yaml
+global:
+  appConfig:
+    kerberos:
+      [...]
+      dedicatedPort:
+        enabled: true
+        port: 8443
+        https: true
+```
+
+This enables an additional clone URL in the GitLab UI that is dedicated for Kerberos negotiation. The `https: true` setting is for URL generation only, and doesn't expose any additional TLS configuration. TLS is terminated and configured in the Ingress for GitLab.
+
+NOTE:
+Due to a current limitation with [our fork of the `nginx-ingress` Helm chart](nginx/fork.md) - specifying a `dedicatedPort` will not currently expose the port for use in the chart's `nginx-ingress` controller. Cluster operators will need to expose this port themselves. Follow [this charts issue](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3531) for more details and potential workarounds.
+
+### LDAP custom allowed realms
+
+The `global.appConfig.kerberos.simpleLdapLinkingAllowedRealms` can be used to specify a set of domains used to link LDAP and Kerberos identities together when a user's LDAP DN does not match the user's Kerberos realm. See the [Custom allowed realms section in the Kerberos integration documentation](https://docs.gitlab.com/ee/integration/kerberos.html#custom-allowed-realms) for additional details.
 
 ## Outgoing email
 
