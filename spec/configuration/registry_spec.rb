@@ -325,7 +325,7 @@ describe 'registry configuration' do
               cache:
                 enabled: true
                 addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
-                mainName: redis.example.com
+                mainname: redis.example.com
                 password: "REDIS_CACHE_PASSWORD"
             CONFIG
           )
@@ -359,7 +359,7 @@ describe 'registry configuration' do
               cache:
                 enabled: true
                 addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
-                mainName: redis.example.com
+                mainname: redis.example.com
                 password: "REDIS_CACHE_PASSWORD"
             CONFIG
           )
@@ -401,7 +401,7 @@ describe 'registry configuration' do
               cache:
                 enabled: true
                 addr: "local1.example.com:26379,local2.example.com:26379"
-                mainName: local.example.com
+                mainname: local.example.com
                 password: "REDIS_CACHE_PASSWORD"
             CONFIG
           )
