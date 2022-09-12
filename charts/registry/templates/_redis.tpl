@@ -35,10 +35,10 @@ redis:
     enabled: {{ .Values.redis.cache.enabled | eq true }}
     {{- if .Values.redis.cache.sentinels }}
     addr: {{ include "registry.redis.host.sentinels" .Values.redis.cache | quote }}
-    mainName: {{ .Values.redis.cache.host }}
+    mainname: {{ .Values.redis.cache.host }}
     {{- else if .redisMergedConfig.sentinels }}
     addr: {{ include "registry.redis.host.sentinels" .redisMergedConfig | quote }}
-    mainName: {{ template "gitlab.redis.host" . }}
+    mainname: {{ template "gitlab.redis.host" . }}
     {{- else if .Values.redis.cache.host  }}
     addr: {{ printf "%s:%d" .Values.redis.cache.host (int .Values.redis.cache.port | default 6379) | quote }}
     {{- else }}
