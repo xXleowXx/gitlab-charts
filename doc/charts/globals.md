@@ -316,7 +316,7 @@ global:
 ### PostgreSQL load balancing
 
 This feature requires the use of an
-[external PostgreSQL](../advanced/external-db/), as this chart does not
+[external PostgreSQL](../advanced/external-db/index.md), as this chart does not
 deploy PostgreSQL in an HA fashion.
 
 The Rails components in GitLab have the ability to
@@ -685,7 +685,7 @@ RPC access to Git repositories, which handles all Git calls made by GitLab.
 
 Administrators can chose to use Gitaly nodes in the following ways:
 
-- [Internal to the chart](#internal), as part of a `StatefulSet` via the [Gitaly chart](gitlab/gitaly/).
+- [Internal to the chart](#internal), as part of a `StatefulSet` via the [Gitaly chart](gitlab/gitaly/index.md).
 - [External to the chart](#external), as external pets.
 - [Mixed environment](#mixed) using both internal and external nodes.
 
