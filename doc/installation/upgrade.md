@@ -227,7 +227,7 @@ run the following command in one of your Praefect pods:
 - You have a complete and tested backup.
 
 Repository data can be restored by following the
-[managing persistent volumes documentation](../advanced/persistent-volumes/),
+[managing persistent volumes documentation](../advanced/persistent-volumes/index.md),
 which provides guidance on reconnecting existing PersistentVolumeClaims to previous
 PersistentVolumes.
 

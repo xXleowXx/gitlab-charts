@@ -29,7 +29,7 @@ and [chart settings](#chart-settings).
 Gitaly is by default deployed as a component when deploying the GitLab
 chart. If deploying Gitaly separately, `global.gitaly.enabled` needs to
 be set to `false` and additional configuration will need to be performed
-as described in the [external Gitaly documentation](../../../advanced/external-gitaly/).
+as described in the [external Gitaly documentation](../../../advanced/external-gitaly/index.md).
 
 ### Installation command line options
 
