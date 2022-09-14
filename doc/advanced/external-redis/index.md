@@ -11,7 +11,7 @@ This document intends to provide documentation on how to configure this Helm cha
 If you don't have Redis configured, for on-premise or deployment to VM,
 consider using our [Omnibus GitLab package](external-omnibus-redis.md).
 
-## Configure the Chart
+## Configure the chart
 
 Disable the `redis` chart and the Redis service it provides, and point the other services to the external service.
 
