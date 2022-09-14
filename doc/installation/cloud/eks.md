@@ -93,7 +93,7 @@ when defining their storage solution.
 
 ## External Access to GitLab
 
-By default, installing the GitLab Chart will deploy an Ingress which will create an associated
+By default, installing the GitLab chart will deploy an Ingress which will create an associated
 Elastic Load Balancer (ELB). Since the DNS names of the ELB cannot be known
 ahead of time, it's difficult to utilize [Let's Encrypt](https://letsencrypt.org/) to automatically provision
 HTTPS certificates.

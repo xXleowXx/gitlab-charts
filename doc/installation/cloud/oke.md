@@ -22,7 +22,7 @@ A cluster with 4 OCPUs and 30GB of RAM is recommended.
 
 ### External access to GitLab
 
-By default, the GitLab Chart deploys an Ingress Controller which creates an
+By default, the GitLab chart deploys an Ingress Controller which creates an
 Oracle Cloud Infrastructure Public Load Balancer with 100Mbps shape. The Load
 Balancer service assigns a floating public IP address which doesn't come from
 the host subnet.

@@ -1036,7 +1036,7 @@ fully automated or scheduled way to run the garbage collection with this Chart.
 ### Manual Garbage Collection
 
 Manual garbage collection requires the registry to be in read-only mode first. Let's assume that you've already
-installed the GitLab Chart using Helm, named it `mygitlab` and installed it in the namespace `gitlabns`.
+installed the GitLab chart by using Helm, named it `mygitlab`, and installed it in the namespace `gitlabns`.
 Replace these values in the commands below according to your actual configuration.
 
 ```shell

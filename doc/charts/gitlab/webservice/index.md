@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab Webservice Chart **(FREE SELF)**
+# Using the GitLab Webservice chart **(FREE SELF)**
 
 The `webservice` sub-chart provides the GitLab Rails webserver with two Webservice workers
 per pod. (The minimum necessary for a single pod to be able to serve any web request in GitLab)
@@ -20,9 +20,9 @@ the Kubernetes cluster this chart is deployed onto.
 
 ## Configuration
 
-The `webservice` chart is configured as follows: [Global Settings](#global-settings),
-[Deployments settings](#deployments-settings), [Ingress Settings](#ingress-settings), [External Services](#external-services), and
-[Chart Settings](#chart-settings).
+The `webservice` chart is configured as follows: [Global settings](#global-settings),
+[Deployments settings](#deployments-settings), [Ingress settings](#ingress-settings), [External services](#external-services), and
+[Chart settings](#chart-settings).
 
 ## Installation command line options
 
@@ -342,7 +342,7 @@ hostname (ex: `RELEASE-webservice-default.default.svc`) in the Common
 Name (CN) or Subject Alternate Name (SAN).
 
 NOTE:
-[The Prometheus server bundled with the Chart](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3335) does not yet
+[The Prometheus server bundled with the chart](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3335) does not yet
 support scraping of HTTPS endpoints.
 
 TLS can be enabled on the `webservice` container by the settings `gitlab.webservice.tls.enabled` and `gitlab.webservice.tls.secretName`:
@@ -372,7 +372,7 @@ In order to use the Community Edition, set `image.repository` to
 `registry.gitlab.com/gitlab-org/build/cng/gitlab-webservice-ce` and `workhorse.image`
 to `registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce`.
 
-## Global Settings
+## Global settings
 
 We share some common global settings among our charts. See the [Globals Documentation](../../globals.md)
 for common configuration options, such as GitLab and Registry hostnames.
@@ -472,7 +472,7 @@ webservice:
        path:
 ```
 
-## Ingress Settings
+## Ingress settings
 
 | Name                              |  Type   | Default                   | Description                                                                                                                                                                                                                     |
 | :-------------------------------- | :-----: | :------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -610,7 +610,7 @@ registry:
 | `port`               | Integer |                 | The external port used in the hostname. Using port `80` or `443` will result in the URLs being formed with `http`/`https`. Other ports will all use `http` and append the port to the end of hostname, for example `http://registry.example.com:8443`.                                                           |
 | `tokenIssuer`        | String  | `gitlab-issuer` | The name of the auth token issuer. This must match the name used in the Registry's configuration, as it incorporated into the token when it is sent. The default of `gitlab-issuer` is the same default we use in the Registry chart.                                                                            |
 
-## Chart Settings
+## Chart settings
 
 The following values are used to configure the Webservice Pods.
 
