@@ -28,7 +28,7 @@ Networking prerequisites:
 - If you plan to use PostgreSQL as a load balancing cluster and Kubernetes
   DNS for service discovery, when you install the `bitnami/postgresql` chart,
   use `--set slave.service.clusterIP=None`.
-  This setting configures the PostgreSQL secondary service as a headless service to 
+  This setting configures the PostgreSQL secondary service as a headless service to
   allow DNS `A` records to be created for each secondary instance.
 
   For an example of how to use Kubernetes DNS for service discovery,
