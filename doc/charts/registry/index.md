@@ -131,7 +131,7 @@ registry:
   tls:
     enabled: false
     secretName:
-    verify: true 
+    verify: true
     caSecretName:
 ```
 
@@ -149,6 +149,8 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `certificate.secret`                                                                                                                         | `gitlab-registry`                                                              | JWT certificate                                                                                                                                                                                                                                                                                                                              |
 | `compatiblity`                                                                                                                               |                                                                                | Configuration of compatibility settings                                                                                                                                                                                                                                                                                                      |
 | `debug.addr.port`                                                                                                                            | `5001`                                                                         | Debug port                                                                                                                                                                                                                                                                                                                                   |
+| `debug.tls.enabled`                                                                                                                          | false                                                                          | Enable TLS for the debug port for the registry. Impacts liveness and readiness probes, as well as the metrics endpoint (if enabled)                                                                                                                                                                                                          |
+| `debug.tls.secretName`                                                                                                                       |                                                                                | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the registry debug endpoint. When not set and `debug.tls.enabled=true` - the debug TLS configuration will default to the registry's TLS certificate.                                                                 |
 | `debug.prometheus.enabled`                                                                                                                   | `false`                                                                        | **DEPRECATED** Use `metrics.enabled`                                                                                                                                                                                                                                                                                                         |
 | `debug.prometheus.path`                                                                                                                      | `""`                                                                           | **DEPRECATED** Use `metrics.path`                                                                                                                                                                                                                                                                                                            |
 | `metrics.enabled`                                                                                                                            | `false`                                                                        | If a metrics endpoint should be made available for scraping                                                                                                                                                                                                                                                                                  |
@@ -403,6 +405,25 @@ registry:
     verify: true
     caSecretName: registry-tls-ca
 ```
+
+### Configuring TLS for the debug port
+
+The Registry debug port also supports TLS. The debug port is used for the
+Kubernetes liveness and readiness checks as well as exposing a `/metrics`
+endpoint for Prometheus (if enabled).
+
+TLS can be enabled for by setting `registry.debug.tls.enabled` to `true`.
+A [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets)
+can be provided in `registry.debug.tls.secretName` dedicated for use in
+the debug port's TLS configuration. If a dedicated secret is not specified,
+the debug configuration will fall back to sharing `registry.tls.secretName` with
+the registry's regular TLS configuration.
+
+For Prometheus to scrape the `/metrics/` endpoint using `https` - additional
+configuration is required for the certificate's CommonName attribute or
+a SubjectAlternativeName entry. See
+[Configuring Prometheus to scrape TLS-enabled endpoints](../../installation/tools.md#configure-prometheus-to-scrape-tls-enabled-endpoints)
+for those requirements.
 
 ## Configuring the `networkpolicy`
 
