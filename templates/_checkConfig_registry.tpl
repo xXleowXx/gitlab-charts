@@ -113,7 +113,6 @@ registry:
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.redis.cache */}}
 
-
 {{/*
 Ensure Registry TLS has a secret when enabled
 */}}
@@ -133,3 +132,21 @@ registry:
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.tls */}}
+
+{{/*
+Ensure a debug TLS secretName is provided if enabling debug TLS for the Registry
+*/}}
+{{- define "gitlab.checkConfig.registry.debug.tls" -}}
+{{-   if $.Values.registry.debug.tls.enabled }}
+{{-     if not $.Values.registry.debug.tls.secretName}}
+{{-       if not (and $.Values.registry.tls.enabled $.Values.registry.tls.secretName)}}
+registry:
+    When Registry debug TLS is enabled a `registry.debug.tls.secretName`
+    secret is required when not enabling TLS for the non-debug Registry endpoint.
+    You must provide a secret containing a TLS certificate and key pair.
+    See https://docs.gitlab.com/charts/charts/registry/index.html#configuring-tls-for-the-debug-port
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* gitlab.checkConfig.registry.tls */}}

@@ -27,7 +27,7 @@ spec:
   - port: {{ .Values.debug.addr.port }}
     targetPort: debug
     protocol: TCP
-    name: http-metrics
+    name: {{ .Values.debug.tls.enabled | ternary "https" "http" }}-metrics
   {{- end }}
   selector:
     app: {{ template "name" . }}

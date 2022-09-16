@@ -452,4 +452,31 @@ describe 'checkConfig registry' do
                      success_description: 'when tls is enabled, with global.hosts.protocol',
                      error_description: 'when tls is enabled, without global.hosts.protocol'
   end
+
+  describe 'gitlab.checkConfig.registry.debug.tls' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        registry:
+          debug:
+            tls:
+              enabled: true
+              secretName: example-tls
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        registry:
+          debug:
+            tls:
+              enabled: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'secret is required when not enabling TLS for the non-debug Registry endpoint.' }
+
+    include_examples 'config validation',
+                     success_description: 'when debug TLS is enabled and secretName is defined',
+                     error_description: 'when debug TLS is enabled but secretName is undefined'
+  end
 end

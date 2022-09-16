@@ -409,4 +409,163 @@ describe 'registry configuration' do
       end
     end
   end
+
+  describe 'debug TLS is configured' do
+    context 'when enabled without required configuration' do
+      let(:test_values) do
+        YAML.safe_load(%(
+          registry:
+            debug:
+              tls:
+                enabled: true
+        )).deep_merge(default_values)
+      end
+
+      it 'fails to render' do
+        expect(HelmTemplate.new(test_values).exit_code).not_to eq(0)
+      end
+    end
+
+    context 'when enabled and service tls is configured' do
+      let(:test_values) do
+        YAML.safe_load(%(
+          global:
+            hosts:
+              registry:
+                protocol: https
+          registry:
+            tls:
+              enabled: true
+              secretName: registry-service-tls
+            debug:
+              tls:
+                enabled: true
+        )).deep_merge(default_values)
+      end
+
+      it 'renders default debug tls configuration and sets healthcheck scheme to HTTPS' do
+        t = HelmTemplate.new(test_values)
+
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          <<~DEBUG_TLS_CONFIG
+          http:
+            addr: :5000
+            # `host` is not configurable
+            # `prefix` is not configurable
+            tls:
+              certificate: /etc/docker/registry/tls/tls.crt
+              key: /etc/docker/registry/tls/tls.key
+              minimumTLS: "tls1.2"
+            debug:
+              addr: :5001
+              prometheus:
+                enabled: false
+                path: /metrics
+              tls:
+                enabled: true
+          DEBUG_TLS_CONFIG
+        )
+
+        tls_crt = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'registry-service-tls', 'tls.crt')
+        expect(tls_crt).not_to be_empty
+
+        liveness_probe = t.find_container('Deployment/test-registry', 'registry')['livenessProbe']['httpGet']
+        expect(liveness_probe['scheme']).to eq('HTTPS')
+
+        readiness_probe = t.find_container('Deployment/test-registry', 'registry')['readinessProbe']['httpGet']
+        expect(readiness_probe['scheme']).to eq('HTTPS')
+      end
+    end
+
+    context 'when minimum required configuration provided' do
+      let(:test_values) do
+        YAML.safe_load(%(
+          registry:
+            debug:
+              tls:
+                enabled: true
+                secretName: registry-debug-tls
+        )).deep_merge(default_values)
+      end
+
+      it 'renders default debug tls configuration and sets healthcheck scheme to HTTPS' do
+        t = HelmTemplate.new(test_values)
+
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          <<~DEBUG_TLS_CONFIG
+          http:
+            addr: :5000
+            # `host` is not configurable
+            # `prefix` is not configurable
+            debug:
+              addr: :5001
+              prometheus:
+                enabled: false
+                path: /metrics
+              tls:
+                enabled: true
+                certificate: /etc/docker/registry/tls/tls-debug.crt
+                key: /etc/docker/registry/tls/tls-debug.key
+                minimumTLS: "tls1.2"
+          DEBUG_TLS_CONFIG
+        )
+
+        tls_crt = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'registry-debug-tls', 'tls.crt')
+        expect(tls_crt).not_to be_empty
+
+        liveness_probe = t.find_container('Deployment/test-registry', 'registry')['livenessProbe']['httpGet']
+        expect(liveness_probe['scheme']).to eq('HTTPS')
+
+        readiness_probe = t.find_container('Deployment/test-registry', 'registry')['readinessProbe']['httpGet']
+        expect(readiness_probe['scheme']).to eq('HTTPS')
+      end
+    end
+
+    context 'when provided extended TLS configuration' do
+      let(:test_values) do
+        YAML.safe_load(%(
+          registry:
+            debug:
+              tls:
+                enabled: true
+                secretName: registry-debug-tls
+                clientCAs: [one, two, three]
+                minimumTLS: "tls1.3"
+        )).deep_merge(default_values)
+      end
+
+      it 'renders configuration as expected' do
+        t = HelmTemplate.new(test_values)
+
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          <<~DEBUG_TLS_CONFIG
+          http:
+            addr: :5000
+            # `host` is not configurable
+            # `prefix` is not configurable
+            debug:
+              addr: :5001
+              prometheus:
+                enabled: false
+                path: /metrics
+              tls:
+                enabled: true
+                certificate: /etc/docker/registry/tls/tls-debug.crt
+                key: /etc/docker/registry/tls/tls-debug.key
+                clientCAs:
+                  - one
+                  - two
+                  - three
+                minimumTLS: "tls1.3"
+          DEBUG_TLS_CONFIG
+        )
+      end
+    end
+  end
 end
