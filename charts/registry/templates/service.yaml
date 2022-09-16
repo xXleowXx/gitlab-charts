@@ -20,9 +20,9 @@ spec:
 {{- end }}
   ports:
   - port: {{ .Values.service.externalPort }}
-    targetPort: http
+    targetPort: {{ .Values.tls.enabled | ternary "https" "http" }}
     protocol: TCP
-    name: {{ .Values.service.name }}
+    name: {{ .Values.tls.enabled | ternary "https" "http" }}-{{ .Values.service.name }}
   {{- if (or .Values.metrics.enabled .Values.debug.prometheus.enabled) }}
   - port: {{ .Values.debug.addr.port }}
     targetPort: debug

@@ -16,6 +16,9 @@
   - name: etc-ssl-certs
     mountPath: /etc/ssl/certs
     readOnly: false
+  - name: etc-pki-ca-trust-extracted-pem
+    mountPath: /etc/pki/ca-trust/extracted/pem
+    readOnly: false
 {{- if or $customCAsEnabled (or $certmanagerDisabled $internalGitalyTLSEnabled $internalPraefectTLSEnabled) }}
   - name: custom-ca-certificates
     mountPath: /usr/local/share/ca-certificates
@@ -33,15 +36,36 @@
 - name: etc-ssl-certs
   emptyDir:
     medium: "Memory"
+- name: etc-pki-ca-trust-extracted-pem
+  emptyDir:
+    medium: "Memory"
 {{- if or $customCAsEnabled (or $certmanagerDisabled $internalGitalyTLSEnabled $internalPraefectTLSEnabled) }}
 - name: custom-ca-certificates
   projected:
     defaultMode: 0440
     sources:
     {{- range $index, $customCA := .Values.global.certificates.customCAs }}
+    {{- if $customCA.secret }}
     - secret:
         name: {{ $customCA.secret }}
-        # items not specified, will mount all keys
+        {{- if $customCA.keys }}
+        items:
+          {{- range $customCA.keys }}
+          - key: {{ . }}
+            path: {{ . }}
+          {{- end }}
+        {{- end }}
+    {{- else if $customCA.configMap }}
+    - configMap:
+        name: {{ $customCA.configMap }}
+        {{- if $customCA.keys }}
+        items:
+          {{- range $customCA.keys }}
+          - key: {{ . }}
+            path: {{ . }}
+          {{- end }}
+        {{- end }}
+    {{- end }}
     {{- end }}
     {{- if not (or $.Values.global.ingress.configureCertmanager $.Values.global.ingress.tls) }}
     - secret:
@@ -77,5 +101,8 @@
 {{- define "gitlab.certificates.volumeMount" -}}
 - name: etc-ssl-certs
   mountPath: /etc/ssl/certs/
+  readOnly: true
+- name: etc-pki-ca-trust-extracted-pem
+  mountPath: /etc/pki/ca-trust/extracted/pem
   readOnly: true
 {{- end -}}

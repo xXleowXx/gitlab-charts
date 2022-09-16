@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Upgrade Guide **(FREE SELF)**
+# Upgrade the GitLab chart **(FREE SELF)**
 
 Before upgrading your GitLab installation, you need to check the
 [changelog](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/CHANGELOG.md)
@@ -17,16 +17,6 @@ NOTE:
 Ongoing work to support this feature can be tracked via
 [the GitLab Operator issue](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator/-/issues/59).
 
-WARNING:
-If you are upgrading from the `5.x` version of the chart to the latest `6.0` release, you need
-to first update to the latest `5.10.x` patch release in order for the upgrade to work.
-The [6.0 release notes](../releases/6_0.md) describe the supported upgrade path.
-
-WARNING:
-If you are upgrading from the `4.x` version of the chart to the latest `5.0` release, you need
-to first update to the latest `4.12.x` patch release in order for the upgrade to work.
-The [5.0 release notes](../releases/5_0.md) describe the supported upgrade path.
-
 We also recommend that you take a [backup](../backup-restore/index.md) first. Also note that you
 must provide all values using `helm upgrade --set key=value` syntax or `-f values.yaml` instead of
 using `--reuse-values`, because some of the current values might be deprecated.
@@ -37,13 +27,13 @@ You can retrieve your previous `--set` arguments cleanly, with
 file via `-f`. Thus `helm upgrade gitlab gitlab/gitlab -f gitlab.yaml`.
 This safely replaces the behavior of `--reuse-values`
 
-Mappings between chart versioning and GitLab versioning can be found [here](../index.md#gitlab-version-mappings).
+Mappings between chart versioning and GitLab versioning can be found [here](../installation/version_mappings.md).
 
 ## Steps
 
 NOTE:
-If you're upgrading to the `5.0` version of the chart, follow the [manual upgrade steps for 5.0](#upgrade-steps-for-50-release).
-If you're upgrading to the `4.0` version of the chart, follow the [manual upgrade steps for 4.0](#upgrade-steps-for-40-release).
+If you're upgrading to the `5.0` version of the chart, follow the [manual upgrade steps for 5.0](#upgrade-to-version-50).
+If you're upgrading to the `4.0` version of the chart, follow the [manual upgrade steps for 4.0](#upgrade-to-version-40).
 If you're upgrading to an older version of the chart, follow the [upgrade steps for older versions](upgrade_old.md).
 
 Before you upgrade, reflect on your set values and if you've possibly "over-configured" your settings. We expect you to maintain a small list of modified values, and leverage most of the chart defaults. If you've explicitly set a large number of settings by:
@@ -74,6 +64,9 @@ The following are the steps to upgrade GitLab to a newer version:
      --set ...
    ```
 
+1. If you [installed the product documentation](deployment.md#install-the-product-documentation),
+   see how to [upgrade it](https://docs.gitlab.com/ee/administration/docs_self_host.html#upgrade-the-product-documentation-to-a-later-version).
+
 During a major database upgrade, we ask you to set `gitlab.migrations.enabled` set to `false`.
 Ensure that you explicitly set it back to `true` for future updates.
 
@@ -98,18 +91,23 @@ To upgrade the bundled PostgreSQL to version 13, the following steps are require
 
 As part of the `5.0.0` release of this chart, we upgraded the bundled PostgreSQL version from `11.9.0` to `12.7.0`. This is
  not a drop in replacement. Manual steps need to be performed to upgrade the database.
-The steps have been documented in the [5.0 upgrade steps](#upgrade-steps-for-50-release).
+The steps have been documented in the [5.0 upgrade steps](#upgrade-to-version-50).
 
 ### Upgrade the bundled PostgreSQL to version 11
 
 As part of the `4.0.0` release of this chart, we upgraded the bundled [PostgreSQL chart](https://github.com/bitnami/charts/tree/master/bitnami/postgresql) from `7.7.0` to `8.9.4`. This is not a drop in replacement. Manual steps need to be performed to upgrade the database.
-The steps have been documented in the [4.0 upgrade steps](#upgrade-steps-for-40-release).
+The steps have been documented in the [4.0 upgrade steps](#upgrade-to-version-40).
 
-## Upgrade steps for the 6.0 release
+## Upgrade to version 6.0
+
+WARNING:
+If you are upgrading from the `5.x` version of the chart to the latest `6.0` release, you need
+to first update to the latest `5.10.x` patch release in order for the upgrade to work.
+The [6.0 release notes](../releases/6_0.md) describe the supported upgrade path.
 
 To upgrade to the `6.0` release you must first be on the latest `5.10.x` patch release. There isn't any additional manual changes required in `6.0` so you can [follow the regular release upgrade steps](#steps).
 
-## Upgrade steps for 5.9 release
+## Upgrade to version 5.9
 
 ### Sidekiq pod never becomes ready
 
@@ -117,15 +115,15 @@ Upgrading to `5.9.x` may lead to a situation where the Sidekiq pod does not beco
 
 This can be resolved from the **Admin Area**:
 
-  1. On the top bar, select **Menu > Admin**.
+  1. On the top bar, select **Main menu > Admin**.
   1. On the left sidebar, select **Settings > Metrics and profiling**.
-  1. Expand  **Metrics - Prometheus**.
+  1. Expand **Metrics - Prometheus**.
   1. Ensure that **Enable health and performance metrics endpoint** is enabled.
   1. Restart the affected pods.
 
 There is additional conversation about this scenario in a [closed issue](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3198).
 
-## Upgrade steps for 5.5 release
+## Upgrade to version 5.5
 
 The `task-runner` chart [was renamed](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2099/diffs)
 to `toolbox` and removed in `5.5.0`. As a result, any mention of `task-runner`
@@ -147,7 +145,12 @@ configuration to fix this.
 
 There is an [open issue about clarifying the error message](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3004).
 
-## Upgrade steps for 5.0 release
+## Upgrade to version 5.0
+
+WARNING:
+If you are upgrading from the `4.x` version of the chart to the latest `5.0` release, you need
+to first update to the latest `4.12.x` patch release in order for the upgrade to work.
+The [5.0 release notes](../releases/5_0.md) describe the supported upgrade path.
 
 The `5.0.0` release requires manual steps in order to perform the upgrade. If you're using the
 bundled PostgreSQL, the best way to perform this upgrade is to back up your old database, and
@@ -172,7 +175,7 @@ If you are using the bundled PostgreSQL database, you should follow the [bundled
   kubectl describe pod <gitlab-upgrade-check-pod-full-name>
   ```
 
-## Upgrade steps for 4.0 release
+## Upgrade to version 4.0
 
 The `4.0.0` release requires manual steps in order to perform the upgrade. If you're using the
 bundled PostgreSQL, the best way to perform this upgrade is to back up your old database, and
@@ -214,8 +217,8 @@ appearing to be lost.
 Prior to upgrading, ensure that:
 
 - All your repositories are in sync across the Gitaly Cluster, and GitLab
-is not in use during the upgrade. To check whether the repositories are in sync,
-run the following command in one of your Praefect pods:
+  is not in use during the upgrade. To check whether the repositories are in sync,
+  run the following command in one of your Praefect pods:
 
   ```shell
   /usr/local/bin/praefect -config /etc/gitaly/config.toml dataloss
@@ -224,7 +227,7 @@ run the following command in one of your Praefect pods:
 - You have a complete and tested backup.
 
 Repository data can be restored by following the
-[managing persistent volumes documentation](../advanced/persistent-volumes/),
+[managing persistent volumes documentation](../advanced/persistent-volumes/index.md),
 which provides guidance on reconnecting existing PersistentVolumeClaims to previous
 PersistentVolumes.
 

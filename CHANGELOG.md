@@ -2,6 +2,167 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.3.3 (2022-09-01)
+
+No changes.
+
+## 6.3.2 (2022-08-30)
+
+No changes.
+
+## 6.3.1 (2022-08-22)
+
+No changes.
+
+## 6.3.0 (2022-08-19)
+
+### Added (4 changes)
+
+- [Add configMaps and keys for customCA](gitlab-org/charts/gitlab@40e0fba3228041da84c7c51d4194a5e3681d51bb) by @ralgar ([merge request](gitlab-org/charts/gitlab!2676))
+- [Document FIPS-compatible deployment](gitlab-org/charts/gitlab@7eaa650d522f03bd24fecb27b6e4e7d41f4553f4) ([merge request](gitlab-org/charts/gitlab!2678))
+- [Add cron_job for updating of ci_runner_versions](gitlab-org/charts/gitlab@be81639d4aea8495fe472501a2c32dbd50f57c6c) ([merge request](gitlab-org/charts/gitlab!2666))
+- [Allow configuring tolerations for each separate Sidekiq shard deployment](gitlab-org/charts/gitlab@5e638b51f96c3e9e0c75db9ee74c09d2f7c45ab3) ([merge request](gitlab-org/charts/gitlab!2660))
+
+### Fixed (3 changes)
+
+- [Pages: fix config generation for internal TLS](gitlab-org/charts/gitlab@033403a23e62b319269c3a6be8415f892843c992) ([merge request](gitlab-org/charts/gitlab!2697))
+- [GitLab Shell: fix host key walking for gitlab-sshd config](gitlab-org/charts/gitlab@79a4982a40065dc68290bfb2ec50f81013e120d2) ([merge request](gitlab-org/charts/gitlab!2711))
+- [Disable CI artifacts for package publish jobs](gitlab-org/charts/gitlab@920af91a619c3b5ae45796b4f098ec694ddc1b08) ([merge request](gitlab-org/charts/gitlab!2682))
+
+### Changed (13 changes)
+
+- [Use batch/v1 CronJob when available](gitlab-org/charts/gitlab@b9f6bae9ee72c1eb728e49dad0e2d107ce38dc2b) ([merge request](gitlab-org/charts/gitlab!2692))
+- [Update gitlab-org/container-registry from 3.56.0-gitlab to 3.57.0-gitlab](gitlab-org/charts/gitlab@88c9599dad42942358d015a3c781effdfbff28a3) ([merge request](gitlab-org/charts/gitlab!2731))
+- [Update gitlab-org/container-registry from 3.55.0-gitlab to 3.56.0-gitlab](gitlab-org/charts/gitlab@d79bd94fc3af2c7c41d1c48294e0b0e6e358c350) ([merge request](gitlab-org/charts/gitlab!2719))
+- [Use policy/v1 PodDisruptionBudget when available](gitlab-org/charts/gitlab@5f1cf0d0c408e97161278b1b7cba991048794e76) ([merge request](gitlab-org/charts/gitlab!2691))
+- [Update gitlab-org/container-registry from 3.54.0-gitlab to 3.55.0-gitlab](gitlab-org/charts/gitlab@a0aa91ef702e6dcfd434a6ed5a030a415e1d036d) ([merge request](gitlab-org/charts/gitlab!2712))
+- [Update gitlab-org/container-registry from 3.53.0-gitlab to 3.54.0-gitlab](gitlab-org/charts/gitlab@9ee104fbd14dec4483181037b85ff474dc2c78ae) ([merge request](gitlab-org/charts/gitlab!2696))
+- [NGINX: disable allowSnippetAnnotations by default](gitlab-org/charts/gitlab@202ee54ec0ff013fcc563fb67a47590d5a8b466c) ([merge request](gitlab-org/charts/gitlab!2689))
+- [Update gitlab-org/charts/gitlab-runner from 0.43.0 to 0.43.1](gitlab-org/charts/gitlab@e6a5064bc830cdf823ef7e81655ad11e0e2d293d) ([merge request](gitlab-org/charts/gitlab!2695))
+- [Respect NGINX defaultbackend default (disabled)](gitlab-org/charts/gitlab@35090516c663dcfcd45927565f092f2254c4404e) ([merge request](gitlab-org/charts/gitlab!2686))
+- [Run ci_runner_versions_reconciliation_worker daily](gitlab-org/charts/gitlab@ef0770a5001b19fc2404c546fa33e671ceb23daf) ([merge request](gitlab-org/charts/gitlab!2693))
+- [Update gitlab-org/container-registry from 3.51.1-gitlab to 3.53.0-gitlab](gitlab-org/charts/gitlab@55bbca177df5bf8a9aff3bad9d6cdd96510b50b7) ([merge request](gitlab-org/charts/gitlab!2688))
+- [Update gitlab-org/charts/gitlab-runner from 0.42.0 to 0.43.0](gitlab-org/charts/gitlab@793cbed36bb465788ec5541b54c6274aa332e611) ([merge request](gitlab-org/charts/gitlab!2681))
+- [Update the Grafana chart to 6.11.0 and Grafana image to the 7.5.16 release](gitlab-org/charts/gitlab@af113095bac1d57d98436c39c8a4fcbf1004ac7f) ([merge request](gitlab-org/charts/gitlab!2669))
+
+### Other (1 change)
+
+- [Ensures that whitespace is chomped to the left](gitlab-org/charts/gitlab@0e65e3393b244bf8a5f04a631865a2f1487e34ab) ([merge request](gitlab-org/charts/gitlab!2651))
+
+## 6.2.4 (2022-08-30)
+
+No changes.
+
+## 6.2.3 (2022-08-22)
+
+No changes.
+
+## 6.2.2 (2022-08-01)
+
+No changes.
+
+## 6.2.1 (2022-07-28)
+
+No changes.
+
+## 6.2.0 (2022-07-21)
+
+### Added (7 changes)
+
+- [Registry: add support for TLS on the Pod service](gitlab-org/charts/gitlab@2f16a8e0f001c7dc647b6e6b86323c36e41809f2) ([merge request](gitlab-org/charts/gitlab!2673))
+- [Add support for memory and custom metrics in all HPAs](gitlab-org/charts/gitlab@be718a614bcdcc8290fa8f96058df07348bfb90e) ([merge request](gitlab-org/charts/gitlab!2621))
+- [Add TLS support configuration to Workhorse](gitlab-org/charts/gitlab@a3f09d98f6a81c3e14ed77ef1a57d8cebbb95eb0) ([merge request](gitlab-org/charts/gitlab!2628))
+- [Add TLS settings for sidekiq exporter/metrics endpoint](gitlab-org/charts/gitlab@b544e3d4a2ae451d72ee9e8865e2442d44791681) ([merge request](gitlab-org/charts/gitlab!2656))
+- [Add NGINX UBI image settings to UBI example values](gitlab-org/charts/gitlab@8537803ba2d443f048fb883e45ebbf4c2c32f6fc) ([merge request](gitlab-org/charts/gitlab!2661))
+- [Support configuring TLS for GitLab Exporter](gitlab-org/charts/gitlab@c13693818c3832d920f88b2b9fabf501071e626f) ([merge request](gitlab-org/charts/gitlab!2665))
+- [gitaly: Enable admins to inject their own Git configuration](gitlab-org/charts/gitlab@b7aef369dfd57046ff831ba17ca97f0978c51b07) ([merge request](gitlab-org/charts/gitlab!2602))
+
+### Fixed (5 changes)
+
+- [Add a relabel_config to target __scheme__ in the default values](gitlab-org/charts/gitlab@cedee2096d5558aad731c76ffb4f7122db0f9697) ([merge request](gitlab-org/charts/gitlab!2672))
+- [Fix custom certificate authorities not working on UBI containers](gitlab-org/charts/gitlab@faed05de75b98269deabf1336e9e613348417c37) ([merge request](gitlab-org/charts/gitlab!2650))
+- [Add KAS configmap checksum to deployment spec](gitlab-org/charts/gitlab@180b80d2f1b64614c52b69988c4c7358cfa6abe4) ([merge request](gitlab-org/charts/gitlab!2654))
+- [Allow shell maxUnavailable to be a percentage](gitlab-org/charts/gitlab@9758097c837ba2c5dbe4823bde327be82ada51ff) ([merge request](gitlab-org/charts/gitlab!2627))
+- [Fix Workhorse config.toml rendering for AWS access and secret keys](gitlab-org/charts/gitlab@a5c1218e3b3339744152e9a5923ce49cf9a02ab6) ([merge request](gitlab-org/charts/gitlab!2639))
+
+### Changed (8 changes)
+
+- [Update gitlab-org/container-registry from 3.51.0-gitlab to 3.51.1-gitlab](gitlab-org/charts/gitlab@7dfa82a79b8bf4ca0fb26b37f0e665209fa7b5a6) ([merge request](gitlab-org/charts/gitlab!2677))
+- [Update gitlab-org/gitlab-exporter from 11.16.0 to 11.17.1](gitlab-org/charts/gitlab@6c20f5c34f3d632163f085b333653a11d9ca0a3d) ([merge request](gitlab-org/charts/gitlab!2670))
+- [Update gitlab-org/container-registry from 3.49.0-gitlab to 3.51.0-gitlab](gitlab-org/charts/gitlab@8be4ba635aa759b080b462d032c30963f65f2645) ([merge request](gitlab-org/charts/gitlab!2663))
+- [gitaly: Start ignoring gitconfig files](gitlab-org/charts/gitlab@757862b50b7f29184379ed2972bc58bb4421b4e7) ([merge request](gitlab-org/charts/gitlab!2602))
+- [Update gitlab-org/container-registry from 3.48.0-gitlab to 3.49.0-gitlab](gitlab-org/charts/gitlab@c2862cccefcfc4278c1e1f093fa020e6395437a9) ([merge request](gitlab-org/charts/gitlab!2645))
+- [Ensure Azure access and secret keys are JSON in Workhorse config.toml](gitlab-org/charts/gitlab@d53ebf1a569e1d92383c89362aaeb7c97a94e33c) ([merge request](gitlab-org/charts/gitlab!2640))
+- [Update gitlab-org/charts/gitlab-runner from 0.41.0 to 0.42.0](gitlab-org/charts/gitlab@c1eb6efccfe738cd8987fb00de30d18b56c1e17a) ([merge request](gitlab-org/charts/gitlab!2634))
+- [Set webhook as MailRoom's default delivery strategy](gitlab-org/charts/gitlab@de907f875d74ddd08f90c4fa563262c3d05dccde) ([merge request](gitlab-org/charts/gitlab!2622))
+
+### Removed (2 changes)
+
+- [config: Remove mentions of deprecated `self_signed_cert` config](gitlab-org/charts/gitlab@58bf47825841c482e874c13fd4e729b523fe99f4) ([merge request](gitlab-org/charts/gitlab!2664))
+- [Remove NGINX's `isControllerTagValid` helper](gitlab-org/charts/gitlab@f099651db6f1d57cdc9a78a2744ad6c36680fe0a) ([merge request](gitlab-org/charts/gitlab!2668))
+
+## 6.1.6 (2022-08-30)
+
+No changes.
+
+## 6.1.5 (2022-08-22)
+
+No changes.
+
+## 6.1.4 (2022-07-28)
+
+No changes.
+
+## 6.1.3 (2022-07-19)
+
+No changes.
+
+## 6.1.2 (2022-07-05)
+
+No changes.
+
+## 6.1.1 (2022-06-30)
+
+No changes.
+
+## 6.1.0 (2022-06-21)
+
+### Added (5 changes)
+
+- [Add option to enable Gitaly pack-objects cache](gitlab-org/charts/gitlab@a2841ce441e30f8c898717c1d1026504adba94d0) by @mienkowt ([merge request](gitlab-org/charts/gitlab!2513))
+- [Add support for enabling SSL on Puma](gitlab-org/charts/gitlab@d21249d87f4a761031813b43a06900312afbbf21) ([merge request](gitlab-org/charts/gitlab!2496))
+- [Make PROXY protocol header read timeout configurable](gitlab-org/charts/gitlab@afad21f1e44578f95f547e40de69c385d6b71f1d) ([merge request](gitlab-org/charts/gitlab!2586))
+- [Add global.appConfig.cdnHost setting](gitlab-org/charts/gitlab@3887cd79c5ca98d0efd01c159a070992152d4011) ([merge request](gitlab-org/charts/gitlab!2559))
+- [Add support for configuring gitlab-sshd crypto](gitlab-org/charts/gitlab@56c96ffa820b18d3a18b7526cc064e2bc4e4e585) ([merge request](gitlab-org/charts/gitlab!2581))
+
+### Changed (17 changes)
+
+- [Ensure proxy buffering is always off for KAS](gitlab-org/charts/gitlab@2d9bab7b22249ab11be3b45613fd36034cda8f02) ([merge request](gitlab-org/charts/gitlab!2609))
+- [Update gitlab-org/container-registry from 3.47.0-gitlab to 3.48.0-gitlab](gitlab-org/charts/gitlab@f3f7334c6c04eee956191704392c87c42aba620d) ([merge request](gitlab-org/charts/gitlab!2631))
+- [Disable Puma worker killer by default](gitlab-org/charts/gitlab@ac8d379b19d845d158c93a7a9d000606219db25a) ([merge request](gitlab-org/charts/gitlab!2605))
+- [Update gitlab-org/gitlab-exporter from 11.15.2 to 11.16.0](gitlab-org/charts/gitlab@2a49166b7ee5d5a643db330919da790dc282a13c) ([merge request](gitlab-org/charts/gitlab!2620))
+- [Update gitlab-org/container-registry from 3.46.0-gitlab to 3.47.0-gitlab](gitlab-org/charts/gitlab@1c31f8f9c03586ed7fabe45410b80c121af7d24d) ([merge request](gitlab-org/charts/gitlab!2616))
+- [Update gitlab-org/container-registry from 3.45.0-gitlab to 3.46.0-gitlab](gitlab-org/charts/gitlab@bbd48a58aae456f031c66dab105dcfba5501352e) ([merge request](gitlab-org/charts/gitlab!2610))
+- [Update gitlab-org/container-registry from 3.43.0-gitlab to 3.45.0-gitlab](gitlab-org/charts/gitlab@056fefdd0b8f0e387f83bf4f47a25283e3f740e4) ([merge request](gitlab-org/charts/gitlab!2604))
+- [Update gitlab-org/gitlab-exporter from 11.15.0 to 11.15.2](gitlab-org/charts/gitlab@9eb7b3e63e65d3327a2caadae99880fde4ac1859) ([merge request](gitlab-org/charts/gitlab!2596))
+- [Add annotations support to the upgrade check hook and minio job template](gitlab-org/charts/gitlab@ffc70957e823b90f24927a18849d749d5242133e) by @flintkr ([merge request](gitlab-org/charts/gitlab!2543))
+- [gitaly: Stop setting Rugged's gitconfig search path](gitlab-org/charts/gitlab@bba860d1eb8e3d639d481e38b0b9c57a150f961d) ([merge request](gitlab-org/charts/gitlab!2594))
+- [Update gitlab-shell chart to make login-grace-time configurable](gitlab-org/charts/gitlab@66afd333ccb49e7cfcef1ec920a23d32c44a70d3) ([merge request](gitlab-org/charts/gitlab!2593))
+- [Update gitlab-shell chart to make client-alive-interval configurable](gitlab-org/charts/gitlab@f0914d468108856fda89a5b1a8b2361a8e283d84) ([merge request](gitlab-org/charts/gitlab!2590))
+- [Update gitlab-shell chart to make grace-period configurable](gitlab-org/charts/gitlab@659ea8e0f2f0ad81f472a8d9bd5bfeb7f117d7be) ([merge request](gitlab-org/charts/gitlab!2579))
+- [Set MailRoom's delivery option content_type to text/plain](gitlab-org/charts/gitlab@78641fffe7a5798c73dc56c80601d88e78f73c38) ([merge request](gitlab-org/charts/gitlab!2589))
+- [Update gitlab-org/container-registry from 3.42.0-gitlab to 3.43.0-gitlab](gitlab-org/charts/gitlab@2bde33a3218c0cc3045462934db150c07d881c9e) ([merge request](gitlab-org/charts/gitlab!2588))
+- [Update gitlab-org/charts/gitlab-runner from 0.40.1 to 0.41.0](gitlab-org/charts/gitlab@6c34ec8cdd54b165f50444ff1d75dcad480d53c2) ([merge request](gitlab-org/charts/gitlab!2584))
+- [Update gitlab-org/container-registry from 3.41.1-gitlab to 3.42.0-gitlab](gitlab-org/charts/gitlab@2a0747412050b8f5b94dc23dd1e40bd5cf78496f) ([merge request](gitlab-org/charts/gitlab!2580))
+
+## 6.0.5 (2022-07-28)
+
+No changes.
+
+## 6.0.4 (2022-06-30)
+
+No changes.
+
 ## 6.0.3 (2022-06-16)
 
 No changes.
@@ -57,6 +218,12 @@ No changes.
 - [Update 'Add License' location](gitlab-org/charts/gitlab@53f38975abef245735162df2f3208bd8547703cd) ([merge request](gitlab-org/charts/gitlab!2568))
 - [Add docs on certmanager-issuer chart](gitlab-org/charts/gitlab@74413b7abc3f6c9896fd7a7e0af86b869764411d) ([merge request](gitlab-org/charts/gitlab!2507))
 - [Update kubectl image to use yq v4.23.1](gitlab-org/charts/gitlab@966e02d12b1177888607f0d224caa97adcdc3940) ([merge request](gitlab-org/charts/gitlab!2459))
+
+## 5.10.5 (2022-06-30)
+
+### Changed (1 change)
+
+- [Makes 14.9 a required upgrade before moving to 14.10](gitlab-org/security/charts/gitlab@ddbd9cfaebe6f84ab132ebb444b16511108e844e)
 
 ## 5.10.4 (2022-06-01)
 

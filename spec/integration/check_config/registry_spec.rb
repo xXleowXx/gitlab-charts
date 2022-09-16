@@ -273,4 +273,183 @@ describe 'checkConfig registry' do
                      success_description: 'when Sentry is enabled and DSN is defined',
                      error_description: 'when Sentry is enabled but DSN is undefined'
   end
+
+  describe 'registry.redis.cache (enabled)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        registry:
+          database:
+            enabled: true
+          redis:
+            cache:
+              enabled: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        registry:
+          database:
+            enabled: false
+          redis:
+            cache:
+              enabled: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Enabling the Redis cache requires the metadata database to be enabled' }
+
+    include_examples 'config validation',
+                     success_description: 'when redis cache enabled is true, with database enabled',
+                     error_description: 'when redis cache enabled is true, with database disabled'
+  end
+
+  describe 'registry.redis.cache (host)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+          redis:
+            cache:
+              enabled: true
+              host: 'localhost'
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+          redis:
+            cache:
+              enabled: true
+              host: ''
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Enabling the Redis cache requires the host to not be empty' }
+
+    include_examples 'config validation',
+                     success_description: 'when redis cache is enabled, with host',
+                     error_description: 'when redis cache is enabled, with empty host'
+  end
+
+  describe 'registry.redis.cache (sentinels)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+          redis:
+            cache:
+              enabled: true
+              host: 'localhost'
+              sentinels:
+                - host: sentinel1.example.com
+                  port: 26379
+                - host: sentinel2.example.com
+                  port: 26379
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        postgresql:
+          image:
+            tag: 12
+
+        registry:
+          database:
+            enabled: true
+          redis:
+            cache:
+              enabled: true
+              host: ''
+              sentinels:
+              - host: sentinel1.example.com
+                port: 26379
+              - host: sentinel2.example.com
+                port: 26379
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Enabling the Redis cache with sentinels requires the registry.redis.cache.host to be set.' }
+
+    include_examples 'config validation',
+                     success_description: 'when redis cache is enabled, with sentinels',
+                     error_description: 'when redis cache is enabled, with sentinels and empty host'
+  end
+
+  describe 'registry.tls (secretName)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        global:
+          hosts:
+            registry:
+              protocol: https
+        registry:
+          tls:
+            enabled: true
+            secretName: registry-service-tls
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        registry:
+          tls:
+            enabled: true
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Enabling the service level TLS requires secretName be provided.' }
+
+    include_examples 'config validation',
+                     success_description: 'when tls is enabled, with secretName',
+                     error_description: 'when tls is enabled, without secretName'
+  end
+
+  describe 'registry.tls (hosts.protocol)' do
+    let(:success_values) do
+      YAML.safe_load(%(
+        global:
+          hosts:
+            registry:
+              protocol: https
+        registry:
+          tls:
+            enabled: true
+            secretName: registry-service-tls
+      )).merge(default_required_values)
+    end
+
+    let(:error_values) do
+      YAML.safe_load(%(
+        registry:
+          tls:
+            enabled: true
+            secretName: registry-service-tls
+      )).merge(default_required_values)
+    end
+
+    let(:error_output) { 'Enabling the service level TLS requires \'global.hosts.registry.protocol\'' }
+
+    include_examples 'config validation',
+                     success_description: 'when tls is enabled, with global.hosts.protocol',
+                     error_description: 'when tls is enabled, without global.hosts.protocol'
+  end
 end

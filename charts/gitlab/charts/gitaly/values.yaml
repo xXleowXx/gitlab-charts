@@ -53,6 +53,10 @@ logging:
   # sentryEnvironment:
 git: {}
   # catFileCacheSize:
+  ## Amend the default configuration Gitaly is using when spawning Git
+  ## commands. Accepts configuration as documented in git-config(1).
+  # config:
+  #   - {key: "pack.threads", value: 4}
 ruby: {}
   # maxRss:
   # gracefulRestartTimeout:
@@ -153,3 +157,10 @@ statefulset:
 affinity:
   podAntiAffinity:
     topologyKey:
+
+## Enable the Gitaly pack-objects cache
+## ref: https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#pack-objects-cache
+packObjectsCache: {}
+#  enabled: false
+#  dir: "/home/git/repositories/+gitaly/PackObjectsCache"
+#  max_age: 5m

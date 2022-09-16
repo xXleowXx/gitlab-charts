@@ -54,7 +54,9 @@ certmanager:
   cainjector: *custom
 
 gitlab-runner:
-  image: custom-repository:custom-tag
+  image:
+    image: custom-repository
+    tag: custom-tag
 
 minio:
   image: custom-repository
@@ -66,7 +68,6 @@ minio:
 
 nginx-ingress:
   controller: *custom
-  defaultBackend: *custom
 
 registry:
     <<: *custom

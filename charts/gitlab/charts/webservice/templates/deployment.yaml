@@ -57,6 +57,10 @@ spec:
       {{- if $.Values.metrics.annotations }}
         {{- toYaml $.Values.metrics.annotations | nindent 8 }}
       {{- else }}
+        {{- if $.Values.metrics.tls.enabled }}
+        gitlab.com/prometheus_scheme: "https"
+        prometheus.io/scheme: "https"
+        {{- end }}
         gitlab.com/prometheus_scrape: "true"
         gitlab.com/prometheus_port: {{ $.Values.metrics.port | quote }}
         gitlab.com/prometheus_path: {{ $.Values.metrics.path }}
@@ -273,6 +277,10 @@ spec:
               subPath: puma/puma.key
            {{- end }}
             - name: webservice-config
+              mountPath: '/etc/krb5.conf'
+              subPath: krb5.conf
+            {{- include "gitlab.appConfig.kerberos.volumeMount" $ | nindent 12 }}
+            - name: webservice-config
               mountPath: '/srv/gitlab/config/initializers/smtp_settings.rb'
               subPath: smtp_settings.rb
             - name: webservice-config
@@ -350,10 +358,6 @@ spec:
               value: '/var/opt/gitlab/templates'
             - name: CONFIG_DIRECTORY
               value: '/srv/gitlab/config'
-            {{- if or .workhorse.monitoring.exporter.enabled .workhorse.metrics.enabled }}
-            - name: GITLAB_WORKHORSE_PROM_LISTEN_ADDR
-              value: "0.0.0.0:{{ .workhorse.monitoring.exporter.port }}"
-            {{- end }}
             {{- if .workhorse.sentryDSN }}
             - name: GITLAB_WORKHORSE_SENTRY_DSN
               value: {{ .workhorse.sentryDSN }}
@@ -374,6 +378,7 @@ spec:
               mountPath: '/tmp'
               readOnly: false
             {{- include "gitlab.certificates.volumeMount" $ | nindent 12 }}
+            {{- include "gitlab.appConfig.kerberos.volumeMount" $ | nindent 12 }}
             {{- include "gitlab.extraVolumeMounts" $ | nindent 12 }}
           livenessProbe:
             exec:
@@ -405,6 +410,7 @@ spec:
       {{- include "gitlab.extraVolumes" $ | nindent 6 }}
       {{- include "gitlab.psql.ssl.volume" $ | nindent 6 }}
       {{- include "gitlab.geo.psql.ssl.volume" $ | nindent 6 }}
+      {{- include "gitlab.appConfig.kerberos.volume" $ | nindent 6 }}
       - name: shared-tmp
         {{- include "gitlab.volume.emptyDir" .sharedTmpDir | nindent 8 }}
       {{- if $.Values.metrics.enabled }}
@@ -440,6 +446,24 @@ spec:
                   path: "puma/puma.crt"
                 - key: "tls.key"
                   path: "puma/puma.key"
+          {{- end }}
+          {{- if $.Values.global.workhorse.tls.enabled }}
+          - secret:
+              name: {{ .workhorse.tls.secretName }}
+              items:
+                - key: "tls.crt"
+                  path: "gitlab-workhorse/tls.crt"
+                - key: "tls.key"
+                  path: "gitlab-workhorse/tls.key"
+          {{- end }}
+          {{- if $.Values.metrics.tls.enabled }}
+          - secret:
+              name: {{ template "webservice-metrics.tls.secret" $ }}
+              items:
+                - key: "tls.crt"
+                  path: "webservice-metrics/webservice-metrics.crt"
+                - key: "tls.key"
+                  path: "webservice-metrics/webservice-metrics.key"
           {{- end }}
           {{- include "gitlab.appConfig.incomingEmail.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.appConfig.serviceDeskEmail.mountSecrets" $ | nindent 10 }}
@@ -495,7 +519,7 @@ spec:
                 - key: "ca.crt"
                   path: rails-secrets/smartcard-ca.crt
           {{- end }}
-     {{- if $.Values.global.email.smime.enabled }}
+      {{- if $.Values.global.email.smime.enabled }}
       - name: smime-creds
         secret:
           secretName: {{ $.Values.global.email.smime.secretName }}

@@ -159,6 +159,37 @@ describe 'Gitaly configuration' do
     end
   end
 
+  context 'With additional gitconfig' do
+    let(:values) do
+      YAML.safe_load(%(
+        gitlab:
+          gitaly:
+            git:
+              config:
+              - {key: "pack.threads", value: "4"}
+              - {key: "fetch.fsckObjects", value: "false"}
+      )).deep_merge(default_values)
+    end
+
+    it 'populates [[git.config]] sections' do
+      t = HelmTemplate.new(values)
+      expect(t.exit_code).to eq(0)
+
+      config = t.dig('ConfigMap/test-gitaly', 'data', 'config.toml.erb')
+      expect(config).to include(
+        <<~CONFIG
+        [[git.config]]
+        key = "pack.threads"
+        value = "4"
+
+        [[git.config]]
+        key = "fetch.fsckObjects"
+        value = "false"
+        CONFIG
+      )
+    end
+  end
+
   context 'When customer provides additional labels' do
     let(:labeled_values) do
       YAML.safe_load(%(
@@ -243,6 +274,99 @@ describe 'Gitaly configuration' do
         expect(t.dig('Service/test-gitaly-default', 'metadata', 'labels')).to include('service' => 'true')
         expect(t.dig('Service/test-gitaly-default', 'metadata', 'labels')).not_to include('global' => 'global')
         expect(t.dig('ServiceAccount/test-gitaly', 'metadata', 'labels')).to include('global' => 'gitaly')
+      end
+    end
+  end
+
+  context 'packObjectsCache' do
+    let(:values) do
+      YAML.safe_load(%(
+        gitlab:
+          gitaly:
+            packObjectsCache:
+              enabled: #{pack_objects_cache_enabled}
+              dir: #{pack_objects_cache_dir}
+              max_age: #{pack_objects_cache_max_age}
+      )).merge(default_values)
+    end
+
+    context 'when enabled' do
+      let(:pack_objects_cache_enabled) { 'true' }
+      let(:pack_objects_cache_dir) { '/pack-objects-cache' }
+      let(:pack_objects_cache_max_age) { '10m' }
+
+      let(:template) { HelmTemplate.new(values) }
+
+      it 'populates a pack_objects_cache section in config.toml.erb' do
+        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.erb')
+
+        pack_objects_cache_section = "[pack_objects_cache]\n" \
+                                     "enabled = #{pack_objects_cache_enabled}\n" \
+                                     "dir = \"#{pack_objects_cache_dir}\"\n" \
+                                     "max_age = #{pack_objects_cache_max_age}"
+
+        expect(config_toml).to include(pack_objects_cache_section)
+      end
+    end
+
+    context 'when not enabled' do
+      let(:pack_objects_cache_enabled) { 'false' }
+      let(:pack_objects_cache_dir) { '/pack-objects-cache' }
+      let(:pack_objects_cache_max_age) { '10m' }
+
+      let(:template) { HelmTemplate.new(values) }
+
+      it 'does not populate a pack_objects_cache section in config.toml.erb' do
+        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.erb')
+
+        expect(config_toml).not_to match /^\[pack_objects_cache\]/
+      end
+    end
+  end
+
+  context 'with extraVolumes' do
+    let(:values) do
+      YAML.safe_load(%(
+        gitlab:
+          gitaly:
+            extraVolumes: |-
+             - name: #{volume_name}
+      )).deep_merge(default_values)
+    end
+
+    let(:template) { HelmTemplate.new(values) }
+
+    shared_examples 'a deprecated gitconfig volume' do
+      it 'fails due to gitconfig deprecation' do
+        expect(template.exit_code).not_to eq(0)
+        expect(template.stderr).to include("Gitaly have stopped reading `gitconfig`")
+      end
+    end
+
+    context 'with gitconfig volume' do
+      let(:volume_name) { "gitconfig" }
+
+      it_behaves_like 'a deprecated gitconfig volume'
+    end
+
+    context 'with git-config volume' do
+      let(:volume_name) { "git-config" }
+
+      it_behaves_like 'a deprecated gitconfig volume'
+    end
+
+    context 'with gitaly-gitconfig volume' do
+      let(:volume_name) { "gitaly-gitconfig" }
+
+      it_behaves_like 'a deprecated gitconfig volume'
+    end
+
+    context 'with gitaly-config volume' do
+      let(:volume_name) { "gitaly-config" }
+
+      it 'successfully renders the template' do
+        expect(template.exit_code).to eq(0)
+        expect(template.stderr).not_to include("Gitaly have stopped reading `gitconfig`")
       end
     end
   end

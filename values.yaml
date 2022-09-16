@@ -75,6 +75,19 @@ global:
     path: /
     pathType: Prefix
 
+  # Override the API version to use for HorizontalPodAutoscaler
+  hpa:
+    apiVersion: ""
+
+  # Override the API version to use for PodDisruptionBudget
+  pdb:
+    apiVersion: ""
+
+  # Override the API version to use for CronJob
+  batch:
+    cronJob:
+      apiVersion: ""
+
   gitlab:
     ## Enterprise license for this GitLab installation
     ## Secret created according to https://docs.gitlab.com/charts/installation/secrets#initial-enterprise-license
@@ -230,6 +243,9 @@ global:
       ## Prune stale group runners on opted-in namespaces
       # ci_runners_stale_group_runners_prune_worker_cron:
       #   cron: "30 * * * *"
+      ## Periodically update ci_runner_versions table with up-to-date versions and status
+      # ci_runner_versions_reconciliation_worker:
+      #   cron: "@daily"
       ### GitLab Geo
       # Geo Primary only!
       # geo_prune_event_log_worker:
@@ -363,7 +379,7 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
-      deliveryMethod: sidekiq
+      deliveryMethod: webhook
       authToken: {}
         # secret:
         # key:
@@ -389,7 +405,7 @@ global:
       clientSecret:
         key: secret
       pollInterval: 60
-      deliveryMethod: sidekiq
+      deliveryMethod: webhook
       authToken: {}
         # secret:
         # key:
@@ -425,12 +441,31 @@ global:
       providers: []
       # - secret: gitlab-google-oauth2
       #   key: provider
+
+    ## https://docs.gitlab.com/charts/charts/globals#kerberos
+    kerberos:
+      enabled: false
+      keytab:
+        # secret:
+        key: keytab
+      servicePrincipalName: ""
+      krb5Config: ""
+      dedicatedPort:
+        enabled: false
+        port: 8443
+        https: true
+      simpleLdapLinkingAllowedRealms: []
+
     ## https://docs.gitlab.com/charts/charts/globals#configure-appconfig-settings
     sentry:
       enabled: false
       dsn:
       clientside_dsn:
       environment:
+
+    gitlab_docs:
+      enabled: false
+      host: ""
 
     smartcard:
       enabled: false
@@ -526,6 +561,9 @@ global:
     notificationSecret: {}
       # secret:
       # key:
+    redis:
+      cache:
+        password: {}
     # https://docs.docker.com/registry/notifications/#configuration
     notifications: {}
       # endpoints:
@@ -634,6 +672,8 @@ global:
     ## https://docs.gitlab.com/charts/installation/secrets#gitlab-workhorse-secret
     # secret:
     # key:
+    tls:
+      enabled: false
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-webservice
   webservice:
@@ -654,6 +694,13 @@ global:
     customCAs: []
     # - secret: custom-CA
     # - secret: more-custom-CAs
+    #   keys:
+    #     - custom-ca-1.crt
+    # - configMap: custom-CA-cm
+    # - configMap: more-custom-CAs-cm
+    #   keys:
+    #     - custom-ca-2.crt
+    #     - custom-ca-3.crt
 
   ## kubectl image used by hooks to carry out specific jobs
   kubectl:
@@ -762,6 +809,7 @@ nginx-ingress:
   controller:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
+    allowSnippetAnnotations: false
     config:
       hsts: "true"
       hsts-include-subdomains: "false"
@@ -797,9 +845,6 @@ nginx-ingress:
     admissionWebhooks:
       enabled: false
   defaultBackend:
-    enabled: true
-    minAvailable: 1
-    replicaCount: 1
     resources:
       requests:
         cpu: 5m
@@ -866,6 +911,11 @@ prometheus:
                 [__meta_kubernetes_pod_annotation_gitlab_com_prometheus_scrape]
               action: keep
               regex: true
+            - source_labels:
+                [__meta_kubernetes_pod_annotation_gitlab_com_prometheus_scheme]
+              action: replace
+              regex: (https?)
+              target_label: __scheme__
             - source_labels:
                 [__meta_kubernetes_pod_annotation_gitlab_com_prometheus_path]
               action: replace
@@ -1065,6 +1115,9 @@ gitlab-runner:
 ## See requirements.yaml for current version
 ## Controlled by `global.grafana.enabled`
 grafana:
+  # Overrides the Grafana image tag for the 7.5.16 security update
+  image:
+    tag: 7.5.16
   ## Override and provide "bogus" administation secrets
   ## gitlab/gitlab-grafana provides overrides via shared-secrets
   nameOverride: grafana-app

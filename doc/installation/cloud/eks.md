@@ -14,6 +14,11 @@ deploying the `gitlab` chart.
 To get started easier, a script is provided to automate the cluster creation.
 Alternatively, a cluster can be created manually as well.
 
+Prerequisites:
+
+- Install the [prerequisites](../tools.md).
+- Install [`eksctl`](https://github.com/weaveworks/eksctl#installation).
+
 ### Scripted cluster creation
 
 A [bootstrap script](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/scripts/eks_bootstrap_script)
@@ -24,13 +29,11 @@ The script will:
 1. Create a new EKS cluster.
 1. Setup `kubectl`, and connect it to the cluster.
 
-The script uses [`eksctl`](https://eksctl.io) to initialize the cluster. If it cannot locate it in your PATH, you will need to download and install it manually.
-
 To authenticate, `eksctl` uses the same options as the AWS command line. See the AWS documentation for how to
 use [environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html), or [configuration files](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
 
-The script reads various parameters from environment variables, or command line arguments and an argument
-`up` or `down` for bootstrap and clean up respectively.
+The script reads various parameters from environment variables, or command line arguments and the argument
+`up` for bootstrap or `down` for clean up.
 
 The table below describes all variables.
 
@@ -90,7 +93,7 @@ when defining their storage solution.
 
 ## External Access to GitLab
 
-By default, installing the GitLab Chart will deploy an Ingress which will create an associated
+By default, installing the GitLab chart will deploy an Ingress which will create an associated
 Elastic Load Balancer (ELB). Since the DNS names of the ELB cannot be known
 ahead of time, it's difficult to utilize [Let's Encrypt](https://letsencrypt.org/) to automatically provision
 HTTPS certificates.

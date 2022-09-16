@@ -68,7 +68,7 @@ registry:
       interval: 24h
       dryrun: false
   image:
-    tag: 'v3.47.0-gitlab'
+    tag: 'v3.57.0-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -90,6 +90,9 @@ registry:
     maxReplicas: 10
     cpu:
       targetAverageUtilization: 75
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
   storage:
     secret:
     key: storage
@@ -125,6 +128,11 @@ registry:
     ingress:
       enabled: false
       rules: []
+  tls:
+    enabled: false
+    secretName:
+    verify: true 
+    caSecretName:
 ```
 
 If you chose to deploy this chart as a standalone, remove the `registry` at the top level.
@@ -153,16 +161,22 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `draintimeout`                                                                                                                               | `'0'`                                                                          | Amount of time to wait for HTTP connections to drain after receiving a SIGTERM signal (e.g. `'10s'`)                                                                                                                                                                                                                                         |
 | `relativeurls`                                                                                                                               | `false`                                                                        | Enable the registry to return relative URLs in Location headers.                                                                                                                                                                                                                                                                             |
 | `enabled`                                                                                                                                    | `true`                                                                         | Enable registry flag                                                                                                                                                                                                                                                                                                                         |
-| `hpa.cpu.targetAverageUtilization`                                                                                                           | `75`                                                                           | Target value of the average of the resource metric across all relevant pods which governs the HPA                                                                                                                                                                                                                                            |
-| `hpa.customMetrics`                                                                                                                          | `[]`                                                                           | autoscaling/v2beta1 Metrics contains the specifications for which to use to calculate the desired replica count (overrides the default use of Average CPU Utilization configured in `targetAverageUtilization`)                                                                                                                              |
+| `hpa.behavior`                                                                                                                               | `{scaleDown: {stabilizationWindowSeconds: 300 }}`                              | Behavior contains the specifications for up- and downscaling behavior (requires `autoscaling/v2beta2` or higher)                                                                                                                                                                                                                             |
+| `hpa.customMetrics`                                                                                                                          | `[]`                                                                           | Custom metrics contains the specifications for which to use to calculate the desired replica count (overrides the default use of Average CPU Utilization configured in `targetAverageUtilization`)                                                                                                                                           |
+| `hpa.cpu.targetType`                                                                                                                         | `Utilization`                                                                  | Set the autoscaling CPU target type, must be either `Utilization` or `AverageValue`                                                                                                                                                                                                                                                          |
+| `hpa.cpu.targetAverageValue`                                                                                                                 |                                                                                | Set the autoscaling CPU target value                                                                                                                                                                                                                                                                                                         |
+| `hpa.cpu.targetAverageUtilization`                                                                                                           | `75`                                                                           | Set the autoscaling CPU target utilization                                                                                                                                                                                                                                                                                                   |
+| `hpa.memory.targetType`                                                                                                                      |                                                                                | Set the autoscaling memory target type, must be either `Utilization` or `AverageValue`                                                                                                                                                                                                                                                       |
+| `hpa.memory.targetAverageValue`                                                                                                              |                                                                                | Set the autoscaling memory target value                                                                                                                                                                                                                                                                                                      |
+| `hpa.memory.targetAverageUtilization`                                                                                                        |                                                                                | Set the autoscaling memory target utilization                                                                                                                                                                                                                                                                                                |
 | `hpa.minReplicas`                                                                                                                            | `2`                                                                            | Minimum number of replicas                                                                                                                                                                                                                                                                                                                   |
 | `hpa.maxReplicas`                                                                                                                            | `10`                                                                           | Maximum number of replicas                                                                                                                                                                                                                                                                                                                   |
 | `httpSecret`                                                                                                                                 |                                                                                | Https secret                                                                                                                                                                                                                                                                                                                                 |
-| `extraEnvFrom`      |  | List of extra environment variables from other data sources to expose          |
+| `extraEnvFrom`                                                                                                                               |                                                                                | List of extra environment variables from other data sources to expose                                                                                                                                                                                                                                                                        |
 | `image.pullPolicy`                                                                                                                           |                                                                                | Pull policy for the registry image                                                                                                                                                                                                                                                                                                           |
 | `image.pullSecrets`                                                                                                                          |                                                                                | Secrets to use for image repository                                                                                                                                                                                                                                                                                                          |
 | `image.repository`                                                                                                                           | `registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry`           | Registry image                                                                                                                                                                                                                                                                                                                               |
-| `image.tag`                                                                                                                                  | `v3.47.0-gitlab`                                                               | Version of the image to use                                                                                                                                                                                                                                                                                                                  |
+| `image.tag`                                                                                                                                  | `v3.57.0-gitlab`                                                               | Version of the image to use                                                                                                                                                                                                                                                                                                                  |
 | `init.image.repository`                                                                                                                      |                                                                                | initContainer image                                                                                                                                                                                                                                                                                                                          |
 | `init.image.tag`                                                                                                                             |                                                                                | initContainer image tag                                                                                                                                                                                                                                                                                                                      |
 | `log`                                                                                                                                        | `{level: info, fields: {service: registry}}`                                   | Configure the logging options                                                                                                                                                                                                                                                                                                                |
@@ -231,6 +245,22 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `tokenIssuer`                                                                                                                                | `gitlab-issuer`                                                                | JWT token issuer                                                                                                                                                                                                                                                                                                                             |
 | `tolerations`                                                                                                                                | `[]`                                                                           | Toleration labels for pod assignment                                                                                                                                                                                                                                                                                                         |
 | `middleware.storage`                                                                                                                         |                                                                                | configuration layer for midleware storage ([s3 for instance](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#example-middleware-configuration))                                                                                                                                                         |
+| `redis.cache.enabled`                                                                                                                          | `false`                                                                        | When set to `true`, the Redis cache is enabled. This feature is dependent on the [metadata database](#database) being enabled. Repository metadata will be cached on the configured Redis instance.                                                                                              |
+| `redis.cache.host`                                                                                                                          | `<Redis URL>`                                                                        | The hostname of the Redis instance. If empty, the value will be filled as `global.redis.host:global.redis.port`.                                                                                      |
+| `redis.cache.port` | `6379` | The port of the Redis instance. |
+| `redis.cache.sentinels` | `[]` | List sentinels with host and port. |
+| `redis.cache.mainname`                                                                                                                          |                                                                         | The main server name. Only applicable for Sentinel.                                                                                             |
+| `redis.cache.password.secret`                                                                                                                          | `gitlab-redis-secret`                                                                        | Name of the secret containing the Redis password.                                                                                              |
+| `redis.cache.password.key`                                                                                                                          | `redis-password`                                                                        | Secret key in which the Redis password is stored.                                                                                              |
+| `redis.cache.db`                                                                                                                          | `0`                                                                        | The name of the database to use for each connection.                                                                                              |
+| `redis.cache.dialtimeout`                                                                                                                          | `0s`                                                                        | The timeout for connecting to the Redis instance. Defaults to no timeout.                                                                                             |
+| `redis.cache.readtimeout`                                                                                                                          | `0s`                                                                        | The timeout for reading from the Redis instance. Defaults to no timeout.                                                                                             |
+| `redis.cache.writetimeout`                                                                                                                          | `0s`                                                                        | The timeout for writing to the Redis instance. Defaults to no timeout.                                                                                              |
+| `redis.cache.tls.enabled`                                                                                                                          | `false`                                                                        | Set to `true` to enable TLS.                                                                                               |
+| `redis.cache.tls.insecure`                                                                                                                          | `false`                                                                        | Set to `true` to disable server name verification when connecting over TLS.                                                                                              |
+| `redis.cache.pool.size`                                                                                                                          | `10`                                                                        | The maximum number of socket connections. Default is 10 connections.                                                                                              |
+| `redis.cache.pool.maxlifetime`                                                                                                                          | `1h`                                                                        | The connection age at which client retires a connection. Default is to not close aged connections.                                                                                              |
+| `redis.cache.pool.idletimeout`                                                                                                                          | `300s`                                                                        | How long to wait before closing inactive connections.                                                                                              |
 
 ## Chart configuration examples
 
@@ -298,7 +328,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v3.47.0-gitlab'`
+- `tag: 'v3.57.0-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
@@ -329,6 +359,50 @@ This section controls the registry Ingress.
 | `enabled`              | Boolean | `false` | Setting that controls whether to create Ingress objects for services that support them. When `false` the `global.ingress.enabled` setting is used.                                                                                    |
 | `tls.enabled`          | Boolean | `true`  | When set to `false`, you disable TLS for the Registry subchart. This is mainly useful for cases in which you cannot use TLS termination at `ingress-level`, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `tls.secretName`       | String  |         | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the registry URL. When not set, the `global.ingress.tls.secretName` is used instead. Defaults to not being set.                                   |
+
+## Configuring TLS
+
+Container Registry supports TLS which secures its communication with other components,
+including `nginx-ingress`.
+
+Prerequisites to configure TLS:
+
+- The TLS certificate must include the Registry Service host name
+  (for example, `RELEASE-registry.default.svc`) in the Common
+  Name (CN) or Subject Alternate Name (SAN).
+- After the TLS certificate generates:
+  - Create a [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets)
+  - Create another Secret that only contains the CA certificate of the TLS certificate with `ca.crt` key.
+
+To enable TLS:
+
+1. Set `registry.tls.enabled` to `true`.
+1. Set `global.hosts.registry.protocol` to `https`.
+1. Pass the Secret names to `registry.tls.secretName` and `global.certificates.customCAs` accordingly.
+
+When `registry.tls.verify` is `true`, you must pass the CA certificate Secret
+name to `registry.tls.caSecretName`. This is necessary for self-signed
+certificates and custom Certificate Authorities. This Secret is used by NGINX to verify the TLS
+certificate of Registry.
+
+For example:
+
+```yaml
+global:
+  certificates:
+    customCAs:
+    - secret: registry-tls-ca
+  hosts:
+    registry:
+      protocol: https
+
+registry:
+  tls:
+    enabled: true
+    secretName: registry-tls
+    verify: true
+    caSecretName: registry-tls-ca
+```
 
 ## Configuring the `networkpolicy`
 
@@ -439,6 +513,15 @@ global:
 ```
 
 Ensuring the `secret` value is set to the name of the secret created above
+
+### Redis cache Secret
+
+The Redis cache Secret is used when `global.redis.password.enabled` is set to `true`.
+
+When the `shared-secrets` feature is enabled, the `gitlab-redis-secret` secret object
+is automatically created if not provided.
+
+To create this secret manually, see the [Redis password instructions](../../installation/secrets.md#redis-password).
 
 ### authEndpoint
 
@@ -613,6 +696,17 @@ kubectl create secret generic registry-storage \
 kubectl create secret generic registry-storage \
     --from-file=config=registry-storage.yaml \
     --from-file=gcs.json=example-project-382839-gcs-bucket.json
+```
+
+You can [disable the redirect for the storage driver](https://docs.gitlab.com/ee/administration/packages/container_registry.html#disable-redirect-for-storage-driver),
+ensuring that all traffic flows through the Registry service instead of redirecting to another backend:
+
+```yaml
+storage:
+  secret: example-secret
+  key: config
+  redirect:
+    disable: true
 ```
 
 If you chose to use the `filesystem` driver:
@@ -882,6 +976,56 @@ gc:
     storagetimeout: 5s
 ```
 
+### Redis cache
+
+WARNING:
+This is an experimental feature and _must not_ be used in production.
+
+The `redis.cache` property is optional and provides options related to the
+[Redis cache](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#cache-1).
+To use `redis.cache` with the registry, the [metadata database](#database) must be enabled.
+
+For example:
+
+```yaml
+redis:
+  cache:
+    enabled: true
+    host: localhost
+    port: 16379
+    password:
+      secret: gitlab-redis-secret
+      key: redis-password
+    db: 0
+    dialtimeout: 10ms
+    readtimeout: 10ms
+    writetimeout: 10ms
+    tls:
+      enabled: true
+      insecure: true
+    pool:
+      size: 10
+      maxlifetime: 1h
+      idletimeout: 300s
+```
+
+#### Sentinels
+
+The `redis.cache` can use the `global.redis.sentinels` configuration. Local values can be provided and
+will take precedence over the global values. For example:
+
+```yaml
+redis:
+  cache:
+    enabled: true
+    host: redis.example.com
+    sentinels:
+      - host: sentinel1.example.com
+        port: 16379
+      - host: sentinel2.example.com
+        port: 16379
+```
+
 ## Garbage Collection
 
 The Docker Registry will build up extraneous data over time which can be freed using
@@ -892,7 +1036,7 @@ fully automated or scheduled way to run the garbage collection with this Chart.
 ### Manual Garbage Collection
 
 Manual garbage collection requires the registry to be in read-only mode first. Let's assume that you've already
-installed the GitLab Chart using Helm, named it `mygitlab` and installed it in the namespace `gitlabns`.
+installed the GitLab chart by using Helm, named it `mygitlab`, and installed it in the namespace `gitlabns`.
 Replace these values in the commands below according to your actual configuration.
 
 ```shell

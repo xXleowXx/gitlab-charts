@@ -60,6 +60,7 @@ function deploy() {
       "--set" "gitlab.gitaly.image.tag=${image_branch}"
       "--set" "gitlab.gitlab-shell.image.tag=${image_branch}"
       "--set" "gitlab.gitlab-exporter.image.tag=${image_branch}"
+      "--set" "gitlab.kas.image.tag=${image_branch}"
       "--set" "registry.image.tag=${image_branch}"
     )
   fi
@@ -79,6 +80,8 @@ function deploy() {
   kubectl create secret generic "${RELEASE_NAME}-gitlab-license" --from-file=license=/tmp/license.gitlab -o yaml --dry-run | kubectl replace --force -f -
 
   # YAML_FILE=""${KUBE_INGRESS_BASE_DOMAIN//\./-}.yaml"
+
+  helm dependency update .
 
   WAIT="--wait --timeout 900s"
 
@@ -137,8 +140,23 @@ CIYAML
         cpu: 100m
 CIYAML
 
+  if [ -n "${REVIEW_APPS_SENTRY_DSN}" ] && [ -n "${REVIEW_APPS_SENTRY_ENVIRONMENT}" ]; then
+    echo "REVIEW_APPS_SENTRY_* detected, enabling Sentry"
+    cat << CIYAML > ci.sentry.yaml
+    global:
+      appConfig:
+        sentry:
+          enabled: true
+          dsn: "${REVIEW_APPS_SENTRY_DSN}"
+          environment: "${REVIEW_APPS_SENTRY_ENVIRONMENT}"
+CIYAML
+
+    SENTRY_CONFIGURATION="-f ci.sentry.yaml"
+  fi
+
   helm upgrade --install \
     $WAIT \
+    ${SENTRY_CONFIGURATION} \
     -f ci.details.yaml \
     -f ci.scale.yaml \
     --set releaseOverride="$RELEASE_NAME" \
