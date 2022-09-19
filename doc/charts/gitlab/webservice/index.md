@@ -152,7 +152,7 @@ to the `helm install` command using the `--set` flags.
 | `workhorse.imageScaler.maxProcs`                    | 2                                                               | The maximum number of image scaling processes that may run concurrently                                                                                                                                                                                                                                                         |
 | `workhorse.imageScaler.maxFileSizeBytes`            | 250000                                                          | The maximum file size in bytes for images to be processed by the scaler                                                                                                                                                                                                                                                         |
 | `workhorse.tls.verify` | `true` | When set to `true` forces NGINX Ingress to verify the TLS certificate of Workhorse. For custom CA you need to set `workhorse.tls.caSecretName` as well. Must be set to `false` for self-signed certificates. |
-| `workhorse.tls.secretName` |  | The name of the [TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets) that contains the TLS key and certificate pair. This is required when Workhorse TLS is enabled.  |
+| `workhorse.tls.secretName` | `{Release.Name}-workhorse-tls` | The name of the [TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets) that contains the TLS key and certificate pair. This is required when Workhorse TLS is enabled.  |
 | `workhorse.tls.caSecretName` |  | The name of the Secret that contains the CA certificate. This **is not** a [TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets), and must have only `ca.crt` key. This is used for TLS verification by NGINX. |
 | `webServer`                                         | `puma`                                                          | Selects web server (Webservice/Puma) that would be used for request handling                                                                                                                                                                                                                                                    |
 | `priorityClassName`                                 | `""`                                                            | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction                                                                                                                                                                                                                            |
@@ -298,7 +298,7 @@ another Secret that only contains the CA certificate of the TLS certificate
 with `ca.crt` key.
 
 The TLS can be enabled for `gitlab-workhorse` container by setting `global.workhorse.tls.enabled`
-to `true` as well as passing the Secret names to `gitlab.webservice.workhorse.tls.secretName` and
+to `true`. You can pass custom Secret names to `gitlab.webservice.workhorse.tls.secretName` and
 `global.certificates.customCAs` accordingly.
 
 When `gitlab.webservice.workhorse.tls.verify` is `true` (it is by default), you
@@ -319,7 +319,7 @@ gitlab:
     workhorse:
       tls:
         verify: true
-        secretName: gitlab-workhorse-tls
+        # secretName: gitlab-workhorse-tls
         caSecretName: gitlab-workhorse-ca
       monitoring:
         exporter:
@@ -345,14 +345,14 @@ NOTE:
 [The Prometheus server bundled with the chart](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3335) does not yet
 support scraping of HTTPS endpoints.
 
-TLS can be enabled on the `webservice` container by the settings `gitlab.webservice.tls.enabled` and `gitlab.webservice.tls.secretName`:
+TLS can be enabled on the `webservice` container by the settings `gitlab.webservice.tls.enabled`:
 
 ```yaml
 gitlab:
   webservice:
     tls:
       enabled: true
-      secretName: gitlab-webservice-tls
+      # secretName: gitlab-webservice-tls
 ```
 
 `secretName` must point to a [Kubernetes TLS secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets).

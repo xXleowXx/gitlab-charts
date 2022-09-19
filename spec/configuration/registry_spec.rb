@@ -81,30 +81,8 @@ describe 'registry configuration' do
     end
 
     context 'when enabled without configuration' do
-      let(:values) do
-        YAML.safe_load(%(
-          registry:
-            tls:
-              enabled: true
-        )).deep_merge(default_values)
-      end
-
-      it 'fails to render' do
-        expect(HelmTemplate.new(tls_values).exit_code).not_to eq(0)
-      end
-    end
-
-    context 'when provided minimum configuration' do
-      let(:values) do
-        YAML.safe_load(%(
-          registry:
-            tls:
-              secretName: registry-service-tls
-        )).deep_merge(tls_values)
-      end
-
       it 'renders default configuration, volume content, ingress annotations, port definitions' do
-        t = HelmTemplate.new(values)
+        t = HelmTemplate.new(tls_values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
         expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
@@ -120,7 +98,7 @@ describe 'registry configuration' do
           TLS_CONFIG
         )
 
-        tls_crt = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'registry-service-tls', 'tls.crt')
+        tls_crt = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'test-registry-tls', 'tls.crt')
         expect(tls_crt).not_to be_empty
 
         ingress_annotations = t.annotations('Ingress/test-registry')
@@ -468,7 +446,7 @@ describe 'registry configuration' do
           DEBUG_TLS_CONFIG
         )
 
-        tls_crt = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'registry-service-tls', 'tls.crt')
+        tls_crt = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'test-registry-tls', 'tls.crt')
         expect(tls_crt).not_to be_empty
 
         liveness_probe = t.find_container('Deployment/test-registry', 'registry')['livenessProbe']['httpGet']

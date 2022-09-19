@@ -349,7 +349,7 @@ SAN attributes.
    kubectl create secret tls gitaly-server-tls --cert=gitaly.crt --key=gitaly.key
    ```
 
-1. Redeploy the Helm chart by passing the additional arguments `--set global.gitaly.tls.enabled=true --set global.gitaly.tls.secretName=<secret name>`
+1. Redeploy the Helm chart by passing `--set global.gitaly.tls.enabled=true`.
 
 ### Global server hooks
 

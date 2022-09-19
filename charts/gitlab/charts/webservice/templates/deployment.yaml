@@ -449,7 +449,7 @@ spec:
           {{- end }}
           {{- if $.Values.global.workhorse.tls.enabled }}
           - secret:
-              name: {{ .workhorse.tls.secretName }}
+              name: {{ include "workhorse.tls.secret" $ }}
               items:
                 - key: "tls.crt"
                   path: "gitlab-workhorse/tls.crt"
