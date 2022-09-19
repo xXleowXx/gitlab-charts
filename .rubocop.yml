@@ -46,11 +46,6 @@ Rails:
 RSpec:
   Enabled: false
 
-# TODO: temporarily excluding the file with lints at RuboCop 1.36
-Fips/MD5:
-  Exclude:
-    - spec/features/backups_spec.rb
-
 # We are not concerned with the security of using public in charts but we want to ensure
 GitlabSecurity/PublicSend:
   Enabled: false
