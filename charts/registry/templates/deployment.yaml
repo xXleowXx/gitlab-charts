@@ -222,14 +222,14 @@ spec:
           {{- if .Values.tls.enabled -}}
           # TLS secret for HTTPS service
           - secret:
-              name: {{ .Values.tls.secretName }}
+              name: {{ include "gitlab.registry.tls.secret" $ }}
               items:
                 - key: tls.crt
                   path: tls/tls.crt
                 - key: tls.key
                   path: tls/tls.key
           {{- end -}}
-          {{- if and .Values.debug.tls.enabled .Values.debug.tls.secretName -}}
+          {{- if and .Values.debug.tls.enabled .Values.debug.tls.secretName }}
           # TLS secret for metrics/debug HTTPS service
           - secret:
               name: {{ .Values.debug.tls.secretName }}

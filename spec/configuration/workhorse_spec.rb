@@ -113,17 +113,6 @@ describe 'Workhorse configuration' do
       end
     end
 
-    context 'when TLS is enabled but custom CA and TLS Secrets are not specified' do
-      let(:tls_enabled) { true }
-
-      let(:template) { HelmTemplate.new(tls_values) }
-
-      it 'fails when checking the configuration' do
-        expect(template.exit_code).not_to eq(0)
-        expect(template.stderr).to include('global.certificates.customCAs')
-      end
-    end
-
     context 'when TLS is enabled and verified' do
       let(:tls_enabled) { true }
       let(:tls_verify) { true }
