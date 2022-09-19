@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# GitLab version mappings **(FREE SELF)**
+# GitLab chart versions **(FREE SELF)**
 
 The GitLab chart doesn't have the same version number as GitLab itself.
 Breaking changes are anticipated that may have to be introduced to the chart
