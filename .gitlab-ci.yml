@@ -508,7 +508,8 @@ danger-review:
       - *stable_branch_ref
   script:
     - git version
-    - danger --fail-on-errors=true
+    - danger_id=$(echo -n ${DANGER_GITLAB_API_TOKEN} | md5sum | awk '{print $1}' | cut -c5-10)
+    - danger --fail-on-errors=true --verbose --danger_id=${danger_id}
 
 rubocop:
   image: ruby:2.7.4-alpine
