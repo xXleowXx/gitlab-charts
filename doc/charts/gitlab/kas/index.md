@@ -119,6 +119,7 @@ You can pass these parameters to the `helm install` command by using the `--set`
 | `deployment.minReadySeconds`               | `0`                                                   | Minimum number of seconds that must pass before a `kas` pod is considered ready.                                                                                                                          |
 | `deployment.strategy`                      | `{}`                                                  | Allows one to configure the update strategy utilized by the deployment.                                                                                                                                   |
 | `deployment.terminationGracePeriodSeconds` | `300`                                                 | How much time in seconds a Pod is allowed to spend shutting down after receiving SIGTERM.                                                                                                                 |
+| `priorityClassName`                        |                                                       | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods.                                                                                      |
 
 ## Enable TLS communication
 
