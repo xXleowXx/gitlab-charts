@@ -680,6 +680,10 @@ global:
     podAntiAffinity:
       topologyKey: "kubernetes.io/hostname"
 
+  # Priority class assigned to pods, may be overridden for individual components
+  # https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+  priorityClassName: ""
+
   ## https://docs.gitlab.com/charts/charts/globals#configure-workhorse-settings
   ## Global settings related to Workhorse
   workhorse:

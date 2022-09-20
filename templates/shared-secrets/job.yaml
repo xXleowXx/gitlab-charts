@@ -29,6 +29,7 @@ spec:
       tolerations:
         {{- toYaml $sharedSecretValues.tolerations | nindent 8 }}
       {{- end }}
+      {{- include "gitlab.priorityClassName" . | nindent 6 }}
       securityContext:
         runAsUser: {{ $sharedSecretValues.securityContext.runAsUser }}
         fsGroup: {{ $sharedSecretValues.securityContext.fsGroup }}
