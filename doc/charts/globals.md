@@ -1216,6 +1216,10 @@ kubectl create secret generic gitlab-rails-storage \
 This setting is left empty by default in the charts, for a default value to be
 assigned by the Rails code.
 
+#### cdn (only for CI Artifacts)
+
+`artifacts` setting has an additional key `cdn` [to configure Google CDN in front of a Google Cloud Storage bucket](../advanced/external-object-storage/index.md#google-cloud-cdn).
+
 ### Incoming email settings
 
 The incoming email settings are explained in the [command line options page](../installation/command-line-options.md#incoming-email-configuration).
