@@ -4,10 +4,10 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Preparing OKE resources **(FREE SELF)**
+# Preparing OKE resources for the GitLab chart **(FREE SELF)**
 
 For a fully functional GitLab instance, you need a few resources before
-deploying the `gitlab` chart to [Oracle Container Engine for Kubernetes (OKE)](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengoverview.htm). Check how to [prepare](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengprerequisites.htm) your Oracle Cloud Infrastructure tenancy before creating the OKE cluster.
+deploying the GitLab chart to [Oracle Container Engine for Kubernetes (OKE)](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengoverview.htm). Check how to [prepare](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengprerequisites.htm) your Oracle Cloud Infrastructure tenancy before creating the OKE cluster.
 
 ## Creating the OKE cluster
 

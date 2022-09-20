@@ -4,10 +4,10 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Preparing GKE resources **(FREE SELF)**
+# Preparing GKE resources for the GitLab chart **(FREE SELF)**
 
 For a fully functional GitLab instance, you will need a few resources before
-deploying the `gitlab` chart. The following is how these charts are deployed
+deploying the GitLab chart. The following is how these charts are deployed
 and tested within GitLab.
 
 ## Creating the GKE cluster

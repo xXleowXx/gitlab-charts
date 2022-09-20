@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
 ---
 
-# Prerequisites for installing the GitLab chart **(FREE SELF)**
+# GitLab chart prerequisites **(FREE SELF)**
 
 Before you deploy GitLab in a Kubernetes cluster, install the following
 prerequisites and gather the minimum required information.
