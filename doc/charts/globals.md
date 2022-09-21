@@ -1653,12 +1653,12 @@ global:
     port: 8181
 ```
 
-| Name | Type | | Default | Description |
-| :-- | :-- | :-- | :-- |
-| serviceName | String | `webservice-default` | Name of service to direct internal API traffic to. Do not include the Release name, as it will be templated in. Should match an entry in `gitlab.webservice.deployments`. See [`gitlab/webservice` chart](gitlab/webservice/index.md#deployments-settings) |
-| scheme | String | `http` | Scheme of the API endpoint |
-| host | String | | Fully qualified hostname or IP address of an API endpoint. Overrides the presence of `serviceName`. |
-| port | Integer | `8181` | Port number of associated API server. |
+| Name        | Type    | Default | Description |
+| :---------- | :------ | :------ | :---------- |
+| serviceName | String  | `webservice-default` | Name of service to direct internal API traffic to. Do not include the Release name, as it will be templated in. Should match an entry in `gitlab.webservice.deployments`. See [`gitlab/webservice` chart](gitlab/webservice/index.md#deployments-settings) |
+| scheme      | String  | `http` | Scheme of the API endpoint |
+| host        | String  | | Fully qualified hostname or IP address of an API endpoint. Overrides the presence of `serviceName`. |
+| port        | Integer | `8181` | Port number of associated API server. |
 | tls.enabled | Boolean | `false` | When set to `true`, enables TLS support for Workhorse. |
 
 ### Bootsnap Cache
