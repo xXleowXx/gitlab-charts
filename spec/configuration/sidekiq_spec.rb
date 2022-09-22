@@ -150,11 +150,11 @@ describe 'Sidekiq configuration' do
     end
   end
 
-  context 'when setting extraEnvFrom' do
-    def deployment_name(pod)
-      "Deployment/test-sidekiq-#{pod}-v2"
-    end
+  def deployment_name(pod)
+    "Deployment/test-sidekiq-#{pod}-v2"
+  end
 
+  context 'when setting extraEnvFrom' do
     context 'when the global value is set' do
       let(:global_values) do
         YAML.safe_load(%(
@@ -770,6 +770,115 @@ describe 'Sidekiq configuration' do
       it 'sets user specified deployment-global value for terminationGracePeriodSeconds in the Pod spec where pod-local value is not set' do
         t = HelmTemplate.new(default_values.deep_merge(chart_values))
         expect(t.dig('Deployment/test-sidekiq-pod-2-v2', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(77)
+      end
+    end
+  end
+
+  context 'Generating SIDEKIQ_QUEUES env var' do
+    let(:default_values) do
+      YAML.safe_load(%(
+      certmanager-issuer:
+        email: test@example.com
+
+      gitlab:
+        sidekiq:
+          pods:
+          - name: pod-1
+          - name: pod-2
+    ))
+    end
+
+    def deep_copy(obj)
+      Marshal.load(Marshal.dump(obj))
+    end
+
+    context 'when queues per pod is set' do
+      let(:values) do
+        v = deep_copy(default_values)
+        v['gitlab']['sidekiq']['pods'][0]['queues'] = 'merge'
+        v['gitlab']['sidekiq']['pods'][1]['queues'] = 'pull'
+        v
+      end
+
+      context 'without routingRules' do
+        it 'should follow queues per pod' do
+          template = HelmTemplate.new(values)
+          expect(template.exit_code).to eq(0)
+          expect(template.env(deployment_name('pod-1'), 'sidekiq'))
+            .to include(
+                  { 'name' => 'SIDEKIQ_QUEUES', 'value' => 'merge' }
+                )
+          expect(template.env(deployment_name('pod-2'), 'sidekiq'))
+            .to include(
+                  { 'name' => 'SIDEKIQ_QUEUES', 'value' => 'pull' }
+                )
+        end
+      end
+
+      context 'with routingRules' do
+        let(:with_routing_rules_values) do
+          YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                 - ["query", "queue"]
+        )).merge(values)
+        end
+
+        it 'should follow queues per pod' do
+          template = HelmTemplate.new(with_routing_rules_values)
+          expect(template.exit_code).to eq(0)
+          expect(template.env(deployment_name('pod-1'), 'sidekiq'))
+            .to include(
+                  { 'name' => 'SIDEKIQ_QUEUES', 'value' => 'merge' }
+                )
+          expect(template.env(deployment_name('pod-2'), 'sidekiq'))
+            .to include(
+                  { 'name' => 'SIDEKIQ_QUEUES', 'value' => 'pull' }
+                )
+        end
+      end
+    end
+
+    context 'when queues per pod is not set' do
+      context 'without routingRules' do
+        it 'has default,mailers as default queues' do
+          default_template = HelmTemplate.new(default_values)
+          expect(default_template.env(deployment_name('pod-1'), 'sidekiq'))
+            .to include(
+                  { 'name' => 'SIDEKIQ_QUEUES', 'value' => 'default,mailers' }
+                )
+          expect(default_template.env(deployment_name('pod-2'), 'sidekiq'))
+            .to include(
+                  { 'name' => 'SIDEKIQ_QUEUES', 'value' => 'default,mailers' }
+                )
+        end
+      end
+
+      context 'with routingRules' do
+        let(:values) do
+          YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                 - ["attribute=a", "queue-a"]
+                 - ["attribute=b", "queue-b"]
+        )).merge(default_values)
+        end
+
+        it 'is generated based on routingRules' do
+          template = HelmTemplate.new(values)
+          expect(template.env(deployment_name('pod-1'), 'sidekiq'))
+            .to include(
+                  { 'name' => 'SIDEKIQ_QUEUES', 'value' => 'queue-a,queue-b,mailers' }
+                )
+          expect(template.env(deployment_name('pod-2'), 'sidekiq'))
+            .to include(
+                  { 'name' => 'SIDEKIQ_QUEUES', 'value' => 'queue-a,queue-b,mailers' }
+                )
+        end
       end
     end
   end

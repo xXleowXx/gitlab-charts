@@ -1174,14 +1174,14 @@ gitlab:
     antiAffinityLabels:
       matchLabels:
         app: gitaly
+  # https://docs.gitlab.com/charts/charts/gitlab/sidekiq
+  sidekiq:
+    queues: "default,mailers"
   ## https://docs.gitlab.com/charts/charts/gitlab/migrations
   #   migrations:
   #     enabled: false
   ## https://docs.gitlab.com/charts/charts/gitlab/webservice
   #   webservice:
-  #     enabled: false
-  ## https://docs.gitlab.com/charts/charts/gitlab/sidekiq
-  #   sidekiq:
   #     enabled: false
   ## https://docs.gitlab.com/charts/charts/gitlab/gitaly
   #   gitaly:
