@@ -27,7 +27,7 @@ describe 'ObjectStorage configuration' do
     ))
   end
 
-  let(:artifacts_cdn_file) { '/etc/gitlab/objectstorage_cdn/artifacts' }
+  let(:artifacts_cdn_file) { '/etc/gitlab/objectstorage/cdn/artifacts' }
 
   describe 'global.appConfig.object_store.enabled' do
     let(:object_store_config_file) { '/etc/gitlab/objectstorage/object_store' }
