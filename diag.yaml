@@ -1,0 +1,91 @@
+global:
+  gitlabVersion: 372242-toolbox-script
+  diagnostics:
+    image:
+      repository: registry.gitlab.com/gitlab-org/build/cng-mirror/gitlab-toolbox-ee
+      tag: 372242-toolbox-script ## If only testing this one container difference
+    gcloud:
+      secret: diagnostics-gcloud
+      key: gcloud.json
+  enterpriseImages:
+    # Default repositories used to pull Gitlab Enterprise Edition images.
+    # See the image.repository and workhorse.repository template helpers.
+    migrations:
+      repository: registry.gitlab.com/gitlab-org/build/cng-mirror/gitlab-toolbox-ee
+    sidekiq:
+      repository: registry.gitlab.com/gitlab-org/build/cng-mirror/gitlab-sidekiq-ee
+    toolbox:
+      repository: registry.gitlab.com/gitlab-org/build/cng-mirror/gitlab-toolbox-ee
+    webservice:
+      repository: registry.gitlab.com/gitlab-org/build/cng-mirror/gitlab-webservice-ee
+    workhorse:
+      repository: registry.gitlab.com/gitlab-org/build/cng-mirror/gitlab-workhorse-ee
+    geo-logcursor:
+      repository: registry.gitlab.com/gitlab-org/build/cng-mirror/gitlab-geo-logcursor
+
+gitlab:
+  webservice:
+    extraVolumes: |-
+      - name: gitlab-diagnostics
+        emptyDir:
+          sizeLimit: 1Gi
+      # Secret containing Google `gcloud.json` credentials file
+      - name: diagnostics-gcloud
+        secret:
+          secretName: {{ .Values.global.diagnostics.gcloud.secret }}
+          items:
+            - key: {{ .Values.global.diagnostics.gcloud.key }}
+              path: gcloud.json
+    extraVolumeMounts: |-
+      - mountPath: /var/tmp/gitlab/diagnostics
+        name: gitlab-diagnostics
+    extraContainers: |-
+      - name: toolbox-uploader
+        args:
+          - /bin/bash
+          - -c
+          - while sleep 5; do ls -lah; done
+        env:
+          - name: ENABLE_BOOTSNAP
+            value: "1"
+          - name: CONFIG_TEMPLATE_DIRECTORY
+            value: /var/opt/gitlab/templates
+          - name: CONFIG_DIRECTORY
+            value: /srv/gitlab/config
+          - name: UNSTRUCTURED_RAILS_LOG
+            value: "false"
+          - name: USE_GITLAB_LOGGER
+            value: "1"
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /etc/gitlab/objectstorage/gcloud.json
+          - name: DIAGNOSTICS_PROJECT
+            value: some-project-9999
+        image: "{{ coalesce .Values.global.diagnostics.image.repository (include "image.repository" .) }}:{{ coalesce .Values.global.diagnostics.image.tag (include "gitlab.versionTag" . ) }}"
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 50m
+            memory: 200M
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        # Shared mount, via emptyDir
+        - mountPath: /var/tmp/gitlab/diagnostics
+          name: gitlab-diagnostics
+        # Secret with gcloud configuration
+        - mountPath: /etc/gitlab/objectstorage
+          name: diagnostics-gcloud
+        - mountPath: /var/opt/gitlab/templates
+          name: webservice-config
+        - mountPath: /srv/gitlab/config/initializers/smtp_settings.rb
+          name: webservice-config
+          subPath: smtp_settings.rb
+        - mountPath: /etc/gitlab
+          name: webservice-secrets
+          readOnly: true
+        - mountPath: /srv/gitlab/config/secrets.yml
+          name: webservice-secrets
+          subPath: rails-secrets/secrets.yml
+        - mountPath: /etc/ssl/certs/
+          name: etc-ssl-certs
+          readOnly: true
