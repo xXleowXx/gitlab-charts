@@ -82,10 +82,8 @@ gitlab:
           subPath: smtp_settings.rb
         - mountPath: /etc/gitlab
           name: webservice-secrets
-          readOnly: true
         - mountPath: /srv/gitlab/config/secrets.yml
           name: webservice-secrets
           subPath: rails-secrets/secrets.yml
         - mountPath: /etc/ssl/certs/
           name: etc-ssl-certs
-          readOnly: true
