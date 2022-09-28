@@ -44,7 +44,7 @@ gitlab:
         args:
           - /bin/bash
           - -c
-          - while sleep 5; do ls -lah; done
+          - printf "$GOOGLE_APPLICATION_CREDENTIALS\nN\n$DIAGNOSTICS_PROJECT\nN\n" | gsutil config -e; while sleep 3; do date; ls -t /var/tmp/gitlab/diagnostics; done
         env:
           - name: ENABLE_BOOTSNAP
             value: "1"
@@ -59,7 +59,7 @@ gitlab:
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /etc/gitlab/objectstorage/gcloud.json
           - name: DIAGNOSTICS_PROJECT
-            value: some-project-9999
+            value: alipniagov-c14e6039
         image: "{{ coalesce .Values.global.diagnostics.image.repository (include "image.repository" .) }}:{{ coalesce .Values.global.diagnostics.image.tag (include "gitlab.versionTag" . ) }}"
         imagePullPolicy: IfNotPresent
         resources:
