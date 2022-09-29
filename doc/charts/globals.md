@@ -1314,6 +1314,7 @@ ldap:
       uid: 'sAMAccountName'
       bind_dn: 'cn=administrator,cn=Users,dc=domain,dc=net'
       base: 'dc=domain,dc=net'
+      encryption: 'simple_tls'
       password:
         secret: my-ldap-password-secret
         key: the-key-containing-the-password
