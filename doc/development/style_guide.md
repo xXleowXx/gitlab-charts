@@ -461,7 +461,7 @@ gitaly:
 
 ## Templating chart notes (NOTES.txt)
 
-Helm's [chart notes feature](https://helm.sh/docs/chart_template_guide/notes_files) provides
+Helm's [chart notes feature](https://helm.sh/docs/chart_template_guide/notes_files/) provides
 helpful information and follow-up instructions after chart installations and upgrades.
 
 These notes are placed in
