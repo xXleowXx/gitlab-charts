@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.4.1 (2022-09-29)
+
+No changes.
+
 ## 6.4.0 (2022-09-21)
 
 ### Added (5 changes)
@@ -31,6 +35,10 @@ entry.
 
 - [Update rack from 2.2.3 to 3.0.0](gitlab-org/charts/gitlab@99c3a60596cc3f2c4d64b585a0900173b2c29691) ([merge request](gitlab-org/charts/gitlab!2779))
 - [Update gitlab-styles from 6.2.0 to 9.0.0](gitlab-org/charts/gitlab@3b5171699d4a181d2e7cdf95f52333f18f03be93) ([merge request](gitlab-org/charts/gitlab!2769))
+
+## 6.3.4 (2022-09-29)
+
+No changes.
 
 ## 6.3.3 (2022-09-01)
 
@@ -78,6 +86,10 @@ No changes.
 ### Other (1 change)
 
 - [Ensures that whitespace is chomped to the left](gitlab-org/charts/gitlab@0e65e3393b244bf8a5f04a631865a2f1487e34ab) ([merge request](gitlab-org/charts/gitlab!2651))
+
+## 6.2.5 (2022-09-29)
+
+No changes.
 
 ## 6.2.4 (2022-08-30)
 
