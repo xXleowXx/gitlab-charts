@@ -1,4 +1,6 @@
 global:
+  image:
+    pullPolicy: Always ## For dev purposes, to use the same branch
   gitlabVersion: 372242-toolbox-script
   diagnostics:
     image:
@@ -44,7 +46,7 @@ gitlab:
         args:
           - /bin/bash
           - -c
-          - printf "$GOOGLE_APPLICATION_CREDENTIALS\nN\n$DIAGNOSTICS_PROJECT\nN\n" | gsutil config -e; while sleep 3; do date; ls -t /var/tmp/gitlab/diagnostics; done
+          - gitlab-rails runner /srv/gitlab/bin/diagnostic-reports-uploader
         env:
           - name: ENABLE_BOOTSNAP
             value: "1"
@@ -59,7 +61,11 @@ gitlab:
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /etc/gitlab/objectstorage/gcloud.json
           - name: DIAGNOSTICS_PROJECT
-            value: alipniagov-c14e6039
+            value: "alipniagov-c14e6039"
+          - name: GITLAB_DIAGNOSTIC_REPORTS_PATH
+            value: /var/tmp/gitlab/diagnostics
+          - name: DIAGNOSTICS_BUCKET
+            value: "diag_reports"
         image: "{{ coalesce .Values.global.diagnostics.image.repository (include "image.repository" .) }}:{{ coalesce .Values.global.diagnostics.image.tag (include "gitlab.versionTag" . ) }}"
         imagePullPolicy: IfNotPresent
         resources:
