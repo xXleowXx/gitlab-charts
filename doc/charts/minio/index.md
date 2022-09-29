@@ -273,5 +273,5 @@ for the following also applies completely to this chart:
 - `minioConfig`
 
 Further explanation of the `minioConfig` settings can be found in the
-[MinIO notify documentation](https://docs.min.io/docs/minio-bucket-notification-guide).
+[MinIO notify documentation](https://min.io/docs/minio/kubernetes/upstream/index.html).
 This includes details on publishing notifications when Bucket Objects are accessed or changed.
