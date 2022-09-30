@@ -60,11 +60,11 @@ gitlab:
             value: "1"
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /etc/gitlab/objectstorage/gcloud.json
-          - name: DIAGNOSTICS_PROJECT
+          - name: GITLAB_DIAGNOSTIC_REPORTS_PROJECT
             value: "alipniagov-c14e6039"
           - name: GITLAB_DIAGNOSTIC_REPORTS_PATH
             value: /var/tmp/gitlab/diagnostics
-          - name: DIAGNOSTICS_BUCKET
+          - name: GITLAB_DIAGNOSTIC_REPORTS_BUCKET
             value: "diag_reports"
         image: "{{ coalesce .Values.global.diagnostics.image.repository (include "image.repository" .) }}:{{ coalesce .Values.global.diagnostics.image.tag (include "gitlab.versionTag" . ) }}"
         imagePullPolicy: IfNotPresent
