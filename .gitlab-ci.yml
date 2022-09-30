@@ -47,7 +47,7 @@ variables:
   TEST_BACKUP_PREFIX: "14.9.2-incr"
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
-  ISSUE_BOT_LABELS_EXTRA: "group::distribution"
+  ISSUE_BOT_LABELS_EXTRA: "group::distribution,type::maintenance,maintenance::pipelines"
   SAST_EXCLUDED_PATHS: "/doc,/examples,/spec"
 
 stages:
