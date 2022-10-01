@@ -81,6 +81,58 @@ when restoring a backup.
 --set global.appConfig.backups.tmpBucket=gitlab-tmp-storage
 ```
 
+### Backups to Azure blob storage
+
+Azure blob storage can be can be used to store backups by setting
+`gitlab.toolbox.backups.objectStorage.backend` to `azure`. This will enable
+Toolbox to use the included copy of `azcopy` to transmit and retrieve the
+backup files to the Azure blob storage.
+
+To support using Azure blob storage, one will need to create a storage account
+in an existing resource group. A shared access signature (SAS) token is then
+generated from the storage account for GitLab to authenticate to Azure. The
+settings for the SAS token should be set to:
+
+- Service: blob
+- Resource types: container, object
+- Permissions: read, write, list
+- Versioning permissions: None
+- Index permissions: None
+- Allowed protocols: HTTPS only
+- Preferred routing: Basic
+
+Once the SAS token is generated, it needs to be stored in a Kubernetes Secret
+**without** the leading question mark. The name of this Secret needs to be
+supplied to `gitlab.toolbox.backups.objectStorage.config.secret`. In addition,
+the key used to store the SAS token needs to be supplied to
+`gitlab.toolbox.backups.objectStorage.config.key`.
+
+The following `kubectl` command can be used to create the Kubernetes Secret
+for the SAS token:
+
+```shell
+kubectl create secret generic backup-sas-token --from-literal=token=<SAS token value>
+```
+
+Once the SAS token Secret has been created, the GitLab Helm chart can be
+configured by adding the backup settings to your deployed values or by supplying
+the settings on the Helm command line. For example:
+
+```shell
+helm install gitlab gitlab/gitlab \
+  --set gitlab.toolbox.backups.objectStorage.config.secret=backup-sas-token \
+  --set gitlab.toolbox.backups.objectStorage.config.key=token \
+  --set gitlab.toolbox.backups.objectStorage.backend=azure
+```
+
+In addition, two bucket locations need to be configured, one for storing the
+backups, and one temporary bucket that is used when restoring a backup.
+
+```shell
+--set global.appConfig.backups.bucket=gitlab-backup-storage
+--set global.appConfig.backups.tmpBucket=gitlab-tmp-storage
+```
+
 ## Troubleshooting
 
 ### Pod eviction issues
