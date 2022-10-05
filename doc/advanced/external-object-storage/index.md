@@ -302,6 +302,7 @@ To use Cloud CDN:
 
 1. Set up [Cloud CDN to use the artifacts bucket as the backend](https://cloud.google.com/cdn/docs/setting-up-cdn-with-bucket).
 1. Create a [key for signed URLs](https://cloud.google.com/cdn/docs/using-signed-urls).
+1. Give the [Cloud CDN service account permission to read from the bucket](https://cloud.google.com/cdn/docs/using-signed-urls#configuring_permissions).
 1. Prepare a YAML file with the parameters using the example in [`rails.googlecdn.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/cdn/rails.googlecdn.yaml).
    You will need to fill in the following information:
     - `url`: Base URL of the CDN host from step 1
