@@ -192,7 +192,7 @@ and they will assist you with any issues you are having.
 - How to update GitLab installed using Helm chart:
 
   ```shell
-  helm repo upgrade
+  helm repo update
 
   # get current values and redirect them to yaml file (analogue of gitlab.rb values)
   helm get values <release name> > gitlab.yaml
