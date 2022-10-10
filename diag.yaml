@@ -58,7 +58,7 @@ gitlab:
             value: "false"
           - name: USE_GITLAB_LOGGER
             value: "1"
-          - name: GOOGLE_APPLICATION_CREDENTIALS
+          - name: GITLAB_GCP_KEY_PATH
             value: /etc/gitlab/objectstorage/gcloud.json
           - name: GITLAB_DIAGNOSTIC_REPORTS_PROJECT
             value: "alipniagov-c14e6039"
