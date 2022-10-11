@@ -766,7 +766,6 @@ describe 'Sidekiq configuration' do
         t = HelmTemplate.new(default_values.deep_merge(chart_values))
         expect(t.dig('Deployment/test-sidekiq-pod-1-v2', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(66)
       end
-
       it 'sets user specified deployment-global value for terminationGracePeriodSeconds in the Pod spec where pod-local value is not set' do
         t = HelmTemplate.new(default_values.deep_merge(chart_values))
         expect(t.dig('Deployment/test-sidekiq-pod-2-v2', 'spec', 'template', 'spec', 'terminationGracePeriodSeconds')).to eq(77)
@@ -865,10 +864,11 @@ describe 'Sidekiq configuration' do
                 routingRules:
                  - ["attribute=a", "queue-a"]
                  - ["attribute=b", "queue-b"]
+                 - ["attribute=mailers", "mailers"]
         )).merge(default_values)
         end
 
-        it 'is generated based on routingRules' do
+        it 'is generated based on routingRules and deduplicates mailers queue' do
           template = HelmTemplate.new(values)
           expect(template.env(deployment_name('pod-1'), 'sidekiq'))
             .to include(

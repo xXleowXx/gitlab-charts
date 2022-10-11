@@ -75,7 +75,7 @@ returned by _checkConfig_sidekiq.tpl in the end.
       {{- end -}}
     {{- end -}}
   {{- end -}}
-  {{- $queuesList = append $queuesList "mailers" -}}
+  {{- $queuesList = append $queuesList "mailers" | uniq -}}
   {{- $queues = join "," $queuesList -}}
 {{- end -}}
 {{- else -}}
