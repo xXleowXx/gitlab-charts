@@ -1,11 +1,11 @@
 global:
   image:
     pullPolicy: Always ## For dev purposes, to use the same branch
-  gitlabVersion: 372242-toolbox-script
+  gitlabVersion: 372242-toolbox-script-ruby-script
   diagnostics:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng-mirror/gitlab-toolbox-ee
-      tag: 372242-toolbox-script ## If only testing this one container difference
+      tag: 372242-toolbox-script-ruby-script ## If only testing this one container difference
     gcloud:
       secret: diagnostics-gcloud
       key: gcloud.json
@@ -46,7 +46,7 @@ gitlab:
         args:
           - /bin/bash
           - -c
-          - gitlab-rails runner /srv/gitlab/bin/diagnostic-reports-uploader
+          - bundle exec /srv/gitlab/bin/diagnostic-reports-uploader
         env:
           - name: ENABLE_BOOTSNAP
             value: "1"
@@ -66,6 +66,8 @@ gitlab:
             value: /var/tmp/gitlab/diagnostics
           - name: GITLAB_DIAGNOSTIC_REPORTS_BUCKET
             value: "diag_reports"
+          - name: GITLAB_DIAGNOSTIC_REPORTS_UPLOADER_SLEEP_S
+            value: "5"
         image: "{{ coalesce .Values.global.diagnostics.image.repository (include "image.repository" .) }}:{{ coalesce .Values.global.diagnostics.image.tag (include "gitlab.versionTag" . ) }}"
         imagePullPolicy: IfNotPresent
         resources:
