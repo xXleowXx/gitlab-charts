@@ -46,7 +46,7 @@ gitlab:
         args:
           - /bin/bash
           - -c
-          - bundle exec /srv/gitlab/bin/diagnostic-reports-uploader
+          - ruby /srv/gitlab/bin/diagnostic-reports-uploader
         env:
           - name: ENABLE_BOOTSNAP
             value: "1"
