@@ -25,6 +25,8 @@ tolerations: []
 enabled: true
 queueSelector: false
 
+queues: "default,mailers"
+
 annotations: {}
 podLabels: {}
 common:
