@@ -24,13 +24,6 @@
 # `.buildpacks` that contains the URLs, one on each line, in order.
 # Note: Auto CI does not work with multiple buildpacks yet
 
-workflow:
-  rules:
-    # Prevent "detached" MR pipelines, not in use in this project.
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - when: always
-
 default:
   image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.7
 
@@ -49,6 +42,9 @@ variables:
   REVIEW_REF_PREFIX: ""
   ISSUE_BOT_LABELS_EXTRA: "group::distribution,type::maintenance,maintenance::pipelines"
   SAST_EXCLUDED_PATHS: "/doc,/examples,/spec"
+  CANONICAL_PROJECT_PATH: 'gitlab-org/charts/gitlab'
+  SECURITY_PROJECT_PATH: 'gitlab-org/security/charts/gitlab'
+  DEV_PROJECT_PATH: 'gitlab/charts/gitlab'
 
 stages:
   - prepare
@@ -67,6 +63,7 @@ stages:
   - report
 
 include:
+  - local: '/.gitlab/ci/rules.gitlab-ci.yml'
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
