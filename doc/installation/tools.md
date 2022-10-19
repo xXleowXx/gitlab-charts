@@ -88,7 +88,9 @@ For example, use the following with `helm install`:
 #### Compatibility with Istio protocol selection
 
 Service port names follow the convention that is compatible with Istio's [explicit port selection](https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/#explicit-protocol-selection).
-They look like `<protocol>-<suffix>`, for example `grpc-gitaly` or `https-metrics`.
+They look like `<protocol>-<suffix>`, for example `tls-gitaly` or `https-metrics`.
+
+Note, that Gitaly uses gRPC, but does not have this suffix due to findings in [Issue #3822](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3822).
 
 ### Persistence
 
