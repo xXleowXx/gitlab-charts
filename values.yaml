@@ -802,6 +802,7 @@ upgradeCheck:
   resources:
     requests:
       cpu: 50m
+  priorityClassName: ""
 
 ## Settings to for the Let's Encrypt ACME Issuer
 # certmanager-issuer:
