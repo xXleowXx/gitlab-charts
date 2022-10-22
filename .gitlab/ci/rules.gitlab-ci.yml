@@ -81,3 +81,7 @@ workflow:
         PIPELINE_TYPE: FORK_FEATURE_BRANCH_PIPELINE
     # Support Merge Request pipelines
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+.rule:skip_if_no_cluster:
+  if: '$KUBECONFIG == null'
+  when: never
