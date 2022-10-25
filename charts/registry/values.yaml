@@ -382,7 +382,6 @@ redis:
 migration:
   enabled: false
   disablemirrorfs: false
-  testslowimport: "0s"
   # rootdirectory:
   # tagconcurrency: 1
   # maxconcurrentimports: 1
