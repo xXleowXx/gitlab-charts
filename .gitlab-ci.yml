@@ -536,7 +536,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 check_docs_markdown:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.16-vale-2.20.1-markdownlint-0.32.2
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.16-vale-2.20.2-markdownlint-0.32.2-markdownlint2-0.5.1
   stage: prepare
   cache: {}
   dependencies: []
@@ -545,7 +545,7 @@ check_docs_markdown:
     # Lint prose
     - vale --minAlertLevel error doc
     # Lint Markdown
-    - markdownlint --config .markdownlint.yml 'doc/**/*.md'
+    - markdownlint-cli2-config .markdownlint.yml 'doc/**/*.md'
   except:
     variables:
       - $DEPS_PIPELINE
@@ -555,7 +555,7 @@ check_docs_markdown:
 
 # Perform link checks on published HTML files
 check_docs_links:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.16-ruby-2.7.6-0bc327a4
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.16-ruby-2.7.6-0088e238
   stage: prepare
   cache: {}
   dependencies: []
