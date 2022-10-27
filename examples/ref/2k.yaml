@@ -141,23 +141,23 @@ prometheus:
   install: true
   alertmanager:
     nodeSelector:
-      workload: "support"
+      workload: support
   kubeStateMetrics:
     nodeSelector:
-      workload: "support"
+      workload: support
   nodeExporter:
     nodeSelector:
-      workload: "support"
+      workload: support
   pushgateway:
     nodeSelector:
-      workload: "support"
+      workload: support
   server:
     nodeSelector:
-      workload: "support"
+      workload: support
 
 grafana:
   nodeSelector:
-    workload: "support"
+    workload: support
 
 # https://docs.gitlab.com/ee/ci/runners/#configuring-runners-in-gitlab
 gitlab-runner:
