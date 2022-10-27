@@ -160,6 +160,7 @@ global:
 
   praefect:
     enabled: false
+    ntpHost: pool.ntp.org
     replaceInternalGitaly: true
     authToken: {}
     autoMigrate: true
