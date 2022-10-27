@@ -7,7 +7,7 @@ gitlab:
     maxReplicas: 3
     maxUnavailable: 1
     minReplicas: 2
-    # Increased to stabilise scaling and accommodate for higher CPU load on large environment
+    # Increased to stabilize scaling and accommodate for higher CPU load on large environment
     hpa:
       cpu:
         targetAverageValue: 1600m
@@ -25,7 +25,7 @@ gitlab:
   sidekiq:
     maxReplicas: 4
     minReplicas: 3
-    # Increased to stabilise scaling and accommodate for higher CPU load on large environment
+    # Increased to stabilize scaling and accommodate for higher CPU load on large environment
     hpa:
       cpu:
         targetAverageValue: 700m
