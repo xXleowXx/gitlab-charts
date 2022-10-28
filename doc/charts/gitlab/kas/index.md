@@ -120,9 +120,13 @@ You can pass these parameters to the `helm install` command by using the `--set`
 | `deployment.strategy`                      | `{}`                                                  | Allows one to configure the update strategy utilized by the deployment.                                                                                                                                   |
 | `deployment.terminationGracePeriodSeconds` | `300`                                                 | How much time in seconds a Pod is allowed to spend shutting down after receiving SIGTERM.                                                                                                                 |
 
-## Enable TLS communication between `kas` pods
+## Enable TLS communication
 
-Enable communication when you want your `kas` pods to communicate with each other over TLS:
+Enable TLS communication between your `kas` pods and other GitLab chart components.
+
+Prerequisite:
+
+- You need at least [GitLab 15.5.1 to use this feature](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/101571#note_1146419137). You can set your GitLab version with `global.gitlabVersion: master`. If you need to force an image update after an initial deployment, also set `global.image.pullPolicy: Always`.
 
 1. Create the certificate authority and certificates that your `kas` pods will trust.
 1. Configure your chart to use the trusted certificates.
@@ -132,9 +136,18 @@ Enable communication when you want your `kas` pods to communicate with each othe
 To create a certificate authority (CA) and the required certificates, follow the steps in
 [Use TLS between components of the GitLab chart](../../../advanced/internal-tls/index.md).
 
-### Configure chart values
+### Chart configuration values
 
-For `kas` to use the certificates you created, set the value of `global.certificates.customCAs` and `gitlab.kas.privateApi.tls`.
+To configure `kas` to use the certificates you created, set the following values.
+
+| Value | Description |
+|-------|-------------|
+| `global.certificates.customCAs` | Shares your CA with your GitLab components. |
+| `global.appConfig.gitlab_kas.internalUrl` | Enables `grpcs` communication between the GitLab Webservice and `kas`. |
+| `gitlab.kas.privateApi.tls.enabled` | Mounts the certificates volume and enables TLS communication between `kas` pods. |
+| `gitlab.kas.privateApi.tls.secretName` | Specifies which Kubernetes TLS secret stores your certificates. |
+| `gitlab.kas.customConfig` | Configures `kas` to expose its ports by using `grpcs`. |
+| `gitlab.kas.ingress` | Configures `kas` Ingress to verify the proxied SSL certificate. |
 
 For example, you could use this `values.yaml` file to deploy your chart:
 
@@ -148,6 +161,9 @@ For example, you could use this `values.yaml` file to deploy your chart:
        - secret: *internal-ca
      hosts:
        domain: gitlab.example.com # Your gitlab domain
+     appConfig:
+       gitlab_kas:
+         internalUrl: "grpcs://RELEASE-kas.NAMESPACE.svc:8153" # Replace RELEASE and NAMESPACE with your chart's release and namespace 
 
    gitlab:
      kas:
@@ -155,6 +171,25 @@ For example, you could use this `values.yaml` file to deploy your chart:
          tls:
            enabled: true
            secretName: *internal-tls
+       customConfig:
+         api:
+           listen:
+             certificate_file: /etc/kas/tls.crt
+             key_file: /etc/kas/tls.key
+         agent:
+           listen:
+             certificate_file: /etc/kas/tls.crt
+             key_file: /etc/kas/tls.key
+           kubernetes_api:
+             listen:
+               certificate_file: /etc/kas/tls.crt
+               key_file: /etc/kas/tls.key
+       ingress:
+         annotations:
+           nginx.ingress.kubernetes.io/backend-protocol: https
+           nginx.ingress.kubernetes.io/proxy-ssl-name: RELEASE-kas.NAMESPACE.svc # Replace RELEASE and NAMESPACE with your chart's release and namespace
+           nginx.ingress.kubernetes.io/proxy-ssl-secret: NAMESPACE/CA-SECRET-NAME # Replace NAMESPACE and CA-SECRET-NAME with your chart's namespace and CA secret name. The same you used for &internal-ca.
+           nginx.ingress.kubernetes.io/proxy-ssl-verify: on
    ```
 
 ## Test the `kas` chart
