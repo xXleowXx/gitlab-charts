@@ -64,6 +64,7 @@ the `helm install` command using the `--set` flags.
 | `service.name`                            | `gitaly`                                          | The name of the Service port that Gitaly is behind in the Service object.                                                                                                      |
 | `service.type`                            | `ClusterIP`                                       | Gitaly service type                                                                                                                                                            |
 | `securityContext.fsGroup`                 | `1000`                                            | Group ID under which the pod should be started                                                                                                                                 |
+| `securityContext.fsGroupChangePolicy`     |                                                   | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23)                                                                                          |
 | `securityContext.runAsUser`               | `1000`                                            | User ID under which the pod should be started                                                                                                                                  |
 | `tolerations`                             | `[]`                                              | Toleration labels for pod assignment                                                                                                                                           |
 | `persistence.accessMode`                  | `ReadWriteOnce`                                   | Gitaly persistence access mode                                                                                                                                                 |
@@ -226,7 +227,7 @@ git:
 ### Altering security contexts
 
 Gitaly `StatefulSet` performance may suffer when repositories have large
-amounts of files due to a [known issue with `fsGroup` in upstream Kubernetes](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods).
+amounts of files.
 Mitigate the issue by changing or fully deleting the settings for the
 `securityContext`.
 
@@ -242,6 +243,18 @@ NOTE:
 The example syntax eliminates the `securityContext` setting entirely.
 Setting `securityContext: {}` or `securityContext:` does not work due
 to the way Helm merges default values with user provided configuration.
+
+Starting from Kubernetes 1.23 you can instead set the `fsGroupChangePolicy` to `OnRootMismatch` to mitigate the issue.
+
+```yaml
+gitlab:
+  gitaly:
+    securityContext:
+      fsGroupChangePolicy: "OnRootMismatch"
+```
+
+From the [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods),
+this setting "could help shorten the time it takes to change ownership and permission of a volume."
 
 ## External Services
 
