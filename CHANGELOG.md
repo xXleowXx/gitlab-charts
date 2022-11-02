@@ -85,6 +85,10 @@ No changes.
 - [Update rack from 2.2.3 to 3.0.0](gitlab-org/charts/gitlab@99c3a60596cc3f2c4d64b585a0900173b2c29691) ([merge request](gitlab-org/charts/gitlab!2779))
 - [Update gitlab-styles from 6.2.0 to 9.0.0](gitlab-org/charts/gitlab@3b5171699d4a181d2e7cdf95f52333f18f03be93) ([merge request](gitlab-org/charts/gitlab!2769))
 
+## 6.3.5 (2022-11-02)
+
+No changes.
+
 ## 6.3.4 (2022-09-29)
 
 No changes.
