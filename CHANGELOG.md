@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.5.2 (2022-11-02)
+
+No changes.
+
 ## 6.5.1 (2022-10-24)
 
 No changes.
@@ -34,6 +38,10 @@ No changes.
 
 - [Update nokogiri from 1.11.2 to 1.13.8](gitlab-org/charts/gitlab@4ca05285a0120d69a708d6fb406c441199ea3d9e) ([merge request](gitlab-org/charts/gitlab!2780))
 - [Update activesupport from 6.0.3.4 to 7.0.4](gitlab-org/charts/gitlab@184a94790f7de95aec576ad273d4fb9a9ec2722e) ([merge request](gitlab-org/charts/gitlab!2781))
+
+## 6.4.4 (2022-11-02)
+
+No changes.
 
 ## 6.4.3 (2022-10-19)
 
@@ -76,6 +84,10 @@ No changes.
 
 - [Update rack from 2.2.3 to 3.0.0](gitlab-org/charts/gitlab@99c3a60596cc3f2c4d64b585a0900173b2c29691) ([merge request](gitlab-org/charts/gitlab!2779))
 - [Update gitlab-styles from 6.2.0 to 9.0.0](gitlab-org/charts/gitlab@3b5171699d4a181d2e7cdf95f52333f18f03be93) ([merge request](gitlab-org/charts/gitlab!2769))
+
+## 6.3.5 (2022-11-02)
+
+No changes.
 
 ## 6.3.4 (2022-09-29)
 
