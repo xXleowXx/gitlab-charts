@@ -19,6 +19,17 @@ helm repo add gitlab https://charts.gitlab.io/
 helm search repo -l gitlab/gitlab
 ```
 
+## Release notes for each version
+
+- [6.0](../releases/6_0.md)
+- [5.0](../releases/5_0.md)
+- [4.0](../releases/4_0.md)
+- [3.0](../releases/3_0.md)
+- [2.0](../releases/2_0.md)
+- [1.0](../releases/1_0.md)
+- [Beta](../releases/beta.md)
+- [Alpha](../releases/alpha.md)
+
 ## Previous chart versions
 
 The table below maps some of the key previous chart versions and GitLab versions.
