@@ -19,7 +19,7 @@ The version you install must be within one minor release of
 
 ### Helm
 
-Install Helm v3.3.1 or later by following [the Helm documentation](https://helm.sh/docs/intro/install/).
+Install Helm v3.6 or later by following [the Helm documentation](https://helm.sh/docs/intro/install/).
 
 ### PostgreSQL
 
