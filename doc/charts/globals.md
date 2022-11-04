@@ -907,6 +907,16 @@ global:
       connection: {}
     backups:
       bucket: gitlab-backups
+    microsoft_graph_mailer:
+      enabled: false
+      user_id: "YOUR-USER-ID"
+      tenant: "YOUR-TENANT-ID"
+      client_id: "YOUR-CLIENT-ID"
+      client_secret:
+        secret:
+        key: secret
+      azure_ad_endpoint: "https://login.microsoftonline.com"
+      graph_endpoint: "https://graph.microsoft.com"
     incomingEmail:
       enabled: false
       address: ""
@@ -2181,7 +2191,7 @@ The `global.appConfig.kerberos.simpleLdapLinkingAllowedRealms` can be used to sp
 
 ## Outgoing email
 
-Outgoing email configuration is available via `global.smtp.*` and `global.email.*`.
+Outgoing email configuration is available via `global.smtp.*`, `global.appConfig.microsoft_graph_mailer.*` and `global.email.*`.
 
 ```yaml
 global:
@@ -2198,10 +2208,21 @@ global:
     password:
       secret: 'smtp-password'
       key: 'password'
+  appConfig:
+    microsoft_graph_mailer:
+      enabled: false
+      user_id: "YOUR-USER-ID"
+      tenant: "YOUR-TENANT-ID"
+      client_id: "YOUR-CLIENT-ID"
+      client_secret:
+        secret:
+        key: secret
+      azure_ad_endpoint: "https://login.microsoftonline.com"
+      graph_endpoint: "https://graph.microsoft.com"
 ```
 
 More information on the available configuration options is available in the
-[outgoing email documentation](../installation/command-line-options.md#outgoing-email-configuration)
+[outgoing email documentation](../installation/command-line-options.md#outgoing-email-configuration).
 
 More detailed examples can be found in the
 [Omnibus SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).
