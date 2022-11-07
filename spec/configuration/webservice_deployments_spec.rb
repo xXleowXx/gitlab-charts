@@ -682,6 +682,55 @@ describe 'Webservice Deployments configuration' do
     end
   end
 
+  context 'workhorse continuous profiling' do
+    let(:expected_config) { { 'name' => 'GITLAB_CONTINUOUS_PROFILING', 'value' => 'stackdriver?service=workhorse' } }
+    let(:template) { HelmTemplate.new(deployments_values) }
+    let(:workhorse_env) do
+      containers = template.dig('Deployment/test-webservice-default', 'spec', 'template', 'spec', 'containers')
+      workhorse = containers.find { |c| c['name'] == 'gitlab-workhorse' }
+      workhorse['env']
+    end
+
+    context 'when not configured' do
+      let(:deployments_values) do
+        YAML.safe_load(%(
+          gitlab:
+            webservice:
+              deployments:
+                default:
+                  ingress:
+                    path: /
+        )).deep_merge(default_values)
+      end
+
+      it 'does not set the GITLAB_CONTINUOUS_PROFILING environment variable' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+        expect(workhorse_env).not_to include(expected_config)
+      end
+    end
+
+    context 'when configured' do
+      let(:deployments_values) do
+        YAML.safe_load(%(
+          gitlab:
+            webservice:
+              deployments:
+                default:
+                  workhorse:
+                    continuousProfiling: stackdriver?service=workhorse
+                  ingress:
+                    path: /
+        )).deep_merge(default_values)
+      end
+
+      it 'sets the GITLAB_CONTINUOUS_PROFILING environment variable' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+
+        expect(workhorse_env).to include(expected_config)
+      end
+    end
+  end
+
   context 'when emptyDir is customized' do
     let(:deployments_values) do
       YAML.safe_load(%(
