@@ -358,6 +358,7 @@ global:
         # interval: 60
         # disconnect_timeout: 120
         # use_tcp: false
+        # max_replica_pools: 30
 ```
 
 Further tuning is also available, in regards to the
