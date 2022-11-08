@@ -93,6 +93,28 @@ global:
         storageClass: storageclass2
 ```
 
+## defaultReplicationFactor
+
+NOTE:
+You should be set `per_repositories` on  `gitlab.praefect.electionStrategy`
+
+`defaultReplicationFactor` can be configured on each virtual storages. (see [configure replication-factor](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#configure-replication-factor) documentation).
+
+```yaml
+global:
+  praefect:
+    enabled: true
+    virtualStorages:
+    - name: default
+      gitalyReplicas: 5
+      maxUnavailable: 2
+      defaultReplicationFactor: 3
+    - name: secondary
+      gitalyReplicas: 4
+      maxUnavailable: 1
+      defaultReplicationFactor: 2
+```
+
 ### Migrating to Praefect
 
 NOTE:

@@ -80,6 +80,9 @@ data:
     {{- $storageName := .name }}
     [[virtual_storage]]
     name = '{{ $storageName }}'
+    {{- if .defaultReplicationFactor }}
+    default_replication_factor = {{ .defaultReplicationFactor }}
+    {{- end -}}
     {{- range until (.gitalyReplicas | int) }}
     [[virtual_storage.node]]
     {{- $serviceName := include "gitlab.praefect.gitaly.serviceName" (dict "context" $globalContext "name" $storageName) -}}
