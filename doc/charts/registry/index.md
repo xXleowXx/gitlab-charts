@@ -68,7 +68,7 @@ registry:
       interval: 24h
       dryrun: false
   image:
-    tag: 'v3.58.0-gitlab'
+    tag: 'v3.60.1-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -331,7 +331,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v3.58.0-gitlab'`
+- `tag: 'v3.60.1-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
