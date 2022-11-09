@@ -84,6 +84,17 @@ and they will assist you with any issues you are having.
   you will be able to see the new schedule here. Some details about the schedules can be found
   in [Running Automated Tasks with a CronJob](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#creating-a-cron-job)
 
+- How to check connectivity in a cluster
+  
+  You can run a container of your choice and install the tools needed to check network connectivity. 
+
+  Example: Run alpine container and install busybox-extras package. You can then use commands like `telnet` and `nslookup`.
+
+  ```shell
+  kubectl run -n <NAMESPACE> -it --tty --rm debug --image=alpine --restart=Never -- sh
+  apk update && apk add busybox-extras
+  ```
+
 ## GitLab-specific Kubernetes information
 
 - Minimal configuration that can be used to [test a Kubernetes Helm chart](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/620).
@@ -217,6 +228,12 @@ all Kubernetes resources and dependent charts:
 
   ```shell
   helm get manifest <release name>
+  ```
+
+- How to check connectivity to GitLab PostgreSQL database:
+
+  ```shell
+  kubectl run pgsql-client --rm --tty -i --restart='Never' --namespace <NAMESPACE> --image docker.io/bitnami/postgresql --env="PGPASSWORD=<POSTGRESQL_PASSWORD>" --command -- psql  --host <DB_HOSTNAME> -U gitlab -d gitlabhq_production -p 5432
   ```
 
 ## Installation of minimal GitLab configuration via minikube on macOS
