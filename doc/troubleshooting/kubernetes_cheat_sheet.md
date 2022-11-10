@@ -230,12 +230,6 @@ all Kubernetes resources and dependent charts:
   helm get manifest <release name>
   ```
 
-- How to check connectivity to GitLab PostgreSQL database:
-
-  ```shell
-  kubectl run pgsql-client --rm --tty -i --restart='Never' --namespace <NAMESPACE> --image docker.io/bitnami/postgresql --env="PGPASSWORD=<POSTGRESQL_PASSWORD>" --command -- psql  --host <DB_HOSTNAME> -U gitlab -d gitlabhq_production -p 5432
-  ```
-
 ## Installation of minimal GitLab configuration via minikube on macOS
 
 This section is based on [Developing for Kubernetes with minikube](../development/minikube/index.md)
