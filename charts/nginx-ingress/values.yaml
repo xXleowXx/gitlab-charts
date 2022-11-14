@@ -14,7 +14,7 @@ controller:
     repository: registry.gitlab.com/gitlab-org/cloud-native/mirror/images/ingress-nginx/controller
     tag: "v1.2.1"
     digest: sha256:5516d103a9c2ecc4f026efbd4b40662ce22dc1f824fb129ed121460aaa5c47f8
-    pullPolicy: IfNotPresent
+    # pullPolicy: IfNotPresent
     # www-data -> uid 101
     runAsUser: 101
     allowPrivilegeEscalation: true
