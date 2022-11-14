@@ -96,11 +96,14 @@ workhorse: {}
 # merged with the default kas config
 customConfig: {}
 
-privateApi: {}
+privateApi:
   # secret:
   # key:
-
+  tls:
+    enabled: false
+      # secretName:
 deployment:
+  terminationGracePeriodSeconds: 300
   strategy: {}
   # minReadySeconds: 0
 

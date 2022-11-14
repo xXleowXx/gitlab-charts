@@ -47,7 +47,7 @@ variables:
   TEST_BACKUP_PREFIX: "14.9.2-incr"
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
-  ISSUE_BOT_LABELS_EXTRA: "group::distribution"
+  ISSUE_BOT_LABELS_EXTRA: "group::distribution,type::maintenance,maintenance::pipelines"
   SAST_EXCLUDED_PATHS: "/doc,/examples,/spec"
 
 stages:
@@ -211,16 +211,16 @@ lint_package:
     - kubectl version
     - ensure_namespace
     - create_secret
-    - install_external_dns "${DNS_PROVIDER}" "${KUBE_INGRESS_BASE_DOMAIN}"
     - deploy
     - wait_for_deploy
     - restart_toolbox
-    - echo "export QA_ENVIRONMENT_URL=gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
+    - echo "export QA_ENVIRONMENT_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
-    - echo "export GITLAB_URL=gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"         >> "${VARIABLES_FILE}"
-    - echo "export REGISTRY_URL=registry-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"     >> "${VARIABLES_FILE}"
-    - echo "export S3_ENDPOINT=https://minio-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
+    - echo "export GITLAB_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"         >> "${VARIABLES_FILE}"
+    - echo "export REGISTRY_URL=registry-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"     >> "${VARIABLES_FILE}"
+    - echo "export S3_ENDPOINT=https://minio-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
   artifacts:
+    when: always
     paths:
     - variables
   only:
@@ -246,6 +246,17 @@ review_gke:
     on_stop: stop_review_gke
     auto_stop_in: 4 days
   resource_group: "gke-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+
+review_gke122:
+  variables:
+    DNS_PROVIDER: "google"
+  extends: .review_template
+  environment:
+    name: k8s122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke122
+    auto_stop_in: 4 days
+  resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 review_gke_dev:
   variables:
@@ -305,6 +316,12 @@ stop_review_gke:
   extends: .stop_review_template
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    action: stop
+
+stop_review_gke122:
+  extends: .stop_review_template
+  environment:
+    name: k8s122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
 
 stop_review_gke_dev:
@@ -491,7 +508,8 @@ danger-review:
       - *stable_branch_ref
   script:
     - git version
-    - danger --fail-on-errors=true
+    - danger_id=$(echo -n ${DANGER_GITLAB_API_TOKEN} | md5sum | awk '{print $1}' | cut -c5-10)
+    - danger --fail-on-errors=true --verbose --danger_id=${danger_id}
 
 rubocop:
   image: ruby:2.7.4-alpine
@@ -507,7 +525,8 @@ rubocop:
       - triggers
       - *com_auto_deploy_branch_ref
   script:
-    - bundle config set path 'gems'
+    - bundle config set --local path 'gems'
+    - bundle config set --local frozen 'true'
     - bundle install -j $(nproc)
     - bundle exec rubocop --parallel
   cache:
@@ -517,7 +536,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 check_docs_markdown:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.16-vale-2.17.0-markdownlint-0.31.1
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.16-vale-2.20.2-markdownlint-0.32.2-markdownlint2-0.5.1
   stage: prepare
   cache: {}
   dependencies: []
@@ -526,7 +545,7 @@ check_docs_markdown:
     # Lint prose
     - vale --minAlertLevel error doc
     # Lint Markdown
-    - markdownlint --config .markdownlint.yml 'doc/**/*.md'
+    - markdownlint-cli2-config .markdownlint.yml 'doc/**/*.md'
   except:
     variables:
       - $DEPS_PIPELINE
@@ -536,7 +555,7 @@ check_docs_markdown:
 
 # Perform link checks on published HTML files
 check_docs_links:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.16-ruby-2.7.6-0bc327a4
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.16-ruby-2.7.6-0088e238
   stage: prepare
   cache: {}
   dependencies: []
@@ -572,7 +591,7 @@ check_docs_links:
   - chmod 755 trigger-build.rb
   variables:
     GIT_STRATEGY: none
-    DOCS_REVIEW_APPS_DOMAIN: 35.193.151.162.nip.io
+    DOCS_REVIEW_APPS_DOMAIN: docs.gitlab-review.app
     DOCS_GITLAB_REPO_SUFFIX: charts
     # By default, deploy the Review App using the `main` branch of the `gitlab-org/gitlab-docs` project
     DOCS_BRANCH: main
@@ -595,7 +614,7 @@ review-docs-deploy:
   - .review-docs
   environment:
     name: review-docs/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
-    url: http://${DOCS_BRANCH}-${DOCS_GITLAB_REPO_SUFFIX}-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}.${DOCS_REVIEW_APPS_DOMAIN}/${DOCS_GITLAB_REPO_SUFFIX}
+    url: https://${DOCS_BRANCH}-${DOCS_GITLAB_REPO_SUFFIX}-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}.${DOCS_REVIEW_APPS_DOMAIN}/${DOCS_GITLAB_REPO_SUFFIX}
     on_stop: review-docs-cleanup
   script:
   - ./trigger-build.rb docs deploy
@@ -648,6 +667,27 @@ review_specs_gke:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
   resource_group: "gke-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  only:
+    refs:
+      - branches
+    variables:
+      - $KUBECONFIG && ($CI_PROJECT_PATH == "gitlab-org/charts/gitlab" || $CI_PROJECT_PATH == "gitlab/charts/gitlab")
+  except:
+    refs:
+      - master
+      - /(^docs[\/-].+|.+-docs$)/
+      - *com_auto_deploy_branch_ref
+
+review_specs_gke122:
+  extends: .specs
+  variables:
+    VARIABLES_FILE: "variables/review_gke122"
+    RSPEC_TAGS: type:feature
+  environment:
+    name: k8s122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke122
+  resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
   only:
     refs:
       - branches
@@ -756,12 +796,14 @@ production_specs_eks:
     QA_ARTIFACTS_DIR: $CI_PROJECT_DIR
     QA_CAN_TEST_PRAEFECT: "false"
   script:
+    - source scripts/ci/qa.sh
+    - qa_export_passwords
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - gem install gitlab-qa
     - source "${VARIABLES_FILE}"
     - app_version=$(ruby -e "require 'yaml'; puts YAML.safe_load(File.read('Chart.yaml'))['appVersion']")
     - qa_version="nightly"
-    - if [ "$app_version" != "master" && "$app_version" != "main" ]; then
+    - if [ "$app_version" != "master" ] && [ "$app_version" != "main" ]; then
     -   qa_version="${app_version}-ee"
     - fi
     - SIGNUP_DISABLED=true QA_DEBUG=true GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD GITLAB_ADMIN_USERNAME=root GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD EE_LICENSE=$REVIEW_APPS_EE_LICENSE gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL -- $TEST_SUITE
@@ -889,6 +931,15 @@ qa_gke:
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke
+
+qa_gke122:
+  extends: .qa_branch
+  variables:
+    VARIABLES_FILE: "variables/review_gke122"
+    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+  environment:
+    name: k8s122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_gke122
 
 qa_eks:
   extends: .qa_branch

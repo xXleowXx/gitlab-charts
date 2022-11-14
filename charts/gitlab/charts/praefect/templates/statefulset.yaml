@@ -124,6 +124,8 @@ spec:
           value: '1'
         - name: PRAEFECT_AUTO_MIGRATE
           value: '{{ .Values.global.praefect.autoMigrate | int }}'
+        - name: NTP_HOST
+          value: '{{ .Values.global.praefect.ntpHost }}'
         {{- include "gitlab.tracing.env" . | nindent 8 }}
         {{- include "gitlab.extraEnv" . | nindent 8 }}
         {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 8 }}

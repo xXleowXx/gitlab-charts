@@ -1,10 +1,10 @@
 ---
-stage: Enablement
+stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Role based access control **(FREE SELF)**
+# Configure RBAC for the GitLab chart **(FREE SELF)**
 
 Until Kubernetes 1.7, there were no permissions within a cluster. With the launch of 1.7, there is now a role based access control system ([RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)) which determines what services can perform actions within a cluster.
 
@@ -20,7 +20,7 @@ RBAC affects a few different aspects of GitLab:
 
 Try listing the current cluster roles, if it fails then `RBAC` is disabled
 
-This command will output `false` if `RBAC` is disabled and `true` otherwise
+This command outputs `false` if `RBAC` is disabled and `true` otherwise
 
 `kubectl get clusterroles > /dev/null 2>&1 && echo true || echo false`
 
@@ -32,7 +32,7 @@ are created and managed by the chart.
 The service accounts are described in the following table. For each service account the table shows:
 
 - The name suffix (the prefix is the release name).
-- A short description, e.g. where it is used, what it is used for.
+- A short description. For example, where it is used or what it is used for.
 - Associated roles and what level of access it has on which resources. Access level is either read-only (R),
   write-only (W), or read-write (RW). Note that group name of resources are omitted.
 - The scope of the roles, which is either the cluster (C) or the namespace (NS). In some instances the scope

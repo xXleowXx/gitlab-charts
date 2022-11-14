@@ -1,7 +1,7 @@
 ---
-stage: Enablement
+stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # GitLab Helm chart deployment options **(FREE SELF)**
@@ -79,6 +79,19 @@ helm inspect values gitlab/gitlab
 | `global.smtp.tls`                 | Enables SMTP/TLS (SMTPS: SMTP over direct TLS connection)                               | _none_                |
 | `global.smtp.user_name`           | Username for SMTP authentication https                                                  | ""                    |
 | `global.smtp.pool`                | Enables SMTP connection pooling                                                         | false                 |
+
+### Microsoft Graph Mailer settings
+
+| Parameter                         | Description                                                                             | Default               |
+|-----------------------------------|-----------------------------------------------------------------------------------------|-----------------------|
+| `global.appConfig.microsoft_graph_mailer.enabled` | Enable outgoing email via Microsoft Graph API                                     | false                 |
+| `global.appConfig.microsoft_graph_mailer.user_id` | The unique identifier for the user that uses the Microsoft Graph API  | ""                    |
+| `global.appConfig.microsoft_graph_mailer.tenant` | The directory tenant the application plans to operate against, in GUID or domain-name format | ""          |
+| `global.appConfig.microsoft_graph_mailer.client_id` | The application ID that's assigned to your app. You can find this information in the portal where you registered your app | "" |
+| `global.appConfig.microsoft_graph_mailer.client_secret.key` | Key in `global.appConfig.microsoft_graph_mailer.client_secret.secret` that contains the client secret that you generated for your app in the app registration portal | `secret` |
+| `global.appConfig.microsoft_graph_mailer.client_secret.secret` | Name of a `Secret` containing the client secret that you generated for your app in the app registration portal | "" |
+| `global.appConfig.microsoft_graph_mailer.azure_ad_endpoint` | The URL of the Azure Active Directory endpoint | `https://login.microsoftonline.com`            |
+| `global.appConfig.microsoft_graph_mailer.graph_endpoint` | The URL of the Microsoft Graph endpoint | `https://graph.microsoft.com`                            |
 
 ## Incoming Email configuration
 
@@ -442,7 +455,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab.webservice.workhorse.sentryDSN` | DSN for Sentry instance for error reporting | "" |
 | `gitlab.webservice.workhorse.tag` | Workhorse image tag |  |
 
-## External Charts
+## External charts
 
 GitLab makes use of several other charts. These are [treated as parent-child relationships](https://helm.sh/docs/topics/charts/#chart-dependencies).
 Ensure that any properties you wish to configure are provided as `chart-name.property`.

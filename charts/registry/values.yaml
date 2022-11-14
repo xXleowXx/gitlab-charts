@@ -1,7 +1,7 @@
 image:
   # registry:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
-  tag: 'v3.56.0-gitlab'
+  tag: 'v3.61.0-gitlab'
   # pullPolicy: IfNotPresent
   # pullSecrets: []
 
@@ -197,7 +197,7 @@ init:
     if [ -d /config/tls ]; then
       cp -r /config/tls/ /registry/tls
       chmod 700 /registry/tls
-      chmod 600 /registry/tls/tls.*
+      chmod 600 /registry/tls/*
     fi
 
 # define some sane resource requests and limitations
@@ -294,6 +294,11 @@ log:
 debug:
   addr:
     port: 5001
+  tls:
+    enabled: false
+    secretName: # Kubernetes secret, type kubernetes.io/tls
+    clientCAs: []
+    minimumTLS: "tls1.2"
   # DEPRECATED in favor of `metrics`
   prometheus:
     enabled: false
@@ -369,6 +374,8 @@ database:
 redis:
   cache:
     enabled: false
+    password:
+      enabled: false
 
 # Configuration settings to support the migration of large registries to the metadata database.
 # NOTE: This is an experimental feature and must not be used in production.
@@ -376,7 +383,6 @@ redis:
 migration:
   enabled: false
   disablemirrorfs: false
-  testslowimport: "0s"
   # rootdirectory:
   # tagconcurrency: 1
   # maxconcurrentimports: 1

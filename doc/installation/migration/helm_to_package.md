@@ -1,17 +1,17 @@
 ---
-stage: Enablement
+stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Migrate from the Helm Chart to the Linux package **(FREE SELF)**
+# Migrate from the Helm chart to the Linux package **(FREE SELF)**
 
 To migrate from a Helm installation to a Linux package (Omnibus) installation:
 
 1. Go to the admin area (**{admin}**) and select **Overview > Components** to
    check your current version of GitLab.
 1. Prepare a clean machine and
-   [install the Linux package](https://docs.gitlab.com/omnibus/manual_install.html)
+   [install the Linux package](https://docs.gitlab.com/ee/update/package/index.html)
    that matches your GitLab Helm chart version.
 1. [Verify the integrity of Git repositories](https://docs.gitlab.com/ee/administration/raketasks/check.html)
    on your GitLab Helm chart instance before the migration.
@@ -57,5 +57,5 @@ To migrate from a Helm installation to a Linux package (Omnibus) installation:
    [perform the restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-gitlab-installations).
 1. After the restore is complete, run the [doctor Rake tasks](https://docs.gitlab.com/ee/administration/raketasks/check.html)
    to make sure that the secrets are valid.
-1. After everything is verified, you may [uninstall](../../index.md#uninstall)
+1. After everything is verified, you may [uninstall](../uninstall.md)
    the GitLab Helm chart instance.

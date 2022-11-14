@@ -1,18 +1,66 @@
 ---
-stage: Enablement
+stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# GitLab version mappings **(FREE SELF)**
+# GitLab chart versions **(FREE SELF)**
+
+The GitLab chart doesn't have the same version number as GitLab itself.
+Breaking changes are anticipated that may have to be introduced to the chart
+that would warrant a major version bump, and the requirement for these changes
+could completely block other development on these charts until completed.
+
+To quickly see the full list of the `gitlab` chart versions and the GitLab version
+they map to, run the following command with [Helm](tools.md):
+
+```shell
+helm repo add gitlab https://charts.gitlab.io/
+helm search repo -l gitlab/gitlab
+```
+
+## Release notes for each version
+
+- [6.0](../releases/6_0.md)
+- [5.0](../releases/5_0.md)
+- [4.0](../releases/4_0.md)
+- [3.0](../releases/3_0.md)
+- [2.0](../releases/2_0.md)
+- [1.0](../releases/1_0.md)
+- [Beta](../releases/beta.md)
+- [Alpha](../releases/alpha.md)
+
+## Previous chart versions
 
 The table below maps some of the key previous chart versions and GitLab versions.
 
 | Chart version | GitLab version |
 |---------------|----------------|
+| 6.5.5 | 15.5.4 |
+| 6.5.4 | 15.5.3 |
+| 6.5.3 | 15.5.3 |
+| 6.5.2 | 15.5.2 |
+| 6.5.1 | 15.5.1 |
+| 6.5.0 | 15.5.0 |
+| 6.4.4 | 15.4.4 |
+| 6.4.3 | 15.4.3 |
+| 6.4.2 | 15.4.2 |
+| 6.4.1 | 15.4.1 |
+| 6.4.0 | 15.4.0 |
+| 6.3.5 | 15.3.5 |
+| 6.3.4 | 15.3.4 |
+| 6.3.3 | 15.3.3 |
+| 6.3.2 | 15.3.2 |
+| 6.3.1 | 15.3.1 |
+| 6.3.0 | 15.3.0 |
+| 6.2.5 | 15.2.5 |
+| 6.2.4 | 15.2.4 |
+| 6.2.3 | 15.2.3 |
 | 6.2.2 | 15.2.2 |
 | 6.2.1 | 15.2.1 |
 | 6.2.0 | 15.2.0 |
+| 6.1.6 | 15.1.6 |
+| 6.1.5 | 15.1.5 |
 | 6.1.4 | 15.1.4 |
 | 6.1.3 | 15.1.3 |
 | 6.1.2 | 15.1.2 |

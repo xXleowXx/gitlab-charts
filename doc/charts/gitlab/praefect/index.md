@@ -1,7 +1,7 @@
 ---
-stage: Enablement
+stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Using the Praefect chart (alpha) **(FREE SELF)**
@@ -220,7 +220,7 @@ Users can use or refer that script to generate certificates with proper SAN attr
    kubectl create secret tls <secret name> --cert=praefect.crt --key=praefect.key
    ```
 
-1. Redeploy the Helm chart by passing the additional arguments `--set global.praefect.tls.enabled=true --set global.praefect.tls.secretName=<secret name>`
+1. Redeploy the Helm chart by passing `--set global.praefect.tls.enabled=true`.
 
 When running Gitaly over TLS, a secret name must be provided for each virtual storage.
 
@@ -259,6 +259,8 @@ the `helm install` command using the `--set` flags.
 | electionStrategy                          | `sql`                                             | See [election strategy](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#automatic-failover-and-leader-election)                                             |
 | image.repository                          | `registry.gitlab.com/gitlab-org/build/cng/gitaly` | The default image repository to use. Praefect is bundled as part of the Gitaly image                                                                                       |
 | podLabels                                 | `{}`                                              | Supplemental Pod labels. Will not be used for selectors.                                                                                                                   |
+| ntpHost                                   | `pool.ntp.org`                                    | Configure the NTP server Praefect should ask the for the current time.
+
 | service.name                              | `praefect`                                        | The name of the service to create                                                                                                                                          |
 | service.type                              | ClusterIP                                         | The type of service to create                                                                                                                                              |
 | service.internalPort                      | 8075                                              | The internal port number that the Praefect pod will be listening on                                                                                                        |

@@ -1,14 +1,14 @@
 ---
-stage: Enablement
+stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#designated-technical-writers
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Releases
+# Helm chart releases
 
 ## Chart Versioning
 
-### Major Releases
+### Major releases
 
 Major releases are for breaking changes **and** significant milestones in the chart or GitLab release.
 
@@ -18,7 +18,7 @@ We bump the major version number for:
 - Breaking changes in GitLab or in the charts, requiring manual interaction to upgrade your existing install.
 - Major updates in the GitLab image (for example, the release of 12.0.0).
 
-### Minor Releases
+### Minor releases
 
 Minor releases will iterate with GitLab image minor releases, and at our own discretion for changes here in the chart.
 
@@ -28,7 +28,7 @@ We will bump it for:
 - changes to our default values in the charts that may increase resource usage (addition of subcharts or pods, additional services or ingresses added)
 - Other functionality changes that we feel warrants more visibility.
 
-### Patch Releases
+### Patch releases
 
 Patch releases for changes that are considered to be very stable updates to the previous release. This includes patch release of the GitLab image.
 
@@ -41,7 +41,7 @@ We will bump it for:
 
 | Chart Version | GitLab Version | Release Scenario |
 | ------------- | -------------- | ---------------- |
-| `0.2.0`       | `11.0.0`       | GitLab 11 release, and Chart beta |
+| `0.2.0`       | `11.0.0`       | GitLab 11 release, and chart beta |
 | `0.2.1`       | `11.0.1`       | GitLab patch release |
 | `0.2.2`       | `11.0.1`       | Chart changes released |
 | `0.2.3`       | `11.0.2`       | GitLab patch release, with some accompanying chart changes |
@@ -51,7 +51,7 @@ We will bump it for:
 | ~~`0.3.1`~~   | ~~`11.1.1`~~   | ~~Security release~~ (*1*) |
 | `0.4.1`       | `11.1.1`       | Security release (*1*) |
 | ...           | ...            | ... |
-| `1.0.0`       | `11.x.0`       | GitLab minor release, along with Chart GA |
+| `1.0.0`       | `11.x.0`       | GitLab minor release, along with chart GA |
 | `2.0.0`       | `11.x.x`       | Introduced some breaking change to the chart |
 | `3.0.0`       | `12.0.0`       | GitLab 12 release |
 

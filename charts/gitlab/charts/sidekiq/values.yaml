@@ -51,6 +51,7 @@ metrics:
   enabled: true
   port: 3807
   path: /metrics
+  log_enabled: false
   podMonitor:
     enabled: false
     additionalLabels: {}
@@ -134,6 +135,8 @@ global:
     enabled:
     credentials: {}
   appConfig:
+    microsoft_graph_mailer:
+      enabled: false
     incomingEmail:
       enabled: false
       address:
