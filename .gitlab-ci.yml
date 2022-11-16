@@ -280,7 +280,7 @@ review_eks:
     DNS_PROVIDER: "aws"
   extends: .review_template
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: aws120/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
     auto_stop_in: 4 days
@@ -338,7 +338,7 @@ stop_review_gke_dev:
 stop_review_eks:
   extends: .stop_review_template
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: aws120/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
 
 # Keys that start with a dot (.) will not be processed by GitLab CI.
@@ -722,7 +722,7 @@ review_specs_eks:
     VARIABLES_FILE: "variables/review_eks"
     RSPEC_TAGS: type:feature
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: aws120/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
   resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
@@ -947,7 +947,7 @@ qa_eks:
     VARIABLES_FILE: "variables/review_eks"
     TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: aws120/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
 
 qa_gke_production:
@@ -986,7 +986,7 @@ qa_eks_manual_full_suite:
     VARIABLES_FILE: "variables/review_eks"
     TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient'
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: aws120/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
   when: manual
 
