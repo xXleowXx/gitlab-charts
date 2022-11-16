@@ -209,6 +209,7 @@ lint_package:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
     - kubectl version
+    - echo $KUBECONFIG
     - ensure_namespace
     - create_secret
     - deploy
