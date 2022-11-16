@@ -775,8 +775,8 @@ nginx-ingress:
   controller:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
-    allowSnippetAnnotations: false
     config:
+      annotation-value-word-blocklist: "load_module,lua_package,_by_lua,location,root,proxy_pass,serviceaccount,{,},',\""
       hsts: "true"
       hsts-include-subdomains: "false"
       hsts-max-age: "63072000"
