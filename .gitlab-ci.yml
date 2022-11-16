@@ -208,8 +208,8 @@ lint_package:
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - check_kube_domain
-    - kubectl version
     - echo $KUBECONFIG
+    - kubectl version
     - ensure_namespace
     - create_secret
     - deploy
