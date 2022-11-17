@@ -80,9 +80,8 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or $.Values.priorityClassName .priorityClassName }}
-      priorityClassName: {{ default $.Values.priorityClassName .priorityClassName }}
-      {{- end }}
+      {{- $priorityClassName := dict "Values" (dict "global" (dict "priorityClassName" $.Values.global.priorityClassName) "priorityClassName" $.Values.priorityClassName) -}}
+      {{- include "gitlab.priorityClassName" $priorityClassName | nindent 6 }}
       securityContext:
         runAsUser: {{ $.Values.securityContext.runAsUser }}
         fsGroup: {{ $.Values.securityContext.fsGroup }}

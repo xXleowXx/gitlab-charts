@@ -38,8 +38,8 @@ spec:
       {{- end }}
     spec:
     {{- include "gitlab.image.pullSecrets" $imageCfg | nindent 6 }}
-    {{- if .Values.defaultBackend.priorityClassName }}
-      priorityClassName: {{ .Values.defaultBackend.priorityClassName }}
+    {{- if or .Values.global.priorityClassName .Values.defaultBackend.priorityClassName }}
+      priorityClassName: {{ default .Values.global.priorityClassName .Values.defaultBackend.priorityClassName }}
     {{- end }}
     {{- if .Values.defaultBackend.podSecurityContext }}
       securityContext: {{ toYaml .Values.defaultBackend.podSecurityContext | nindent 8 }}

@@ -681,6 +681,10 @@ global:
     podAntiAffinity:
       topologyKey: "kubernetes.io/hostname"
 
+  # Priority class assigned to pods, may be overridden for individual components
+  # https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+  priorityClassName: ""
+
   ## https://docs.gitlab.com/charts/charts/globals#configure-workhorse-settings
   ## Global settings related to Workhorse
   workhorse:
@@ -802,6 +806,7 @@ upgradeCheck:
   resources:
     requests:
       cpu: 50m
+  priorityClassName: ""
 
 ## Settings to for the Let's Encrypt ACME Issuer
 # certmanager-issuer:
@@ -831,8 +836,8 @@ nginx-ingress:
   controller:
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
-    allowSnippetAnnotations: false
     config:
+      annotation-value-word-blocklist: "load_module,lua_package,_by_lua,location,root,proxy_pass,serviceaccount,{,},',\""
       hsts: "true"
       hsts-include-subdomains: "false"
       hsts-max-age: "63072000"

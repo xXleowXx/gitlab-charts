@@ -174,3 +174,6 @@ deployment:
 affinity:
   podAntiAffinity:
     topologyKey:
+
+# Priority class assigned to pods
+priorityClassName: ""

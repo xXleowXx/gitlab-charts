@@ -50,6 +50,9 @@ service:
 ## Support for tolerations for pod scheduling
 tolerations: []
 
+# Priority class assigned to pods
+priorityClassName: ""
+
 ## Enable/Disable Chart
 enabled: true
 

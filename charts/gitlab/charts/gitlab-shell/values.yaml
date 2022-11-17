@@ -33,6 +33,9 @@ init:
 # Tolerations for pod scheduling
 tolerations: []
 
+# Priority class assigned to pods
+priorityClassName: ""
+
 global: {}
 
 enabled: true

@@ -2287,3 +2287,17 @@ global:
   - `topology.kubernetes.io/region`
 
 Kubernetes references on [Inter-pod affinity and anti-affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity)
+
+## Pod Priority and Preemption
+
+Pod priorities can be configured either via `global.priorityClassName` or per sub-chart via `priorityClassName`.
+Setting pod priority allows you to tell the scheduler to evict lower priority pods to make scheduling of pendings pods possible.
+
+```yaml
+global:
+  priorityClassName: system-cluster-critical
+```
+
+| Name                | Type   | Default | Description                      |
+| :-------------------| :--:   | :------ | :------------------------------- |
+| `priorityClassName` | String |         | Priority class assigned to pods. |
