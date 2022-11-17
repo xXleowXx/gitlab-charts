@@ -11,7 +11,6 @@ Some of the key benefits of this chart and [corresponding containers](https://gi
 - No requirement for root privileges.
 - Utilization of object storage instead of NFS for storage.
 
-
 ## Detailed documentation
 
 See the [repository documentation](doc/index.md) for how to install GitLab and
