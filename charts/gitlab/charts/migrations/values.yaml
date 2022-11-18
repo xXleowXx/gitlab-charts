@@ -74,8 +74,12 @@ resources:
   requests:
     cpu: 250m
     memory: 200Mi
+
 activeDeadlineSeconds: 3600
 backoffLimit: 6
+
+## Define time after which job gets deleted after finishing
+# ttlSecondsAfterFinished: 60
 
 ## Allow to overwrite under which User and Group we're running.
 securityContext:
