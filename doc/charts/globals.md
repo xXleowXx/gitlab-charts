@@ -178,8 +178,9 @@ Various cloud providers' LoadBalancer implementations have an impact on configur
 
 | Provider | Layer | Example snippet |
 | :-- | --: | :-- |
-| AWS | 4 | [aws/elb-layer4-loadbalancer](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/elb-layer4-loadbalancer.yaml) |
-| AWS | 7 | [aws/elb-layer7-loadbalancer](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/elb-layer7-loadbalancer.yaml) |
+| AWS | 4 | [`aws/elb-layer4-loadbalancer`](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/elb-layer4-loadbalancer.yaml) |
+| AWS | 7 | [`aws/elb-layer7-loadbalancer`](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/elb-layer7-loadbalancer.yaml) |
+| AWS | 7 | [`aws/alb-full`](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/examples/aws/alb-full.yaml) |
 
 ### `global.ingress.configureCertmanager`
 
