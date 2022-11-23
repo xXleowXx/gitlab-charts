@@ -71,6 +71,8 @@ spec:
         env:
         - name: BYPASS_SCHEMA_VERSION
           value: 'true'
+        - name: SKIP_POST_DEPLOYMENT_MIGRATIONS
+          value: 'true'
         {{- include "gitlab.extraEnv" . | nindent 8 }}
         {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 8 }}
       volumes:
