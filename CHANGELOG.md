@@ -39,6 +39,10 @@ No changes.
 
 - [Container Registry: remove testslowimport migration setting](gitlab-org/charts/gitlab@b433267a4a406dc7dbfd22c72de930cf62994eea) ([merge request](gitlab-org/charts/gitlab!2818))
 
+## 6.5.6 (2022-11-30)
+
+No changes.
+
 ## 6.5.5 (2022-11-11)
 
 No changes.
