@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.4.6 (2022-11-30)
+
+No changes.
+
 ## 6.4.5 (2022-11-15)
 
 No changes.
