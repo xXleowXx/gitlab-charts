@@ -92,6 +92,10 @@ No changes.
 - [Update nokogiri from 1.11.2 to 1.13.8](gitlab-org/charts/gitlab@4ca05285a0120d69a708d6fb406c441199ea3d9e) ([merge request](gitlab-org/charts/gitlab!2780))
 - [Update activesupport from 6.0.3.4 to 7.0.4](gitlab-org/charts/gitlab@184a94790f7de95aec576ad273d4fb9a9ec2722e) ([merge request](gitlab-org/charts/gitlab!2781))
 
+## 6.4.6 (2022-11-30)
+
+No changes.
+
 ## 6.4.5 (2022-11-15)
 
 No changes.
