@@ -184,7 +184,7 @@ Various cloud providers' LoadBalancer implementations have an impact on configur
 
 ### `global.ingress.configureCertmanager`
 
-Global setting that controls the automatic configuration of [cert-manager](https://artifacthub.io/packages/helm/jetstack/cert-manager)
+Global setting that controls the automatic configuration of [cert-manager](https://cert-manager.io/docs/installation/helm/)
 for Ingress objects. If `true`, relies on `certmanager-issuer.email` being set.
 
 If `false` and `global.ingress.tls.secretName` is not set, this will activate automatic
