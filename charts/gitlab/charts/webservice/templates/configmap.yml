@@ -150,7 +150,7 @@ data:
       {{- include "gitlab.appConfig.registry.configuration" $ | nindent 6 }}
       {{- include "gitlab.appConfig.smartcard.configuration" $ | nindent 6 }}
   configure: |
-    {{- include "gitlab.scripts.configure.secrets" (dict) | nindent 4 }}
+    {{- include "gitlab.scripts.configure.secrets" (dict "redis minio objectstorage postgres ldap omniauth smtp kas pages oauth-secrets mailroom gitlab-exporter microsoft_graph_mailer") | nindent 4 }}
     {{- include "gitlab.psql.ssl.initScript" . | nindent 4 }}
     {{- include "gitlab.geo.psql.ssl.initScript" . | nindent 4 }}
     {{- if $.Values.tls.enabled }}
