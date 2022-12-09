@@ -1624,7 +1624,7 @@ corresponding queue:
 
 - The query is following the
   [worker matching query](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector) syntax.
-- The `<queue_name>` must be a valid Sidekiq queue name. If the queue name
+- The `<queue_name>` must match a valid Sidekiq queue name `sidekiq.pods[].queues` defined under [`sidekiq.pods`](gitlab/sidekiq/index.md#per-pod-settings). If the queue name
   is `nil`, or an empty string, the worker is routed to the queue generated
   by the name of the worker instead.
 
@@ -1637,7 +1637,7 @@ global:
   appConfig:
     sidekiq:
       routingRules:
-      - ["resource_boundary=cpu", "cpu_boundary"]
+      - ["resource_boundary=cpu", "cpu-boundary"]
       - ["feature_category=pages", null]
       - ["feature_category=search", "search"]
       - ["feature_category=memory|resource_boundary=memory", "memory-bound"]
