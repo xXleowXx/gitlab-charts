@@ -440,6 +440,11 @@ global:
       # externalUrl:
       # internalUrl:
 
+    ## https://docs.gitlab.com/charts/charts/globals#suggested-reviewers-settings
+    suggested_reviewers: {}
+      # secret:
+      # key:
+
     ## https://docs.gitlab.com/charts/charts/globals#omniauth
     omniauth:
       enabled: false

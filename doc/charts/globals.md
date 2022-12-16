@@ -1238,7 +1238,7 @@ The incoming email settings are explained in the [command line options page](../
 
 #### Custom secret
 
-One can optionally customize the KAS `secret` name as well and `key`, either by
+One can optionally customize the KAS `secret` name as well as `key`, either by
 using Helm's `--set variable` option:
 
 ```shell
@@ -1300,6 +1300,30 @@ global:
       externalUrl: "wss://custom-kas-url.example.com"
       internalUrl: "grpc://custom-internal-url"
 ```
+
+### Suggested Reviewers settings
+
+#### Custom secret
+
+One can optionally customize the Suggested Reviewers `secret` name as well as
+`key`, either by using Helm's `--set variable` option:
+
+```shell
+--set global.appConfig.suggested_reviewers.secret=custom-secret-name \
+--set global.appConfig.suggested_reviewers.key=custom-secret-key \
+```
+
+or by configuring your `values.yaml`:
+
+```yaml
+global:
+  appConfig:
+    suggested_reviewers:
+      secret: "custom-secret-name"
+      key: "custom-secret-key"
+```
+
+If you'd like to customize the secret value, refer to the [secrets documentation](../installation/secrets.md#gitlab-suggested-reviewers-secret).
 
 ### LDAP
 
