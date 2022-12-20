@@ -215,6 +215,16 @@ This impacts the default image tag used in the `webservice`, `sidekiq`, and `mig
 charts. Note that the `gitaly`, `gitlab-shell` and `gitlab-runner` image tags should
 be separately updated to versions compatible with the GitLab version.
 
+## Adding suffix to all image tags
+
+If you wish to add a suffix to the name of all images used in the Helm chart, you can use the `global.image.tagSuffix` key.
+An example of this use case might be if you wish to use fips compliant container images from GitLab, which are all built
+with the `-fips` extension to the image tag.
+
+```shell
+--set global.image.tagSuffix="-fips"
+```
+
 ## Configure PostgreSQL settings
 
 The GitLab global PostgreSQL settings are located under the `global.psql` key.
