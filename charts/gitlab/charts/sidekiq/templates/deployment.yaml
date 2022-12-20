@@ -7,7 +7,7 @@
 {{- $releaseName := .Release.Name -}}
 {{- $releaseService := .Release.Service -}}
 {{- $fullname := include "fullname" . -}}
-{{- $image := printf "%s:%s" (coalesce .Values.image.repository (include "image.repository" .)) (coalesce .Values.image.tag (include "gitlab.versionTag" . ) | toString) -}}
+{{- $image := (printf "%s:%s%s" (coalesce .Values.image.repository (include "image.repository" .)) (coalesce .Values.image.tag (include "gitlab.versionTag" . )) (include "gitlab.image.tagSuffix" .)) | toString -}}
 {{- $concurrency := .Values.concurrency -}}
 {{- $timeout := .Values.timeout -}}
 {{- $resources := .Values.resources -}}
@@ -115,7 +115,7 @@ spec:
         {{- include "gitlab.certificates.initContainer" $ | nindent 8 }}
         - name: configure
           command: ['sh', '/config/configure']
-          image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global.busybox) | quote }}
+          image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global) | quote }}
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" $ | nindent 10 }}
