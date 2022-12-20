@@ -144,6 +144,21 @@ annotations:
   kubernetes.io/example-annotation: annotation-value
 ```
 
+### tls.secretName
+
+`tls.secretName` allows you to add an object that provides TLS support to the GitLab Exporter pods. When TLS is enabled, the `secretName` should be configured with an object that contains both the certificate and the key:
+
+```YAML
+tls:
+  enabled: true
+  secretName:
+    name: {{ template "gitlab.gitlab-exporter.tls.secret" . }}
+      - key: tls.crt
+        path: "gitlab-exporter/tls.crt"
+      - key: tls.key
+        path: "gitlab-exporter/tls.key"
+```
+
 ## Global settings
 
 We share some common global settings among our charts. See the [Globals Documentation](../../globals.md)
