@@ -30,6 +30,7 @@ global:
   image: {}
     # pullPolicy: IfNotPresent
     # pullSecrets: []
+    # tagSuffix: ""
 
   ## Supplemental Pod labels. Will not be used for selectors.
   pod:
