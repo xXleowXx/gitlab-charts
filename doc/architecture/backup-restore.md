@@ -53,7 +53,7 @@ Backups are made using the following steps, in order:
 
 - `--backend <backend>`
 
-  Configures the object storage backend to use for backups. Can be either `s3` or `gcs`. Default is `s3`.
+  Configures the backend to use for backups. Can be one of `s3`, `gcs` or `ssh`. Default is `s3`.
 
 - `--storage-class <storage-class-name>`
 
@@ -74,13 +74,17 @@ it requires using the Interoperability API which makes undesirable compromises t
 for backups you can configure the backup utility script to use the Cloud Storage native CLI, `gsutil`, to do the upload and download
 of your artifacts by setting the `BACKUP_BACKEND` environment variable to `gcs`.
 
+#### Backing up to SSH Server
+
+SSH server can be used as backup location by providing `--backend ssh` argument to backup-utility. `BACKUP_BACKEND` environment variable must be still set to `s3` or `gcs`. It is used to access object storages.
+
 ### Restore
 
 The backup utility when given an argument `--restore` attempts to restore from an existing backup to the running instance. This
 backup can be from either an Omnibus GitLab or a CNG Helm chart installation given that both the instance that was
 backed up and the running instance runs the same version of GitLab. The restore expects a file in backup bucket using `-t <backup-name>` or a remote URL using `-f <url>`.
 
-When given a `-t` parameter it looks into backup bucket in object storage for a backup tar with such name. When
+When given a `-t` parameter it looks into backup backend for a backup tar with such name. When
 given a `-f` parameter it expects that the given URL is a valid URI of a backup tar in a location accessible from the container.
 
 After fetching the backup tar the sequence of execution is:

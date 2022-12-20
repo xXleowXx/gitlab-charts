@@ -80,6 +80,26 @@ when restoring a backup.
 --set global.appConfig.backups.bucket=gitlab-backup-storage
 --set global.appConfig.backups.tmpBucket=gitlab-tmp-storage
 ```
+## SSH
+It is possible to use ssh server as backup destination.
+```shell
+--set gitlab.toolbox.backups.cron.extraArgs=' --backend ssh --ssh-host my-ssh-server --ssh-user backup --ssh-path /path/to/backups --ssh-key /path/to/key/mount '
+```
+To mount ssh key into toolbox container add `extraVolumes` and `extraVolumeMounts` under `toolbox` pointing to secret that contain ssh key (secret is not managed by chart and must be created separately):
+```yaml
+gitlab:
+  toolbox:
+    extraVolumes: |
+      - name: ssh-backup-secret
+        secret:
+          secretName: my-secret
+          defaultMode: 0600
+    extraVolumeMounts: |
+      - name: ssh-backup-secret
+        mountPath: /home/git/.ssh
+```
+Assuming secret `my-secret` has key `id_rsa` that contains ssh key, following argument should be added to extraArgs `--ssh-key /home/git/.ssh/id_rsa`.
+SSH connection could also be configured via `SSH_OPTS` environment variable which is passed to ssh and scp commands. By default following arguments are passed to skip host key verification dialog `-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null`. If `SSH_OPTS` is set those values will be overriden.
 
 ## Troubleshooting
 
