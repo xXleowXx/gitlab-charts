@@ -28,6 +28,10 @@ entry.
 
 - [Use kubectl image with kubectl 1.24.7, yq 4.30.1](gitlab-org/charts/gitlab@e0c892e060ac405d8a2c90f7b4d632e1b3512728) ([merge request](gitlab-org/charts/gitlab!2871))
 
+## 6.6.3 (2022-12-21)
+
+No changes.
+
 ## 6.6.2 (2022-12-05)
 
 No changes.
