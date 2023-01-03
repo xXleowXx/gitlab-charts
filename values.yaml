@@ -366,7 +366,6 @@ global:
       user_id: ""
       tenant: ""
       client_id: ""
-      client_secret: ""
       client_secret:
         secret: ""
         key: secret
