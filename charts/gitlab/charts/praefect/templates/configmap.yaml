@@ -42,7 +42,6 @@ data:
 
     [failover]
     enabled = {{ .Values.failover.enabled }}
-    election_strategy = '{{ .Values.electionStrategy }}'
     read_only_after_failover = {{ .Values.failover.readonlyAfter }}
 
     [auth]

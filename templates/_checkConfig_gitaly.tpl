@@ -53,17 +53,15 @@ Ensure that when electionStrategy is 'per_repository', defaultReplicationFactor 
 */}}
 {{- define "gitlab.checkConfig.praefect.defaultReplicationFactor" -}}
 {{- if and $.Values.global.gitaly.enabled $.Values.global.praefect.enabled -}}
-{{-   if eq $.Values.gitlab.praefect.electionStrategy "per_repository" -}}
-{{-     range $i, $vs := $.Values.global.praefect.virtualStorages -}}
-{{-       $gitalyReplicas := int (default 1 $vs.gitalyReplicas) -}}
-{{-       $defaultReplicationFactor := int (default 1 $vs.defaultReplicationFactor) -}}
-{{-       if or ( gt $defaultReplicationFactor $gitalyReplicas ) ( lt $defaultReplicationFactor 1 ) -}}
+{{-   range $i, $vs := $.Values.global.praefect.virtualStorages -}}
+{{-     $gitalyReplicas := int (default 1 $vs.gitalyReplicas) -}}
+{{-     $defaultReplicationFactor := int (default 1 $vs.defaultReplicationFactor) -}}
+{{-     if or ( gt $defaultReplicationFactor $gitalyReplicas ) ( lt $defaultReplicationFactor 1 ) -}}
 praefect:
     Praefect is enabled and electionStrategy is 'per_repository',
     but 'defaultReplicationFactor' is not correct.
     'defaultReplicationFactor' is greater than 1, less than 'gitalyReplicas'.
     Please modify `global.praefect.virtualStorages[{{ $i }}].defaultReplicationFactor`.
-{{-       end }}
 {{-     end }}
 {{-   end }}
 {{- end }}
