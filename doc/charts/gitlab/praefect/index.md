@@ -95,9 +95,6 @@ global:
 
 ## defaultReplicationFactor
 
-NOTE:
-You should be set `per_repositories` on  `gitlab.praefect.electionStrategy`
-
 `defaultReplicationFactor` can be configured on each virtual storages. (see [configure replication-factor](https://docs.gitlab.com/ee/administration/gitaly/praefect.html#configure-replication-factor) documentation).
 
 ```yaml
