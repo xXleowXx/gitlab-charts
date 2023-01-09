@@ -90,6 +90,8 @@ affinity:
   podAntiAffinity:
     topologyKey:
 
+topologySpreadConstraints: []
+
 podLabels: {}
 common:
   labels: {}

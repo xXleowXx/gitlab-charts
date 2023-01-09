@@ -100,4 +100,6 @@ affinity:
   podAntiAffinity:
     topologyKey:
 
+topologySpreadConstraints: []
+
 storageUrl: https://storage.googleapis.com/glsec-spamcheck-ml-artifacts/spam-classifier/0.4.2/model/issues/tflite/model.tflite
