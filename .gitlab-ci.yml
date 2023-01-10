@@ -182,6 +182,7 @@ lint_package:
   extends: .source_autodevops
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
+    - set_context
     - check_kube_domain
     - kubectl version
     - ensure_namespace
@@ -208,6 +209,9 @@ lint_package:
 review_gke:
   variables:
     DNS_PROVIDER: "google"
+    AGENT_NAME: "gke-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   extends: .review_template
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
@@ -262,6 +266,7 @@ review_eks:
   script:
     - git checkout master
     - source scripts/ci/autodevops.sh
+    - set_context
     - delete
     - cleanup
   when: manual
@@ -275,6 +280,10 @@ review_eks:
 
 stop_review_gke:
   extends: .stop_review_template
+  variables:
+    AGENT_NAME: "gke-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
@@ -300,35 +309,6 @@ stop_review_eks:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
 
-# Keys that start with a dot (.) will not be processed by GitLab CI.
-# Staging and canary jobs are disabled by default, to enable them
-# remove the dot (.) before the job name.
-# https://docs.gitlab.com/ee/ci/yaml/README.html#hidden-keys
-
-# Staging deploys are disabled by default since
-# continuous deployment to production is enabled by default
-# If you prefer to automatically deploy to staging and
-# only manually promote to production, enable this job by removing the dot (.),
-# and uncomment the `when: manual` line in the `production` job.
-
-.staging:
-  stage: staging
-  script:
-    - check_kube_domain
-    - check_domain_ip
-    - ensure_namespace
-    - create_secret
-    - deploy
-    - wait_for_deploy
-  environment:
-    name: staging
-    url: https://gitlab-staging.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    DOMAIN: -staging.$KUBE_INGRESS_BASE_DOMAIN
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-
 # This job continuously deploys to production on every push to `master`.
 # To make this a manual process, either because you're enabling `staging`
 # or `canary` deploys, or you simply want more control over when you deploy
@@ -339,6 +319,7 @@ stop_review_eks:
   extends: .source_autodevops
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
+    - set_context
     - check_kube_domain
     - check_domain_ip
     - ensure_namespace
@@ -365,6 +346,9 @@ stable_gke:
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
     VARIABLES_FILE: "variables/stable_gke"
+    AGENT_NAME: "gke-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   resource_group: "gke-production"
 
 stable_eks:
@@ -378,6 +362,10 @@ stable_eks:
 
 review_helm_test:
   stage: qa
+  variables:
+    AGENT_NAME: "gke-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
@@ -393,6 +381,10 @@ review_helm_test:
 
 production_helm_test:
   stage: qa
+  variables:
+    AGENT_NAME: "gke-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
@@ -406,7 +398,9 @@ production_helm_test:
 debug_review:
   stage: qa
   when: on_failure
+  extends: .source_autodevops
   script:
+    - set_context
     - kubectl -n "$NAMESPACE" describe pod
     - kubectl -n "$NAMESPACE" get pod,jobs,secret,ing,cm,sa,svc,role,rolebinding,pvc
   artifacts:
@@ -419,6 +413,9 @@ debug_review:
   variables:
     HOST_SUFFIX: "$CI_ENVIRONMENT_SLUG"
     DOMAIN: "-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"
+    AGENT_NAME: "gke-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
@@ -560,6 +557,7 @@ review-docs-cleanup:
   extends: .source_autodevops
   script:
     - ./scripts/ci/install_spec_dependencies
+    - set_context
     - ./scripts/ci/run_specs
   artifacts:
     when: on_failure
@@ -582,6 +580,9 @@ review_specs_gke:
   variables:
     VARIABLES_FILE: "variables/review_gke"
     RSPEC_TAGS: type:feature
+    AGENT_NAME: "gke-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
@@ -657,6 +658,9 @@ production_specs_gke:
   variables:
     VARIABLES_FILE: "variables/stable_gke"
     RSPEC_TAGS: type:feature
+    AGENT_NAME: "gke-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
