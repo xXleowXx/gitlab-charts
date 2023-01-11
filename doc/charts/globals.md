@@ -599,7 +599,7 @@ redis:
     authClients: false
 ```
 
-Note that the steps to enable TLS provided by Bitnami Redis must also be followed: https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/
+Note that you must follow Bitnami's [steps to enable TLS](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/) as well.
 
 ### Password-less Redis Servers
 
