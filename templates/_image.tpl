@@ -50,6 +50,19 @@ overridden using the global.gitlabVersion field in values.
 {{- end -}}
 
 {{/*
+Allow configuring a standard suffix on all images in chart
+*/}}
+{{- define "gitlab.image.tagSuffix" -}}
+{{- if hasKey . "Values" -}}
+{{ .Values.global.tagSuffix }}
+{{- else if hasKey . "global" -}}
+{{ .global.tagSuffix }}
+{{- else }}
+""
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the image digest to use.
 */}}
 {{- define "gitlab.image.digest" -}}

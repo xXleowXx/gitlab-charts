@@ -61,16 +61,3 @@ Return priorityClassName for Pod definitions
 priorityClassName: {{ $pcName }}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Allow configuring a standard suffix on all images in chart
-*/}}
-{{- define "gitlab.image.tagSuffix" -}}
-{{- if hasKey . "Values" -}}
-{{ .Values.global.tagSuffix }}
-{{- else if hasKey . "global" -}}
-{{ .global.tagSuffix }}
-{{- else }}
-""
-{{- end -}}
-{{- end -}}
