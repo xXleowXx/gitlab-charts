@@ -587,13 +587,19 @@ for the attributes that are used to configure Sentinel servers.
 
 ### Specifying secure Redis scheme (SSL)
 
-In order to connect to Redis using SSL, the `rediss` (note the double `s`) scheme parameter is required:
+In order to connect to Redis using SSL, the `rediss` (note the double `s`) scheme parameter is required. Additionally, `authClients` key must be set to false `false` because [Redis defaults to mutual TLS](https://redis.io/docs/management/security/encryption/#client-certificate-authentication):
 
 ```yaml
 global:
   redis:
     scheme: rediss
+redis:
+  tls:
+    enabled: true
+    authClients: false
 ```
+
+Note that the steps to enable TLS provided by Bitnami Redis must also be followed: https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/
 
 ### Password-less Redis Servers
 
