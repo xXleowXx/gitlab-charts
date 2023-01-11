@@ -142,7 +142,7 @@ removed in GitLab 17.0. Enable TLS via the [global KAS attribute](../../globals.
 
 1. Create the certificate authority and certificates that your `kas` pods will trust.
 1. Configure your chart to use the trusted certificates.
-1. Configure [Redis for TLS](https://docs.gitlab.com/charts/charts/globals.html#specifying-secure-redis-scheme-ssl)
+1. Configure [Redis for TLS](../../globals.md#specifying-secure-redis-scheme-ssl)
 
 Prerequisites:
 
