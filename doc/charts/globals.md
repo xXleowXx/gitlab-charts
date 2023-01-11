@@ -593,7 +593,6 @@ In order to connect to Redis using SSL, the `rediss` (note the double `s`) schem
 global:
   redis:
     scheme: rediss
-  --set global.redis.scheme=rediss
 ```
 
 ### Password-less Redis Servers
