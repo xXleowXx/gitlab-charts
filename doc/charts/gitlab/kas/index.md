@@ -140,6 +140,10 @@ The `gitlab.kas.privateApi.tls.enabled` and `gitlab.kas.privateApi.tls.secretNam
 [deprecated](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3843) in GitLab 15.8, and will be
 removed in GitLab 17.0. Enable TLS via the [global KAS attribute](../../globals.md#tls-settings-1) instead.
 
+1. Create the certificate authority and certificates that your `kas` pods will trust.
+1. Configure your chart to use the trusted certificates.
+1. Configure (Redis for TLS][https://docs.gitlab.com/charts/charts/globals.html#specifying-secure-redis-scheme-ssl]
+
 Prerequisites:
 
 - Use [GitLab 15.5.1 or later](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/101571#note_1146419137).
@@ -172,7 +176,7 @@ For example, you could use this `values.yaml` file to deploy your chart:
        domain: gitlab.example.com # Your gitlab domain
      appConfig:
        gitlab_kas:
-         internalUrl: "grpcs://RELEASE-kas.NAMESPACE.svc:8153" # Replace RELEASE and NAMESPACE with your chart's release and namespace 
+         internalUrl: "grpcs://RELEASE-kas.NAMESPACE.svc:8153" # Replace RELEASE and NAMESPACE with your chart's release and namespace
 
    gitlab:
      kas:
