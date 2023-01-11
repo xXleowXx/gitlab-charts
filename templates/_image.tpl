@@ -66,6 +66,7 @@ Will replace the `-ee` edition suffix if `global.edition=ce`.
 {{-   $registry := include "gitlab.image.registry" . -}}
 {{-   $repository := include "gitlab.image.repository" . -}}
 {{-   $tag := include "gitlab.image.tag" . -}}
+{{-   $tagSuffix := include "gitlab.image.tagSuffix" . -}}
 {{-   $digest := include "gitlab.image.digest" . -}}
 {{-   if hasSuffix "-ee" $repository -}}
 {{-      if eq .context.Values.global.edition "ce" -}}
@@ -73,9 +74,9 @@ Will replace the `-ee` edition suffix if `global.edition=ce`.
 {{-      end -}}
 {{-   end -}}
 {{-   if eq $registry "none" -}}
-{{-     printf "%s:%s%s" $repository $tag $digest | quote -}}
+{{-     printf "%s:%s%s%s" $repository $tag $tagSuffix $digest | quote -}}
 {{-   else -}}
-{{-     printf "%s/%s:%s%s" $registry $repository $tag $digest | quote -}}
+{{-     printf "%s/%s:%s%s%s" $registry $repository $tag $tagSuffix $digest | quote -}}
 {{-   end -}}
 {{- end -}}
 

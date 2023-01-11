@@ -67,9 +67,9 @@ Allow configuring a standard suffix on all images in chart
 */}}
 {{- define "gitlab.image.tagSuffix" -}}
 {{- if hasKey . "Values" -}}
-{{ .Values.global.image.tagSuffix }}
+{{ .Values.global.tagSuffix }}
 {{- else if hasKey . "global" -}}
-{{ .global.image.tagSuffix }}
+{{ .global.tagSuffix }}
 {{- else }}
 ""
 {{- end -}}
