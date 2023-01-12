@@ -2,7 +2,7 @@
 apiVersion: v1
 name: geo-logcursor
 version: 6.5.9
-appVersion: 15.5.8
+appVersion: 15.5.9
 description: GitLab Geo logcursor
 keywords:
 - gitlab
