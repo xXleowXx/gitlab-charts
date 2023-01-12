@@ -44,6 +44,10 @@ No changes.
 
 - [Use kubectl image with kubectl 1.24.7, yq 4.30.1](gitlab-org/charts/gitlab@e0c892e060ac405d8a2c90f7b4d632e1b3512728) ([merge request](gitlab-org/charts/gitlab!2871))
 
+## 6.6.5 (2023-01-12)
+
+No changes.
+
 ## 6.6.4 (2023-01-09)
 
 No changes.
