@@ -590,7 +590,7 @@ for the attributes that are used to configure Sentinel servers.
 To connect to Redis with SSL:
 
 1. Update your configuration to use the `rediss` (double `s`) scheme parameter.
-2. In your configuration, set `authClients` to `false`:
+1. In your configuration, set `authClients` to `false`:
 
    ```yaml
    global:
