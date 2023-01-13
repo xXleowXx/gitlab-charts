@@ -1311,6 +1311,44 @@ global:
       internalUrl: "grpc://custom-internal-url"
 ```
 
+#### TLS settings
+
+KAS supports TLS communication between its `kas` pods and other GitLab chart components.
+
+Prerequisites:
+
+- Use [GitLab 15.5.1 or later](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/101571#note_1146419137).
+  You can set your GitLab version with `global.gitlabVersion: <version>`. If you need to force an image update
+  after an initial deployment, also set `global.image.pullPolicy: Always`.
+- [Create the certificate authority](../advanced/internal-tls/index.md) and certificates that your `kas` pods will trust.
+
+To configure `kas` to use the certificates you created, set the following values.
+
+| Value                                    | Description                                                                      |
+|------------------------------------------|----------------------------------------------------------------------------------|
+| `global.kas.tls.enabled`                 | Mounts the certificates volume and enables TLS communication to `kas` endpoints. |
+| `global.kas.tls.secretName`    | Specifies which Kubernetes TLS secret stores your certificates.                  |
+| `global.kas.tls.caSecretName`    | Specifies which Kubernetes TLS secret stores your custom CA.                     |
+
+For example, you could use the following in your `values.yaml` file to deploy your chart:
+
+```yaml
+.internal-ca: &internal-ca gitlab-internal-tls-ca # The secret name you used to share your TLS CA.
+.internal-tls: &internal-tls gitlab-internal-tls # The secret name you used to share your TLS certificate.
+
+global:
+  certificates:
+    customCAs:
+    - secret: *internal-ca
+  hosts:
+    domain: gitlab.example.com # Your gitlab domain 
+  kas:
+    tls:
+      enabled: true
+      secretName: *internal-tls
+      caSecretName: *internal-ca
+```
+
 ### Suggested Reviewers settings
 
 #### Custom secret
