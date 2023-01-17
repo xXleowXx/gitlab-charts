@@ -132,5 +132,7 @@ affinity:
   podAntiAffinity:
     topologyKey:
 
+topologySpreadConstraints: []
+
 # Priority class assigned to pods
 priorityClassName: ""

@@ -105,6 +105,10 @@ spec:
                 matchLabels:
                   {{- include "gitlab.selectorLabels" $ | nindent 18 }}
       {{- end }}
+      {{- if $.Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml $.Values.topologySpreadConstraints | nindent 8 }}
+      {{- end }}
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" $ }}
       {{- end }}

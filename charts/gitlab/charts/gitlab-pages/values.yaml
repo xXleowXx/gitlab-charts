@@ -203,3 +203,5 @@ workhorse: {}
 affinity:
   podAntiAffinity:
     topologyKey:
+
+topologySpreadConstraints: []

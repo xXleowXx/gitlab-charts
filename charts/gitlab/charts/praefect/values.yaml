@@ -75,3 +75,5 @@ statefulset:
 affinity:
   podAntiAffinity:
     topologyKey:
+
+topologySpreadConstraints: []

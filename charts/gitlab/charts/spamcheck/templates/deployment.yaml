@@ -62,6 +62,10 @@ spec:
                 matchLabels:
                   {{- include "gitlab.selectorLabels" . | nindent 18 }}
       {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml .Values.topologySpreadConstraints | nindent 8 }}
+      {{- end }}
       {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
       {{- include "gitlab.priorityClassName" . | nindent 6 }}
       initContainers:

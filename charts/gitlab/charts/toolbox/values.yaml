@@ -25,6 +25,8 @@ affinity:
   podAntiAffinity:
     topologyKey:
 
+topologySpreadConstraints: []
+
 common:
   labels: {}
 
