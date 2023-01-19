@@ -585,16 +585,27 @@ configurations **are not shared** and needs to be specified for each
 instance that uses Sentinels. Please refer to the [Sentinel configuration](#redis-sentinel-support)
 for the attributes that are used to configure Sentinel servers.
 
-### Specifying secure Redis scheme (SSL)
+### Specify secure Redis scheme (SSL)
 
-In order to connect to Redis using SSL, the `rediss` (note the double `s`) scheme parameter is required:
+To connect to Redis with SSL:
 
-```yaml
-global:
-  redis:
-    scheme: rediss
-  --set global.redis.scheme=rediss
-```
+1. Update your configuration to use the `rediss` (double `s`) scheme parameter.
+1. In your configuration, set `authClients` to `false`:
+
+   ```yaml
+   global:
+     redis:
+       scheme: rediss
+   redis:
+     tls:
+       enabled: true
+       authClients: false
+   ```
+
+   This configuration is required because [Redis defaults to mutual TLS](https://redis.io/docs/management/security/encryption/#client-certificate-authentication), which not all chart components support.
+
+1. Follow Bitnami's [steps to enable TLS](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/). Make sure the chart components trust the certificate authority used to create Redis certificates.
+1. Optional. If you use a custom certificate authority, see the [Custom Certificate Authorities](#custom-certificate-authorities) global configuration.
 
 ### Password-less Redis Servers
 
