@@ -489,15 +489,16 @@ continue to apply with the Sentinel support unless re-specified in the table abo
 The GitLab chart includes support for running with separate Redis instances
 for different persistence classes, currently:
 
-| Instance       | Purpose                                                         |
-|:---------------|:----------------------------------------------------------------|
-| `cache`        | Store cached data                                               |
-| `queues`       | Store Sidekiq background jobs                                   |
-| `sharedState`  | Store various persistent data such as distributed locks         |
-| `actioncable`  | Pub/Sub queue backend for ActionCable                           |
-| `traceChunks`  | Store job traces temporarily                                    |
-| `rateLimiting` | Store rate-limiting usage for RackAttack and Application Limits |
-| `sessions`     | Store user session data                                         |
+| Instance          | Purpose                                                         |
+|:------------------|:----------------------------------------------------------------|
+| `cache`           | Store cached data                                               |
+| `queues`          | Store Sidekiq background jobs                                   |
+| `sharedState`     | Store various persistent data such as distributed locks         |
+| `actioncable`     | Pub/Sub queue backend for ActionCable                           |
+| `traceChunks`     | Store job traces temporarily                                    |
+| `rateLimiting`    | Store rate-limiting usage for RackAttack and Application Limits |
+| `sessions`        | Store user session data                                         |
+| `repositoryCache` | Store repository related data                                   |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -564,6 +565,13 @@ global:
         enabled: true
         secret: sessions-secret
         key: sessions-password
+    repositoryCache:
+      host: repositoryCache.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: repositoryCache-secret
+        key: repositoryCache-password
 ```
 
 The following table describes the attributes for each dictionary of the
