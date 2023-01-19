@@ -35,8 +35,8 @@ by the `gitlab:artifacts:migrate` script below.
 
 1. Migrate any existing data from the package-based
    installation to object storage:
-   
-   1. [Migrate to object storage](https://docs.gitlab.com/ee/administration/object_storage.html#migrate-to-object-storage). 
+
+   1. [Migrate to object storage](https://docs.gitlab.com/ee/administration/object_storage.html#migrate-to-object-storage).
 
    1. Visit the package-based GitLab instance and make sure the
       migrated data are available. For example check if user, group and project
