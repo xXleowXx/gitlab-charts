@@ -2,6 +2,22 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.7.4 (2023-01-12)
+
+No changes.
+
+## 6.7.3 (2023-01-11)
+
+No changes.
+
+## 6.7.2 (2023-01-09)
+
+No changes.
+
+## 6.7.1 (2023-01-05)
+
+No changes.
+
 ## 6.7.0 (2022-12-21)
 
 ### Added (2 changes)
@@ -27,6 +43,14 @@ entry.
 ### Other (1 change)
 
 - [Use kubectl image with kubectl 1.24.7, yq 4.30.1](gitlab-org/charts/gitlab@e0c892e060ac405d8a2c90f7b4d632e1b3512728) ([merge request](gitlab-org/charts/gitlab!2871))
+
+## 6.6.5 (2023-01-12)
+
+No changes.
+
+## 6.6.4 (2023-01-09)
+
+No changes.
 
 ## 6.6.3 (2022-12-21)
 
@@ -72,6 +96,14 @@ No changes.
 ### Removed (1 change)
 
 - [Container Registry: remove testslowimport migration setting](gitlab-org/charts/gitlab@b433267a4a406dc7dbfd22c72de930cf62994eea) ([merge request](gitlab-org/charts/gitlab!2818))
+
+## 6.5.9 (2023-01-12)
+
+No changes.
+
+## 6.5.8 (2023-01-09)
+
+No changes.
 
 ## 6.5.7 (2022-12-07)
 

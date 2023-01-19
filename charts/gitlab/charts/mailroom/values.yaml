@@ -45,6 +45,7 @@ global:
       password:
         secret: ""
         key: password
+      deleteAfterDelivery: true
       expungeDeleted: false
       logger:
         logPath: "/dev/stdout"
@@ -70,6 +71,7 @@ global:
       password:
         secret: ""
         key: password
+      deleteAfterDelivery: true
       expungeDeleted: false
       logger:
         logPath: "/dev/stdout"

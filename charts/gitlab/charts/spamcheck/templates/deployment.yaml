@@ -27,7 +27,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") $ | sha256sum }}
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
-        {{- range $key, $value := merge .Values.annotations .Values.metrics.annotations }}
+        {{- range $key, $value := .Values.annotations }}
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
@@ -92,11 +92,7 @@ spec:
           ports:
             - name: grpc
               containerPort: {{ $.Values.service.internalPort }}
-            - name: monitor
-              containerPort: {{ $.Values.metrics.port }}
           env:
-            - name: STORAGE_URL
-              value: {{ .Values.storageUrl | quote }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
           resources:
@@ -104,14 +100,11 @@ spec:
           volumeMounts:
             - name: spamcheck-config-volume
               mountPath: /app/config
-            - name: spamcheck-data-volume
-              mountPath: /var/lib/spamcheck
-              readOnly: false
             {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
           livenessProbe:
             exec:
-              command: ["grpcurl", "-plaintext", "-max-time=1", "localhost:{{ .Values.service.internalPort }}", "spamcheck.SpamcheckService/Healthz"]
+              command: ["health-check", "--liveness"]
             initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
@@ -119,7 +112,7 @@ spec:
             failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
           readinessProbe:
             exec:
-              command: ["grpcurl", "-plaintext", "-max-time=1", "localhost:{{ .Values.service.internalPort }}", "spamcheck.SpamcheckService/Healthz"]
+              command: ["health-check", "--readiness"]
             initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
