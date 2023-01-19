@@ -66,6 +66,13 @@ Input: dict "context" $ "name" string
 {{- end -}}
 {{- end -}}
 
+{{- define "gitlab.rails.redis.repositoryCache" -}}
+{{- if .Values.global.redis.repositoryCache -}}
+{{-   $_ := set $ "redisConfigName" "repositoryCache" }}
+{{-   include "gitlab.rails.redis.yaml" (dict "context" $ "name" "redis.repository_cache") -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 cable.yml configuration
 If no `global.redis.actioncable`, use `global.redis`
@@ -87,4 +94,5 @@ If no `global.redis.actioncable`, use `global.redis`
 {{ include "gitlab.rails.redis.traceChunks" . }}
 {{ include "gitlab.rails.redis.rateLimiting" . }}
 {{ include "gitlab.rails.redis.sessions" . }}
+{{ include "gitlab.rails.redis.repositoryCache" . }}
 {{- end -}}
