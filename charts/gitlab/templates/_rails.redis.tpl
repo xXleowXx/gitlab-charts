@@ -84,6 +84,12 @@ If no `global.redis.actioncable`, use `global.redis`
 {{- include "gitlab.rails.redis.yaml" (dict "context" $ "name" "cable") -}}
 {{- end -}}
 
+{{- define "gitlab.rails.redisYmlOverride" -}}
+{{- if .Values.global.redis.redisYmlOverride -}}
+redis.yml.erb: |
+  production: {{ toYaml .Values.global.redis.redisYmlOverride | nindent 4 }}
+{{- end -}}
+{{- end -}}
 
 {{- define "gitlab.rails.redis.all" -}}
 {{ include "gitlab.rails.redis.resque" . }}
@@ -95,4 +101,5 @@ If no `global.redis.actioncable`, use `global.redis`
 {{ include "gitlab.rails.redis.rateLimiting" . }}
 {{ include "gitlab.rails.redis.sessions" . }}
 {{ include "gitlab.rails.redis.repositoryCache" . }}
+{{ include "gitlab.rails.redisYmlOverride" . }}
 {{- end -}}
