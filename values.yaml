@@ -133,6 +133,7 @@ global:
       # key:
     # host: redis.hostedsomewhere.else
     # port: 6379
+    # user: webservice
     # sentinels:
     #   - host:
     #     port:
