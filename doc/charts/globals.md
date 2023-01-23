@@ -417,6 +417,7 @@ global:
 | `host`             | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
 | `serviceName`      | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
 | `port`             | Integer | `6379`  | The port on which to connect to the Redis server. |
+| `user`             | String  |         | The user used to authenticate against Redis (Redis 6.0+). |
 | `password.enabled` | Boolean    | true    | The `password.enabled` provides a toggle for using a password with the Redis instance. |
 | `password.key`     | String  |         | The `password.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
 | `password.secret`  | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
@@ -489,15 +490,16 @@ continue to apply with the Sentinel support unless re-specified in the table abo
 The GitLab chart includes support for running with separate Redis instances
 for different persistence classes, currently:
 
-| Instance       | Purpose                                                         |
-|:---------------|:----------------------------------------------------------------|
-| `cache`        | Store cached data                                               |
-| `queues`       | Store Sidekiq background jobs                                   |
-| `sharedState`  | Store various persistent data such as distributed locks         |
-| `actioncable`  | Pub/Sub queue backend for ActionCable                           |
-| `traceChunks`  | Store job traces temporarily                                    |
-| `rateLimiting` | Store rate-limiting usage for RackAttack and Application Limits |
-| `sessions`     | Store user session data                                         |
+| Instance          | Purpose                                                         |
+|:------------------|:----------------------------------------------------------------|
+| `cache`           | Store cached data                                               |
+| `queues`          | Store Sidekiq background jobs                                   |
+| `sharedState`     | Store various persistent data such as distributed locks         |
+| `actioncable`     | Pub/Sub queue backend for ActionCable                           |
+| `traceChunks`     | Store job traces temporarily                                    |
+| `rateLimiting`    | Store rate-limiting usage for RackAttack and Application Limits |
+| `sessions`        | Store user session data                                         |
+| `repositoryCache` | Store repository related data                                   |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -564,6 +566,13 @@ global:
         enabled: true
         secret: sessions-secret
         key: sessions-password
+    repositoryCache:
+      host: repositoryCache.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: repositoryCache-secret
+        key: repositoryCache-password
 ```
 
 The following table describes the attributes for each dictionary of the
@@ -585,16 +594,27 @@ configurations **are not shared** and needs to be specified for each
 instance that uses Sentinels. Please refer to the [Sentinel configuration](#redis-sentinel-support)
 for the attributes that are used to configure Sentinel servers.
 
-### Specifying secure Redis scheme (SSL)
+### Specify secure Redis scheme (SSL)
 
-In order to connect to Redis using SSL, the `rediss` (note the double `s`) scheme parameter is required:
+To connect to Redis with SSL:
 
-```yaml
-global:
-  redis:
-    scheme: rediss
-  --set global.redis.scheme=rediss
-```
+1. Update your configuration to use the `rediss` (double `s`) scheme parameter.
+1. In your configuration, set `authClients` to `false`:
+
+   ```yaml
+   global:
+     redis:
+       scheme: rediss
+   redis:
+     tls:
+       enabled: true
+       authClients: false
+   ```
+
+   This configuration is required because [Redis defaults to mutual TLS](https://redis.io/docs/management/security/encryption/#client-certificate-authentication), which not all chart components support.
+
+1. Follow Bitnami's [steps to enable TLS](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/). Make sure the chart components trust the certificate authority used to create Redis certificates.
+1. Optional. If you use a custom certificate authority, see the [Custom Certificate Authorities](#custom-certificate-authorities) global configuration.
 
 ### Password-less Redis Servers
 

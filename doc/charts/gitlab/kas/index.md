@@ -41,7 +41,7 @@ helm upgrade --install kas --set global.kas.enabled=false
 
 When you use the chart's Ingress with the default configuration,
 the service for the agent server is reachable on a subdomain.
-For example, for`global.hosts.domain: example.com`, the agent server
+For example, for `global.hosts.domain: example.com`, the agent server
 is reachable at `kas.example.com`.
 
 The [KAS Ingress](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/charts/gitlab/charts/kas/templates/ingress.yaml)
@@ -145,7 +145,10 @@ Prerequisites:
 - Use [GitLab 15.5.1 or later](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/101571#note_1146419137).
   You can set your GitLab version with `global.gitlabVersion: <version>`. If you need to force an image update
   after an initial deployment, also set `global.image.pullPolicy: Always`.
-- [Create the certificate authority](../../../advanced/internal-tls/index.md) and certificates that your `kas` pods will trust.
+
+1. Create the certificate authority and certificates that your `kas` pods will trust.
+1. Configure your chart to use the trusted certificates.
+1. Optional. Configure [Redis for TLS](../../globals.md#specify-secure-redis-scheme-ssl).
 
 To configure `kas` to use the certificates you created, set the following values.
 
@@ -172,7 +175,7 @@ For example, you could use this `values.yaml` file to deploy your chart:
        domain: gitlab.example.com # Your gitlab domain
      appConfig:
        gitlab_kas:
-         internalUrl: "grpcs://RELEASE-kas.NAMESPACE.svc:8153" # Replace RELEASE and NAMESPACE with your chart's release and namespace 
+         internalUrl: "grpcs://RELEASE-kas.NAMESPACE.svc:8153" # Replace RELEASE and NAMESPACE with your chart's release and namespace
 
    gitlab:
      kas:
