@@ -55,6 +55,7 @@ stages:
   - canary
   - stable
   - specs
+  - qa-manual
   - qa
   - staging-release
   - package
@@ -850,27 +851,43 @@ qa_eks_production:
 
 # QA jobs for Full E2E suites
 
+.qa_full_suite_manual_trigger:
+  image: alpine
+  stage: qa-manual
+  when: manual
+  artifacts:
+    paths:
+    - variables
+
+qa_gke_full_suite_manual_trigger:
+  extends: .qa_full_suite_manual_trigger
+  script: echo 'The job will trigger Full E2E suite against GKE'
+
 qa_gke_manual_full_suite:
   extends: .qa_branch
-  parallel: 6
+  parallel: 7
   variables:
     VARIABLES_FILE: "variables/review_gke"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke
-  when: manual
+  needs: [ "qa_gke_full_suite_manual_trigger"]
+
+qa_eks_full_suite_manual_trigger:
+  extends: .qa_full_suite_manual_trigger
+  script: echo 'The job will trigger Full E2E suite against EKS'
 
 qa_eks_manual_full_suite:
   extends: .qa_branch
-  parallel: 6
+  parallel: 7
   variables:
     VARIABLES_FILE: "variables/review_eks"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
-  when: manual
+  needs: [ "qa_eks_full_suite_manual_trigger"]
 
 knapsack-qa-report:
   image:
