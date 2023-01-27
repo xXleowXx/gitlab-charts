@@ -249,6 +249,9 @@ global:
       ## Periodically update ci_runner_versions table with up-to-date versions and status
       # ci_runner_versions_reconciliation_worker:
       #   cron: "@daily"
+      ## Periodically clean up stale ci_runner_machines records
+      # ci_runners_stale_machines_cleanup_worker:
+      #   cron: "36 4 * * *"
       ### GitLab Geo
       # Geo Primary only!
       # geo_prune_event_log_worker:
