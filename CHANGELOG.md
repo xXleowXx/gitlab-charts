@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.7.6 (2023-01-30)
+
+### Fixed (1 change)
+
+- [Fix indent for priorityClassName in Toolbox backup job](gitlab-org/security/charts/gitlab@3ef41cf43a34d56bcdfd1353cffc5edec3fe9e08)
+
 ## 6.7.5 (2023-01-12)
 
 No changes.
