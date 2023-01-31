@@ -439,17 +439,19 @@ Handles merging a set of labels for services
 
 {{/*
 Detect if `x.ingress.tls.secretName` are set
-Return value if either `global.ingress.tls.secretName` or all three `x.ingress.tls.secretName` are set.
-Return empty if not
+Return value if either `global.ingress.tls.secretName` or all components have `x.ingress.tls.secretName` set.
+Return empty if not.
 
-We're explicitly checking for an actual value being present, not the existance of map.
+We're explicitly checking for an actual value being present, not the existence of map.
 */}}
 {{- define "gitlab.ingress.tls.configured" -}}
 {{/* Pull the value, if it exists */}}
-{{- $global      := pluck "secretName" (default (dict)  $.Values.global.ingress.tls) | first -}}
+{{- $global      := pluck "secretName" (default (dict) $.Values.global.ingress.tls) | first -}}
 {{- $webservice  := pluck "secretName" $.Values.gitlab.webservice.ingress.tls | first -}}
 {{- $registry    := pluck "secretName" $.Values.registry.ingress.tls | first -}}
 {{- $minio       := pluck "secretName" $.Values.minio.ingress.tls | first -}}
+{{- $pages       := pluck "secretName" (index $.Values.gitlab "gitlab-pages").ingress.tls | first -}}
+{{- $kas         := pluck "secretName" $.Values.gitlab.kas.ingress.tls | first -}}
 {{- $smartcard   := pluck "smartcardSecretName" $.Values.gitlab.webservice.ingress.tls | first -}}
 {{/* Set each item to configured value, or !enabled
      This works because `false` is the same as empty, so we'll use the value when `enabled: true`
@@ -462,9 +464,11 @@ We're explicitly checking for an actual value being present, not the existance o
 {{- $webservice  :=  default $webservice (not $.Values.gitlab.webservice.enabled) -}}
 {{- $registry    :=  default $registry (not $.Values.registry.enabled) -}}
 {{- $minio       :=  default $minio (not $.Values.global.minio.enabled) -}}
+{{- $pages       :=  default $pages (not $.Values.global.pages.enabled) -}}
+{{- $kas         :=  default $kas (not $.Values.global.kas.enabled) -}}
 {{- $smartcard   :=  default $smartcard (not $.Values.global.appConfig.smartcard.enabled) -}}
 {{/* Check that all enabled items have been configured */}}
-{{- if or $global (and $webservice $registry $minio $smartcard) -}}
+{{- if or $global (and $webservice $registry $minio $pages $kas $smartcard) -}}
 true
 {{- end -}}
 {{- end -}}
