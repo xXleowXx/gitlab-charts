@@ -46,7 +46,9 @@ The user should ensure all necessary secrets are created according to documentat
 {{- if or .Values.gitlab.webservice.enabled .Values.registry.enabled .Values.global.minio.enabled }}
 {{-   if not (or .Values.global.ingress.configureCertmanager (include "gitlab.ingress.tls.configured" .)) }}
 {{ $WARNING }}
-Automatic TLS certificate generation with cert-manager is disabled and no TLS certificates were provided. Self-signed certificates were generated.
+Automatic TLS certificate generation with cert-manager is disabled.
+One or more of the components does not have a TLS certificate Secret configured.
+As a result, Self-signed certificates were generated for these components.
 
 You may retrieve the CA root for these certificates from the `{{ template "gitlab.wildcard-self-signed-cert-name" $ }}-ca` secret, via the following command. It can then be imported to a web browser or system store.
 
@@ -54,7 +56,7 @@ You may retrieve the CA root for these certificates from the `{{ template "gitla
 
 If you do not wish to use self-signed certificates, please set the following properties:
 - global.ingress.tls.secretName
-OR
+OR all of:
 - global.ingress.tls.enabled (set to `true`)
 {{- if $.Values.gitlab.webservice.enabled }}
 - gitlab.webservice.ingress.tls.secretName
@@ -67,6 +69,12 @@ OR
 {{- end }}
 {{- if $.Values.global.minio.enabled }}
 - minio.ingress.tls.secretName
+{{- end }}
+{{- if $.Values.global.pages.enabled }}
+- gitlab.gitlab-pages.ingress.tls.secretName
+{{- end }}
+{{- if $.Values.global.kas.enabled }}
+- gitlab.kas.ingress.tls.secretName
 {{- end }}
 
 {{- if (index .Values "gitlab-runner").install }}
