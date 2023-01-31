@@ -1592,32 +1592,6 @@ Example configuration `--set` items, when using the global chart:
 Due to the complexity of using `--set` arguments, a user may wish to use a YAML snippet,
 passed to `helm` with `-f omniauth.yaml`.
 
-#### connection
-
-Details of the Kubernetes secret that contains the connection information for the
-object storage provider. The contents of this secret should be a YAML formatted file.
-
-Defaults to `{}` and will be ignored if `global.minio.enabled` is `true`.
-
-This property has two sub-keys: `secret` and `key`:
-
-- `secret` is the name of a Kubernetes Secret. This value is required to use external object storage.
-- `key` is the name of the key in the secret which houses the YAML block. Defaults to `connection`.
-
-Examples for [AWS (s3)](https://fog.io/storage/#using-amazon-s3-and-fog) and [Google (GCS)](https://fog.io/storage/#google-cloud-storage)
-providers can be found in [`examples/objectstorage`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage):
-
-- [`rails.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.s3.yaml)
-- [`rails.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/rails.gcs.yaml)
-
-Once a YAML file containing the contents of the `connection` has been created, create
-the secret in Kubernetes:
-
-```shell
-kubectl create secret generic gitlab-rails-storage \
-    --from-file=connection=rails.yaml
-```
-
 ### Cron jobs related settings
 
 Sidekiq includes maintenance jobs that can be configured to run on a periodic

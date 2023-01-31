@@ -1,10 +1,11 @@
 {{- $sharedSecretValues := index .Values "shared-secrets" -}}
 {{- if $sharedSecretValues.enabled }}
-{{-   if not (or .Values.global.ingress.configureCertmanager .Values.global.ingress.tls) -}}
-{{-     $imageCfgSelfsign := dict "global" .Values.global.image "local" $sharedSecretValues.selfsign.image "context" $ -}}
-{{-     $imageCfgKubectl := dict "global" .Values.global.image "local" .Values.global.kubectl.image "context" $ -}}
-{{-     $jointPullSecrets := concat (default (list) $sharedSecretValues.selfsign.image.pullSecrets) (default (list) .Values.global.kubectl.image.pullSecrets) -}}
-{{-     $imageCfg := dict "global" .Values.global.image "local" (dict "pullSecrets" $jointPullSecrets) -}}
+{{-   if not .Values.global.ingress.configureCertmanager -}}
+{{-     if not (include "gitlab.ingress.tls.configured" .) }}
+{{-       $imageCfgSelfsign := dict "global" .Values.global.image "local" $sharedSecretValues.selfsign.image "context" $ -}}
+{{-       $imageCfgKubectl := dict "global" .Values.global.image "local" .Values.global.kubectl.image "context" $ -}}
+{{-       $jointPullSecrets := concat (default (list) $sharedSecretValues.selfsign.image.pullSecrets) (default (list) .Values.global.kubectl.image.pullSecrets) -}}
+{{-       $imageCfg := dict "global" .Values.global.image "local" (dict "pullSecrets" $jointPullSecrets) -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -111,5 +112,6 @@ spec:
       volumes:
       - name: certs-path
         emptyDir: {}
+{{-     end -}}
 {{-   end -}}
 {{- end }}
