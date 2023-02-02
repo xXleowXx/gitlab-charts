@@ -54,6 +54,7 @@ Tool name | Benefits | Example use case | Link(s)
 `lens` | Highly visual management and navigation of clusters. | Navigate and manage cluster resources quickly in a standalone desktop application. | [Homepage](https://k8slens.dev/)
 `stern` | Easily follow logs from multiple pods. | See logs from a set of GitLab pods together. | [GitHub](https://github.com/wercker/stern)
 `dive` | Explore container layers. | A tool for exploring a container image, layer contents, and discovering ways to shrink the size of your Docker/OCI image. | [GitHub](https://github.com/wagoodman/dive), [GitLab Unfiltered](https://youtu.be/9kdE-ye6vlc)
+`container-diff` | Explore container layers. | A tool for analyzing and comparing container images. | [GitHub](https://github.com/GoogleContainerTools/container-diff)
 
 ## Kubernetes cluster
 
