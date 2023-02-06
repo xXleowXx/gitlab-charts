@@ -744,11 +744,11 @@ global:
   kubectl:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/kubectl
-      # The digest below comes from a given tag pipeline because they are mirrored to .com,
-      # ensuring that the image tag is available from both instances. The digest can be
+      # The tag below comes from a given tag pipeline because they are mirrored to .com,
+      # ensuring that the image tag is available from both instances. The tag can be
       # found in the 'sync-images-gitlab-com' job.
       #   https://dev.gitlab.org/gitlab/charts/components/images/-/tags
-      tag: 1.24.7@sha256:4be8ed0fb89c29c5bacf0dcedee803e1ac1298da9a45186eb5a391c2353c6bf6
+      tag: 0baa9a626199c8817f83c72e980f12027419b026
       # pullPolicy: IfNotPresent
       # pullSecrets: []
     securityContext:
