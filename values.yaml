@@ -862,7 +862,7 @@ nginx-ingress:
       externalTrafficPolicy: "Local"
     ingressClassByName: false
     ingressClassResource:
-      name: '{{ include "ingress.class.name" $ }}'
+      name: '{{ include "ingress.class.name" $ | quote }}'
     resources:
       requests:
         cpu: 100m
