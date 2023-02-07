@@ -11,11 +11,11 @@ prerequisites and decide on the options you'll use when you install.
 
 ## Prerequisites
 
-### `kubectl`
+### kubectl
 
-Install `kubectl` 1.16 or later by following [the Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/#kubectl).
-The version you install must be within one minor release of
-[the version running in your cluster](https://kubernetes.io/docs/tasks/tools/).
+Install `kubectl` by following [the Kubernetes documentation](https://kubernetes.io/docs/tasks/tools/#kubectl).
+The version you install must be [within one minor release](https://kubernetes.io/releases/version-skew-policy/#kubectl)
+of the version running in your cluster.
 
 ### Helm
 
