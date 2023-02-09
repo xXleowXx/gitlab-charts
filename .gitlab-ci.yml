@@ -885,6 +885,10 @@ qa_eks_production:
 
 # QA jobs for Full E2E suites
 
+.qa_production_full_suite_manual_trigger:
+  extends: .qa_production
+  when: manual
+
 .qa_full_suite_manual_trigger:
   image: alpine
   stage: qa-manual
@@ -908,6 +912,16 @@ qa_gke_manual_full_suite:
     on_stop: stop_review_gke
   needs: [ "qa_gke_full_suite_manual_trigger"]
 
+qa_gke_manual_full_suite_production:
+  extends: .qa_production_full_suite_manual_trigger
+  parallel: 7
+  variables:
+    VARIABLES_FILE: "variables/stable_gke"
+    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+  environment:
+    name: gke_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+  needs: [ "qa_gke_full_suite_manual_trigger"]
+
 qa_gke122_full_suite_manual_trigger:
   extends: .qa_full_suite_manual_trigger
   script: echo 'The job will trigger Full E2E suite against GKE122'
@@ -923,6 +937,16 @@ qa_gke122_manual_full_suite:
     on_stop: stop_review_gke122
   needs: [ "qa_gke122_full_suite_manual_trigger"]
 
+qa_gke122_manual_full_suite_production:
+  extends: .qa_production_full_suite_manual_trigger
+  parallel: 7
+  variables:
+    VARIABLES_FILE: "variables/stable_gke122"
+    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+  environment:
+    name: k8s122_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+  needs: [ "qa_gke122_full_suite_manual_trigger"]
+
 qa_eks_full_suite_manual_trigger:
   extends: .qa_full_suite_manual_trigger
   script: echo 'The job will trigger Full E2E suite against EKS'
@@ -936,6 +960,16 @@ qa_eks_manual_full_suite:
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
+  needs: [ "qa_eks_full_suite_manual_trigger"]
+
+qa_eks_manual_full_suite_production:
+  extends: .qa_production_full_suite_manual_trigger
+  parallel: 7
+  variables:
+    VARIABLES_FILE: "variables/stable_eks"
+    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+  environment:
+    name: eks_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
   needs: [ "qa_eks_full_suite_manual_trigger"]
 
 knapsack-qa-report:
