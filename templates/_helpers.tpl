@@ -450,7 +450,7 @@ We're explicitly checking for an actual value being present, not the existence o
 {{- $webservice  := pluck "secretName" $.Values.gitlab.webservice.ingress.tls | first -}}
 {{- $registry    := pluck "secretName" $.Values.registry.ingress.tls | first -}}
 {{- $minio       := pluck "secretName" $.Values.minio.ingress.tls | first -}}
-{{- $pages       := pluck "secretName" (index $.Values.gitlab "gitlab-pages").ingress.tls | first -}}
+{{- $pages       := pluck "secretName" ((index $.Values.gitlab "gitlab-pages").ingress).tls | first -}}
 {{- $kas         := pluck "secretName" $.Values.gitlab.kas.ingress.tls | first -}}
 {{- $smartcard   := pluck "smartcardSecretName" $.Values.gitlab.webservice.ingress.tls | first -}}
 {{/* Set each item to configured value, or !enabled
