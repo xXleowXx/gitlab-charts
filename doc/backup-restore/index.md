@@ -89,7 +89,10 @@ Toolbox to use the included copy of `azcopy` to transmit and retrieve the
 backup files to the Azure blob storage.
 
 To support using Azure blob storage, one will need to create a storage account
-in an existing resource group. A shared access signature (SAS) token is then
+in an existing resource group. The storage account base URL needs to be
+set to `gitlab.toolbox.backups.objectStorage.config.azureUrl`.
+
+A shared access signature (SAS) token is then
 generated from the storage account for GitLab to authenticate to Azure. The
 settings for the SAS token should be set to:
 
@@ -122,11 +125,13 @@ the settings on the Helm command line. For example:
 helm install gitlab gitlab/gitlab \
   --set gitlab.toolbox.backups.objectStorage.config.secret=backup-sas-token \
   --set gitlab.toolbox.backups.objectStorage.config.key=token \
-  --set gitlab.toolbox.backups.objectStorage.backend=azure
+  --set gitlab.toolbox.backups.objectStorage.backend=azure \
+  --set gitlab.toolbox.backups.objectStorage.config.azureUrl=https://<YOUR_STORAGE_ACCOUNT>.blob.core.windows.net
 ```
 
-In addition, two bucket locations need to be configured, one for storing the
-backups, and one temporary bucket that is used when restoring a backup.
+In addition, two buckets/containers need to be created beforehand, one for storing the
+backups, and one temporary bucket that is used when restoring a backup. Add the
+bucket names to your values or settings. For example:
 
 ```shell
 --set global.appConfig.backups.bucket=gitlab-backup-storage

@@ -182,6 +182,7 @@ backups:
     #   secret: my-backup-secret
     #   key: config
     #   gcpProject: my-gcp-project-id
+    #   azureUrl: https://<my-azure-storage-account>.blob.core.windows.net
 extra: {}
 
 rack_attack:

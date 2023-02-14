@@ -89,7 +89,9 @@ spec:
                 - cp /etc/gitlab/.s3cfg $HOME/.s3cfg && backup-utility {{ .Values.backups.cron.extraArgs }} # alpine sleep has no infinity
                 {{- else if eq .Values.backups.objectStorage.backend "gcs" }}
                 - sh /var/opt/gitlab/templates/configure-gsutil && backup-utility {{ .Values.backups.cron.extraArgs }}
-                {{- end }}
+                {{- else if eq .Values.backups.objectStorage.backend "azure" }}
+                - backup-utility {{ .Values.backups.cron.extraArgs }} --azure-endpoint-url {{ .Values.backups.objectStorage.config.azureUrl }}
+                 {{- end }}
               image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}{{ include "gitlab.image.tagSuffix" . }}"
               {{- include "gitlab.image.pullPolicy" $imageCfg | indent 14 }}
               env:
@@ -207,6 +209,13 @@ spec:
                     items:
                       - key: {{ default "config" .Values.backups.objectStorage.config.key }}
                         path: objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}
+                {{- end }}
+                {{- if eq .Values.backups.objectStorage.backend "azure" }}
+                - secret:
+                    name: {{ .Values.backups.objectStorage.config.secret }}
+                    items:
+                      - key: {{ default "config" .Values.backups.objectStorage.config.key }}
+                        path: objectstorage/azure_token
                 {{- end }}
                 {{- include "gitlab.kas.mountSecrets" $ | nindent 16 }}
                 {{- include "gitlab.pages.mountSecrets" $ | nindent 16 }}
