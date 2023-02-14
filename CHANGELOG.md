@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.8.2 (2023-02-10)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.49.0 to 0.49.1](gitlab-org/security/charts/gitlab@0edebdf10fc3386788d0668ab1b552813f4c60f2)
+
 ## 6.8.1 (2023-01-30)
 
 No changes.
@@ -25,6 +31,10 @@ No changes.
 - [Update gitlab-org/charts/gitlab-runner from 0.48.0 to 0.48.1](gitlab-org/charts/gitlab@460c275eaca9b1e3bf063947ca49629edef57d80) ([merge request](gitlab-org/charts/gitlab!2915))
 - [Update gitlab-org/gitlab-exporter from 11.18.2 to 12.1.0](gitlab-org/charts/gitlab@428de3dd7c208a0469b18b927fece2bc54029b19) ([merge request](gitlab-org/charts/gitlab!2911))
 - [Update gitlab-org/container-registry from 3.63.0-gitlab to 3.64.0-gitlab](gitlab-org/charts/gitlab@a1edaea5f4d9d2a6d972b7412deafe6a2b50aedb) ([merge request](gitlab-org/charts/gitlab!2904))
+
+## 6.7.7 (2023-02-10)
+
+No changes.
 
 ## 6.7.6 (2023-01-30)
 
@@ -73,6 +83,10 @@ No changes.
 ### Other (1 change)
 
 - [Use kubectl image with kubectl 1.24.7, yq 4.30.1](gitlab-org/charts/gitlab@e0c892e060ac405d8a2c90f7b4d632e1b3512728) ([merge request](gitlab-org/charts/gitlab!2871))
+
+## 6.6.8 (2023-02-10)
+
+No changes.
 
 ## 6.6.7 (2023-01-30)
 
