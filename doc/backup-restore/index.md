@@ -90,7 +90,7 @@ backup files to the Azure blob storage.
 
 To support using Azure blob storage, one will need to create a storage account
 in an existing resource group. The storage account base URL needs to be
-set to `gitlab.toolbox.backups.objectStorage.config.azureUrl`.
+set to `gitlab.toolbox.backups.objectStorage.config.azureBaseUrl`.
 
 A shared access signature (SAS) token is then
 generated from the storage account for GitLab to authenticate to Azure. The
@@ -126,7 +126,7 @@ helm install gitlab gitlab/gitlab \
   --set gitlab.toolbox.backups.objectStorage.config.secret=backup-sas-token \
   --set gitlab.toolbox.backups.objectStorage.config.key=token \
   --set gitlab.toolbox.backups.objectStorage.backend=azure \
-  --set gitlab.toolbox.backups.objectStorage.config.azureUrl=https://<YOUR_STORAGE_ACCOUNT>.blob.core.windows.net
+  --set gitlab.toolbox.backups.objectStorage.config.azureBaseUrl=https://<YOUR_STORAGE_ACCOUNT>.blob.core.windows.net
 ```
 
 In addition, two buckets/containers need to be created beforehand, one for storing the

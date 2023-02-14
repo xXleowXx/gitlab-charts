@@ -86,6 +86,7 @@ gitlab:
 | `backups.cron.suspend`                      | Backup cron job is suspended | `false`                      |
 | `backups.objectStorage.backend`             | Object storage provider to use (`s3`, `gcs` or `azure`) | `s3`                       |
 | `backups.objectStorage.config.gcpProject`   | GCP Project to use when backend is `gcs`     | ""                           |
+| `backups.objectStorage.config.azureBaseUrl` | Base URL of the Azure Storage Account when backend is `azure` | ""          |
 | `backups.objectStorage.config.key`          | Key containing credentials in secret         | ""                           |
 | `backups.objectStorage.config.secret`       | Object storage credentials secret            | ""                           |
 | `common.labels`                             | Supplemental labels that are applied to all objects created by this chart. | `{}` |
