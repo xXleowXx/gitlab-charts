@@ -148,7 +148,7 @@ spec:
             {{- end }}
             {{- if eq .Values.backups.objectStorage.backend "azure" }}
             - name: AZURE_BASE_URL
-              value: {{ .Values.backups.objectStorage.config.azureBaseUrl }}
+              value: {{ required "A valid backups.objectStorage.config.azureBaseUrl is needed!" .Values.backups.objectStorage.config.azureBaseUrl }}
             {{- end }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
@@ -233,25 +233,27 @@ spec:
                   path: registry/gitlab-registry.key
           {{- include "gitlab.registry.notificationSecret.mount" $ | nindent 10 -}}
           {{- if or .Values.backups.objectStorage.config (not (or .Values.global.minio.enabled .Values.global.appConfig.object_store.enabled)) }}
+          {{-   if eq .Values.backups.objectStorage.backend "s3" }}
           - secret:
               name: {{ .Values.backups.objectStorage.config.secret }}
               items:
                 - key: {{ default "config" .Values.backups.objectStorage.config.key }}
                   path: objectstorage/.s3cfg
-          {{- end }}
-          {{- if eq .Values.backups.objectStorage.backend "gcs" }}
+          {{-   end }}
+          {{-   if eq .Values.backups.objectStorage.backend "gcs" }}
           - secret:
               name: {{ .Values.backups.objectStorage.config.secret }}
               items:
                 - key: {{ default "config" .Values.backups.objectStorage.config.key }}
                   path: objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}
-          {{- end }}
-          {{- if eq .Values.backups.objectStorage.backend "azure" }}
+          {{-   end }}
+          {{-   if eq .Values.backups.objectStorage.backend "azure" }}
           - secret:
               name: {{ .Values.backups.objectStorage.config.secret }}
               items:
                 - key: {{ default "config" .Values.backups.objectStorage.config.key }}
                   path: objectstorage/azure_token
+          {{-   end }}
           {{- end }}
           {{- include "gitlab.pages.mountSecrets" $ | nindent 10 }}
           {{- include "gitlab.kas.mountSecrets" $ | nindent 10 }}
