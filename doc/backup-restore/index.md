@@ -98,7 +98,8 @@ settings for the SAS token should be set to:
 
 - Service: blob
 - Resource types: container, object
-- Permissions: read, write, list
+- Permissions: read, write, list and delete (only
+  when old backups are configured to be removed automatically)
 - Versioning permissions: None
 - Index permissions: None
 - Allowed protocols: HTTPS only
