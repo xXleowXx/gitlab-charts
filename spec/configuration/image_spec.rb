@@ -130,14 +130,7 @@ describe 'image configuration' do
               next if container_name.include?('minio')
 
               it 'should use the global registry' do
-                registry = case container_name
-                           when 'configure', 'run-check'
-                             'global.busybox.registry.com'
-                           else
-                             'global.registry.com'
-                           end
-
-                expect(container&.dig('image')).to start_with("#{registry}/")
+                expect(container&.dig('image')).to start_with("global.registry.com/")
               end
 
               it 'should use the global imagePullPolicy' do

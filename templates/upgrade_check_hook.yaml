@@ -1,5 +1,4 @@
 {{- if .Values.upgradeCheck.enabled }}
-{{- $imageCfg := dict "global" .Values.global.busybox.image "local" .Values.upgradeCheck.image "context" $ -}}
 {{- $imagePullCfg := dict "global" .Values.global.image "local" .Values.upgradeCheck.image -}}
 apiVersion: v1
 kind: ConfigMap
@@ -63,7 +62,7 @@ spec:
       {{- include "gitlab.image.pullSecrets" $imagePullCfg | nindent 6}}
       containers:
         - name: run-check
-          image: {{ include "gitlab.image.fullPath" $imageCfg }}
+          image: {{ include "gitlab.busybox.image" (dict "local" .Values.upgradeCheck "global" $.Values.global) }}
           command: ['/bin/sh', '/scripts/runcheck']
           {{- include "gitlab.image.pullPolicy" $imagePullCfg | indent 10 }}
           env:

@@ -69,7 +69,7 @@ spec:
         - name: configure
           command: ['sh']
           args: [ '-c', 'sh -x /config-logcursor/configure']
-          image: {{ include "gitlab.image.fullPath" $initImageCfg }}
+          image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global) }}
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}

@@ -31,8 +31,6 @@ global:
     - name: ps-global
   busybox:
     image:
-      registry: global.busybox.registry.com
-      repository: global-busybox-repo
       pullPolicy: pp-busybox
       pullSecrets:
       - name: ps-busybox

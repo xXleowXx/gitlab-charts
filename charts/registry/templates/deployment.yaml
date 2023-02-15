@@ -83,7 +83,7 @@ spec:
       initContainers:
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
         - name: configure
-          image: {{ include "gitlab.image.fullPath" $initImageCfg }}
+          image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global) }}
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           command: ["sh", "/config/configure"]
           volumeMounts:

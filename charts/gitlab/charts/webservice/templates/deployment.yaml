@@ -113,7 +113,7 @@ spec:
         - name: configure
           command: ['sh']
           args: [ '-c', 'sh -x /config-webservice/configure ; sh -x /config-workhorse/configure ; mkdir -p -m 3770 /tmp/gitlab']
-          image: {{ include "gitlab.image.fullPath" $initImageCfg }}
+          image: {{ include "gitlab.busybox.image" (dict "local" $.Values.init "global" $.Values.global) }}
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
             {{- include "webservice.extraEnv" (dict "global" $.Values.global "local" .) | nindent 12 }}

@@ -1,4 +1,3 @@
-{{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
 */}}
@@ -481,13 +480,19 @@ Format:
   {{ include "gitlab.helper.image" (dict "context" . "image" "<image context>") }}
 */}}
 {{- define "gitlab.helper.image" -}}
+{{- $registry := coalesce .image.registry .context.Values.global.image.registry "none" }}
+{{- $repository := coalesce .image.repository .context.Values.global.image.repository  }}
 {{- $gitlabVersion := "" -}}
 {{- if .context.Values.global.gitlabVersion -}}
 {{-   $gitlabVersion = printf "v%s" .context.Values.global.gitlabVersion -}}
 {{- end -}}
 {{- $tag := coalesce .image.tag $gitlabVersion "master" -}}
 {{- $tagSuffix := include "gitlab.image.tagSuffix" .context -}}
-{{- printf "%s:%s%s" .image.repository $tag $tagSuffix -}}
+{{- if eq $registry "none" -}}
+{{-   printf "%s:%s%s" $repository $tag $tagSuffix | quote -}}
+{{- else -}}
+{{-   printf "%s/%s:%s%s" $registry $repository $tag $tagSuffix | quote -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -528,9 +533,14 @@ Constructs busybox image name.
     # TODO: consider tagSuffix here, since we took it out of example
 */}}
 {{- if kindIs "map" .local.image }}
-{{- $image := default .global.busybox.image.repository .local.image.repository }}
+{{- $registry := coalesce .local.image.registry .global.busybox.image.registry .global.image.registry "none" }}
+{{- $repository := coalesce .local.image.repository .global.busybox.image.repository .global.image.repository  }}
 {{- $tag := coalesce .local.image.tag .global.busybox.image.tag "latest" }}
-{{- printf "%s:%s" $image $tag -}}
+{{- if eq $registry "none" -}}
+{{-   printf "%s:%s" $repository $tag | quote -}}
+{{- else -}}
+{{-   printf "%s/%s:%s" $registry $repository $tag | quote -}}
+{{- end -}}
 {{- else }}
 {{- printf "DEPRECATED:DEPRECATED" -}}
 {{- end -}}

@@ -70,7 +70,7 @@ spec:
         - name: configure
           command: ["sh"]
           args: ["-c", "wget -P /var/lib/spamcheck $(STORAGE_URL)"]
-          image: {{ include "gitlab.image.fullPath" $initImageCfg }}
+          image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global) }}
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           env:
             - name: STORAGE_URL
