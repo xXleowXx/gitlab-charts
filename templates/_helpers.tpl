@@ -510,10 +510,40 @@ Return true in any other case.
 {{- end -}}
 
 {{/*
-Constructs kubectl image name.
+Constructs helper image value.
+Format:
+  {{ include "gitlab.helper.image" (dict "context" . "image" "<image context>") }}
+*/}}
+{{- define "gitlab.helper.image" -}}
+{{- $gitlabVersion := "" -}}
+{{- if .context.Values.global.gitlabVersion -}}
+{{-   $gitlabVersion = printf "v%s" .context.Values.global.gitlabVersion -}}
+{{- end -}}
+{{- $tag := coalesce .image.tag $gitlabVersion "master" -}}
+{{- $tagSuffix := include "gitlab.image.tagSuffix" .context -}}
+{{- printf "%s:%s%s" .image.repository $tag $tagSuffix -}}
+{{- end -}}
+
+{{/*
+Constructs kubectl image value.
 */}}
 {{- define "gitlab.kubectl.image" -}}
-{{- printf "%s:%s" .Values.global.kubectl.image.repository .Values.global.kubectl.image.tag -}}
+{{- include "gitlab.helper.image" (dict "context" . "image" .Values.global.kubectl.image) -}}
+{{- end -}}
+
+{{/*
+Constructs certificates image value.
+*/}}
+{{- define "gitlab.certificates.image" -}}
+{{- include "gitlab.helper.image" (dict "context" . "image" .Values.global.certificates.image) -}}
+{{- end -}}
+
+{{/*
+Constructs selfsign image value.
+*/}}
+{{- define "gitlab.selfsign.image" -}}
+{{- $image := index .Values "shared-secrets" "selfsign" "image" -}}
+{{- include "gitlab.helper.image" (dict "context" . "image" $image) -}}
 {{- end -}}
 
 {{/*
@@ -529,10 +559,11 @@ Constructs busybox image name.
     # doesn't matter what we print there because once rendering is done
     # deprecation check will kick-in and abort the process. That value will not
     # be used.
+    # TODO: consider tagSuffix here, since we took it out of example
 */}}
 {{- if kindIs "map" .local.image }}
 {{- $image := default .global.busybox.image.repository .local.image.repository }}
-{{- $tag := default .global.busybox.image.tag .local.image.tag }}
+{{- $tag := coalesce .local.image.tag .global.busybox.image.tag "latest" }}
 {{- printf "%s:%s" $image $tag -}}
 {{- else }}
 {{- printf "DEPRECATED:DEPRECATED" -}}

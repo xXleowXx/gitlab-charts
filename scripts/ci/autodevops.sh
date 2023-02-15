@@ -55,8 +55,6 @@ function deploy() {
   if [[ -n "$image_branch" ]]; then
       gitlab_version_args=(
       "--set" "global.gitlabVersion=${image_branch}"
-      "--set" "global.certificates.image.tag=${image_branch}"
-      "--set" "global.kubectl.image.tag=${image_branch}"
       "--set" "gitlab.gitaly.image.tag=${image_branch}"
       "--set" "gitlab.gitlab-shell.image.tag=${image_branch}"
       "--set" "gitlab.gitlab-exporter.image.tag=${image_branch}"
