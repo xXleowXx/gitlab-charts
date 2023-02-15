@@ -71,7 +71,7 @@ spec:
           command: ["sh"]
           args: ["-c", "wget -P /var/lib/spamcheck $(STORAGE_URL)"]
           image: {{ include "gitlab.busybox.image" (dict "local" .Values.init "global" $.Values.global) }}
-          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           env:
             - name: STORAGE_URL
               value: {{ .Values.storageUrl | quote }}
