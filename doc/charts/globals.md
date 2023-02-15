@@ -1560,6 +1560,17 @@ args:
   name_identifier_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
 ```
 
+Microsoft Azure OAuth 2.0 OmniAuth provider configuration example:
+
+```yaml
+name: azure_activedirectory_v2
+label: Azure
+args:
+  client_id: '<CLIENT_ID>'
+  client_secret: '<CLIENT_SECRET>'
+  tenant_id: '<TENANT_ID>'
+```
+
 [Group SAML](https://docs.gitlab.com/ee/integration/saml.html#configuring-group-saml-on-a-self-managed-gitlab-instance) configuration example:
 
 ```yaml
@@ -1579,6 +1590,7 @@ shown below:
 omniauth:
   providers:
     - secret: gitlab-google-oauth2
+    - secret: azure_activedirectory_v2
     - secret: gitlab-azure-oauth2
     - secret: gitlab-cas3
 ```

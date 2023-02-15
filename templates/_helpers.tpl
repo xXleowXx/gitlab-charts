@@ -416,7 +416,7 @@ We're explicitly checking for an actual value being present, not the existence o
 {{- $webservice  := pluck "secretName" $.Values.gitlab.webservice.ingress.tls | first -}}
 {{- $registry    := pluck "secretName" $.Values.registry.ingress.tls | first -}}
 {{- $minio       := pluck "secretName" $.Values.minio.ingress.tls | first -}}
-{{- $pages       := pluck "secretName" (index $.Values.gitlab "gitlab-pages").ingress.tls | first -}}
+{{- $pages       := pluck "secretName" ((index $.Values.gitlab "gitlab-pages").ingress).tls | first -}}
 {{- $kas         := pluck "secretName" $.Values.gitlab.kas.ingress.tls | first -}}
 {{- $smartcard   := pluck "smartcardSecretName" $.Values.gitlab.webservice.ingress.tls | first -}}
 {{/* Set each item to configured value, or !enabled
@@ -472,6 +472,67 @@ Return true in any other case.
 {{-  .Values.global.ingress.enabled }}
 {{- else }}
 {{-   true }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Constructs helper image value.
+Format:
+  {{ include "gitlab.helper.image" (dict "context" . "image" "<image context>") }}
+*/}}
+{{- define "gitlab.helper.image" -}}
+{{- $gitlabVersion := "" -}}
+{{- if .context.Values.global.gitlabVersion -}}
+{{-   $gitlabVersion = printf "v%s" .context.Values.global.gitlabVersion -}}
+{{- end -}}
+{{- $tag := coalesce .image.tag $gitlabVersion "master" -}}
+{{- $tagSuffix := include "gitlab.image.tagSuffix" .context -}}
+{{- printf "%s:%s%s" .image.repository $tag $tagSuffix -}}
+{{- end -}}
+
+{{/*
+Constructs kubectl image value.
+*/}}
+{{- define "gitlab.kubectl.image" -}}
+{{- include "gitlab.helper.image" (dict "context" . "image" .Values.global.kubectl.image) -}}
+{{- end -}}
+
+{{/*
+Constructs certificates image value.
+*/}}
+{{- define "gitlab.certificates.image" -}}
+{{- include "gitlab.helper.image" (dict "context" . "image" .Values.global.certificates.image) -}}
+{{- end -}}
+
+{{/*
+Constructs selfsign image value.
+*/}}
+{{- define "gitlab.selfsign.image" -}}
+{{- $image := index .Values "shared-secrets" "selfsign" "image" -}}
+{{- include "gitlab.helper.image" (dict "context" . "image" $image) -}}
+{{- end -}}
+
+{{/*
+Constructs busybox image name.
+*/}}
+{{- define "gitlab.busybox.image" -}}
+{{/*
+    # Earlier, init.image and init.tag were used to configure initContainer
+    # image details. We deprecated them in favor of init.image.repository and
+    # init.image.tag. However, deprecation checking happens after template
+    # rendering is done. So, we have to handle the case of `init.image` being a
+    # string to avoid the process being broken at rendering stage itself. It
+    # doesn't matter what we print there because once rendering is done
+    # deprecation check will kick-in and abort the process. That value will not
+    # be used.
+    # TODO: consider tagSuffix here, since we took it out of example
+*/}}
+{{- if kindIs "map" .local.image }}
+{{- $image := default .global.busybox.image.repository .local.image.repository }}
+{{- $tag := coalesce .local.image.tag .global.busybox.image.tag "latest" }}
+{{- printf "%s:%s" $image $tag -}}
+{{- else }}
+{{- printf "DEPRECATED:DEPRECATED" -}}
 {{- end -}}
 {{- end -}}
 

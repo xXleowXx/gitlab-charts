@@ -43,7 +43,7 @@ spec:
       {{- include "gitlab.image.pullSecrets" $imageCfg | nindent 6 }}
       initContainers:
       - name: cfssl-self-sign
-        image: {{ include "gitlab.image.fullPath" $imageCfgSelfsign }}
+        image: {{ include "gitlab.selfsign.image" . }}
         {{- include "gitlab.image.pullPolicy" $imageCfgSelfsign | indent 8 }}
         env:
         - name: CA_SUBJECT
@@ -69,7 +69,7 @@ spec:
           {{- toYaml $sharedSecretValues.resources | nindent 10 }}
       containers:
       - name: kubectl
-        image: {{ include "gitlab.image.fullPath" $imageCfgKubectl }}
+        image: {{ include "gitlab.kubectl.image" . }}
         {{- include "gitlab.image.pullPolicy" $imageCfgKubectl | indent 8 }}
         command:
         - /bin/bash

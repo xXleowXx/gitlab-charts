@@ -7,7 +7,7 @@
 {{- $certmanagerDisabled := not (or $.Values.global.ingress.configureCertmanager $.Values.global.ingress.tls) }}
 {{- $imageCfg := dict "global" .Values.global.image "local" .Values.global.certificates.image "context" $ -}}
 - name: certificates
-  image: {{ include "gitlab.image.fullPath" $imageCfg }}
+  image: {{ include "gitlab.certificates.image" . }}
   {{- include "gitlab.image.pullPolicy" $imageCfg | indent 2 }}
   env:
   {{- include "gitlab.extraEnv" . | nindent 2 }}
