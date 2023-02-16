@@ -133,7 +133,7 @@ spec:
                 {{- end }}
                 {{- if eq .Values.backups.objectStorage.backend "azure" }}
                 - name: AZURE_BASE_URL
-                  value: {{ required "A valid backups.objectStorage.config.azureBaseUrl is needed!" .Values.backups.objectStorage.config.azureBaseUrl }}
+                  value: {{ .Values.backups.objectStorage.config.azureBaseUrl }}
                 {{- end }}
               volumeMounts:
                 {{- include "gitlab.extraVolumeMounts" . | nindent 16 }}

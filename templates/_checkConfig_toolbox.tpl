@@ -2,12 +2,17 @@
 Ensure that a valid object storage config secret is provided.
 */}}
 {{- define "gitlab.toolbox.backups.objectStorage.config.secret" -}}
+{{- $objectStorage := .Values.gitlab.toolbox.backups.objectStorage -}}
 {{-   if .Values.gitlab.toolbox.enabled -}}
-{{-     if or .Values.gitlab.toolbox.backups.objectStorage.config (not (or .Values.global.minio.enabled .Values.global.appConfig.object_store.enabled)) (eq .Values.gitlab.toolbox.backups.objectStorage.backend "gcs") }}
-{{-       if not .Values.gitlab.toolbox.backups.objectStorage.config.secret -}}
+{{-     if or $objectStorage.config (not (or .Values.global.minio.enabled .Values.global.appConfig.object_store.enabled)) (has $objectStorage.backend (list "gcs" "azure")) }}
+{{-       if not $objectStorage.config.secret -}}
 toolbox:
     A valid object storage config secret is needed for backups.
     Please configure it via `gitlab.toolbox.backups.objectStorage.config.secret`.
+{{-       else if and (eq $objectStorage.backend "azure") (not $objectStorage.config.azureBaseUrl) -}}
+toolbox:
+    A valid Azure base URL is needed for backing up to Azure.
+    Please configure it via `gitlab.toolbox.backups.objectStorage.config.azureBaseUrl`.
 {{-       end -}}
 {{-     end -}}
 {{-   end -}}
