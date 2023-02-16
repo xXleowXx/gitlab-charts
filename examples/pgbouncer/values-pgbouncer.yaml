@@ -1,0 +1,67 @@
+pgbouncer:
+  enabled: true
+  replicaCount: 3
+  deployment:
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+    terminationGracePeriodSeconds: 600
+  nodeSelector:
+    node-role.kubernetes.io/infra: ""
+  podAnnotations:
+    gitlab.com/prometheus_scrape: "true"
+    gitlab.com/prometheus_port: "9127"
+    gitlab.com/prometheus_path: "/metrics"
+  antiAffinity: "hard"
+  resources:
+    limits:
+      cpu: "1"
+    requests:
+      cpu: "1"
+      memory: 40Mi
+  ## PgBouncer configuration
+  databases:
+    gitlab_production:
+      host: host1.example.cern.ch
+      port: 5432
+  pgbouncer:
+    logfile: /dev/stdout
+    auth_type: scram-sha-256
+    auth_file: /etc/pgbouncer/userlist.txt
+    ## Console access
+    admin_users: gitlab_user
+    stats_users: gitlab_user
+    ## Pool settings
+    pool_mode: transaction
+    ## Log settings
+    log_connections: 0
+    log_disconnections: 0
+    log_pooler_errors: 1
+    log_stats: 1
+    verbose: 0
+    ignore_startup_parameters: extra_float_digits
+    min_pool_size: 21
+    default_pool_size: 94
+    reserve_pool_size: 18
+    reserve_pool_timeout: 2
+    max_db_connections: 900
+    max_user_connections: 900
+    max_client_conn: 2048
+  userlist:
+    gitlab_user: SCRAM-SHA-256...
+  ## PgBouncer-exporter configuration
+  pgbouncerExporter:
+    enabled: true
+    extraEnv:
+      - name: PGBOUNCER_PORT
+        value: "6432"
+      - name: PGBOUNCER_USER
+        value: "gitlab"
+    extraEnvFrom:
+      - name: PGBOUNCER_PWD
+        valueFrom:
+          secretKeyRef:
+            name: gitlab-dbod-credentials
+            key: gitlab-passwd
+            optional: false

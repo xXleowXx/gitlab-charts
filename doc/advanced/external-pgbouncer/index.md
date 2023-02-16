@@ -1,0 +1,237 @@
+---
+stage: Systems
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+---
+
+# Configure the GitLab chart with an external PgBouncer
+
+This document intends to provide documentation on how to configure the GitLab Helm chart with an external PgBouncer service.
+
+PgBouncer is a lightweight connection pooler for PostgreSQL. It sits between your application and the PostgreSQL server, allowing your application to reuse connections to the server, rather than creating a new connection for each query. This can improve the performance and scalability of your application, as well as reduce the load on the PostgreSQL server.
+
+## Prerequisites
+
+- A deployment of PostgreSQL 12 or later.
+
+## Configure the chart
+
+In order to start using the `pgbouncer` chart, the following properties must be set:
+
+- `pgbouncer.enabled`: Set to `true` to enable the included PgBouncer chart.
+- `pgbouncer.databases.<database-name>`. Set `<database-name>` to the name of the database used for GitLab (e.g., `gitlabhq_production`).
+- `pgbouncer.databases.<database-name>.host`. Set `<database-name>.host` to the host name of the database server.
+- `pgbouncer.databases.<database-name>.port`. Set `<database-name>.port` to the port of the database server.
+
+A working example configuration could be:
+
+```yaml
+pgbouncer:
+  enabled: true # default false
+  replicaCount: 3 # optional, default 1
+  image: # optional
+    repository: registry.cern.ch/pgbouncer/pgbouncer # optional, default registry.cern.ch/pgbouncer/pgbouncer
+    tag: 1.18.0 # optional, default 1.18.0
+  antiAffinity: "hard" # optional, default soft
+  resources: # optional
+    limits:
+      cpu: "1"
+    requests:
+      cpu: "1"
+      memory: 40Mi
+  databases: # mandatory
+    gitlabhq_production: # mandatory, GitLab database name
+      host: host1.example.com # mandatory, GitLab database host name
+      port: 5432 # mandatory, GitLab database port
+    ## multiple databases can be added
+    # another_database:
+    #   host: host2.example.com
+    #   port: 5432
+  pgbouncer: # mandatory
+    logfile: /dev/stdout # optional, default /dev/stdout
+    auth_type: scram-sha-256 # mandatory, it can be any of any, password, md5, scram-sha-256 (default and recommended)
+    auth_file: /etc/pgbouncer/userlist.txt # optional, auth_query can be used instead
+    admin_users: user1 # optional
+    stats_users: user2 # optional
+    pool_mode: transaction # mandatory transaction mode for GitLab
+    ignore_startup_parameters: extra_float_digits
+    min_pool_size: 20 # optional, default 0 (disabled)
+    default_pool_size: 80 # optional, default 20
+    reserve_pool_size: 18 # optional, default 0 (disabled)
+    reserve_pool_timeout: 2 # optional, default 5
+    max_db_connections: 900 # optional, default 0 (unlimited)
+    max_user_connections: 900 # optional, default 0 (unlimited)
+    max_client_conn: 2048 # optional, default 100 (max `ulimit -n` file descriptors)
+    log_connections: 1 # optional, default 1
+    log_disconnections: 1 # optional, default 1
+    log_pooler_errors: 1 # optional, default 1
+    log_stats: 1 # optional, default 1
+    verbose: 0 # optional, default 0
+  userlist: # optional, mandatory when using auth_file
+    user1: <pwd | md5 | scram-sha-256 > # mandatory, must match auth_type password encryption
+    # user2: <pwd | md5 | scram-sha-256 >
+```
+
+A more complete [example values file](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/pgbouncer/values-pgbouncer.yaml) is provided, which shows the
+appropriate set of configuration.
+
+NOTE: when using multiple replicas of PgBouncer, values for `min_pool_size` and `default_pool_size` are scaled according to the number of replicas. I.e., if we have configured `min_pool_size: 20`, and we have `replicaCount: 3`, the resulting minimum pool size in the database server will be `20 * 3 = 60` minimum backend connections. Same applies to `default_pool_size`. Bear this in mind when scaling PgBouncer.
+
+### Enable PgBouncer exporter for monitoring
+
+To enable monitoring for the PgBouncer service, the following `pgbouncerExporter` must be enabled and configured:
+
+NOTE: when enabling `pgbouncerExporter`, both `PGBOUNCER_USER`, `PGBOUNCER_PORT` and `PGBOUNCER_PWD` environment variables must be compulsorily created.
+
+```yaml
+pgbouncer:
+  enabled: true
+  podAnnotations:
+    gitlab.com/prometheus_scrape: "true"
+    gitlab.com/prometheus_port: "9127"
+    gitlab.com/prometheus_path: "/metrics"
+  # ...
+  pgbouncerExporter: # optional
+    enabled: true
+    extraEnv:
+      - name: PGBOUNCER_PORT
+        value: "6432"
+      - name: PGBOUNCER_USER
+        value: "database_username"
+    extraEnvFrom:
+      - name: PGBOUNCER_PWD
+        valueFrom:
+          secretKeyRef:
+            name: gitlab-database-credentials
+            key: database-username-pwd
+            optional: false
+```
+
+This will automatically create a sidecar container and will start exposing metrics for each of the pgbouncer replicas.
+
+### Authenticate users in PgBouncer
+
+There are a few different ways to authenticate users in PgBouncer.
+
+One way is using an **authentication file** containing the list of known roles and their password hash (a.k.a. `auth_file`). For this to work, the following must be setup in the chart configuration:
+
+```yaml
+pgbouncer:
+  # ...
+  pgbouncer:
+    # ...
+    auth_file: /etc/pgbouncer/userlist.txt
+  userlist:
+    user1: <pwd | md5 | scram-sha-256 >
+```
+
+Another is to use an **authentication query** returning the password hash (a.k.a `auth_query`). For this to work, the following must be setup in the chart configuration:
+
+```yaml
+pgbouncer:
+  # ...
+  pgbouncer:
+    # ...
+    auth_query: select uname, phash from pgbouncer_auth.user_lookup($1)
+```
+
+NOTE: when both are defined, the `auth_query` is used only for roles not found in the `auth_file`.
+
+For both cases, a **secure function** must be created at the database server level and a superuser access to the `pg_shadow` table would be required. Secure function could look like:
+
+```sql
+CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(in i_username text, out uname text, out phash text)
+RETURNS record AS $$
+BEGIN
+    SELECT usename, passwd FROM pg_catalog.pg_shadow
+    WHERE usename = i_username INTO uname, phash;
+    RETURN;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+REVOKE ALL ON FUNCTION pgbouncer.user_lookup(text) FROM public, pgbouncer;
+GRANT EXECUTE ON FUNCTION pgbouncer.user_lookup(text) TO pgbouncer;
+```
+
+This function will allow us to fetch the hashed password of the database user name (assuming `gitlab` is the database username):
+
+```sql
+gitlabhq_production=# select uname, phash from pgbouncer_auth.user_lookup('gitlab');
+
+ uname  |                                                                 phash
+--------+---------------------------------------------------------------------------------------------------------------------------------------
+ gitlab | SCRAM-SHA-256...
+```
+
+For further information about how to configure the secure function, refer to the [PgBouncer official documentation](https://www.pgbouncer.org/config.html).
+
+Last but not least, make sure that the `auth_type` value matches the `password_encryption` value under the `postgresql.conf` configuration file in the database server(s), as well as in the client authentication `pg_hba.conf` file.
+
+### Connecting PgBouncer over TLS
+
+In order to connect PgBouncer over TLS, to create a Kubernetes secret containg both the key and the certificate(s) is needed in advance:
+
+```shell
+kubectl create secret generic gitlab-pgbouncer-client-tls-certificate --from-file=client-pgbouncer-tls.crt=<path to certificate>
+kubectl create secret generic gitlab-pgbouncer-client-tls-key --from-file=client-pgbouncer.key=<path to key>
+
+kubectl create secret generic gitlab-pgbouncer-server-tls-certificate --from-file=server-pgbouncer-tls.crt=<path to certificate>
+kubectl create secret generic gitlab-pgbouncer-server-tls-key --from-file=server-pgbouncer.key=<path to key>
+```
+
+For them to be used, pgbouncer must contain these secrets mounted in the `pgbouncer` container, so that they can be referenced from the `pgbouncer.pgbouncer` helm chart configuration. This can be achieved by using both the `extraVolumes` and `extraVolumeMounts` elements accordingly.
+
+## Configure GitLab application to use PgBouncer
+
+Once PgBouncer is fully configured, it just remains connecting the GitLab application through it. For this to work, we only need to configure the `webservice`, `sidekiq` and `gitlab-exporter` GitLab components to go through PgBouncer.
+
+In order to configure them, will keep the `global.psql` configuration as is, and will modify the GitLab components as follows:
+
+```yaml
+global:
+  # ...
+  psql:
+    host: host1.example.com
+    password:
+      secret: gitlab-database-credentials
+      key: gitlab-passwd
+    database: gitlabhq_production
+    port: 6600
+    username: gitlab
+# ...
+gitlab:
+  # ...
+  gitlab-exporter:
+    # ...
+    psql:
+      host: gitlab-pgbouncer # assuming the release name is gitlab
+      port: 6432
+      password:
+        secret: gitlab-database-credentials
+        key: gitlab-passwd
+      database: gitlabhq_production
+      username: gitlab
+  # ...
+  webservice:
+    # ...
+    psql:
+      host: gitlab-pgbouncer # assuming the release name is gitlab
+      port: 6432
+      password:
+        secret: gitlab-database-credentials
+        key: gitlab-passwd
+      database: gitlabhq_production
+      username: gitlab
+    # ...
+  sidekiq:
+    # ...
+    psql:
+      host: gitlab-pgbouncer # assuming the release name is gitlab
+      port: 6432
+      password:
+        secret: gitlab-database-credentials
+        key: gitlab-passwd
+      database: gitlabhq_production
+      username: gitlab
+```
+
+And that's it. You are ready to start using GitLab through PgBouncer.
