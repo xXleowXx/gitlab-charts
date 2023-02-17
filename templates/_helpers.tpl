@@ -517,7 +517,7 @@ Format:
 {{- define "gitlab.helper.image" -}}
 {{- $gitlabVersion := "" -}}
 {{- if .context.Values.global.gitlabVersion -}}
-{{-   $gitlabVersion = printf "v%s" .context.Values.global.gitlabVersion -}}
+{{-   $gitlabVersion = include "gitlab.parseAppVersion" (dict "appVersion" .context.Values.global.gitlabVersion "prepend" "true") -}}
 {{- end -}}
 {{- $tag := coalesce .image.tag $gitlabVersion "master" -}}
 {{- $tagSuffix := include "gitlab.image.tagSuffix" .context -}}
