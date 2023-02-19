@@ -174,4 +174,34 @@ describe 'toolbox configuration' do
       end
     end
   end
+
+  context 'cron job eviction annotation' do
+    let(:safeToEvict) { false }
+
+    let(:values) do
+      HelmTemplate.with_defaults %(
+        gitlab:
+          toolbox:
+            backups:
+              cron:
+                enabled: true
+                safeToEvict: #{safeToEvict}
+      )
+    end
+
+    let(:template) { HelmTemplate.new(values) }
+
+    context "when safeToEvict defaults to false" do
+      it 'sets the safe-to-evict annotation to false' do
+        expect(template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'annotations', 'cluster-autoscaler.kubernetes.io/safe-to-evict')).to eq("false")
+      end
+    end
+
+    context "when safeToEvict defaults to true" do
+      let(:safeToEvict) { true }
+      it 'sets the safe-to-evict annotation to true' do
+        expect(template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'annotations', 'cluster-autoscaler.kubernetes.io/safe-to-evict')).to eq("true")
+      end
+    end
+  end
 end

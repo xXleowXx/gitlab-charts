@@ -30,6 +30,7 @@ gitlab:
         successfulJobsHistoryLimit: 3
         suspend: false
         backoffLimit: 6
+        safeToEvict: false
         restartPolicy: "OnFailure"
         resources:
           requests:
@@ -62,6 +63,7 @@ gitlab:
 | `common.labels`                             | Supplemental labels that are applied to all objects created by this chart.  | `{}` |
 | `antiAffinityLabels.matchLabels`            | Labels for setting anti-affinity options     |                              |
 | `backups.cron.activeDeadlineSeconds`        | Backup CronJob active deadline seconds (if null, no active deadline is applied)| `null` |
+| `backups.cron.safeToEvict`                  | Autoscaling safe-to-evict annotation         | false                        |
 | `backups.cron.backoffLimit`                 | Backup CronJob backoff limit| `6` |
 | `backups.cron.concurrencyPolicy`            | Kubernetes Job concurrency policy            | `Replace`                    |
 | `backups.cron.enabled`                      | Backup CronJob enabled flag                  | false                        |
