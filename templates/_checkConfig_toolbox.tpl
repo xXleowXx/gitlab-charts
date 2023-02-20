@@ -9,10 +9,10 @@ Ensure that a valid object storage config secret is provided.
 toolbox:
     A valid object storage config secret is needed for backups.
     Please configure it via `gitlab.toolbox.backups.objectStorage.config.secret`.
-{{-       else if and (eq $objectStorage.backend "azure") (not $objectStorage.config.azureBaseUrl) -}}
+{{-       else if and (eq $objectStorage.backend "azure") (not $objectStorage.config.azureStorageAccount) -}}
 toolbox:
-    A valid Azure base URL is needed for backing up to Azure.
-    Please configure it via `gitlab.toolbox.backups.objectStorage.config.azureBaseUrl`.
+    A valid Azure storage account is needed for backing up to Azure.
+    Please configure it via `gitlab.toolbox.backups.objectStorage.config.azureStorageAccount`.
 {{-       end -}}
 {{-     end -}}
 {{-   end -}}

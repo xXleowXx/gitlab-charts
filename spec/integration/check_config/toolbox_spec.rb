@@ -95,7 +95,8 @@ describe 'checkConfig toolbox' do
                   config:
                     secret: s3cmd-config
                     key: config
-                  azureBaseUrl: "https://mystorage.blob.core.windows.net"
+                    azureStorageAccount: mystorage
+                  backend: azure
         )).merge(default_required_values)
       end
 
@@ -109,11 +110,11 @@ describe 'checkConfig toolbox' do
                   config:
                     secret: s3cmd-config
                     key: config
+                    azureStorageAccount: mystorage
                   backend: azure
-                  # azureBaseUrl: "https://mystorage.blob.core.windows.net"
         )).merge(default_required_values)
 
-        let(:error_output) { 'A valid Azure base URL is needed for backing up to Azure.' }
+        let(:error_output) { 'A valid Azure storage account is needed for backing up to Azure.' }
 
         include_examples 'config validation',
                          success_description: 'when toolbox is using Azure backend with base URL configured',

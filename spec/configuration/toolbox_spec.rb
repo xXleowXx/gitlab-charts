@@ -220,7 +220,7 @@ describe 'toolbox configuration' do
                   config:
                     secret: token-secret
                     key: token
-                    azureBaseUrl: "https://mystorage.blob.core.windows.net"
+                    azureStorageAccount: mystorage
                   backend: azure
         )).deep_merge(default_values)
       end
@@ -236,21 +236,21 @@ describe 'toolbox configuration' do
       it 'configures the deployment to use the azure backend' do
         deployment_spec = template.dig("Deployment/test-toolbox", 'spec', 'template', 'spec')
         container_env = deployment_spec.dig('containers', 0, 'env')
-        expect(container_env).to include(env_value('AZURE_BASE_URL', 'https://mystorage.blob.core.windows.net'))
+        expect(container_env).to include(env_value('AZURE_STORAGE_ACCOUNT', 'mystorage'))
         expect(container_env).to include(env_value('BACKUP_BACKEND', 'azure'))
         init_secret = deployment_spec['volumes'].find { |s| s['name'] == 'init-toolbox-secrets' }
         token_secret = init_secret["projected"]["sources"].find { |sc| sc['secret']['name'] == 'token-secret' }["secret"]
-        expect(token_secret).to eq({ "name" => 'token-secret', "items" => [{ "key" => 'token', "path" => 'objectstorage/azure_token' }] })
+        expect(token_secret).to eq({ "name" => 'token-secret', "items" => [{ "key" => 'token', "path" => 'objectstorage/azure_access_key' }] })
       end
 
       it 'configures the cronjob to use the azure backend' do
         cronjob_spec = template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'template', 'spec')
         container_env = cronjob_spec.dig('containers', 0, 'env')
-        expect(container_env).to include(env_value('AZURE_BASE_URL', 'https://mystorage.blob.core.windows.net'))
+        expect(container_env).to include(env_value('AZURE_STORAGE_ACCOUNT', 'mystorage'))
         expect(container_env).to include(env_value('BACKUP_BACKEND', 'azure'))
         init_secret = cronjob_spec['volumes'].find { |s| s['name'] == 'init-toolbox-secrets' }
         token_secret = init_secret["projected"]["sources"].find { |sc| sc['secret']['name'] == 'token-secret' }["secret"]
-        expect(token_secret).to eq({ "name" => 'token-secret', "items" => [{ "key" => 'token', "path" => 'objectstorage/azure_token' }] })
+        expect(token_secret).to eq({ "name" => 'token-secret', "items" => [{ "key" => 'token', "path" => 'objectstorage/azure_access_key' }] })
       end
     end
   end
