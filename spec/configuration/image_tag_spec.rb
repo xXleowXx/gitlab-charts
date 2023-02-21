@@ -56,6 +56,19 @@ def test_helper_images(template, description, expectation, expectation_busybox)
   end
 end
 
+def fetch_default_gitlab_version
+  # load from values.yaml
+  values = YAML.load_file('./values.yaml')
+  # fetch value of key (nil if not present)
+  gitlab_version = values['global']['gitlab_version']
+  # if not present, return `:master`
+  gitlab_version = 'master' if gitlab_version.nil?
+  gitlab_version = "v#{gitlab_version}" if gitlab_version.match? "^\\d+\\.\\d+\\.\\d+(-rc\\d+)?(-pre)?$"
+
+  # return in expected format of `:blah`
+  ":#{gitlab_version}"
+end
+
 describe 'image tag configuration' do
   context 'no global.gitlabVersion configured' do
     begin
@@ -84,7 +97,7 @@ describe 'image tag configuration' do
       expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
     end
 
-    test_helper_images(template, 'should use the default image tag', ':master', ':latest')
+    test_helper_images(template, 'should use the default image tag', fetch_default_gitlab_version, ':latest')
   end
 
   context 'global.gitlabVersion' do
