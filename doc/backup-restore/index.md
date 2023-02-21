@@ -83,42 +83,28 @@ when restoring a backup.
 
 ### Backups to Azure blob storage
 
-Azure blob storage can be can be used to store backups by setting
+Azure blob storage can be used to store backups by setting
 `gitlab.toolbox.backups.objectStorage.backend` to `azure`. This will enable
 Toolbox to use the included copy of `azcopy` to transmit and retrieve the
 backup files to the Azure blob storage.
 
-To support using Azure blob storage, one will need to create a storage account
-in an existing resource group. The storage account base URL needs to be
-set to `gitlab.toolbox.backups.objectStorage.config.azureBaseUrl`.
+To use Azure blob storage, one will need to create a storage account
+in an existing resource group. The storage account name needs to be
+set to `gitlab.toolbox.backups.objectStorage.config.azureStorageAccount`.
 
-A shared access signature (SAS) token is then
-generated from the storage account for GitLab to authenticate to Azure. The
-settings for the SAS token should be set to:
-
-- Service: blob
-- Resource types: container, object
-- Permissions: read, write, list and delete (only
-  when old backups are configured to be removed automatically)
-- Versioning permissions: None
-- Index permissions: None
-- Allowed protocols: HTTPS only
-- Preferred routing: Basic
-
-Once the SAS token is generated, it needs to be stored in a Kubernetes Secret
-**without** the leading question mark. The name of this Secret needs to be
-supplied to `gitlab.toolbox.backups.objectStorage.config.secret`. In addition,
-the key used to store the SAS token needs to be supplied to
+The access key needs to be stored in a Kubernetes Secret. The name of this
+Secret needs to be supplied to `gitlab.toolbox.backups.objectStorage.config.secret`.
+In addition, the key used to store the access key needs to be supplied to
 `gitlab.toolbox.backups.objectStorage.config.key`.
 
 The following `kubectl` command can be used to create the Kubernetes Secret
-for the SAS token:
+for the access key:
 
 ```shell
-kubectl create secret generic backup-sas-token --from-literal=token=<SAS token value>
+kubectl create secret generic backup-access-key --from-literal=token=<access key value>
 ```
 
-Once the SAS token Secret has been created, the GitLab Helm chart can be
+Once the access key Secret has been created, the GitLab Helm chart can be
 configured by adding the backup settings to your deployed values or by supplying
 the settings on the Helm command line. For example:
 
@@ -127,8 +113,12 @@ helm install gitlab gitlab/gitlab \
   --set gitlab.toolbox.backups.objectStorage.config.secret=backup-sas-token \
   --set gitlab.toolbox.backups.objectStorage.config.key=token \
   --set gitlab.toolbox.backups.objectStorage.backend=azure \
-  --set gitlab.toolbox.backups.objectStorage.config.azureBaseUrl=https://<YOUR_STORAGE_ACCOUNT>.blob.core.windows.net
+  --set gitlab.toolbox.backups.objectStorage.config.azureStorageAccount=YOUR_STORAGE_ACCOUNT \
+  --set gitlab.toolbox.backups.objectStorage.config.azureBlobHost=blob.core.windows.net
 ```
+
+The access key from the Secret is used to generate and refresh shorter-lived shared
+access signature (SAS) tokens to access the storage account.
 
 In addition, two buckets/containers need to be created beforehand, one for storing the
 backups, and one temporary bucket that is used when restoring a backup. Add the
