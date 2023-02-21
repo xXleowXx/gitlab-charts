@@ -101,7 +101,7 @@ The following `kubectl` command can be used to create the Kubernetes Secret
 for the access key:
 
 ```shell
-kubectl create secret generic backup-access-key --from-literal=token=<access key value>
+kubectl create secret generic backup-access-key --from-literal=accesskey=<access key value>
 ```
 
 Once the access key Secret has been created, the GitLab Helm chart can be
