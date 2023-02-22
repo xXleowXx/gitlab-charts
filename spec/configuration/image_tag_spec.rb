@@ -60,7 +60,7 @@ def fetch_default_gitlab_version
   # load from values.yaml
   values = YAML.load_file('./values.yaml')
   # fetch value of key (nil if not present)
-  gitlab_version = values['global']['gitlab_version']
+  gitlab_version = values['global']['gitlabVersion']
   # if not present, return `:master`
   gitlab_version = 'master' if gitlab_version.nil?
   gitlab_version = "v#{gitlab_version}" if gitlab_version.match? "^\\d+\\.\\d+\\.\\d+(-rc\\d+)?(-pre)?$"
