@@ -83,43 +83,5 @@ describe 'checkConfig toolbox' do
       include_examples 'config validation',
                        success_description: 'when toolbox is disabled and does not have a valid object storage backup secret configured'
     end
-
-    describe 'is using Azure as backup backend' do
-      let(:success_values) do
-        YAML.safe_load(%(
-          gitlab:
-            toolbox:
-              enabled: true
-              backups:
-                objectStorage:
-                  config:
-                    secret: s3cmd-config
-                    key: config
-                    azureStorageAccount: mystorage
-                  backend: azure
-        )).merge(default_required_values)
-      end
-
-      let(:error_values) do
-        YAML.safe_load(%(
-          gitlab:
-            toolbox:
-              enabled: true
-              backups:
-                objectStorage:
-                  config:
-                    secret: s3cmd-config
-                    key: config
-                    azureStorageAccount: mystorage
-                  backend: azure
-        )).merge(default_required_values)
-
-        let(:error_output) { 'A valid Azure storage account is needed for backing up to Azure.' }
-
-        include_examples 'config validation',
-                         success_description: 'when toolbox is using Azure backend with base URL configured',
-                         error_description: 'when toolbox is using Azure backend without base URL confiured'
-      end
-    end
   end
 end

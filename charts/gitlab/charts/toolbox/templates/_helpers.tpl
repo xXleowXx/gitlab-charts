@@ -55,7 +55,7 @@ Usage:
     name: {{ .config.secret }}
     items:
       - key: {{ default "config" .config.key }}
-        path: objectstorage/azure_access_key
+        path: objectstorage/azure_config
 {{-   else -}}
 - secret:
     name: {{ .config.secret }}
@@ -65,17 +65,3 @@ Usage:
 {{-   end -}}
 {{- end -}}
 
-
-{{/*
-Returns the Azure backup specific environment variables.
-
-Usage:
-  {{ include "toolbox.backups.objectStorage.config.env" .Values.backups.objectStorage }}
-
-*/}}
-{{- define "toolbox.backups.objectStorage.config.env" -}}
-- name: AZURE_BLOB_HOST
-  value: {{ default .config.azureBlobHost "blob.core.windows.net" }}
-- name: AZURE_STORAGE_ACCOUNT
-  value: {{ .config.azureStorageAccount }}
-{{- end -}}

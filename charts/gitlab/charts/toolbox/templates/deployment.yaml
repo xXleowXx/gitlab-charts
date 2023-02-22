@@ -147,7 +147,8 @@ spec:
               value: '/etc/gitlab/objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}'
             {{- end }}
             {{- if eq .Values.backups.objectStorage.backend "azure" }}
-            {{- include "toolbox.backups.objectStorage.config.env" .Values.backups.objectStorage | nindent 12 }}
+            - name: AZURE_CONFIG_FILE
+              value: '/etc/gitlab/objectstorage/azure_config'
             {{- end }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
