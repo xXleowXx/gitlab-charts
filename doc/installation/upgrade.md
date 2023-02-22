@@ -9,7 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 Before upgrading your GitLab installation, you need to check the
 [changelog](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/CHANGELOG.md)
 corresponding to the specific release you want to upgrade to and look for any
-[release notes](../releases/index.md) that might pertain to the new GitLab chart
+[release notes](version_mappings.md#release-notes-for-each-version) that might pertain to the new GitLab chart
 version.
 
 NOTE:
