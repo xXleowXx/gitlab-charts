@@ -89,32 +89,35 @@ Toolbox to use the included copy of `azcopy` to transmit and retrieve the
 backup files to the Azure blob storage.
 
 To use Azure blob storage, one will need to create a storage account
-in an existing resource group. The storage account name needs to be
-set to `gitlab.toolbox.backups.objectStorage.config.azureStorageAccount`.
+in an existing resource group. Create a config secret with your storage
+account's name, access key and blob host.
 
-The access key needs to be stored in a Kubernetes Secret. The name of this
-Secret needs to be supplied to `gitlab.toolbox.backups.objectStorage.config.secret`.
-In addition, the key used to store the access key needs to be supplied to
-`gitlab.toolbox.backups.objectStorage.config.key`.
+Create a config file containing the paramters:
 
-The following `kubectl` command can be used to create the Kubernetes Secret
-for the access key:
-
-```shell
-kubectl create secret generic backup-access-key --from-literal=accesskey=<access key value>
+```yaml
+# azure-backup-conf.yaml
+azure_storage_account_name: <storage account>
+azure_storage_access_key: <access key value>
+azure_storage_domain: blob.core.windows.net # optional
 ```
 
-Once the access key Secret has been created, the GitLab Helm chart can be
+The following `kubectl` command can be used to create the Kubernetes Secret:
+
+```shell
+kubectl create secret generic backup-azure-creds \
+  --from-file=config=azure-backup-conf.yaml \
+  --from-literal=azure_storage_account_name=<storage account>
+```
+
+Once the Secret has been created, the GitLab Helm chart can be
 configured by adding the backup settings to your deployed values or by supplying
 the settings on the Helm command line. For example:
 
 ```shell
 helm install gitlab gitlab/gitlab \
-  --set gitlab.toolbox.backups.objectStorage.config.secret=backup-sas-token \
-  --set gitlab.toolbox.backups.objectStorage.config.key=token \
-  --set gitlab.toolbox.backups.objectStorage.backend=azure \
-  --set gitlab.toolbox.backups.objectStorage.config.azureStorageAccount=YOUR_STORAGE_ACCOUNT \
-  --set gitlab.toolbox.backups.objectStorage.config.azureBlobHost=blob.core.windows.net
+  --set gitlab.toolbox.backups.objectStorage.config.secret=backup-azure-creds \
+  --set gitlab.toolbox.backups.objectStorage.config.key=config \
+  --set gitlab.toolbox.backups.objectStorage.backend=azure
 ```
 
 The access key from the Secret is used to generate and refresh shorter-lived shared
