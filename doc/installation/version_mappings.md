@@ -36,6 +36,7 @@ The table below maps some of the key previous chart versions and GitLab versions
 
 | Chart version | GitLab version |
 |---------------|----------------|
+| 6.9.0 | 15.9.0 |
 | 6.8.3 | 15.8.3 |
 | 6.8.2 | 15.8.2 |
 | 6.8.1 | 15.8.1 |
@@ -506,7 +507,7 @@ gitlab/gitlab           1.4.2           11.6.3
 gitlab/gitlab           1.4.1           11.6.2
 ```
 
-Read more about our charts versioning [here](../development/release.md#chart-versioning)
+Read more about our charts versioning [here](../development/release.md#chart-versioning).
 
-Check the [releases documentation](../releases/index.md) for information on important releases,
+Check the [releases documentation](#release-notes-for-each-version) for information on important releases,
 and see the [changelog](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/CHANGELOG.md) for the full details on any release.

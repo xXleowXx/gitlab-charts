@@ -723,7 +723,7 @@ global:
   certificates:
     image:
       # registry:
-      repository: registry.gitlab.com/gitlab-org/build/cng/alpine-certificates
+      repository: registry.gitlab.com/gitlab-org/build/cng/certificates
       # Default tag is `master`, overridable by `global.gitlabVersion`.
       # tag: master
       # pullPolicy: IfNotPresent
