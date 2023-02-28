@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.9.1 (2023-02-23)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.49.3 to 0.50.1](gitlab-org/charts/gitlab@95cb8869b072a926117edd1335202120dd3db9bc) ([merge request](gitlab-org/charts/gitlab!2998))
+
 ## 6.9.0 (2023-02-21)
 
 ### Added (4 changes)
