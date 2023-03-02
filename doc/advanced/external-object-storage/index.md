@@ -118,7 +118,7 @@ Examples for [S3](https://docs.docker.com/registry/storage-drivers/s3/)(S3 compa
 ## LFS, Artifacts, Uploads, Packages, External Diffs, Terraform State, Dependency Proxy
 
 Configuration of object storage for LFS, artifacts, uploads, packages, external
-diffs, and pseudonymizer is done via the following keys:
+diffs, Terraform state, and pseudonymizer is done via the following keys:
 
 - `global.appConfig.lfs`
 - `global.appConfig.artifacts`
@@ -126,6 +126,7 @@ diffs, and pseudonymizer is done via the following keys:
 - `global.appConfig.packages`
 - `global.appConfig.externalDiffs`
 - `global.appConfig.dependencyProxy`
+- `global.appConfig.terraformState`
 
 Note also that:
 
