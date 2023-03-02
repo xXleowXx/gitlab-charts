@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.9.2 (2023-03-02)
+
+No changes.
+
 ## 6.9.1 (2023-02-23)
 
 ### Changed (1 change)
@@ -46,6 +50,10 @@ entry.
 - [Moved minio config to global in example config](gitlab-org/charts/gitlab@973557e4cf0c5ec1e0c399fcce557fae2a87de17) ([merge request](gitlab-org/charts/gitlab!2952))
 - [Doc - configure the GitLab chart with an decomposed database](gitlab-org/charts/gitlab@af72661b6f82f8f16dab591c8af67e44baf0b998) ([merge request](gitlab-org/charts/gitlab!2890))
 
+## 6.8.4 (2023-03-02)
+
+No changes.
+
 ## 6.8.3 (2023-02-15)
 
 No changes.
@@ -79,6 +87,10 @@ No changes.
 - [Update gitlab-org/charts/gitlab-runner from 0.48.0 to 0.48.1](gitlab-org/charts/gitlab@460c275eaca9b1e3bf063947ca49629edef57d80) ([merge request](gitlab-org/charts/gitlab!2915))
 - [Update gitlab-org/gitlab-exporter from 11.18.2 to 12.1.0](gitlab-org/charts/gitlab@428de3dd7c208a0469b18b927fece2bc54029b19) ([merge request](gitlab-org/charts/gitlab!2911))
 - [Update gitlab-org/container-registry from 3.63.0-gitlab to 3.64.0-gitlab](gitlab-org/charts/gitlab@a1edaea5f4d9d2a6d972b7412deafe6a2b50aedb) ([merge request](gitlab-org/charts/gitlab!2904))
+
+## 6.7.8 (2023-03-02)
+
+No changes.
 
 ## 6.7.7 (2023-02-10)
 
