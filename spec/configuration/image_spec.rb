@@ -97,28 +97,8 @@ describe 'image configuration' do
 
   context 'global image settings' do
     begin
-      template = HelmTemplate.new(HelmTemplate.with_defaults(%(
-        global:
-          geo:
-            enabled: true
-            role: secondary
-            psql:
-              host: foo
-              password:
-                secret: bar
-          psql:
-            host: foo
-            password:
-              secret: bar
-
-          image:
-            pullPolicy: pp-global
-            pullSecrets:
-            - name: ps-global
-          busybox:
-            image:
-              pullPolicy: pp-busybox
-      )))
+      values = open('spec/fixtures/global-image-config.yaml', 'r').read
+      template = HelmTemplate.new(HelmTemplate.with_defaults(values))
     rescue StandardError
       # Skip these examples when helm or chart dependencies are missing
       next
