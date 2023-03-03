@@ -45,6 +45,8 @@ variables:
   CANONICAL_PROJECT_PATH: 'gitlab-org/charts/gitlab'
   SECURITY_PROJECT_PATH: 'gitlab-org/security/charts/gitlab'
   DEV_PROJECT_PATH: 'gitlab/charts/gitlab'
+  QA_FULL_SUITE_OPTIONS: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+  QA_SANITY_SUITE_OPTIONS: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
 
 stages:
   - prepare
@@ -787,6 +789,7 @@ production_specs_eks:
     - if [ "$app_version" != "master" ] && [ "$app_version" != "main" ]; then
     -   qa_version="${app_version}-ee"
     - fi
+    - echo "Running - 'gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL -- $TEST_SUITE'"
     - SIGNUP_DISABLED=true QA_DEBUG=true GITLAB_USERNAME=root GITLAB_PASSWORD=$ROOT_PASSWORD GITLAB_ADMIN_USERNAME=root GITLAB_ADMIN_PASSWORD=$ROOT_PASSWORD EE_LICENSE=$REVIEW_APPS_EE_LICENSE gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL -- $TEST_SUITE
   artifacts:
     when: always
@@ -899,7 +902,7 @@ qa_gke:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_gke"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke
@@ -908,7 +911,7 @@ qa_gke122:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_gke122"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: k8s122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke122
@@ -917,7 +920,7 @@ qa_gke125:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_gke125"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke125
@@ -926,7 +929,7 @@ qa_eks:
   extends: .qa_branch
   variables:
     VARIABLES_FILE: "variables/review_eks"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
@@ -935,7 +938,7 @@ qa_gke_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_gke"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: gke_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
 
@@ -943,7 +946,7 @@ qa_gke122_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_gke122"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: k8s122_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
 
@@ -951,7 +954,7 @@ qa_gke125_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_gke125"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: gke125_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
 
@@ -959,7 +962,7 @@ qa_eks_production:
   extends: .qa_production
   variables:
     VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: eks_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
 
@@ -986,7 +989,7 @@ qa_gke_manual_full_suite:
   parallel: 7
   variables:
     VARIABLES_FILE: "variables/review_gke"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke
@@ -997,7 +1000,7 @@ qa_gke_manual_full_suite_production:
   parallel: 7
   variables:
     VARIABLES_FILE: "variables/stable_gke"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
     name: gke_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
   needs: [ "qa_gke_full_suite_manual_trigger"]
@@ -1011,7 +1014,7 @@ qa_gke122_manual_full_suite:
   parallel: 7
   variables:
     VARIABLES_FILE: "variables/review_gke122"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
     name: k8s122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke122
@@ -1022,7 +1025,7 @@ qa_gke122_manual_full_suite_production:
   parallel: 7
   variables:
     VARIABLES_FILE: "variables/stable_gke122"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
     name: k8s122_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
   needs: [ "qa_gke122_full_suite_manual_trigger"]
@@ -1036,7 +1039,7 @@ qa_gke125_manual_full_suite:
   parallel: 7
   variables:
     VARIABLES_FILE: "variables/review_gke125"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke125
@@ -1051,7 +1054,7 @@ qa_eks_manual_full_suite:
   parallel: 7
   variables:
     VARIABLES_FILE: "variables/review_eks"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
@@ -1062,7 +1065,7 @@ qa_eks_manual_full_suite_production:
   parallel: 7
   variables:
     VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
     name: eks_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
   needs: [ "qa_eks_full_suite_manual_trigger"]

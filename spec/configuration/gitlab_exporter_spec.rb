@@ -5,9 +5,7 @@ require 'hash_deep_merge'
 
 describe 'gitlab-exporter configuration' do
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
+    HelmTemplate.with_defaults(%(
       global: {}
       gitlab:
         gitlab-exporter:
