@@ -5,9 +5,7 @@ require 'hash_deep_merge'
 
 describe 'toolbox configuration' do
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
+    HelmTemplate.with_defaults(%(
       gitlab:
         toolbox:
           backups:
@@ -70,20 +68,18 @@ describe 'toolbox configuration' do
     let(:api_version) { '' }
 
     let(:values) do
-      YAML.safe_load %(
-      certmanager-issuer:
-        email: test@example.com
-      global:
-        batch:
-          cronJob:
-            apiVersion: "#{api_version}"
-      gitlab:
-        toolbox:
-          backups:
-            cron:
-              enabled: true
-          enabled: true
-      )
+      HelmTemplate.with_defaults(%(
+        global:
+          batch:
+            cronJob:
+              apiVersion: "#{api_version}"
+        gitlab:
+          toolbox:
+            backups:
+              cron:
+                enabled: true
+            enabled: true
+      ))
     end
 
     let(:template) { HelmTemplate.new(values) }

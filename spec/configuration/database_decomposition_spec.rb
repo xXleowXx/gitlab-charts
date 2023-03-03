@@ -14,7 +14,7 @@ describe 'Database configuration' do
   end
 
   let(:default_values) do
-    HelmTemplate.certmanager_issuer.deep_merge(YAML.safe_load(%(
+    HelmTemplate.with_defaults(%(
       global:
         psql:
           host: ''
@@ -34,7 +34,7 @@ describe 'Database configuration' do
           tcpUserTimeout: nil
       postgresql:
         install: true
-    )))
+    ))
   end
 
   describe 'No decomposition' do
