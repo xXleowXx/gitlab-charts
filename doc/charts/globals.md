@@ -2013,7 +2013,7 @@ gitlab:
         tag: x.y.z
 ```
 
-See [`spec/fixtures/local-image-config.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/spec/fixtures/global-image-config.yaml) for a more complete example.
+See [`spec/fixtures/local-image-config.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/spec/fixtures/local-image-config.yaml) for a more complete example.
 
 ## Service Accounts
 
