@@ -784,7 +784,13 @@ production_specs_eks:
     - qa_export_passwords
     - docker login -u gitlab-ci-token -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
     - gem install gitlab-qa
-    - source "${VARIABLES_FILE}"
+    - source "${VARIABLES_FILE}"    
+    - app_version=$(ruby -e "require 'yaml'; puts YAML.safe_load(File.read('Chart.yaml'))['appVersion']")
+    - qa_version="nightly"
+    - if [ "$app_version" != "master" ] && [ "$app_version" != "main" ]; then
+    -   qa_version="${app_version}-ee"
+    - fi
+    - echo "Running - 'gitlab-qa Test::Instance::Any EE:$qa_version https://$QA_ENVIRONMENT_URL -- $TEST_SUITE'"
     - if [ -n "$QA_GITLAB_REVISION" ]; then
     -   QA_IMAGE=dev.gitlab.org:5005/gitlab/gitlab-ee/gitlab-ee:$QA_GITLAB_REVISION
     - else
