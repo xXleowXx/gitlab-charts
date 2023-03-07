@@ -67,6 +67,8 @@ to the `helm install` command using the `--set` flags.
 | `securityContext.runAsUser`               | `1000`                                                     | User ID under which the pod should be started                                                                                                                              |
 | `tolerations`                             | `[]`                                                       | Toleration labels for pod assignment                                                                                                                                       |
 | `psql.port`                               |                                                            | Set PostgreSQL server port. Takes precedence over `global.psql.port`                                                                                                       |
+| `tls.enabled`                             | `false`                                                    | GitLab Exporter TLS enabled                                                                                                                                                |
+| `tls.secretName`                          | `{Release.Name}-gitlab-exporter-tls`                       | GitLab Exporter TLS secret. Must point to a [Kubernetes TLS secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets).                                |
 
 ## Chart configuration examples
 
