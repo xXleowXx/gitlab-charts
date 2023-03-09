@@ -1455,10 +1455,10 @@ If the LDAP server uses a custom CA or self-signed certificate, you must:
 
    ```shell
    # Secret
-   kubectl -n gitlab create secret generic my-custom-ca-secret --from-file=unique_name=my-custom-ca.pem
+   kubectl -n gitlab create secret generic my-custom-ca-secret --from-file=unique_name.crt=my-custom-ca.pem
 
    # ConfigMap
-   kubectl -n gitlab create configmap my-custom-ca-configmap --from-file=unique_name=my-custom-ca.pem
+   kubectl -n gitlab create configmap my-custom-ca-configmap --from-file=unique_name.crt=my-custom-ca.pem
    ```
 
 1. Then, specify:
@@ -1908,10 +1908,10 @@ To create a Secret or ConfigMap:
 
 ```shell
 # Create a Secret from a certificate file
-kubectl create secret generic secret-custom-ca --from-file=unique_name=/path/to/cert
+kubectl create secret generic secret-custom-ca --from-file=unique_name.crt=/path/to/cert
 
 # Create a ConfigMap from a certificate file
-kubectl create configmap cm-custom-ca --from-file=unique_name=/path/to/cert
+kubectl create configmap cm-custom-ca --from-file=unique_name.crt=/path/to/cert
 ```
 
 To configure a Secret or ConfigMap, or both, specify them in globals:
@@ -1923,13 +1923,23 @@ global:
       - secret: secret-custom-CAs           # Mount all keys of a Secret
       - secret: secret-custom-CAs           # Mount only the specified keys of a Secret
         keys:
-          - unique_name
+          - unique_name.crt
       - configMap: cm-custom-CAs            # Mount all keys of a ConfigMap
       - configMap: cm-custom-CAs            # Mount only the specified keys of a ConfigMap
         keys:
-          - unique_name_1
-          - unique_name_2
+          - unique_name_1.crt
+          - unique_name_2.crt
 ```
+
+NOTE:
+The `.crt` extension in the Secret's key name is important for the
+[Debian update-ca-certificates package](https://manpages.debian.org/bullseye/ca-certificates/update-ca-certificates.8.en.html).
+This step ensures that the custom CA file is mounted with that extension and is processed
+in the Certificates initContainers.
+Previously, when the certificates helper image was Alpine-based, the file extension was not actually required
+even though the [documentation](https://gitlab.alpinelinux.org/alpine/ca-certificates/-/blob/master/update-ca-certificates.8)
+says that it is.
+The UBI-based `update-ca-trust` utility does not seem to have the same requirement.
 
 You can provide any number of Secrets or ConfigMaps, each containing any number of keys that hold
 PEM-encoded CA certificates. These are configured as entries under `global.certificates.customCAs`.
