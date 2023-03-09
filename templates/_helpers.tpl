@@ -638,3 +638,28 @@ emptyDir: {}
 emptyDir: {{ toYaml $values | nindent 2 }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return a PodSecurityContext definition.
+
+Usage:
+  {{ include "gitlab.podSecurityContext" .Values.securityContext }}
+*/}}
+{{- define "gitlab.podSecurityContext" -}}
+{{- $psc := . }}
+{{- if $psc }}
+securityContext:
+{{-   if not (empty $psc.runAsUser) }}
+  runAsUser: {{ $psc.runAsUser }}
+{{-   end }}
+{{-   if not (empty $psc.runAsGroup) }}
+  runAsGroup: {{ $psc.runAsGroup }}
+{{-   end }}
+{{-   if not (empty $psc.fsGroup) }}
+  fsGroup: {{ $psc.fsGroup }}
+{{-   end }}
+{{-   if not (empty $psc.fsGroupChangePolicy) }}
+  fsGroupChangePolicy: {{ $psc.fsGroupChangePolicy }}
+{{-   end }}
+{{- end }}
+{{- end -}}

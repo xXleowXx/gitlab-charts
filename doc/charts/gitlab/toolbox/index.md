@@ -181,22 +181,6 @@ restoration disk space also needs to grow accordingly. In most cases the
 size of the restoration disk space should be the same size as the backup
 disk space.
 
-### Large backup volumes
-
-Toolbox volume mount may fail for large backup volumes. Starting from
-Kubernetes 1.23 you can set the `fsGroupChangePolicy` to `OnRootMismatch`
-to mitigate the issue.
-
-```yaml
-gitlab:
-  toolbox:
-    securityContext:
-      fsGroupChangePolicy: "OnRootMismatch"
-```
-
-From the [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods),
-this setting "could help shorten the time it takes to change ownership and permission of a volume."
-
 ## Toolbox included tools
 
 The Toolbox container contains useful GitLab tools such as Rails console,

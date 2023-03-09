@@ -77,18 +77,7 @@ spec:
             readOnly: false
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
-      {{- if .Values.securityContext }}
-      securityContext:
-        {{- if not (empty .Values.securityContext.runAsUser) }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        {{- end }}
-        {{- if not (empty .Values.securityContext.fsGroup) }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        {{- if not (empty .Values.securityContext.fsGroupChangePolicy) }}
-        fsGroupChangePolicy: {{ .Values.securityContext.fsGroupChangePolicy }}
-        {{- end }}
-        {{- end }}
-      {{- end }}
+      {{- include "gitlab.podSecurityContext" .Values.securityContext | nindent 6 }}
       {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
