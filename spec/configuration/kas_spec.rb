@@ -167,6 +167,10 @@ describe 'kas configuration' do
         expect(config_yaml_data['gitlab']).not_to be_nil
       end
 
+      it 'sets the external url for GitLab' do
+        expect(config_yaml_data['gitlab']['external_url']).to eq('https://gitlab.example.com')
+      end
+
       describe 'tls config' do
         shared_context 'privateApi with tls' do
           it 'configures the privateApi with certificate files' do
