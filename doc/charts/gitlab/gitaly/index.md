@@ -234,38 +234,6 @@ git:
       value: ignore
 ```
 
-### Altering security contexts
-
-Gitaly `StatefulSet` performance may suffer when repositories have large
-amounts of files.
-Mitigate the issue by changing or fully deleting the settings for the
-`securityContext`.
-
-```yaml
-gitlab:
-  gitaly:
-    securityContext:
-      fsGroup: ""
-      runAsUser: ""
-```
-
-NOTE:
-The example syntax eliminates the `securityContext` setting entirely.
-Setting `securityContext: {}` or `securityContext:` does not work due
-to the way Helm merges default values with user provided configuration.
-
-Starting from Kubernetes 1.23 you can instead set the `fsGroupChangePolicy` to `OnRootMismatch` to mitigate the issue.
-
-```yaml
-gitlab:
-  gitaly:
-    securityContext:
-      fsGroupChangePolicy: "OnRootMismatch"
-```
-
-From the [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods),
-this setting "could help shorten the time it takes to change ownership and permission of a volume."
-
 ## External Services
 
 This chart should be attached the Workhorse service.

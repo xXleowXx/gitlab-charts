@@ -333,6 +333,7 @@ health:
 securityContext:
   runAsUser: 1000
   fsGroup: 1000
+  # fsGroupChangePolicy: OnRootMismatch
 
 # Disable reporting by default
 # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#reporting
