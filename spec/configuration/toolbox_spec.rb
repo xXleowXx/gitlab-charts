@@ -128,4 +128,50 @@ describe 'toolbox configuration' do
       end
     end
   end
+
+  context 'cron job ephemeral volume' do
+    let(:useGenericEphemeralVolume) { false }
+
+    let(:values) do
+      HelmTemplate.with_defaults %(
+      gitlab:
+        toolbox:
+          backups:
+            cron:
+              enabled: true
+              persistence:
+                enabled: true
+                useGenericEphemeralVolume: #{useGenericEphemeralVolume}
+          enabled: true
+      )
+    end
+
+    let(:template) { HelmTemplate.new(values) }
+
+    def toolbox_tmp_volume(template)
+      volume_name = 'toolbox-tmp'
+      job_template_spec = template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate')
+      volumes = job_template_spec.dig('spec', 'template', 'spec', 'volumes')
+      volumes.keep_if { |volume| volume['name'] == volume_name }
+      volumes[0]
+    end
+
+    context "when useGenericEphemeralVolume defaults to false" do
+      it 'configures a persistentVolumeClaim in the cron job' do
+        toolbox_tmp_volume = toolbox_tmp_volume(template)
+        expect(toolbox_tmp_volume.keys).to contain_exactly('persistentVolumeClaim', 'name')
+        expect(toolbox_tmp_volume['persistentVolumeClaim'].keys).to contain_exactly('claimName')
+      end
+    end
+
+    context "when useGenericEphemeralVolume is true" do
+      let(:useGenericEphemeralVolume) { true }
+
+      it 'configures a volumeClaimTemplate in the cron job' do
+        toolbox_tmp_volume = toolbox_tmp_volume(template)
+        expect(toolbox_tmp_volume.keys).to contain_exactly('ephemeral', 'name')
+        expect(toolbox_tmp_volume['ephemeral'].keys).to contain_exactly('volumeClaimTemplate')
+      end
+    end
+  end
 end

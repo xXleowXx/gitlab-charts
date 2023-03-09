@@ -158,8 +158,14 @@ spec:
                       name: {{ template "fullname" . }}
             - name: toolbox-tmp
               {{- if .Values.backups.cron.persistence.enabled }}
+              {{- if .Values.backups.cron.persistence.useGenericEphemeralVolume }}
+              ephemeral:
+                volumeClaimTemplate:
+                  {{- include "toolbox.backups.cron.persistence.persistentVolumeClaim" . | nindent 18 }}
+              {{- else }}
               persistentVolumeClaim:
                 claimName: {{ template "fullname" . }}-backup-tmp
+              {{- end }}
               {{- else }}
               emptyDir: {}
               {{- end }}
