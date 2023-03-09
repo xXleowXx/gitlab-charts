@@ -45,6 +45,7 @@ gitlab:
     persistence:
       enabled: false
       accessMode: 'ReadWriteOnce'
+      useGenericEphemeralVolume: false
       size: '10Gi'
     resources:
       requests:
@@ -101,6 +102,7 @@ gitlab:
 | `persistence.enabled`                       | Toolbox enable persistence flag          | false                        |
 | `persistence.matchExpressions`              | Label-expression matches to bind             |                              |
 | `persistence.matchLabels`                   | Label-value matches to bind                  |                              |
+| `persistence.useGenericEphemeralVolume`     | Use a [generic ephemeral volume](https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes) | false |
 | `persistence.size`                          | Toolbox persistence volume size          | `10Gi`                       |
 | `persistence.storageClass`                  | StorageClass name for provisioning           |                              |
 | `persistence.subPath`                       | Toolbox persistence volume mount path    |                              |
