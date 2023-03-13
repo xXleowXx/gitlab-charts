@@ -196,9 +196,9 @@ externally rather than the included MinIO service. The backup/restore procedure 
 - A bucket for storing backups (`global.appConfig.backups.bucket`)
 - A temporary bucket for preserving existing data during the restore process (`global.appConfig.backups.tmpBucket`)
 
-AWS S3-compatible object storage systems, Google Cloud Storage and Azure Blob Storage
+AWS S3-compatible object storage systems, Google Cloud Storage, and Azure Blob Storage
 are supported backends. You can configure the backend type by setting `global.appConfig.backups.objectStorage.backend`
-to `s3` for AWS S3, `gcs` for Google Cloud Storage or `azure` for Azure Blob Storage.
+to `s3` for AWS S3, `gcs` for Google Cloud Storage, or `azure` for Azure Blob Storage.
 You must also provide a connection configuration through the `gitlab.toolbox.backups.objectStorage.config` key.
 
 When using Google Cloud Storage, the GCP project must be set with the `global.appConfig.backups.objectStorage.config.gcpProject` value.
