@@ -105,8 +105,7 @@ The following `kubectl` command can be used to create the Kubernetes Secret:
 
 ```shell
 kubectl create secret generic backup-azure-creds \
-  --from-file=config=azure-backup-conf.yaml \
-  --from-literal=azure_storage_account_name=<storage account>
+  --from-file=config=azure-backup-conf.yaml
 ```
 
 Once the Secret has been created, the GitLab Helm chart can be
