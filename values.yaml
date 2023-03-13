@@ -1224,3 +1224,7 @@ gitlab:
   #   kas:
   ## https://docs.gitlab.com/charts/charts/gitlab/praefect
   #   praefect:
+
+## Installation & configuration of gitlab/gitlab-zoekt
+gitlab-zoekt:
+  install: false
