@@ -51,6 +51,9 @@ the `helm install` command using the `--set` flags.
 | `extraEnv`                                       |                                                   | List of extra environment variables to expose                                                                                                                                  |
 | `extraEnvFrom`                                   |                                                   | List of extra environment variables from other data sources to expose                                                                                                          |
 | `gitaly.serviceName`                             |                                                   | The name of the generated Gitaly service. Overrides `global.gitaly.serviceName`, and defaults to `<RELEASE-NAME>-gitaly`                                                       |
+| `gpgSigning.enabled`                             | `false`                                           | If [Gitaly GPG signing](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-commit-signing-for-gitlab-ui-commits) should be used.                 |
+| `gpgSigning.secret`                              |                                                   | The name of the secret used for Gitaly GPG signing.                                                                                                                            |
+| `gpgSigning.key`                                 |                                                   | The key in the GPG secret containing Gitaly's GPG signing key.                                                                                                                 |
 | `image.pullPolicy`                               | `Always`                                          | Gitaly image pull policy                                                                                                                                                       |
 | `image.pullSecrets`                              |                                                   | Secrets for the image repository                                                                                                                                               |
 | `image.repository`                               | `registry.com/gitlab-org/build/cng/gitaly`        | Gitaly image repository                                                                                                                                                        |
@@ -357,3 +360,25 @@ To populate the ConfigMap, you can point `kubectl` to a directory of scripts:
 ```shell
 kubectl create configmap MAP_NAME --from-file /PATH/TO/SCRIPT/DIR
 ```
+
+### GPG signing commits created by GitLab
+
+Gitaly has the ability to [GPG sign all commits](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-commit-signing-for-gitlab-ui-commits) created via the GitLab UI, e.g. the WebIDE,
+as well as commits created by GitLab, such as merge commits and squashes.
+
+1. Create a k8s secret using your GPG private key.
+
+   ```shell
+   kubectl create secret generic gitaly-gpg-signing-key --from-file=signing_key=/path/to/gpg_signing_key.gpg
+   ```
+
+1. Enable GPG signing in your `values.yaml`.
+
+   ```yaml
+   gitlab:
+     gitaly:
+       gpgSigning:
+         enabled: true
+         secret: gitaly-gpg-signing-key
+         key: signing_key
+   ```

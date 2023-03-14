@@ -177,3 +177,10 @@ packObjectsCache: {}
 #  enabled: false
 #  dir: "/home/git/repositories/+gitaly/PackObjectsCache"
 #  max_age: 5m
+
+## Enable Gitaly to GPG sign all commits created by GitLab
+## ref: https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-commit-signing-for-gitlab-ui-commits
+gpgSigning: {}
+  # enabled: false
+  # secret: glGPG
+  # key:
