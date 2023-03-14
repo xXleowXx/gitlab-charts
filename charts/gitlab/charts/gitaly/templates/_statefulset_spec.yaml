@@ -209,6 +209,13 @@ spec:
               items:
                 - key: {{ template "gitlab.gitlab-shell.authToken.key" . }}
                   path: ".gitlab_shell_secret"
+          {{- if .Values.gpgSigning.enabled }}
+          - secret:
+              name: {{ .Values.gpgSigning.secret }}
+              items:
+                - key: {{ .Values.gpgSigning.key }}
+                  path: "signing_key.gpg"
+          {{- end }}
           {{- if .Values.global.gitaly.tls.enabled }}
           {{- $secretName := include "gitlab.gitaly.tls.secret" . -}}
           {{- if .storage }}
