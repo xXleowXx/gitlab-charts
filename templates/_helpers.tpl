@@ -640,6 +640,24 @@ emptyDir: {{ toYaml $values | nindent 2 }}
 {{- end -}}
 
 {{/*
+Return init container specific securityContext template
+*/}}
+{{- define "gitlab.init.containerSecurityContext" }}
+{{- if .Values.init.containerSecurityContext }}
+securityContext:
+  {{- toYaml .Values.init.containerSecurityContext | nindent 2 }}
+{{- end }}
+{{- end }}
+
+{{/*
+Return container specific securityContext template
+*/}}
+{{- define "gitlab.containerSecurityContext" }}
+{{- if .Values.containerSecurityContext }}
+securityContext:
+  {{- toYaml .Values.containerSecurityContext | nindent 2 }}
+{{- end }}
+{{- end }}
 Return a PodSecurityContext definition.
 
 Usage:
