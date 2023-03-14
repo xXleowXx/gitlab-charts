@@ -504,7 +504,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 check_docs_markdown:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.16-vale-2.23.0-markdownlint-0.33.0-markdownlint2-0.6.0
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.17-vale-2.24.0-markdownlint-0.33.0-markdownlint2-0.6.0
   stage: prepare
   cache: {}
   dependencies: []
@@ -522,11 +522,12 @@ check_docs_markdown:
 
 # Perform link checks on published HTML files
 check_docs_links:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.16-ruby-3.0.5-2a7e4d1c
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.17-ruby-3.2.1-f53af000
   stage: prepare
   cache: {}
   dependencies: []
   before_script: []
+  tags: [ saas-linux-medium-amd64 ]
   script:
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
