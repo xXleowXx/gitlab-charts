@@ -40,6 +40,7 @@ sets the `cluster-autoscaler.kubernetes.io/safe-to-evict: "false"`
 annotation on the jobTemplate. Some Kubernetes environments, such as
 GKE Autopilot, don't allow this annotation to be set and will not create
 Job Pods for the backup.
+This annotation can be changed by setting the `gitlab.toolbox.backups.cron.safeToEvict` parameter to `true`, which will allow the Jobs to be created but at the risk of being evicted and corrupting the backup.
 
 Cron based backups can be enabled in this chart to happen at regular intervals as defined by the [Kubernetes schedule](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#schedule).
 
