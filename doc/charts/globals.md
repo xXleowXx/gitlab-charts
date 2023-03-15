@@ -274,6 +274,7 @@ global:
 | `keepalivesCount`    | Integer   |                        | The number of TCP keepalives that can be lost before the client's connection to the server is considered dead. A value of zero uses the system default.                                        |
 | `tcpUserTimeout`     | Integer   |                        | The number of milliseconds that transmitted data may remain unacknowledged before a connection is forcibly closed. A value of zero uses the system default.                                    |
 | `applicationName`    | String    |                        | The name of the application connecting to the database. Set to a blank string (`""`) to disable. By default, this will be set to the name of the running process (e.g. `sidekiq`, `puma`).     |
+| `ci.enabled`         | Boolean   | Not defined            | Enables [two database connections](#configure-multiple-database-connections).                                                                                                                  |
 
 ### PostgreSQL per chart
 
@@ -384,6 +385,28 @@ global:
       max_replication_difference: # See documentation
       max_replication_lag_time:   # See documentation
       replica_check_interval:     # See documentation
+```
+
+### Configure multiple database connections
+
+In GitLab 16.0, GitLab will default to using two database connections
+that point to the same PostgreSQL database.
+
+This feature can be enabled by adding a `ci.enabled` key. If you want to
+disable the feature, you need to remove this key.
+
+NOTE:
+The value of the key is not important: we will also configure two
+connection if the value is for example set to `false` or `foo` for example.
+This will be addressed by
+[issue 4264](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/4264)
+which will ensure that the value is properly treated as a boolean.
+
+```yaml
+global:
+  psql:
+    ci:
+      enabled: true
 ```
 
 ## Configure Redis settings
