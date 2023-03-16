@@ -130,6 +130,7 @@ diffs, Terraform state, and pseudonymizer is done via the following keys:
 
 Note also that:
 
+- You must create buckets for the [default names or custom names in the bucket configuration](../../charts/globals.md#specify-buckets).
 - A different bucket is needed for each, otherwise performing a restore from
   backup doesn't function properly.
 - Storing MR diffs on external storage is not enabled by default, so,
