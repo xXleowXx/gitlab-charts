@@ -529,7 +529,7 @@ check_docs_links:
   cache: {}
   dependencies: []
   before_script: []
-  tags: [ saas-linux-medium-amd64 ]
+  tags: [ gitlab-org ]
   script:
     - mv doc/ /tmp/gitlab-docs/content/charts
     - cd /tmp/gitlab-docs
