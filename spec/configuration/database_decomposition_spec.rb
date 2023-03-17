@@ -189,6 +189,20 @@ describe 'Database configuration' do
       )))
     end
 
+    it 'can be disabled' do
+      decompose_ci_with_enabled_false = decompose_ci.deep_merge(YAML.safe_load(%(
+        global:
+          psql:
+            ci:
+              enabled: false
+      )))
+
+      t = HelmTemplate.new(decompose_ci_with_enabled_false)
+      expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+      db_config = database_config(t, 'webservice')
+      expect(db_config['production'].keys).to contain_exactly('main')
+    end
+
     context 'With minimal configuration' do
       it 'Provides `main` and `ci` stanzas' do
         t = HelmTemplate.new(decompose_ci)
