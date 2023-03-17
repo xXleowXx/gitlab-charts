@@ -57,6 +57,9 @@ podLabels: {}
 common:
   labels: {}
 serviceLabels: {}
+## Additional environment variables to set
+extraEnv: {}
+extraEnvFrom: {}
 resources:
   requests:
     cpu: 100m

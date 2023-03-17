@@ -90,6 +90,8 @@ spec:
                   fieldPath: status.podIP
             - name: OWN_PRIVATE_API_URL
               value: "{{ include "gitlab.kas.internal.scheme" . }}://$(POD_IP):{{ .Values.service.privateApiPort }}"
+            {{- include "gitlab.extraEnv" . | nindent 12 }}
+            {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
               name: {{ template "name" . }}
