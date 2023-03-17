@@ -89,7 +89,9 @@ spec:
                 - cp /etc/gitlab/.s3cfg $HOME/.s3cfg && backup-utility {{ .Values.backups.cron.extraArgs }} # alpine sleep has no infinity
                 {{- else if eq .Values.backups.objectStorage.backend "gcs" }}
                 - sh /var/opt/gitlab/templates/configure-gsutil && backup-utility {{ .Values.backups.cron.extraArgs }}
-                {{- end }}
+                {{- else if eq .Values.backups.objectStorage.backend "azure" }}
+                - backup-utility {{ .Values.backups.cron.extraArgs }}
+                 {{- end }}
               image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}{{ include "gitlab.image.tagSuffix" . }}"
               {{- include "gitlab.image.pullPolicy" $imageCfg | indent 14 }}
               env:
@@ -128,6 +130,10 @@ spec:
                 {{- if eq .Values.backups.objectStorage.backend "gcs" }}
                 - name: GOOGLE_APPLICATION_CREDENTIALS
                   value: '/etc/gitlab/objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}'
+                {{- end }}
+                {{- if eq .Values.backups.objectStorage.backend "azure" }}
+                - name: AZURE_CONFIG_FILE
+                  value: '/etc/gitlab/objectstorage/azure_config'
                 {{- end }}
               volumeMounts:
                 {{- include "gitlab.extraVolumeMounts" . | nindent 16 }}
@@ -195,18 +201,7 @@ spec:
                         path: registry/gitlab-registry.key
                 {{- include "gitlab.registry.notificationSecret.mount" $ | nindent 16 -}}
                 {{- if or .Values.backups.objectStorage.config (not .Values.global.minio.enabled) }}
-                - secret:
-                    name: {{ required "A valid backups.objectStorage.config.secret is needed!" .Values.backups.objectStorage.config.secret }}
-                    items:
-                      - key: {{ default "config" .Values.backups.objectStorage.config.key }}
-                        path: objectstorage/.s3cfg
-                {{- end }}
-                {{- if eq .Values.backups.objectStorage.backend "gcs" }}
-                - secret:
-                    name: {{ required "A valid backups.objectStorage.config.secret is needed!" .Values.backups.objectStorage.config.secret }}
-                    items:
-                      - key: {{ default "config" .Values.backups.objectStorage.config.key }}
-                        path: objectstorage/{{ default "config" .Values.backups.objectStorage.config.key }}
+                {{-   include "toolbox.backups.objectStorage.config.secret" .Values.backups.objectStorage | nindent 16 }}
                 {{- end }}
                 {{- include "gitlab.kas.mountSecrets" $ | nindent 16 }}
                 {{- include "gitlab.pages.mountSecrets" $ | nindent 16 }}

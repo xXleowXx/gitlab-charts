@@ -4,6 +4,10 @@ require 'yaml'
 require 'hash_deep_merge'
 
 describe 'toolbox configuration' do
+  def env_value(name, value)
+    { 'name' => name, 'value' => value.to_s }
+  end
+
   let(:default_values) do
     HelmTemplate.with_defaults(%(
       gitlab:
@@ -201,6 +205,51 @@ describe 'toolbox configuration' do
       let(:safeToEvict) { true }
       it 'sets the safe-to-evict annotation to true' do
         expect(template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'annotations', 'cluster-autoscaler.kubernetes.io/safe-to-evict')).to eq("true")
+      end
+    end
+  end
+
+  context 'backup configuration' do
+    context 'using azure backend' do
+      let(:values) do
+        YAML.safe_load(%(
+          gitlab:
+            toolbox:
+              backups:
+                objectStorage:
+                  config:
+                    secret: azure-backup-conf
+                    key: azconf
+                  backend: azure
+        )).deep_merge(default_values)
+      end
+
+      let(:template) do
+        HelmTemplate.new(values)
+      end
+
+      it 'renders the template' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+      end
+
+      it 'configures the deployment to use the azure backend' do
+        deployment_spec = template.dig("Deployment/test-toolbox", 'spec', 'template', 'spec')
+        container_env = deployment_spec.dig('containers', 0, 'env')
+        expect(container_env).to include(env_value('AZURE_CONFIG_FILE', '/etc/gitlab/objectstorage/azure_config'))
+        expect(container_env).to include(env_value('BACKUP_BACKEND', 'azure'))
+        init_secret = deployment_spec['volumes'].find { |s| s['name'] == 'init-toolbox-secrets' }
+        token_secret = init_secret["projected"]["sources"].find { |sc| sc['secret']['name'] == 'azure-backup-conf' }["secret"]
+        expect(token_secret["items"]).to eq([{ "key" => 'azconf', "path" => 'objectstorage/azure_config' }])
+      end
+
+      it 'configures the cronjob to use the azure backend' do
+        cronjob_spec = template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'template', 'spec')
+        container_env = cronjob_spec.dig('containers', 0, 'env')
+        expect(container_env).to include(env_value('AZURE_CONFIG_FILE', '/etc/gitlab/objectstorage/azure_config'))
+        expect(container_env).to include(env_value('BACKUP_BACKEND', 'azure'))
+        init_secret = cronjob_spec['volumes'].find { |s| s['name'] == 'init-toolbox-secrets' }
+        token_secret = init_secret["projected"]["sources"].find { |sc| sc['secret']['name'] == 'azure-backup-conf' }["secret"]
+        expect(token_secret["items"]).to eq([{ "key" => 'azconf', "path" => 'objectstorage/azure_config' }])
       end
     end
   end
