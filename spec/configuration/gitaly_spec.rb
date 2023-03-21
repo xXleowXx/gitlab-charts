@@ -322,6 +322,47 @@ describe 'Gitaly configuration' do
     end
   end
 
+  context 'gpg signing' do
+    let(:values) do
+      HelmTemplate.with_defaults %(
+        gitlab:
+          gitaly:
+            gpgSigning:
+              enabled: #{gpg_signing_enabled}
+              secret: #{gpg_secret_name}
+              key: #{gpg_secret_key}
+      )
+    end
+
+    context 'when enabled' do
+      let(:gpg_signing_enabled) { true }
+      let(:gpg_secret_name) { 'gpgSecret' }
+      let(:gpg_secret_key) { 'gpgisfun' }
+
+      let(:template) { HelmTemplate.new(values) }
+
+      it 'populates a signing_key field in config.toml.erb' do
+        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.erb')
+
+        expect(config_toml).to include "signing_key = '/etc/gitlab-secrets/gitaly/signing_key.gpg'"
+      end
+    end
+
+    context 'when disabled' do
+      let(:gpg_signing_enabled) { false }
+      let(:gpg_secret_name) { 'dont use me' }
+      let(:gpg_secret_key) { 'gpgisunfun' }
+
+      let(:template) { HelmTemplate.new(values) }
+
+      it 'does not populate a signing_key field in config.toml.erb' do
+        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.erb')
+
+        expect(config_toml).not_to match /^signing_key = /
+      end
+    end
+  end
+
   context 'with extraVolumes' do
     let(:values) do
       YAML.safe_load(%(

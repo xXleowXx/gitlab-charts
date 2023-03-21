@@ -915,7 +915,8 @@ prometheus:
     retention: 15d
     strategy:
       type: Recreate
-  #
+    image:
+      tag: v2.38.0
   serverFiles:
     prometheus.yml:
       scrape_configs:

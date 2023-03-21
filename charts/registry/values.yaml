@@ -1,7 +1,7 @@
 image:
   # registry:
   repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry
-  tag: 'v3.68.0-gitlab'
+  tag: 'v3.69.0-gitlab'
   # pullPolicy: IfNotPresent
   # pullSecrets: []
 
@@ -227,7 +227,7 @@ tokenService: 'container_registry'
 # This must match your GitLab Rails configuration
 tokenIssuer: 'gitlab-issuer'
 # Must to be `false` to support Windows clients
-# See https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3964
+# See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3964
 authAutoRedirect: false
 
 maxUnavailable: 1
@@ -334,6 +334,7 @@ health:
 securityContext:
   runAsUser: 1000
   fsGroup: 1000
+  # fsGroupChangePolicy: OnRootMismatch
 
 # Disable reporting by default
 # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#reporting
