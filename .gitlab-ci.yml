@@ -669,6 +669,9 @@ review_specs_gke125:
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
   resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  rules:
+    - !reference [.rule:skip_if_no_cluster]
+    - !reference [.specs, rules]
 
 # Bring back when https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2457 is fixed
 # review_specs_gke_dev:
