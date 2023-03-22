@@ -151,7 +151,14 @@ lint_package:
     - helm repo add gitlab https://charts.gitlab.io
     - helm repo add jetstack https://charts.jetstack.io
     - helm dependency update
-    - helm kubeval . --force-color --strict --kube-version $KUBE_VERSION --set certmanager-issuer.email=support@gitlab.com $HELM_EXTRAS --skip-kinds "CustomResourceDefinition" -v $KUBE_VERSION
+    - >
+      helm kubeval . --force-color --strict
+      --kube-version $KUBE_VERSION
+      --set certmanager-issuer.email=support@gitlab.com
+      --set gitlab.toolbox.backups.cron.enabled=true
+      $HELM_EXTRAS
+      --skip-kinds "CustomResourceDefinition"
+      -v $KUBE_VERSION
   rules:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_BRANCH_PIPELINE$/'
@@ -175,6 +182,17 @@ lint_package:
     KUBE_VERSION: "1.22.3"
     KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
     HELM_EXTRAS: "--set global.ingress.apiVersion=networking.k8s.io/v1"
+
+"Validate 1.25.7":
+  extends: .kubeval
+  variables:
+    KUBE_VERSION: "1.25.7"
+    KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
+    HELM_EXTRAS: >-
+      --set global.ingress.apiVersion=networking.k8s.io/v1
+      --set global.pdb.apiVersion=policy/v1
+      --set global.hpa.apiVersion=autoscaling/v2
+      --set global.batch.cronJob.apiVersion=batch/v1
 
 .review_template:
   stage: review
