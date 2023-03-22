@@ -152,7 +152,7 @@ CIYAML
     SENTRY_CONFIGURATION="-f ci.sentry.yaml"
   fi
 
-  helm upgrade --install \
+  helm upgrade --install --atomic \
     $WAIT \
     ${SENTRY_CONFIGURATION} \
     -f ci.details.yaml \
