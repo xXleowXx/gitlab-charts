@@ -392,15 +392,7 @@ global:
 In GitLab 16.0, GitLab will default to using two database connections
 that point to the same PostgreSQL database.
 
-This feature can be enabled by adding a `ci.enabled` key. If you want to
-disable the feature, you need to remove this key.
-
-NOTE:
-The value of the key is not important: we will also configure two
-connection if the value is for example set to `false` or `foo` for example.
-This will be addressed by
-[issue 4264](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/4264)
-which will ensure that the value is properly treated as a boolean.
+This feature can be enabled by setting the `ci.enabled` key to `true`.
 
 ```yaml
 global:
@@ -408,6 +400,8 @@ global:
     ci:
       enabled: true
 ```
+
+If you want to disable the feature, set the `ci.enabled` key to `false`.
 
 ## Configure Redis settings
 
