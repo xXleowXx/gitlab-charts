@@ -96,6 +96,9 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.gitlabShell.proxyPolicy" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitlabShell.metrics" .) -}}
 
+{{/* _checkConfig_omniauth.tpl*/}}
+{{- $messages = append $messages (include "gitlab.checkConfig.omniauth.providerFormat" .) -}}
+
 {{/* other checks */}}
 {{- $messages = append $messages (include "gitlab.checkConfig.multipleRedis" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.redisYmlOverride" .) -}}
