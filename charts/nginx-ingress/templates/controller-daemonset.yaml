@@ -180,7 +180,7 @@ spec:
               containerPort: {{ .Values.controller.admissionWebhooks.port }}
               protocol: TCP
           {{- end }}
-          {{- if include "gitlab.shell.port" . }}
+          {{- if (and .Values.controller.service.enableShell (include "gitlab.shell.port" $)) }}
             - name: gitlab-shell
               containerPort: {{ include "gitlab.shell.port" . | int }}
               protocol: TCP
