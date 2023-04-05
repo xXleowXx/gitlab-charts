@@ -7,7 +7,7 @@ export CI_APPLICATION_TAG=$CI_COMMIT_SHA
 export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
 
 # Derive the Helm RELEASE argument from CI_ENVIRONMENT_SLUG
-if [[ $CI_ENVIRONMENT_SLUG =~ ^.{3}-review ]]; then
+if [[ $CI_ENVIRONMENT_SLUG =~ ^[^-]+-review ]]; then
   # if a "review", use $REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
   RELEASE_NAME=rvw-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}
   # Trim release name to leave room for prefixes/suffixes
