@@ -39,7 +39,7 @@ The GitLab chart expects rails secrets to be provided as a Kubernetes Secret wit
 1. Run the following command to convert your `gitlab-secrets.json` to YAML format:
 
    ```shell
-   yq -P '{"production": .gitlab_rails}' gitlab-secrets.json >> gitlab-secrets.yaml
+   yq -P '{"production": .gitlab_rails}' gitlab-secrets.json -o yaml >> gitlab-secrets.yaml
    ```
 
 1. Check that the new `gitlab-secrets.yaml` file has the following contents:
