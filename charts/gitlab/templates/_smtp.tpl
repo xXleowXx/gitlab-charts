@@ -24,6 +24,7 @@ smtp_settings = {
   {{- end }}
   {{- if has .Values.global.smtp.tls (list true false) }}
   tls: {{ .Values.global.smtp.tls }},
+  ssl: {{ .Values.global.smtp.tls }},
   {{- end }}
   {{- if .Values.global.smtp.openssl_verify_mode }}
   openssl_verify_mode: {{ .Values.global.smtp.openssl_verify_mode | quote }}
