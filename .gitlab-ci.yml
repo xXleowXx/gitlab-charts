@@ -240,7 +240,7 @@ review_gke:
     name: gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke
-    auto_stop_in: 4 days
+    auto_stop_in: 2 days
   resource_group: "gke-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 review_gke122:
@@ -254,7 +254,7 @@ review_gke122:
     name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke122
-    auto_stop_in: 4 days
+    auto_stop_in: 2 days
   resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 review_gke125:
@@ -268,7 +268,7 @@ review_gke125:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
-    auto_stop_in: 4 days
+    auto_stop_in: 2 days
   resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 review_gke_dev:
@@ -280,7 +280,7 @@ review_gke_dev:
     name: dev_gke_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke_dev
-    auto_stop_in: 4 days
+    auto_stop_in: 2 days
   resource_group: "gke-review-app-dev-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
   rules:
     - !reference [.rule:skip_if_no_cluster]
@@ -294,7 +294,7 @@ review_eks:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
-    auto_stop_in: 4 days
+    auto_stop_in: 2 days
   resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 .stop_review_template:
