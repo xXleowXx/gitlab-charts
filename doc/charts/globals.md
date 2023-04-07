@@ -389,10 +389,19 @@ global:
 
 ### Configure multiple database connections
 
+> The `gitlab:db:decomposition:connection_status` Rake task was [introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/111927) in GitLab 15.11.
+
 In GitLab 16.0, GitLab will default to using two database connections
 that point to the same PostgreSQL database.
 
-This feature can be enabled by setting the `ci.enabled` key to `true`.
+To opt-in for this feature, you first need to ensure PostgreSQL `max_connections` is high enough (using more than 50% of the available max connections).
+You can verify this by running the following Rake task using [the Toolbox container](gitlab/toolbox/index.md#toolbox-included-tools):
+
+```shell
+gitlab-rake gitlab:db:decomposition:connection_status
+```
+
+If the task indicates that `max_connections` is high enough, you can enable this feature by setting the `ci.enabled` key to `true`:
 
 ```yaml
 global:
