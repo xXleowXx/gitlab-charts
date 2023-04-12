@@ -1378,7 +1378,7 @@ global:
     customCAs:
     - secret: *internal-ca
   hosts:
-    domain: gitlab.example.com # Your gitlab domain 
+    domain: gitlab.example.com # Your gitlab domain
   kas:
     tls:
       enabled: true
@@ -1494,6 +1494,39 @@ If the LDAP server uses a custom CA or self-signed certificate, you must:
 This will ensure that the CA certificate is mounted in the relevant pods at `/etc/ssl/certs/ca-cert-unique_name.pem` and specifies its use in the LDAP configuration.
 
 See [Custom Certificate Authorities](#custom-certificate-authorities) for more info.
+
+### DuoAuth
+
+Use these settings to enable [two-factor authentication (2FA) with Duo](https://docs.gitlab.com/ee/user/profile/account/two_factor_authentication.html#enable-one-time-password).
+
+```yaml
+global:
+  appConfig:
+    duoAuth:
+      enabled:
+      hostname:
+      integrationKey:
+      secretKey:
+      #  secret:
+      #  key:
+```
+
+| Name              | Type    | Default | Description                                |
+|:----------------- |:-------:|:------- |:------------------------------------------ |
+| `enabled`         | Boolean | `false` | Enable or disable the integration with Duo |
+| `hostname`        | String  |         | Duo API hostname                           |
+| `integrationKey` | String  |         | Duo API integration key                    |
+| `secretKey`      |         |         | Duo API secret key that must be [configured with the name of secret and key name](#configure-the-duo-secret-key) |
+
+### Configure the Duo secret key
+
+To configure Duo auth integration in the GitLab Helm chart you must provide a secret in the `global.appConfig.duoAuth.secretKey.secret` setting containing Duo auth secret_key value.
+
+To create a Kubernetes secret object to store your Duo account `secretKey`, from the command line, run:
+
+```shell
+kubectl create secret generic <secret_object_name> --from-literal=secretKey=<duo_secret_key_value>
+```
 
 ### OmniAuth
 
