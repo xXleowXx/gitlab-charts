@@ -438,6 +438,14 @@ global:
       servers: {}
       ## See documentation for complete example of a configured LDAP server
 
+    duoAuth:
+      enabled: false
+      # hostname:
+      # integrationKey:
+      # secretKey:
+      #   secret:
+      #   key:
+
     ## https://docs.gitlab.com/charts/charts/globals#kas-settings
     gitlab_kas: {}
       # secret:
