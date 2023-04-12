@@ -1388,7 +1388,9 @@ global:
 
 ### Suggested Reviewers settings
 
-#### Custom secret
+NOTE:
+The Suggested Reviewers secret is created automatically and only used on GitLab SaaS.
+This secret is not needed on self-managed GitLab instances.
 
 One can optionally customize the Suggested Reviewers `secret` name as well as
 `key`, either by using Helm's `--set variable` option:
