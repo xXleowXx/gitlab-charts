@@ -47,6 +47,8 @@ variables:
   DEV_PROJECT_PATH: 'gitlab/charts/gitlab'
   QA_FULL_SUITE_OPTIONS: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
   QA_SANITY_SUITE_OPTIONS: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+  DEBIAN_VERSION: bullseye
+  RUBY_VERSION: "3.0"
 
 stages:
   - prepare
@@ -523,7 +525,7 @@ rubocop:
     - bundle install -j $(nproc)
     - bundle exec rubocop --parallel
   cache:
-    key: "${CI_JOB_NAME}"
+    key: "debian-${DEBIAN_VERSION}-ruby-${RUBY_VERSION}-${CI_JOB_NAME}"
     paths:
     - gems
   rules:
@@ -630,8 +632,6 @@ review-docs-cleanup:
     DOCKER_HOST: tcp://docker:2375
     GITLAB_PASSWORD: $ROOT_PASSWORD
     S3_CONFIG_PATH: /etc/gitlab/minio
-    DEBIAN_VERSION: bullseye
-    RUBY_VERSION: "3.0"
     RUBYGEMS_VERSION: "3.4"
     GO_VERSION: "1.19"
     RUST_VERSION: "1.65"
