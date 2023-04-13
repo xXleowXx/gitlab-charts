@@ -173,7 +173,7 @@ CIYAML
     --set global.ingress.tls.secretName=helm-charts-win-tls \
     --set global.ingress.configureCertmanager=false \
     --set global.appConfig.initialDefaults.signupEnabled=false \
-    --set nginx-ingress.controller.electionID="$RELEASE_NAME" \
+    --set nginx-ingress.controller.electionID="$RELEASE_NAME-nginx-election" \
     --set nginx-ingress.controller.ingressClassByName=true \
     --set nginx-ingress.controller.ingressClassResource.controllerValue="ci.gitlab.com/$RELEASE_NAME" \
     --set certmanager.install=false \
