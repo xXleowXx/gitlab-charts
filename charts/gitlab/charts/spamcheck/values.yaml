@@ -51,6 +51,7 @@ service:
   internalPort: 8001
 
 deployment:
+  # revisionHistoryLimit: 10
   livenessProbe:
     initialDelaySeconds: 20
     periodSeconds: 60

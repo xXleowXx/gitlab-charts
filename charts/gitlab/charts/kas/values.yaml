@@ -124,6 +124,7 @@ privateApi:
     enabled: false # DEPRECATED: in favor of `global.kas.tls.enabled`
       # secretName: # DEPRECATED: in favor of `global.kas.tls.secretName`
 deployment:
+  # revisionHistoryLimit: 10
   terminationGracePeriodSeconds: 300
   strategy: {}
   # minReadySeconds: 0

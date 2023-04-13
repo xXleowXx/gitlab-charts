@@ -250,6 +250,7 @@ concurrency: 20
 # related to this subject.
 # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 deployment:
+  # revisionHistoryLimit: 10
   strategy: {}
   terminationGracePeriodSeconds: 30
 

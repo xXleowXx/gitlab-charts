@@ -95,6 +95,7 @@ extraEnv:
   RUBY_GC_HEAP_FREE_SLOTS_MAX_RATIO: 0.111
 
 deployment:
+  # revisionHistoryLimit: 10
   strategy: {}
 
 affinity:

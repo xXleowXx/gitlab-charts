@@ -99,6 +99,7 @@ keda:
   # triggers: []
 
 deployment:
+  # revisionHistoryLimit: 10
   terminationGracePeriodSeconds: 30
   livenessProbe:
     initialDelaySeconds: 10

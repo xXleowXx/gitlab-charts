@@ -11,6 +11,9 @@ metadata:
   annotations:
     {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
 spec:
+  {{- if .Values.deployment.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
+  {{- end }}
   {{- if .Values.deployment.strategy }}
   strategy:
     {{- .Values.deployment.strategy | toYaml | nindent 4 }}
