@@ -189,6 +189,7 @@ GEM
     thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.0.11)
+    tomlrb (2.0.3)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unicode-display_width (1.7.0)
@@ -226,6 +227,7 @@ DEPENDENCIES
   rspec-retry
   selenium-webdriver
   solargraph
+  tomlrb
 
 BUNDLED WITH
    2.3.22
