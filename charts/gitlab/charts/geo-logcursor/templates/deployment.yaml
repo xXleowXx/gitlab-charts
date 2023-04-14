@@ -14,9 +14,7 @@ metadata:
     {{- include "gitlab.deploymentAnnotations" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  {{- if .Values.deployment.revisionHistoryLimit }}
-  revisionHistoryLimit: {{ .Values.deployment.revisionHistoryLimit }}
-  {{- end }}
+  {{- include "gitlab.deploymentRevisionHistoryLimit" (dict "local" .Values.deployment "context" .) | nindent 2 }}
   selector:
     matchLabels:
       {{- include "gitlab.selectorLabels" . | nindent 6 }}

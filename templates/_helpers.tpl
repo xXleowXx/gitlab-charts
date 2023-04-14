@@ -334,6 +334,23 @@ Handles merging a set of deployment annotations
 {{- end -}}
 {{- end -}}
 
+{{/*
+Return the revision history limit for a deployment.
+
+It expects a dictionary with two entries:
+  - `local` which contains local deployment settings, e.g. .Values.deployment
+  - `context` which is the parent context (either `.` or `$`)
+
+Format:
+  {{ include "gitlab.deploymentRevisionHistoryLimit" (dict "local" .Values.deployment "context" .) -}}
+*/}}
+{{- define "gitlab.deploymentRevisionHistoryLimit" -}}
+{{- $revisionHistoryLimit := pluck "revisionHistoryLimit" (default (dict) .local) (default (dict) .context.Values.global.deployment) | first -}}
+{{- if $revisionHistoryLimit }}
+revisionHistoryLimit: {{ $revisionHistoryLimit }}
+{{- end }}
+{{- end }}
+
 {{/* ######### labels */}}
 
 {{/*

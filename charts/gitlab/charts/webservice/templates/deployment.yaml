@@ -31,9 +31,7 @@ metadata:
 spec:
   # Don't provide replicas when HPA are present
   # replicas: {{ .hpa.minReplicas }}
-  {{- if .deployment.revisionHistoryLimit }}
-  revisionHistoryLimit: {{ .deployment.revisionHistoryLimit }}
-  {{- end }}
+  {{- include "gitlab.deploymentRevisionHistoryLimit" (dict "local" .deployment "context" $) | nindent 2 }}
   selector:
     matchLabels:
       {{- include "gitlab.selectorLabels" $ | nindent 6 }}
