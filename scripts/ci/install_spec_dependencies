@@ -26,4 +26,4 @@ chmod +x kubectl
 mv kubectl /usr/local/bin/kubectl
 
 curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/${GOMPLATE_VERSION}/gomplate_linux-amd64
-chmod 755 /usr/local/bin/gomplate
+chmod +x /usr/local/bin/gomplate
