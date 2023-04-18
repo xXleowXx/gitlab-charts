@@ -2,6 +2,18 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.10.3 (2023-04-14)
+
+No changes.
+
+## 6.10.2 (2023-04-05)
+
+No changes.
+
+## 6.10.1 (2023-03-30)
+
+No changes.
+
 ## 6.10.0 (2023-03-21)
 
 ### Added (6 changes)
@@ -34,6 +46,10 @@ entry.
 - [Add docs and config check for gitlab-shell metrics](gitlab-org/charts/gitlab@e46e19b84a47f45018e39af1e5e0731be6982a1f) ([merge request](gitlab-org/charts/gitlab!3006))
 - [Add more context to sidekiq pod deprecation notices](gitlab-org/charts/gitlab@fdaef9d08c68beac06b0bcff16d0ec6b1bc274aa) ([merge request](gitlab-org/charts/gitlab!2966))
 - [Add more context to sidekiq pod deprecation notices](gitlab-org/charts/gitlab@378fd9116dc5147d9d4c23d81a72e0e8089f138e) ([merge request](gitlab-org/charts/gitlab!2972))
+
+## 6.9.4 (2023-03-30)
+
+No changes.
 
 ## 6.9.3 (2023-03-09)
 
@@ -86,6 +102,14 @@ No changes.
 - [Add defaultReplicationFactor in Praefect's ConfigMap.](gitlab-org/charts/gitlab@36e44f78978b368c1db99a5dc747686ab4363e8c) by @kyunam-jo ([merge request](gitlab-org/charts/gitlab!2844))
 - [Moved minio config to global in example config](gitlab-org/charts/gitlab@973557e4cf0c5ec1e0c399fcce557fae2a87de17) ([merge request](gitlab-org/charts/gitlab!2952))
 - [Doc - configure the GitLab chart with an decomposed database](gitlab-org/charts/gitlab@af72661b6f82f8f16dab591c8af67e44baf0b998) ([merge request](gitlab-org/charts/gitlab!2890))
+
+## 6.8.6 (2023-04-18)
+
+No changes.
+
+## 6.8.5 (2023-03-30)
+
+No changes.
 
 ## 6.8.4 (2023-03-02)
 

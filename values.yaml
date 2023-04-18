@@ -439,6 +439,14 @@ global:
       servers: {}
       ## See documentation for complete example of a configured LDAP server
 
+    duoAuth:
+      enabled: false
+      # hostname:
+      # integrationKey:
+      # secretKey:
+      #   secret:
+      #   key:
+
     ## https://docs.gitlab.com/charts/charts/globals#kas-settings
     gitlab_kas: {}
       # secret:
@@ -1076,6 +1084,13 @@ postgresql:
       postgresql.gitlab/init-revision: "1"
   metrics:
     enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9187"
+        gitlab.com/prometheus_scrape: "true"
+        gitlab.com/prometheus_port: "9187"
+
     ## Optionally define additional custom metrics
     ## ref: https://github.com/wrouesnel/postgres_exporter#adding-new-metrics-via-a-config-file
 
@@ -1229,3 +1244,7 @@ gitlab:
   #   kas:
   ## https://docs.gitlab.com/charts/charts/gitlab/praefect
   #   praefect:
+
+## Installation & configuration of gitlab/gitlab-zoekt
+gitlab-zoekt:
+  install: false
