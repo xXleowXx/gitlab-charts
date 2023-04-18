@@ -103,6 +103,10 @@ No changes.
 - [Moved minio config to global in example config](gitlab-org/charts/gitlab@973557e4cf0c5ec1e0c399fcce557fae2a87de17) ([merge request](gitlab-org/charts/gitlab!2952))
 - [Doc - configure the GitLab chart with an decomposed database](gitlab-org/charts/gitlab@af72661b6f82f8f16dab591c8af67e44baf0b998) ([merge request](gitlab-org/charts/gitlab!2890))
 
+## 6.8.6 (2023-04-18)
+
+No changes.
+
 ## 6.8.5 (2023-03-30)
 
 No changes.
