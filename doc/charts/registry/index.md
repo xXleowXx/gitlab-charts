@@ -68,7 +68,7 @@ registry:
       interval: 24h
       dryrun: false
   image:
-    tag: 'v3.70.0-gitlab'
+    tag: 'v3.71.0-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
