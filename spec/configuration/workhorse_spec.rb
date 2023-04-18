@@ -84,35 +84,55 @@ describe 'Workhorse configuration' do
     end
   end
 
-  context 'with S3 configured' do
-    let(:s3_config) { File.read('examples/objectstorage/rails.s3.yaml') }
+  describe 'object storage configuration' do
+    context 'with S3 configured' do
+      let(:s3_config) { File.read('examples/objectstorage/rails.s3.yaml') }
 
-    it 'renders a TOML configuration file' do
-      toml = render_toml(raw_toml, s3_config)
+      it 'renders a TOML configuration file' do
+        toml = render_toml(raw_toml, s3_config)
 
-      expect(toml.keys).to match_array(%w[shutdown_timeout listeners object_storage image_resizer redis])
+        expect(toml.keys).to match_array(%w[shutdown_timeout listeners object_storage image_resizer redis])
 
-      object_storage = toml['object_storage']
-      expect(object_storage.keys).to match_array(%w[provider s3])
-      expect(object_storage['s3'].keys).to match_array(%w[aws_access_key_id aws_secret_access_key])
-      expect(object_storage['s3']['aws_access_key_id']).to eq('BOGUS_ACCESS_KEY')
-      expect(object_storage['s3']['aws_secret_access_key']).to eq('BOGUS_SECRET_KEY')
+        object_storage = toml['object_storage']
+        expect(object_storage.keys).to match_array(%w[provider s3])
+        expect(object_storage['s3'].keys).to match_array(%w[aws_access_key_id aws_secret_access_key])
+        expect(object_storage['s3']['aws_access_key_id']).to eq('BOGUS_ACCESS_KEY')
+        expect(object_storage['s3']['aws_secret_access_key']).to eq('BOGUS_SECRET_KEY')
+      end
     end
-  end
 
-  context 'with AzureRM configured' do
-    let(:s3_config) { File.read('examples/objectstorage/rails.azurerm.yaml') }
+    context 'with AzureRM configured' do
+      let(:s3_config) { File.read('examples/objectstorage/rails.azurerm.yaml') }
 
-    it 'renders a TOML configuration file' do
-      toml = render_toml(raw_toml, s3_config)
+      it 'renders a TOML configuration file' do
+        toml = render_toml(raw_toml, s3_config)
 
-      expect(toml.keys).to match_array(%w[shutdown_timeout listeners object_storage image_resizer redis])
+        expect(toml.keys).to match_array(%w[shutdown_timeout listeners object_storage image_resizer redis])
 
-      object_storage = toml['object_storage']
-      expect(object_storage.keys).to match_array(%w[provider azurerm])
-      expect(object_storage['azurerm'].keys).to match_array(%w[azure_storage_account_name azure_storage_access_key])
-      expect(object_storage['azurerm']['azure_storage_account_name']).to eq('YOUR_AZURE_STORAGE_ACCOUNT_NAME')
-      expect(object_storage['azurerm']['azure_storage_access_key']).to eq('YOUR_AZURE_STORAGE_ACCOUNT_KEY')
+        object_storage = toml['object_storage']
+        expect(object_storage.keys).to match_array(%w[provider azurerm])
+        expect(object_storage['azurerm'].keys).to match_array(%w[azure_storage_account_name azure_storage_access_key])
+        expect(object_storage['azurerm']['azure_storage_account_name']).to eq('YOUR_AZURE_STORAGE_ACCOUNT_NAME')
+        expect(object_storage['azurerm']['azure_storage_access_key']).to eq('YOUR_AZURE_STORAGE_ACCOUNT_KEY')
+      end
+    end
+
+    context 'with GCS configured' do
+      let(:s3_config) { File.read('examples/objectstorage/rails.gcs.yaml') }
+
+      it 'renders a TOML configuration file' do
+        toml = render_toml(raw_toml, s3_config)
+        yaml = YAML.safe_load(s3_config)
+
+        expect(toml.keys).to match_array(%w[shutdown_timeout listeners object_storage image_resizer redis])
+
+        object_storage = toml['object_storage']
+        expect(object_storage.keys).to match_array(%w[provider google])
+        expect(object_storage['google'].keys).to match_array(%w[google_project google_json_key_string])
+        expect(object_storage['google']['google_project']).to eq(yaml['google_project'])
+        # here, we `rstrip` the YAML string, because it has an extra `\n` on the end as opposed to the rendered TOML
+        expect(object_storage['google']['google_json_key_string']).to eq(yaml['google_json_key_string'].rstrip)
+      end
     end
   end
 
