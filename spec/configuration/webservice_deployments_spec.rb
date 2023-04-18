@@ -842,4 +842,30 @@ describe 'Webservice Deployments configuration' do
       end
     end
   end
+
+  context 'volumes' do
+    using RSpec::Parameterized::TableSyntax
+    where(:nameOverride, :expected_deployment_name, :expected_configmap_name) do
+      nil                | 'test-webservice-default'       | 'test-webservice'
+      'testnameoverride' | 'test-testnameoverride-default' | 'test-testnameoverride'
+    end
+
+    with_them do
+      it 'refers to the ConfigMap by the correct name' do
+        values = default_values.deep_merge(YAML.safe_load(%(
+          gitlab:
+            webservice:
+              nameOverride: #{nameOverride}
+        )))
+
+        t = HelmTemplate.new(values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        volumes = t.dig("Deployment/#{expected_deployment_name}", 'spec', 'template', 'spec', 'volumes')
+        expect(volumes).to include({ "name" => "webservice-config", "configMap" => { "name" => expected_configmap_name } })
+
+        expect(t.dig("ConfigMap/#{expected_configmap_name}")).to be_truthy
+      end
+    end
+  end
 end
