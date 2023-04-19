@@ -322,7 +322,7 @@ function delete() {
 }
 
 function cleanup() {
-  kubectl -n "$NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,job,pod,secret,configmap,pvc,secret,clusterrole,clusterrolebinding,role,rolebinding,sa 2>&1 \
+  kubectl -n "$NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,replicaset,job,pod,secret,configmap,pvc,pv,clusterrole,clusterrolebinding,role,rolebinding,sa 2>&1 \
     | grep "$RELEASE_NAME" \
     | awk '{print $1}' \
     | xargs kubectl -n "$NAMESPACE" delete \
