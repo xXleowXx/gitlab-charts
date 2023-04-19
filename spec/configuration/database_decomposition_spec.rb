@@ -257,6 +257,15 @@ describe 'Database configuration' do
                 applicationName: ci
                 preparedStatements: false
                 databaseTasks: false
+              embedding:
+                username: embedding-user
+                password:
+                  secret: embedding-password
+                preparedStatements: true
+                databaseTasks: true
+                applicationName: embedding
+                host: embedding.host.name
+                load_balancing: false
           postgresql:
             install: false
         )))
@@ -267,7 +276,7 @@ describe 'Database configuration' do
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
         db_config = database_config(t, 'webservice')
-        expect(db_config['production'].keys).to contain_exactly('main', 'ci')
+        expect(db_config['production'].keys).to contain_exactly('main', 'ci', 'embedding')
 
         # check `main` stanza
         main_config = db_config['production']['main']
@@ -289,12 +298,22 @@ describe 'Database configuration' do
         expect(ci_config['prepared_statements']).to eq(false)
         expect(ci_config['database_tasks']).to eq(false)
 
+        # check `embedding` stanza
+        embedding_config = db_config['production']['embedding']
+        expect(embedding_config['host']).to eq('embedding.host.name')
+        expect(embedding_config['port']).to eq(5432)
+        expect(embedding_config['username']).to eq('embedding-user')
+        expect(embedding_config['application_name']).to eq('embedding')
+        expect(embedding_config['prepared_statements']).to eq(true)
+        expect(embedding_config['database_tasks']).to eq(true)
+        expect(embedding_config['load_balancing']).to eq(nil)
+
         # Check the secret mounts
         webservice_secret_mounts = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets').select do |item|
           item['secret']['items'][0]['key'] == 'postgresql-password'
         end
         psql_secret_mounts = webservice_secret_mounts.map { |x| x['secret']['name'] }
-        expect(psql_secret_mounts).to contain_exactly('main-password', 'ci-password')
+        expect(psql_secret_mounts).to contain_exactly('main-password', 'ci-password', 'embedding-password')
       end
     end
 
