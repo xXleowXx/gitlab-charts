@@ -2074,9 +2074,14 @@ global:
     # name:
 ```
 
-- Setting `global.serviceAccount.enabled` to `true` will create a custom service account for each deployment.
-- Setting `global.serviceAccount.create` to `false` will disable automatic service account creation.
-- Setting `global.serviceAccount.name` will use that name in the deployment for either auto-generated or manually created service accounts.
+- Setting `global.serviceAccount.enabled` controls reference to a ServiceAccount for each component via `spec.serviceAccountName`.
+- Setting `global.serviceAccount.create` controls ServiceAccount object creation via Helm.
+- Setting `global.serviceAccount.name` controls the ServiceAccount object name and the name referenced by each component.
+
+NOTE:
+Do not use `global.serviceAccount.create=true` with `global.serviceAccount.name`, as it instructs the charts
+to create multiple ServiceAccount objects with the same name. Instead, use `global.serviceAccount.create=false` if specifying
+a global name.
 
 ## Annotations
 

@@ -106,6 +106,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitlab_docs" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.globalServiceAccount" .) -}}
 {{- $messages = append $messages (include "gitlab.duoAuth.checkConfig" .) -}}
 
 {{- /* prepare output */}}
@@ -203,3 +204,18 @@ smtp:
 {{-   end }}
 {{- end -}}
 {{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}
+
+{{/*
+Ensure that global service account settings are correct.
+*/}}
+{{- define "gitlab.checkConfig.globalServiceAccount" -}}
+{{-   if and .Values.global.serviceAccount.enabled .Values.global.serviceAccount.create -}}
+{{-     if .Values.global.serviceAccount.name }}
+serviceAccount:
+  `global.serviceAccount.name` is set to {{ .Values.global.serviceAccount.name | quote }}.
+  Please set `global.serviceAccount.create=false` and manually create a ServiceAccount
+  object in the cluster with a matching name.
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.globalServiceAccount */}}
