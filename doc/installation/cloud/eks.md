@@ -90,7 +90,7 @@ to use a storage class locked to a particular zone leads to a scenario where pod
 exist in a different zone from storage volumes and be unable to access data.
 For more information, see how to [provision persistent volumes](../storage.md).
 
-In the Amazon EKS 1.23 and later clusters, regardless of whether manual or dynamic provisioning, 
+In the Amazon EKS 1.23 and later clusters, regardless of whether manual or dynamic provisioning,
 you need to install the [Amazon EBS CSI add-on](https://docs.aws.amazon.com/eks/latest/userguide/managing-ebs-csi.html#adding-ebs-csi-eks-add-on) on the cluster.
 
 ```shell

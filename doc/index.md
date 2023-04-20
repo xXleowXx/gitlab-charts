@@ -11,7 +11,7 @@ This chart contains all the required components to get started and can scale to 
 
 For OpenShift-based installations, use [GitLab Operator](https://docs.gitlab.com/operator/),
 otherwise you'll have to update the [security context constraints](https://docs.gitlab.com/operator/security_context_constraints.html)
-yourself. 
+yourself.
 
 WARNING:
 The default Helm chart configuration is **not intended for production**.
