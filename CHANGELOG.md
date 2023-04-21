@@ -34,6 +34,10 @@ entry.
 - [Remove references to unused 'fullnameOverride' key](gitlab-org/charts/gitlab@34b9c0d5d1f5227b8bb1b2496e3be6f9ff3a9ec0) ([merge request](gitlab-org/charts/gitlab!3092))
 - [checkConfig: verify format of omniauth provider content](gitlab-org/charts/gitlab@f419b34386799a83587eeecfea142070477e8029) ([merge request](gitlab-org/charts/gitlab!3054))
 
+## 6.10.4 (2023-04-21)
+
+No changes.
+
 ## 6.10.3 (2023-04-14)
 
 No changes.
