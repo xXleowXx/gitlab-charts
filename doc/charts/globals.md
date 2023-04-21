@@ -1499,10 +1499,15 @@ If the LDAP server uses a custom CA or self-signed certificate, you must:
    --set global.certificates.customCAs[0].configMap=my-custom-ca-configmap
 
    # Configure the LDAP integration to trust the custom CA
-   --set global.appConfig.ldap.servers.main.ca_file=/etc/ssl/certs/ca-cert-unique_name.pem
+   --set global.appConfig.ldap.servers.main.ca_file=/etc/ssl/certs/unique_name.pem
    ```
 
-This will ensure that the CA certificate is mounted in the relevant pods at `/etc/ssl/certs/ca-cert-unique_name.pem` and specifies its use in the LDAP configuration.
+This ensures that the CA certificate is mounted in the relevant pods at `/etc/ssl/certs/unique_name.pem` and specifies its use in the LDAP configuration.
+
+NOTE:
+In GitLab 15.9 and later, the certificate in `/etc/ssl/certs/` is not prefixed with `ca-cert-` anymore.
+This was the old behavior due to the use of Alpine for the container that prepared the certificate secrets
+for deployed pods. The `gitlab-base` container is now used for this operation, which is based on Debian.
 
 See [Custom Certificate Authorities](#custom-certificate-authorities) for more info.
 
