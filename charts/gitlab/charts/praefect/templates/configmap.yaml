@@ -59,9 +59,6 @@ data:
     {{- if .sentryDsn }}
     sentry_dsn = "{{ .sentryDsn }}"
     {{- end }}
-    {{- if .rubySentryDsn }}
-    ruby_sentry_dsn = "{{ .rubySentryDsn }}"
-    {{- end }}
     dir = "/var/log/gitaly"
     {{- if .sentryEnvironment }}
     sentry_environment = "{{ .sentryEnvironment }}"
