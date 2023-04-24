@@ -41,6 +41,8 @@ for more information on how the global variables work.
 - [Outgoing email](#outgoing-email)
 - [Platform](#platform)
 - [Affinity](#affinity)
+- [Pod Priority and Preemption](#pod-priority-and-preemption)
+- [Log Rotation](#log-rotation)
 
 ## Configure Host settings
 
@@ -2434,3 +2436,17 @@ global:
 | Name                | Type   | Default | Description                      |
 | :-------------------| :--:   | :------ | :------------------------------- |
 | `priorityClassName` | String |         | Priority class assigned to pods. |
+
+## Log Rotation
+
+By default, the GitLab Helm chart does not rotate logs. This can cause ephemeral storage issues for containers that run for a long time.
+
+To enable log rotation, set the `GITLAB_LOGGER_TRUNCATE_LOGS` environment variable to true. You can also configure the log rotation frequency and the maximum log size by setting the `GITLAB_LOGGER_TRUNCATE_INTERVAL` and `GITLAB_LOGGER_MAX_FILESIZE` environment variables, respectively.
+
+```yaml
+global:
+  extraEnv:
+    GITLAB_LOGGER_TRUNCATE_LOGS: true
+    GITLAB_LOGGER_TRUNCATE_INTERVAL: 300
+    GITLAB_LOGGER_MAX_FILESIZE: 1000
+```
