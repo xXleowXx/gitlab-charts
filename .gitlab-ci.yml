@@ -296,6 +296,7 @@ stop_review_gke122:
   variables:
     AGENT_NAME: "gke122-ci-cluster"
     KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v122.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
