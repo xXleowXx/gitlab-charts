@@ -116,8 +116,6 @@ global:
   gitlab:
     license:
       secret: example-gitlab-license
-  grafana:
-    enabled: true
   hosts:
     domain: example.com
   minio:
@@ -158,10 +156,6 @@ prometheus:
   server:
     nodeSelector:
       workload: support
-
-grafana:
-  nodeSelector:
-    workload: support
 
 # https://docs.gitlab.com/ee/ci/runners/#configuring-runners-in-gitlab
 gitlab-runner:

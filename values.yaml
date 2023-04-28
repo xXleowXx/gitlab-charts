@@ -192,10 +192,6 @@ global:
     credentials: {}
       # secret:
 
-  ## https://docs.gitlab.com/charts/charts/globals#configure-grafana-integration
-  grafana:
-    enabled: false
-
   ## https://docs.gitlab.com/charts/charts/globals#configure-appconfig-settings
   ## Rails based portions of this chart share many settings
   appConfig:
@@ -1162,57 +1158,6 @@ gitlab-runner:
     gitlab.com/prometheus_scrape: "true"
     gitlab.com/prometheus_port: 9252
 
-## Installation & configuration of stable/grafana
-## See requirements.yaml for current version
-## Controlled by `global.grafana.enabled`
-grafana:
-  # Overrides the Grafana image tag for the 7.5.16 security update
-  image:
-    tag: 7.5.16
-  ## Override and provide "bogus" administation secrets
-  ## gitlab/gitlab-grafana provides overrides via shared-secrets
-  nameOverride: grafana-app
-  admin:
-    existingSecret: bogus
-  env:
-    GF_SECURITY_ADMIN_USER: bogus
-    GF_SECURITY_ADMIN_PASSWORD: bogus
-  ## This override allows gitlab/gitlab-grafana to completely override the secret
-  ##   handling behavior of the upstream chart in combination with the above.
-  command: ["sh", "-x", "/tmp/scripts/import-secret.sh"]
-  ## The following settings allow Grafana to dynamically create
-  ## dashboards and datasources from configmaps. See
-  ## https://artifacthub.io/packages/helm/grafana/grafana#sidecar-for-dashboards
-  sidecar:
-    dashboards:
-      enabled: true
-      label: gitlab_grafana_dashboard
-    datasources:
-      enabled: true
-      label: gitlab_grafana_datasource
-  ## We host Grafana as a sub-url of GitLab
-  grafana.ini:
-    server:
-      serve_from_sub_path: true
-      root_url: http://localhost/-/grafana/
-    auth:
-      login_cookie_name: gitlab_grafana_session
-  ## We generate and provide random passwords
-  ## NOTE: the Secret & ConfigMap names are hard coded!
-  extraSecretMounts:
-    - name: initial-password
-      mountPath: /tmp/initial
-      readOnly: true
-      secretName: gitlab-grafana-initial-password
-      defaultMode: 400
-  extraConfigmapMounts:
-    - name: import-secret
-      mountPath: /tmp/scripts
-      configMap: gitlab-grafana-import-secret
-      readOnly: true
-  testFramework:
-    enabled: false
-
 ## Settings for individual sub-charts under GitLab
 ## Note: Many of these settings are configurable via globals
 gitlab:
@@ -1236,8 +1181,6 @@ gitlab:
   ## https://docs.gitlab.com/charts/charts/gitlab/gitlab-shell
   #   gitlab-shell:
   #     enabled: false
-  ## https://docs.gitlab.com/charts/charts/gitlab/gitlab-grafana
-  #   gitlab-grafana:
   ## https://docs.gitlab.com/charts/charts/gitlab/gitlab-pages
   #   gitlab-pages:
   ## https://docs.gitlab.com/charts/charts/gitlab/kas

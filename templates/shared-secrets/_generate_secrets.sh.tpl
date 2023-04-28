@@ -195,11 +195,6 @@ generate_secret_if_needed {{ template "gitlab.registry.httpSecret.secret" . }} -
 # Container Registry notification_secret
 generate_secret_if_needed {{ template "gitlab.registry.notificationSecret.secret" . }} --from-literal={{ template "gitlab.registry.notificationSecret.key" . }}=[\"$(gen_random 'a-zA-Z0-9' 32)\"]
 
-{{ if .Values.global.grafana.enabled -}}
-# Grafana password
-generate_secret_if_needed "gitlab-grafana-initial-password" --from-literal=password=$(gen_random 'a-zA-Z0-9' 64)
-{{ end }}
-
 {{ if .Values.global.praefect.enabled -}}
 {{   if not .Values.global.praefect.psql.host -}}
 # Praefect DB password
