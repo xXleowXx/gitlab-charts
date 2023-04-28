@@ -6,7 +6,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # GitLab Helm chart deployment options **(FREE SELF)**
 
-You can supply these configuration options to the `helm install` command by using the `--set` flags.
+This page lists commonly used values of the GitLab chart. For a complete list of the available options, refer
+to the documentation for each subchart.
+
+You can pass values to the `helm install` command by using a YAML file and the `--values <values file>`
+flag or by using multiple `--set` flags. It is recommended to use a values file that contains only the
+overrides needed for your release.
 
 The source of the default `values.yaml` file can be found [here](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/values.yaml).
 These contents change over releases, but you can use Helm itself to retrieve these on a per-version basis:
@@ -455,13 +460,24 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 GitLab makes use of several other charts. These are [treated as parent-child relationships](https://helm.sh/docs/topics/charts/#chart-dependencies).
 Ensure that any properties you wish to configure are provided as `chart-name.property`.
 
-## Prometheus
+### Prometheus
 
 Prefix Prometheus values with `prometheus`. For example, set the persistence
 storage value using `prometheus.server.persistentVolume.size`. To disable Prometheus set `prometheus.install=false`.
 
 Refer to the [Prometheus chart documentation](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus)
 for the exhaustive list of configuration options.
+
+### PostgreSQL
+
+Prefix PostgreSQL values with `postgresql`. For example, set the storage class value
+using `postgresql.persitence.storageClass`.
+
+Refer to the default values file for a list of the available configuration options.
+
+```shell
+helm inspect values https://charts.bitnami.com/bitnami/postgresql-8.9.4.tgz
+```
 
 ## Bringing your own images
 
