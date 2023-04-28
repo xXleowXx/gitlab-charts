@@ -24,10 +24,6 @@ dependencies:
   version: 0.52.0
   repository: https://charts.gitlab.io/
   condition: gitlab-runner.install
-- name: grafana
-  version: 6.11.0
-  repository: https://grafana.github.io/helm-charts
-  condition: global.grafana.enabled
 - name: redis
   version: 11.3.4
   repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami

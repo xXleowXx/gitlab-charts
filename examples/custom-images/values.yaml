@@ -25,8 +25,6 @@ gitlab:
   gitlab-exporter:
     <<: *custom
     init: *custom
-  # If `global.grafana.enabled=true`, uncomment below to set the custom image
-  # gitlab-grafana: *custom
   gitlab-shell:
     <<: *custom
     init: *custom
@@ -100,9 +98,3 @@ redis:
       tag: custom-tag
 
 upgradeCheck: *custom
-
-# If `global.grafana.enabled=true`, uncomment below to set the custom image
-# grafana:
-#   <<: *custom
-#   sidecar:
-#     image: custom-repository:custom-tag
