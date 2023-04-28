@@ -615,7 +615,7 @@ Run the certificates container using Docker.
 `308: Permanent Redirect` can happen if your Load Balancer is configured to send unencrypted traffic (HTTP) to NGINX.
 Because NGINX defaults to redirecting `HTTP` to `HTTPS`, you may end up in a "redirect loop".
 
-To fix this, [enable NGINX's `use-forward-headers` setting](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers).
+To fix this, [enable NGINX's `use-forwarded-headers` setting](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers).
 
 ## "Invalid Word" errors in the `nginx-controller` logs and `404` errors
 
