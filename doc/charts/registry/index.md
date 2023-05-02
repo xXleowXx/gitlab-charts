@@ -231,18 +231,6 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `gc.manifests.disabled`                                                                                                                      | `false`                                                                        | When set to `true`, the GC worker for manifests is disabled.                                                                                                                                                                                                                                                                                 |
 | `gc.manifests.interval`                                                                                                                      | `5s`                                                                           | The initial sleep interval between each worker run.                                                                                                                                                                                                                                                                                          |
 | `gc.reviewafter`                                                                                                                             | `24h`                                                                          | The minimum amount of time after which the garbage collector should pick up a record for review. `-1` means no wait.                                                                                                                                                                                                                         |
-| `migration.enabled`                                                                                                                          | `false`                                                                        | When set to `true`, migration mode is enabled. New repositories will be added to the database, while existing repositories will continue to use the filesystem. This is an experimental feature and must not be used in production environments.                                                                                             |
-| `migration.disablemirrorfs`                                                                                                                  | `false`                                                                        | When set to `true`, the registry does not write metadata to the filesystem. Must be used in combination with the metadata database. This is an experimental feature and must not be used in production environments.                                                                                                                         |
-| `migration.rootdirectory`                                                                                                                    |                                                                                | Allows repositories that have been migrated to the database to use separate storage paths. Using a distinct root directory from the main storage driver configuration allows online migrations. This is an experimental feature and must not be used in production environments.                                                             |
-| `migration.importtimeout`                                                                                                                    | `5m`                                                                           | The maximum duration that an import job may take to complete before it is aborted. This is an experimental feature and must not be used in production environments.                                                                                                                                                                          |
-| `migration.preimporttimeout`                                                                                                                 | `1h`                                                                           | The maximum duration that a pre import job may take to complete before it is aborted. This is an experimental feature and must not be used in production environments.                                                                                                                                                                       |
-| `migration.tagconcurrency`                                                                                                                   | `1`                                                                            | This parameter determines the number of concurrent tag details requests to the filesystem backend. This can greatly reduce the time spent importing a repository after a successful pre import has completed. Pre import is not affected by this parameter. This is an experimental feature and must not be used in production environments. |
-| `migration.maxconcurrentimports`                                                                                                             | `1`                                                                            | This parameter determines the maximum number of concurrent imports allowed per instance of the registry. This can help reduce the number of resources that the registry needs when the migration mode is enabled. This is an experimental feature and must not be used in production environments.                                           |
-| `migration.importnotification.enabled`                                                                                                       | `false`                                                                        | When set to `true`, the import notification feature will be enabled. This requires the following parameters to be configured. This is an experimental feature and must not be used in production environments.                                                                                                                               |
-| `migration.importnotification.url`                                                                                                           | `'<GitLab URL>/api/v4/internal/registry/repositories/{path}/migration/status'` | The URL endpoint where the notification will be sent to. Required when `importnotification` is enabled. Must be a valid URL, including scheme. A placeholder can be defined as `{path}` to add the repository path in the URL.                                                                                                               |
-| `migration.importnotification.timeout`                                                                                                       | `5s`                                                                           | A value for the HTTP timeout for the import notification. This is an experimental feature and must not be used in production environments.                                                                                                                                                                                                   |
-| `migration.importnotification.secret`                                                                                                        | `''`                                                                           | This will be automatically created if                                                                                                                                                                                                                                                                                                        |
-| not provided, when the `shared-secrets` feature is enabled. This is an experimental feature and must not be used in production environments. |
 | `securityContext.fsGroup`                                                                                                                    | `1000`                                                                         | Group ID under which the pod should be started                                                                                                                                                                                                                                                                                               |
 | `securityContext.runAsUser`                                                                                                                  | `1000`                                                                         | User ID under which the pod should be started                                                                                                                                                                                                                                                                                                |
 | `securityContext.fsGroupChangePolicy`                                                                                                        |                                                                                | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) |
@@ -511,7 +499,6 @@ kubectl create secret generic gitlab-registry-httpsecret --from-literal=secret=s
 
 Notification Secret is utilized for calling back to the GitLab application in various ways,
 such as for Geo to help manage syncing Container Registry data between primary and secondary sites.
-It is also used to send import notifications if the [migration](#migration) is enabled and the endpoint is configured.
 
 The `notificationSecret` secret object will be automatically created if
 not provided, when the `shared-secrets` feature is enabled.
@@ -929,36 +916,6 @@ there will be some variation in how you connect.
    template1=# exit
    ...@gitlab-postgresql-0/$ exit
    ```
-
-### migration
-
-The `migration` property is optional and provides options related to the
-[migration](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#migration)
-of metadata from the filesystem to the metadata database.
-
-WARNING:
-This is an experimental feature and _must not_ be used in production.
-
-NOTE:
-This feature requires the [metadata database](#database) to be enabled.
-
-```yaml
-migration:
-  enabled: true
-  disablemirrorfs: true
-  rootdirectory: gitlab
-  importtimeout: 5m
-  preimporttimeout: 1h
-  tagconcurrency: 10
-  maxconcurrentimports: 10
-  importnotification:
-    enabled: true
-    url: 'https://example.com/notification/{path}/status'
-    timeout: 5s
-    secret:
-        secret: gitlab-registry-notification
-        key: secret
-```
 
 ### gc
 
