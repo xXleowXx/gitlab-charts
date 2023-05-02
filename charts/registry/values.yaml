@@ -271,11 +271,6 @@ middleware:
 minio:
   redirect: false
 
-# https://github.com/docker/distribution/blob/master/docs/configuration.md#compatibility
-compatibility:
-  schema1:
-    enabled: false
-
 # Enable the registry to accept windows based docker images
 # See https://github.com/docker/distribution/issues/2795
 validation:
