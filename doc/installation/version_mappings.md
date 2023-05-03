@@ -39,6 +39,7 @@ The table below maps some of the key previous chart versions and GitLab versions
 | 6.11.2 | 15.11.2 |
 | 6.11.1 | 15.11.1 |
 | 6.11.0 | 15.11.0 |
+| 6.10.6 | 15.10.6 |
 | 6.10.5 | 15.10.5 |
 | 6.10.4 | 15.10.4 |
 | 6.10.3 | 15.10.3 |
