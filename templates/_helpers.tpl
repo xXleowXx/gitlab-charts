@@ -574,14 +574,14 @@ Constructs busybox image name.
 Override upstream redis chart naming
 */}}
 {{- define "redis.secretName" -}}
-{{ template "gitlab.redis.password.secret" . }}
+{{ template "gitlab.redis.auth.secret" . }}
 {{- end -}}
 
 {{/*
 Override upstream redis secret key name
 */}}
 {{- define "redis.secretPasswordKey" -}}
-{{ template "gitlab.redis.password.key" . }}
+{{ template "gitlab.redis.auth.key" . }}
 {{- end -}}
 
 {{/*

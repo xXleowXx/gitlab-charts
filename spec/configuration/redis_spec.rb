@@ -7,12 +7,12 @@ describe 'Redis configuration' do
     HelmTemplate.defaults
   end
 
-  describe 'global.redis.password.enabled' do
+  describe 'global.redis.auth.enabled' do
     let(:values) do
       YAML.safe_load(%(
         global:
           redis:
-            password:
+            auth:
               enabled: true
       )).merge(default_values)
     end
@@ -30,7 +30,7 @@ describe 'Redis configuration' do
         YAML.safe_load(%(
           global:
             redis:
-              password:
+              auth:
                 enabled: false
         )).merge(default_values)
       end

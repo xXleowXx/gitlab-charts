@@ -252,7 +252,7 @@ global:
     #   serverCA: server-ca.pem
   redis:
     # host: '0.0.0.0'
-    password: {}
+    auth: {}
   gitaly:
     internal:
       names: ["default"]
@@ -355,7 +355,7 @@ global:
       host: ""
 
 redis:
-  password: {}
+  auth: {}
 gitaly:
   # host: '0.0.0.0'
   # port: 8075

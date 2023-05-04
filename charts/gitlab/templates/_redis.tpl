@@ -65,7 +65,7 @@ Return the password section of the Redis URI, if needed.
 */}}
 {{- define "gitlab.redis.url.password" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- if .redisMergedConfig.password.enabled -}}:<%= ERB::Util::url_encode(File.read("/etc/gitlab/redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}").strip) %>@{{- end -}}
+{{- if .redisMergedConfig.auth.enabled -}}:<%= ERB::Util::url_encode(File.read("/etc/gitlab/redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}").strip) %>@{{- end -}}
 {{- end -}}
 
 {{/*
@@ -110,20 +110,20 @@ Note: Workhorse only uses the primary Redis (global.redis)
 {{      include "gitlab.redis.secret" $ }}
 {{-   end }}
 {{- end -}}
-{{/* reset 'redisConfigName', to get global.redis.password's Secret item */}}
+{{/* reset 'redisConfigName', to get global.redis.auth's Secret item */}}
 {{- $_ := set . "redisConfigName" "" }}
-{{- if .Values.global.redis.password.enabled }}
+{{- if .Values.global.redis.auth.enabled}}
 {{    include "gitlab.redis.secret" . }}
 {{- end }}
 {{- end -}}
 
 {{- define "gitlab.redis.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- if .redisMergedConfig.password.enabled }}
+{{- if .redisMergedConfig.auth.enabled }}
 - secret:
-    name: {{ template "gitlab.redis.password.secret" . }}
+    name: {{ template "gitlab.redis.auth.secret" . }}
     items:
-      - key: {{ template "gitlab.redis.password.key" . }}
+      - key: {{ template "gitlab.redis.auth.key" . }}
         path: redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}
 {{- end }}
 {{- end -}}

@@ -65,7 +65,7 @@ health_checks:
   port: 3808
 
 redis:
-  password: {}
+  auth: {}
 
 psql: {}
   # port: 5432
@@ -123,7 +123,7 @@ global:
     #   clientCertificate: client-cert.pem
     #   serverCA: server-ca.pem
   redis:
-    password: {}
+    auth: {}
   gitaly:
     internal:
       names: ["default"]
