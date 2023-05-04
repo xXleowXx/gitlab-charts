@@ -33,7 +33,7 @@ Return the redis password secret name
 */}}
 {{- define "gitlab.redis.auth.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- default (printf "%s-redis-secret" .Release.Name) .redisMergedConfig.auth.existingSecret | quote -}}
+{{- default (printf "%s-redis-secret" .Release.Name) .redisMergedConfig.auth.secret | quote -}}
 {{- end -}}
 
 {{/*
@@ -41,5 +41,5 @@ Return the redis password secret key
 */}}
 {{- define "gitlab.redis.auth.key" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- default "secret" .redisMergedConfig.auth.existingSecretKey | quote -}}
+{{- default "secret" .redisMergedConfig.auth.key | quote -}}
 {{- end -}}
