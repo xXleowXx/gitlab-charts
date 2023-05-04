@@ -65,7 +65,7 @@ Return the password section of the Redis URI, if needed.
 */}}
 {{- define "gitlab.redis.url.password" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- if .redisMergedConfig.auth.enabled -}}:<%= ERB::Util::url_encode(File.read("/etc/gitlab/redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}").strip) %>@{{- end -}}
+{{- if .redisMergedConfig.password.enabled -}}:<%= ERB::Util::url_encode(File.read("/etc/gitlab/redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}").strip) %>@{{- end -}}
 {{- end -}}
 
 {{/*
@@ -88,6 +88,14 @@ sentinels:
 {{-   $_ := set . "redisMergedConfig" ( index .Values.global.redis .redisConfigName ) -}}
 {{- else -}}
 {{-   $_ := set . "redisMergedConfig" .Values.global.redis -}}
+{{- end -}}
+{{-   if not (kindIs "map" (get $.redisMergedConfig "password")) -}}
+{{-     $_ := set $.redisMergedConfig "password" $.Values.global.redis.auth -}}
+{{-   end -}}
+{{- range $key := keys $.Values.global.redis.auth -}}
+{{-   if not (hasKey $.redisMergedConfig.password $key) -}}
+{{-     $_ := set $.redisMergedConfig.password $key (index $.Values.global.redis.auth $key) -}}
+{{-   end -}}
 {{- end -}}
 {{- end -}}
 
@@ -112,18 +120,18 @@ Note: Workhorse only uses the primary Redis (global.redis)
 {{- end -}}
 {{/* reset 'redisConfigName', to get global.redis.auth's Secret item */}}
 {{- $_ := set . "redisConfigName" "" }}
-{{- if .Values.global.redis.auth.enabled}}
+{{- if include "gitlab.redis.password.enabled" $ }}
 {{    include "gitlab.redis.secret" . }}
 {{- end }}
 {{- end -}}
 
 {{- define "gitlab.redis.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- if .redisMergedConfig.auth.enabled }}
+{{- if .redisMergedConfig.password.enabled }}
 - secret:
-    name: {{ template "gitlab.redis.auth.secret" . }}
+    name: {{ template "gitlab.redis.password.secret" . }}
     items:
-      - key: {{ template "gitlab.redis.auth.key" . }}
+      - key: {{ template "gitlab.redis.password.key" . }}
         path: redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}
 {{- end }}
 {{- end -}}
