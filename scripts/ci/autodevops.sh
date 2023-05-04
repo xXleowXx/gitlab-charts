@@ -74,7 +74,7 @@ function deploy() {
   #echo "Generated root login: $ROOT_PASSWORD"
   kubectl create secret generic "${RELEASE_NAME}-gitlab-initial-root-password" --from-literal=password=$ROOT_PASSWORD -o yaml --dry-run=client | kubectl replace --force -f -
 
-  echo "${REVIEW_APPS_EE_LICENSE}" > /tmp/license.gitlab
+  echo "${QA_EE_LICENSE}" > /tmp/license.gitlab
   kubectl create secret generic "${RELEASE_NAME}-gitlab-license" --from-file=license=/tmp/license.gitlab -o yaml --dry-run=client | kubectl replace --force -f -
 
   # YAML_FILE=""${KUBE_INGRESS_BASE_DOMAIN//\./-}.yaml"
@@ -171,6 +171,8 @@ CIYAML
     --set certmanager.install=false \
     --set prometheus.install=$PROMETHEUS_INSTALL \
     --set prometheus.server.retention="4d" \
+    --set global.extraEnv.GITLAB_LICENSE_MODE="test" \
+    --set global.extraEnv.CUSTOMER_PORTAL_URL="https://customers.staging.gitlab.com" \
     --set global.gitlab.license.secret="$RELEASE_NAME-gitlab-license" \
     --namespace="$NAMESPACE" \
     "${gitlab_version_args[@]}" \
