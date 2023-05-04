@@ -817,6 +817,7 @@ upgradeCheck:
     fsGroup: 65534
   tolerations: []
   annotations: {}
+  configMapAnnotations: {}
   resources:
     requests:
       cpu: 50m
