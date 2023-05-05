@@ -39,13 +39,16 @@ describe 'Database configuration' do
 
   describe 'No decomposition' do
     context 'With default configuration' do
-      it '`database.yml` Provides only `main` stanza and uses in-chart postgresql service' do
+      it '`database.yml` Provides only `main`, and `ci` stanza and uses in-chart postgresql service' do
         t = HelmTemplate.new(default_values)
         expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
         db_config = database_config(t, 'webservice')
-        expect(db_config['production'].keys).to contain_exactly('main')
+        expect(db_config['production'].keys).to contain_exactly('main', 'ci')
         expect(db_config['production'].dig('main', 'host')).to eq('test-postgresql.default.svc')
         expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+
+        expect(db_config['production'].dig('ci', 'host')).to eq('test-postgresql.default.svc')
+        expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
       end
     end
 
@@ -54,7 +57,6 @@ describe 'Database configuration' do
         t = HelmTemplate.new(default_values.deep_merge(YAML.safe_load(%(
           global:
             psql:
-              databaseTasks: true
               password:
                 secret: sekrit
                 key: pa55word
@@ -67,11 +69,30 @@ describe 'Database configuration' do
         expect(db_config['production'].dig('main', 'host')).to eq('server')
         expect(db_config['production'].dig('main', 'port')).to eq(9999)
         expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+        expect(db_config['production'].dig('ci', 'host')).to eq('server')
+        expect(db_config['production'].dig('ci', 'port')).to eq(9999)
+        expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
 
         webservice_secret_mounts = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets').select do |item|
           item['secret']['name'] == 'sekrit' && item['secret']['items'][0]['key'] == 'pa55word'
         end
-        expect(webservice_secret_mounts.length).to eq(1)
+        expect(webservice_secret_mounts.length).to eq(2)
+      end
+    end
+
+    context 'When `ci` is enabled: false' do
+      it 'only has `main` configuration' do
+        disabled_psql_ci = default_values.deep_merge(YAML.safe_load(%(
+          global:
+            psql:
+              ci:
+                enabled: false
+        )))
+
+        t = HelmTemplate.new(disabled_psql_ci)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+        db_config = database_config(t, 'webservice')
+        expect(db_config['production'].keys).to contain_exactly('main')
       end
     end
   end
@@ -533,9 +554,11 @@ describe 'Database configuration' do
           t = HelmTemplate.new(geo_values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
           db_config = database_config(t, 'webservice')
-          expect(db_config['production'].keys).to contain_exactly('main')
+          expect(db_config['production'].keys).to contain_exactly('main', 'ci')
           expect(db_config['production'].dig('main', 'host')).to eq('db.example.com')
           expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+          expect(db_config['production'].dig('ci', 'host')).to eq('db.example.com')
+          expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
         end
       end
 
@@ -549,9 +572,11 @@ describe 'Database configuration' do
 
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
           db_config = database_config(t, 'webservice')
-          expect(db_config['production'].keys).to contain_exactly('main')
+          expect(db_config['production'].keys).to contain_exactly('main', 'ci')
           expect(db_config['production'].dig('main', 'host')).to eq('test-postgresql.default.svc')
           expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+          expect(db_config['production'].dig('ci', 'host')).to eq('test-postgresql.default.svc')
+          expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
         end
       end
     end
@@ -569,9 +594,11 @@ describe 'Database configuration' do
 
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
           db_config = database_config(t, 'webservice')
-          expect(db_config['production'].keys).to contain_exactly('main')
+          expect(db_config['production'].keys).to contain_exactly('main', 'ci')
           expect(db_config['production'].dig('main', 'host')).to eq('server')
           expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+          expect(db_config['production'].dig('ci', 'host')).to eq('server')
+          expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
         end
       end
 
@@ -589,9 +616,11 @@ describe 'Database configuration' do
 
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
           db_config = database_config(t, 'webservice')
-          expect(db_config['production'].keys).to contain_exactly('main')
+          expect(db_config['production'].keys).to contain_exactly('main', 'ci')
           expect(db_config['production'].dig('main', 'host')).to eq('server')
           expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+          expect(db_config['production'].dig('ci', 'host')).to eq('server')
+          expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
         end
       end
     end
@@ -624,9 +653,11 @@ describe 'Database configuration' do
           t = HelmTemplate.new(geo_values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
           db_config = database_config(t, 'webservice')
-          expect(db_config['production'].keys).to contain_exactly('main', 'geo')
+          expect(db_config['production'].keys).to contain_exactly('main', 'ci', 'geo')
           expect(db_config['production'].dig('main', 'host')).to eq('geo-1.db.example.com')
           expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+          expect(db_config['production'].dig('ci', 'host')).to eq('geo-1.db.example.com')
+          expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
           expect(db_config['production'].dig('geo', 'host')).to eq('geo-2.db.example.com')
           expect(db_config['production'].dig('geo', 'database_tasks')).to eq(true)
         end
@@ -649,9 +680,11 @@ describe 'Database configuration' do
 
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
           db_config = database_config(t, 'webservice')
-          expect(db_config['production'].keys).to contain_exactly('main')
+          expect(db_config['production'].keys).to contain_exactly('main', 'ci')
           expect(db_config['production'].dig('main', 'host')).to eq('test-postgresql.default.svc')
           expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+          expect(db_config['production'].dig('ci', 'host')).to eq('test-postgresql.default.svc')
+          expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
         end
       end
     end
@@ -669,9 +702,11 @@ describe 'Database configuration' do
 
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
           db_config = database_config(t, 'webservice')
-          expect(db_config['production'].keys).to contain_exactly('main', 'geo')
+          expect(db_config['production'].keys).to contain_exactly('main', 'ci', 'geo')
           expect(db_config['production'].dig('main', 'host')).to eq('server')
           expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+          expect(db_config['production'].dig('ci', 'host')).to eq('server')
+          expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
           expect(db_config['production'].dig('geo', 'host')).to eq('geo-2.db.example.com')
           expect(db_config['production'].dig('geo', 'database_tasks')).to eq(true)
         end
@@ -704,9 +739,11 @@ describe 'Database configuration' do
 
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
           db_config = database_config(t, 'webservice')
-          expect(db_config['production'].keys).to contain_exactly('main')
+          expect(db_config['production'].keys).to contain_exactly('main', 'ci')
           expect(db_config['production'].dig('main', 'host')).to eq('server')
           expect(db_config['production'].dig('main', 'database_tasks')).to eq(true)
+          expect(db_config['production'].dig('ci', 'host')).to eq('server')
+          expect(db_config['production'].dig('ci', 'database_tasks')).to eq(false)
         end
       end
     end
