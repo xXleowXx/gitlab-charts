@@ -146,6 +146,7 @@ imagePullPolicy: {{ $pullPolicy | quote }}
 {{- define "gitlab.certmanager_annotations" -}}
 {{- if (pluck "configureCertmanager" .Values.ingress .Values.global.ingress (dict "configureCertmanager" false) | first) -}}
 cert-manager.io/issuer: "{{ .Release.Name }}-issuer"
+acme.cert-manager.io/http01-edit-in-place: "true"
 {{- end -}}
 {{- end -}}
 
