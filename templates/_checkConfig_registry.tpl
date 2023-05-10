@@ -42,6 +42,13 @@ registry:
     PostgreSQL 12 is the minimum required version for the registry database.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
+{{-     if and ($.Values.registry.database.discovery.enabled) }}
+{{-       if or (not (kindIs "string" $.Values.registry.database.discovery.nameserver)) (empty $.Values.registry.database.discovery.nameserver) }}
+registry:
+    Enabling database discovery requires a nameserver to be provided.
+    See https://docs.gitlab.com/charts/charts/registry#database.
+{{-       end -}}
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.database */}}
