@@ -99,6 +99,10 @@ No changes.
 - [Add more context to sidekiq pod deprecation notices](gitlab-org/charts/gitlab@fdaef9d08c68beac06b0bcff16d0ec6b1bc274aa) ([merge request](gitlab-org/charts/gitlab!2966))
 - [Add more context to sidekiq pod deprecation notices](gitlab-org/charts/gitlab@378fd9116dc5147d9d4c23d81a72e0e8089f138e) ([merge request](gitlab-org/charts/gitlab!2972))
 
+## 6.9.8 (2023-05-10)
+
+No changes.
+
 ## 6.9.7 (2023-05-03)
 
 No changes.
