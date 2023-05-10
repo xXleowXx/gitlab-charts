@@ -664,6 +664,8 @@ global:
     authentication: "plain"
     starttls_auto: false
     openssl_verify_mode: "peer"
+    open_timeout: 30
+    read_timeout: 60
     pool: false
 
   ## https://docs.gitlab.com/charts/charts/globals#outgoing-email
