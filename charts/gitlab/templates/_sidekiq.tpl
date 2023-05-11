@@ -7,11 +7,13 @@ Usage:
 {{- define "gitlab.appConfig.sidekiq.configuration" -}}
 {{- with $.Values.global.appConfig.sidekiq }}
 sidekiq:
+{{- $loggingFormat := "json" }}
 {{- if $.Values.logging }}
   {{- if $.Values.logging.format }}
-  log_format: {{ $.Values.logging.format }}
+    {{- $loggingFormat = $.Values.logging.format }}
   {{- end }}
 {{- end }}
+  log_format: {{ $loggingFormat }}
 {{- if kindIs "slice" .routingRules }}
   {{- if gt (len .routingRules) 0 }}
   routing_rules:
