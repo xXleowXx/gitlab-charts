@@ -125,20 +125,20 @@ module Gitlab
       return [stdout, status]
     end
 
-    def scale_rails_down()
-      for app in %w(webservice sidekiq) do
+    def scale_rails_down
+      %w[webservice sidekiq].each do |app|
         stdout, status = scale_deployment(app, 0)
-        fail stdout unless status.success?
+        raise stdout unless status.success?
       end
     end
 
-    def scale_rails_up()
-      for app in %w(webservice sidekiq) do
+    def scale_rails_up
+      %w[webservice sidekiq].each do |app|
         replicas, status = get_hpa_minreplicas(app)
-        fail replicas unless status.success?
+        raise replicas unless status.success?
 
         stdout, status = scale_deployment(app, replicas)
-        fail stdout unless status.success?
+        raise stdout unless status.success?
       end
     end
 
