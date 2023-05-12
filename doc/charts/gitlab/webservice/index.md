@@ -85,8 +85,8 @@ to the `helm install` command using the `--set` flags.
 | `metrics.serviceMonitor.additionalLabels`           | `{}`                                                            | Additional labels to add to the ServiceMonitor                                                                                                                                                                                                                                                                                  |
 | `metrics.serviceMonitor.endpointConfig`             | `{}`                                                            | Additional endpoint configuration for the ServiceMonitor                                                                                                                                                                                                                                                                        |
 | `metrics.annotations`                               |                                                                 | **DEPRECATED** Set explicit metrics annotations. Replaced by template content.                                                                                                                                                                                                                                                  |
-| `metrics.tls.enabled`                               | `false`                                                         | TLS enabled for the metrics/web_exporter endpoint                                                                                                                                                                                                                                                                               |
-| `metrics.tls.secretName`                            | `{Release.Name}-webservice-metrics-tls`                         | Secret for the metrics/web_exporter endpoint TLS cert and key                                                                                                                                                                                                                                                                   |
+| `metrics.tls.enabled`                               |                                                                 | TLS enabled for the metrics/web_exporter endpoint. Defaults to `tls.enabled`.                                                                                                                                                                                                                                                   |
+| `metrics.tls.secretName`                            |                                                                 | Secret for the metrics/web_exporter endpoint TLS cert and key. Defaults to `tls.secretName`.                                                                                                                                                                                                                                    |
 | `minio.bucket`                                      | `git-lfs`                                                       | Name of storage bucket, when using MinIO                                                                                                                                                                                                                                                                                        |
 | `minio.port`                                        | `9000`                                                          | Port for MinIO service                                                                                                                                                                                                                                                                                                          |
 | `minio.serviceName`                                 | `minio-svc`                                                     | Name of MinIO service                                                                                                                                                                                                                                                                                                           |
@@ -339,10 +339,14 @@ gitlab:
             enabled: true
 ```
 
-TLS can be enabled on metrics endpoints for `gitlab-workhorse` container by setting
-`gitlab.webservice.workhorse.monitoring.tls.enabled` to `true`. Note that TLS on
-metrics endpoint is only available when TLS is enabled for Workhorse. The metrics
-listener uses the same TLS certificate that is specified by `gitlab.webservice.workhorse.tls.secretName`.
+TLS on the metrics endpoints of the `gitlab-workhorse` container is inherited from
+`global.workhorse.tls.enabled`. Note that TLS on metrics endpoint is only available
+when TLS is enabled for Workhorse. The metrics listener uses the same TLS certificate
+that is specified by `gitlab.webservice.workhorse.tls.secretName`.
+
+TLS certificates used for metrics endpoints may require additional considerations for
+the included subject alternative names (SANs), particularly if using the included Prometheus
+Helm chart. For more information, see [Configure Prometheus to scrape TLS-enabled endpoints](../../../installation/tools.md#configure-prometheus-to-scrape-tls-enabled-endpoints).
 
 #### `webservice`
 
