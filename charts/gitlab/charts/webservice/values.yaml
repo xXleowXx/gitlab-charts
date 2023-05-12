@@ -61,8 +61,8 @@ metrics:
   enabled: true
   port: 8083
   path: /metrics
-  tls:
-    enabled: false
+  tls: {}
+    # enabled: 
     # secretName:
   serviceMonitor:
     enabled: false
@@ -193,8 +193,8 @@ workhorse:
     exporter:
       enabled: false
       port: 9229
-      tls:
-        enabled: false
+      tls: {}
+        # enabled: false
   metrics:
     enabled: false
     port: 9229

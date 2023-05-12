@@ -791,7 +791,7 @@ describe 'Webservice Deployments configuration' do
         expect(service_ports).to include({ 'port' => 8080, 'targetPort' => 'http-webservice', 'protocol' => 'TCP', 'name' => 'http-webservice' })
         expect(service_ports).to include({ 'port' => 8181, 'targetPort' => 'http-workhorse', 'protocol' => 'TCP', 'name' => 'http-workhorse' })
         expect(service_ports).to include({ 'port' => 8081, 'targetPort' => 'https-ws', 'protocol' => 'TCP', 'name' => 'https-ws' })
-        expect(service_ports).to include({ 'port' => 8083, 'targetPort' => 'http-metrics-ws', 'protocol' => 'TCP', 'name' => 'http-metrics-ws' })
+        expect(service_ports).to include({ 'port' => 8083, 'targetPort' => 'http-metrics-ws', 'protocol' => 'TCP', 'name' => 'https-metrics-ws' })
       end
     end
 
@@ -838,7 +838,7 @@ describe 'Webservice Deployments configuration' do
         expect(service_port_names).not_to include('http-webservice')
         expect(service_ports).to include({ 'port' => 8181, 'targetPort' => 'http-workhorse', 'protocol' => 'TCP', 'name' => 'http-workhorse' })
         expect(service_ports).to include({ 'port' => 8081, 'targetPort' => 'https-ws', 'protocol' => 'TCP', 'name' => 'https-ws' })
-        expect(service_ports).to include({ 'port' => 8083, 'targetPort' => 'http-metrics-ws', 'protocol' => 'TCP', 'name' => 'http-metrics-ws' })
+        expect(service_ports).to include({ 'port' => 8083, 'targetPort' => 'http-metrics-ws', 'protocol' => 'TCP', 'name' => 'https-metrics-ws' })
       end
     end
   end
