@@ -76,6 +76,7 @@ spec:
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" . | nindent 10 }}
           {{- include "gitlab.psql.ssl.volumeMount" . | nindent 10 }}
+          {{- include "gitlab.geo.psql.ssl.volumeMount" . | nindent 10 }}
           - name: logcursor-config
             mountPath: /config-logcursor
             readOnly: true
@@ -174,6 +175,7 @@ spec:
       volumes:
       {{- include "gitlab.extraVolumes" . | nindent 6 }}
       {{- include "gitlab.psql.ssl.volume" . | nindent 6 }}
+      {{- include "gitlab.geo.psql.ssl.volume" . | nindent 6 }}
       - name: logcursor-config
         configMap:
           name: {{ template "fullname" . }}
