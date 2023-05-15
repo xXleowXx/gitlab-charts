@@ -75,13 +75,6 @@ Input: dict "context" $ "name" string
 {{- end -}}
 {{- end -}}
 
-{{- define "gitlab.rails.redis.clusterRateLimiting" -}}
-{{- if .Values.global.redis.clusterRateLimiting -}}
-{{-   $_ := set $ "redisConfigName" "clusterRateLimiting" }}
-{{-   include "gitlab.rails.redis.yaml" (dict "context" $ "name" "redis.cluster_rate_limiting") -}}
-{{- end -}}
-{{- end -}}
-
 {{- define "gitlab.rails.redis.sessions" -}}
 {{- if .Values.global.redis.sessions -}}
 {{- $_ := set $ "redisConfigName" "sessions" }}
@@ -123,7 +116,6 @@ redis.yml.erb: |
 {{ include "gitlab.rails.redis.cable" . }}
 {{ include "gitlab.rails.redis.traceChunks" . }}
 {{ include "gitlab.rails.redis.rateLimiting" . }}
-{{ include "gitlab.rails.redis.clusterRateLimiting" . }}
 {{ include "gitlab.rails.redis.sessions" . }}
 {{ include "gitlab.rails.redis.repositoryCache" . }}
 {{ include "gitlab.rails.redisYmlOverride" . }}
