@@ -34,7 +34,7 @@ common:
 logging:
   # set to "json" for json
   # structured logs
-  format: "default"
+  format: "json"
 
 networkpolicy:
   enabled: false
