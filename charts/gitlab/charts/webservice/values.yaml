@@ -366,15 +366,7 @@ gitaly:
 minio:
   serviceName: 'minio-svc'
   port: 9000
-registry:
-  enabled: true
-  host:
-  # port: 443
-  api:
-    protocol: http
-    serviceName: registry
-    port: 5000
-  tokenIssuer: gitlab-issuer
+
 extra: {}
   # google_analytics_id: '_your_tracking_id'
   # matomo_url: '_your_matomo_url'
