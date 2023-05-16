@@ -428,10 +428,11 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab.webservice.psql.password.key` | Key to psql password in psql secret | `psql-password` |
 | `gitlab.webservice.psql.password.secret` | psql secret name | `gitlab-postgres` |
 | `gitlab.webservice.psql.port` | Set PostgreSQL server port. Takes precedence over `global.psql.port` |  |
-| `gitlab.webservice.registry.api.port` | Registry port | `5000` |
-| `gitlab.webservice.registry.api.protocol` | Registry protocol | `http` |
-| `gitlab.webservice.registry.api.serviceName` | Registry service name | `registry` |
-| `gitlab.webservice.registry.tokenIssuer` | Registry token issuer | `gitlab-issuer` |
+| `global.registry.enabled` | Enable registry. Mirrors `registry.enabled` | `true` |
+| `global.registry.api.port` | Registry port | `5000` |
+| `global.registry.api.protocol` | Registry protocol | `http` |
+| `global.registry.api.serviceName` | Registry service name | `registry` |
+| `global.registry.tokenIssuer` | Registry token issuer | `gitlab-issuer` |
 | `gitlab.webservice.replicaCount` | webservice number of replicas | `1` |
 | `gitlab.webservice.resources.requests.cpu` | webservice minimum CPU | `200m` |
 | `gitlab.webservice.resources.requests.memory` | webservice minimum memory | `1.4G` |

@@ -59,6 +59,9 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.hpa.behaviorMispell" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.global.grafana" .) -}}
 
+{{- /* we're ready to deprecate top-level registry entries for workhorse and sidekiq, but not enforcing yet */ -}}
+{{- /* $deprecated = append $deprecated (include "gitlab.deprecate.registry.topLevel" .) */ -}}
+
 {{- /* prepare output */}}
 {{- $deprecated = without $deprecated "" -}}
 {{- $message := join "\n" $deprecated -}}
@@ -473,3 +476,14 @@ grafana:
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.global.grafana */}}
+
+{{- define "gitlab.deprecate.registry.topLevel" -}}
+{{-   if hasKey $.Values.gitlab.webservice "registry" }}
+registry:
+    The configuration of `gitlab.webservice.registry` has moved. Please use `global.registry` instead
+{{-   end -}}
+{{-   if hasKey $.Values.gitlab.sidekiq "registry" }}
+registry:
+    The configuration of `gitlab.sidekiq.registry` has moved. Please use `global.registry` instead
+{{-   end -}}
+{{- end -}}

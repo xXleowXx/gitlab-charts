@@ -209,14 +209,6 @@ minio:
   bucket: git-lfs
   serviceName: 'minio-svc'
   port: 9000
-registry:
-  host:
-  # port: 443
-  api:
-    protocol: http
-    serviceName: registry
-    port: 5000
-  tokenIssuer: gitlab-issuer
 resources:
   # limits:
   #  cpu: 1

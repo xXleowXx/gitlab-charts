@@ -587,6 +587,7 @@ global:
   ## https://docs.gitlab.com/charts/charts/globals#configure-registry-settings
   registry:
     bucket: registry
+
     certificate: {}
       # secret:
     httpSecret: {}
@@ -617,6 +618,16 @@ global:
       #         secret: gitlab-registry-specific-password
       #         key: password
       # events: {}
+
+    # Settings utilized by other services referencing registry:
+    enabled: true
+    host:
+    # port: 443
+    api:
+      protocol: http
+      serviceName: registry
+      port: 5000
+    tokenIssuer: gitlab-issuer
 
   pages:
     enabled: false

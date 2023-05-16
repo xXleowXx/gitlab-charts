@@ -225,7 +225,8 @@ authEndpoint:
 # Do not change this
 tokenService: 'container_registry'
 # This must match your GitLab Rails configuration
-tokenIssuer: 'gitlab-issuer'
+# tokenIssuer: 'gitlab-issuer'
+
 # Must to be `false` to support Windows clients
 # See https://gitlab.com/gitlab-org/omnibus-gitlab/-/issues/3964
 authAutoRedirect: false

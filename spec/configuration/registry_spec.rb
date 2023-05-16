@@ -681,4 +681,145 @@ describe 'registry configuration' do
       end
     end
   end
+
+  describe 'Registry tokenIssuer references' do
+    context 'when tokenIssuer set globally' do
+      let(:test_values) do
+        YAML.safe_load(%(
+          global:
+            registry:
+              tokenIssuer: substitute-issuer
+        )).deep_merge(default_values)
+      end
+
+      it 'renders configuration as expected' do
+        t = HelmTemplate.new(test_values)
+
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+        configmaps = ['sidekiq', 'webservice', 'toolbox']
+        configmaps.each do |configname|
+          expect(t.dig("ConfigMap/test-#{configname}", 'data', 'gitlab.yml.erb')).to include("issuer: substitute-issuer")
+        end
+
+        expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include("issuer: substitute-issuer")
+        expect(t.dig('ConfigMap/test-shared-secrets', 'data', 'generate-secrets')).to include("CN=substitute-issuer")
+      end
+    end
+  end
+
+  describe 'Registry enablement' do
+    context 'when registry is enabled' do
+      let(:registry_values) do
+        YAML.safe_load(%(
+          registry:
+            enabled: true
+        )).deep_merge(default_values)
+      end
+
+      it 'deploys registry service' do
+        t = HelmTemplate.new(registry_values)
+        # working around rubocop defficiency
+        expect(t.resource_exists?('Deployment/test-registry')).to be true
+      end
+
+      context 'when registry integration enabled globally' do
+        let(:test_values) do
+          YAML.safe_load(%(
+            global:
+              registry:
+                enabled: true
+                host: regtest
+          )).deep_merge(registry_values)
+        end
+
+        it 'configures components to use registry' do
+          t = HelmTemplate.new(test_values)
+
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+          configmaps = ['sidekiq', 'webservice']
+          configmaps.each do |configname|
+            gitlab_yml_erb = t.dig("ConfigMap/test-#{configname}", 'data', 'gitlab.yml.erb')
+            gye = YAML.safe_load(gitlab_yml_erb)
+            expect(gye.dig('production', 'registry', 'enabled')).to eq(true)
+            expect(gye.dig('production', 'registry', 'host')).to eq('regtest')
+          end
+        end
+      end
+
+      context 'when registry integration disabled globally' do
+        let(:test_values) do
+          YAML.safe_load(%(
+            global:
+              registry:
+                enabled: false
+          )).deep_merge(registry_values)
+        end
+
+        it 'disables registry integration for components' do
+          t = HelmTemplate.new(test_values)
+
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+          configmaps = ['sidekiq', 'webservice']
+          configmaps.each do |configname|
+            gitlab_yml_erb = t.dig("ConfigMap/test-#{configname}", 'data', 'gitlab.yml.erb')
+            gye = YAML.safe_load(gitlab_yml_erb)
+            expect(gye.dig('production', 'registry', 'enabled')).to eq(false)
+          end
+        end
+      end
+    end
+
+    context 'when registry is disabled' do
+      let(:registry_values) do
+        YAML.safe_load(%(
+          registry:
+            enabled: false
+        )).deep_merge(default_values)
+      end
+
+      it 'registry service is not deployed' do
+        t = HelmTemplate.new(registry_values)
+        # working around rubocop defficiency
+        # expect(t.dig('Deployment/test-registry', 'metadata')).to eq(nil)
+        expect(t.resource_exists?('Deployment/test-registry')).to be false
+      end
+
+      context 'when registry integration enabled only locally' do
+        let(:test_values) do
+          YAML.safe_load(%(
+            global:
+              registry:
+                enabled: false
+            gitlab:
+              webservice:
+                registry:
+                  enabled: true
+                  host: regtest
+              sidekiq:
+                registry:
+                  enabled: true
+                  host: regtest
+              toolbox:
+                registry:
+                  enabled: true
+                  host: regtest
+          )).deep_merge(registry_values)
+        end
+
+        it 'renders configuration as expected' do
+          t = HelmTemplate.new(test_values)
+
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+          configmaps = ['sidekiq', 'webservice', 'toolbox']
+          configmaps.each do |configname|
+            gitlab_yml_erb = t.dig("ConfigMap/test-#{configname}", 'data', 'gitlab.yml.erb')
+            gye = YAML.safe_load(gitlab_yml_erb)
+            expect(gye.dig('production', 'registry', 'enabled')).to eq(true)
+            expect(gye.dig('production', 'registry', 'host')).to eq('regtest')
+          end
+        end
+      end
+    end
+  end
 end
