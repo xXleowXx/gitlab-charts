@@ -182,7 +182,7 @@ If deploying with an already existing Redis cluster, please use the password
 for accessing the Redis cluster that has been base64 encoded instead of a
 randomly generated one.
 
-This secret is referenced by the `global.redis.password.secret` setting.
+This secret is referenced by the `global.redis.auth.secret` setting.
 
 ### GitLab Shell secret
 

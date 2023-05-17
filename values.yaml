@@ -127,7 +127,7 @@ global:
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-redis-settings
   redis:
-    password:
+    auth:
       enabled: true
       # secret:
       # key:
@@ -1065,9 +1065,11 @@ prometheus:
 ## https://docs.gitlab.com/charts/installation/deployment.html#redis
 redis:
   install: true
-  existingSecret: gitlab-redis-secret
-  existingSecretKey: redis-password
-  usePasswordFile: true
+  auth:
+    existingSecret: gitlab-redis-secret
+    existingSecretKey: redis-password
+    usePasswordFiles: true
+  architecture: standalone
   cluster:
     enabled: false
   metrics:

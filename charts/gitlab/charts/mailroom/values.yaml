@@ -31,7 +31,7 @@ workhorse: {}
 
 global:
   redis:
-    password: {}
+    auth: {}
   appConfig:
     incomingEmail:
       enabled: false
@@ -146,7 +146,7 @@ networkpolicy:
   annotations: {}
 
 redis:
-  password: {}
+  auth: {}
 
 resources:
   # limits:

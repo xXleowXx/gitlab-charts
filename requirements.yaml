@@ -25,8 +25,8 @@ dependencies:
   repository: https://charts.gitlab.io/
   condition: gitlab-runner.install
 - name: redis
-  version: 11.3.4
-  repository: https://raw.githubusercontent.com/bitnami/charts/eb5f9a9513d987b519f0ecd732e7031241c50328/bitnami
+  version: 16.13.2
+  repository: https://charts.bitnami.com/bitnami
   condition: redis.install
 - name: nginx-ingress
   condition: nginx-ingress.enabled

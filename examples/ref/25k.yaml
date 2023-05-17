@@ -137,7 +137,7 @@ global:
       - host: cache.sentinel2.example.com
       - host: cache.sentinel3.example.com
     host: example-redis-queue-1
-    password:
+    auth:
       key: password
       secret: example-redis-secret
     sentinels:

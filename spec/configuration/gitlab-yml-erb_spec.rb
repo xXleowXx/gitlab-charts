@@ -289,7 +289,7 @@ describe 'gitlab.yml.erb configuration' do
       it 'does not populate the gitlab.yml.erb' do
         t = HelmTemplate.new(required_values)
 
-        expect(t.stderr).to eq("")
+        expect(t.stderr).to be_empty
         expect(t.exit_code).to eq(0)
         expect(YAML.safe_load(
           t.dig(
@@ -359,7 +359,7 @@ describe 'gitlab.yml.erb configuration' do
       it 'does not populate the gitlab.yml.erb' do
         t = HelmTemplate.new(required_values)
 
-        expect(t.stderr).to eq("")
+        expect(t.stderr).to be_empty
         expect(t.exit_code).to eq(0)
         expect(YAML.safe_load(
           t.dig(

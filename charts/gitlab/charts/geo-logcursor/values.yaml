@@ -34,7 +34,7 @@ global:
       #   clientCertificate: client-cert.pem
       #   serverCA: server-ca.pem
   redis:
-    password: {}
+    auth: {}
   hosts:
     domain: example.com
     hostSuffix:
@@ -50,7 +50,7 @@ global:
       #https: false
 
 redis:
-  password: {}
+  auth: {}
 psql: {}
 gitaly:
   # host: '0.0.0.0'
