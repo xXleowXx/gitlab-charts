@@ -69,7 +69,18 @@ function generate_secret_if_needed(){
 # Initial root password
 generate_secret_if_needed {{ template "gitlab.migrations.initialRootPassword.secret" . }} --from-literal={{ template "gitlab.migrations.initialRootPassword.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
 
-{{ if and (not .Values.global.redis.host) .Values.global.redis.password.enabled -}}
+{{/*
+The include in this if returns a value that makes use of
+"gitlab.redis.configMerge" to return global.redis.password.enabled
+with a fallback to global.redis.auth.enabled - it is evaluated for truthiness, based
+on emptiness of the returned string.
+
+This should be read as:
+
+"if there's not a defined global.redis.host and we've enabled redis password
+auth, then generate secrets if needed"
+*/}}
+{{ if and (not .Values.global.redis.host) (include "gitlab.redis.password.enabled" $) -}}
 # Redis password
 generate_secret_if_needed {{ template "gitlab.redis.password.secret" . }} --from-literal={{ template "gitlab.redis.password.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}

@@ -35,7 +35,7 @@ common:
 enabled: true
 initialRootPassword: {}
 redis:
-  password: {}
+  auth: {}
 gitaly:
   # host: '0.0.0.0'
   # port: 8075
@@ -65,7 +65,7 @@ global:
     #   clientCertificate: client-cert.pem
     #   serverCA: server-ca.pem
   redis:
-    password: {}
+    auth: {}
   gitaly:
     internal:
       names: ["default"]

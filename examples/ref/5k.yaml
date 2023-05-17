@@ -128,7 +128,7 @@ global:
     port:  example-postgresql-port
   redis:
     host: example-redis-queue-1
-    password:
+    auth:
       key: password
       secret: example-redis-secret
     sentinels:

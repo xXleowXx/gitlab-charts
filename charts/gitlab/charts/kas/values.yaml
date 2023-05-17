@@ -9,7 +9,7 @@ global:
     enabled: true
   redis:
     # host: '0.0.0.0'
-    password: {}
+    auth: {}
   # hosts:
     # kas:
       # name: kas.example.com

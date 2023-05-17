@@ -544,7 +544,7 @@ Ensuring the `secret` value is set to the name of the secret created above
 
 ### Redis cache Secret
 
-The Redis cache Secret is used when `global.redis.password.enabled` is set to `true`.
+The Redis cache Secret is used when `global.redis.auth.enabled` is set to `true`.
 
 When the `shared-secrets` feature is enabled, the `gitlab-redis-secret` secret object
 is automatically created if not provided.
