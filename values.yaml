@@ -1076,17 +1076,23 @@ redis:
 ## Installation & configuration of stable/prostgresql
 ## See requirements.yaml for current version
 postgresql:
-  postgresqlUsername: gitlab
-  # This just needs to be set. It will use a second entry in existingSecret for postgresql-postgres-password
-  postgresqlPostgresPassword: bogus
   install: true
-  postgresqlDatabase: gitlabhq_production
+  auth:
+    ## These need to be set, for the sake of bitnami/postgresql upgrade patterns.
+    ## They are overridden by use of `existingSecret`
+    password: bogus-satisfy-upgrade
+    postgresPassword: bogus-satisfy-upgrade
+    ## 
+    usePasswordFiles: false
+    existingSecret: '{{ include "gitlab.psql.password.secret" . }}'
+    secretKeys:
+      adminPasswordKey: postgresql-postgres-password
+      userPasswordKey: '{{ include "gitlab.psql.password.key" $ }}'
   image:
-    tag: 12.7.0
-  usePasswordFile: true
-  existingSecret: bogus
-  initdbScriptsConfigMap: bogus
-  master:
+    tag: 14.8.0
+  primary:
+    initdb:
+      scriptsConfigMap: '{{ include "gitlab.psql.initdbscripts" $}}'
     extraVolumeMounts:
       - name: custom-init-scripts
         mountPath: /docker-entrypoint-preinitdb.d/init_revision.sh
