@@ -52,6 +52,10 @@ entry.
 - [Update extraEnvFrom docs](gitlab-org/charts/gitlab@994ab9824f518701ed7059e28c7fdf1b2c97e446) ([merge request](gitlab-org/charts/gitlab!3025))
 - [Add tests for Webservice ConfigMap name](gitlab-org/charts/gitlab@6d51d3fe5475a84166f23d5c5a0f23a1b38ce489) ([merge request](gitlab-org/charts/gitlab!3091))
 
+## 6.11.5 (2023-05-19)
+
+No changes.
+
 ## 6.11.4 (2023-05-16)
 
 ### Added (1 change)
