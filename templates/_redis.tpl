@@ -15,7 +15,7 @@ Build a dict of redis configuration
 {{-   end -}}
 {{-   if kindIs "map" (get (index $.Values.global.redis $.redisConfigName) "password")  -}}
 {{-     $_ := set $.redisMergedConfig "password" (get (index $.Values.global.redis $.redisConfigName) "password") -}}
-{{-   else if and (hasKey $.Values.global.redis "redisYmlOverrideSecrets") (hasKey $.Values.global.redis.redisYmlOverrideSecrets $.redisConfigName) (kindIs "map" (get (index $.Values.global.redis.redisYmlOverrideSecrets $.redisConfigName) "password"))  -}}
+{{-   else if and $.Values.global.redis.redisYmlOverrideSecrets (kindIs "map" (dig $.redisConfigName "password" "" $.Values.global.redis.redisYmlOverrideSecrets))  -}}
 {{-     $_ := set $.redisMergedConfig "password" (get (index $.Values.global.redis.redisYmlOverrideSecrets $.redisConfigName) "password") -}}
 {{-   else if (kindIs "map" (get $.Values.global.redis "password")) -}}
 {{-     $_ := set $.redisMergedConfig "password" (get $.Values.global.redis "password") -}}
