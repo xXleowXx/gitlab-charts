@@ -74,6 +74,10 @@ external Redis services. You must set `redis.install` to `false`. See
 [configure Redis settings](../../charts/globals.md#configure-redis-settings)
 for further details.
 
+The secrets for external Redis services defined in `global.redis.redisYmlOverride` can be loaded dynamically
+using `globa.redis.redisYmlOverrideSecrets` which uses the same format as external Redis Services.
+See [configure Redis settings](../../charts/globals.md#multiple-redis-support) for further details.
+
 Example:
 
 ```yaml
@@ -81,6 +85,12 @@ redis:
   install: false
 global:
   redis:
+    redisYmlOverrideSecrets:
+      exotic_redis:
+        password:
+          enabled: true
+          secret: secretname
+          key: password
     redisYmlOverride:
       exotic_redis:
         host: redis.example.com:6379

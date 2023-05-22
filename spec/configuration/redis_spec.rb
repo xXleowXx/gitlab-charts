@@ -44,6 +44,29 @@ describe 'Redis configuration' do
   end
 
   describe 'redis.yml override' do
+    context 'when redisYmlOverrideSecrets is invalid' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            redis:
+              redisYmlOverrideSecrets:
+                chat:
+                  secret: gitlab-redis-chat-credential-v2
+          redis:
+            install: true
+        )).merge(default_values)
+      end
+
+      it 'skips the render' do
+        t = HelmTemplate.new(values)
+        projected_volume = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets')
+        chat_mount =  projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-chat-credential-v2" }
+
+        expect(t.exit_code).to eq(0)
+        expect(chat_mount.size).to eq(0)
+      end
+    end
+
     context 'when redisYmlOverrideSecrets is defined' do
       let(:values) do
         YAML.safe_load(%(
