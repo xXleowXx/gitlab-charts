@@ -246,7 +246,7 @@ global:
       #   cron: "@daily"
       ## Periodically clean up stale ci_runner_machines records
       # ci_runners_stale_machines_cleanup_worker:
-      #   cron: "36 4 * * *"
+      #   cron: "36 * * * *"
       ### GitLab Geo
       # Geo Primary only!
       # geo_prune_event_log_worker:
@@ -1084,7 +1084,7 @@ postgresql:
     ## They are overridden by use of `existingSecret`
     password: bogus-satisfy-upgrade
     postgresPassword: bogus-satisfy-upgrade
-    ## 
+    ##
     usePasswordFiles: false
     existingSecret: '{{ include "gitlab.psql.password.secret" . }}'
     secretKeys:
