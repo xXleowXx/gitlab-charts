@@ -40,7 +40,7 @@ global:
   edition: ee
 
   ## https://docs.gitlab.com/charts/charts/globals#gitlab-version
-  gitlabVersion: "16.0.0"
+  gitlabVersion: "16.0.1"
 
   ## https://docs.gitlab.com/charts/charts/globals#application-resource
   application:
