@@ -68,7 +68,7 @@ describe 'Redis configuration' do
           t = HelmTemplate.new(values)
           projected_volume = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets')
           chat_mount =  projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-chat-credential-v2" }
-          cache_mount =  projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v2" }
+          cache_mount =  projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v2-override" }
 
           expect(t.exit_code).to eq(0)
           expect(chat_mount.size).to eq(0)
@@ -99,15 +99,17 @@ describe 'Redis configuration' do
           )).merge(default_values)
         end
 
-        it 'does not override secret defined in standard redis' do
+        it 'renders both secret without namespace clash' do
           t = HelmTemplate.new(values)
           projected_volume = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets')
           cache_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v2" }
-          override_cache_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v3" }
+          override_cache_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v3-override" }
 
           expect(t.exit_code).to eq(0)
           expect(cache_mount.size).to eq(1)
+          expect(cache_mount.first['secret']['items'].first['path']).to eq("redis/cache-password")
           expect(override_cache_mount.size).to eq(1)
+          expect(override_cache_mount.first['secret']['items'].first['path']).to eq("redis/cache-override-password")
         end
       end
 
@@ -142,9 +144,9 @@ describe 'Redis configuration' do
         it 'renders custom enabled secrets as a volume alongside other secrets' do
           t = HelmTemplate.new(values)
           projected_volume = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets')
-          chat_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cluster-chat-cache-rails-credential-v2" }
           cache_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v2" }
-          dblb_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-db-loadbalancing-rails-credential-v2" }
+          chat_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cluster-chat-cache-rails-credential-v2-override" }
+          dblb_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-db-loadbalancing-rails-credential-v2-override" }
 
           expect(t.exit_code).to eq(0)
           expect(cache_mount.size).to eq(1) # override secrets show up in the same location

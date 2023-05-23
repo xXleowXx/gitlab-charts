@@ -39,7 +39,12 @@ Return the redis password secret name
 */}}
 {{- define "gitlab.redis.password.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- default (printf "%s-redis-secret" .Release.Name) .redisMergedConfig.password.secret | quote -}}
+{{- $secret := default (printf "%s-redis-secret" .Release.Name) .redisMergedConfig.password.secret }}
+{{- if $.usingOverride }}
+{{-   printf "%s-override" $secret | quote -}}
+{{- else }}
+{{-   quote $secret -}}
+{{- end }}
 {{- end -}}
 
 {{/*

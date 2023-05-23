@@ -138,11 +138,15 @@ Note: Workhorse only uses the primary Redis (global.redis)
 {{- define "gitlab.redis.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
 {{- if .redisMergedConfig.password.enabled }}
+{{- $passwordPath := printf "%s-password" (default "redis" .redisConfigName) }}
+{{- if $.usingOverride }}
+{{-   $passwordPath = printf "%s-override-password" (default "redis" .redisConfigName) }}
+{{- end }}
 - secret:
     name: {{ template "gitlab.redis.password.secret" . }}
     items:
       - key: {{ template "gitlab.redis.password.key" . }}
-        path: redis/{{ printf "%s-password" (default "redis" .redisConfigName) }}
+        path: redis/{{ $passwordPath }}
 {{- end }}
 {{- end -}}
 
