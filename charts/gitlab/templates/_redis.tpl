@@ -121,11 +121,13 @@ Note: Workhorse only uses the primary Redis (global.redis)
 {{/* reset 'redisConfigName', to get global.redis.redisYmlOverrideSecrets's Secret item */}}
 {{- $_ := set . "redisConfigName" "" }}
 {{- if .Values.global.redis.redisYmlOverrideSecrets -}}
+{{- $_ := set $ "usingOverride" true }}
 {{- range $key, $redis := .Values.global.redis.redisYmlOverrideSecrets }}
 {{-   $_ := set $ "redisConfigName" $key }}
 {{    include "gitlab.redis.secret" $ }}
 {{- end }}
 {{- end -}}
+{{- $_ := set $ "usingOverride" false }}
 {{/* reset 'redisConfigName', to get global.redis.auth's Secret item */}}
 {{- $_ := set . "redisConfigName" "" }}
 {{- if include "gitlab.redis.password.enabled" $ }}

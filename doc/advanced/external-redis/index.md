@@ -75,7 +75,7 @@ external Redis services. You must set `redis.install` to `false`. See
 for further details.
 
 The secrets for external Redis services defined in `global.redis.redisYmlOverride` can be loaded dynamically
-using `globa.redis.redisYmlOverrideSecrets` which uses the same format as external Redis Services.
+using `global.redis.redisYmlOverrideSecrets` which uses the same format as external Redis Services.
 See [configure Redis settings](../../charts/globals.md#multiple-redis-support) for further details.
 
 Example:
