@@ -131,8 +131,14 @@ Note: Workhorse only uses the primary Redis (global.redis)
 {{- if .Values.global.redis.redisYmlOverride -}}
 {{-   $_ := set $ "usingOverride" true }}
 {{-   range $key, $redis := .Values.global.redis.redisYmlOverride }}
-{{-     $_ := set $ "redisConfigName" $key }}
-{{      include "gitlab.redis.secret" $ }}
+{{-     $hasPasswordMap := kindIs "map" $redis }}
+{{-     if $hasPasswordMap }}
+{{-       $hasPasswordMap = kindIs "map" (get $redis "password_map") }}
+{{-     end }}
+{{-     if $hasPasswordMap }}
+{{-       $_ := set $ "redisConfigName" $key }}
+{{        include "gitlab.redis.secret" $ }}
+{{-     end }}
 {{-   end }}
 {{- end -}}
 {{- $_ := set $ "usingOverride" false }}
