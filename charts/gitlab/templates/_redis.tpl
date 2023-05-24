@@ -121,11 +121,11 @@ Note: Workhorse only uses the primary Redis (global.redis)
 {{/* reset 'redisConfigName', to get global.redis.redisYmlOverrideSecrets's Secret item */}}
 {{- $_ := set . "redisConfigName" "" }}
 {{- if .Values.global.redis.redisYmlOverrideSecrets -}}
-{{- $_ := set $ "usingOverride" true }}
-{{- range $key, $redis := .Values.global.redis.redisYmlOverrideSecrets }}
-{{-   $_ := set $ "redisConfigName" $key }}
-{{    include "gitlab.redis.secret" $ }}
-{{- end }}
+{{-   $_ := set $ "usingOverride" true }}
+{{-   range $key, $redis := .Values.global.redis.redisYmlOverrideSecrets }}
+{{-     $_ := set $ "redisConfigName" $key }}
+{{      include "gitlab.redis.secret" $ }}
+{{-   end }}
 {{- end -}}
 {{- $_ := set $ "usingOverride" false }}
 {{/* reset 'redisConfigName', to get global.redis.auth's Secret item */}}
@@ -138,10 +138,10 @@ Note: Workhorse only uses the primary Redis (global.redis)
 {{- define "gitlab.redis.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
 {{- if .redisMergedConfig.password.enabled }}
-{{- $passwordPath := printf "%s-password" (default "redis" .redisConfigName) }}
-{{- if $.usingOverride }}
-{{-   $passwordPath = printf "%s-override-password" (default "redis" .redisConfigName) }}
-{{- end }}
+{{-   $passwordPath := printf "%s-password" (default "redis" .redisConfigName) }}
+{{-   if $.usingOverride }}
+{{-     $passwordPath = printf "%s-override-password" (default "redis" .redisConfigName) }}
+{{-   end }}
 - secret:
     name: {{ template "gitlab.redis.password.secret" . }}
     items:
