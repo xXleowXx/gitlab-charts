@@ -120,7 +120,7 @@ Note: Workhorse only uses the primary Redis (global.redis)
 {{- end -}}
 {{/* reset 'redisConfigName', to get global.redis.auth's Secret item */}}
 {{- $_ := set . "redisConfigName" "" }}
-{{- if include "gitlab.redis.password.enabled" $ }}
+{{- if eq (include "gitlab.redis.password.enabled" $) "true" }}
 {{    include "gitlab.redis.secret" . }}
 {{- end }}
 {{- end -}}
