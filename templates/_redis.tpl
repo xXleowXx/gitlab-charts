@@ -50,5 +50,5 @@ global.redis.auth.enabled
 */}}
 {{- define "gitlab.redis.password.enabled" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- .redisMergedConfig.password.enabled -}}
+{{ ternary "true" "" .redisMergedConfig.password.enabled }}
 {{- end -}}
