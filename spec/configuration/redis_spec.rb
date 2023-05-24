@@ -254,7 +254,7 @@ describe 'Redis configuration' do
 
       it 'renders arbitrary values' do
         t = HelmTemplate.new(values)
-        expect(t.exit_code).to eq(0)
+        expect(t.stderr).to eq("")
         actual = YAML.safe_load(t.dig('ConfigMap/test-webservice','data','redis.yml.erb'))
         expect(actual).to eq(
           {
