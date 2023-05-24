@@ -107,10 +107,41 @@ If no `global.redis.actioncable`, use `global.redis`
 {{- include "gitlab.rails.redis.yaml" (dict "context" $ "name" "cable") -}}
 {{- end -}}
 
+{{/*
+overrides globa.redis.redisYmlOverride.xxxx.password if its a map
+replaces with a gitlab.redis.instance.overridePassword
+*/}}
+{{- define "gitlab.rails.redisYmlOverrideProcessed" -}}
+{{- $_ := set $ "usingOverride" true }}
+{{- range $key, $redis := .Values.global.redis.redisYmlOverride }}
+{{-   $_ := set $ "redisConfigName" $key }}
+{{-   $hasPasswordMap := kindIs "map" $redis }}
+{{-   if $hasPasswordMap }}
+{{-     $hasPasswordMap = kindIs "map" (get $redis "password") }}
+{{-   end }}
+{{-   if $hasPasswordMap -}}
+{{-     $_ := set $redis "password_map" $redis.password -}}
+{{-     $password := include "gitlab.redis.instance.overridePassword" $ -}}
+{{-     $_ := set $redis "password" $password -}}
+{{-   end -}}
+{{- end -}}
+{{- $_ := set $ "usingOverride" false }}
+{{- $_ := set . "redisConfigName" "" }}
+{{- end -}}
+
 {{- define "gitlab.rails.redisYmlOverride" -}}
 {{- if .Values.global.redis.redisYmlOverride -}}
+{{-   include "gitlab.rails.redisYmlOverrideProcessed" . }}
+{{-   $modifiedMap := dict -}}
+{{-   range $key, $value := .Values.global.redis.redisYmlOverride -}}
+{{-     if kindIs "map" $value }}
+{{-       $_ := set $modifiedMap $key (omit $value "password_map") -}}
+{{-     else -}}
+{{-       $_ := set $modifiedMap $key $value -}}
+{{-     end -}}
+{{-   end -}}
 redis.yml.erb: |
-  production: {{ toYaml .Values.global.redis.redisYmlOverride | nindent 4 }}
+  production: {{ toYaml $modifiedMap | nindent 4 }}
 {{- end -}}
 {{- end -}}
 

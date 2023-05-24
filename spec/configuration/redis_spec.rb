@@ -44,39 +44,8 @@ describe 'Redis configuration' do
   end
 
   describe 'redis.yml override' do
-    context 'when redisYmlOverrideSecrets is defined' do
-      context 'when redisYmlOverrideSecrets contains invalid secrets' do
-        let(:values) do
-          YAML.safe_load(%(
-            global:
-              redis:
-                redisYmlOverrideSecrets:
-                  chat:
-                    secret: gitlab-redis-chat-credential-v2
-                  cache:
-                    password:
-                      enabled: true
-                      secret: gitlab-redis-cache-credential-v2
-                      key: password
-
-            redis:
-              install: true
-          )).merge(default_values)
-        end
-
-        it 'skips render only for invalid secret' do
-          t = HelmTemplate.new(values)
-          projected_volume = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets')
-          chat_mount =  projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-chat-credential-v2" }
-          cache_mount =  projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v2-override" }
-
-          expect(t.exit_code).to eq(0)
-          expect(chat_mount.size).to eq(0)
-          expect(cache_mount.size).to eq(1)
-        end
-      end
-
-      context 'when using both global.redis.redisYmlOverrideSecrets.xxx and global.redis.xxx to define secrets' do
+    context 'when redisYmlOverride is set' do
+      context 'when using both global.redis.redisYmlOverride.xxx and global.redis.xxx to define secrets' do
         let(:values) do
           YAML.safe_load(%(
             global:
@@ -88,8 +57,9 @@ describe 'Redis configuration' do
                     enabled: true
                     secret: gitlab-redis-cache-credential-v2
                     key: password
-                redisYmlOverrideSecrets:
+                redisYmlOverride:
                   cache:
+                    host: gstg-redis-cache
                     password:
                       enabled: true
                       secret: gitlab-redis-cache-credential-v3
@@ -101,57 +71,138 @@ describe 'Redis configuration' do
 
         it 'renders both secret without namespace clash' do
           t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0)
+
           projected_volume = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets')
           cache_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v2" }
-          override_cache_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v3-override" }
+          override_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v3" }
 
-          expect(t.exit_code).to eq(0)
+          # 2 mounts to different paths but same secret key to avoid user having to repeatedly define secrets
           expect(cache_mount.size).to eq(1)
+          expect(override_mount.size).to eq(1)
           expect(cache_mount.first['secret']['items'].first['path']).to eq("redis/cache-password")
-          expect(override_cache_mount.size).to eq(1)
-          expect(override_cache_mount.first['secret']['items'].first['path']).to eq("redis/cache-override-password")
+          expect(override_mount.first['secret']['items'].first['path']).to eq("redis/cache-override-password")
         end
       end
 
-      context 'when redisYmlOverrideSecrets contains disabled secrets' do
+      context 'when redisYmlOverride does not contains items with password key' do
         let(:values) do
           YAML.safe_load(%(
-            global:
-              redis:
-                host: placeholder
-                cache:
-                  host: gstg-redis-cache
-                  password:
-                    enabled: true
-                    secret: gitlab-redis-cache-credential-v2
-                    key: password
-                redisYmlOverrideSecrets:
-                  dbLoadBalancing:
-                    password:
-                      enabled: false
-                      secret: gitlab-redis-db-loadbalancing-rails-credential-v2
-                      key: password
-                  chat:
-                    password:
-                      enabled: true
-                      secret: gitlab-redis-cluster-chat-cache-rails-credential-v2
-                      key: password
+          global:
             redis:
-              install: false
-          )).merge(default_values)
+              redisYmlOverride:
+                cache:
+                  url: redis://:<%= ERB::Util::url_encode(File.read("/etc/gitlab/redis/redis-password").strip) %>@some-host:6379
+          redis:
+            install: false
+        )).merge(default_values)
         end
 
-        it 'renders custom enabled secrets as a volume alongside other secrets' do
+        it 'renders as is' do
           t = HelmTemplate.new(values)
-          projected_volume = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets')
-          cache_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credential-v2" }
-          chat_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cluster-chat-cache-rails-credential-v2-override" }
-          dblb_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-db-loadbalancing-rails-credential-v2-override" }
-
           expect(t.exit_code).to eq(0)
-          expect(cache_mount.size).to eq(1) # override secrets show up in the same location
-          expect(chat_mount.size).to eq(1) # enabled secret
-          expect(dblb_mount.size).to eq(0) # disabled secret
+
+          actual = YAML.safe_load(t.dig('ConfigMap/test-webservice','data','redis.yml.erb'))
+          expect(actual).to eq(
+            {
+              'production' => {
+                'cache' => {
+                  'url' => 'redis://:<%= ERB::Util::url_encode(File.read("/etc/gitlab/redis/redis-password").strip) %>@some-host:6379'
+                }
+              }
+            })
+        end
+      end
+
+      context 'when redisYmlOverride contains items with password of type string' do
+        let(:values) do
+          YAML.safe_load(%(
+          global:
+            redis:
+              redisYmlOverride:
+                cache:
+                  host: gprd-redis-cache
+                  password: <%= ERB::Util::url_encode(File.read(\"/etc/gitlab/redis/some-password\").strip) %>
+
+          redis:
+            install: false
+        )).merge(default_values)
+        end
+
+        it 'renders as is' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0)
+
+          projected_volume = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets')
+          cache_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credentials-v2" }
+
+          # no additional secrets mounted
+          expect(cache_mount.size).to eq(0)
+
+          actual = YAML.safe_load(t.dig('ConfigMap/test-webservice','data','redis.yml.erb'))
+          expect(actual).to eq(
+            {
+              'production' => {
+                'cache' => {
+                  'host' => 'gprd-redis-cache',
+                  'password' => "<%= ERB::Util::url_encode(File.read(\"/etc/gitlab/redis/some-password\").strip) %>"
+                }
+              }
+            })
+        end
+      end
+
+      context 'when redisYmlOverride contains items with password of type map' do
+        let(:values) do
+          YAML.safe_load(%(
+          global:
+            redis:
+              redisYmlOverride:
+                chat:
+                  host: gprd-redis-chat
+                  password:
+                    enabled: false
+                    secret: gitlab-redis-chat-credentials-v2
+                    key: password
+                cache:
+                  host: gprd-redis-cache
+                  other_keys:
+                  - node1
+                  - node2
+                  password:
+                    enabled: true
+                    secret: gitlab-redis-cache-credentials-v2
+                    key: password
+
+          redis:
+            install: false
+        )).merge(default_values)
+        end
+
+        it 'replaces password with ERB string' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0)
+          projected_volume = t.projected_volume_sources('Deployment/test-webservice-default', 'init-webservice-secrets')
+          cache_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-cache-credentials-v2" }
+          chat_mount = projected_volume.select { |item| item['secret']['name'] == "gitlab-redis-chat-credentials-v2" }
+
+          expect(cache_mount.size).to eq(1)
+          expect(chat_mount.size).to eq(0)
+          actual = YAML.safe_load(t.dig('ConfigMap/test-webservice','data','redis.yml.erb'))
+          expect(actual).to eq(
+            {
+              'production' => {
+                'cache' => {
+                  'host' => 'gprd-redis-cache',
+                  'password' => "<%= ERB::Util::url_encode(File.read(\"/etc/gitlab/redis/cache-override-password\").strip) %>",
+                  'other_keys' => ['node1', 'node2']
+                },
+                'chat' => {
+                  'host' => 'gprd-redis-chat',
+                  'password' => ''
+                }
+              }
+            })
         end
       end
     end

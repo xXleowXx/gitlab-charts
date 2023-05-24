@@ -69,6 +69,14 @@ Return the password section of the Redis URI, if needed.
 {{- end -}}
 
 {{/*
+Return the password of the Redis instance, if needed.
+*/}}
+{{- define "gitlab.redis.instance.overridePassword" -}}
+{{- include "gitlab.redis.configMerge" . -}}
+{{- if .redisMergedConfig.password.enabled -}}<%= ERB::Util::url_encode(File.read("/etc/gitlab/redis/{{ printf "%s-override-password" (default "redis" .redisConfigName) }}").strip) %>{{- end -}}
+{{- end -}}
+
+{{/*
 Build the structure describing sentinels
 */}}
 {{- define "gitlab.redis.sentinels" -}}
@@ -118,11 +126,11 @@ Note: Workhorse only uses the primary Redis (global.redis)
 {{      include "gitlab.redis.secret" $ }}
 {{-   end }}
 {{- end -}}
-{{/* reset 'redisConfigName', to get global.redis.redisYmlOverrideSecrets's Secret item */}}
+{{/* reset 'redisConfigName', to get global.redis.redisYmlOverride's Secret item */}}
 {{- $_ := set . "redisConfigName" "" }}
-{{- if .Values.global.redis.redisYmlOverrideSecrets -}}
+{{- if .Values.global.redis.redisYmlOverride -}}
 {{-   $_ := set $ "usingOverride" true }}
-{{-   range $key, $redis := .Values.global.redis.redisYmlOverrideSecrets }}
+{{-   range $key, $redis := .Values.global.redis.redisYmlOverride }}
 {{-     $_ := set $ "redisConfigName" $key }}
 {{      include "gitlab.redis.secret" $ }}
 {{-   end }}

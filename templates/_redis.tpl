@@ -12,14 +12,16 @@ Build a dict of redis configuration
 {{-   $_ := unset $ "redisMergedConfig" -}}
 {{-   $_ := set $ "redisMergedConfig" (dict "redisConfigName" $.redisConfigName) -}}
 {{-   $hasOverrideSecret := false -}}
-{{-   if $.Values.global.redis.redisYmlOverrideSecrets -}}
-{{-     $hasOverrideSecret = (kindIs "map" (dig $.redisConfigName "password" "" $.Values.global.redis.redisYmlOverrideSecrets)) -}}
+{{-   if and $.Values.global.redis.redisYmlOverride $.usingOverride -}}
+{{-     if kindIs "map" (get $.Values.global.redis.redisYmlOverride $.redisConfigName) -}}
+{{-       $hasOverrideSecret = (kindIs "map" (dig $.redisConfigName "password_map" "" $.Values.global.redis.redisYmlOverride)) -}}
+{{-     end -}}
 {{-   end -}}
 {{-   range $want := list "host" "port" "scheme" "user" -}}
 {{-     $_ := set $.redisMergedConfig $want (pluck $want (index $.Values.global.redis $.redisConfigName) $.Values.global.redis | first) -}}
 {{-   end -}}
 {{-   if and $hasOverrideSecret $.usingOverride -}}
-{{-     $_ := set $.redisMergedConfig "password" (get (index $.Values.global.redis.redisYmlOverrideSecrets $.redisConfigName) "password") -}}
+{{-     $_ := set $.redisMergedConfig "password" (get (index $.Values.global.redis.redisYmlOverride $.redisConfigName) "password_map") -}}
 {{-   else if kindIs "map" (get (index $.Values.global.redis $.redisConfigName) "password")  -}}
 {{-     $_ := set $.redisMergedConfig "password" (get (index $.Values.global.redis $.redisConfigName) "password") -}}
 {{-   else if (kindIs "map" (get $.Values.global.redis "password")) -}}
@@ -39,12 +41,7 @@ Return the redis password secret name
 */}}
 {{- define "gitlab.redis.password.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- $secret := default (printf "%s-redis-secret" .Release.Name) .redisMergedConfig.password.secret }}
-{{- if $.usingOverride }}
-{{-   printf "%s-override" $secret | quote -}}
-{{- else }}
-{{-   quote $secret -}}
-{{- end }}
+{{- default (printf "%s-redis-secret" .Release.Name) .redisMergedConfig.password.secret | quote -}}
 {{- end -}}
 
 {{/*

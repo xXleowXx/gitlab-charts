@@ -74,10 +74,6 @@ external Redis services. You must set `redis.install` to `false`. See
 [configure Redis settings](../../charts/globals.md#configure-redis-settings)
 for further details.
 
-The secrets for external Redis services defined in `global.redis.redisYmlOverride` can be loaded dynamically
-using `global.redis.redisYmlOverrideSecrets` which uses the same format as external Redis Services.
-See [configure Redis settings](../../charts/globals.md#multiple-redis-support) for further details.
-
 Example:
 
 ```yaml
@@ -85,13 +81,13 @@ redis:
   install: false
 global:
   redis:
-    redisYmlOverrideSecrets:
-      exotic_redis:
+    redisYmlOverride:
+      raredis:
+        host: rare-redis.example.com:6379
         password:
           enabled: true
           secret: secretname
           key: password
-    redisYmlOverride:
       exotic_redis:
         host: redis.example.com:6379
         password: <%= File.read('/path/to/secret').strip.to_json %>
@@ -100,11 +96,14 @@ global:
           nested: value
 ```
 
-Assuming `/path/to/secret` contains `THE SECRET`, his will cause the
+Assuming `/path/to/secret` contains `THE SECRET` and `/path/to/secret/raredis-override-password` contains `RARE SECRET`, his will cause the
 following to be rendered in `redis.yml`:
 
 ```yaml
 production:
+  raredis:
+    host: rare-redis.example.com:6379
+    password: "RARE SECRET"
   exotic_redis:
     host: redis.example.com:6379
     password: "THE SECRET"
@@ -117,7 +116,8 @@ production:
 
 The flip side of the flexibility of `redisYmlOverride` is that it is less user friendly. For example:
 
-1. To insert passwords into `redis.yml` you must write correct ERB
+1. To insert passwords into `redis.yml` you may either (1) use the existing [password definition](../../charts/globals.md#multiple-redis-support)
+   and let Helm replace it with an ERB statement or (2) write correct ERB
    `<%= File.read('/path/to/secret').strip.to_json %>` statements yourself, using
    whatever path the secret is mounted in the container at.
 1. In `redisYmlOverride` you must follow the naming conventions of
