@@ -80,7 +80,7 @@ This should be read as:
 "if there's not a defined global.redis.host and we've enabled redis password
 auth, then generate secrets if needed"
 */}}
-{{ if and (not .Values.global.redis.host) (include "gitlab.redis.password.enabled" $) -}}
+{{ if and (not .Values.global.redis.host) (eq (include "gitlab.redis.password.enabled" $) "true" ) -}}
 # Redis password
 generate_secret_if_needed {{ template "gitlab.redis.password.secret" . }} --from-literal={{ template "gitlab.redis.password.key" . }}=$(gen_random 'a-zA-Z0-9' 64)
 {{ end }}
