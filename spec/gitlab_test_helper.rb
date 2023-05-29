@@ -101,6 +101,47 @@ module Gitlab
       return [stdout, status]
     end
 
+    def get_hpa_minreplicas(app)
+      filters = "app=#{app}"
+
+      if ENV['RELEASE_NAME']
+        filters="#{filters},release=#{ENV['RELEASE_NAME']}"
+      end
+
+      stdout, status = Open3.capture2e("kubectl get hpa -l #{filters} -ojsonpath='{.items[0].spec.minReplicas}' ")
+      return [stdout, status]
+    end
+
+    def scale_deployment(app, replicas)
+      filters = "app=#{app}"
+
+      if ENV['RELEASE_NAME']
+        filters="#{filters},release=#{ENV['RELEASE_NAME']}"
+      end
+
+      puts "Scaling Deployment ('#{filters}') to #{replicas}."
+
+      stdout, status = Open3.capture2e("kubectl scale deployment -l #{filters} --replicas=#{replicas}")
+      return [stdout, status]
+    end
+
+    def scale_rails_down
+      %w[webservice sidekiq].each do |app|
+        stdout, status = scale_deployment(app, 0)
+        raise stdout unless status.success?
+      end
+    end
+
+    def scale_rails_up
+      %w[webservice sidekiq].each do |app|
+        replicas, status = get_hpa_minreplicas(app)
+        raise replicas unless status.success?
+
+        stdout, status = scale_deployment(app, replicas)
+        raise stdout unless status.success?
+      end
+    end
+
     def restore_from_backup(skip: [])
       skip_flags=''
 
@@ -125,17 +166,6 @@ module Gitlab
       cmd = full_command("gitlab-rake db:migrate")
 
       stdout, status = Open3.capture2e(cmd)
-      return [stdout, status]
-    end
-
-    def restart_webservice
-      filters = 'app=webservice'
-
-      if ENV['RELEASE_NAME']
-        filters="#{filters},release=#{ENV['RELEASE_NAME']}"
-      end
-
-      stdout, status = Open3.capture2e("kubectl delete pods -l #{filters} --wait=true")
       return [stdout, status]
     end
 
