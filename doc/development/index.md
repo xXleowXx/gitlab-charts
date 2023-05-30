@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Our contribution policies can be found in [CONTRIBUTING.md](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/CONTRIBUTING.md)
 
-Contributing documentation changes to the charts requires only a text editor. Documentation is stored in the [doc/](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/doc/) directory.
+Contributing documentation changes to the charts requires only a text editor. Documentation is stored in the [`doc/`](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/doc/) directory.
 
 ## Architecture
 
