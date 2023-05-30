@@ -80,6 +80,10 @@ global:
   hpa:
     apiVersion: ""
 
+  # Enable KEDA globally (https://keda.sh/)
+  keda:
+    enabled: false
+
   # Override the API version to use for PodDisruptionBudget
   pdb:
     apiVersion: ""

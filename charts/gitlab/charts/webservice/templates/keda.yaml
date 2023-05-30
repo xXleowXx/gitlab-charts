@@ -2,16 +2,17 @@
 {{- include "webservice.datamodel.prepare" $ -}}
 {{/* BEGIN range deployments */}}
 {{- range $.Values.deployments -}}
-{{-   if not (default $.Values.global.keda.enabled .keda.enabled) -}}
-{{-   $hpaCfg := (dict "global" $.Values.global.hpa "local" .hpa "context" $) -}}
+{{-   $kedaCfg := (dict "global" $.Values.global "hpa" .hpa "keda" .keda "resources" .resources) -}}
+{{-   $kedaEnabled := include "gitlab.keda.scaledobject.enabled" $kedaCfg -}}
+{{-   if $kedaEnabled -}}
 {{/*
 From here on:
 - `.` is `.deployments.xyz` value
 - `.name` is the key (xyz)
 */}}
 ---
-apiVersion: {{ template "gitlab.hpa.apiVersion" $hpaCfg }}
-kind: HorizontalPodAutoscaler
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
 metadata:
   name: {{ template "webservice.fullname.withSuffix" . }}
   namespace: {{ $.Release.Namespace }}
@@ -24,10 +25,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ template "webservice.fullname.withSuffix" . }}
-  minReplicas: {{ .hpa.minReplicas }}
-  maxReplicas: {{ .hpa.maxReplicas }}
-  {{- include "gitlab.hpa.metrics" $hpaCfg | nindent 2 }}
-  {{- include "gitlab.hpa.behavior" $hpaCfg | nindent 2 }}
+  {{- include "gitlab.keda.scaledobject.spec" $kedaCfg | nindent 2 }}
 {{-   end -}}
 {{- end -}}
 {{/* END range deployments */}}
