@@ -78,7 +78,7 @@ module Gitlab
     end
 
     def enforce_root_password(password)
-      cmd = full_command("gitlab-rails runner \"user = User.find(1); user.password='#{password}'; user.password_confirmation='#{password}'; user.save!\"")
+      cmd = full_command("gitlab-rails runner \"user = User.find(1); user.user_type = :human ; user.password='#{password}'; user.password_confirmation='#{password}'; user.save!\"")
 
       stdout, status = Open3.capture2e(cmd)
       return [stdout, status]
