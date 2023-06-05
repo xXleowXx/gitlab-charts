@@ -126,6 +126,16 @@ No changes.
 - [Remove references to unused 'fullnameOverride' key](gitlab-org/charts/gitlab@34b9c0d5d1f5227b8bb1b2496e3be6f9ff3a9ec0) ([merge request](gitlab-org/charts/gitlab!3092))
 - [checkConfig: verify format of omniauth provider content](gitlab-org/charts/gitlab@f419b34386799a83587eeecfea142070477e8029) ([merge request](gitlab-org/charts/gitlab!3054))
 
+## 6.10.8 (2023-06-05)
+
+### Added (1 change)
+
+- [Add SMTP read and write timeout values](gitlab-org/security/charts/gitlab@a8303f726be912983f132b130cb63412a7d2b519)
+
+### Fixed (1 change)
+
+- [Validate that SMTP settings do not enable both TLS and STARTTLS](gitlab-org/security/charts/gitlab@df2fda08bda5585870e965f1162480ffe390921c)
+
 ## 6.10.7 (2023-05-10)
 
 No changes.
