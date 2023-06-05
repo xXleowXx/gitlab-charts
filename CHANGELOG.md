@@ -2,6 +2,16 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 6.10.8 (2023-06-05)
+
+### Added (1 change)
+
+- [Add SMTP read and write timeout values](gitlab-org/security/charts/gitlab@a8303f726be912983f132b130cb63412a7d2b519)
+
+### Fixed (1 change)
+
+- [Validate that SMTP settings do not enable both TLS and STARTTLS](gitlab-org/security/charts/gitlab@df2fda08bda5585870e965f1162480ffe390921c)
+
 ## 6.10.7 (2023-05-10)
 
 No changes.
