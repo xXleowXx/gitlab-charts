@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.0.2 (2023-06-05)
+
+No changes.
+
 ## 7.0.1 (2023-05-22)
 
 No changes.
@@ -55,6 +59,10 @@ No changes.
 - [Consolidate webservice TLS configuration](gitlab-org/charts/gitlab@7412c984cda3683c60ba3c3e48bf2474ec88209e) ([merge request](gitlab-org/charts/gitlab!3135))
 - [Update extraEnvFrom docs](gitlab-org/charts/gitlab@994ab9824f518701ed7059e28c7fdf1b2c97e446) ([merge request](gitlab-org/charts/gitlab!3025))
 - [Add tests for Webservice ConfigMap name](gitlab-org/charts/gitlab@6d51d3fe5475a84166f23d5c5a0f23a1b38ce489) ([merge request](gitlab-org/charts/gitlab!3091))
+
+## 6.11.7 (2023-06-05)
+
+No changes.
 
 ## 6.11.6 (2023-05-24)
 
@@ -117,6 +125,16 @@ No changes.
 - [Bump gitlab-zoekt to v0.3.0](gitlab-org/charts/gitlab@418f28559cbb547d2cb36b7e56c08bc6046f05c3) ([merge request](gitlab-org/charts/gitlab!3094))
 - [Remove references to unused 'fullnameOverride' key](gitlab-org/charts/gitlab@34b9c0d5d1f5227b8bb1b2496e3be6f9ff3a9ec0) ([merge request](gitlab-org/charts/gitlab!3092))
 - [checkConfig: verify format of omniauth provider content](gitlab-org/charts/gitlab@f419b34386799a83587eeecfea142070477e8029) ([merge request](gitlab-org/charts/gitlab!3054))
+
+## 6.10.8 (2023-06-05)
+
+### Added (1 change)
+
+- [Add SMTP read and write timeout values](gitlab-org/security/charts/gitlab@a8303f726be912983f132b130cb63412a7d2b519)
+
+### Fixed (1 change)
+
+- [Validate that SMTP settings do not enable both TLS and STARTTLS](gitlab-org/security/charts/gitlab@df2fda08bda5585870e965f1162480ffe390921c)
 
 ## 6.10.7 (2023-05-10)
 
