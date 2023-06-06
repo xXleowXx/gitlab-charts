@@ -291,7 +291,7 @@ minimize their own configuration files without it being cumbersome.
 A charts template helpers are located in `templates/_helpers.tpl`. These contain the [named templates](https://helm.sh/docs/chart_template_guide/named_templates/)
 used within the chart.
 
-When using these templates, there a few things to keep in mind regarding the [golang templating syntax](https://pkg.go.dev/text/template).
+When using these templates, there a few things to keep in mind regarding the [Go templating syntax](https://pkg.go.dev/text/template).
 
 ### Trapping non-printed values from actions
 
@@ -503,7 +503,7 @@ Two categories, `WARNING` and `NOTICE`, signify each type of entry in the note o
 
 Each entry in `NOTES.txt` should start with one of these two categories. For example:
 
-```golang
+```go
 {{- if eq true .Values.some.setting }}
 {{ $WARNING }}
 This message is a warning.
