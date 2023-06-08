@@ -1958,7 +1958,6 @@ global:
 Configure the request timeout (in seconds) after which a Webservice worker process
 is killed by the Webservice master process. The default value is 60 seconds.
 
-NOTE: 
 The `global.webservice.workerTimeout` setting does not affect the maximum request duration. To set maximum request duration, set the following environment variables. For more details, see [chart issue #2191](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2191) and [Change the worker timeout](https://docs.gitlab.com/ee/administration/operations/puma.html#change-the-worker-timeout) documentation.
 
 ```yaml
