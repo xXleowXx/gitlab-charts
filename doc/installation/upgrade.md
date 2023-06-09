@@ -38,7 +38,7 @@ the discussion in [merge request 3029](https://gitlab.com/gitlab-org/charts/gitl
 
 From the [Helm documentation](https://helm.sh/docs/helm/helm_upgrade/#options),
 you can pass the `--atomic` flag during a `helm upgrade`, and the upgrade
-process rolls back changes made in case of failed upgrade. `--atomic` sets
+process rolls back changes made in case workloads do not become ready in time. `--atomic` sets
 `--wait` by default, which is based on the `--timeout` flag, which is 5 minutes
 by default. So, depending your environment, you might want to tweak this, if an
 upgrade takes more than 5 minutes. There's also another potentially useful
@@ -46,11 +46,11 @@ flag, `--wait-for-jobs`, which can be used in combination with `--atomic` and
 `--timeout`.
 
 The rollback of the atomic flag might not always bring back the release in a
-functional state. For example, when the migration job upgrades the database
-(partially), manual intervention will be required. However, the combination of
+functional state. For example, if the migration job upgrades the database
+partially, manual intervention may be required. However, the combination of
 `--wait-for-jobs` and `--atomic` could allow to detect these problems early.
 
-Without `--atomic` you could have a failed deployment and GitLab left in a
+Without `--atomic` you could have a failed deployment and be left with GitLab in a
 non-working state. With `--atomic` there is a chance you roll back to a working
 version. Using `--atomic` is safest when you only upgrade one version at a
 time, and thus the database is guaranteed to be compatible.
@@ -59,9 +59,9 @@ Timeouts, in combination with `--atomic`, can bring the application to a broken
 state . There might be many unexpected scenarios which could make a
 job/pod take much longer than expected.
 
- By upgrading one minor version at a time, with a long `--timeout`, and
- skipping the post-deploy migrations, you not only increase the chances of a
- successful deploy, but you also increase the chances of a successful revert.
+By upgrading one minor version at a time, with a long `--timeout`, and
+skipping the post-deploy migrations, you not only increase the chances of a
+successful deploy, but you also increase the chances of a successful revert.
 
 Of course, it depends on the migration type, and the set of migrations for a
 specific release.
