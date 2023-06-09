@@ -46,10 +46,10 @@ valued is used by most of the methods to locate values within the YAML.
 For example:
 
 ```ruby
-obj.dig('ConfigMap/test-gitaly', 'data', 'config.toml.erb')
+obj.dig('ConfigMap/test-gitaly', 'data', 'config.toml.tpl')
 ```
 
-This will return the contents of the `config.toml.erb` file contained in the
+This will return the contents of the `config.toml.tpl` file contained in the
 `test-gitaly` ConfigMap.
 
 NOTE:
@@ -66,7 +66,7 @@ line. This dictionary mirrors the YAML structure of the `values.yaml` file.
 describe 'some feature' do
   let(:default_values) do
     HelmTemplate.defaults
-    # or: 
+    # or:
     # HelmTemplate.with_defaults(%(
     #  yourCustom: values
     #))
