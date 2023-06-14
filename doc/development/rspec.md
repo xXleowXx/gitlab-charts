@@ -342,8 +342,8 @@ Each `it` block runs a Helm template, which is a time and resource intensive
 operation. Given the high frequency of these blocks in our RSpec test suites,
 we aim to reduce the number of `it` blocks where possible.
 
-The [RSpec docs](https://relishapp.com/rspec/rspec-core/v/3-10/docs/helper-methods/let-and-let)
-provide further explanation:
+The [RSpec documentation](https://rspec.info/features/3-12/rspec-core/helper-methods/let/)
+provides further explanation:
 
 >>>
 Use `let` to define a memoized helper method. The value will be cached
