@@ -290,7 +290,7 @@ persistence:
   size: 50Gi
   matchLabels: {}
   matchExpressions: []
-  subPath: "/data"
+  subPath: "data"
   annotations: {}
 ```
 
