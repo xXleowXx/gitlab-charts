@@ -29,7 +29,7 @@ for more information on how the global variables work.
 - [Webservice](#configure-webservice)
 - [Custom Certificate Authorities](#custom-certificate-authorities)
 - [Application Resource](#application-resource)
-- [Busybox image](#busybox-image)
+- [GitLab base image](#gitlab-base-image)
 - [Service Accounts](#service-accounts)
 - [Annotations](#annotations)
 - [Tracing](#tracing)
@@ -2044,22 +2044,16 @@ certmanager:
   install: false
 ```
 
-## Busybox image
+## GitLab base image
 
-By default, GitLab Helm charts use `busybox:latest` for booting up various
-initContainers. This is controlled by the following settings
+GitLab Helm chart uses a common GitLab base image for various initialization tasks.
+This image support UBI builds and shares layers with other images.
+It replaces the now deprecated busybox image.
 
-```yaml
-global:
-  busybox:
-    image:
-      repository: busybox
-      tag: latest
-```
-
-Many charts also provide `init.image.repository` and `init.image.tag` settings
-locally that can be used to override this global setting for that specific
-chart.
+NOTE:
+If custom busybox settings are defined, the chart falls back to the legacy busybox.
+This `busybox` configuration fallback will eventually be removed.
+Please migrate your settings to `global.gitlabBase`.
 
 ## Service Accounts
 

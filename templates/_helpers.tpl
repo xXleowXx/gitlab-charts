@@ -507,7 +507,7 @@ Constructs selfsign image value.
 {{- end -}}
 
 {{/*
-Constructs busybox image name.
+DEPRECATED: Constructs busybox image name.
 */}}
 {{- define "gitlab.busybox.image" -}}
 {{/*
@@ -521,13 +521,51 @@ Constructs busybox image name.
     # be used.
     # TODO: consider tagSuffix here, since we took it out of example
 */}}
-{{- if kindIs "map" .local.image }}
-{{- $image := default .global.busybox.image.repository .local.image.repository }}
-{{- $tag := coalesce .local.image.tag .global.busybox.image.tag "latest" }}
+{{- if kindIs "map" .image }}
+{{- $image := coalesce .image.repository .global.busybox.image.repository "registry.gitlab.com/gitlab-org/cloud-native/mirror/images/busybox" }}
+{{- $tag := coalesce .image.tag .global.busybox.image.tag "latest" }}
 {{- printf "%s:%s" $image $tag -}}
 {{- else }}
 {{- printf "DEPRECATED:DEPRECATED" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Constructs the image value used for the configure container.
+
+Defaults to GitLab Base image and falls back to the deprecated busybox image,
+when custom global busybox values are defined.
+
+It expects a dictionary with two entries:
+  - `root` which contains the root context
+  - `image` which contains overrides for the GitLab base image
+
+Format:
+  {{ include "gitlab.configure.image" (dict "root" $ "image" "<override image context>") }}
+*/}}
+{{- define "gitlab.configure.image" -}}
+{{/* Fall back to deprecated busybox */}}
+{{- if hasKey .root.Values.global "busybox" }}
+{{-   include "gitlab.busybox.image" (dict "global" .root.Values.global "image" .image) -}}
+{{- else }}
+{{-   $image := mergeOverwrite (deepCopy .root.Values.global.gitlabBase.image) .image }}
+{{-   include "gitlab.helper.image" (dict "context" .root "image" $image) -}}
+{{- end }}
+{{- end -}}
+
+{{/*
+Constructs the image configuration for the `configure` container.
+
+Defaults to the GitLab Base values and falls back to the deprecated busybox values,
+when custom global busybox values are defined.
+*/}}
+{{- define "gitlab.configure.config" -}}
+{{- $global := .global.gitlabBase.image }}
+{{/* Fall back to deprecated busybox */}}
+{{- if hasKey .global "busybox" }}
+{{-   $global := .global.busybox.image }}
+{{- end }}
+{{- dict "global" $global "local" .init.image | toYaml }}
 {{- end -}}
 
 {{/*
