@@ -457,7 +457,7 @@ danger-review:
     - git version
     - danger_id=$(echo -n ${DANGER_GITLAB_API_TOKEN} | md5sum | awk '{print $1}' | cut -c5-10)
     - |
-      if [ -v DANGER_GITLAB_API_TOKEN ] && [ "${PIPELINE_TYPE}" = "FORK_MR_PIPELINE" ]; then
+      if [ ! -v DANGER_GITLAB_API_TOKEN ] && [ "${PIPELINE_TYPE}" = "FORK_MR_PIPELINE" ]; then
         echo "Danger token not configured. As this is from a fork, failing danger gracefully."
         exit 202
       fi
