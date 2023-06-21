@@ -1115,6 +1115,44 @@ postgresql:
     ## Optionally define additional custom metrics
     ## ref: https://github.com/wrouesnel/postgres_exporter#adding-new-metrics-via-a-config-file
 
+postgresql-ci:
+  nameOverride: postgresql-ci
+  install: true
+  auth:
+    database: gitlabhq_production_ci
+    ## These need to be set, for the sake of bitnami/postgresql upgrade patterns.
+    ## They are overridden by use of `existingSecret`
+    password: bogus-satisfy-upgrade
+    postgresPassword: bogus-satisfy-upgrade
+    ##
+    usePasswordFiles: false
+    existingSecret: '{{ include "gitlab.psql.password.secret" . }}'
+    secretKeys:
+      adminPasswordKey: postgresql-postgres-password
+      userPasswordKey: '{{ include "gitlab.psql.password.key" $ }}'
+  image:
+    tag: 14.8.0
+  primary:
+    initdb:
+      scriptsConfigMap: '{{ include "gitlab.psql.initdbscripts" $}}'
+    extraVolumeMounts:
+      - name: custom-init-scripts
+        mountPath: /docker-entrypoint-preinitdb.d/init_revision.sh
+        subPath: init_revision.sh
+    podAnnotations:
+      postgresql.gitlab/init-revision: "1"
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9187"
+        gitlab.com/prometheus_scrape: "true"
+        gitlab.com/prometheus_port: "9187"
+
+    ## Optionally define additional custom metrics
+    ## ref: https://github.com/wrouesnel/postgres_exporter#adding-new-metrics-via-a-config-file
+
 ## Installation & configuration charts/registry
 ## https://docs.gitlab.com/charts/architecture/decisions#registry
 ## https://docs.gitlab.com/charts/charts/registry/

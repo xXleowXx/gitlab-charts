@@ -20,6 +20,11 @@ dependencies:
   version: 12.5.2
   repository: https://charts.bitnami.com/bitnami
   condition: postgresql.install
+- name: postgresql
+  version: 12.5.2
+  repository: https://charts.bitnami.com/bitnami
+  alias: postgresql-ci
+  condition: postgresql.install
 - name: gitlab-runner
   version: 0.52.0
   repository: https://charts.gitlab.io/
