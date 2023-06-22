@@ -408,10 +408,8 @@ global:
 
 The GitLab global Redis settings are located under the `global.redis` key.
 
-By default we use an single, non-replicated Redis instance. If desired, a
-highly available Redis can be deployed instead. To install an HA Redis
-cluster one needs to set `redis.cluster.enabled=true` when the GitLab
-chart is installed.
+By default we use an single, non-replicated Redis instance. If a highly available
+Redis is required, we recommend using an external Redis instance.
 
 You can bring an external Redis instance by setting `redis.install=false`, and
 following our [advanced documentation](../advanced/external-redis/index.md) for
