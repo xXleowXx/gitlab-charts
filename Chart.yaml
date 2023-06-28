@@ -3,7 +3,7 @@ apiVersion: v1
 name: gitlab
 version: 7.1.0
 appVersion: master
-description: The One DevOps Platform
+description: GitLab is the most comprehensive AI-powered DevSecOps Platform.
 keywords:
 - gitlab
 home: https://about.gitlab.com/
