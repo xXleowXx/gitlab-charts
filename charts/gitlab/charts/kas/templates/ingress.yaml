@@ -64,11 +64,13 @@ spec:
               serviceName: {{ template "gitlab.kas.serviceName" . }}
               servicePort: {{ .Values.service.externalPort }}
             {{- end }}
-  {{- if (and $tlsSecret (eq (include "gitlab.ingress.tls.enabled" $) "true" )) }}
+  {{- if (eq (include "gitlab.ingress.tls.enabled" $) "true") }}
   tls:
     - hosts:
       - {{ $hostname }}
+      {{- if $tlsSecret }}
       secretName: {{ $tlsSecret }}
+      {{- end -}}
   {{- else }}
   tls: []
   {{- end }}
