@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.1.1 (2023-06-28)
+
+No changes.
+
 ## 7.1.0 (2023-06-21)
 
 ### Added (3 changes)
@@ -34,6 +38,10 @@ entry.
 - [Bump gitlab-zoekt to 0.4.0](gitlab-org/charts/gitlab@75046bd4e827b39a0c8c12f8f58f7d32c7230547) ([merge request](gitlab-org/charts/gitlab!3233))
 - [Add troubleshooting docs on s3cmd PermissionError](gitlab-org/charts/gitlab@fb92de457cd14c19218db9c8f37a8672051becdf) ([merge request](gitlab-org/charts/gitlab!3198))
 - [Postgres: correct minimum version in NOTES](gitlab-org/charts/gitlab@5ea24b44e59236bd82b3a81f6c9f0601159778d7) by @jouve ([merge request](gitlab-org/charts/gitlab!3213))
+
+## 7.0.6 (2023-06-28)
+
+No changes.
 
 ## 7.0.5 (2023-06-16)
 
@@ -104,6 +112,10 @@ No changes.
 - [Consolidate webservice TLS configuration](gitlab-org/charts/gitlab@7412c984cda3683c60ba3c3e48bf2474ec88209e) ([merge request](gitlab-org/charts/gitlab!3135))
 - [Update extraEnvFrom docs](gitlab-org/charts/gitlab@994ab9824f518701ed7059e28c7fdf1b2c97e446) ([merge request](gitlab-org/charts/gitlab!3025))
 - [Add tests for Webservice ConfigMap name](gitlab-org/charts/gitlab@6d51d3fe5475a84166f23d5c5a0f23a1b38ce489) ([merge request](gitlab-org/charts/gitlab!3091))
+
+## 6.11.10 (2023-06-28)
+
+No changes.
 
 ## 6.11.9 (2023-06-15)
 
