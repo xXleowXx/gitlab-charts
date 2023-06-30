@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 This document intends to provide documentation on how to configure the GitLab Helm chart with an external PgBouncer service.
 
-PgBouncer is a lightweight connection pooler for PostgreSQL. It sits between your application and the PostgreSQL server, allowing your application to reuse connections to the server, rather than creating a new connection for each query. This can improve the performance and scalability of your application, as well as reduce the load on the PostgreSQL server.
+[PgBouncer](https://www.pgbouncer.org) is a lightweight connection pooler for PostgreSQL. It sits between your application and the PostgreSQL server, allowing your application to reuse connections to the server, rather than creating a new connection for each query. This can improve the performance and scalability of your application, as well as reduce the load on the PostgreSQL server.
 
 ## Prerequisites
 
@@ -75,13 +75,14 @@ pgbouncer:
 A more complete [example values file](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/pgbouncer/values-pgbouncer.yaml) is provided, which shows the
 appropriate set of configuration.
 
-NOTE: when using multiple replicas of PgBouncer, values for `min_pool_size` and `default_pool_size` are scaled according to the number of replicas. I.e., if we have configured `min_pool_size: 20`, and we have `replicaCount: 3`, the resulting minimum pool size in the database server will be `20 * 3 = 60` minimum backend connections. Same applies to `default_pool_size`. Bear this in mind when scaling PgBouncer.
+NOTE: when using multiple replicas of PgBouncer, values for `min_pool_size` and `default_pool_size` are scaled according to the number of replicas. For example, if we have configured `min_pool_size: 20`, and we have `replicaCount: 3`, the resulting minimum pool size in the database server will be `20 * 3 = 60` minimum backend connections. The same logic applies to `default_pool_size`. Keep this in mind when scaling PgBouncer.
 
 ### Enable PgBouncer exporter for monitoring
 
 To enable monitoring for the PgBouncer service, the following `pgbouncerExporter` must be enabled and configured:
 
-NOTE: when enabling `pgbouncerExporter`, both `PGBOUNCER_USER`, `PGBOUNCER_PORT` and `PGBOUNCER_PWD` environment variables must be compulsorily created.
+NOTE:
+When enabling `pgbouncerExporter`, `PGBOUNCER_USER`, `PGBOUNCER_PORT`, and `PGBOUNCER_PWD` environment variables must be created.
 
 ```yaml
 pgbouncer:
@@ -107,7 +108,7 @@ pgbouncer:
             optional: false
 ```
 
-This will automatically create a sidecar container and will start exposing metrics for each of the pgbouncer replicas.
+This will automatically create a sidecar container and will start exposing metrics for each of the PgBouncer replicas.
 
 ### Authenticate users in PgBouncer
 
@@ -135,7 +136,8 @@ pgbouncer:
     auth_query: select uname, phash from pgbouncer_auth.user_lookup($1)
 ```
 
-NOTE: when both are defined, the `auth_query` is used only for roles not found in the `auth_file`.
+NOTE:
+When both are defined, the `auth_query` is used only for roles not found in the `auth_file`.
 
 For both cases, a **secure function** must be created at the database server level and a superuser access to the `pg_shadow` table would be required. Secure function could look like:
 
@@ -168,7 +170,7 @@ Last but not least, make sure that the `auth_type` value matches the `password_e
 
 ### Connecting PgBouncer over TLS
 
-In order to connect PgBouncer over TLS, to create a Kubernetes secret containg both the key and the certificate(s) is needed in advance:
+In order to connect PgBouncer over TLS, to create a Kubernetes Secret containing both the key and the certificate(s) is needed in advance:
 
 ```shell
 kubectl create secret generic gitlab-pgbouncer-client-tls-certificate --from-file=client-pgbouncer-tls.crt=<path to certificate>
@@ -178,11 +180,11 @@ kubectl create secret generic gitlab-pgbouncer-server-tls-certificate --from-fil
 kubectl create secret generic gitlab-pgbouncer-server-tls-key --from-file=server-pgbouncer.key=<path to key>
 ```
 
-For them to be used, pgbouncer must contain these secrets mounted in the `pgbouncer` container, so that they can be referenced from the `pgbouncer.pgbouncer` helm chart configuration. This can be achieved by using both the `extraVolumes` and `extraVolumeMounts` elements accordingly.
+For them to be used, PgBouncer must contain these secrets mounted in the `pgbouncer` container, so that they can be referenced from the `pgbouncer.pgbouncer` Helm chart configuration. This can be achieved by using both the `extraVolumes` and `extraVolumeMounts` elements accordingly.
 
 ## Configure GitLab application to use PgBouncer
 
-Once PgBouncer is fully configured, it just remains connecting the GitLab application through it. For this to work, we only need to configure the `webservice`, `sidekiq` and `gitlab-exporter` GitLab components to go through PgBouncer.
+Once PgBouncer is fully configured, the final step is to connect it to GitLab. For this to work, we only need to configure the `webservice`, `sidekiq` and `gitlab-exporter` GitLab components to go through PgBouncer.
 
 In order to configure them, will keep the `global.psql` configuration as is, and will modify the GitLab components as follows:
 
