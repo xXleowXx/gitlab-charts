@@ -31,7 +31,7 @@ pgbouncer:
   replicaCount: 3 # optional, default 1
   image: # optional
     repository: registry.cern.ch/pgbouncer/pgbouncer # optional, default registry.cern.ch/pgbouncer/pgbouncer
-    tag: 1.18.0 # optional, default 1.18.0
+    tag: 1.19.1 # optional, default 1.19.1
   antiAffinity: "hard" # optional, default soft
   resources: # optional
     limits:
