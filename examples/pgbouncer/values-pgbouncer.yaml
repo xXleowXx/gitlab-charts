@@ -1,6 +1,9 @@
 pgbouncer:
   enabled: true
   replicaCount: 3
+  image: # optional
+    repository: registry.cern.ch/pgbouncer/pgbouncer # optional, default registry.cern.ch/pgbouncer/pgbouncer
+    tag: 1.19.1 # optional, default 1.19.1
   deployment:
     strategy:
       type: RollingUpdate
@@ -16,6 +19,7 @@ pgbouncer:
   antiAffinity: "hard"
   resources:
     limits:
+      ## PgBouncer is single-threaded, meaning it only uses 1 CPU.
       cpu: "1"
     requests:
       cpu: "1"
@@ -25,6 +29,10 @@ pgbouncer:
     gitlab_production:
       host: host1.example.cern.ch
       port: 5432
+    ## multiple databases can be added
+    # another_database:
+    #   host: host2.example.com
+    #   port: 5432
   pgbouncer:
     logfile: /dev/stdout
     auth_type: scram-sha-256

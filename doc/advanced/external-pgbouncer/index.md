@@ -23,55 +23,6 @@ In order to start using the `pgbouncer` chart, the following properties must be 
 - `pgbouncer.databases.<database-name>.host`. Set `<database-name>.host` to the host name of the database server.
 - `pgbouncer.databases.<database-name>.port`. Set `<database-name>.port` to the port of the database server.
 
-A working example configuration could be:
-
-```yaml
-pgbouncer:
-  enabled: true # default false
-  replicaCount: 3 # optional, default 1
-  image: # optional
-    repository: registry.cern.ch/pgbouncer/pgbouncer # optional, default registry.cern.ch/pgbouncer/pgbouncer
-    tag: 1.19.1 # optional, default 1.19.1
-  antiAffinity: "hard" # optional, default soft
-  resources: # optional
-    limits:
-      cpu: "1"
-    requests:
-      cpu: "1"
-      memory: 40Mi
-  databases: # mandatory
-    gitlabhq_production: # mandatory, GitLab database name
-      host: host1.example.com # mandatory, GitLab database host name
-      port: 5432 # mandatory, GitLab database port
-    ## multiple databases can be added
-    # another_database:
-    #   host: host2.example.com
-    #   port: 5432
-  pgbouncer: # mandatory
-    logfile: /dev/stdout # optional, default /dev/stdout
-    auth_type: scram-sha-256 # mandatory, it can be any of any, password, md5, scram-sha-256 (default and recommended)
-    auth_file: /etc/pgbouncer/userlist.txt # optional, auth_query can be used instead
-    admin_users: user1 # optional
-    stats_users: user2 # optional
-    pool_mode: transaction # mandatory transaction mode for GitLab
-    ignore_startup_parameters: extra_float_digits
-    min_pool_size: 20 # optional, default 0 (disabled)
-    default_pool_size: 80 # optional, default 20
-    reserve_pool_size: 18 # optional, default 0 (disabled)
-    reserve_pool_timeout: 2 # optional, default 5
-    max_db_connections: 900 # optional, default 0 (unlimited)
-    max_user_connections: 900 # optional, default 0 (unlimited)
-    max_client_conn: 2048 # optional, default 100 (max `ulimit -n` file descriptors)
-    log_connections: 1 # optional, default 1
-    log_disconnections: 1 # optional, default 1
-    log_pooler_errors: 1 # optional, default 1
-    log_stats: 1 # optional, default 1
-    verbose: 0 # optional, default 0
-  userlist: # optional, mandatory when using auth_file
-    user1: <pwd | md5 | scram-sha-256 > # mandatory, must match auth_type password encryption
-    # user2: <pwd | md5 | scram-sha-256 >
-```
-
 A more complete [example values file](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/pgbouncer/values-pgbouncer.yaml) is provided, which shows the
 appropriate set of configuration.
 
@@ -116,6 +67,8 @@ There are a few different ways to authenticate users in PgBouncer.
 
 One way is using an **authentication file** containing the list of known roles and their password hash (a.k.a. `auth_file`). For this to work, the following must be setup in the chart configuration:
 
+Either using the `userlist` element. This will automatically generate a secret:
+
 ```yaml
 pgbouncer:
   # ...
@@ -125,6 +78,8 @@ pgbouncer:
   userlist:
     user1: <pwd | md5 | scram-sha-256 >
 ```
+
+Or creating manually a secret in advance, mounted in the `auth_file` location path for being referenced, using the appropriate `extraVolumes` and `extraVolumeMounts` elements in the chart.
 
 Another is to use an **authentication query** returning the password hash (a.k.a `auth_query`). For this to work, the following must be setup in the chart configuration:
 
