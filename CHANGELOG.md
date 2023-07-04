@@ -45,6 +45,12 @@ No changes.
 - [Add troubleshooting docs on s3cmd PermissionError](gitlab-org/charts/gitlab@fb92de457cd14c19218db9c8f37a8672051becdf) ([merge request](gitlab-org/charts/gitlab!3198))
 - [Postgres: correct minimum version in NOTES](gitlab-org/charts/gitlab@5ea24b44e59236bd82b3a81f6c9f0601159778d7) by @jouve ([merge request](gitlab-org/charts/gitlab!3213))
 
+## 7.0.7 (2023-07-04)
+
+### Fixed (1 change)
+
+- [Change ciSecureFiles to type-specific storage form](gitlab-org/security/charts/gitlab@5f6a2257d383480579fb1f30b18535d0e383c85f)
+
 ## 7.0.6 (2023-06-28)
 
 No changes.
