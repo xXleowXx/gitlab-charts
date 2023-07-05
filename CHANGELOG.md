@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.0.7 (2023-07-04)
+
+### Fixed (1 change)
+
+- [Change ciSecureFiles to type-specific storage form](gitlab-org/security/charts/gitlab@5f6a2257d383480579fb1f30b18535d0e383c85f)
+
 ## 7.0.6 (2023-06-28)
 
 No changes.
