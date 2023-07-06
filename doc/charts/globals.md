@@ -1051,7 +1051,7 @@ application are described below:
 #### Content Security Policy
 
 Setting a Content Security Policy (CSP) can help thwart JavaScript cross-site
-scripting (XSS) attacks. See GitLab documentation for configuration details. [Content Security Policy Documentation](https://docs.gitlab.com/omnibus/settings/configuration.html#content-security-policy)
+scripting (XSS) attacks. See GitLab documentation for configuration details. [Content Security Policy Documentation](https://docs.gitlab.com/omnibus/settings/configuration.html#set-a-content-security-policy)
 
 GitLab automatically provides secure default values for the CSP.
 
@@ -1081,7 +1081,7 @@ global:
 ```
 
 Improperly configuring the CSP rules could prevent GitLab from working properly.
-Before rolling out a policy, you may also want to change report_only to true to
+Before rolling out a policy, you may also want to change `report_only` to `true` to
 test the configuration.
 
 #### defaultProjectsFeatures
