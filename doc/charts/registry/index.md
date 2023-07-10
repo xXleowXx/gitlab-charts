@@ -1004,36 +1004,6 @@ there will be some variation in how you connect.
    ...@gitlab-postgresql-0/$ exit
    ```
 
-### migration
-
-The `migration` property is optional and provides options related to the
-[migration](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#migration)
-of metadata from the filesystem to the metadata database.
-
-WARNING:
-This is an experimental feature and _must not_ be used in production.
-
-NOTE:
-This feature requires the [metadata database](#database) to be enabled.
-
-```yaml
-migration:
-  enabled: true
-  disablemirrorfs: true
-  rootdirectory: gitlab
-  importtimeout: 5m
-  preimporttimeout: 1h
-  tagconcurrency: 10
-  maxconcurrentimports: 10
-  importnotification:
-    enabled: true
-    url: 'https://example.com/notification/{path}/status'
-    timeout: 5s
-    secret:
-        secret: gitlab-registry-notification
-        key: secret
-```
-
 ### gc
 
 The `gc` property is optional and provides options related to
