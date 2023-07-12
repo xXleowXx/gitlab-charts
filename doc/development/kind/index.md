@@ -36,7 +36,7 @@ Create the `colima` VM:
 colima start --cpu 4 --memory 16 --disk 40 --profile docker --arch aarch64 --vm-type=vz --vz-rosetta
 ```
 
-When ready, you can follow the [prepartion](#preparation) below to install GitLab with `kind`.
+When ready, you can follow the [preparation](#preparation) below to install GitLab with `kind`.
 
 ### Managing the VM
 
