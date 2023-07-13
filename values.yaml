@@ -921,6 +921,18 @@ nginx-ingress:
   serviceAccount:
     create: true
 
+haproxy:
+  install: false
+  controller:
+    service:
+      type: LoadBalancer
+      tcpPorts:
+        - name: ssh
+          port: 22
+          targetPort: 22
+    extraArgs:
+      - --configmap-tcp-services=$(POD_NAMESPACE)/$(POD_NAMESPACE)-haproxy-tcp
+
 ## Installation & configuration of stable/prometheus
 ## See requirements.yaml for current version
 prometheus:

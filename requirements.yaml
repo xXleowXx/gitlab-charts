@@ -39,3 +39,8 @@ dependencies:
   repository: https://helm.traefik.io/traefik
   condition: traefik.install
   version: 10.19.4
+- name: kubernetes-ingress
+  alias: haproxy
+  version: 1.32.0
+  condition: haproxy.install
+  repository: https://haproxytech.github.io/helm-charts
