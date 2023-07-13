@@ -35,3 +35,7 @@ dependencies:
   version: 0.4.3
   repository: https://charts.gitlab.io/
   condition: gitlab-zoekt.install
+- name: traefik
+  repository: https://helm.traefik.io/traefik
+  condition: traefik.install
+  version: 10.19.4
