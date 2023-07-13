@@ -50,7 +50,7 @@ variables:
   DEBIAN_VERSION: bullseye
   RUBY_VERSION: "3.0"
   BUILDER_RUBY_DOCKER_VERSION: "4.18.0"
-  GITLAB_QA_VERSION: "12.0.0"
+  GITLAB_QA_VERSION: "12.1.0"
   # STRICT_VERSIONS is used in RSpecs to ensure exact version match for tools like "helm" and "kubectl"
   STRICT_VERSIONS: "true"
 
