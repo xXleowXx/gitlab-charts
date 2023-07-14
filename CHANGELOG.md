@@ -125,6 +125,10 @@ No changes.
 - [Update extraEnvFrom docs](gitlab-org/charts/gitlab@994ab9824f518701ed7059e28c7fdf1b2c97e446) ([merge request](gitlab-org/charts/gitlab!3025))
 - [Add tests for Webservice ConfigMap name](gitlab-org/charts/gitlab@6d51d3fe5475a84166f23d5c5a0f23a1b38ce489) ([merge request](gitlab-org/charts/gitlab!3091))
 
+## 6.11.12 (2023-07-14)
+
+No changes.
+
 ## 6.11.11 (2023-07-04)
 
 ### Fixed (1 change)
