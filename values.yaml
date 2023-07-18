@@ -793,6 +793,10 @@ global:
       string: ""
     urlTemplate: ""
 
+  zoekt:
+    gateway:
+      basicAuth: {}
+
   ## https://docs.gitlab.com/charts/charts/globals
   extraEnv: {}
   #   SOME_KEY: some_value
@@ -1240,3 +1244,7 @@ gitlab:
 ## Installation & configuration of gitlab/gitlab-zoekt
 gitlab-zoekt:
   install: false
+  gateway:
+    basicAuth:
+      enabled: true
+      secretName: '{{ include "gitlab.zoekt.gateway.basicAuth.secretName" $ }}'

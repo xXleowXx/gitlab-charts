@@ -32,7 +32,7 @@ dependencies:
   condition: nginx-ingress.enabled
   version: '*.*.*'
 - name: gitlab-zoekt
-  version: 0.4.3
+  version: 0.5.4
   repository: https://charts.gitlab.io/
   condition: gitlab-zoekt.install
 - name: traefik
