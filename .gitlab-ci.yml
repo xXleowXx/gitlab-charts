@@ -174,6 +174,7 @@ lint_package:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "NIGHTLY_PIPELINE"'
+  needs: ['lint_package']
 
 "Validate 1.19.16":
   extends: .kubeval
@@ -408,6 +409,7 @@ review_helm_test_gke122:
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+  needs: ['review_specs_gke122']
 
 production_helm_test_gke122:
   stage: qa
@@ -425,6 +427,7 @@ production_helm_test_gke122:
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
+  needs: ['production_specs_gke122']
 
 debug_review_gke122:
   stage: qa
@@ -553,6 +556,9 @@ check_docs_links:
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
+  needs:
+    - check_docs_links
+    - check_docs_markdown
 
 # Trigger a docs build in gitlab-docs
 # Useful to preview the docs changes live
@@ -629,6 +635,7 @@ review_specs_gke122:
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
+  needs: ['review_gke122']
 
 review_specs_gke125:
   extends: .specs
@@ -646,6 +653,7 @@ review_specs_gke125:
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
+  needs: ['review_gke125']
 
 review_specs_eks:
   extends: .specs
@@ -660,17 +668,18 @@ review_specs_eks:
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
+  needs: ['review_eks']
 
 specs_without_cluster:
   extends: .specs
   variables:
     RSPEC_TAGS: ~type:feature
-  needs: []
   parallel: 6
   rules:
     - !reference [.specs, rules]
     - if: '$PIPELINE_TYPE == "AUTO_DEPLOY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "RELEASE_PIPELINE"'
+  needs: ['lint_package']
 
 .production_specs:
   extends: .specs
@@ -686,6 +695,7 @@ production_specs_without_cluster:
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
+  needs: ['lint_package']
 
 production_specs_gke122:
   extends: .production_specs
@@ -699,6 +709,7 @@ production_specs_gke122:
     name: gke122_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "gke122-production"
+  needs: ['stable_gke122']
 
 production_specs_gke125:
   extends: .production_specs
@@ -712,6 +723,7 @@ production_specs_gke125:
     name: gke125_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "gke125-production"
+  needs: ['stable_gke125']
 
 production_specs_eks:
   extends: .production_specs
@@ -723,6 +735,7 @@ production_specs_eks:
     name: eks_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "eks-production"
+  needs: ['stable_eks']
 
 .qa:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_RUBY_DOCKER_VERSION}
@@ -869,6 +882,10 @@ qa_gke122:
   environment:
     name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke122
+  needs:
+    - review_gke122
+    - job: review_specs_gke122
+      artifacts: false
 
 qa_gke125:
   extends: .qa_branch
@@ -878,6 +895,10 @@ qa_gke125:
   environment:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke125
+  needs:
+    - review_gke125
+    - job: review_specs_gke125
+      artifacts: false
 
 qa_eks:
   extends: .qa_branch
@@ -887,6 +908,10 @@ qa_eks:
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
+  needs:
+    - review_eks
+    - job: review_specs_eks
+      artifacts: false
 
 qa_gke122_production:
   extends: .qa_production
@@ -895,6 +920,10 @@ qa_gke122_production:
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: gke122_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+  needs:
+    - stable_gke122
+    - job: production_specs_gke122
+      artifacts: false
 
 qa_gke125_production:
   extends: .qa_production
@@ -903,6 +932,11 @@ qa_gke125_production:
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: gke125_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+  needs:
+    - stable_gke125
+    - job: production_specs_gke125
+      artifacts: false
+
 
 qa_eks_production:
   extends: .qa_production
@@ -911,6 +945,10 @@ qa_eks_production:
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
     name: eks_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+  needs:
+    - stable_eks
+    - job: production_specs_eks
+      artifacts: false
 
 # QA jobs for Full E2E suites
 
