@@ -921,7 +921,7 @@ qa_gke122_production:
     VARIABLES_FILE: "variables/stable_gke122"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: gke122_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke122_production
   needs:
     - stable_gke122
     - job: production_specs_gke122
@@ -933,12 +933,11 @@ qa_gke125_production:
     VARIABLES_FILE: "variables/stable_gke125"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: gke125_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_production
   needs:
     - stable_gke125
     - job: production_specs_gke125
       artifacts: false
-
 
 qa_eks_production:
   extends: .qa_production
@@ -946,7 +945,7 @@ qa_eks_production:
     VARIABLES_FILE: "variables/stable_eks"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: eks_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_production
   needs:
     - stable_eks
     - job: production_specs_eks
@@ -988,7 +987,7 @@ qa_gke122_manual_full_suite_production:
     VARIABLES_FILE: "variables/stable_gke122"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: gke122_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke122_production
   needs: [ "qa_gke122_full_suite_manual_trigger"]
 
 qa_gke125_full_suite_manual_trigger:
@@ -1028,7 +1027,7 @@ qa_eks_manual_full_suite_production:
     VARIABLES_FILE: "variables/stable_eks"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: eks_production/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_production
   needs: [ "qa_eks_full_suite_manual_trigger"]
 
 knapsack-qa-report:
