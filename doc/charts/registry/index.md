@@ -951,11 +951,11 @@ there will be some variation in how you connect.
 1. Log into your database instance:
 
    ```shell
-   kubectl exec -it $(kubectl get pods -l app=postgresql -o custom-columns=NAME:.metadata.name --no-headers) -- bash
+   kubectl exec -it $(kubectl get pods -l app.kubernetes.io/name=postgresql -o custom-columns=NAME:.metadata.name --no-headers) -- bash
    ```
 
    ```shell
-   PGPASSWORD=$(cat $POSTGRES_POSTGRES_PASSWORD_FILE) psql -U postgres -d template1
+   PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD} psql -U postgres -d template1
    ```
 
 1. Create the database user:
