@@ -15,9 +15,9 @@ yourself.
 
 WARNING:
 The default Helm chart configuration is **not intended for production**.
-The default chart creates a proof of concept (PoC) implementation where all GitLab
-services are deployed in the cluster. For production deployments, you must follow the
-[Cloud Native Hybrid reference architecture](installation/index.md#use-the-reference-architectures).
+The default values will create an implementation where _all_ GitLab services are
+deployed in the cluster, which is **not suitable for production workloads**.
+For production deployments, you **must** follow the [Cloud Native Hybrid reference architectures](installation/index.md#use-the-reference-architectures).
 
 For a production deployment, you should have strong working knowledge of Kubernetes.
 This method of deployment has different management, observability, and concepts than traditional deployments.
