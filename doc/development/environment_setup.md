@@ -33,6 +33,7 @@ that specifies these tools with their recommended versions. To install or update
    asdf plugin add kubectl
    asdf plugin add helm
    asdf plugin add stern
+   asdf plugin add vale
    ```
 
 1. Install or update the tools:
