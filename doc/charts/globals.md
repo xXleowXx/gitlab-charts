@@ -2388,7 +2388,7 @@ More information on the available configuration options is available in the
 [outgoing email documentation](../installation/command-line-options.md#outgoing-email-configuration).
 
 More detailed examples can be found in the
-[Omnibus SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).
+[Linux package SMTP settings documentation](https://docs.gitlab.com/omnibus/settings/smtp.html).
 
 ## Platform
 

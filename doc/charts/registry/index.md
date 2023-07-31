@@ -787,7 +787,7 @@ external service, such as `s3`, `gcs`, `azure` or other compatible Object Storag
 NOTE:
 The chart will populate `delete.enabled: true` into this configuration
 by default if not specified by the user. This keeps expected behavior in line with
-the default use of MinIO, as well as the Omnibus GitLab. Any user provided value
+the default use of MinIO, as well as the Linux package. Any user provided value
 will supersede this default.
 
 ### middleware.storage
