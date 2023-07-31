@@ -14,7 +14,7 @@ GitLab Geo provides the ability to have geographically distributed application
 deployments.
 
 While external database services can be used, these documents focus on
-the use of the [Omnibus GitLab](https://docs.gitlab.com/omnibus/) for PostgreSQL to provide the
+the use of the [Linux package](https://docs.gitlab.com/omnibus/) for PostgreSQL to provide the
 most platform agnostic guide, and make use of the automation included in `gitlab-ctl`.
 
 In this guide, both clusters have the same external URL. See [Set up a Unified URL for Geo sites](https://docs.gitlab.com/ee/administration/geo/secondary_proxy/index.html#set-up-a-unified-url-for-geo-sites).
@@ -41,7 +41,7 @@ To use GitLab Geo with the GitLab Helm chart, the following requirements must be
 
 ## Overview
 
-This guide uses 2 Omnibus GitLab database nodes,
+This guide uses 2 database nodes created by using the Linux package,
 configuring only the PostgreSQL services needed, and 2 deployments of the
 GitLab Helm chart. It is intended to be the _minimal_ required configuration.
 This documentation does not include SSL from application to database, support
@@ -50,8 +50,8 @@ for other database providers, or
 
 The outline below should be followed in order:
 
-1. [Setup Omnibus database nodes](#set-up-omnibus-database-nodes)
-1. [Setup Kubernetes clusters](#set-up-kubernetes-clusters)
+1. [Set up Linux package database nodes](#set-up-linux-package-database-nodes)
+1. [Set up Kubernetes clusters](#set-up-kubernetes-clusters)
 1. [Collect information](#collect-information)
 1. [Configure Primary database](#configure-primary-database)
 1. [Deploy chart as Geo Primary site](#deploy-chart-as-geo-primary-site)
@@ -62,7 +62,7 @@ The outline below should be followed in order:
 1. [Add Secondary Geo site via Primary](#add-secondary-geo-site-via-primary)
 1. [Confirm Operational Status](#confirm-operational-status)
 
-## Set up Omnibus database nodes
+## Set up Linux package database nodes
 
 For this process, two nodes are required. One is the Primary database node, the
 other the Secondary database node. You may use any provider of machine
@@ -75,8 +75,8 @@ Bear in mind that communication is required:
   - The primary needs to expose TCP port `5432`.
   - The secondary needs to expose TCP ports `5432` & `5431`.
 
-Install an [operating system supported by Omnibus GitLab](https://docs.gitlab.com/ee/install/requirements.html#operating-systems), and then
-[install the Omnibus GitLab](https://about.gitlab.com/install/) onto it. Do not provide the
+Install an [operating system supported by the Linux package](https://docs.gitlab.com/ee/install/requirements.html#operating-systems), and then
+[install the Linux package](https://about.gitlab.com/install/) onto it. Do not provide the
 `EXTERNAL_URL` environment variable when installing, as we'll provide a minimal
 configuration file before reconfiguring the package.
 
@@ -140,7 +140,7 @@ This guide does not cover setting up DNS.
 
 The `gitlab` and `gitlab_geo` database user passwords must exist in two
 forms: bare password, and PostgreSQL hashed password. To obtain the hashed form,
-perform the following commands on one of the Omnibus instances, which asks
+perform the following commands on one of the Linux package installation instances, which asks
 you to enter and confirm the password before outputting an appropriate hash
 value for you to make note of.
 
@@ -149,9 +149,9 @@ value for you to make note of.
 
 ## Configure Primary database
 
-_This section is performed on the Primary Omnibus GitLab database node._
+_This section is performed on the Primary Linux package installation database node._
 
-To configure the Primary database node's Omnibus GitLab, work from
+To configure the Primary database node's Linux package installation, work from
 this example configuration:
 
 ```ruby
@@ -195,7 +195,7 @@ We must replace several items:
 
 The `md5_auth_cidr_addresses` should be in the form of
 `[ '127.0.0.1/24', '10.41.0.0/16']`. It is important to include `127.0.0.1` in
-this list, as the automation in Omnibus GitLab connects using this. The
+this list, as the automation in the Linux package connects using this. The
 addresses in this list should include the IP address (not hostname) of your
 Secondary database, and all nodes of your primary Kubernetes cluster. This _can_
 be left as `['0.0.0.0/0']`, however _it is not best practice_.
@@ -351,9 +351,9 @@ this as the Primary site. We will do this via the Toolbox Pod.
 
 ## Configure Secondary database
 
-_This section is performed on the Secondary Omnibus GitLab database node._
+_This section is performed on the Secondary Linux package installation database node._
 
-To configure the Secondary database node's Omnibus GitLab, work from
+To configure the Secondary database node's Linux package installation, work from
 this example configuration:
 
 ```ruby
@@ -407,12 +407,12 @@ We must replace several items:
   `gitlab_geo` password.
 - `geo_postgresql['md5_auth_cidr_addresses']` should be updated to be a list of
   explicit IP addresses, or address blocks in CIDR notation.
-- `gitlab_user_password` must be updated, and is used here to allow Omnibus GitLab
+- `gitlab_user_password` must be updated, and is used here to allow the Linux package
   to automate the PostgreSQL configuration.
 
 The `md5_auth_cidr_addresses` should be in the form of
 `[ '127.0.0.1/24', '10.41.0.0/16']`. It is important to include `127.0.0.1` in
-this list, as the automation in Omnibus GitLab connects using this. The
+this list, as the automation in the Linux package connects using this. The
 addresses in this list should include the IP addresses of all nodes of your
 Secondary Kubernetes cluster. This _can_ be left as `['0.0.0.0/0']`, however
 _it is not best practice_.
@@ -463,7 +463,7 @@ After configuration above is prepared:
    node.
 
 1. Test that the `gitlab-psql` user can connect to the **primary** site's PostgreSQL
-   (the default Omnibus database name is `gitlabhq_production`):
+   (the default Linux package database name is `gitlabhq_production`):
 
    ```shell
    sudo \
@@ -492,7 +492,7 @@ of your Primary PostgreSQL node:
    gitlab-ctl replicate-geo-database --slot-name=geo_2 --host=PRIMARY_DATABASE_HOST --sslmode=verify-ca
    ```
 
-1. After replication has finished, we must reconfigure the Omnibus GitLab one last time
+1. After replication has finished, we must reconfigure the Linux package one last time
    to ensure `pg_hba.conf` is correct for the secondary PostgreSQL node:
 
    ```shell

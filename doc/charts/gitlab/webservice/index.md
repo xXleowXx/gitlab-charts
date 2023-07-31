@@ -14,7 +14,7 @@ The pods of this chart make use of two containers: `gitlab-workhorse` and `webse
 port `8181`, and should _always_ be the destination for inbound traffic to the pod.
 The `webservice` houses the GitLab [Rails codebase](https://gitlab.com/gitlab-org/gitlab),
 listens on `8080`, and is accessible for metrics collection purposes.
-`webservice` should never recieve normal traffic directly.
+`webservice` should never receive normal traffic directly.
 
 ## Requirements
 
@@ -532,8 +532,8 @@ gitlab:
 
 `proxyBodySize` is used to set the NGINX proxy maximum body size. This is commonly
 required to allow a larger Docker image than the default.
-It is equivalent to the `nginx['client_max_body_size']` configuration in an
-[Omnibus installation](https://docs.gitlab.com/omnibus/settings/nginx.html#request-entity-too-large).
+It is equivalent to the `nginx['client_max_body_size']` configuration in a
+[Linux package installation](https://docs.gitlab.com/omnibus/settings/nginx.html#request-entity-too-large).
 As an alternative option,
 you can set the body size with either of the following two parameters too:
 

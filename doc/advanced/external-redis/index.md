@@ -9,7 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 This document intends to provide documentation on how to configure this Helm chart with an external Redis service.
 
 If you don't have Redis configured, for on-premise or deployment to VM,
-consider using our [Omnibus GitLab package](external-omnibus-redis.md).
+consider using our [Linux package](external-omnibus-redis.md).
 
 ## Configure the chart
 

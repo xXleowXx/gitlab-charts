@@ -28,7 +28,7 @@ each of which can be installed separately.
 ## Learn more
 
 - [Test the GitLab chart on GKE or EKS](quickstart/index.md)
-- [Migrate from Omnibus to the GitLab chart](installation/migration/index.md)
+- [Migrate from using the Linux package to the GitLab chart](installation/migration/index.md)
 - [Prepare to deploy](installation/index.md)
 - [Deploy](installation/deployment.md)
 - [View deployment options](installation/command-line-options.md)
