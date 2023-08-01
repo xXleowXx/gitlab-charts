@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.2.2 (2023-08-01)
+
+No changes.
+
 ## 7.2.1 (2023-07-25)
 
 No changes.
@@ -34,6 +38,10 @@ No changes.
 ### Removed (1 change)
 
 - [Remove registry migration configuration](gitlab-org/charts/gitlab@7593db8956336c56f038542e6e89d5c8690f03de) ([merge request](gitlab-org/charts/gitlab!3280))
+
+## 7.1.3 (2023-08-01)
+
+No changes.
 
 ## 7.1.2 (2023-07-04)
 
@@ -77,6 +85,10 @@ No changes.
 - [Bump gitlab-zoekt to 0.4.0](gitlab-org/charts/gitlab@75046bd4e827b39a0c8c12f8f58f7d32c7230547) ([merge request](gitlab-org/charts/gitlab!3233))
 - [Add troubleshooting docs on s3cmd PermissionError](gitlab-org/charts/gitlab@fb92de457cd14c19218db9c8f37a8672051becdf) ([merge request](gitlab-org/charts/gitlab!3198))
 - [Postgres: correct minimum version in NOTES](gitlab-org/charts/gitlab@5ea24b44e59236bd82b3a81f6c9f0601159778d7) by @jouve ([merge request](gitlab-org/charts/gitlab!3213))
+
+## 7.0.8 (2023-08-01)
+
+No changes.
 
 ## 7.0.7 (2023-07-04)
 
