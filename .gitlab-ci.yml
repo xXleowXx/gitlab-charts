@@ -77,11 +77,7 @@ include:
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
   - template: Jobs/SAST-IaC.latest.gitlab-ci.yml
-  - project: 'gitlab-org/quality/pipeline-common'
-    file:
-      - '/ci/danger-review.yml'
-    rules:
-      - if: $CI_SERVER_HOST == "gitlab.com"
+  - remote: 'https://gitlab.com/gitlab-org/quality/pipeline-common/-/raw/6.4.0/ci/danger-review.yml'
 
 dependency_scanning:
   needs: []
@@ -465,6 +461,8 @@ debug_review_gke122:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
 
 danger-review:
+  rules:
+    - if: $CI_SERVER_HOST == "gitlab.com"
   before_script:
     - bundle add gitlab-dangerfiles
 
