@@ -77,6 +77,12 @@ include:
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
   - template: Jobs/SAST-IaC.latest.gitlab-ci.yml
+  - project: 'gitlab-org/quality/pipeline-common'
+    file:
+      - '/ci/danger-review.yml'
+    rules:
+      - if: $CI_SERVER_HOST == "gitlab.com"
+
 dependency_scanning:
   needs: []
   before_script: []
@@ -459,23 +465,8 @@ debug_review_gke122:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
 
 danger-review:
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
-  stage: prepare
-  cache: {}
-  script:
-    - git version
-    - danger_id=$(echo -n ${DANGER_GITLAB_API_TOKEN} | md5sum | awk '{print $1}' | cut -c5-10)
-    - |
-      if [ ! -v DANGER_GITLAB_API_TOKEN ] && [ "${PIPELINE_TYPE}" = "FORK_MR_PIPELINE" ]; then
-        echo "Danger token not configured. As this is from a fork, failing danger gracefully."
-        exit 202
-      fi
-    - danger --fail-on-errors=true --verbose --danger_id=${danger_id}
-  allow_failure:
-    exit_codes: 202
-  rules:
-    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
+  before_script:
+    - bundle add gitlab-dangerfiles
 
 rubocop:
   image: ruby:3.0-alpine
