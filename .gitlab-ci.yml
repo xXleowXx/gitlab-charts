@@ -463,9 +463,9 @@ debug_review_gke122:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
 
 danger-review:
-  rules:
-    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/ && $PIPELINE_TYPE != "FORK_MR_PIPELINE"'
-    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
+#  rules:
+#    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/ && $PIPELINE_TYPE != "FORK_MR_PIPELINE"'
+#    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
   before_script:
     - bundle add gitlab-dangerfiles
 
