@@ -115,11 +115,12 @@ test:
     - kubectl version
     - kubectl cluster-info
   script:
+    - helm dependency update
     - >
       helm install gitlab .
-        -f ./examples/kind/values-base.yaml
-        -f ./examples/kind/values-ssl.yaml
-        --set global.hosts.domain=$(hostname -i).nip.io
+      -f ./examples/kind/values-base.yaml
+      -f ./examples/kind/values-ssl.yaml
+      --set global.hosts.domain=$(hostname -i).nip.io
     - kubectl wait pods -l app=webservice,release=gitlab --for condition=Ready --timeout=120s
 
 tag_auto_deploy:
