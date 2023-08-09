@@ -96,7 +96,6 @@ iac-sast:
 
 test:
   stage: k3s
-  extends: .source_autodevops
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.7.1-kube-1.20.11-alpine-3.14
   parallel:
     matrix:
@@ -108,13 +107,15 @@ test:
   services:
     - name: registry.gitlab.com/gitlab-org/cluster-integration/test-utils/k3s-gitlab-ci/releases/$K3S_VERSION
       alias: k3s
-  script:
+  before_script:
     - apk upgrade
-    - apk add curl
+    - apk add bash curl
+    - source scripts/ci/autodevops.sh
     - curl -f k3s:8081?service=k3s > kubeconfig
     - export KUBECONFIG=kubeconfig
     - kubectl version
     - kubectl cluster-info
+  script:
     - ensure_namespace
     - create_secret
     - deploy
