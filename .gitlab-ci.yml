@@ -111,18 +111,7 @@ test:
     - apk upgrade
     - apk add bash curl
   script:
-    - /bin/bash
-    - -c
-    - |
-      source scripts/ci/autodevops.sh
-      curl -f k3s:8081?service=k3s > kubeconfig
-      export KUBECONFIG=kubeconfig
-      kubectl version
-      kubectl cluster-info
-      ensure_namespace
-      create_secret
-      deploy
-      wait_for_deploy
+    - /bin/bash ./scripts/test_in_k3s.sh
 
 tag_auto_deploy:
   stage: staging-release
