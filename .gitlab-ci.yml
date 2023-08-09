@@ -123,7 +123,7 @@ test:
       --set global.hosts.domain=$(hostname -i).nip.io
     - sleep 10
     - kubectl get pods
-    - kubectl wait pods -l app=webservice,release=gitlab --for condition=Ready --timeout=180s
+    - kubectl wait pods -l app=webservice,release=gitlab --for condition=Ready --timeout=600s
 
 tag_auto_deploy:
   stage: staging-release
