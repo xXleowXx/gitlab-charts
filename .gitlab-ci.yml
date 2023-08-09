@@ -103,13 +103,17 @@ test:
         - v1.24.14-k3s1
         - v1.25.10-k3s1
         - v1.26.5-k3s1
+        - v1.27.1-k3s1
+  variables:
+    BUILD_IMAGE_NAME: "$CI_REGISTRY_IMAGE/build/$CI_COMMIT_REF_SLUG:$K3S_VERSION"
   services:
-    - name: registry.gitlab.com/gitlab-org/cluster-integration/test-utils/k3s-gitlab-ci/releases/$K3S_VERSION
+    - name: $BUILD_IMAGE_NAME
       alias: k3s
   script:
+    - apk upgrade
     - apk add curl
-    - curl k3s:8081 > k3s.yaml
-    - export KUBECONFIG=$(pwd)/k3s.yaml
+    - curl -f k3s:8081?service=k3s > kubeconfig
+    - export KUBECONFIG=kubeconfig
     - kubectl version
     - kubectl cluster-info
 
