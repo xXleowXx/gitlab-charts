@@ -55,6 +55,7 @@ variables:
   STRICT_VERSIONS: "true"
 
 stages:
+  - k3s
   - prepare
   - test
   - preflight
@@ -92,6 +93,25 @@ sast:
 iac-sast:
   needs: []
   before_script: []
+
+test:
+  stage: k3s
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.7.1-kube-1.20.11-alpine-3.14
+  parallel:
+    matrix:
+      - K3S_VERSION:
+        - v1.24.14-k3s1
+        - v1.25.10-k3s1
+        - v1.26.5-k3s1
+  services:
+    - name: registry.gitlab.com/gitlab-org/cluster-integration/test-utils/k3s-gitlab-ci/releases/$K3S_VERSION
+      alias: k3s
+  script:
+    - apk add curl
+    - curl k3s:8081 > k3s.yaml
+    - export KUBECONFIG=$(pwd)/k3s.yaml
+    - kubectl version
+    - kubectl cluster-info
 
 tag_auto_deploy:
   stage: staging-release
