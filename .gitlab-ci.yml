@@ -121,7 +121,9 @@ test:
       -f ./examples/kind/values-base.yaml
       -f ./examples/kind/values-ssl.yaml
       --set global.hosts.domain=$(hostname -i).nip.io
-    - kubectl wait pods -l app=webservice,release=gitlab --for condition=Ready --timeout=120s
+    - sleep 10
+    - kubectl get pods
+    - kubectl wait pods -l app=webservice,release=gitlab --for condition=Ready --timeout=180s
 
 tag_auto_deploy:
   stage: staging-release
