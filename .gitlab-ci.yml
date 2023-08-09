@@ -104,10 +104,8 @@ test:
         - v1.25.10-k3s1
         - v1.26.5-k3s1
         - v1.27.1-k3s1
-  variables:
-    BUILD_IMAGE_NAME: "$CI_REGISTRY_IMAGE/build/$CI_COMMIT_REF_SLUG:$K3S_VERSION"
   services:
-    - name: $BUILD_IMAGE_NAME
+    - name: registry.gitlab.com/gitlab-org/cluster-integration/test-utils/k3s-gitlab-ci/releases/$K3S_VERSION
       alias: k3s
   script:
     - apk upgrade
