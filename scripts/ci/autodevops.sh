@@ -259,6 +259,14 @@ function set_context() {
   fi
 }
 
+function vcluster_connect() {
+  if [ -z ${VCLUSTER_NAME} ]; then
+    echo 'VCLUSTER_NAME not configured, skipping `vcluster connect`'
+  else
+    vcluster connect "${VCLUSTER_NAME}"
+  fi
+}
+
 function check_kube_domain() {
   if [ -z ${KUBE_INGRESS_BASE_DOMAIN+x} ]; then
     echo "ERROR: In order to deploy, KUBE_INGRESS_BASE_DOMAIN must be set as a variable at the group or project level, or manually added in .gitlab-cy.yml"
