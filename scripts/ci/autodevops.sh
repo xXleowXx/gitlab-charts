@@ -264,6 +264,11 @@ function vcluster_connect() {
     echo 'VCLUSTER_NAME not configured, skipping `vcluster connect`'
   else
     vcluster connect "${VCLUSTER_NAME}"
+
+    # Ensure that ${NAMESPACE} exists in the vcluster context, too.
+    ensure_namespace
+
+    kubectl config set-context --current --namespace=${NAMESPACE}
   fi
 }
 
