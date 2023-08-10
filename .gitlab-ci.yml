@@ -218,6 +218,7 @@ lint_package:
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - set_context
+    - vcluster_connect
     - check_kube_domain
     - kubectl version
     - ensure_namespace
@@ -292,6 +293,7 @@ review_eks:
     - git checkout master
     - source scripts/ci/autodevops.sh
     - set_context
+    - vcluster_connect
     - delete
     - cleanup
   when: manual
