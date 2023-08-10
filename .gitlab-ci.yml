@@ -208,6 +208,17 @@ lint_package:
       --set global.hpa.apiVersion=autoscaling/v2
       --set global.batch.cronJob.apiVersion=batch/v1
 
+"Validate 1.26.7":
+  extends: .kubeval
+  variables:
+    KUBE_VERSION: "1.26.7"
+    KUBEVAL_SCHEMA_LOCATION: "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
+    HELM_EXTRAS: >-
+      --set global.ingress.apiVersion=networking.k8s.io/v1
+      --set global.pdb.apiVersion=policy/v1
+      --set global.hpa.apiVersion=autoscaling/v2
+      --set global.batch.cronJob.apiVersion=batch/v1
+
 .review_template:
   stage: review
   variables:
