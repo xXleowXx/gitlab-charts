@@ -272,6 +272,21 @@ review_gke125:
     auto_stop_in: 2 days
   resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
+review_gke126:
+  variables:
+    DNS_PROVIDER: "google"
+    AGENT_NAME: "gke125-ci-cluster" # connect to 1.25 cluster, which has vcluster running
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v126.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
+    VCLUSTER_NAME: vcluster-k8s-126
+  extends: .review_template
+  environment:
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke126
+    auto_stop_in: 2 days
+  resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+
 review_eks:
   variables:
     DNS_PROVIDER: "aws"
@@ -323,6 +338,17 @@ stop_review_gke125:
   extends: .stop_review_template
   environment:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    action: stop
+
+stop_review_gke126:
+  variables:
+    AGENT_NAME: "gke125-ci-cluster" # connect to 1.25 cluster, which has vcluster running
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v126.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
+    VCLUSTER_NAME: vcluster-k8s-126
+  extends: .stop_review_template
+  environment:
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
 
 stop_review_eks:
@@ -659,6 +685,24 @@ review_specs_gke125:
     - !reference [.specs, rules]
   needs: ['review_gke125']
 
+review_specs_gke126:
+  extends: .specs
+  variables:
+    VARIABLES_FILE: "variables/review_gke126"
+    RSPEC_TAGS: type:feature
+    AGENT_NAME: "gke125-ci-cluster" # cnonect to 1.25 cluster, which has vcluster running
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v126.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
+  environment:
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke126
+  resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  rules:
+    - !reference [.rule:skip_if_no_cluster]
+    - !reference [.specs, rules]
+  needs: ['review_gke126']
+
 review_specs_eks:
   extends: .specs
   variables:
@@ -904,6 +948,19 @@ qa_gke125:
     - job: review_specs_gke125
       artifacts: false
 
+qa_gke126:
+  extends: .qa_branch
+  variables:
+    VARIABLES_FILE: "variables/review_gke126"
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
+  environment:
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_gke126
+  needs:
+    - review_gke126
+    - job: review_specs_gke126
+      artifacts: false
+
 qa_eks:
   extends: .qa_branch
   variables:
@@ -1006,6 +1063,21 @@ qa_gke125_manual_full_suite:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke125
   needs: [ "qa_gke125_full_suite_manual_trigger"]
+
+qa_gke126_full_suite_manual_trigger:
+  extends: .qa_full_suite_manual_trigger
+  script: echo 'The job will trigger Full E2E suite against GKE126'
+
+qa_gke126_manual_full_suite:
+  extends: .qa_branch
+  parallel: 7
+  variables:
+    VARIABLES_FILE: "variables/review_gke126"
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
+  environment:
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_gke126
+  needs: [ "qa_gke126_full_suite_manual_trigger"]
 
 qa_eks_full_suite_manual_trigger:
   extends: .qa_full_suite_manual_trigger
