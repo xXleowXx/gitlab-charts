@@ -289,7 +289,7 @@ review_gke126:
     AGENT_NAME: "gke125-ci-cluster" # connect to 1.25 cluster, which has vcluster running
     KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v126.helm-charts.win"
     KUBE_NAMESPACE: "helm-charts-win"
-    VCLUSTER_NAME: vcluster-k8s-126
+    VCLUSTER_NAME: k8s-126
   extends: .review_template
   environment:
     name: gke125_vcluster_126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
@@ -356,7 +356,7 @@ stop_review_gke126:
     AGENT_NAME: "gke125-ci-cluster" # connect to 1.25 cluster, which has vcluster running
     KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v126.helm-charts.win"
     KUBE_NAMESPACE: "helm-charts-win"
-    VCLUSTER_NAME: vcluster-k8s-126
+    VCLUSTER_NAME: k8s-126
   extends: .stop_review_template
   environment:
     name: gke125_vcluster_126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
