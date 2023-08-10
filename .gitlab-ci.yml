@@ -644,8 +644,11 @@ review-docs-cleanup:
     CHROME_VERSION: "109"
   extends: .source_autodevops
   script:
+    - curl -L -o /usr/local/bin/vcluster "https://github.com/loft-sh/vcluster/releases/download/v0.15.5/vcluster-linux-amd64"
+    - chmod +x /usr/local/bin/vcluster
     - ./scripts/ci/install_spec_dependencies
     - set_context
+    - vcluster_connect
     - ./scripts/ci/run_specs
   artifacts:
     when: on_failure
@@ -706,6 +709,7 @@ review_specs_gke126:
     AGENT_NAME: "gke125-ci-cluster" # cnonect to 1.25 cluster, which has vcluster running
     KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v126.helm-charts.win"
     KUBE_NAMESPACE: "helm-charts-win"
+    VCLUSTER_NAME: k8s-126
   environment:
     name: gke125_vcluster_126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
