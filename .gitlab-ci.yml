@@ -281,7 +281,7 @@ review_gke126:
     VCLUSTER_NAME: vcluster-k8s-126
   extends: .review_template
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_vcluster_126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
     auto_stop_in: 2 days
@@ -348,7 +348,7 @@ stop_review_gke126:
     VCLUSTER_NAME: vcluster-k8s-126
   extends: .stop_review_template
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_vcluster_126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
 
 stop_review_eks:
@@ -694,7 +694,7 @@ review_specs_gke126:
     KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v126.helm-charts.win"
     KUBE_NAMESPACE: "helm-charts-win"
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_vcluster_126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
   resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
@@ -954,7 +954,7 @@ qa_gke126:
     VARIABLES_FILE: "variables/review_gke126"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_vcluster_126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke126
   needs:
     - review_gke126
@@ -1075,7 +1075,7 @@ qa_gke126_manual_full_suite:
     VARIABLES_FILE: "variables/review_gke126"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_vcluster_126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke126
   needs: [ "qa_gke126_full_suite_manual_trigger"]
 
