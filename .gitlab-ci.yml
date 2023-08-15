@@ -71,12 +71,28 @@ stages:
   - cleanup
   - report
 
+# This job MUST be defined before including /ci/danger-review.yml below
+# because we MUST override the `script` key in the correct order
+danger-review:
+  # This script only exists so that this yaml file is correctly parsed on dev.gitlab.org
+  # where /ci/danger-review.yml won't be included. In gitlab.com this will be included
+  # and the script will be overridden.
+  script: echo "no-op"
+  rules:
+    - if: $CI_SERVER_HOST == "gitlab.com"
+
 include:
   - local: '/.gitlab/ci/rules.gitlab-ci.yml'
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
   - template: Jobs/SAST-IaC.latest.gitlab-ci.yml
+  - project: 'gitlab-org/quality/pipeline-common'
+    file:
+      - '/ci/danger-review.yml'
+    rules:
+      - if: $CI_SERVER_HOST == "gitlab.com"
+
 dependency_scanning:
   needs: []
   before_script: []
@@ -457,25 +473,6 @@ debug_review_gke122:
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
-
-danger-review:
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:danger
-  stage: prepare
-  cache: {}
-  script:
-    - git version
-    - danger_id=$(echo -n ${DANGER_GITLAB_API_TOKEN} | md5sum | awk '{print $1}' | cut -c5-10)
-    - |
-      if [ ! -v DANGER_GITLAB_API_TOKEN ] && [ "${PIPELINE_TYPE}" = "FORK_MR_PIPELINE" ]; then
-        echo "Danger token not configured. As this is from a fork, failing danger gracefully."
-        exit 202
-      fi
-    - danger --fail-on-errors=true --verbose --danger_id=${danger_id}
-  allow_failure:
-    exit_codes: 202
-  rules:
-    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
 
 rubocop:
   image: ruby:3.0-alpine
