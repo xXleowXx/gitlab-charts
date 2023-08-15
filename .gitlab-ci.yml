@@ -49,7 +49,7 @@ variables:
   QA_SANITY_SUITE_OPTIONS: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
   DEBIAN_VERSION: bullseye
   RUBY_VERSION: "3.0"
-  BUILDER_RUBY_DOCKER_VERSION: "4.18.0"
+  CI_TOOLS_VERSION: "4.22.0"
   GITLAB_QA_VERSION: "12.2.1"
   # STRICT_VERSIONS is used in RSpecs to ensure exact version match for tools like "helm" and "kubectl"
   STRICT_VERSIONS: "true"
@@ -123,7 +123,7 @@ update-trigger-branch:
     - if: '$TRIGGER_UPDATE'  # Allow us to manually trigger this job in a pipeline if we wish using this CI variable
 
 dependency_update:
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_RUBY_DOCKER_VERSION}
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/distribution_ci_tools:${CI_TOOLS_VERSION}
   stage: prepare
   script:
     - curl https://deps.app/install.sh | bash -s -- -b $HOME/bin
@@ -740,7 +740,7 @@ production_specs_eks:
   needs: ['stable_eks']
 
 .qa:
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_RUBY_DOCKER_VERSION}
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/distribution_ci_tools:${CI_TOOLS_VERSION}
   stage: qa
   services:
   - docker:dind
@@ -780,7 +780,7 @@ production_specs_eks:
 wait_for_dev_images:
   # Remove after https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2370 is complete
   timeout: 2h
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_RUBY_DOCKER_VERSION}
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/distribution_ci_tools:${CI_TOOLS_VERSION}
   stage: prepare
   services:
   - docker:dind
@@ -836,7 +836,7 @@ publish_devel_package:
 release_package:
   stage: release-package
   timeout: 2h
-  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/ruby_docker:${BUILDER_RUBY_DOCKER_VERSION}
+  image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/distribution_ci_tools:${CI_TOOLS_VERSION}
   script:
     - |
       if [[ $CI_COMMIT_REF_NAME =~ $AUTO_DEPLOY_TAG_REGEX ]]; then
