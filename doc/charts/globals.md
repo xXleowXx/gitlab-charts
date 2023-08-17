@@ -2443,7 +2443,7 @@ global:
 
 By default, the GitLab Helm chart does not rotate logs. This can cause ephemeral storage issues for containers that run for a long time.
 
-To enable log rotation, set the `GITLAB_LOGGER_TRUNCATE_LOGS` environment variable to true. You can also configure the log rotation frequency and the maximum log size by setting the `GITLAB_LOGGER_TRUNCATE_INTERVAL` and `GITLAB_LOGGER_MAX_FILESIZE` environment variables, respectively:
+To enable log rotation, set the `GITLAB_LOGGER_TRUNCATE_LOGS` environment variable to true. You can also configure the log rotation frequency (in seconds) and the maximum log size (in bytes) by setting the `GITLAB_LOGGER_TRUNCATE_INTERVAL` and `GITLAB_LOGGER_MAX_FILESIZE` environment variables, respectively:
 
 ```yaml
 global:
