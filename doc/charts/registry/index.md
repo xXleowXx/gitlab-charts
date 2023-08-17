@@ -991,16 +991,16 @@ there will be some variation in how you connect.
    ...@gitlab-postgresql-0/$ exit
    ```
 
-### gc
+### `gc` property
 
-The `gc` property is optional and provides options related to
-[online garbage collection](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc).
+The `gc` property provides [online garbage collection](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc)
+options.
 
 WARNING:
 This is an experimental feature and _must not_ be used in production.
 
-NOTE:
-This feature requires the [metadata database](#database) to be enabled.
+Online garbage collection requires the [metadata database](#database) to be enabled. You must use online garbage collection when using the database, though
+you can temporarily disable online garbage collection for maintenance and debugging.
 
 ```yaml
 gc:
@@ -1074,6 +1074,11 @@ The Docker Registry will build up extraneous data over time which can be freed u
 [garbage collection](https://docs.docker.com/registry/garbage-collection/).
 As of [now](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1586) there is no
 fully automated or scheduled way to run the garbage collection with this Chart.
+
+WARNING:
+You must use [online garbage collection](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc) with the
+[metadata database](#database). Using manual garbage collection with the metadata database will lead to data loss.
+Online garbage collection fully replaces the need to manually run garbage collection.
 
 ### Manual Garbage Collection
 
