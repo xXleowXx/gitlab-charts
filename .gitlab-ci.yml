@@ -71,16 +71,6 @@ stages:
   - cleanup
   - report
 
-# This job MUST be defined before including /ci/danger-review.yml below
-# because we MUST override the `script` key in the correct order
-danger-review:
-  # This script only exists so that this yaml file is correctly parsed on dev.gitlab.org
-  # where /ci/danger-review.yml won't be included. In gitlab.com this will be included
-  # and the script will be overridden.
-  script: echo "no-op"
-  rules:
-    - if: $CI_SERVER_HOST == "gitlab.com"
-
 include:
   - local: '/.gitlab/ci/rules.gitlab-ci.yml'
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
