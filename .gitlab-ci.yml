@@ -504,7 +504,7 @@ check_docs_markdown:
 
 # Perform link checks on published HTML files
 check_docs_links:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.18-ruby-3.2.2-4207821e
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.18-ruby-3.2.2-6a53d93b
   stage: prepare
   cache: {}
   dependencies: []
