@@ -66,11 +66,13 @@ spec:
               serviceName: {{ template "webservice.fullname.withSuffix" . }}
               servicePort: {{ $.Values.service.workhorseExternalPort }}
             {{- end -}}
-  {{- if (and $tlsSecret (eq (include "gitlab.ingress.tls.enabled" $) "true" )) }}
+  {{- if (eq (include "gitlab.ingress.tls.enabled" $) "true") }}
   tls:
     - hosts:
       - {{ $gitlabHostname }}
+      {{- if $tlsSecret }}
       secretName: {{ $tlsSecret }}
+      {{- end -}}
   {{- else }}
   tls: []
   {{- end }}
