@@ -508,6 +508,7 @@ webservice:
 | `ingress.tls.enabled`             | Boolean | `true`                    | When set to `false`, you disable TLS for GitLab Webservice. This is mainly useful for cases in which you cannot use TLS termination at Ingress-level, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `ingress.tls.secretName`          | String  | (empty)                   | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the GitLab URL. When not set, the `global.ingress.tls.secretName` value is used instead.                                                    |
 | `ingress.tls.smardcardSecretName` | String  | (empty)                   | The name of the Kubernetes TLS SEcret that contains a valid certificate and key for the GitLab smartcard URL if enabled. When not set, the `global.ingress.tls.secretName` value is used instead.                               |
+| `ingress.tls.useGeoClass`         | Boolean | false                     | Override the IngressClass with the Geo Ingress class (`global.geo.ingressClass`). Required for primary Geo sites.                                                                                                              |
 
 ### annotations
 
@@ -539,6 +540,12 @@ you can set the body size with either of the following two parameters too:
 
 - `gitlab.webservice.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
 - `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
+
+### Extra Ingress
+
+An extra Ingress can be deployed by setting `extraIngress.enabled=true`. The Ingress
+is named as the default Ingress with the `-extra` suffix and supports the same
+settings as the default Ingress.
 
 ## Resources
 

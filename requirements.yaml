@@ -31,6 +31,10 @@ dependencies:
 - name: nginx-ingress
   condition: nginx-ingress.enabled
   version: '*.*.*'
+- name: nginx-ingress
+  condition: nginx-ingress-geo.enabled
+  version: '*.*.*'
+  alias: nginx-ingress-geo
 - name: gitlab-zoekt
   version: 0.5.8
   repository: https://charts.gitlab.io/
