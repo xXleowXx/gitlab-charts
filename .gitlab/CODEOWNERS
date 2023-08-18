@@ -27,7 +27,7 @@
 ^[Distribution CI/CD] @gitlab-org/maintainers/helm-charts-gitlab @balasankarc
 .gitlab/ci/*
 /scripts/ci/*
-.gitlab-ci.yaml
+.gitlab-ci.yml
 
 ^[Documentation Directories] @gl-docsteam
 /doc/
