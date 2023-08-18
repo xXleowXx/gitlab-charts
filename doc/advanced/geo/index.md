@@ -6,10 +6,6 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Configure the GitLab chart with GitLab Geo
 
-WARNING:
-The following guide describes how to set up Geo with a unified URL, but it does not work yet.
-For more information, see [issue 3522](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3522).
-
 GitLab Geo provides the ability to have geographically distributed application
 deployments.
 
@@ -170,6 +166,7 @@ geo_logcursor['enable']=false
 grafana['enable']=false
 gitaly['enable']=false
 redis['enable']=false
+gitlab_kas['enable']=false
 prometheus_monitoring['enable'] = false
 ## Configure the DB for network
 postgresql['enable'] = true
@@ -251,6 +248,19 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
        nodeName: London Office
        enabled: true
        role: primary
+   # configure Geo Nginx Controller for internal Geo site traffic
+   nginx-ingress-geo:
+     enabled: true
+   gitlab:
+     webservice:
+       # Use the Geo NGINX controller.
+       ingress:
+         useGeoClass: true
+       # Configure an Ingress for internal Geo traffic
+       extraIngress:
+         enabled: true
+         hostname: gitlab.london.example.com
+         useGeoClass: true
    # External DB, disable
    postgresql:
      install: false
@@ -261,6 +271,8 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
    - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
    - global.geo.nodeName must match
      [the Name field of a Geo site in the Admin Area](https://docs.gitlab.com/ee/administration/geo_sites.html#common-settings)
+   - [nginx-ingress-geo](../../charts/nginx/index.md#gitlab-geo) enables a Ingress controller for Geo traffic forwarded from secondaries
+   - configure the primary Geo site's [gitlab.webservice](../../charts/gitlab/webservice/index.md#ingress-settings) Ingresses for Geo traffic
    - Also configure any additional settings, such as:
      - [Configuring SSL/TLS](../../installation/tools.md#tls-certificates)
      - [Using external Redis](../external-redis/index.md)
@@ -305,7 +317,7 @@ this as the Primary site. We will do this via the Toolbox Pod.
 1. Set the primary site's Internal URL with a Rails runner command. Replace `https://primary.gitlab.example.com` with the actual Internal URL:
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: 'https://primary.gitlab.example.com'"
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: 'https://primary.gitlab.example.com')"
    ```
 
 1. Check the status of Geo configuration:
@@ -376,6 +388,7 @@ grafana['enable']=false
 gitaly['enable']=false
 redis['enable']=false
 prometheus_monitoring['enable'] = false
+gitlab_kas['enable']=false
 ## Configure the DBs for network
 postgresql['enable'] = true
 postgresql['listen_address'] = '0.0.0.0'
@@ -550,8 +563,10 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
      # See docs.gitlab.com/charts/charts/globals
      # Configure host & domain
      hosts:
-       hostSuffix: secondary
-       domain: example.com
+       domain: shanghai.example.com
+       # use a unified URL (same external URL as the primary site)
+       gitlab:
+         name: gitlab.example.com
      # configure DB connection
      psql:
        host: geo-2.db.example.com
@@ -570,6 +585,12 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
          password:
            secret: geo
            key: geo-postgresql-password
+   gitlab:
+     webservice:
+       # Configure a Ingress for internal Geo traffic
+       extraIngress:
+         enabled: true
+         hostname: shanghai.gitlab.example.com
    # External DB, disable
    postgresql:
      install: false
@@ -581,6 +602,7 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
    - [`global.geo.psql.host`](../../charts/globals.md#configure-postgresql-settings)
    - global.geo.nodeName must match
      [the Name field of a Geo site in the Admin Area](https://docs.gitlab.com/ee/administration/geo_sites.html#common-settings)
+   - [nginx-ingress-geo](../../charts/nginx/index.md#gitlab-geo) enables a ingress controller pre-configured for traffic
    - Also configure any additional settings, such as:
      - [Configuring SSL/TLS](../../installation/tools.md#tls-certificates)
      - [Using external Redis](../external-redis/index.md)
@@ -676,3 +698,9 @@ configured, via the Toolbox Pod.
    - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
      Rake task is checking for a local SSH server, which is actually present in the
      `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
+
+## Registry
+
+To sync the secondary registry with the primary registry you can configure
+[registry replication](https://docs.gitlab.com/ee/administration/geo/replication/container_registry.html#configure-container-registry-replication)
+using a  [notification secret](../../charts/registry/index.md#notification-secret).

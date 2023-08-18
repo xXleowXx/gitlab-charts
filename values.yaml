@@ -532,6 +532,7 @@ global:
     ## Geo Secondary only
     # nodeName allows multiple instances behind a load balancer.
     nodeName: # defaults to `gitlab.gitlab.host`
+    # ingressClass: 
     # PostgreSQL connection details only needed for `secondary`
     psql:
       password: {}
@@ -864,13 +865,13 @@ certmanager:
 ## https://docs.gitlab.com/charts/charts/nginx/
 ## https://docs.gitlab.com/charts/architecture/decisions#nginx-ingress
 ## Installation & configuration of charts/ingress-nginx:
-nginx-ingress:
+nginx-ingress: &nginx-ingress
   enabled: true
   tcpExternalConfig: "true"
-  controller:
+  controller: &nginx-ingress-controller
     addHeaders:
       Referrer-Policy: strict-origin-when-cross-origin
-    config:
+    config: &nginx-ingress-controller-config
       annotation-value-word-blocklist: "load_module,lua_package,_by_lua,location,root,proxy_pass,serviceaccount,{,},',\""
       hsts: "true"
       hsts-include-subdomains: "false"
@@ -924,6 +925,26 @@ nginx-ingress:
     scope: false
   serviceAccount:
     create: true
+
+# Ingress controller to handle requests forwarded from other Geo sites.
+# Configuration differences compared to the main nginx ingress:
+#   - Pass X-Forwarded-For headers as is
+#   - Use a different IngressClass name
+nginx-ingress-geo:
+  <<: *nginx-ingress
+  enabled: false
+  controller:
+    <<: *nginx-ingress-controller
+    config:
+      <<: *nginx-ingress-controller-config
+      # Pass incoming X-Forwarded-* headers to upstream. Required to handle requests
+      # from other Geo sites.
+      # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers
+      use-forwarded-headers: true
+    electionID: ingress-controller-leader-geo
+    ingressClassResource:
+      name: '{{ include "gitlab.geo.ingress.class.name" $ | quote }}'
+      controllerValue: 'k8s.io/nginx-ingress-geo'
 
 haproxy:
   install: false
