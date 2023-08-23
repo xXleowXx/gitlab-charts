@@ -624,7 +624,7 @@ Now that both databases are configured and applications are deployed, we must te
 the Primary site that the Secondary site exists:
 
 1. Visit the **primary** site.
-1. On the left sidebar, expand the top-most chevron (**{chevron-down}**).
+1. On the left sidebar, select **Search or go to**.
 1. Select **Admin Area**.
 1. Select **Geo > Add site**.
 1. Add the **secondary** site. Use the full GitLab URL for the URL.
