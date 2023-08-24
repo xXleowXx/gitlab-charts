@@ -28,6 +28,15 @@ global:
     labels: {}
 
   image: {}
+    # Registry value override is only available for Spamcheck chart.
+    # If specifying a value here, be sure to also configure
+    # `gitlab.spamcheck.image.repository` to a value that does not
+    # include the default registry domain `registry.gitlab.com`.
+    # Support for other charts is coming as an iterative rollout.
+    # See https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2859
+    # for more information.
+    # registry:
+
     # pullPolicy: IfNotPresent
     # pullSecrets: []
     # tagSuffix: ""
