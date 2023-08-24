@@ -226,12 +226,14 @@ lint_package:
     - echo "export REGISTRY_URL=registry-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"     >> "${VARIABLES_FILE}"
     - echo "export S3_ENDPOINT=https://minio-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - kubectl wait pods -n $NAMESPACE -l app=toolbox,release=$RELEASE_NAME  --for condition=Ready --timeout=60s
-    - if [ $PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/ ]; then
-    -   QA_GITLAB_VERSION_COMMAND="cat /srv/gitlab/VERSION" # to pull latest QA image for stable release
+    - if [[ $PIPELINE_TYPE =~ STABLE_BRANCH_PIPELINE$ ]]; then
+    -   QA_GITLAB_VERSION_COMMAND="cat /srv/gitlab/VERSION"; # to pull latest QA image for stable release
+    -   QA_GITLAB_VARIABLE_NAME="QA_GITLAB_VERSION";
     - else
-    -   QA_GITLAB_VERSION_COMMAND="cat /srv/gitlab/REVISION"
+    -   QA_GITLAB_VERSION_COMMAND="cat /srv/gitlab/REVISION";
+    -   QA_GITLAB_VARIABLE_NAME="QA_GITLAB_REVISION";
     - fi;
-    - echo "export QA_GITLAB_REVISION=`kubectl exec -i $(kubectl get pods -lrelease=$RELEASE_NAME,app=toolbox -o custom-columns=":metadata.name") -c toolbox -- $QA_GITLAB_VERSION_COMMAND`" >> "${VARIABLES_FILE}"
+    - echo "export $QA_GITLAB_VARIABLE_NAME=`kubectl exec -i $(kubectl get pods -lrelease=$RELEASE_NAME,app=toolbox -o custom-columns=":metadata.name") -c toolbox -- $QA_GITLAB_VERSION_COMMAND`" >> "${VARIABLES_FILE}"
   artifacts:
     when: always
     paths:
@@ -747,6 +749,8 @@ production_specs_eks:
     - source "${VARIABLES_FILE}"
     - if [ -n "$QA_GITLAB_REVISION" ]; then
     -   QA_IMAGE="registry.gitlab.com/gitlab-org/gitlab/gitlab-ee-qa:$QA_GITLAB_REVISION"
+    - elif [ -n "$QA_GITLAB_VERSION" ]; then
+    -   QA_IMAGE="gitlab/gitlab-ee-qa:$QA_GITLAB_VERSION"
     - else
     -   QA_IMAGE="gitlab/gitlab-ee-qa:nightly" # this will default to use nightly https://gitlab.com/gitlab-org/gitlab-qa/-/blob/master/docs/what_tests_can_be_run.md#specifying-the-gitlab-version
     - fi;
