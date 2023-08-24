@@ -237,7 +237,12 @@ lint_package:
     - echo "export REGISTRY_URL=registry-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"     >> "${VARIABLES_FILE}"
     - echo "export S3_ENDPOINT=https://minio-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - kubectl wait pods -n $NAMESPACE -l app=toolbox,release=$RELEASE_NAME  --for condition=Ready --timeout=60s
-    - echo "export QA_GITLAB_REVISION=`kubectl exec -i $(kubectl get pods -lrelease=$RELEASE_NAME,app=toolbox -o custom-columns=":metadata.name") -c toolbox -- cat /srv/gitlab/REVISION`" >> "${VARIABLES_FILE}"
+    - if [ $PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/ ]; then
+    -   QA_GITLAB_VERSION_COMMAND="cat /srv/gitlab/VERSION" # to pull latest QA image for stable release
+    - else
+    -   QA_GITLAB_VERSION_COMMAND="cat /srv/gitlab/REVISION"
+    - fi;
+    - echo "export QA_GITLAB_REVISION=`kubectl exec -i $(kubectl get pods -lrelease=$RELEASE_NAME,app=toolbox -o custom-columns=":metadata.name") -c toolbox -- $QA_GITLAB_VERSION_COMMAND`" >> "${VARIABLES_FILE}"
   artifacts:
     when: always
     paths:
