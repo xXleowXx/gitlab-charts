@@ -1199,7 +1199,7 @@ The `storage_options` are used to configure
 
 Setting a default encryption on an S3 bucket is the easiest way to
 enable encryption, but you may want to
-[set a bucket policy to ensure only encrypted objects are uploaded](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
+[set a bucket policy to ensure only encrypted objects are uploaded](https://repost.aws/knowledge-center/s3-bucket-store-kms-encrypted-objects).
 To do this, you must configure GitLab to send the proper encryption headers
 in the `storage_options` configuration section:
 

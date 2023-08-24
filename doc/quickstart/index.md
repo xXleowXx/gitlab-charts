@@ -114,7 +114,7 @@ simplicity we recommend a single "wildcard" record:
 - In Google Cloud DNS, create an `A` record with the name `*`. We also
   suggest setting the TTL to `1` minute instead of `5` minutes.
 - On AWS EKS, the address will be a URL rather than an IP address.
-  [Create a Route 53 alias record](https://aws.amazon.com/premiumsupport/knowledge-center/route-53-create-alias-records/)
+  [Create a Route 53 alias record](https://repost.aws/knowledge-center/route-53-create-alias-records)
   `*.domain.tld` pointing to this URL.
 
 ## Sign in to GitLab
