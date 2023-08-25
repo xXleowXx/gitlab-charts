@@ -2431,7 +2431,7 @@ Setting pod priority allows you to tell the scheduler to evict lower priority po
 ```yaml
 global:
   priorityClassName: system-cluster-critical
-```
+``` 
 
 | Name                | Type   | Default | Description                      |
 | :-------------------| :--:   | :------ | :------------------------------- |
