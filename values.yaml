@@ -355,7 +355,7 @@ global:
       bucket: gitlab-mr-diffs
       connection: {}
     terraformState:
-      enabled: false
+      enabled: true
       bucket: gitlab-terraform-state
       connection: {}
     ciSecureFiles:
@@ -363,7 +363,7 @@ global:
       bucket: gitlab-ci-secure-files
       connection: {}
     dependencyProxy:
-      enabled: false
+      enabled: true
       proxy_download: true
       bucket: gitlab-dependency-proxy
       connection: {}
