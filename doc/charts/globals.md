@@ -1237,7 +1237,7 @@ as they are structurally identical aside from the default value of the `bucket` 
 
 | Name             | Type    | Default | Description |
 |:---------------- |:-------:|:------- |:----------- |
-| `enabled`        | Boolean | Defaults to `true` for LFS, artifacts, uploads, and packages  | Enable the use of these features with object storage. |
+| `enabled`        | Boolean | Defaults to `true` for LFS, artifacts, uploads, packages, Terraform state, and dependency proxy  | Enable the use of these features with object storage. |
 | `proxy_download` | Boolean | `true`  | Enable proxy of all downloads via GitLab, in place of direct downloads from the `bucket`. |
 | `bucket`         | String  | Various | Name of the bucket to use from object storage provider. Default will be `git-lfs`, `gitlab-artifacts`, `gitlab-uploads`, or `gitlab-packages`, depending on the service. |
 | `connection`     | String  | `{}`    | [See below](#connection). |
