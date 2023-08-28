@@ -261,6 +261,9 @@ global:
       ## Periodically clean up stale ci_runner_machines records
       # ci_runners_stale_machines_cleanup_worker:
       #   cron: "36 * * * *"
+      ## Prune failed builds' helper table
+      # ci_runners_failed_builds_cleanup_worker_cron:
+      #   cron: "*/10 * * * *"
       ### GitLab Geo
       # Geo Primary only!
       # geo_prune_event_log_worker:
@@ -541,7 +544,7 @@ global:
     ## Geo Secondary only
     # nodeName allows multiple instances behind a load balancer.
     nodeName: # defaults to `gitlab.gitlab.host`
-    # ingressClass: 
+    # ingressClass:
     # PostgreSQL connection details only needed for `secondary`
     psql:
       password: {}
