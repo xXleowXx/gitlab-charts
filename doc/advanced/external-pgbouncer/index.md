@@ -65,23 +65,28 @@ This will automatically create a sidecar container and will start exposing metri
 
 There are a few different ways to authenticate users in PgBouncer.
 
-One way is using an **authentication file** containing the list of known roles and their password hash (a.k.a. `auth_file`). For this to work, the following must be setup in the chart configuration:
+#### authentication file
 
-Either using the `userlist` element. This will automatically generate a secret:
+Authentication file contains the list of known roles and their password hashes (a.k.a. `auth_file`). They have to be the same pairs as configured in PostgreSQL. 
 
-```yaml
-pgbouncer:
-  # ...
-  pgbouncer:
-    # ...
-    auth_file: /etc/pgbouncer/userlist.txt
-  userlist:
-    user1: <pwd | md5 | scram-sha-256 >
-```
+Two ways to configure the chart:
 
-Or creating manually a secret in advance, mounted in the `auth_file` location path for being referenced, using the appropriate `extraVolumes` and `extraVolumeMounts` elements in the chart.
+1. using the `userlist` element. This will automatically generate a secret:
 
-Another is to use an **authentication query** returning the password hash (a.k.a `auth_query`). For this to work, the following must be setup in the chart configuration:
+   ```yaml
+   pgbouncer:
+     # ...
+     pgbouncer:
+       # ...
+       auth_file: /etc/pgbouncer/userlist.txt
+     userlist:
+       user1: <pwd | md5 | scram-sha-256 >
+   ```
+2. Create secret manually in advance, mount it in the `auth_file` location path for being referenced, using the appropriate `extraVolumes` and `extraVolumeMounts` elements in the chart.
+
+#### authentication query
+
+Authentication query returns the password hash (a.k.a `auth_query`). For this to work, the following must be setup in the chart configuration:
 
 ```yaml
 pgbouncer:
@@ -94,7 +99,7 @@ pgbouncer:
 NOTE:
 When both are defined, the `auth_query` is used only for roles not found in the `auth_file`.
 
-For both cases, a **secure function** must be created at the database server level and a superuser access to the `pg_shadow` table would be required. Secure function could look like:
+For `auth_query` to function, **secure function** must be created at the database level and a superuser access to the `pg_shadow` table would be required. Secure function could look like:
 
 ```sql
 CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(in i_username text, out uname text, out phash text)
