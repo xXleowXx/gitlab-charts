@@ -78,6 +78,12 @@ No changes.
 
 - [Remove registry migration configuration](gitlab-org/charts/gitlab@7593db8956336c56f038542e6e89d5c8690f03de) ([merge request](gitlab-org/charts/gitlab!3280))
 
+## 7.1.5 (2023-08-31)
+
+### Fixed (1 change)
+
+- [Use tcp prefix for KAS service port names](gitlab-org/security/charts/gitlab@98761b5d3f40e0ac8f8abe84ae65fda63cd0c365)
+
 ## 7.1.4 (2023-08-03)
 
 No changes.
