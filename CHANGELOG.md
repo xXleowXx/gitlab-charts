@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.3.1 (2023-08-31)
+
+No changes.
+
 ## 7.3.0 (2023-08-21)
 
 ### Added (2 changes)
@@ -22,6 +26,12 @@ entry.
 - [Update gitlab-org/container-registry from 3.78.0-gitlab to 3.79.0-gitlab](gitlab-org/charts/gitlab@1c63ea70ad695118c0a4dc1861f3400e3b8186e0) ([merge request](gitlab-org/charts/gitlab!3310))
 - [Update gitlab-org/gitlab-qa from 12.2.0 to 12.2.1](gitlab-org/charts/gitlab@eff824a0b05538a9d648e21601ac444fc578a701) ([merge request](gitlab-org/charts/gitlab!3299))
 - [Update gitlab-org/charts/gitlab-runner from 0.52.0 to 0.53.0](gitlab-org/charts/gitlab@44694d066d142a42600fd152cc7ce2ca532ab72b) ([merge request](gitlab-org/charts/gitlab!3192))
+
+## 7.2.5 (2023-08-31)
+
+### Fixed (1 change)
+
+- [Use tcp prefix for KAS service port names](gitlab-org/security/charts/gitlab@a0f550d2dfe32300e80132425c57af82ab000453)
 
 ## 7.2.4 (2023-08-11)
 
@@ -67,6 +77,12 @@ No changes.
 ### Removed (1 change)
 
 - [Remove registry migration configuration](gitlab-org/charts/gitlab@7593db8956336c56f038542e6e89d5c8690f03de) ([merge request](gitlab-org/charts/gitlab!3280))
+
+## 7.1.5 (2023-08-31)
+
+### Fixed (1 change)
+
+- [Use tcp prefix for KAS service port names](gitlab-org/security/charts/gitlab@98761b5d3f40e0ac8f8abe84ae65fda63cd0c365)
 
 ## 7.1.4 (2023-08-03)
 
