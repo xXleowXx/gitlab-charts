@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.2.5 (2023-08-31)
+
+### Fixed (1 change)
+
+- [Use tcp prefix for KAS service port names](gitlab-org/security/charts/gitlab@a0f550d2dfe32300e80132425c57af82ab000453)
+
 ## 7.2.4 (2023-08-11)
 
 No changes.
