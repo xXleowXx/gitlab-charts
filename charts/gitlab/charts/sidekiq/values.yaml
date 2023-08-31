@@ -168,11 +168,11 @@ global:
       bucket:
       connection: {}
     terraformState:
-      enabled: false
+      enabled: true
       bucket:
       connection: {}
     dependencyProxy:
-      enabled: false
+      enabled: true
       proxy_download: true
       bucket:
       connection: {}

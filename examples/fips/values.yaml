@@ -84,6 +84,16 @@ global:
       connection:
         secret: my-objectstore-packages-secret # Package storage secret.
         key: connection
+    terraformState:
+      bucket: my-terraformstate-storage # Terraform state storage bucket.
+      connection:
+        secret: my-objectstore-terraformstate-secret # Terraform state storage secret.
+        key: connection
+    dependencyProxy:
+      bucket: my-dependencyproxy-storage # Dependency proxy storage bucket.
+      connection:
+        secret: my-objectstore-dependencyproxy-secret # Dependency proxy storage secret.
+        key: connection
     backups:
       bucket: my-backup-storage # Backup storage bucket.
       tmpBucket: my-tmp-storage # Temp storage bucket.
