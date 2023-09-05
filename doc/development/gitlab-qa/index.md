@@ -76,9 +76,9 @@ Items needed for execution, which
   in the form of `https://gitlab.domain.tld`.
 - `EE_LICENSE`: A string containing a GitLab EE license. This can be handled
   via `export EE_LICENSE=$(cat GitLab.gitlab-license)`.
-- `GITHUB_ACCESS_TOKEN`: A string containing a valid GitHub Personal Access Token.
+- `QA_GITHUB_ACCESS_TOKEN`: A string containing a valid GitHub Personal Access Token.
   This will be used to test the GitHub importer. For GitLab team members, you can
-  find the access token for the `GitLab QA` user in 1password.
+  find the access token for the `GitLab QA` user in 1password in the Gitlab-QA vault of 1passoword.
 
 Retrieve the above items, and export them as environment variables.
 
@@ -94,7 +94,7 @@ to quickly ensure that basic functionality is working
 major functionality is working
   - Enable this suite via `export QA_OPTIONS="--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated"`
 - _Full suite_: running all tests against the environment. Test run will take more than an hour.
-  - Enable this suite via `--tag ~skip_live_env --tag ~orchestrated --tag ~requires_praefect --tag ~github --tag ~requires_git_protocol_v2 --tag ~transient`
+  - Enable this suite via `--tag ~skip_live_env --tag ~orchestrated --tag ~requires_praefect --tag ~requires_git_protocol_v2 --tag ~transient`
 
 Selecting a test suite depends on the use case. In the majority of cases, running
 Smoke and Reliable suite should give quick and consistent test results
