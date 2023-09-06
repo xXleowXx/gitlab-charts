@@ -78,7 +78,7 @@ Items needed for execution, which
   via `export EE_LICENSE=$(cat GitLab.gitlab-license)`.
 - `QA_GITHUB_ACCESS_TOKEN`: A string containing a valid GitHub Personal Access Token.
   This will be used to test the GitHub importer. For GitLab team members, you can
-  find the access token for the `GitLab QA` user in 1password in the Gitlab-QA vault of 1passoword.
+  find the access token for the `GitLab QA` user in 1password in the GitLab-QA vault of 1password.
 
 Retrieve the above items, and export them as environment variables.
 
