@@ -63,7 +63,7 @@ module Gitlab
 
       # Operate specifically within the user login form, avoiding registation form
       within('div#login-pane') do
-        fill_in 'Username or email', with: 'root'
+        fill_in 'Username or primary email', with: 'root'
         fill_in 'Password', with: ENV['GITLAB_PASSWORD']
       end
       click_button 'Sign in'
