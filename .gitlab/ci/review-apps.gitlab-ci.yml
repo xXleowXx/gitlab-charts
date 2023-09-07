@@ -1,0 +1,33 @@
+review_apps:
+  stage: review
+  variables:
+    AGENT_NAME: "gke125-ci-cluster" # connect to 1.25 cluster until we have a dedicated cluster
+  before_script:
+    - source scripts/ci/vcluster.sh
+  script:
+    - cluster_connect
+    - kubectl version
+    - vcluster_create
+    - vcluster_connect
+    - kubectl version
+  parallel:
+    matrix:
+      - VCLUSTER_K8S_VERSION:
+        - "1.26"
+  rules:
+    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+
+stop_review_apps:
+  extends: review_apps
+  dependencies: []
+  script:
+    - cluster_connect
+    - vcluster_delete
+  rules:
+    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
+      when: delayed
+      start_in: 1 hour
+    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+      when: delayed
+      start_in: 1 hour
