@@ -13,7 +13,8 @@ While external database services can be used, these documents focus on
 the use of the [Linux package](https://docs.gitlab.com/omnibus/) for PostgreSQL to provide the
 most platform agnostic guide, and make use of the automation included in `gitlab-ctl`.
 
-In this guide, both clusters have the same external URL. See [Set up a Unified URL for Geo sites](https://docs.gitlab.com/ee/administration/geo/secondary_proxy/index.html#set-up-a-unified-url-for-geo-sites).
+In this guide, both clusters have the same external URL. This feature is supported by the chart
+since version 7.3. See [Set up a Unified URL for Geo sites](https://docs.gitlab.com/ee/administration/geo/secondary_proxy/index.html#set-up-a-unified-url-for-geo-sites).
 
 NOTE:
 See the [defined terms](https://docs.gitlab.com/ee/administration/geo/glossary.html)
