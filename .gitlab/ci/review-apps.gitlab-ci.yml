@@ -17,8 +17,8 @@
     - cluster_connect
     - kubectl version
     - vcluster_create
-    - vcluster_connect
-    - kubectl version
+    - vcluster_run kubectl version
+    - vcluster_deploy
 
 .stop_review_app_template:
   extends: .review_app_common
