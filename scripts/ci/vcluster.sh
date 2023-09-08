@@ -33,15 +33,7 @@ function vcluster_helm_deploy() {
 }
 
 function vcluster_helm_rollout_status() {
-  kubectl rollout status deployment -lrelease=gitlab --timeout=60s
-}
-
-function vcluster_confirm_homepage() {
-  vcluster_run nohup kubectl port-forward service/gitlab-nginx-ingress-controller 8080:http &
-
-  curl -IL --fail \
-    http://gitlab.example.com:8080 \
-    --resolve gitlab.example.com:8080:127.0.0.1
+  vcluster_run kubectl rollout status deployment/gitlab-webservice-default --timeout=300s
 }
 
 function vcluster_delete() {
