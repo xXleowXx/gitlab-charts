@@ -11,6 +11,7 @@ function cluster_connect() {
 
 function vcluster_create() {
   vcluster create ${VCLUSTER_NAME} \
+    --expose \
     --upgrade \
     --namespace=${VCLUSTER_NAME} \
     --kubernetes-version=${VCLUSTER_K8S_VERSION} \
