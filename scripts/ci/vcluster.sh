@@ -65,6 +65,8 @@ function vcluster_deploy() {
   nginx-ingress:
     controller:
       replicaCount: 1   # 2
+      service:
+        type: NodePort # to avoid creating a LoadBalancer
   redis:
     resources:
       requests:
