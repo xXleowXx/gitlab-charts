@@ -28,6 +28,7 @@
     - vcluster_delete
   environment:
     action: stop
+  when: manual
 
 # Below, create two jobs for each Kubernetes version:
 #  - one to create the environment
