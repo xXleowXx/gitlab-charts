@@ -5,7 +5,8 @@ require 'yaml'
 describe 'image configuration' do
   let(:included_charts) do
     [
-      'Deployment/test-spamcheck'
+      'spamcheck',
+      'mailroom'
     ]
   end
 
@@ -14,6 +15,11 @@ describe 'image configuration' do
       global:
         spamcheck:
           enabled: true
+        appConfig:
+          incomingEmail:
+            enabled: true # for Mailroom
+            password:
+              secret: foo # for Mailroom
     ))
   end
 
@@ -30,10 +36,8 @@ describe 'image configuration' do
       t = HelmTemplate.new(default_values)
       expect(t.exit_code).to eq(0)
 
-      resources_by_kind = t.resources_by_kind('Deployment').select { |key, _| included_charts.include? key }
-
-      resources_by_kind.each do |key, _|
-        expect(t.find_image(key, 'spamcheck')).to start_with('registry.gitlab.com')
+      included_charts.each do |chart, _|
+        expect(t.find_image("Deployment/test-#{chart}", chart)).to start_with('registry.gitlab.com')
       end
     end
   end
@@ -43,10 +47,8 @@ describe 'image configuration' do
       t = HelmTemplate.new(global_image_registry_values)
       expect(t.exit_code).to eq(0)
 
-      resources_by_kind = t.resources_by_kind('Deployment').select { |key, _| included_charts.include? key }
-
-      resources_by_kind.each do |key, _|
-        expect(t.find_image(key, 'spamcheck')).to start_with('custom.registry.com')
+      included_charts.each do |chart, _|
+        expect(t.find_image("Deployment/test-#{chart}", chart)).to start_with('custom.registry.com')
       end
     end
   end
@@ -58,6 +60,9 @@ describe 'image configuration' do
         spamcheck:
           image:
             registry: spamcheck.registry.com
+        mailroom:
+          image:
+            registry: mailroom.registry.com
       )).deep_merge(global_image_registry_values)
     end
 
@@ -65,10 +70,8 @@ describe 'image configuration' do
       t = HelmTemplate.new(local_image_registry_values)
       expect(t.exit_code).to eq(0)
 
-      resources_by_kind = t.resources_by_kind('Deployment').select { |key, _| included_charts.include? key }
-
-      resources_by_kind.each do |key, _|
-        expect(t.find_image(key, 'spamcheck')).to start_with('spamcheck.registry.com')
+      included_charts.each do |chart, _|
+        expect(t.find_image("Deployment/test-#{chart}", chart)).to start_with("#{chart}.registry.com")
       end
     end
   end
