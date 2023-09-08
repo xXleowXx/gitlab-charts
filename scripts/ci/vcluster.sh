@@ -47,3 +47,10 @@ function vcluster_confirm_homepage() {
 function vcluster_delete() {
   vcluster delete ${VCLUSTER_NAME}
 }
+
+function vcluster_info() {
+  echo "To connect to the virtual cluster:"
+  echo "1. Connect to host cluster via kubectl: ${AGENT_NAME}"
+  echo "2. Connect to virtual cluster: vcluster connect ${VCLUSTER_NAME}"
+  echo "3. Open a separate terminal window and run your kubectl and helm commands."
+}

@@ -21,6 +21,7 @@
     - vcluster_helm_deploy
     - vcluster_helm_rollout_status
     - vcluster_confirm_homepage
+    - vcluster_info
 
 .stop_review_app_template:
   extends: .review_app_common
