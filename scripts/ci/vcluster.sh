@@ -9,23 +9,17 @@ function cluster_connect() {
   fi
 }
 
-function vcluster_name() {
-  echo -n "vcluster-${CI_JOB_NAME}-${CI_COMMIT_REF_SLUG}"
-}
-
 function vcluster_create() {
-  name=$(vcluster_name)
-  vcluster create ${name} \
+  vcluster create ${VCLUSTER_NAME} \
     --upgrade \
-    --namespace=${name} \
+    --namespace=${VCLUSTER_NAME} \
     --kubernetes-version=${VCLUSTER_K8S_VERSION} \
     --connect=false \
     --update-current=false
 }
 
 function vcluster_connect() {
-  name=$(vcluster_name)
-  vcluster connect ${name}
+  vcluster connect ${VCLUSTER_NAME}
 }
 
 function vcluster_deploy() {
@@ -89,6 +83,5 @@ CIVALUES
 }
 
 function vcluster_delete() {
-  name=$(vcluster_name)
-  vcluster delete ${name}
+  vcluster delete ${VCLUSTER_NAME}
 }
