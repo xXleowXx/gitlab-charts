@@ -31,7 +31,7 @@ gitlab:
   toolbox:
     enabled: true
 gitlab-runner:
-  certsSecretName: gitlab-wildcard-tls-chain
+  install: false
 certmanager:
   install: false
 nginx-ingress:
