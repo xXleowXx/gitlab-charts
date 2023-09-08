@@ -22,7 +22,7 @@ function vcluster_run() {
   vcluster connect ${VCLUSTER_NAME} -- $@
 }
 
-function vcluster_deploy() {
+function vcluster_helm_deploy() {
   helm dependency update
 
   vcluster_run helm upgrade --install \
@@ -30,6 +30,18 @@ function vcluster_deploy() {
     --wait --timeout 600s \
     -f ./scripts/ci/vcluster_helm_values.yaml \
     .
+}
+
+function vcluster_helm_rollout_status() {
+  kubectl rollout status deployment -lrelease=gitlab --timeout=60s
+}
+
+function vcluster_confirm_homepage() {
+  vcluster_run nohup kubectl port-forward service/gitlab-nginx-ingress-controller 8080:http &
+
+  curl -IL --fail \
+    http://gitlab.example.com:8080 \
+    --resolve gitlab.example.com:8080:127.0.0.1
 }
 
 function vcluster_delete() {

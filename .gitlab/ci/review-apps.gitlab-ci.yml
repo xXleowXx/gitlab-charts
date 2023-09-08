@@ -18,7 +18,9 @@
     - kubectl version
     - vcluster_create
     - vcluster_run kubectl version
-    - vcluster_deploy
+    - vcluster_helm_deploy
+    - vcluster_helm_rollout_status
+    - vcluster_confirm_homepage
 
 .stop_review_app_template:
   extends: .review_app_common
