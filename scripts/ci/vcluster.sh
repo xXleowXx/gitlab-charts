@@ -10,7 +10,7 @@ function cluster_connect() {
 }
 
 function vcluster_name() {
-  echo -n "vcluster-k8s-${VCLUSTER_K8S_VERSION}-${CI_COMMIT_REF_SLUG}"
+  echo -n "vcluster-${CI_JOB_NAME}-${CI_COMMIT_REF_SLUG}"
 }
 
 function vcluster_create() {
