@@ -25,7 +25,9 @@
 # Note: Auto CI does not work with multiple buildpacks yet
 
 default:
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.7
+  # image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.7
+  # TODO: restore image above once it contains `vcluster`
+  image: registry.gitlab.com/mnielsen/tmp-registry/gitlab-charts-build-base:vcluster
 
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
