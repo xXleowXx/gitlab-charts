@@ -517,6 +517,7 @@ for different persistence classes, currently:
 | `rateLimiting`    | Store rate-limiting usage for RackAttack and Application Limits |
 | `sessions`        | Store user session data                                         |
 | `repositoryCache` | Store repository related data                                   |
+| `workhorse`       | Pub/sub queue backend for Workhorse                             |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -537,59 +538,66 @@ global:
     cache:
       host: cache.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: cache-secret
         key: cache-password
     sharedState:
       host: shared.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: shared-secret
         key: shared-password
     queues:
       host: queues.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: queues-secret
         key: queues-password
     actioncable:
       host: cable.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: cable-secret
         key: cable-password
     traceChunks:
       host: traceChunks.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: traceChunks-secret
         key: traceChunks-password
     rateLimiting:
       host: rateLimiting.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: rateLimiting-secret
         key: rateLimiting-password
     sessions:
       host: sessions.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: sessions-secret
         key: sessions-password
     repositoryCache:
       host: repositoryCache.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: repositoryCache-secret
         key: repositoryCache-password
+    workhorse:
+      host: workhorse.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: workhorse-secret
+        key: workhorse-password
 ```
 
 The following table describes the attributes for each dictionary of the
@@ -599,9 +607,9 @@ Redis instances.
 |:------------------ |:-------:|:------- |:----------- |
 | `.host`            | String  |         | The hostname of the Redis server with the database to use. |
 | `.port`            | Integer | `6379`  | The port on which to connect to the Redis server. |
-| `.auth.enabled`| Boolean    | true    | The `auth.enabled` provides a toggle for using a password with the Redis instance. |
-| `.auth.key`    | String  |         | The `auth.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
-| `.auth.secret` | String  |         | The `auth.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
+| `.password.enabled`| Boolean | true    | The `password.enabled` provides a toggle for using a password with the Redis instance. |
+| `.password.key`    | String  |         | The `password.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
+| `.password.secret` | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
 
 The primary Redis definition is required as there are additional persistence
 classes that have not been separated.
@@ -1966,7 +1974,7 @@ gitlab:
     workerTimeout: 60
     extraEnv:
       GITLAB_RAILS_RACK_TIMEOUT: "60"
-      GITLAB_RAILS_WAIT_TIMEOUT: "90" 
+      GITLAB_RAILS_WAIT_TIMEOUT: "90"
 ```
 
 ## Custom Certificate Authorities
