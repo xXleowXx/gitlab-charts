@@ -9,4 +9,4 @@ warn("Most of the time, all merge requests should target `master`. Otherwise, pl
 has_qa_verified_label = helper.mr_labels.find { |label| label.start_with?('QA:verified') }
 is_docs_only_branch = helper.mr_source_branch =~ /(^docs[\/-].*|.*-docs$)/
 
-warn("Please check the QA job and compare with builds on master. If no new failures are reported in QA job, add 'QA:verified' label.") unless has_qa_verified_label || is_docs_only_branch
+warn("Please check the QA job and compare with builds on `master`. If no new failures are reported in QA job, add ~QA:verified label.") unless has_qa_verified_label || is_docs_only_branch
