@@ -1087,4 +1087,4 @@ e2e-test-report:
     ALLURE_RESULTS_GLOB: "gitlab-qa-run-*/**/allure-results"
     ALLURE_JOB_NAME: $QA_RUN_TYPE
   rules:
-    - when: always
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
