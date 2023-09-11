@@ -62,6 +62,7 @@ variables:
         backups:
           cron:
             enabled: true
+  GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
 
 stages:
   - prepare
@@ -74,6 +75,7 @@ stages:
   - specs
   - qa-manual
   - qa
+  - qa-report
   - staging-release
   - package
   - release-package
@@ -89,6 +91,8 @@ include:
   - project: 'gitlab-org/quality/pipeline-common'
     file:
       - '/ci/danger-review.yml'
+      - /ci/base.gitlab-ci.yml
+      - /ci/allure-report.yml
     rules:
       - if: $CI_SERVER_HOST == "gitlab.com"
 
@@ -751,6 +755,7 @@ production_specs_eks:
   services:
   - docker:dind
   variables:
+    QA_GENERATE_ALLURE_REPORT: "true"
     DOCKER_HOST: tcp://docker:2375
     QA_ARTIFACTS_DIR: $CI_PROJECT_DIR
     QA_CAN_TEST_PRAEFECT: "false"
@@ -1064,3 +1069,22 @@ issue-bot:
       when: on_failure
     - if: '$PIPELINE_TYPE =~ /RELEASE_PIPELINE$/'
       when: on_failure
+
+# QA job to post allure report snapshot as a comment in the MR
+.e2e-test-report:
+  extends:
+    - .generate-allure-report-base
+  variables:
+    GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
+    ALLURE_PROJECT_PATH: $CI_PROJECT_PATH
+    ALLURE_MERGE_REQUEST_IID: $CI_MERGE_REQUEST_IID
+
+e2e-test-report:
+  extends:
+    - .e2e-test-report
+  stage: qa-report
+  variables:
+    ALLURE_RESULTS_GLOB: "gitlab-qa-run-*/**/allure-results"
+    ALLURE_JOB_NAME: $QA_RUN_TYPE
+  rules:
+    - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
