@@ -1,5 +1,3 @@
-<!-- After merging changes to this template, update the `Default description template for merge requests` -->
-<!-- found under Settings - General Merge Requests -->
 ## What does this MR do?
 
 <!-- Briefly describe what this MR is about. -->
@@ -30,3 +28,5 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] Equivalent MR/issue for [omnibus-gitlab](https://gitlab.com/gitlab-org/omnibus-gitlab) opened
 - [ ] Equivalent MR/issue for [Gitlab Operator project](https://gitlab.com/gitlab-org/cloud-native/gitlab-operator) opened (see [Operator documentation on impact of Charts changes](https://docs.gitlab.com/operator/developer/charts_dependency))
 - [ ] Validate potential values for new configuration settings. Formats such as integer `10`, duration `10s`, URI `scheme://user:passwd@host:port` may require quotation or other special handling when rendered in a template and written to a configuration file.
+
+<!-- template sourced from https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/.gitlab/merge_request_templates/Default.md -->
