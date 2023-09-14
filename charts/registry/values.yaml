@@ -395,6 +395,14 @@ redis:
     password:
       enabled: false
 
+# The online garbage collector is only going to be enabled if the metadata
+# database is enabled. In general, we don't want to default to disabled, since
+# online garbage collection is designed to run continuously and should only be
+# disabled for compelling debugging and troubleshooting reasons.
+# https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc
+gc:
+  disabled: false
+
 ## Configure TLS on the instance itself
 ## WARNING: All clients must trust the certificate used for service.
 tls:
