@@ -891,7 +891,9 @@ profiling:
 The `database` property is optional and enables the [metadata database](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database).
 
 NOTE:
-The metadata database is an experimental feature and _must not_ be used in production.
+The metadata database is a beta feature from version 16.4 and later. Please
+review the [feedback issue](https://gitlab.com/gitlab-org/gitlab/-/issues/423459)
+and associated documentation before enabling this feature.
 
 NOTE:
 This feature requires PostgreSQL 12 or newer.
@@ -996,8 +998,10 @@ there will be some variation in how you connect.
 The `gc` property provides [online garbage collection](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc)
 options.
 
-WARNING:
-This is an experimental feature and _must not_ be used in production.
+NOTE:
+The online garbage collection is a beta feature from version 16.4 and later. Please
+review the [feedback issue](https://gitlab.com/gitlab-org/gitlab/-/issues/423459)
+and associated documentation before enabling this feature.
 
 Online garbage collection requires the [metadata database](#database) to be enabled. You must use online garbage collection when using the database, though
 you can temporarily disable online garbage collection for maintenance and debugging.
@@ -1020,8 +1024,10 @@ gc:
 
 ### Redis cache
 
-WARNING:
-This is an experimental feature and _must not_ be used in production.
+NOTE:
+The Redis cache is a beta feature from version 16.4 and later. Please
+review the [feedback issue](https://gitlab.com/gitlab-org/gitlab/-/issues/423459)
+and associated documentation before enabling this feature.
 
 The `redis.cache` property is optional and provides options related to the
 [Redis cache](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#cache-1).
