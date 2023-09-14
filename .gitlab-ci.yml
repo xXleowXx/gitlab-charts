@@ -769,7 +769,6 @@ production_specs_eks:
     - |
       SIGNUP_DISABLED=true \
       QA_DEBUG=true \
-      GITHUB_ACCESS_TOKEN=$QA_GITHUB_ACCESS_TOKEN \
       GITLAB_USERNAME=root \
       GITLAB_PASSWORD=$ROOT_PASSWORD \
       GITLAB_ADMIN_USERNAME=root \
