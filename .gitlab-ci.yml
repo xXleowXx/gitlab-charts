@@ -239,33 +239,13 @@ lint_package:
   extends: .kubeconform
   variables:
     KUBE_VERSION: "1.26.8"
-    HELM_SETTINGS: |
-      global:
-        ingress:
-          apiVersion: networking.k8s.io/v1
-        pdb:
-          apiVersion: policy/v1
-        hpa:
-          apiVersion: autoscaling/v2
-        batch:
-          cronJob:
-            apiVersion: batch/v1
+    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
 
 "Validate 1.27.5":
   extends: .kubeconform
   variables:
     KUBE_VERSION: "1.27.5"
-    HELM_SETTINGS: |
-      global:
-        ingress:
-          apiVersion: networking.k8s.io/v1
-        pdb:
-          apiVersion: policy/v1
-        hpa:
-          apiVersion: autoscaling/v2
-        batch:
-          cronJob:
-            apiVersion: batch/v1
+    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
 
 .review_template:
   stage: review
