@@ -1571,6 +1571,7 @@ omniauth:
   providers: []
   # - secret: gitlab-google-oauth2
   #   key: provider
+  # - name: group_saml
 ```
 
 | Name                      | Type    | Default     | Description |
@@ -1600,6 +1601,13 @@ This property has two sub-keys: `secret` and `key`:
 - `secret`: *(required)* The name of a Kubernetes `Secret` containing the provider block.
 - `key`: *(optional)* The name of the key in the `Secret` containing the provider block.
   Defaults to `provider`
+
+Alternatively, if the provider has no other configuration than its name, you may
+use a second form with only a 'name' attribute, and optionally a `label` or
+`icon` attribute. The eligible providers are:
+
+- [`group_saml`](https://docs.gitlab.com/ee/integration/saml.html#configure-group-saml-sso-on-a-self-managed-instance)
+- [`kerberos`](https://docs.gitlab.com/ee/integration/saml.html#configure-group-saml-sso-on-a-self-managed-instance)
 
 The `Secret` for these entries contains YAML or JSON formatted blocks, as described
 in [OmniAuth Providers](https://docs.gitlab.com/ee/integration/omniauth.html). To
@@ -1642,12 +1650,6 @@ args:
   tenant_id: '<TENANT_ID>'
 ```
 
-[Group SAML](https://docs.gitlab.com/ee/integration/saml.html#configuring-group-saml-on-a-self-managed-gitlab-instance) configuration example:
-
-```yaml
-name: group_saml
-```
-
 This content can be saved as `provider.yaml`, and then a secret created from it:
 
 ```shell
@@ -1664,6 +1666,14 @@ omniauth:
     - secret: azure_activedirectory_v2
     - secret: gitlab-azure-oauth2
     - secret: gitlab-cas3
+```
+
+[Group SAML](https://docs.gitlab.com/ee/integration/saml.html#configuring-group-saml-on-a-self-managed-gitlab-instance) configuration example:
+
+```yaml
+omniauth:
+  providers:
+    - name: group_saml
 ```
 
 Example configuration `--set` items, when using the global chart:
