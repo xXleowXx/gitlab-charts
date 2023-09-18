@@ -602,11 +602,6 @@ review-docs-cleanup:
     DOCKER_HOST: tcp://docker:2375
     GITLAB_PASSWORD: $ROOT_PASSWORD
     S3_CONFIG_PATH: /etc/gitlab/minio
-    RUBYGEMS_VERSION: "3.4"
-    GO_VERSION: "1.19"
-    RUST_VERSION: "1.65"
-    PG_VERSION: "13"
-    CHROME_VERSION: "109"
   extends: .source_autodevops
   script:
     - ./scripts/ci/install_spec_dependencies
