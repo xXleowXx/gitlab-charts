@@ -183,14 +183,14 @@ lint_package:
     - helm dependency update
     - echo "$HELM_DEFAULT_SETTINGS" | tee ./template_settings.yaml
     - echo "$HELM_SETTINGS" | tee -a ./template_settings.yaml
+    - helm template . -f ./template_settings.yaml > manifests.yaml
     - >
-      helm kubeconform --strict --summary
-      -f ./template_settings.yaml
-      --kubernetes-version $KUBE_VERSION
-      --schema-location default
-      --schema-location "$KUBE_CRD_SCHEMA_URL"
-      --output json
-      .
+      kubeconform -strict -summary
+      -kubernetes-version $KUBE_VERSION
+      -schema-location default
+      -schema-location "$KUBE_CRD_SCHEMA_URL"
+      -output json
+      ./manifests.yaml
   rules:
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_BRANCH_PIPELINE$/'
