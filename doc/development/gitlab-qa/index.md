@@ -35,9 +35,23 @@ or:
 export GITLAB_VERSION=nightly
 ```
 
+### Network access
+
+To run GitLab QA, you will need sustained network access to the deployed instance.
+Ensure this by visiting the deployment from any browser, or via cURL.
+
+## Running GitLab QA in pipeline
+
+To run GitLab QA tests against the deployed instance you can use [GitLab QA Executor](https://gitlab.com/gitlab-org/quality/gitlab-qa-executor). This project contains CI configuration to run GitLab QA against self-managed GitLab environments with parallelization that automates the following manual steps for running GitLab QA from a local machine.
+
+## Running GitLab QA from local machine
+
+Follow below instructions to run GitLab QA against the deployed instance
+from your local machine.
+
 ### Install the `gitlab-qa` gem
 
-Ensure you have a functional version of Ruby, preferably of the `2.5` branch.
+Ensure you have a functional version of Ruby, preferably of the `3.0` branch.
 Install the `gitlab-qa` gem:
 
 ```shell
@@ -56,11 +70,6 @@ testing, in conjunction with the nightly builds of the CNG containers:
 ```shell
 docker pull gitlab/gitlab-ee-qa:$GITLAB_VERSION
 ```
-
-### Network access
-
-To run GitLab QA, you will need sustained network access to the deployed instance.
-Ensure this by visiting the deployment from any browser, or via cURL.
 
 ### Configuration
 
