@@ -14,12 +14,18 @@
 .review_app_template:
   extends: .review_app_common
   script:
+    - echo -e "\e[0Ksection_start:`date +%s`:connect_vcluster\r\e[0KConnecting to review vcluster"
     - cluster_connect
     - kubectl version
     - vcluster_create
     - vcluster_run kubectl version
+    - echo -e "\e[0Ksection_end:`date +%s`:connect_vcluster\r\e[0K"
+    - echo -e "\e[0Ksection_start:`date +%s`:deploy_app\r\e[0KDeploy GitLab to vcluster"
     - vcluster_helm_deploy
+    - echo -e "\e[0Ksection_end:`date +%s`:deploy_app\r\e[0K"
+    - echo -e "\e[0Ksection_start:`date +%s`:wait_rollout\r\e[0KWait for rollout"
     - vcluster_helm_rollout_status
+    - echo -e "\e[0Ksection_end:`date +%s`:wait_rollout\r\e[0K"
     - vcluster_info
 
 .stop_review_app_template:
