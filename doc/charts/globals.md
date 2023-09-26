@@ -393,8 +393,17 @@ global:
 
 > The `gitlab:db:decomposition:connection_status` Rake task was [introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/111927) in GitLab 15.11.
 
-In GitLab 16.0, GitLab defaults to using two database connections
-that point to the same PostgreSQL database.
+In GitLab 16.0, GitLab defaults to using two database connections that point to the same PostgreSQL database. 
+
+To ensure that the `ci` database does not execute any database management tasks such as schema management, schema migration, seeds, etc., please make sure that the `database_tasks` setting is set to `false`. By default, this setting is configured as `true`.
+
+```yaml
+global:
+  psql:
+    ci:
+      enabled: true
+      databaseTasks: false
+```
 
 If you wish to switch back to single database connection, set the `ci.enabled` key to `false`:
 
