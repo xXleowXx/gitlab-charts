@@ -238,17 +238,18 @@ lint_package:
     HOST_SUFFIX: "$CI_ENVIRONMENT_SLUG"
     DOMAIN: "-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"
     VARIABLES_FILE: "variables/${CI_JOB_NAME}"
-  extends: .source_autodevops
+  extends:
+    - .run_script
   script:
-    - mkdir -p $(dirname "${VARIABLES_FILE}")
-    - set_context
-    - check_kube_domain
-    - kubectl version
-    - ensure_namespace
-    - create_secret
-    - deploy
-    - wait_for_deploy
-    - restart_toolbox
+  #   - mkdir -p $(dirname "${VARIABLES_FILE}")
+  #   - set_context
+  #   - check_kube_domain
+  #   - kubectl version
+  #   - ensure_namespace
+  #   - create_secret
+  #   - deploy
+  #   - wait_for_deploy
+  #   - restart_toolbox
     - echo "export QA_ENVIRONMENT_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
     - echo "export GITLAB_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"         >> "${VARIABLES_FILE}"
@@ -357,6 +358,26 @@ stop_review_eks:
 # To make this a manual process, either because you're enabling `staging`
 # or `canary` deploys, or you simply want more control over when you deploy
 # to production, uncomment the `when: manual` line in the `production` job.
+
+.run_script:
+  extends: .source_autodevops
+  script:
+    - mkdir -p $(dirname "${VARIABLES_FILE}")
+    - set_context
+    - check_kube_domain
+    - >
+      if [ "$CI_JOB_NAME" == ".review_template" ]; then
+        kubectl version
+      fi
+    - ensure_namespace
+    - create_secret
+    - deploy
+    - wait_for_deploy
+    - >
+      if [ "$CI_JOB_NAME" == ".stable" ]; then
+        check_domain_ip
+      fi
+    - restart_toolbox
 
 .stable:
   stage: stable
