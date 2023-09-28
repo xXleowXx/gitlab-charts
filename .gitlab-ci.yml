@@ -374,6 +374,8 @@ stop_review_eks:
     - echo "export QA_ENVIRONMENT_URL=gitlab.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
     - echo "export S3_ENDPOINT=https://minio.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
+    - kubectl wait pods -n $NAMESPACE -l app=toolbox,release=$RELEASE_NAME  --for condition=Ready --timeout=60s
+    - echo "export QA_GITLAB_REVISION=`kubectl exec -i $(kubectl get pods -lrelease=$RELEASE_NAME,app=toolbox -o custom-columns=":metadata.name") -c toolbox -- cat /srv/gitlab/REVISION`" >> "${VARIABLES_FILE}"
   artifacts:
     paths:
     - variables
