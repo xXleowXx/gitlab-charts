@@ -293,6 +293,12 @@ global:
       # loose_foreign_keys_cleanup_worker_cron:
       #   cron: "*/5 * * * *"
 
+    ## https://docs.gitlab.com/charts/charts/globals#cron-jobs-related-settings
+    ee_cron_jobs: {}
+      # click_house_ci_finished_builds_sync_worker:
+      #   cron: "*/3 * * * *"
+      #   args: [0, 1]
+
     ## https://docs.gitlab.com/charts/charts/globals#content-security-policy
     contentSecurityPolicy:
       enabled: false
@@ -543,7 +549,7 @@ global:
     ## Geo Secondary only
     # nodeName allows multiple instances behind a load balancer.
     nodeName: # defaults to `gitlab.gitlab.host`
-    # ingressClass: 
+    # ingressClass:
     # PostgreSQL connection details only needed for `secondary`
     psql:
       password: {}
