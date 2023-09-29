@@ -444,11 +444,14 @@ Use the `Secret` name, not the _actual password_ when configuring the Helm prope
 
 ### IMAP password for incoming emails
 
-To let GitLab have access to [incoming emails](https://docs.gitlab.com/ee/administration/incoming_email.html)
-store the password of the IMAP account in a Kubernetes secret.
+GitLab uses authentication strings such as app passwords, tokens, or IMAP
+passwords to access incoming emails.
+
+[Find your email provider in the GitLab incoming email documentation](https://docs.gitlab.com/ee/administration/incoming_email.html)
+and set its required authentication string as a Kubernetes secret.
 
 ```shell
-kubectl create secret generic incoming-email-password --from-literal=password=yourpasswordhere
+kubectl create secret generic incoming-email-password --from-literal="password=auth_string_for_your_provider_here"
 ```
 
 Then use `--set global.appConfig.incomingEmail.password.secret=incoming-email-password`
@@ -459,11 +462,15 @@ Use the `Secret` name, not the _actual password_ when configuring the Helm prope
 
 ### IMAP password for Service Desk emails
 
-To let GitLab have access to [service_desk emails](https://docs.gitlab.com/ee/user/project/service_desk.html#using-custom-email-address)
-store the password of the IMAP account in a Kubernetes secret.
+GitLab uses authentication strings such as app passwords, tokens, or IMAP
+passwords to access
+[Service Desk emails](https://docs.gitlab.com/ee/user/project/service_desk/configure.html#custom-email-address).
+
+[Find your email provider in the GitLab incoming email documentation](https://docs.gitlab.com/ee/administration/incoming_email.html)
+and set its required authentication string as a Kubernetes secret.
 
 ```shell
-kubectl create secret generic service-desk-email-password --from-literal=password=yourpasswordhere
+kubectl create secret generic service-desk-email-password --from-literal="password=auth_string_for_your_provider_here"
 ```
 
 Then use `--set global.appConfig.serviceDeskEmail.password.secret=service-desk-email-password`
