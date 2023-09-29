@@ -352,7 +352,7 @@ To rotate the PostgreSQL secret:
     # Inside the pod, update the passwords in the database
     sed -i 's/^\(local .*\)md5$/\1trust/' /opt/bitnami/postgresql/conf/pg_hba.conf
     pg_ctl reload ; sleep 1
-    echo "ALTER USER postgres WITH PASSWORD '$(cat $POSTGRES_POSTGRES_PASSWORD_FILE)' ; ALTER USER gitlab WITH PASSWORD '$(cat $POSTGRES_PASSWORD_FILE)'" | psql -U postgres -d gitlabhq_production -f -
+    echo "ALTER USER postgres WITH PASSWORD '$(echo $POSTGRES_POSTGRES_PASSWORD)' ; ALTER USER gitlab WITH PASSWORD '$(echo POSTGRES_PASSWORD)'" | psql -U postgres -d gitlabhq_production -f -
     sed -i 's/^\(local .*\)trust$/\1md5/' /opt/bitnami/postgresql/conf/pg_hba.conf
     pg_ctl reload
     ```
