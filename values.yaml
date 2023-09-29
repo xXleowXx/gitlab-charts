@@ -104,6 +104,10 @@ global:
     cronJob:
       apiVersion: ""
 
+  # Override enablement of ServiceMonitor and PodMonitor objects.
+  monitoring:
+    enabled: false
+
   gitlab:
     ## Enterprise license for this GitLab installation
     ## Secret created according to https://docs.gitlab.com/charts/installation/secrets#initial-enterprise-license
