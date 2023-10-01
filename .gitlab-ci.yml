@@ -55,6 +55,8 @@ variables:
   # STRICT_VERSIONS is used in RSpecs to ensure exact version match for tools like "helm" and "kubectl"
   STRICT_VERSIONS: "true"
   KUBE_CRD_SCHEMA_URL: "https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/v3/apis__apiextensions.k8s.io__v1_openapi.json"
+  REVIEW_JOB_REGEX_PATTERN: "review_(gke[0-9]{3}|eks)"
+  STABLE_JOB_REGEX_PATTERN: "stable_(gke[0-9]{3}|eks)"
   HELM_DEFAULT_SETTINGS: |
     certmanager-issuer:
       email: support@gitlab.com
@@ -518,6 +520,7 @@ stop_review_eks:
 # To make this a manual process, either because you're enabling `staging`
 # or `canary` deploys, or you simply want more control over when you deploy
 # to production, uncomment the `when: manual` line in the `production` job.
+
 
 .stable:
   stage: stable
