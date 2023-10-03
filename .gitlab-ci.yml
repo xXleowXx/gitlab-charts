@@ -349,8 +349,6 @@ stop_review_eks:
   variables:
     JOB_REGEX_PATTERN
   script:
-    - echo $CI_ENVIRONMENT_SLUG
-    - echo $CI_JOB_NAME
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - set_context
     - check_kube_domain
