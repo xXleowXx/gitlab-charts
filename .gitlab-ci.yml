@@ -62,6 +62,7 @@ variables:
         backups:
           cron:
             enabled: true
+  GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
 
 stages:
   - prepare
@@ -74,6 +75,7 @@ stages:
   - specs
   - qa-manual
   - qa
+  - qa-report
   - staging-release
   - package
   - release-package
@@ -89,8 +91,12 @@ include:
   - project: 'gitlab-org/quality/pipeline-common'
     file:
       - '/ci/danger-review.yml'
+      - '/ci/allure-report.yml'
     rules:
-      - if: $CI_SERVER_HOST == "gitlab.com"
+      - if: '$CI_SERVER_HOST == "gitlab.com"'
+  - local: '/gitlab-ci-config/gitlab-com.yml'
+    rules:
+      - if: '$CI_SERVER_HOST == "gitlab.com"'
 
 dependency_scanning:
   needs: []
@@ -751,6 +757,7 @@ production_specs_eks:
   services:
   - docker:dind
   variables:
+    QA_GENERATE_ALLURE_REPORT: "true"
     DOCKER_HOST: tcp://docker:2375
     QA_ARTIFACTS_DIR: $CI_PROJECT_DIR
     QA_CAN_TEST_PRAEFECT: "false"
@@ -1063,3 +1070,4 @@ issue-bot:
       when: on_failure
     - if: '$PIPELINE_TYPE =~ /RELEASE_PIPELINE$/'
       when: on_failure
+
