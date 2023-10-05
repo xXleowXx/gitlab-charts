@@ -58,10 +58,10 @@ documentation.
   - [MinIO secret](#minio-secret)
   - [Registry HTTP secret](#registry-http-secret)
   - [Registry notification secret](#registry-notification-secret)
-  - [Grafana password](#grafana-password)
   - [GitLab Pages secret](#gitlab-pages-secret)
   - [GitLab incoming email auth token](#gitlab-incoming-email-auth-token)
   - [GitLab Service Desk email auth token](#gitlab-service-desk-email-auth-token)
+  - [Zoekt basic auth password](#zoekt-basic-auth-password)
 - [External Services](#external-services)
   - [OmniAuth](#omniauth)
   - [LDAP Password](#ldap-password)
@@ -140,6 +140,8 @@ kubectl create secret generic <name>-gitlab-shell-host-keys --from-file hostKeys
 
 This secret is referenced by the `global.shell.hostKeys.secret` setting.
 
+If this secret is rotated, all SSH clients will see `hostname mismatch` errors.
+
 ### Initial Enterprise license
 
 WARNING:
@@ -180,6 +182,8 @@ kubectl create secret generic <name>-redis-secret --from-literal=secret=$(head -
 If deploying with an already existing Redis cluster, please use the password
 for accessing the Redis cluster that has been base64 encoded instead of a
 randomly generated one.
+
+This secret is referenced by the `global.redis.auth.secret` setting.
 
 ### GitLab Shell secret
 
@@ -236,6 +240,9 @@ kubectl create secret generic <name>-rails-secret --from-file=secrets.yml
 
 This secret is referenced by the `global.railsSecrets.secret` setting.
 
+It is **not recommended**  to rotate this secret as it contains the database encryption keys. If the secret is
+rotated, the result will be the same behavior exhibited [when the secrets file is lost](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#when-the-secrets-file-is-lost).
+
 NOTE:
 The `encrypted_settings_key_base` was added in GitLab `13.7`, and will be required for GitLab `14.0`.
 
@@ -258,6 +265,8 @@ Replace `<name>` with the name of the release.
 kubectl create secret generic <name>-gitlab-runner-secret --from-literal=runner-registration-token=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
 ```
 
+This secret is referenced by the `gitlab-runner.runners.secret` setting.
+
 ### GitLab KAS secret
 
 GitLab Rails requires that a secret for KAS is present, even if one deploys this chart without installing the KAS sub-chart. Still, one can create this secret manually by following the below procedure or leave it to the chart to auto-generate the secret.
@@ -268,6 +277,8 @@ Replace `<name>` with the name of the release.
 kubectl create secret generic <name>-gitlab-kas-secret --from-literal=kas_shared_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
 ```
 
+This secret is referenced by the `global.appConfig.gitlab_kas.key` setting.
+
 ### GitLab KAS API secret
 
 You can leave it to the chart to auto-generate the secret, or you can create this secret manually (replace `<name>` with the name of the release):
@@ -276,7 +287,13 @@ You can leave it to the chart to auto-generate the secret, or you can create thi
 kubectl create secret generic <name>-kas-private-api --from-literal=kas_private_api_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
 ```
 
+This secret is referenced by the `gitlab.kas.privateApi.secret` setting.
+
 ### GitLab Suggested Reviewers secret
+
+NOTE:
+The Suggested Reviewers secret is created automatically and only used on GitLab SaaS.
+This secret is not needed on self-managed GitLab instances.
 
 GitLab Rails requires that a secret for Suggested Reviewers is present. You can
 leave it to the chart to auto-generate the secret, or you can create this secret
@@ -285,6 +302,8 @@ manually (replace `<name>` with the name of the release):
 ```shell
 kubectl create secret generic <name>-gitlab-suggested-reviewers --from-literal=suggested_reviewers_secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
 ```
+
+This secret is referenced by the `global.appConfig.suggested_reviewers.secret` setting.
 
 ### MinIO secret
 
@@ -308,14 +327,39 @@ kubectl create secret generic <name>-postgresql-password \
     --from-literal=postgresql-postgres-password=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
 ```
 
-### Grafana password
+This secret is referenced by the `global.psql.password.secret` setting.
 
-If configuring [Grafana integration](../charts/globals.md#configure-grafana-integration), generate a random 64 character alpha-numeric password.
-Replace `<name>` with the name of the release.
+#### Changing the PostgreSQL password for the bundled PostgreSQL subchart
 
-```shell
-kubectl create secret generic <name>-grafana-initial-password --from-literal=password=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64)
-```
+WARNING:
+The default Helm chart configuration is **not intended for production**, which includes the bundled PostgreSQL
+subchart.
+
+The bundled PostgreSQL subchart only configures the database with the passwords from the secret when the database is initially created.
+Additional steps need to be taken to change the passwords in an existing database.
+
+Please note this operation will be disruptive to users while the change is being made.
+
+To rotate the PostgreSQL secret:
+
+1. Complete the general [rotating secrets](#rotating-secrets) instructions for the PostgreSQL secret.
+1. Exec into the PostgreSQL pod and update the passwords in the database:
+
+    ```shell
+    # Exec into the PostgreSQL pod
+    kubectl exec -it <name>-postgresql-0 -- sh
+
+    # Inside the pod, update the passwords in the database
+    sed -i 's/^\(local .*\)md5$/\1trust/' /opt/bitnami/postgresql/conf/pg_hba.conf
+    pg_ctl reload ; sleep 1
+    echo "ALTER USER postgres WITH PASSWORD '$(echo $POSTGRES_POSTGRES_PASSWORD)' ; ALTER USER gitlab WITH PASSWORD '$(echo POSTGRES_PASSWORD)'" | psql -U postgres -d gitlabhq_production -f -
+    sed -i 's/^\(local .*\)trust$/\1md5/' /opt/bitnami/postgresql/conf/pg_hba.conf
+    pg_ctl reload
+    ```
+
+1. Delete the `gitlab-exporter`, `postgresql`, `toolbox`, `sidekiq` and `webservice` pods using the `kubectl delete pod`
+command so the new pods are loaded with the new secret and allow them to connect to the
+database.
 
 ### GitLab Pages secret
 
@@ -337,6 +381,8 @@ Replace `<name>` with the name of the release.
 kubectl create secret generic <name>-registry-httpsecret --from-literal=secret=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 64 | base64)
 ```
 
+This secret is referenced by the `global.registry.httpSecret.secret` setting.
+
 ### Registry notification secret
 
 Generate a random 32 character alpha-numeric key shared by all registry pods, and the GitLab webservice pods.
@@ -345,6 +391,8 @@ Replace `<name>` with the name of the release.
 ```shell
 kubectl create secret generic <name>-registry-notification --from-literal=secret=[\"$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32)\"]
 ```
+
+This secret is referenced by the `global.registry.notificationSecret.secret` setting.
 
 ### Praefect DB password
 
@@ -396,11 +444,14 @@ Use the `Secret` name, not the _actual password_ when configuring the Helm prope
 
 ### IMAP password for incoming emails
 
-To let GitLab have access to [incoming emails](https://docs.gitlab.com/ee/administration/incoming_email.html)
-store the password of the IMAP account in a Kubernetes secret.
+GitLab uses authentication strings such as app passwords, tokens, or IMAP
+passwords to access incoming emails.
+
+[Find your email provider in the GitLab incoming email documentation](https://docs.gitlab.com/ee/administration/incoming_email.html)
+and set its required authentication string as a Kubernetes secret.
 
 ```shell
-kubectl create secret generic incoming-email-password --from-literal=password=yourpasswordhere
+kubectl create secret generic incoming-email-password --from-literal="password=auth_string_for_your_provider_here"
 ```
 
 Then use `--set global.appConfig.incomingEmail.password.secret=incoming-email-password`
@@ -411,11 +462,15 @@ Use the `Secret` name, not the _actual password_ when configuring the Helm prope
 
 ### IMAP password for Service Desk emails
 
-To let GitLab have access to [service_desk emails](https://docs.gitlab.com/ee/user/project/service_desk.html#using-custom-email-address)
-store the password of the IMAP account in a Kubernetes secret.
+GitLab uses authentication strings such as app passwords, tokens, or IMAP
+passwords to access
+[Service Desk emails](https://docs.gitlab.com/ee/user/project/service_desk/configure.html#custom-email-address).
+
+[Find your email provider in the GitLab incoming email documentation](https://docs.gitlab.com/ee/administration/incoming_email.html)
+and set its required authentication string as a Kubernetes secret.
 
 ```shell
-kubectl create secret generic service-desk-email-password --from-literal=password=yourpasswordhere
+kubectl create secret generic service-desk-email-password --from-literal="password=auth_string_for_your_provider_here"
 ```
 
 Then use `--set global.appConfig.serviceDeskEmail.password.secret=service-desk-email-password`
@@ -449,6 +504,17 @@ kubectl create secret generic <name>-service-desk-email-auth-token --from-litera
 ```
 
 This secret is referenced by the `global.serviceDeskEmail.authToken` setting.
+
+### Zoekt basic auth password
+
+You can leave it to the chart to auto-generate the secret, or you can create this secret manually (replace `<name>` with the name of the release):
+
+```shell
+password=$(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 32 | base64)
+kubectl create secret generic <name>-zoekt-basicauth --from-literal=gitlab_username=gitlab --from-literal=gitlab_password="$password"
+```
+
+This secret is referenced by the `gitlab.zoekt.gateway.basicAuth.secretName` setting.
 
 ### Microsoft Graph client secret for incoming emails
 
@@ -530,11 +596,11 @@ The key name inside the secret where the certificate is stored MUST BE
 
 ### OAuth integration
 
-For configuring OAuth integration of various services like GitLab Pages and
-Grafana with GitLab, secrets containing OAuth credentials are required. The
-secret should contain an App ID (by default, stored under the `appid` key),
-and an App Secret (by default, stored under the `appsecret` key), both of which are
-recommended to be alphanumeric strings, at least 64 characters long.
+For configuring OAuth integration of various services like GitLab Pages, secrets
+containing OAuth credentials are required. The secret should contain an App ID
+(by default, stored under the `appid` key), and an App Secret (by default,
+stored under the `appsecret` key), both of which are recommended to be
+alphanumeric strings, at least 64 characters long.
 
 ```shell
 kubectl create secret generic oauth-gitlab-pages-secret --from-literal=appid=<app id> --from-literal=appsecret=<app secret>
@@ -548,3 +614,18 @@ specified using `global.oauth.<service name>.appIdKey` and
 ## Next steps
 
 Once all secrets have been generated and stored, you can proceed [deploying GitLab](deployment.md).
+
+## Rotating secrets
+
+The secrets can be rotated if required for security purposes.
+
+1. [Back up your current secrets](../backup-restore/backup.md#back-up-the-secrets).
+1. For your convenience, create new secrets that are suffixed with `-v2` (for example `gitlab-shell-host-keys-v2`)
+   by following the [manual secret creation](#manual-secret-creation-optional) steps for each secret you wish to rotate.
+1. Update the secret keys in your `values.yaml` file to point to the new secret names. Most secret
+   names are documented under each respective secret in the [manual secret creation](#manual-secret-creation-optional)
+   section.
+1. Upgrade the GitLab Chart release with the updated `values.yaml` file.
+1. If you are rotating the PostgreSQL secret, there are [additional steps to complete the rotation](#changing-the-postgresql-password-for-the-bundled-postgresql-subchart).
+1. Confirm that GitLab is working as expected. If it is, it should be safe to delete the
+   old secrets.

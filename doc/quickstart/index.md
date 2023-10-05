@@ -36,12 +36,13 @@ issue certificates.
 
 A cluster with a total of at least eight virtual CPUs and 30GB of RAM is recommended.
 
-This guide is not intended to cover how to create or obtain a Kubernetes cluster.
-We'll instead refer to the cloud providers' own instructions:
+You can either refer to your cloud providers' instructions on how to create a Kubernetes cluster,
+or use the GitLab-provided scripts to [automate the cluster creation](../installation/cloud/index.md).
 
-- [Google GKE cluster creation guide](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-zonal-cluster).
-- [Amazon AWS Getting started with Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html).
-  Use EC2 managed nodes for the EKS cluster, and not Fargate. Fargate [has a number of limitations](https://docs.aws.amazon.com/en_us/eks/latest/userguide/fargate.html) and is not supported for use with the GitLab Helm chart.
+WARNING:
+Kubernetes nodes must use the x86-64 architecture.
+Support for multiple architectures, including AArch64/ARM64, is under active development.
+See [issue 2899](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2899) for more information.
 
 ### Install kubectl
 
@@ -55,7 +56,7 @@ before you can interact with the cluster from the command line.
 
 ### Install Helm
 
-For this guide, we use the latest release of Helm v3 (v3.3.1 or later).
+For this guide, we use the latest release of Helm v3 (v3.5.2 or later).
 To install Helm, see the [Helm installation documentation](https://helm.sh/docs/intro/install/).
 
 ## Add the GitLab Helm repository
@@ -118,7 +119,7 @@ simplicity we recommend a single "wildcard" record:
 - In Google Cloud DNS, create an `A` record with the name `*`. We also
   suggest setting the TTL to `1` minute instead of `5` minutes.
 - On AWS EKS, the address will be a URL rather than an IP address.
-  [Create a Route 53 alias record](https://aws.amazon.com/premiumsupport/knowledge-center/route-53-create-alias-records/)
+  [Create a Route 53 alias record](https://repost.aws/knowledge-center/route-53-create-alias-records)
   `*.domain.tld` pointing to this URL.
 
 ## Sign in to GitLab

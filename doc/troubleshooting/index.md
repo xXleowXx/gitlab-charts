@@ -356,7 +356,7 @@ To address this, ensure the Kubernetes version is 1.21 or older. See
 [#2852](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2852) for
 more information regarding NGINX Ingress support for Kubernetes 1.22 or later.
 
-## Increased load on `/api/v4/jobs/requests` endpoint
+## Increased load on `/api/v4/jobs/request` endpoint
 
 You may face this issue if the option `workhorse.keywatcher` was set to `false` for the deployment servicing `/api/*`.
 Use the following steps to verify:
@@ -370,11 +370,11 @@ Use the following steps to verify:
 1. Inspect the file `/srv/gitlab/config/workhorse-config.toml`. The `[redis]` configuration might be missing:
 
    ```shell
-   cat /srv/gitlab/config/workhorse-config.toml | grep '\[redis\]'
+   grep '\[redis\]' /srv/gitlab/config/workhorse-config.toml
    ```
 
 If the `[redis]` configuration is not present, the `workhorse.keywatcher` flag was set to `false` during deployment
-thus causing the extra load in the `/api/v4/jobs/requests` endpoint. To fix this, enable the `keywatcher` in the
+thus causing the extra load in the `/api/v4/jobs/request` endpoint. To fix this, enable the `keywatcher` in the
 `webservice` chart:
 
 ```yaml
@@ -467,7 +467,7 @@ Partial trust of certificates signed by private certificate authorities can occu
 - The supplied certificates are not in separate files.
 - The certificates init container doesn't perform all the required steps.
 
-Also, GitLab is mostly written in Ruby on Rails and Golang, and each language's
+Also, GitLab is mostly written in Ruby on Rails and Go, and each language's
 TLS libraries work differently. This difference can result in issues like job logs
 failing to render in the GitLab UI but raw job logs downloading without issue.
 
@@ -590,12 +590,12 @@ Run the certificates container using Docker.
    docker run -ti --rm \
         -v $(pwd)/etc/ssl/certs:/etc/ssl/certs \
         -v $(pwd)/usr/local/share/ca-certificates:/usr/local/share/ca-certificates \
-        registry.gitlab.com/gitlab-org/build/cng/alpine-certificates:20191127-r2
+        registry.gitlab.com/gitlab-org/build/cng/gitlab-base:v15.10.3
    ```
 
 1. Check your certificates have been correctly built:
 
-   - `etc/ssl/certs/ca-cert-corporate_root.pem` should have been created.
+   - `etc/ssl/certs/corporate_root.pem` should have been created.
    - There should be a hashed filename, which is a symlink to the certificate itself (such as `etc/ssl/certs/1234abcd.0`).
    - The file and the symbolic link should display with:
 
@@ -606,8 +606,8 @@ Run the certificates container using Docker.
      For example:
 
      ```plaintext
-     lrwxrwxrwx   1 root root      20 Oct  7 11:34 28746b42.0 -> ca-cert-corporate_root.pem
-     -rw-r--r--   1 root root    1948 Oct  7 11:34 ca-cert-corporate_root.pem
+     lrwxrwxrwx   1 root root      20 Oct  7 11:34 28746b42.0 -> corporate_root.pem
+     -rw-r--r--   1 root root    1948 Oct  7 11:34 corporate_root.pem
      ```
 
 ## `308: Permanent Redirect` causing a redirect loop
@@ -615,4 +615,64 @@ Run the certificates container using Docker.
 `308: Permanent Redirect` can happen if your Load Balancer is configured to send unencrypted traffic (HTTP) to NGINX.
 Because NGINX defaults to redirecting `HTTP` to `HTTPS`, you may end up in a "redirect loop".
 
-To fix this, [enable NGINX's `use-forward-headers` setting](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers).
+To fix this, [enable NGINX's `use-forwarded-headers` setting](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#use-forwarded-headers).
+
+## "Invalid Word" errors in the `nginx-controller` logs and `404` errors
+
+After upgrading to Helm chart 6.6 or later, you might experience `404` return
+codes when visiting your GitLab or third-party domains for applications installed
+in your cluster and are also seeing "invalid word" errors in the
+`gitlab-nginx-ingress-controller` logs:
+
+```console
+gitlab-nginx-ingress-controller-899b7d6bf-688hr controller W1116 19:03:13.162001       7 store.go:846] skipping ingress gitlab/gitlab-minio: nginx.ingress.kubernetes.io/configuration-snippet annotation contains invalid word proxy_pass
+gitlab-nginx-ingress-controller-899b7d6bf-688hr controller W1116 19:03:13.465487       7 store.go:846] skipping ingress gitlab/gitlab-registry: nginx.ingress.kubernetes.io/configuration-snippet annotation contains invalid word proxy_pass
+gitlab-nginx-ingress-controller-899b7d6bf-lqcks controller W1116 19:03:12.233577       6 store.go:846] skipping ingress gitlab/gitlab-kas: nginx.ingress.kubernetes.io/configuration-snippet annotation contains invalid word proxy_pass
+gitlab-nginx-ingress-controller-899b7d6bf-lqcks controller W1116 19:03:12.536534       6 store.go:846] skipping ingress gitlab/gitlab-webservice-default: nginx.ingress.kubernetes.io/configuration-snippet annotation contains invalid word proxy_pass
+gitlab-nginx-ingress-controller-899b7d6bf-lqcks controller W1116 19:03:12.848844       6 store.go:846] skipping ingress gitlab/gitlab-webservice-default-smartcard: nginx.ingress.kubernetes.io/configuration-snippet annotation contains invalid word proxy_pass
+gitlab-nginx-ingress-controller-899b7d6bf-lqcks controller W1116 19:03:13.161640       6 store.go:846] skipping ingress gitlab/gitlab-minio: nginx.ingress.kubernetes.io/configuration-snippet annotation contains invalid word proxy_pass
+gitlab-nginx-ingress-controller-899b7d6bf-lqcks controller W1116 19:03:13.465425       6 store.go:846] skipping ingress gitlab/gitlab-registry: nginx.ingress.kubernetes.io/configuration-snippet annotation contains invalid word proxy_pass
+```
+
+In that case, review your GitLab values and any third-party Ingress objects for the use
+of [configuration snippets](https://kubernetes.github.io/ingress-nginx/examples/customization/configuration-snippets/).
+You may need to adjust or modify the `nginx-ingress.controller.config.annotation-value-word-blocklist`
+setting.
+
+See [Annotation value word blocklist](../charts/nginx/index.md#annotation-value-word-blocklist) for additional details.
+
+### Volume mount takes a long time
+
+Mounting large volumes, such as the `gitaly` or `toolbox` chart volumes, can take a long time because Kubernetes
+recursively changes the permissions of the volume's contents to match the Pod's `securityContext`.
+
+Starting with Kubernetes 1.23 you can set the `securityContext.fsGroupChangePolicy` to `OnRootMismatch` to mitigate
+this issue. This flag is supported by all GitLab subcharts.
+
+For example for the Gitaly subchart:
+
+```yaml
+gitlab:
+  gitaly:
+    securityContext:
+      fsGroupChangePolicy: "OnRootMismatch"
+```
+
+See the [Kubernetes documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods),
+for more details.
+
+For Kubernetes versions not supporting `fsGroupChangePolicy` you can mitigate the
+issue by changing or fully deleting the settings for the `securityContext`.
+
+```yaml
+gitlab:
+  gitaly:
+    securityContext:
+      fsGroup: ""
+      runAsUser: ""
+```
+
+NOTE:
+The example syntax eliminates the `securityContext` setting entirely.
+Setting `securityContext: {}` or `securityContext:` does not work due
+to the way Helm merges default values with user provided configuration.

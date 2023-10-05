@@ -5,10 +5,7 @@ require 'hash_deep_merge'
 
 describe 'Praefect configuration' do
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
-    ))
+    HelmTemplate.defaults
   end
 
   let(:praefect_resources) do
@@ -94,7 +91,7 @@ describe 'Praefect configuration' do
     end
 
     it 'enables prometheus_exclude_database_from_default_metrics by default' do
-      expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.erb')).to include('prometheus_exclude_database_from_default_metrics = true')
+      expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.tpl')).to include('prometheus_exclude_database_from_default_metrics = true')
     end
 
     context 'without replacing Gitaly' do
@@ -181,8 +178,8 @@ describe 'Praefect configuration' do
         vs2_selection = "name = 'secondary'\n" \
                         "default_replication_factor = 2"
 
-        expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.erb')).to include(vs1_selection)
-        expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.erb')).to include(vs2_selection)
+        expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.tpl')).to include(vs1_selection)
+        expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.tpl')).to include(vs2_selection)
       end
     end
 
@@ -203,7 +200,7 @@ describe 'Praefect configuration' do
       end
 
       it 'disables prometheus_exclude_database_from_default_metrics' do
-        expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.erb')).to include('prometheus_exclude_database_from_default_metrics = false')
+        expect(template.dig('ConfigMap/test-praefect', 'data', 'config.toml.tpl')).to include('prometheus_exclude_database_from_default_metrics = false')
       end
     end
 

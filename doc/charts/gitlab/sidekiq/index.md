@@ -63,6 +63,16 @@ to the `helm install` command using the `--set` flags:
 | `hpa.memory.targetAverageValue`            |                                                              | Set the autoscaling memory target value                                                                                                                                                            |
 | `hpa.memory.targetAverageUtilization`      |                                                              | Set the autoscaling memory target utilization                                                                                                                                                      |
 | `hpa.targetAverageValue`                   |                                                              | **DEPRECATED** Set the autoscaling CPU target value                                                                                                                                                |
+| `keda.enabled`                             | `false`                                                      | Use [KEDA](https://keda.sh/) `ScaledObjects` instead of `HorizontalPodAutoscalers`                                                                                                                 |
+| `keda.pollingInterval`                     | `30`                                                         | The interval to check each trigger on                                                                                                                                                              |
+| `keda.cooldownPeriod`                      | `300`                                                        | The period to wait after the last trigger reported active before scaling the resource back to 0                                                                                                    |
+| `keda.minReplicaCount`                     |                                                              | Minimum number of replicas KEDA will scale the resource down to, defaults to `minReplicas`                                                                                                         |
+| `keda.maxReplicaCount`                     |                                                              | Maximum number of replicas KEDA will scale the resource up to, defaults to `maxReplicas`                                                                                                           |
+| `keda.fallback`                            |                                                              | KEDA fallback configuration, see the [documentation](https://keda.sh/docs/2.10/concepts/scaling-deployments/#fallback)                                                                             |
+| `keda.hpaName`                             |                                                              | The name of the HPA resource KEDA will create, defaults to `keda-hpa-{scaled-object-name}`                                                                                                         |
+| `keda.restoreToOriginalReplicaCount`       |                                                              | Specifies whether the target resource should be scaled back to original replicas count after the `ScaledObject` is deleted                                                                         |
+| `keda.behavior`                            |                                                              | The specifications for up- and downscaling behavior, defaults to `hpa.behavior`                                                                                                                    |
+| `keda.triggers`                            |                                                              | List of triggers to activate scaling of the target resource, defaults to triggers computed from `hpa.cpu` and `hpa.memory`                                                                         |
 | `minReplicas`                              | `2`                                                          | Minimum number of replicas                                                                                                                                                                         |
 | `maxReplicas`                              | `10`                                                         | Maximum number of replicas                                                                                                                                                                         |
 | `maxUnavailable`                           | `1`                                                          | Limit of maximum number of Pods to be unavailable                                                                                                                                                  |
@@ -72,17 +82,18 @@ to the `helm install` command using the `--set` flags:
 | `image.tag`                                |                                                              | Sidekiq image tag                                                                                                                                                                                  |
 | `init.image.repository`                    |                                                              | initContainer image                                                                                                                                                                                |
 | `init.image.tag`                           |                                                              | initContainer image tag                                                                                                                                                                            |
-| `logging.format`                           | `default`                                                    | Set to `json` for JSON-structured logs                                                                                                                                                             |
+| `init.containerSecurityContext`            |                                                              | initContainer container specific [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core)                                                   |
+| `logging.format`                           | `json`                                                       | Set to `text` for non-JSON logs                                                                                                                                                                    |
 | `metrics.enabled`                          | `true`                                                       | If a metrics endpoint should be made available for scraping                                                                                                                                        |
 | `metrics.port`                             | `3807`                                                       | Metrics endpoint port                                                                                                                                                                              |
 | `metrics.path`                             | `/metrics`                                                   | Metrics endpoint path                                                                                                                                                                              |
-| `metrics.log_enabled`                      | `false`                                                      | Enables or disables metrics server logs written to `sidekiq_exporter.log`                                                                                                                                                               |
+| `metrics.log_enabled`                      | `false`                                                      | Enables or disables metrics server logs written to `sidekiq_exporter.log`                                                                                                                          |
 | `metrics.podMonitor.enabled`               | `false`                                                      | If a PodMonitor should be created to enable Prometheus Operator to manage the metrics scraping                                                                                                     |
 | `metrics.podMonitor.additionalLabels`      | `{}`                                                         | Additional labels to add to the PodMonitor                                                                                                                                                         |
 | `metrics.podMonitor.endpointConfig`        | `{}`                                                         | Additional endpoint configuration for the PodMonitor                                                                                                                                               |
 | `metrics.annotations`                      |                                                              | **DEPRECATED** Set explicit metrics annotations. Replaced by template content.                                                                                                                     |
-| `metrics.tls.enabled`                      | `false`                                                      | TLS enabled for the metrics/sidekiq_exporter endpoint                                                                                                                                              |
-| `metrics.tls.secretName`                   | `{Release.Name}-sidekiq-metrics-tls`                         | Secret for the metrics/sidekiq_exporter endpoint TLS cert and key                                                                                                                                  |
+| `metrics.tls.enabled`                      | `false`                                                      | TLS enabled for the `metrics/sidekiq_exporter` endpoint                                                                                                                                            |
+| `metrics.tls.secretName`                   | `{Release.Name}-sidekiq-metrics-tls`                         | Secret for the `metrics/sidekiq_exporter` endpoint TLS cert and key                                                                                                                                |
 | `psql.password.key`                        | `psql-password`                                              | key to psql password in psql secret                                                                                                                                                                |
 | `psql.password.secret`                     | `gitlab-postgres`                                            | psql password secret                                                                                                                                                                               |
 | `psql.port`                                |                                                              | Set PostgreSQL server port. Takes precedence over `global.psql.port`                                                                                                                               |
@@ -110,6 +121,9 @@ to the `helm install` command using the `--set` flags:
 | `readinessProbe.failureThreshold`          | `3`                                                          | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded                                                                                                |
 | `securityContext.fsGroup`                  | `1000`                                                       | Group ID under which the pod should be started                                                                                                                                                     |
 | `securityContext.runAsUser`                | `1000`                                                       | User ID under which the pod should be started                                                                                                                                                      |
+| `securityContext.fsGroupChangePolicy`      |                                                              | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23)                                                                                                              |
+| `containerSecurityContext`                 |                                                              | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started                            |
+| `containerSecurityContext.runAsUser`       | `1000`                                                       | Allow to overwrite the specific security context under which the container is started                                                                                                              |
 | `priorityClassName`                        | `""`                                                         | Allow configuring pods `priorityClassName`, this is used to control pod priority in case of eviction                                                                                               |
 
 ## Chart configuration examples
@@ -175,6 +189,7 @@ pod. Pod-level `extraEnv` settings are not added to [init containers](https://ku
 ### extraEnvFrom
 
 `extraEnvFrom` allows you to expose additional environment variables from other data sources in all containers in the pods.
+Subsequent variables can be overridden per Sidekiq pod.
 
 Below is an example use of `extraEnvFrom`:
 
@@ -192,11 +207,14 @@ extraEnvFrom:
       name: special-secret
       key: special_token
       # optional: boolean
-  CONFIG_STRING:
-    configMapKeyRef:
-      name: useful-config
-      key: some-string
-      # optional: boolean
+pods:
+  - name: immediate
+    extraEnvFrom:
+      CONFIG_STRING:
+        configMapKeyRef:
+          name: useful-config
+          key: some-string
+          # optional: boolean
 ```
 
 ### extraVolumes
@@ -394,8 +412,8 @@ on a per-pod basis.
 | `maxUnavailable`             | Integer | `1`       | Limit of maximum number of Pods to be unavailable                                                                                     |
 
 NOTE:
-[Detailed documentation of the Sidekiq memory killer is available](https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html#sidekiq-memorykiller)
-in the Omnibus documentation.
+[Detailed documentation of the Sidekiq memory killer is available](https://docs.gitlab.com/ee/administration/sidekiq/sidekiq_memory_killer.html)
+in the Linux package documentation.
 
 ## Per-pod Settings
 
@@ -413,8 +431,8 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `concurrency`                         | Integer |                                                                     | The number of tasks to process simultaneously. If not provided, it will be pulled from the chart-wide default.                                                                                                                                                          |
 | `name`                                | String  |                                                                     | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries.                                                                                                                              |
 | `queues`                              | String  |                                                                     | [See below](#queues).                                                                                                                                                                                                                                                   |
-| `negateQueues`                        | String  |                                                                     | [See below](#negatequeues).                                                                                                                                                                                                                                             |
-| `queueSelector`                       | Boolean | `false`                                                             | Use the [queue selector](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector).                                                                                                                                             |
+| `negateQueues`                        | String  |                                                                     | **DEPRECATED** [See below](#negatequeues).                                                                                                                                                                                                                              |
+| `queueSelector`                       | Boolean | `false`                                                             | **DEPRECATED** Use the [queue selector](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#queue-selectors).                                                                                                                        |
 | `timeout`                             | Integer |                                                                     | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. This value **must** be less than `terminationGracePeriodSeconds`. |
 | `resources`                           |         |                                                                     | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation.                                                                                                   |
 | `nodeSelector`                        |         |                                                                     | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.                                                                                   |
@@ -438,6 +456,16 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `hpa.memory.targetAverageValue`       | String  |                                                                     | Overrides the autoscaling memory target value                                                                                                                                                                                                                           |
 | `hpa.memory.targetAverageUtilization` | Integer |                                                                     | Overrides the autoscaling memory target utilization                                                                                                                                                                                                                     |
 | `hpa.targetAverageValue`              | String  |                                                                     | **DEPRECATED** Overrides the autoscaling CPU target value                                                                                                                                                                                                               |
+| `keda.enabled`                        | Boolean | `false`                                                             | Overrides enabling KEDA
+| `keda.pollingInterval`                | Integer | `30`                                                                | Overrides the KEDA polling interval                                                                                                                                                                                                                                     |
+| `keda.cooldownPeriod`                 | Integer | `300`                                                               | Overrides the KEDA cooldown period                                                                                                                                                                                                                                      |
+| `keda.minReplicaCount`                | Integer |                                                                     | Overrides the KEDA minimum replica count                                                                                                                                                                                                                                |
+| `keda.maxReplicaCount`                | Integer |                                                                     | Overrides the KEDA maximum replica count                                                                                                                                                                                                                                |
+| `keda.fallback`                       | Map     |                                                                     | Overrides the KEDA fallback configuration                                                                                                                                                                                                                               |
+| `keda.hpaName`                        | String  |                                                                     | Overrides the KEDA HPA name                                                                                                                                                                                                                                             |
+| `keda.restoreToOriginalReplicaCount`  | Boolean |                                                                     | Overrides enabling the restoration of the original replica count                                                                                                                                                                                                        |
+| `keda.behavior`                       | Map     |                                                                     | Overrides the KEDA HPA behavior                                                                                                                                                                                                                                         |
+| `keda.triggers`                       | Array   |                                                                     | Overrides the KEDA triggers                                                                                                                                                                                                                                             |
 | `extraEnv`                            | Map     |                                                                     | List of extra environment variables to expose. The chart-wide value is merged into this, with values from the pod taking precedence                                                                                                                                     |
 | `extraEnvFrom`                        | Map     |                                                                     | List of extra environment variables from other data source to expose                                                                                                                                                                                                    |
 | `terminationGracePeriodSeconds`       | Integer | `30`                                                                | Optional duration in seconds the pod needs to terminate gracefully.                                                                                                                                                                                                     |
@@ -570,3 +598,32 @@ networkpolicy:
             except:
             - 10.0.0.0/8
 ```
+
+## Configuring KEDA
+
+This `keda` section enables the installation of [KEDA](https://keda.sh/) `ScaledObjects` instead of regular `HorizontalPodAutoscalers`.
+This configuration is optional and can be used when there is a need for autoscaling based on custom or external metrics.
+
+Most settings default to the values set in the `hpa` section where applicable.
+
+If the following are true, CPU and memory triggers are added automatically based on the CPU and memory thresholds set in the `hpa` section:
+
+- `triggers` is not set.
+- The corresponding `request.cpu.request` or `request.memory.request` setting is also set to a non-zero value.
+
+If no triggers are set, the `ScaledObject` is not created.
+
+Refer to the [KEDA documentation](https://keda.sh/docs/2.10/concepts/scaling-deployments/) for more details about those settings.
+
+| Name                            | Type    | Default | Description                                                                                                                                                                     |
+| :----------------------------   | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `enabled`                       | Boolean | `false` | Use [KEDA](https://keda.sh/) `ScaledObjects` instead of `HorizontalPodAutoscalers`                                                                                              |
+| `pollingInterval`               | Integer | `30`    | The interval to check each trigger on                                                                                                                                           |
+| `cooldownPeriod`                | Integer | `300`   | The period to wait after the last trigger reported active before scaling the resource back to 0                                                                                 |
+| `minReplicaCount`               | Integer |         | Minimum number of replicas KEDA will scale the resource down to, defaults to `minReplicas`                                                                                      |
+| `maxReplicaCount`               | Integer |         | Maximum number of replicas KEDA will scale the resource up to, defaults to `maxReplicas`                                                                                        |
+| `fallback`                      | Map     |         | KEDA fallback configuration, see the [documentation](https://keda.sh/docs/2.10/concepts/scaling-deployments/#fallback)                                                          |
+| `hpaName`                       | String  |         | The name of the HPA resource KEDA will create, defaults to `keda-hpa-{scaled-object-name}`                                                                                      |
+| `restoreToOriginalReplicaCount` | Boolean |         | Specifies whether the target resource should be scaled back to original replicas count after the `ScaledObject` is deleted                                                      |
+| `behavior`                      | Map     |         | The specifications for up- and downscaling behavior, defaults to `hpa.behavior`                                                                                                 |
+| `triggers`                      | Array   |         | List of triggers to activate scaling of the target resource, defaults to triggers computed from `hpa.cpu` and `hpa.memory`                                                      |

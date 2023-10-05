@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Our contribution policies can be found in [CONTRIBUTING.md](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/CONTRIBUTING.md)
 
-Contributing documentation changes to the charts requires only a text editor. Documentation is stored in the [doc/](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/doc/) directory.
+Contributing documentation changes to the charts requires only a text editor. Documentation is stored in the [`doc/`](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/doc/) directory.
 
 ## Architecture
 
@@ -46,6 +46,10 @@ functionality of the chart.
 ChaosKube can be used to test the fault tolerance of highly available cloud-native GitLab installations.
 
 [Read more in the ChaosKube chart docs](chaoskube/index.md).
+
+### ClickHouse
+
+[Instructions](clickhouse.md) for configuring an external ClickHouse server with GitLab.
 
 ## Versioning and Release
 
@@ -123,7 +127,7 @@ data will be lost.
 Some information on how all the inner Helm workings behave:
 
 - The Distribution Team has a [training presentation for Helm charts](https://docs.google.com/presentation/d/1CStgh5lbS-xOdKdi3P8N9twaw7ClkvyqFN3oZrM1SNw/present).
-- Templating in Helm is done via golang's [text/template](https://pkg.go.dev/text/template)
+- Templating in Helm is done via Go [text/template](https://pkg.go.dev/text/template)
   and [sprig](https://pkg.go.dev/github.com/Masterminds/sprig?utm_source=godoc%27).
 - Helm repository has some additional information on developing with Helm in its
   [tips and tricks section](https://helm.sh/docs/howto/charts_tips_and_tricks/).

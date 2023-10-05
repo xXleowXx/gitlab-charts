@@ -174,11 +174,11 @@ there will be some variation in how you connect.
 1. Log into your database instance:
 
    ```shell
-   kubectl exec -it $(kubectl get pods -l app=postgresql -o custom-columns=NAME:.metadata.name --no-headers) -- bash
+   kubectl exec -it $(kubectl get pods -l app.kubernetes.io/name=postgresql -o custom-columns=NAME:.metadata.name --no-headers) -- bash
    ```
 
    ```shell
-   PGPASSWORD=$(cat $POSTGRES_POSTGRES_PASSWORD_FILE) psql -U postgres -d template1
+   PGPASSWORD=$(echo $POSTGRES_POSTGRES_PASSWORD) psql -U postgres -d template1
    ```
 
 1. Create the database user:
@@ -278,7 +278,6 @@ the `helm install` command using the `--set` flags.
 | image.repository                          | `registry.gitlab.com/gitlab-org/build/cng/gitaly` | The default image repository to use. Praefect is bundled as part of the Gitaly image                                                                                       |
 | podLabels                                 | `{}`                                              | Supplemental Pod labels. Will not be used for selectors.                                                                                                                   |
 | ntpHost                                   | `pool.ntp.org`                                    | Configure the NTP server Praefect should ask the for the current time.
-
 | service.name                              | `praefect`                                        | The name of the service to create                                                                                                                                          |
 | service.type                              | ClusterIP                                         | The type of service to create                                                                                                                                              |
 | service.internalPort                      | 8075                                              | The internal port number that the Praefect pod will be listening on                                                                                                        |
@@ -289,7 +288,6 @@ the `helm install` command using the `--set` flags.
 | logging.level                             |                                                   | Log level                                                                                                                                                                  |
 | logging.format                            | `json`                                            | Log format                                                                                                                                                                 |
 | logging.sentryDsn                         |                                                   | Sentry DSN URL - Exceptions from Go server                                                                                                                                 |
-| logging.rubySentryDsn                     |                                                   | Sentry DSN URL - Exceptions from `gitaly-ruby`                                                                                                                             |
 | logging.sentryEnvironment                 |                                                   | Sentry environment to be used for logging                                                                                                                                  |
 | `metrics.enabled`                         | `true`                                            | If a metrics endpoint should be made available for scraping                                                                                                                |
 | `metrics.port`                            | `9236`                                            | Metrics endpoint port                                                                                                                                                      |
@@ -300,5 +298,6 @@ the `helm install` command using the `--set` flags.
 | `metrics.serviceMonitor.endpointConfig`   | `{}`                                              | Additional endpoint configuration for the ServiceMonitor                                                                                                                   |
 | securityContext.runAsUser                 | 1000                                              |                                                                                                                                                                            |
 | securityContext.fsGroup                   | 1000                                              |                                                                                                                                                                            |
+| securityContext.fsGroupChangePolicy       |                                                   | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23)                                                                                      |
 | serviceLabels                             | `{}`                                              | Supplemental service labels                                                                                                                                                |
 | statefulset.strategy                      | `{}`                                              | Allows one to configure the update strategy utilized by the statefulset                                                                                                    |

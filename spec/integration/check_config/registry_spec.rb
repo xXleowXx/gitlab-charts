@@ -9,7 +9,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -21,7 +21,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 11
+            tag: 12
 
         registry:
           database:
@@ -29,11 +29,11 @@ describe 'checkConfig registry' do
       )).merge(default_required_values)
     end
 
-    let(:error_output) { 'PostgreSQL 12 is the minimum required version' }
+    let(:error_output) { 'PostgreSQL 13 is the minimum required version' }
 
     include_examples 'config validation',
-                     success_description: 'when postgresql.image.tag is >= 12',
-                     error_description: 'when postgresql.image.tag is < 12'
+                     success_description: 'when postgresql.image.tag is >= 13',
+                     error_description: 'when postgresql.image.tag is < 13'
   end
 
   describe 'registry.database (sslmode)' do
@@ -41,7 +41,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -54,7 +54,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -70,181 +70,65 @@ describe 'checkConfig registry' do
                      error_description: 'when when database.sslmode is not valid'
   end
 
-  describe 'registry.migration (disablemirrorfs)' do
-    let(:success_values) do
-      YAML.safe_load(%(
-        postgresql:
-          image:
-            tag: 12
-
-        registry:
-          database:
-            enabled: true
-          migration:
-            disablemirrorfs: true
-      )).merge(default_required_values)
-    end
-
-    let(:error_values) do
-      YAML.safe_load(%(
-        postgresql:
-          image:
-            tag: 12
-
-        registry:
-          migration:
-            disablemirrorfs: true
-      )).merge(default_required_values)
-    end
-
-    let(:error_output) { 'Disabling filesystem metadata requires the metadata database to be enabled' }
-
-    include_examples 'config validation',
-                     success_description: 'when migration disablemirrorfs is true, with database enabled',
-                     error_description: 'when migration disablemirrorfs is true, with database disabled'
-  end
-
-  describe 'registry.migration (enabled)' do
-    let(:success_values) do
-      YAML.safe_load(%(
-        registry:
-          database:
-            enabled: true
-          migration:
-            enabled: true
-      )).merge(default_required_values)
-    end
-
-    let(:error_values) do
-      YAML.safe_load(%(
-        registry:
-          migration:
-            enabled: true
-      )).merge(default_required_values)
-    end
-
-    let(:error_output) { 'Enabling migration mode requires the metadata database to be enabled' }
-
-    include_examples 'config validation',
-                     success_description: 'when migration enabled is true, with database enabled',
-                     error_description: 'when migration enabled is true, with database disabled'
-  end
-
-  describe 'registry.migration.importnotification (enabled)' do
-    let(:success_values) do
-      YAML.safe_load(%(
-        postgresql:
-          image:
-            tag: 12
-
-        registry:
-          database:
-            enabled: true
-          migration:
-            enabled: true
-            importnotification:
+  describe 'registry.database (discovery)' do
+    describe 'nameserver is not provided' do
+      let(:success_values) do
+        YAML.safe_load(%(
+          registry:
+            database:
               enabled: true
-              url: 'https://gitlab.example.com'
-      )).merge(default_required_values)
-    end
+              discovery:
+                enabled: true
+                nameserver: 'nameserver.fqdn.'
+        )).merge(default_required_values)
+      end
 
-    let(:error_values) do
-      YAML.safe_load(%(
-        postgresql:
-          image:
-            tag: 12
-
-        registry:
-          database:
-            enabled: true
-          migration:
-            enabled: false
-            importnotification:
+      let(:error_values) do
+        YAML.safe_load(%(
+          registry:
+            database:
               enabled: true
-      )).merge(default_required_values)
+              discovery:
+                enabled: true
+        )).merge(default_required_values)
+      end
+
+      let(:error_output) { "Enabling database discovery requires a nameserver to be provided." }
+
+      include_examples 'config validation',
+                       success_description: 'when discovery is enabled and a nameserver is provided',
+                       error_description: 'when discovery is enabled but the nameserver is missing'
     end
 
-    let(:error_output) { 'Enabling importnotification requires the migration mode to be enabled' }
-
-    include_examples 'config validation',
-                     success_description: 'when import notification is enabled, with migration enabled',
-                     error_description: 'when import notification is enabled, with migration disabled'
-  end
-
-  describe 'registry.migration.importnotification (url)' do
-    let(:success_values) do
-      YAML.safe_load(%(
-        postgresql:
-          image:
-            tag: 12
-
-        registry:
-          database:
-            enabled: true
-          migration:
-            enabled: true
-            importnotification:
+    describe 'nameserver is provided but is an empty string' do
+      let(:success_values) do
+        YAML.safe_load(%(
+          registry:
+            database:
               enabled: true
-              url: 'https://gitlab.example.com'
-      )).merge(default_required_values)
-    end
+              discovery:
+                enabled: true
+                nameserver: 'nameserver.fqdn.'
+        )).merge(default_required_values)
+      end
 
-    let(:error_values) do
-      YAML.safe_load(%(
-        postgresql:
-          image:
-            tag: 12
-
-        registry:
-          database:
-            enabled: true
-          migration:
-            enabled: true
-            importnotification:
+      let(:error_values) do
+        YAML.safe_load(%(
+          registry:
+            database:
               enabled: true
-              url: ''
-      )).merge(default_required_values)
+              discovery:
+                enabled: true
+                nameserver: ''
+        )).merge(default_required_values)
+      end
+
+      let(:error_output) { "Enabling database discovery requires a nameserver to be provided." }
+
+      include_examples 'config validation',
+                       success_description: 'when discovery is enabled and a nameserver is provided',
+                       error_description: 'when discovery is enabled but the nameserver is empty'
     end
-
-    let(:error_output) { 'Enabling importnotification requires the URL to not be empty' }
-
-    include_examples 'config validation',
-                     success_description: 'when import notification is enabled, with url',
-                     error_description: 'when import notification is enabled, with empty url'
-  end
-
-  describe 'registry.gc (disabled)' do
-    let(:success_values) do
-      YAML.safe_load(%(
-        postgresql:
-          image:
-            tag: 12
-
-        registry:
-          database:
-            enabled: true
-          gc:
-            disabled: false
-      )).merge(default_required_values)
-    end
-
-    let(:error_values) do
-      YAML.safe_load(%(
-        postgresql:
-          image:
-            tag: 12
-
-        registry:
-          gc:
-            disabled: false
-      )).merge(default_required_values)
-    end
-
-    let(:error_output) { 'Enabling online garbage collection requires the metadata database to be enabled' }
-
-    include_examples 'config validation',
-                     success_description: 'when gc disabled is false, with database enabled',
-                     error_description: 'when gc disabled is false, with database disabled'
   end
 
   describe 'gitlab.checkConfig.registry.sentry.dsn' do
@@ -309,7 +193,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -325,7 +209,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -349,7 +233,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -370,7 +254,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -399,7 +283,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -419,7 +303,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -446,7 +330,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:
@@ -466,7 +350,7 @@ describe 'checkConfig registry' do
       YAML.safe_load(%(
         postgresql:
           image:
-            tag: 12
+            tag: 13
 
         registry:
           database:

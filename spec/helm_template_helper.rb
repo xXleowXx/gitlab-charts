@@ -7,13 +7,14 @@ class HelmTemplate
 
   def self.helm_major_version
     if @_helm_major_version.nil?
-      parts = `helm version -c`.match('Ver(sion)?:"v(\d)\.(\d+)')
+      parts = `helm version -c`.match('Ver(sion)?:"v(\d)\.(\d+)(?:\.(\d+))?')
       @_helm_major_version = parts[2].to_i
       @_helm_minor_version = parts[3].to_i
+      @_helm_patch_version = parts[4].to_i
 
       # Check for Helm version below minimum supported version
-      if @_helm_major_version < 3 || (@_helm_major_version == 3 && @_helm_minor_version < 3)
-        puts "ERROR: Helm version needs to be greater than 3.3.1"
+      if @_helm_major_version < 3 || (@_helm_major_version == 3 && @_helm_minor_version < 5 && @_helm_patch_version < 2)
+        puts "ERROR: Helm version needs to be greater than 3.5.2"
         exit(1)
       end
     end
@@ -42,19 +43,14 @@ class HelmTemplate
     { "certmanager-issuer" => { "email" => "test@example.com" } }
   end
 
-  def self.yaml_values(yaml_str)
-    (YAML.safe_load(yaml_str) || {}).merge!(HelmTemplate.certmanager_issuer)
+  def self.defaults
+    HelmTemplate.certmanager_issuer
   end
 
-  # Parses the specified YAML string and renders the template with it.
-  def self.from_string(yaml_str = '')
-    HelmTemplate.new(HelmTemplate.yaml_values(yaml_str))
-  end
-
-  # Reads the specified YAML file and renders the template with it.
-  def self.from_file(file_path)
-    HelmTemplate.from_string(
-      File.read(file_path))
+  def self.with_defaults(yaml)
+    yaml ||= {}
+    hash = yaml.is_a?(Hash) ? yaml : YAML.safe_load(yaml)
+    hash.deep_merge!(HelmTemplate.defaults)
   end
 
   attr_reader :mapped
@@ -93,8 +89,16 @@ class HelmTemplate
     }
   end
 
+  def [](arg)
+    dig(arg)
+  end
+
   def dig(*args)
     @mapped.dig(*args)
+  end
+
+  def resource_exists?(item)
+    @mapped.has_key?(item)
   end
 
   def volumes(item)
@@ -176,6 +180,11 @@ class HelmTemplate
       &.find { |container| container['name'] == container_name }
   end
 
+  def find_image(item, container_name, init = false)
+    find_container(item, container_name, init)
+      &.dig('image')
+  end
+
   def env(item, container_name, init = false)
     find_container(item, container_name, init)
       &.dig('env')
@@ -187,7 +196,7 @@ class HelmTemplate
   end
 
   def resources_by_kind(kind)
-    @mapped.select{ |key, hash| hash['kind'] == kind }
+    @mapped.select{ |_, hash| hash['kind'] == kind }
   end
 
   def exit_code()

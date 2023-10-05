@@ -15,6 +15,7 @@ init:
   resources:
     requests:
       cpu: 50m
+  containerSecurityContext: {}
 
 # Node labels for pod assignment
 # nodeSelector: {}
@@ -33,7 +34,7 @@ common:
 logging:
   # set to "json" for json
   # structured logs
-  format: "default"
+  format: "json"
 
 networkpolicy:
   enabled: false
@@ -64,7 +65,7 @@ health_checks:
   port: 3808
 
 redis:
-  password: {}
+  auth: {}
 
 psql: {}
   # port: 5432
@@ -122,7 +123,7 @@ global:
     #   clientCertificate: client-cert.pem
     #   serverCA: server-ca.pem
   redis:
-    password: {}
+    auth: {}
   gitaly:
     internal:
       names: ["default"]
@@ -217,15 +218,7 @@ gitaly:
 minio:
   serviceName: 'minio-svc'
   port: 9000
-registry:
-  enabled: true
-  host:
-  # port: 443
-  api:
-    protocol: http
-    serviceName: registry
-    port: 5000
-  tokenIssuer: gitlab-issuer
+
 extra: {}
 
 ## Additional environment variables to set
@@ -276,6 +269,21 @@ hpa:
     scaleDown:
       stabilizationWindowSeconds: 300
 
+keda:
+  enabled: false
+  ## See https://keda.sh/docs/2.10/concepts/scaling-deployments/#scaledobject-spec
+  pollingInterval: 30
+  cooldownPeriod: 300
+  # minReplicaCount: 2
+  # maxReplicaCount: 10
+  # fallback:
+  #   failureThreshold: 3
+  #   replicas: 6
+  # hpaName: keda-hpa-{scaled-object-name}
+  # restoreToOriginalReplicaCount: false
+  # behavior: {}
+  # triggers: []
+
 timeout: 25
 resources:
   # limits:
@@ -314,6 +322,21 @@ pods:
     #   behavior:
     #     scaleDown:
     #       stabilizationWindowSeconds:
+    # keda:
+    #   enabled: false
+    #   ## See https://keda.sh/docs/2.10/concepts/scaling-deployments/#scaledobject-spec
+    #   pollingInterval: 30
+    #   cooldownPeriod: 300
+    #   minReplicaCount: 2
+    #   maxReplicaCount: 10
+    #   fallback:
+    #     failureThreshold: 3
+    #     replicas: 6
+    #   hpaName: keda-hpa-{scaled-object-name}
+    #   restoreToOriginalReplicaCount: false
+    #   behavior: {}
+    #   triggers: []
+    #
     # common:
     #   labels: {}
     # podLabels: {}
@@ -321,10 +344,15 @@ pods:
     # nodeSelector: {}
     # tolerations: []
 
-## Allow to overwrite under which User and Group we're running.
+## Allow to overwrite under which User and Group the Pod will be running.
 securityContext:
   runAsUser: 1000
   fsGroup: 1000
+  # fsGroupChangePolicy: OnRootMismatch
+
+## Allow to overwrite the specific security context under which the container is running.
+containerSecurityContext:
+  runAsUser: 1000
 
 ## Enable deployment to use a serviceAccount
 serviceAccount:

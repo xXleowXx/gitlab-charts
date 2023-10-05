@@ -12,13 +12,21 @@ describe "Restoring a backup" do
     stdout, status = gitaly_purge_storage
     fail stdout unless status.success?
 
-    stdout, status = restore_from_backup
+    stdout, status = restore_from_backup(skip: 'repositories')
     fail stdout unless status.success?
 
-    # We run migrations once early to get the db into a place where we can set the runner token
+    # scale the Rails deployments to 0
+    scale_rails_down
+    # wait for rollout to complete (change in replicas)
+    wait_for_rails_rollout
+
+    # We run migrations once early to get the db into a place where we can set the runner token and restore repos
     # Ignore errors, we will run the migrations again after the token
     stdout, status = run_migrations
     warn "WARNING: Migrations did not succeed:\n#{stdout}" unless status.success?
+
+    stdout, status = restore_from_backup(skip: 'db')
+    fail stdout unless status.success?
 
     stdout, status = set_runner_token
     fail stdout unless status.success?
@@ -29,8 +37,10 @@ describe "Restoring a backup" do
     stdout, status = enforce_root_password(ENV['GITLAB_PASSWORD']) if ENV['GITLAB_PASSWORD']
     fail stdout unless status.success?
 
-    stdout, status = restart_webservice
-    fail stdout unless status.success?
+    # scale the Rails code deployments up
+    scale_rails_up
+    # wait for rollout to complete (change in replicas)
+    wait_for_rails_rollout
 
     # Wait for the site to come up after the restore/migrations
     wait_until_app_ready
@@ -50,17 +60,17 @@ describe "Restoring a backup" do
 
     it 'Navigating to testproject1 repo should work' do
       visit '/root/testproject1'
-      expect(find('table[data-qa-selector="file_tree_table"]'))
+      expect(find('[data-testid="file_tree_table"],[data-qa-selector="file_tree_table"]'))
         .to have_content('Dockerfile')
     end
 
     it 'Should have runner registered' do
       visit '/admin/runners'
-      expect(page).to have_css('#content-body [data-testid^=\'runner-row-\']', minimum: 1)
+      expect(page).to have_css('#content-body [data-testid^="runner-row-"],[data-qa-selector^="runner-row-"]', minimum: 1)
     end
 
     it 'Issue attachments should load correctly' do
-      visit '/root/testproject1/issues/1'
+      visit '/root/testproject1/-/issues/1'
 
       image_selector = 'div.md > p > a > img.js-lazy-loaded'
 

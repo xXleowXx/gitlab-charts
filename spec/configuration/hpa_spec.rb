@@ -9,10 +9,7 @@ describe 'GitLab HPA configuration(s)' do
   end
 
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
-    ))
+    HelmTemplate.defaults
   end
 
   let(:hpa_names) do
@@ -118,6 +115,14 @@ describe 'GitLab HPA configuration(s)' do
     all_hpas = template.resources_by_kind("HorizontalPodAutoscaler").keys
     all_hpas.map! { |item| item.split('/')[1] }
     expect(all_hpas).to match_array(hpa_names)
+  end
+
+  it 'No ScaledObjects are created' do
+    template = HelmTemplate.new(enable_all_hpas)
+    expect(template.exit_code).to eq(0)
+
+    all_scaledobjects = template.resources_by_kind("ScaledObject").keys
+    expect(all_scaledobjects).to be_empty
   end
 
   describe 'api version' do

@@ -9,9 +9,7 @@ describe 'Database configuration' do
   end
 
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
+    HelmTemplate.with_defaults(%(
       global:
         psql:
           host: ''
@@ -270,7 +268,8 @@ describe 'Database configuration' do
         sidekiq_secret_mounts =  t.projected_volume_sources('Deployment/test-sidekiq-all-in-1-v2','init-sidekiq-secrets').select { |item|
           item['secret']['name'] == 'test-postgresql-password'
         }
-        expect(sidekiq_secret_mounts.length).to eq(1)
+        expect(sidekiq_secret_mounts.length).to eq(2)
+
         # webservice gets "other", with non-defaults
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('host: "psql.other"')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('port: 5431')
@@ -288,7 +287,7 @@ describe 'Database configuration' do
         webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice-default','init-webservice-secrets').select { |item|
           item['secret']['name'] == 'other-postgresql-password' && item['secret']['items'][0]['key'] == 'other-password'
         }
-        expect(webservice_secret_mounts.length).to eq(1)
+        expect(webservice_secret_mounts.length).to eq(2)
       end
     end
 
@@ -325,7 +324,7 @@ describe 'Database configuration' do
         sidekiq_secret_mounts =  t.projected_volume_sources('Deployment/test-sidekiq-all-in-1-v2','init-sidekiq-secrets').select { |item|
           item['secret']['name'] == 'test-postgresql-password' && item['secret']['items'][0]['key'] == 'postgresql-password'
         }
-        expect(sidekiq_secret_mounts.length).to eq(1)
+        expect(sidekiq_secret_mounts.length).to eq(2)
         # webservice gets "other", with non-defaults
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('host: "psql.other"')
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('port: 5432')
@@ -342,7 +341,7 @@ describe 'Database configuration' do
         webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice-default','init-webservice-secrets').select { |item|
           item['secret']['name'] == 'test-postgresql-password' && item['secret']['items'][0]['key'] == 'postgresql-password'
         }
-        expect(webservice_secret_mounts.length).to eq(1)
+        expect(webservice_secret_mounts.length).to eq(2)
       end
     end
 
@@ -371,13 +370,13 @@ describe 'Database configuration' do
         sidekiq_secret_mounts =  t.projected_volume_sources('Deployment/test-sidekiq-all-in-1-v2','init-sidekiq-secrets').select { |item|
           item['secret']['name'] == 'global-postgresql-password' && item['secret']['items'][0]['key'] == 'global-password'
         }
-        expect(sidekiq_secret_mounts.length).to eq(1)
+        expect(sidekiq_secret_mounts.length).to eq(2)
         # webservice gets "other", with non-defaults
         expect(t.dig('ConfigMap/test-webservice','data','database.yml.erb')).to include('host: "psql.other"')
         webservice_secret_mounts =  t.projected_volume_sources('Deployment/test-webservice-default','init-webservice-secrets').select { |item|
           item['secret']['name'] == 'global-postgresql-password' && item['secret']['items'][0]['key'] == 'global-password'
         }
-        expect(webservice_secret_mounts.length).to eq(1)
+        expect(webservice_secret_mounts.length).to eq(2)
       end
     end
 

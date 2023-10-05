@@ -10,10 +10,11 @@ GitLab Geo provides the ability to have geographically distributed application
 deployments.
 
 While external database services can be used, these documents focus on
-the use of the [Omnibus GitLab](https://docs.gitlab.com/omnibus/) for PostgreSQL to provide the
+the use of the [Linux package](https://docs.gitlab.com/omnibus/) for PostgreSQL to provide the
 most platform agnostic guide, and make use of the automation included in `gitlab-ctl`.
 
-In this guide, both clusters have the same external URL. See [Set up a Unified URL for Geo sites](https://docs.gitlab.com/ee/administration/geo/secondary_proxy/index.html#set-up-a-unified-url-for-geo-sites).
+In this guide, both clusters have the same external URL. This feature is supported by the chart
+since version 7.3. See [Set up a Unified URL for Geo sites](https://docs.gitlab.com/ee/administration/geo/secondary_proxy/index.html#set-up-a-unified-url-for-geo-sites). You can optionally [configure a separate URL for the secondary site](#configure-a-separate-url-for-the-secondary-site-optional).
 
 NOTE:
 See the [defined terms](https://docs.gitlab.com/ee/administration/geo/glossary.html)
@@ -37,7 +38,7 @@ To use GitLab Geo with the GitLab Helm chart, the following requirements must be
 
 ## Overview
 
-This guide uses 2 Omnibus GitLab database nodes,
+This guide uses 2 database nodes created by using the Linux package,
 configuring only the PostgreSQL services needed, and 2 deployments of the
 GitLab Helm chart. It is intended to be the _minimal_ required configuration.
 This documentation does not include SSL from application to database, support
@@ -46,19 +47,21 @@ for other database providers, or
 
 The outline below should be followed in order:
 
-1. [Setup Omnibus database nodes](#set-up-omnibus-database-nodes)
-1. [Setup Kubernetes clusters](#set-up-kubernetes-clusters)
+1. [Set up Linux package database nodes](#set-up-linux-package-database-nodes)
+1. [Set up Kubernetes clusters](#set-up-kubernetes-clusters)
 1. [Collect information](#collect-information)
 1. [Configure Primary database](#configure-primary-database)
 1. [Deploy chart as Geo Primary site](#deploy-chart-as-geo-primary-site)
-1. [Set the Geo primary site](#set-the-geo-primary-site)
+1. [Set the Geo Primary site](#set-the-geo-primary-site)
 1. [Configure Secondary database](#configure-secondary-database)
-1. [Copy secrets from primary site to secondary site](#copy-secrets-from-the-primary-site-to-the-secondary-site)
+1. [Copy secrets from the primary site to the secondary site](#copy-secrets-from-the-primary-site-to-the-secondary-site)
 1. [Deploy chart as Geo Secondary site](#deploy-chart-as-geo-secondary-site)
 1. [Add Secondary Geo site via Primary](#add-secondary-geo-site-via-primary)
 1. [Confirm Operational Status](#confirm-operational-status)
+1. [Configure a separate URL for the secondary site (Optional)](#configure-a-separate-url-for-the-secondary-site-optional)
+1. [Registry](#registry)
 
-## Set up Omnibus database nodes
+## Set up Linux package database nodes
 
 For this process, two nodes are required. One is the Primary database node, the
 other the Secondary database node. You may use any provider of machine
@@ -71,8 +74,8 @@ Bear in mind that communication is required:
   - The primary needs to expose TCP port `5432`.
   - The secondary needs to expose TCP ports `5432` & `5431`.
 
-Install an [operating system supported by Omnibus GitLab](https://docs.gitlab.com/ee/install/requirements.html#operating-systems), and then
-[install the Omnibus GitLab](https://about.gitlab.com/install/) onto it. Do not provide the
+Install an [operating system supported by the Linux package](https://docs.gitlab.com/ee/install/requirements.html#operating-systems), and then
+[install the Linux package](https://about.gitlab.com/install/) onto it. Do not provide the
 `EXTERNAL_URL` environment variable when installing, as we'll provide a minimal
 configuration file before reconfiguring the package.
 
@@ -136,7 +139,7 @@ This guide does not cover setting up DNS.
 
 The `gitlab` and `gitlab_geo` database user passwords must exist in two
 forms: bare password, and PostgreSQL hashed password. To obtain the hashed form,
-perform the following commands on one of the Omnibus instances, which asks
+perform the following commands on one of the Linux package installation instances, which asks
 you to enter and confirm the password before outputting an appropriate hash
 value for you to make note of.
 
@@ -145,9 +148,9 @@ value for you to make note of.
 
 ## Configure Primary database
 
-_This section is performed on the Primary Omnibus GitLab database node._
+_This section is performed on the Primary Linux package installation database node._
 
-To configure the Primary database node's Omnibus GitLab, work from
+To configure the Primary database node's Linux package installation, work from
 this example configuration:
 
 ```ruby
@@ -166,6 +169,7 @@ geo_logcursor['enable']=false
 grafana['enable']=false
 gitaly['enable']=false
 redis['enable']=false
+gitlab_kas['enable']=false
 prometheus_monitoring['enable'] = false
 ## Configure the DB for network
 postgresql['enable'] = true
@@ -183,7 +187,7 @@ We must replace several items:
 - `external_url` must be updated to reflect the host name of our Primary site.
 - `gitlab_rails['geo_node_name']` must be replaced with a unique name for your
   site. See the Name field in
-  [Common settings](https://docs.gitlab.com/ee/user/admin_area/geo_sites.html#common-settings).
+  [Common settings](https://docs.gitlab.com/ee/administration/geo_sites.html#common-settings).
 - `gitlab_user_password_hash` must be replaced with the hashed form of the
   `gitlab` password.
 - `postgresql['md5_auth_cidr_addresses']` can be update to be a list of
@@ -191,7 +195,7 @@ We must replace several items:
 
 The `md5_auth_cidr_addresses` should be in the form of
 `[ '127.0.0.1/24', '10.41.0.0/16']`. It is important to include `127.0.0.1` in
-this list, as the automation in Omnibus GitLab connects using this. The
+this list, as the automation in the Linux package connects using this. The
 addresses in this list should include the IP address (not hostname) of your
 Secondary database, and all nodes of your primary Kubernetes cluster. This _can_
 be left as `['0.0.0.0/0']`, however _it is not best practice_.
@@ -214,6 +218,11 @@ After the configuration above is prepared:
 ## Deploy chart as Geo Primary site
 
 _This section is performed on the Primary site's Kubernetes cluster._
+
+NOTE:
+Setting up a unified URL on primaries currently does not work with pre-defined IP addresses
+set in `global.hosts.externalIP`.
+See [issue 5006](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5006) for more information.
 
 To deploy this chart as a Geo Primary, start [from this example configuration](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/geo/primary.yaml):
 
@@ -247,6 +256,19 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
        nodeName: London Office
        enabled: true
        role: primary
+   # configure Geo Nginx Controller for internal Geo site traffic
+   nginx-ingress-geo:
+     enabled: true
+   gitlab:
+     webservice:
+       # Use the Geo NGINX controller.
+       ingress:
+         useGeoClass: true
+       # Configure an Ingress for internal Geo traffic
+       extraIngress:
+         enabled: true
+         hostname: gitlab.london.example.com
+         useGeoClass: true
    # External DB, disable
    postgresql:
      install: false
@@ -256,7 +278,9 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
    - [global.hosts.domain](../../charts/globals.md#configure-host-settings)
    - [global.psql.host](../../charts/globals.md#configure-postgresql-settings)
    - global.geo.nodeName must match
-     [the Name field of a Geo site in the Admin Area](https://docs.gitlab.com/ee/user/admin_area/geo_sites.html#common-settings)
+     [the Name field of a Geo site in the Admin Area](https://docs.gitlab.com/ee/administration/geo_sites.html#common-settings)
+   - [nginx-ingress-geo](../../charts/nginx/index.md#gitlab-geo) enables a Ingress controller for Geo traffic forwarded from secondaries
+   - configure the primary Geo site's [gitlab.webservice](../../charts/gitlab/webservice/index.md#ingress-settings) Ingresses for Geo traffic
    - Also configure any additional settings, such as:
      - [Configuring SSL/TLS](../../installation/tools.md#tls-certificates)
      - [Using external Redis](../external-redis/index.md)
@@ -276,7 +300,7 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
 1. Wait for the deployment to complete, and the application to come online. When
    the application is reachable, log in.
 
-1. Sign in to GitLab, and [activate your GitLab subscription](https://docs.gitlab.com/ee/user/admin_area/license.html).
+1. Sign in to GitLab, and [activate your GitLab subscription](https://docs.gitlab.com/ee/administration/license.html).
 
    NOTE:
    **This step is required for Geo to function.**
@@ -301,7 +325,7 @@ this as the Primary site. We will do this via the Toolbox Pod.
 1. Set the primary site's Internal URL with a Rails runner command. Replace `https://primary.gitlab.example.com` with the actual Internal URL:
 
    ```shell
-   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: 'https://primary.gitlab.example.com'"
+   kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.primary_node.update!(internal_url: 'https://primary.gitlab.example.com')"
    ```
 
 1. Check the status of Geo configuration:
@@ -347,9 +371,9 @@ this as the Primary site. We will do this via the Toolbox Pod.
 
 ## Configure Secondary database
 
-_This section is performed on the Secondary Omnibus GitLab database node._
+_This section is performed on the Secondary Linux package installation database node._
 
-To configure the Secondary database node's Omnibus GitLab, work from
+To configure the Secondary database node's Linux package installation, work from
 this example configuration:
 
 ```ruby
@@ -372,6 +396,7 @@ grafana['enable']=false
 gitaly['enable']=false
 redis['enable']=false
 prometheus_monitoring['enable'] = false
+gitlab_kas['enable']=false
 ## Configure the DBs for network
 postgresql['enable'] = true
 postgresql['listen_address'] = '0.0.0.0'
@@ -394,7 +419,7 @@ gitlab_rails['db_password']='gitlab_user_password'
 We must replace several items:
 
 - `gitlab_rails['geo_node_name']` must be replaced with a unique name for your site. See the Name field in
-  [Common settings](https://docs.gitlab.com/ee/user/admin_area/geo_sites.html#common-settings).
+  [Common settings](https://docs.gitlab.com/ee/administration/geo_sites.html#common-settings).
 - `gitlab_user_password_hash` must be replaced with the hashed form of the
   `gitlab` password.
 - `postgresql['md5_auth_cidr_addresses']` should be updated to be a list of
@@ -403,12 +428,12 @@ We must replace several items:
   `gitlab_geo` password.
 - `geo_postgresql['md5_auth_cidr_addresses']` should be updated to be a list of
   explicit IP addresses, or address blocks in CIDR notation.
-- `gitlab_user_password` must be updated, and is used here to allow Omnibus GitLab
+- `gitlab_user_password` must be updated, and is used here to allow the Linux package
   to automate the PostgreSQL configuration.
 
 The `md5_auth_cidr_addresses` should be in the form of
 `[ '127.0.0.1/24', '10.41.0.0/16']`. It is important to include `127.0.0.1` in
-this list, as the automation in Omnibus GitLab connects using this. The
+this list, as the automation in the Linux package connects using this. The
 addresses in this list should include the IP addresses of all nodes of your
 Secondary Kubernetes cluster. This _can_ be left as `['0.0.0.0/0']`, however
 _it is not best practice_.
@@ -459,7 +484,7 @@ After configuration above is prepared:
    node.
 
 1. Test that the `gitlab-psql` user can connect to the **primary** site's PostgreSQL
-   (the default Omnibus database name is `gitlabhq_production`):
+   (the default Linux package database name is `gitlabhq_production`):
 
    ```shell
    sudo \
@@ -488,7 +513,7 @@ of your Primary PostgreSQL node:
    gitlab-ctl replicate-geo-database --slot-name=geo_2 --host=PRIMARY_DATABASE_HOST --sslmode=verify-ca
    ```
 
-1. After replication has finished, we must reconfigure the Omnibus GitLab one last time
+1. After replication has finished, we must reconfigure the Linux package one last time
    to ensure `pg_hba.conf` is correct for the secondary PostgreSQL node:
 
    ```shell
@@ -546,8 +571,10 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
      # See docs.gitlab.com/charts/charts/globals
      # Configure host & domain
      hosts:
-       hostSuffix: secondary
-       domain: example.com
+       domain: shanghai.example.com
+       # use a unified URL (same external URL as the primary site)
+       gitlab:
+         name: gitlab.example.com
      # configure DB connection
      psql:
        host: geo-2.db.example.com
@@ -566,6 +593,12 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
          password:
            secret: geo
            key: geo-postgresql-password
+   gitlab:
+     webservice:
+       # Configure a Ingress for internal Geo traffic
+       extraIngress:
+         enabled: true
+         hostname: shanghai.gitlab.example.com
    # External DB, disable
    postgresql:
      install: false
@@ -576,7 +609,8 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
    - [`global.psql.host`](../../charts/globals.md#configure-postgresql-settings)
    - [`global.geo.psql.host`](../../charts/globals.md#configure-postgresql-settings)
    - global.geo.nodeName must match
-     [the Name field of a Geo site in the Admin Area](https://docs.gitlab.com/ee/user/admin_area/geo_sites.html#common-settings)
+     [the Name field of a Geo site in the Admin Area](https://docs.gitlab.com/ee/administration/geo_sites.html#common-settings)
+   - [nginx-ingress-geo](../../charts/nginx/index.md#gitlab-geo) enables a ingress controller pre-configured for traffic
    - Also configure any additional settings, such as:
      - [Configuring SSL/TLS](../../installation/tools.md#tls-certificates)
      - [Using external Redis](../external-redis/index.md)
@@ -597,10 +631,10 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
 Now that both databases are configured and applications are deployed, we must tell
 the Primary site that the Secondary site exists:
 
-1. Visit the **primary** site, and on the top bar, select
-   **Main menu > Admin**.
-1. On the left sidebar, select **Geo**.
-1. Select **Add site**.
+1. Visit the **primary** site.
+1. On the left sidebar, select **Search or go to**.
+1. Select **Admin Area**.
+1. Select **Geo > Add site**.
 1. Add the **secondary** site. Use the full GitLab URL for the URL.
 1. Enter a Name with the `global.geo.nodeName` of the Secondary site. These values must always match exactly, character for character.
 1. Enter Internal URL, for example `https://shanghai.gitlab.example.com`.
@@ -672,3 +706,58 @@ configured, via the Toolbox Pod.
    - `OpenSSH configured to use AuthorizedKeysCommand ... no` _is expected_. This
      Rake task is checking for a local SSH server, which is actually present in the
      `gitlab-shell` chart, deployed elsewhere, and already configured appropriately.
+
+## Configure a separate URL for the secondary site (Optional)
+
+A single, unified URL for the primary and secondary site is usually more convenient for users. For example, you can:
+
+- Place both sites behind a load balancer.
+- Route users to the closest site using your cloud provider's DNS features.
+
+In some cases, you may want to give users control over which site they visit. For this purpose, you can configure the secondary Geo site to use a unique external URL. For example:
+
+- Primary cluster's External URL: `https://gitlab.example.com`
+- Secondary cluster's External URL: `https://shanghai.gitlab.example.com`
+
+1. Edit `secondary.yaml` and update the secondary cluster's external URL so that the `webservice` chart can process those requests:
+
+   ```yaml
+   global:
+     # See docs.gitlab.com/charts/charts/globals
+     # Configure host & domain
+     hosts:
+       domain: example.com
+       # use a unique external URL for the secondary site
+       gitlab:
+         name: shanghai.gitlab.example.com
+   ```
+
+1. Update the secondary site's External URL in GitLab so that it can use the URL wherever it's needed:
+   - Using the Admin UI:
+     1. Visit the **primary** site.
+     1. On the left sidebar, select **Search or go to**.
+     1. Select **Admin Area**.
+     1. Select **Geo > Sites**.
+     1. Select the pencil icon to **Edit the secondary site**.
+     1. Edit the External URL, for example `https://shanghai.gitlab.example.com`.
+     1. Select **Save changes**.
+   - Using a Rails runner command:
+     1. In a toolbox container in the primary site:
+
+        ```shell
+        kubectl --namespace gitlab exec -ti gitlab-geo-toolbox-XXX -- gitlab-rails runner "GeoNode.secondary_nodes.last.update!(url: 'https://shanghai.gitlab.example.com')"
+        ```
+
+1. Redeploy the secondary site's chart:
+
+   ```shell
+   helm upgrade --install gitlab-geo gitlab/gitlab --namespace gitlab -f secondary.yaml
+   ```
+
+1. Wait for the deployment to complete, and the application to come online.
+
+## Registry
+
+To sync the secondary registry with the primary registry you can configure
+[registry replication](https://docs.gitlab.com/ee/administration/geo/replication/container_registry.html#configure-container-registry-replication)
+using a  [notification secret](../../charts/registry/index.md#notification-secret).

@@ -37,8 +37,9 @@ Table below contains all the possible charts configurations that can be supplied
 | `image.tag`                 | Migrations image tag                     |                   |
 | `image.pullPolicy`          | Migrations pull policy                   | `Always`          |
 | `image.pullSecrets`         | Secrets for the image repository         |                   |
-| `init.image`                | initContainer image                      | `busybox`         |
-| `init.tag`                  | initContainer image tag                  | `latest`          |
+| `init.image.repository`     | initContainer image repository           | `registry.gitlab.com/gitlab-org/build/cng/gitlab-base` |
+| `init.image.tag`            | initContainer image tag                  | `master`          |
+| `init.image.containerSecurityContext` | init container securityContext overrides | `{}`    |
 | `enabled`                   | Migrations enable flag                   | `true`            |
 | `tolerations`               | Toleration labels for pod assignment     | `[]`              |
 | `annotations`               | Annotations for the job spec             | `{}`              |
@@ -53,6 +54,8 @@ Table below contains all the possible charts configurations that can be supplied
 | `resources.requests.memory` | `200Mi`                                  | GitLab Migrations minimum memory |
 | `securityContext.fsGroup`   | `1000`                                   | Group ID under which the pod should be started |
 | `securityContext.runAsUser` | `1000`                                   | User ID under which the pod should be started |
+| `securityContext.fsGroupChangePolicy` |                                | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) |
+| `containerSecurityContext.runAsUser`  | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started | `1000` |
 | `extraInitContainers`       | List of extra init containers to include |                   |
 | `extraContainers`           | List of extra containers to include      |                   |
 | `extraVolumes`              | List of extra volumes to create          |                   |

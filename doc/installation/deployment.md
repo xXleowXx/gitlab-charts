@@ -14,7 +14,8 @@ For a complete list of options, read [Installation command line options](command
 WARNING:
 The default Helm chart configuration is **not intended for production**.
 The default chart creates a proof of concept (PoC) implementation where all GitLab
-services are deployed in the cluster. For production deployments, additional setup and configuration is required.
+services are deployed in the cluster. For production deployments, you must follow the
+[Cloud Native Hybrid reference architecture](index.md#use-the-reference-architectures).
 
 For a production deployment, you should have strong working knowledge of Kubernetes.
 This method of deployment has different management, observability, and concepts than traditional deployments.
@@ -96,8 +97,10 @@ specifying `--set global.edition=ce`. If you also specified
 individual images (for example, `--set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce`),
 you need to omit any occurrence of those images.
 
-After the deployment, you can [activate your Enterprise Edition license](https://docs.gitlab.com/ee/user/admin_area/license.html).
+After the deployment, you can [activate your Enterprise Edition license](https://docs.gitlab.com/ee/administration/license.html).
 
-## Install the product documentation
+## Recommended next steps
 
-This is an optional step. See how to [self-host the product documentation](https://docs.gitlab.com/ee/administration/docs_self_host.html).
+After completing your installation, consider taking the
+[recommended next steps](https://docs.gitlab.com/ee/install/next_steps.html),
+including authentication options and sign-up restrictions.

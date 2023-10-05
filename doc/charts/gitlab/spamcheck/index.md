@@ -28,14 +28,15 @@ helm upgrade --force --install gitlab . \
 
 ### Configure GitLab to use Spamcheck
 
-1. On the top bar, select `Menu` > `Admin`.
-1. On the left sidebar, select `Settings` > `Reporting`.
-1. Expand `Spam and Anti-bot Protection`.
+1. On the left sidebar, select **Search or go to**.
+1. Select **Admin Area**.
+1. Select **Settings > Reporting**
+1. Expand **Spam and Anti-bot Protection**.
 1. Update the Spam Check settings:
-    1. Check the `Enable Spam Check via external API endpoint` checkbox
-    1. For URL of the external Spam Check endpoint use `grpc://gitlab-spamcheck.default.svc:8001`, where `default` is replaced with the Kubernetes namespace where GitLab is deployed.
-    1. Leave `Spam Check API key` blank.
-1. Select `Save changes`.
+   1. Check the "Enable Spam Check via external API endpoint" checkbox
+   1. For URL of the external Spam Check endpoint use `grpc://gitlab-spamcheck.default.svc:8001`, where `default` is replaced with the Kubernetes namespace where GitLab is deployed.
+   1. Leave "Spam Check API key" blank.
+1. Select **Save changes**.
 
 ## Installation command line options
 
@@ -65,7 +66,20 @@ The table below contains all the possible charts configurations that can be supp
 | `hpa.memory.targetAverageValue`                 |                                                                                                      | Set the autoscaling memory target value                                                                                                                                                            |
 | `hpa.memory.targetAverageUtilization`           |                                                                                                      | Set the autoscaling memory target utilization                                                                                                                                                      |
 | `hpa.targetAverageValue`                        |                                                                                                      | **DEPRECATED** Set the autoscaling CPU target value                                                                                                                                                |
+| `image.registry`                                |                                                                                                      | Spamcheck image registry          |
 | `image.repository`                              | `registry.gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck` | Spamcheck image repository                                                                                                                                                                         |
+| `image.tag`                                     |                                                                                                      | Spamcheck image tag                                                                                                                                                                                                      |
+| `image.digest`                                  |                                                                                                      | Spamcheck image digest                                                                                                                                                                                                   |
+| `keda.enabled`                                  | `false`                                                                                              | Use [KEDA](https://keda.sh/) `ScaledObjects` instead of `HorizontalPodAutoscalers`                                                                                                                 |
+| `keda.pollingInterval`                          | `30`                                                                                                 | The interval to check each trigger on                                                                                                                                                              |
+| `keda.cooldownPeriod`                           | `300`                                                                                                | The period to wait after the last trigger reported active before scaling the resource back to 0                                                                                                    |
+| `keda.minReplicaCount`                          |                                                                                                      | Minimum number of replicas KEDA will scale the resource down to, defaults to `hpa.minReplicas`                                                                                                     |
+| `keda.maxReplicaCount`                          |                                                                                                      | Maximum number of replicas KEDA will scale the resource up to, defaults to `hpa.maxReplicas`                                                                                                       |
+| `keda.fallback`                                 |                                                                                                      | KEDA fallback configuration, see the [documentation](https://keda.sh/docs/2.10/concepts/scaling-deployments/#fallback)                                                                             |
+| `keda.hpaName`                                  |                                                                                                      | The name of the HPA resource KEDA will create, defaults to `keda-hpa-{scaled-object-name}`                                                                                                         |
+| `keda.restoreToOriginalReplicaCount`            |                                                                                                      | Specifies whether the target resource should be scaled back to original replicas count after the `ScaledObject` is deleted                                                                         |
+| `keda.behavior`                                 |                                                                                                      | The specifications for up- and downscaling behavior, defaults to `hpa.behavior`                                                                                                                    |
+| `keda.triggers`                                 |                                                                                                      | List of triggers to activate scaling of the target resource, defaults to triggers computed from `hpa.cpu` and `hpa.memory`                                                                         |
 | `logging.level`                                 | `info`                                                                                               | Log level                                                                                                                                                                                          |
 | `maxReplicas`                                   | `10`                                                                                                 | HPA `maxReplicas`                                                                                                                                                                                  |
 | `maxUnavailable`                                | `1`                                                                                                  | HPA `maxUnavailable`                                                                                                                                                                               |
@@ -75,6 +89,7 @@ The table below contains all the possible charts configurations that can be supp
 | `resources.requests.memory`                     | `100M`                                                                                               | Spamcheck minimum memory                                                                                                                                                                           |
 | `securityContext.fsGroup`                       | `1000`                                                                                               | Group ID under which the pod should be started                                                                                                                                                     |
 | `securityContext.runAsUser`                     | `1000`                                                                                               | User ID under which the pod should be started                                                                                                                                                      |
+| `securityContext.fsGroupChangePolicy`           |                                                                                                      | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23)                                                                                                              |
 | `serviceLabels`                                 | `{}`                                                                                                 | Supplemental service labels                                                                                                                                                                        |
 | `service.externalPort`                          | `8001`                                                                                               | Spamcheck external port                                                                                                                                                                            |
 | `service.internalPort`                          | `8001`                                                                                               | Spamcheck internal port                                                                                                                                                                            |
@@ -84,6 +99,35 @@ The table below contains all the possible charts configurations that can be supp
 | `tolerations`                                   | `[]`                                                                                                 | Toleration labels for pod assignment                                                                                                                                                               |
 | `extraEnvFrom`                                  | `{}`                                                                                                 | List of extra environment variables from other data sources to expose                                                                                                                              |
 | `priorityClassName`                             |                                                                                                      | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods.                                                                               |
+
+## Configuring KEDA
+
+This `keda` section enables the installation of [KEDA](https://keda.sh/) `ScaledObjects` instead of regular `HorizontalPodAutoscalers`.
+This configuration is optional and can be used when there is a need for autoscaling based on custom or external metrics.
+
+Most settings default to the values set in the `hpa` section where applicable.
+
+If the following are true, CPU and memory triggers are added automatically based on the CPU and memory thresholds set in the `hpa` section:
+
+- `triggers` is not set.
+- The corresponding `request.cpu.request` or `request.memory.request` setting is also set to a non-zero value.
+
+If no triggers are set, the `ScaledObject` is not created.
+
+Refer to the [KEDA documentation](https://keda.sh/docs/2.10/concepts/scaling-deployments/) for more details about those settings.
+
+| Name                            | Type    | Default | Description                                                                                                                                                                     |
+| :----------------------------   | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `enabled`                       | Boolean | `false` | Use [KEDA](https://keda.sh/) `ScaledObjects` instead of `HorizontalPodAutoscalers`                                                                                              |
+| `pollingInterval`               | Integer | `30`    | The interval to check each trigger on                                                                                                                                           |
+| `cooldownPeriod`                | Integer | `300`   | The period to wait after the last trigger reported active before scaling the resource back to 0                                                                                 |
+| `minReplicaCount`               | Integer |         | Minimum number of replicas KEDA will scale the resource down to, defaults to `hpa.minReplicas`                                                                                  |
+| `maxReplicaCount`               | Integer |         | Maximum number of replicas KEDA will scale the resource up to, defaults to `hpa.maxReplicas`                                                                                    |
+| `fallback`                      | Map     |         | KEDA fallback configuration, see the [documentation](https://keda.sh/docs/2.10/concepts/scaling-deployments/#fallback)                                                          |
+| `hpaName`                       | String  |         | The name of the HPA resource KEDA will create, defaults to `keda-hpa-{scaled-object-name}`                                                                                      |
+| `restoreToOriginalReplicaCount` | Boolean |         | Specifies whether the target resource should be scaled back to original replicas count after the `ScaledObject` is deleted                                                      |
+| `behavior`                      | Map     |         | The specifications for up- and downscaling behavior, defaults to `hpa.behavior`                                                                                                 |
+| `triggers`                      | Array   |         | List of triggers to activate scaling of the target resource, defaults to triggers computed from `hpa.cpu` and `hpa.memory`                                                      |
 
 ## Chart configuration examples
 

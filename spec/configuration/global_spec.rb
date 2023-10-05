@@ -5,9 +5,7 @@ require 'hash_deep_merge'
 
 describe 'global configuration' do
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
+    HelmTemplate.with_defaults(%(
       global: {}
     ))
   end
@@ -133,7 +131,7 @@ describe 'global configuration' do
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
       # We need to look at any configmap that has `gitlab.yml.erb`
-      configmaps = t.resources_by_kind('ConfigMap').filter { |cm, content| content['data'].has_key? 'gitlab.yml.erb' }
+      configmaps = t.resources_by_kind('ConfigMap').filter { |cm, content| content['data']&.has_key? 'gitlab.yml.erb' }
       # We can ignore `migrations`, as this does not handle API responses for URLs of any kind.
       configmaps = configmaps.reject! { |cm, content| cm.eql? 'ConfigMap/test-migrations' }
       configmaps.each do |cm, content|
@@ -150,7 +148,7 @@ describe 'global configuration' do
         global:
           image:
             tagSuffix: -fips
-          busybox:
+          gitlabBase:
             image:
               tag: fixed-version
           certificates:
@@ -180,13 +178,6 @@ describe 'global configuration' do
         'Deployment/test-gitlab-runner',
         'Deployment/test-prometheus-server',
         'Deployment/test-minio'
-      ]
-    end
-
-    let(:ignored_initContainers) do
-      [
-        'certificates',
-        'configure'
       ]
     end
 
@@ -226,8 +217,6 @@ describe 'global configuration' do
         next unless content['spec']['template']['spec'].key?('initContainers')
 
         content['spec']['template']['spec']['initContainers'].each do |ic|
-          next if ignored_initContainers.include? ic['name']
-
           # we are currently only using sha256 digests, but this match
           # will need to be more flexible in the future
           expect(ic['image']).to match('-fips\b(@sha256:[a-fA-F0-9]{64})?$'), "Expected #{o}'s 'initContainers' image tags to have suffix '-fips'. initContainer is #{ic}"
