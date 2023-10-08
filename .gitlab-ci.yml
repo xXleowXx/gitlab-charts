@@ -347,7 +347,6 @@ stop_review_eks:
 .run_script:
   extends: .source_autodevops
   variables:
-    JOB_REGEX_PATTERN
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - set_context
