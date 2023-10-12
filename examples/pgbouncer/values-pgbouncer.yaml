@@ -36,7 +36,7 @@ pgbouncer:
   pgbouncer:
     logfile: /dev/stdout
     auth_type: scram-sha-256
-    auth_file: /etc/pgbouncer/userlist.txt
+    auth_file: /etc/pgbouncer/auth_file
     ## Console access
     admin_users: gitlab_user
     stats_users: gitlab_user
@@ -56,8 +56,23 @@ pgbouncer:
     max_db_connections: 900
     max_user_connections: 900
     max_client_conn: 2048
-  userlist:
-    gitlab_user: SCRAM-SHA-256...
+  ## Use userlist element for experimentation.
+  # userlist:
+  #   gitlab_user: SCRAM-SHA-256...
+  #
+  ## Assuming authentication file is used.
+  extraVolumes:
+    - name: pgbouncer_auth
+      secret:
+        secretName: pgbouncer
+        items:
+          - key: auth_file
+            path: auth_file
+  extraVolumeMounts:
+    - name: pgbouncer_auth
+      mountPath: /etc/pgbouncer/auth_file
+      subPath: auth_file
+      readonly: true
   ## PgBouncer-exporter configuration
   pgbouncerExporter:
     enabled: true
@@ -65,11 +80,11 @@ pgbouncer:
       - name: PGBOUNCER_PORT
         value: "6432"
       - name: PGBOUNCER_USER
-        value: "gitlab"
+        value: "database_username"
     extraEnvFrom:
       - name: PGBOUNCER_PWD
         valueFrom:
           secretKeyRef:
-            name: gitlab-dbod-credentials
-            key: gitlab-passwd
+            name: gitlab-database-credentials
+            key: database-username-pwd
             optional: false
