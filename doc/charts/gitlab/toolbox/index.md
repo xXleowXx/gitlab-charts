@@ -30,6 +30,7 @@ gitlab:
         successfulJobsHistoryLimit: 3
         suspend: false
         backoffLimit: 6
+        safeToEvict: false
         restartPolicy: "OnFailure"
         resources:
           requests:
@@ -38,6 +39,7 @@ gitlab:
         persistence:
           enabled: false
           accessMode: ReadWriteOnce
+          useGenericEphemeralVolume: false
           size: 10Gi
       objectStorage:
         backend: s3
@@ -61,6 +63,7 @@ gitlab:
 | `common.labels`                             | Supplemental labels that are applied to all objects created by this chart.  | `{}` |
 | `antiAffinityLabels.matchLabels`            | Labels for setting anti-affinity options     |                              |
 | `backups.cron.activeDeadlineSeconds`        | Backup CronJob active deadline seconds (if null, no active deadline is applied)| `null` |
+| `backups.cron.safeToEvict`                  | Autoscaling safe-to-evict annotation         | false                        |
 | `backups.cron.backoffLimit`                 | Backup CronJob backoff limit| `6` |
 | `backups.cron.concurrencyPolicy`            | Kubernetes Job concurrency policy            | `Replace`                    |
 | `backups.cron.enabled`                      | Backup CronJob enabled flag                  | false                        |
@@ -70,6 +73,7 @@ gitlab:
 | `backups.cron.persistence.enabled`          | Backup cron enable persistence flag          | false                        |
 | `backups.cron.persistence.matchExpressions` | Label-expression matches to bind             |                              |
 | `backups.cron.persistence.matchLabels`      | Label-value matches to bind                  |                              |
+| `backups.cron.persistence.useGenericEphemeralVolume` | Use a [generic ephemeral volume](https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes) | false |
 | `backups.cron.persistence.size`             | Backup cron persistence volume size          | `10Gi`                       |
 | `backups.cron.persistence.storageClass`     | StorageClass name for provisioning           |                              |
 | `backups.cron.persistence.subPath`          | Backup cron persistence volume mount path    |                              |
@@ -81,7 +85,7 @@ gitlab:
 | `backups.cron.startingDeadlineSeconds`      | Backup cron job starting deadline, in seconds (if null, no starting deadline is applied) | `null`                      |
 | `backups.cron.successfulJobsHistoryLimit`   | Number of successful backup jobs list in history | `3`                      |
 | `backups.cron.suspend`                      | Backup cron job is suspended | `false`                      |
-| `backups.objectStorage.backend`             | Object storage provider to use (`s3` or `gcs`) | `s3`                       |
+| `backups.objectStorage.backend`             | Object storage provider to use (`s3`, `gcs` or `azure`) | `s3`                       |
 | `backups.objectStorage.config.gcpProject`   | GCP Project to use when backend is `gcs`     | ""                           |
 | `backups.objectStorage.config.key`          | Key containing credentials in secret         | ""                           |
 | `backups.objectStorage.config.secret`       | Object storage credentials secret            | ""                           |
@@ -96,6 +100,7 @@ gitlab:
 | `init.image.repository`                     | Toolbox init image repository            |                              |
 | `init.image.tag`                            | Toolbox init image tag                   |                              |
 | `init.resources`                            | Toolbox init container resource requirements | { `requests`: { `cpu`: `50m` }} |
+| `init.containerSecurityContext`             | initContainer container specific [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) | {} |
 | `nodeSelector`                              | Toolbox and backup job node selection    |                              |
 | `persistence.accessMode`                    | Toolbox persistence access mode          | `ReadWriteOnce`              |
 | `persistence.enabled`                       | Toolbox enable persistence flag          | false                        |
@@ -112,6 +117,8 @@ gitlab:
 | `securityContext.fsGroup`                   | Group ID under which the pod should be started | `1000`                     |
 | `securityContext.runAsUser`                 | User ID under which the pod should be started  | `1000`                     |
 | `securityContext.fsGroupChangePolicy`       | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) | |
+| `containerSecurityContext`                  | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started | |
+| `containerSecurityContext.runAsUser`        | Allow to overwrite the specific security context under which the container is started | `1000` |
 | `serviceAccount.annotations`                | Annotations for ServiceAccount               | {}                           |
 | `serviceAccount.enabled`                    | Flag for using ServiceAccount                | false                        |
 | `serviceAccount.create`                     | Flag for creating a ServiceAccount           | false                        |
@@ -178,22 +185,6 @@ mindful that as the size of the GitLab installation grows the size of the
 restoration disk space also needs to grow accordingly. In most cases the
 size of the restoration disk space should be the same size as the backup
 disk space.
-
-### Large backup volumes
-
-Toolbox volume mount may fail for large backup volumes. Starting from
-Kubernetes 1.23 you can set the `fsGroupChangePolicy` to `OnRootMismatch`
-to mitigate the issue.
-
-```yaml
-gitlab:
-  toolbox:
-    securityContext:
-      fsGroupChangePolicy: "OnRootMismatch"
-```
-
-From the [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#configure-volume-permission-and-ownership-change-policy-for-pods),
-this setting "could help shorten the time it takes to change ownership and permission of a volume."
 
 ## Toolbox included tools
 

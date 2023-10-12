@@ -1,5 +1,7 @@
+require 'active_support'
 require 'open-uri'
-require "base64"
+require 'base64'
+require 'fugit'
 
 module Gitlab
   def self.included(klass)
@@ -7,6 +9,20 @@ module Gitlab
   end
 
   module TestHelper
+    KUBE_TIMEOUT_DEFAULT = '2m'.freeze
+
+    def kube_timeout_parse(variable)
+      timeout = ENV[variable] || KUBE_TIMEOUT_DEFAULT
+
+      # Check the format, simplify.
+      duration = Fugit::Duration.parse(timeout)
+
+      # If invalid, return the error.
+      raise "kube_timeout_parse: #{variable}: invalid duration '#{timeout}'" if duration.nil?
+
+      duration.deflate.to_plain_s
+    end
+
     def full_command(cmd, env = {})
       "kubectl exec -it #{pod_name} -- env #{env_hash_to_str(env)} #{cmd}"
     end
@@ -47,7 +63,7 @@ module Gitlab
 
     def sign_in
       # DRY CSS selector for finding the user avatar
-      qa_avatar_selector = 'img[data-qa-selector="user_avatar_content"]'
+      qa_avatar_selector = 'img[data-testid="user_avatar_content"],img[data-qa-selector="user_avatar_content"]'
 
       visit '/users/sign_in'
 
@@ -58,9 +74,11 @@ module Gitlab
 
       # Return if already signed in
       return if has_selector?(qa_avatar_selector)
+      raise 'GITLAB_PASSWORD environment variable not set' if ENV['GITLAB_PASSWORD'].blank?
+
       # Operate specifically within the user login form, avoiding registation form
       within('div#login-pane') do
-        fill_in 'Username or email', with: 'root'
+        fill_in 'Username or primary email', with: 'root'
         fill_in 'Password', with: ENV['GITLAB_PASSWORD']
       end
       click_button 'Sign in'
@@ -75,7 +93,7 @@ module Gitlab
     end
 
     def enforce_root_password(password)
-      cmd = full_command("gitlab-rails runner \"user = User.find(1); user.password='#{password}'; user.password_confirmation='#{password}'; user.save!\"")
+      cmd = full_command("gitlab-rails runner \"user = User.find(1); user.user_type = :human ; user.password='#{password}'; user.password_confirmation='#{password}'; user.save!\"")
 
       stdout, status = Open3.capture2e(cmd)
       return [stdout, status]
@@ -98,8 +116,70 @@ module Gitlab
       return [stdout, status]
     end
 
-    def restore_from_backup
-      cmd = full_command("backup-utility --restore -t original", { GITLAB_ASSUME_YES: "1" })
+    def get_hpa_minreplicas(app)
+      filters = "app=#{app}"
+
+      if ENV['RELEASE_NAME']
+        filters="#{filters},release=#{ENV['RELEASE_NAME']}"
+      end
+
+      stdout, status = Open3.capture2e("kubectl get hpa -l #{filters} -ojsonpath='{.items[0].spec.minReplicas}' ")
+      return [stdout, status]
+    end
+
+    def scale_deployment(app, replicas)
+      filters = "app=#{app}"
+
+      if ENV['RELEASE_NAME']
+        filters="#{filters},release=#{ENV['RELEASE_NAME']}"
+      end
+
+      puts "Scaling Deployment ('#{filters}') to #{replicas}."
+
+      stdout, status = Open3.capture2e("kubectl scale deployment -l #{filters} --replicas=#{replicas}  --timeout=#{kube_timeout_parse('KUBE_SCALE_TIMEOUT')}")
+      return [stdout, status]
+    end
+
+    def scale_rails_down
+      %w[webservice sidekiq].each do |app|
+        stdout, status = scale_deployment(app, 0)
+        raise stdout unless status.success?
+      end
+    end
+
+    def scale_rails_up
+      %w[webservice sidekiq].each do |app|
+        replicas, status = get_hpa_minreplicas(app)
+        raise replicas unless status.success?
+
+        stdout, status = scale_deployment(app, replicas)
+        raise stdout unless status.success?
+      end
+    end
+
+    def wait_for_rails_rollout
+      wait_for_rollout(type: "deployment", filters: "app in (webservice, sidekiq)")
+    end
+
+    def wait_for_rollout(type: nil, filters: nil)
+      raise ArgumentError, "Must supply both 'type' and 'filters'" if type.nil? || filters.nil?
+
+      if ENV['RELEASE_NAME']
+        filters="#{filters},release=#{ENV['RELEASE_NAME']}"
+      end
+
+      stdout, status = Open3.capture2e("kubectl rollout status #{type} -l'#{filters}' --timeout=#{kube_timeout_parse('KUBE_ROLLOUT_TIMEOUT')}")
+      raise stdout unless status.success?
+    end
+
+    def restore_from_backup(skip: [])
+      skip_flags=''
+
+      [skip].flatten.each do |skipped|
+        skip_flags += " --skip #{skipped}"
+      end
+
+      cmd = full_command("backup-utility --restore -t original #{skip_flags}", { GITLAB_ASSUME_YES: "1" })
       stdout, status = Open3.capture2e(cmd)
 
       return [stdout, status]
@@ -119,17 +199,6 @@ module Gitlab
       return [stdout, status]
     end
 
-    def restart_webservice
-      filters = 'app=webservice'
-
-      if ENV['RELEASE_NAME']
-        filters="#{filters},release=#{ENV['RELEASE_NAME']}"
-      end
-
-      stdout, status = Open3.capture2e("kubectl delete pods -l #{filters} --wait=true")
-      return [stdout, status]
-    end
-
     def restart_gitlab_runner
       release = ENV['RELEASE_NAME'] || 'gitlab'
       filters = "app=#{release}-gitlab-runner"
@@ -146,7 +215,7 @@ module Gitlab
       cmd = full_command(
         "gitlab-rails runner \"" \
         "settings = ApplicationSetting.current_without_cache; " \
-        "settings.update_columns(encrypted_customers_dot_jwt_signing_key_iv: nil, encrypted_customers_dot_jwt_signing_key: nil, encrypted_ci_jwt_signing_key_iv: nil, encrypted_ci_jwt_signing_key: nil); " \
+        "settings.update_columns(encrypted_customers_dot_jwt_signing_key_iv: nil, encrypted_customers_dot_jwt_signing_key: nil, encrypted_ci_jwt_signing_key_iv: nil, encrypted_ci_jwt_signing_key: nil, error_tracking_access_token_encrypted: nil); " \
         "settings.set_runners_registration_token('#{runner_registration_token}'); " \
         "settings.save!; " \
         "Ci::Runner.delete_all" \

@@ -34,15 +34,11 @@ describe 'GitLab Ingress configuration(s)' do
   end
 
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
-    ))
+    HelmTemplate.defaults
   end
 
   let(:ingress_names) do
     %w[
-      test-grafana-app
       test-gitlab-pages
       test-kas
       test-webservice-default
@@ -61,8 +57,6 @@ describe 'GitLab Ingress configuration(s)' do
         minio:
           enabled: true
         pages:
-          enabled: true
-        grafana:
           enabled: true
         kas:
           enabled: true

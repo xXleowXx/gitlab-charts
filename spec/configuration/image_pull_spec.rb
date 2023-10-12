@@ -5,7 +5,7 @@ require 'yaml'
 TARGET_KINDS = %w[Deployment StatefulSet Job].freeze
 CONTAINER_TYPES = %w[initContainers containers].freeze
 EXTERNAL_CHARTS = %w[
-  certmanager gitlab-runner grafana postgresql prometheus redis nginx-ingress
+  certmanager gitlab-runner postgresql prometheus redis nginx-ingress
 ].freeze
 
 def targeted_resource_kind?(resource)
@@ -83,7 +83,28 @@ describe 'image configuration' do
 
   context 'global imagePullPolicy and imagePullSecrets' do
     begin
-      template = HelmTemplate.from_file 'spec/fixtures/global-image-config.yaml'
+      template = HelmTemplate.new(HelmTemplate.with_defaults(%(
+        global:
+          geo:
+            enabled: true
+            role: secondary
+            psql:
+              host: foo
+              password:
+                secret: bar
+          psql:
+            host: foo
+            password:
+              secret: bar
+
+          image:
+            pullPolicy: pp-global
+            pullSecrets:
+            - name: ps-global
+          gitlabBase:
+            image:
+              pullPolicy: pp-gl-base
+      )))
     rescue StandardError
       # Skip these examples when helm or chart dependencies are missing
       next
@@ -113,7 +134,7 @@ describe 'image configuration' do
               it 'should use the global imagePullPolicy' do
                 pull_policy = 'pp-global'
 
-                pull_policy = 'pp-busybox' if container_type == 'initContainers' &&
+                pull_policy = 'pp-gl-base' if container_type == 'initContainers' &&
                   container&.dig('name') == 'configure'
 
                 expect(container&.dig('imagePullPolicy')).to eq(pull_policy)
@@ -127,7 +148,8 @@ describe 'image configuration' do
 
   context 'local imagePullPolicy and imagePullSecrets' do
     begin
-      template = HelmTemplate.from_file 'spec/fixtures/local-image-config.yaml'
+      values = open('spec/fixtures/local-image-config.yaml', 'r').read
+      template = HelmTemplate.new(HelmTemplate.with_defaults(values))
     rescue StandardError
       # Skip these examples when helm or chart dependencies are missing
       next

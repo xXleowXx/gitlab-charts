@@ -254,3 +254,140 @@ pgbouncer:
 ```
 
 This will automatically create a sidecar container and will start exposing metrics for each of the PgBouncer replicas.
+
+### Authenticate users in PgBouncer
+
+There are a few different ways to authenticate users in PgBouncer.
+
+#### authentication file
+
+Authentication file contains the list of known roles and their password hashes (a.k.a. `auth_file`). They have to be the same pairs as configured in PostgreSQL. 
+
+Two ways to configure the chart:
+
+1. using the `userlist` element. This will automatically generate a secret:
+
+   ```yaml
+   pgbouncer:
+     # ...
+     pgbouncer:
+       # ...
+       auth_file: /etc/pgbouncer/userlist.txt
+     userlist:
+       user1: <pwd | md5 | scram-sha-256 >
+   ```
+2. Create secret manually in advance, mount it in the `auth_file` location path for being referenced, using the appropriate `extraVolumes` and `extraVolumeMounts` elements in the chart.
+
+#### authentication query
+
+Authentication query returns the password hash (a.k.a `auth_query`). For this to work, the following must be setup in the chart configuration:
+
+```yaml
+pgbouncer:
+  # ...
+  pgbouncer:
+    # ...
+    auth_query: select uname, phash from pgbouncer_auth.user_lookup($1)
+```
+
+NOTE:
+When both are defined, the `auth_query` is used only for roles not found in the `auth_file`.
+
+For `auth_query` to function, **secure function** must be created at the database level and a superuser access to the `pg_shadow` table would be required. Secure function could look like:
+
+```sql
+CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(in i_username text, out uname text, out phash text)
+RETURNS record AS $$
+BEGIN
+    SELECT usename, passwd FROM pg_catalog.pg_shadow
+    WHERE usename = i_username INTO uname, phash;
+    RETURN;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+REVOKE ALL ON FUNCTION pgbouncer.user_lookup(text) FROM public, pgbouncer;
+GRANT EXECUTE ON FUNCTION pgbouncer.user_lookup(text) TO pgbouncer;
+```
+
+This function will allow us to fetch the hashed password of the database user name (assuming `gitlab` is the database username):
+
+```sql
+gitlabhq_production=# select uname, phash from pgbouncer_auth.user_lookup('gitlab');
+
+ uname  |                                                                 phash
+--------+---------------------------------------------------------------------------------------------------------------------------------------
+ gitlab | SCRAM-SHA-256...
+```
+
+For further information about how to configure the secure function, refer to the [PgBouncer official documentation](https://www.pgbouncer.org/config.html).
+
+Last but not least, make sure that the `auth_type` value matches the `password_encryption` value under the `postgresql.conf` configuration file in the database server(s), as well as in the client authentication `pg_hba.conf` file.
+
+### Connecting PgBouncer over TLS
+
+In order to connect PgBouncer over TLS, to create a Kubernetes Secret containing both the key and the certificate(s) is needed in advance:
+
+```shell
+kubectl create secret generic gitlab-pgbouncer-client-tls-certificate --from-file=client-pgbouncer-tls.crt=<path to certificate>
+kubectl create secret generic gitlab-pgbouncer-client-tls-key --from-file=client-pgbouncer.key=<path to key>
+
+kubectl create secret generic gitlab-pgbouncer-server-tls-certificate --from-file=server-pgbouncer-tls.crt=<path to certificate>
+kubectl create secret generic gitlab-pgbouncer-server-tls-key --from-file=server-pgbouncer.key=<path to key>
+```
+
+For them to be used, PgBouncer must contain these secrets mounted in the `pgbouncer` container, so that they can be referenced from the `pgbouncer.pgbouncer` Helm chart configuration. This can be achieved by using both the `extraVolumes` and `extraVolumeMounts` elements accordingly.
+
+## Configure GitLab application to use PgBouncer
+
+Once PgBouncer is fully configured, the final step is to connect it to GitLab. For this to work, we only need to configure the `webservice`, `sidekiq` and `gitlab-exporter` GitLab components to go through PgBouncer.
+
+In order to configure them, will keep the `global.psql` configuration as is, and will modify the GitLab components as follows:
+
+```yaml
+global:
+  # ...
+  psql:
+    host: host1.example.com
+    password:
+      secret: gitlab-database-credentials
+      key: gitlab-passwd
+    database: gitlabhq_production
+    port: 6600
+    username: gitlab
+# ...
+gitlab:
+  # ...
+  gitlab-exporter:
+    # ...
+    psql:
+      host: gitlab-pgbouncer # assuming the release name is gitlab
+      port: 6432
+      password:
+        secret: gitlab-database-credentials
+        key: gitlab-passwd
+      database: gitlabhq_production
+      username: gitlab
+  # ...
+  webservice:
+    # ...
+    psql:
+      host: gitlab-pgbouncer # assuming the release name is gitlab
+      port: 6432
+      password:
+        secret: gitlab-database-credentials
+        key: gitlab-passwd
+      database: gitlabhq_production
+      username: gitlab
+    # ...
+  sidekiq:
+    # ...
+    psql:
+      host: gitlab-pgbouncer # assuming the release name is gitlab
+      port: 6432
+      password:
+        secret: gitlab-database-credentials
+        key: gitlab-passwd
+      database: gitlabhq_production
+      username: gitlab
+```
+
+And that's it. You are ready to start using GitLab through PgBouncer.

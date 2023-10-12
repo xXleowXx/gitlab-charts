@@ -33,7 +33,6 @@ proper-names:
     "API",
     "Asana",
     "Auth0",
-    "Authentiq",
     "Azure",
     "Bamboo",
     "Bitbucket",
@@ -53,6 +52,7 @@ proper-names:
     "Geo",
     "Git LFS",
     "git-annex",
+    "git-credential-oauth",
     "git-sizer",
     "Git",
     "Gitaly",
@@ -103,12 +103,12 @@ proper-names:
     "OAuth",
     "OAuth 2",
     "OmniAuth",
-    "Omnibus GitLab",
     "OpenID",
     "OpenShift",
     "PgBouncer",
     "Postfix",
     "PostgreSQL",
+    "PowerShell",
     "Praefect",
     "Prometheus",
     "Puma",
@@ -149,3 +149,4 @@ proper-names:
     "YouTrack"
   ]
   code_blocks: false
+  html_elements: false

@@ -1,14 +1,27 @@
 require 'spec_helper'
 require 'helm_template_helper'
+require 'runtime_template_helper'
+require 'tomlrb'
 require 'yaml'
 require 'hash_deep_merge'
 
 describe 'Gitaly configuration' do
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
-    ))
+    HelmTemplate.defaults
+  end
+
+  def render_toml(raw_template, env = {})
+    # provide the gitaly_token
+    files = { '/etc/gitlab-secrets/gitaly/gitaly_token' => RuntimeTemplate::JUNK_TOKEN }
+
+    toml = RuntimeTemplate.gomplate(raw_template: raw_template, files: files, env: env)
+
+    Tomlrb.parse(toml)
+  end
+
+  def render_erb(raw_template)
+    yaml = RuntimeTemplate.erb(raw_template: raw_template, files: RuntimeTemplate.mock_files)
+    YAML.safe_load(yaml)
   end
 
   context 'When disabled and provided external instances' do
@@ -27,8 +40,8 @@ describe 'Gitaly configuration' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0)
       # check that gitlab.yml.erb contains production.repositories.storages
-      gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb')
-      storages = YAML.load(gitlab_yml)['production']['repositories']['storages']
+      gitlab_yml = render_erb(t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb'))
+      storages = gitlab_yml['production']['repositories']['storages']
       expect(storages).to have_key('default')
       expect(storages['default']['gitaly_address']).to eq('tcp://git.example.com:8075')
     end
@@ -50,8 +63,8 @@ describe 'Gitaly configuration' do
         t = HelmTemplate.new(values)
         expect(t.exit_code).to eq(0)
         # check that gitlab.yml.erb contains production.repositories.storages
-        gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb')
-        storages = YAML.load(gitlab_yml)['production']['repositories']['storages']
+        gitlab_yml = render_erb(t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb'))
+        storages = gitlab_yml['production']['repositories']['storages']
         expect(storages).to have_key('default')
         expect(storages['default']['gitaly_address']).to eq('tls://git.example.com:8076')
       end
@@ -75,8 +88,8 @@ describe 'Gitaly configuration' do
         t = HelmTemplate.new(values)
         expect(t.exit_code).to eq(0)
         # check that gitlab.yml.erb contains production.repositories.storages
-        gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb')
-        storages = YAML.load(gitlab_yml)['production']['repositories']['storages']
+        gitlab_yml = render_erb(t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb'))
+        storages = gitlab_yml['production']['repositories']['storages']
         expect(storages).to have_key('default')
         expect(storages['default']['gitaly_address']).to eq('tls://git.example.com:8076')
       end
@@ -101,8 +114,8 @@ describe 'Gitaly configuration' do
         t = HelmTemplate.new(values)
         expect(t.exit_code).to eq(0)
         # check that gitlab.yml.erb contains production.repositories.storages
-        gitlab_yml = t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb')
-        storages = YAML.load(gitlab_yml)['production']['repositories']['storages']
+        gitlab_yml = render_erb(t.dig('ConfigMap/test-webservice','data','gitlab.yml.erb'))
+        storages = gitlab_yml['production']['repositories']['storages']
         expect(storages).to have_key('default')
         expect(storages['default']['gitaly_address']).to eq('tcp://git.example.com:8075')
       end
@@ -176,7 +189,7 @@ describe 'Gitaly configuration' do
       t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0)
 
-      config = t.dig('ConfigMap/test-gitaly', 'data', 'config.toml.erb')
+      config = t.dig('ConfigMap/test-gitaly', 'data', 'config.toml.tpl')
       expect(config).to include(
         <<~CONFIG
         [[git.config]]
@@ -243,6 +256,16 @@ describe 'Gitaly configuration' do
         expect(t.dig('Service/test-gitaly', 'metadata', 'labels')).not_to include('global' => 'global')
         expect(t.dig('ServiceAccount/test-gitaly', 'metadata', 'labels')).to include('global' => 'gitaly')
       end
+
+      it 'renders a TOML configuration file' do
+        t = HelmTemplate.new(labeled_values)
+        config = t.dig('ConfigMap/test-gitaly', 'data', 'config.toml.tpl')
+        toml = render_toml(config, 'HOSTNAME' => 'default')
+
+        expect(toml.keys).to match_array(%w[auth bin_dir git gitlab gitlab-shell hooks listen_addr logging prometheus_listen_addr storage])
+        expect(toml['storage']).to eq([{ 'name' => 'default', 'path' => '/home/git/repositories' }])
+        expect(toml['auth']['token'].length).to eq(32)
+      end
     end
 
     context 'with praefect enabled' do
@@ -253,6 +276,7 @@ describe 'Gitaly configuration' do
               enabled: true
               virtualStorages:
               - name: default
+                gitalyReplicas: 3
         )).deep_merge(default_values).deep_merge(labeled_values)
       end
 
@@ -276,6 +300,16 @@ describe 'Gitaly configuration' do
         expect(t.dig('Service/test-gitaly-default', 'metadata', 'labels')).not_to include('global' => 'global')
         expect(t.dig('ServiceAccount/test-gitaly', 'metadata', 'labels')).to include('global' => 'gitaly')
       end
+
+      it 'renders a TOML configuration file' do
+        t = HelmTemplate.new(praefect_labeled_values)
+        config = t.dig('ConfigMap/test-gitaly-praefect', 'data', 'config.toml.tpl')
+        toml = render_toml(config, 'HOSTNAME' => 'test-gitaly-default-0')
+
+        expect(toml.keys).to match_array(%w[auth bin_dir git gitlab gitlab-shell hooks listen_addr logging prometheus_listen_addr storage])
+        expect(toml['storage']).to eq([{ 'name' => 'test-gitaly-default-0', 'path' => '/home/git/repositories' }])
+        expect(toml['auth']['token'].length).to eq(32)
+      end
     end
   end
 
@@ -298,8 +332,8 @@ describe 'Gitaly configuration' do
 
       let(:template) { HelmTemplate.new(values) }
 
-      it 'populates a pack_objects_cache section in config.toml.erb' do
-        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.erb')
+      it 'populates a pack_objects_cache section in config.toml.tpl' do
+        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.tpl')
 
         pack_objects_cache_section = "[pack_objects_cache]\n" \
                                      "enabled = #{pack_objects_cache_enabled}\n" \
@@ -317,10 +351,51 @@ describe 'Gitaly configuration' do
 
       let(:template) { HelmTemplate.new(values) }
 
-      it 'does not populate a pack_objects_cache section in config.toml.erb' do
-        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.erb')
+      it 'does not populate a pack_objects_cache section in config.toml.tpl' do
+        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.tpl')
 
         expect(config_toml).not_to match /^\[pack_objects_cache\]/
+      end
+    end
+  end
+
+  context 'gpg signing' do
+    let(:values) do
+      HelmTemplate.with_defaults %(
+        gitlab:
+          gitaly:
+            gpgSigning:
+              enabled: #{gpg_signing_enabled}
+              secret: #{gpg_secret_name}
+              key: #{gpg_secret_key}
+      )
+    end
+
+    context 'when enabled' do
+      let(:gpg_signing_enabled) { true }
+      let(:gpg_secret_name) { 'gpgSecret' }
+      let(:gpg_secret_key) { 'gpgisfun' }
+
+      let(:template) { HelmTemplate.new(values) }
+
+      it 'populates a signing_key field in config.toml.tpl' do
+        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.tpl')
+
+        expect(config_toml).to include "signing_key = '/etc/gitlab-secrets/gitaly/signing_key.gpg'"
+      end
+    end
+
+    context 'when disabled' do
+      let(:gpg_signing_enabled) { false }
+      let(:gpg_secret_name) { 'dont use me' }
+      let(:gpg_secret_key) { 'gpgisunfun' }
+
+      let(:template) { HelmTemplate.new(values) }
+
+      it 'does not populate a signing_key field in config.toml.tpl' do
+        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.tpl')
+
+        expect(config_toml).not_to match /^signing_key = /
       end
     end
   end

@@ -5,10 +5,7 @@ require 'hash_deep_merge'
 
 describe 'gitlab.yml.erb configuration' do
   let(:default_values) do
-    YAML.safe_load(%(
-      certmanager-issuer:
-        email: test@example.com
-    ))
+    HelmTemplate.defaults
   end
 
   context 'when CSP is disabled' do
@@ -254,6 +251,26 @@ describe 'gitlab.yml.erb configuration' do
     end
   end
 
+  context 'sidekiq.logging on web' do
+    it 'populates the gitlab.yml.erb' do
+      t = HelmTemplate.new(default_values)
+
+      expect(t.stderr).to eq("")
+      expect(t.exit_code).to eq(0)
+
+      expect(YAML.safe_load(
+        t.dig(
+          'ConfigMap/test-webservice',
+          'data',
+          'gitlab.yml.erb'
+        )
+      )['production']).to include(YAML.safe_load(%(
+        sidekiq:
+          log_format: "json"
+      )))
+    end
+  end
+
   context 'sidekiq.routingRules on web' do
     let(:required_values) do
       value.merge(default_values)
@@ -272,7 +289,7 @@ describe 'gitlab.yml.erb configuration' do
       it 'does not populate the gitlab.yml.erb' do
         t = HelmTemplate.new(required_values)
 
-        expect(t.stderr).to eq("")
+        expect(t.stderr).to be_empty
         expect(t.exit_code).to eq(0)
         expect(YAML.safe_load(
           t.dig(
@@ -290,6 +307,7 @@ describe 'gitlab.yml.erb configuration' do
           global:
             appConfig:
               sidekiq:
+                log_format: "json"
                 routingRules:
                   - ["resource_boundary=cpu", "cpu_boundary"]
                   - ["feature_category=pages", null]
@@ -311,6 +329,7 @@ describe 'gitlab.yml.erb configuration' do
           )
         )['production']).to include(YAML.safe_load(%(
           sidekiq:
+            log_format: "json"
             routing_rules:
               - ["resource_boundary=cpu","cpu_boundary"]
               - ["feature_category=pages",null]
@@ -340,7 +359,7 @@ describe 'gitlab.yml.erb configuration' do
       it 'does not populate the gitlab.yml.erb' do
         t = HelmTemplate.new(required_values)
 
-        expect(t.stderr).to eq("")
+        expect(t.stderr).to be_empty
         expect(t.exit_code).to eq(0)
         expect(YAML.safe_load(
           t.dig(
@@ -349,7 +368,7 @@ describe 'gitlab.yml.erb configuration' do
             'gitlab.yml.erb'
           )
         )['production']['sidekiq']).to include(YAML.safe_load(%(
-          log_format: "default"
+          log_format: "json"
         )))
       end
     end
@@ -380,7 +399,7 @@ describe 'gitlab.yml.erb configuration' do
             'gitlab.yml.erb'
           )
         )['production']['sidekiq']).to include(YAML.safe_load(%(
-          log_format: "default"
+          log_format: "json"
           routing_rules:
             - ["resource_boundary=cpu","cpu_boundary"]
             - ["feature_category=pages",null]
@@ -388,6 +407,36 @@ describe 'gitlab.yml.erb configuration' do
             - ["feature_category=memory|resource_boundary=memory","memory"]
             - ["*","default"]
         )))
+      end
+    end
+  end
+
+  context 'GraphQL timeout' do
+    let(:values) { HelmTemplate.defaults }
+    let(:template) { HelmTemplate.new(values) }
+    let(:renderedGraphQlTimeout) do
+      YAML.safe_load(
+        template.dig('ConfigMap/test-sidekiq', 'data', 'gitlab.yml.erb')
+      )['production']['gitlab']['graphql_timeout']
+    end
+
+    context 'is not configured' do
+      it 'populates no value to gitlab.yml.erb' do
+        expect(renderedGraphQlTimeout).to eq(nil)
+      end
+    end
+
+    context 'not configured' do
+      let(:values) do
+        HelmTemplate.with_defaults(%(
+        global:
+          appConfig:
+            graphQlTimeout: 120
+        ))
+      end
+
+      it 'populates the value to gitlab.yml.erb' do
+        expect(renderedGraphQlTimeout).to eq(120)
       end
     end
   end

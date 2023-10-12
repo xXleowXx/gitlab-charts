@@ -13,7 +13,7 @@ Kubernetes cluster are required.
 
 The minimum tools required for charts development are documented on the [Required tools page](../installation/tools.md).
 
-We recommend using [`asdf`](https://github.com/asdf-vm/asdf) to install these tools.
+You should use [`asdf`](https://github.com/asdf-vm/asdf) to install these tools.
 This allows us to easily switch between versions, Helm 3.4 and 3.5 for example.
 
 We provide a [`.tool-versions` file](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/.tool-versions)
@@ -33,6 +33,7 @@ that specifies these tools with their recommended versions. To install or update
    asdf plugin add kubectl
    asdf plugin add helm
    asdf plugin add stern
+   asdf plugin add vale
    ```
 
 1. Install or update the tools:
@@ -62,6 +63,11 @@ A cloud or local Kubernetes cluster may be used for development.
 For simple issues, a local cluster is often enough to test deployments.
 When dealing with networking, storage, or other complex issues, a cloud Kubernetes cluster allows you to more accurately recreate a production environment.
 
+WARNING:
+Kubernetes nodes must use the x86-64 architecture.
+Support for multiple architectures, including AArch64/ARM64, is under active development.
+See [issue 2899](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2899) for more information.
+
 ### Local cluster
 
 The following local cluster options are supported:
@@ -79,3 +85,18 @@ The following cloud cluster options are supported:
 ## Installing from repository
 
 Details on installing the chart from the Git repository can be found in the [developer deployment](deploy.md) documentation.
+
+## Developer license
+
+A [developer license](https://about.gitlab.com/handbook/developer-onboarding/#working-on-gitlab-ee-developer-licenses) can
+be used for chart development to test features that are only functional in a licensed environment.
+
+To use a developer license follow the [instructions for Enterprise licenses](../installation/secrets.md#initial-enterprise-license)
+and connect your instance to the Staging Customers Portal.
+
+```yaml
+global:
+  extraEnv:
+    GITLAB_LICENSE_MODE: test
+    CUSTOMER_PORTAL_URL: https://customers.staging.gitlab.com
+```

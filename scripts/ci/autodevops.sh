@@ -7,7 +7,7 @@ export CI_APPLICATION_TAG=$CI_COMMIT_SHA
 export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
 
 # Derive the Helm RELEASE argument from CI_ENVIRONMENT_SLUG
-if [[ $CI_ENVIRONMENT_SLUG =~ ^.{3}-review ]]; then
+if [[ $CI_ENVIRONMENT_SLUG =~ ^[^-]+-review ]]; then
   # if a "review", use $REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
   RELEASE_NAME=rvw-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}
   # Trim release name to leave room for prefixes/suffixes
@@ -42,21 +42,32 @@ function previousDeployFailed() {
   return $status
 }
 
+function get_gitlab_app_version_for_branch() {
+  git fetch origin "${1}"
+  git show origin/"${1}":Chart.yaml | grep 'appVersion:' | awk '{print $2}'
+}
+
+function get_image_branch_for_gitlab_app_version() {
+  # turn vX.Y.Z / X.Y.Z into X-Y-stable
+  echo "${1}" | sed -E 's/^v?([0-9]+)\.([0-9]+)\.([0-9]+)$/\1-\2-stable/'
+}
+
 function deploy() {
   # Use the gitlab version from the environment or use stable images when on the stable branch
   gitlab_app_version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
   if [[ -n "${GITLAB_VERSION}" ]]; then
     image_branch=$GITLAB_VERSION
-  elif [[ "${CI_COMMIT_BRANCH}" =~ -stable$ ]] && [[ "${gitlab_app_version}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    image_branch=$(echo "${gitlab_app_version%.*}-stable" | tr '.' '-')
+  elif [[ "${CI_COMMIT_BRANCH}" =~ -stable$ ]] && [[ "${gitlab_app_version}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    image_branch=$(get_image_branch_for_gitlab_app_version "${gitlab_app_version}")
+  elif [[ "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" =~ -stable$ ]]; then
+    stable_gitlab_app_version=$(get_gitlab_app_version_for_branch "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
+    image_branch=$(get_image_branch_for_gitlab_app_version "${stable_gitlab_app_version}")
   fi
 
   gitlab_version_args=()
   if [[ -n "$image_branch" ]]; then
       gitlab_version_args=(
       "--set" "global.gitlabVersion=${image_branch}"
-      "--set" "global.certificates.image.tag=${image_branch}"
-      "--set" "global.kubectl.image.tag=${image_branch}"
       "--set" "gitlab.gitaly.image.tag=${image_branch}"
       "--set" "gitlab.gitlab-shell.image.tag=${image_branch}"
       "--set" "gitlab.gitlab-exporter.image.tag=${image_branch}"
@@ -76,7 +87,7 @@ function deploy() {
   #echo "Generated root login: $ROOT_PASSWORD"
   kubectl create secret generic "${RELEASE_NAME}-gitlab-initial-root-password" --from-literal=password=$ROOT_PASSWORD -o yaml --dry-run=client | kubectl replace --force -f -
 
-  echo "${REVIEW_APPS_EE_LICENSE}" > /tmp/license.gitlab
+  echo "${QA_EE_LICENSE}" > /tmp/license.gitlab
   kubectl create secret generic "${RELEASE_NAME}-gitlab-license" --from-file=license=/tmp/license.gitlab -o yaml --dry-run=client | kubectl replace --force -f -
 
   # YAML_FILE=""${KUBE_INGRESS_BASE_DOMAIN//\./-}.yaml"
@@ -140,6 +151,14 @@ CIYAML
         cpu: 100m
 CIYAML
 
+  # PostgreSQL max_connection defaults to 100, which is apparently not enough to pass QA.
+  cat << CIYAML > ci.psql.yaml
+  postgresql:
+    primary:
+      extendedConfiguration: |-
+        max_connections = 200
+CIYAML
+
   if [ -n "${REVIEW_APPS_SENTRY_DSN}" ] && [ -n "${REVIEW_APPS_SENTRY_ENVIRONMENT}" ]; then
     echo "REVIEW_APPS_SENTRY_* detected, enabling Sentry"
     cat << CIYAML > ci.sentry.yaml
@@ -159,6 +178,7 @@ CIYAML
     ${SENTRY_CONFIGURATION} \
     -f ci.details.yaml \
     -f ci.scale.yaml \
+    -f ci.psql.yaml \
     --set releaseOverride="$RELEASE_NAME" \
     --set global.image.pullPolicy="Always" \
     --set global.hosts.hostSuffix="$HOST_SUFFIX" \
@@ -167,12 +187,14 @@ CIYAML
     --set global.ingress.tls.secretName=helm-charts-win-tls \
     --set global.ingress.configureCertmanager=false \
     --set global.appConfig.initialDefaults.signupEnabled=false \
-    --set nginx-ingress.controller.electionID="$RELEASE_NAME" \
+    --set nginx-ingress.controller.electionID="$RELEASE_NAME-nginx-election" \
     --set nginx-ingress.controller.ingressClassByName=true \
     --set nginx-ingress.controller.ingressClassResource.controllerValue="ci.gitlab.com/$RELEASE_NAME" \
     --set certmanager.install=false \
     --set prometheus.install=$PROMETHEUS_INSTALL \
     --set prometheus.server.retention="4d" \
+    --set global.extraEnv.GITLAB_LICENSE_MODE="test" \
+    --set global.extraEnv.CUSTOMER_PORTAL_URL="https://customers.staging.gitlab.com" \
     --set global.gitlab.license.secret="$RELEASE_NAME-gitlab-license" \
     --namespace="$NAMESPACE" \
     "${gitlab_version_args[@]}" \
@@ -316,7 +338,7 @@ function delete() {
 }
 
 function cleanup() {
-  kubectl -n "$NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,job,pod,secret,configmap,pvc,secret,clusterrole,clusterrolebinding,role,rolebinding,sa 2>&1 \
+  kubectl -n "$NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,replicaset,job,pod,secret,configmap,pvc,pv,clusterrole,clusterrolebinding,role,rolebinding,sa 2>&1 \
     | grep "$RELEASE_NAME" \
     | awk '{print $1}' \
     | xargs kubectl -n "$NAMESPACE" delete \

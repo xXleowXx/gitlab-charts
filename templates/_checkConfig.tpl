@@ -49,8 +49,13 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.storageNames" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.tls" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitaly.extern.repos" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.gitaly.gpgSigning" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.praefect.storageNames" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.praefect.defaultReplicationFactor" .) -}}
+
+{{/* _checkConfig_ingress.tpl*/}}
+{{- $messages = append $messages (include "gitlab.checkConfig.ingress.alternatives" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.ingress.class" .) -}}
 
 {{/* _checkConfig_nginx.tpl*/}}
 {{- $messages = append $messages (include "gitlab.checkConfig.nginx.controller.extraArgs" .) -}}
@@ -59,6 +64,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{/* _checkConfig_object_storage.tpl*/}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.consolidatedConfig" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.typeSpecificConfig" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.objectStorage.ciSecureFiles" .) -}}
 
 {{/* _checkConfig_postgresql.tpl*/}}
 {{- $messages = append $messages (include "gitlab.checkConfig.postgresql.deprecatedVersion" .) -}}
@@ -69,8 +75,6 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.sentry.dsn" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.notifications" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.database" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.registry.gc" .) -}}
-{{- $messages = append $messages (include "gitlab.checkConfig.registry.migration" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.redis.cache" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.tls" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.registry.debug.tls" .) -}}
@@ -91,8 +95,15 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.gracePeriod" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.webservice.loadBalancer" .) -}}
 
+{{/* _checkConfig_workhorse.tpl*/}}
+{{- $messages = append $messages (include "gitlab.checkConfig.workhorse.exporter.tls.enabled" .) -}}
+
 {{/* _checkConfig_gitlab_shell.tpl*/}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitlabShell.proxyPolicy" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.gitlabShell.metrics" .) -}}
+
+{{/* _checkConfig_omniauth.tpl*/}}
+{{- $messages = append $messages (include "gitlab.checkConfig.omniauth.providerFormat" .) -}}
 
 {{/* other checks */}}
 {{- $messages = append $messages (include "gitlab.checkConfig.multipleRedis" .) -}}
@@ -101,6 +112,10 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $messages = append $messages (include "gitlab.checkConfig.sentry" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.gitlab_docs" .) -}}
 {{- $messages = append $messages (include "gitlab.checkConfig.smtp.openssl_verify_mode" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.smtp.tls_kind" .) -}}
+{{- $messages = append $messages (include "gitlab.checkConfig.globalServiceAccount" .) -}}
+{{- $messages = append $messages (include "gitlab.duoAuth.checkConfig" .) -}}
+
 {{- /* prepare output */}}
 {{- $messages = without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -196,3 +211,30 @@ smtp:
 {{-   end }}
 {{- end -}}
 {{/* END gitlab.checkConfig.smtp.openssl_verify_mode */}}
+
+{{/*
+Ensure that either `global.smtp.tls` or `global.smtp.starttls_auto` is set to true, but not both.
+*/}}
+{{- define "gitlab.checkConfig.smtp.tls_kind" -}}
+{{-   if and .Values.global.smtp.tls .Values.global.smtp.starttls_auto -}}
+smtp:
+    global.smtp.tls and global.smtp.starttls_auto are mutually exclusive.
+    Set one of them to false. SMTP providers usually use port 465 for TLS and port 587 for STARTTLS.
+{{-     end }}
+{{-   end }}
+{{/* END gitlab.checkConfig.smtp.tls_kind */}}
+
+{{/*
+Ensure that global service account settings are correct.
+*/}}
+{{- define "gitlab.checkConfig.globalServiceAccount" -}}
+{{-   if and .Values.global.serviceAccount.enabled .Values.global.serviceAccount.create -}}
+{{-     if .Values.global.serviceAccount.name }}
+serviceAccount:
+  `global.serviceAccount.name` is set to {{ .Values.global.serviceAccount.name | quote }}.
+  Please set `global.serviceAccount.create=false` and manually create a ServiceAccount
+  object in the cluster with a matching name.
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+{{/* END gitlab.checkConfig.globalServiceAccount */}}

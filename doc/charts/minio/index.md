@@ -88,6 +88,7 @@ to the `helm install` command using the `--set` flags:
 | `resources.requests.memory`    | `256Mi`                       | MinIO minimum memory requested          |
 | `securityContext.fsGroup`      | `1000`                        | Group ID to start the pod with          |
 | `securityContext.runAsUser`    | `1000`                        | User ID to start the pod with           |
+| `securityContext.fsGroupChangePolicy` |                        | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) |
 | `servicePort`                  | `9000`                        | MinIO service port                      |
 | `serviceType`                  | `ClusterIP`                   | MinIO service type                      |
 | `tolerations`                  | `[]`                          | Toleration labels for pod assignment    |
@@ -157,9 +158,9 @@ init:
 
 The initContainer image settings are just as with a normal image configuration.
 By default, chart-local values are left empty, and the global settings
-`global.busybox.image.repository` and `global.busybox.image.tag` will be used to
-populate initContainer image. If chart-local values are specified, they get
-used instead of the global setting's values.
+`global.gitlabBase.image.repository` and the image tag associated with the current
+`global.gitlabVersion` will be used to populate the initContainer image.
+The global configuration can be overridden by chart-local values (e.g. `minio.init.image.tag`).
 
 ### initContainer script
 
@@ -185,7 +186,7 @@ These settings control the MinIO Ingress.
 | `apiVersion`     | String  |         | Value to use in the `apiVersion` field. |
 | `annotations`    | String  |         | This field is an exact match to the standard `annotations` for [Kubernetes Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/). |
 | `enabled`        | Boolean | `false` | Setting that controls whether to create Ingress objects for services that support them. When `false` the `global.ingress.enabled` setting is used. |
-| `configureCertmanager` | Boolean |   | Toggles Ingress annotation `cert-manager.io/issuer`. For more information see the [TLS requirement for GitLab Pages](../../installation/tls.md).  |
+| `configureCertmanager` | Boolean |   | Toggles Ingress annotation `cert-manager.io/issuer` and `acme.cert-manager.io/http01-edit-in-place`.. For more information see the [TLS requirement for GitLab Pages](../../installation/tls.md).  |
 | `tls.enabled`    | Boolean | `true`  | When set to `false`, you disable TLS for MinIO. This is mainly useful when you cannot use TLS termination at Ingress-level, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `tls.secretName` | String  |         | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the MinIO URL. When not set, the `global.ingress.tls.secretName` is used instead. |
 

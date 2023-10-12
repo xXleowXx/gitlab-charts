@@ -9,7 +9,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 This document intends to provide documentation on how to configure this Helm chart with an external Redis service.
 
 If you don't have Redis configured, for on-premise or deployment to VM,
-consider using our [Omnibus GitLab package](external-omnibus-redis.md).
+consider using our [Linux package](external-omnibus-redis.md).
+
+For details about currently supported Redis versions, see [Installation system requirements](https://docs.gitlab.com/ee/install/requirements.html#redis).
 
 ## Configure the chart
 
@@ -19,9 +21,9 @@ You must set the following parameters:
 
 - `redis.install`: Set to `false` to disable including the Redis chart.
 - `global.redis.host`: Set to the hostname of the external Redis, can be a domain or an IP address.
-- `global.redis.password.enabled`: Set to `false` if the external Redis does not require a password.
-- `global.redis.password.secret`: The name of the [secret which contains the token for authentication](../../installation/secrets.md#redis-password).
-- `global.redis.password.key`: The key in the secret, which contains the token content.
+- `global.redis.auth.enabled`: Set to `false` if the external Redis does not require a password.
+- `global.redis.auth.secret`: The name of the [secret which contains the token for authentication](../../installation/secrets.md#redis-password).
+- `global.redis.auth.key`: The key in the secret, which contains the token content.
 
 Items below can be further customized if you are not using the defaults:
 
@@ -33,8 +35,8 @@ For example, pass these values via Helm's `--set` flag while deploying:
 helm install gitlab gitlab/gitlab  \
   --set redis.install=false \
   --set global.redis.host=redis.example \
-  --set global.redis.password.secret=gitlab-redis \
-  --set global.redis.password.key=redis-password \
+  --set global.redis.auth.secret=gitlab-redis \
+  --set global.redis.auth.key=redis-password \
 ```
 
 If you are connecting to a Redis HA cluster that has Sentinel servers
@@ -82,6 +84,12 @@ redis:
 global:
   redis:
     redisYmlOverride:
+      raredis:
+        host: rare-redis.example.com:6379
+        password:
+          enabled: true
+          secret: secretname
+          key: password
       exotic_redis:
         host: redis.example.com:6379
         password: <%= File.read('/path/to/secret').strip.to_json %>
@@ -90,11 +98,14 @@ global:
           nested: value
 ```
 
-Assuming `/path/to/secret` contains `THE SECRET`, his will cause the
+Assuming `/path/to/secret` contains `THE SECRET` and `/path/to/secret/raredis-override-password` contains `RARE SECRET`, his will cause the
 following to be rendered in `redis.yml`:
 
 ```yaml
 production:
+  raredis:
+    host: rare-redis.example.com:6379
+    password: "RARE SECRET"
   exotic_redis:
     host: redis.example.com:6379
     password: "THE SECRET"
@@ -107,9 +118,11 @@ production:
 
 The flip side of the flexibility of `redisYmlOverride` is that it is less user friendly. For example:
 
-1. To insert passwords into `redis.yml` you must write correct ERB
-   `<%= File.read('/path/to/secret').strip.to_json %>` statements yourself, using
-   whatever path the secret is mounted in the container at.
+1. To insert passwords into `redis.yml` you may either:
+   - Use the existing [password definition](../../charts/globals.md#multiple-redis-support)
+     and let Helm replace it with an ERB statement.
+   - Write correct ERB `<%= File.read('/path/to/secret').strip.to_json %>` statements yourself,
+     using whatever path the secret is mounted in the container at.
 1. In `redisYmlOverride` you must follow the naming conventions of
    GitLab Rails. For example, the "SharedState" instance is not called
    `sharedState` but `shared_state`.
@@ -119,3 +132,12 @@ The flip side of the flexibility of `redisYmlOverride` is that it is less user f
 1. The CNG images [expect a valid `resque.yml` and `cable.yml`](https://gitlab.com/gitlab-org/build/CNG/-/blob/4d314e505edb25ccefd4297d212bfbbb5bc562f9/gitlab-rails/scripts/lib/checks/redis.rb#L54)
   so you still need to configure at least `global.redis.host` to get a
   `resque.yml` file.
+
+## Troubleshooting
+
+### `ERR Error running script (call to f_5962bd591b624c0e0afce6631ff54e7e4402ebd8): @user_script:7: ERR syntax error`
+
+You might see this error in the logs of `webservice` and `sidekiq` pods if you use external Redis 5 with Helm chart 7.2 or later. Redis 5
+[is not supported](https://docs.gitlab.com/ee/install/requirements.html#redis).
+
+To fix it, upgrade your external Redis instance to 6.x or later.

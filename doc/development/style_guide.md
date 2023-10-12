@@ -60,29 +60,30 @@ We use secrets to store sensitive information like passwords and share them amon
 
 The common fields we use them in are:
 
-- **Certificates** - TLS certificates for the registry etc.
+- **TLS/SSL Certificates** - Sharing TLS/SSL certificates
 - **Passwords** - Sharing the Redis password.
 - **Auth Tokens** - Sharing the inter-service auth tokens
+- **Other Secrets** - Sharing other secrets like JWT certificates and signing keys
 
-### Certificates
+### TLS/SSL Certificates
 
-For example, where `registry` was the owning chart, and the other charts need to reference the `registry` certificate.
+A TLS/SSL certificate is expected to be a valid [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets).
 
-The owning chart should define its certificate secret like the following:
-
-```yaml
-certificate:
-  secret: <secret name>
-  key: <key name inside the secret to fetch>
-```
-
-Other charts should share the same certificate secret like the following:
+For example, to set up the registry:
 
 ```yaml
 registry:
-  certificate:
-    secret: <secret name>
-    key: <key name inside the secret to fetch>
+  tls:
+    secretName: <TLS secret name>
+```
+
+When a TLS certificate is shared between charts, it should be defined as [a global value](https://helm.sh/docs/chart_template_guide/subcharts_and_globals/#global-chart-values).
+
+```yaml
+global:
+  ingress:
+    tls:
+      secretName: <TLS secret name>
 ```
 
 ### Passwords
@@ -126,6 +127,31 @@ gitaly:
 ```
 
 For example, where `gitaly` was the owning chart, and the other charts need to reference the `gitaly` authToken.
+
+### Other Secrets
+
+Other secrets, such as the JWT signing certificate for the `registry` or the `gitaly` GPG signing
+key, use the same format as `authToken` and `password` secrets.
+
+To share such secrets from one chart to other charts, provide a configuration similar to
+the example below in which the `registry` JWT signing certificate is shared with other charts.
+
+The owning chart should define its secret like the following:
+
+```yaml
+certificate:
+  secret: <secret name>
+  key: <key name inside the secret to fetch>
+```
+
+Other charts should share the same secret like the following:
+
+```yaml
+registry:
+  certificate:
+    secret: <secret name>
+    key: <key name inside the secret to fetch>
+```
 
 ## Preferences on function use
 
@@ -265,7 +291,7 @@ minimize their own configuration files without it being cumbersome.
 A charts template helpers are located in `templates/_helpers.tpl`. These contain the [named templates](https://helm.sh/docs/chart_template_guide/named_templates/)
 used within the chart.
 
-When using these templates, there a few things to keep in mind regarding the [golang templating syntax](https://pkg.go.dev/text/template).
+When using these templates, there a few things to keep in mind regarding the [Go templating syntax](https://pkg.go.dev/text/template).
 
 ### Trapping non-printed values from actions
 
@@ -477,7 +503,7 @@ Two categories, `WARNING` and `NOTICE`, signify each type of entry in the note o
 
 Each entry in `NOTES.txt` should start with one of these two categories. For example:
 
-```golang
+```go
 {{- if eq true .Values.some.setting }}
 {{ $WARNING }}
 This message is a warning.

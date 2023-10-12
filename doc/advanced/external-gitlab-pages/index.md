@@ -7,8 +7,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Configure the GitLab chart with external GitLab Pages
 
 This document intends to provide documentation on how to configure this Helm
-chart with a GitLab Pages instance, configured outside of the cluster, using an
-Omnibus GitLab package.
+chart with a GitLab Pages instance, configured outside of the cluster using a Linux package.
+[Issue 418259](https://gitlab.com/gitlab-org/gitlab/-/issues/418259) proposes adding documentation for a Linux package instance with an external
+GitLab Pages using the Helm chart.
 
 ## Requirements
 
@@ -25,7 +26,7 @@ Omnibus GitLab package.
 
 ## Configure external GitLab Pages instance
 
-1. [Install GitLab](https://about.gitlab.com/install/) using the Omnibus GitLab
+1. [Install GitLab](https://about.gitlab.com/install/) using the Linux
    package.
 
 1. Edit `/etc/gitlab/gitlab.rb` file and replace its contents with the

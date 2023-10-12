@@ -107,45 +107,12 @@ Returns the minio url.
 {{- $result.domainHost -}}
 {{- end -}}
 
-{{/*
-  A helper template for collecting and inserting the imagePullSecrets.
-
-  It expects a dictionary with two entries:
-    - `global` which contains global image settings, e.g. .Values.global.image
-    - `local` which contains local image settings, e.g. .Values.image
-*/}}
-{{- define "gitlab.image.pullSecrets" -}}
-{{- $pullSecrets := default (list) .global.pullSecrets -}}
-{{- if .local.pullSecrets -}}
-{{-   $pullSecrets = concat $pullSecrets .local.pullSecrets -}}
-{{- end -}}
-{{- if $pullSecrets }}
-imagePullSecrets:
-{{-   range $index, $entry := $pullSecrets }}
-- name: {{ $entry.name }}
-{{-   end }}
-{{- end }}
-{{- end -}}
-
-{{/*
-  A helper template for inserting imagePullPolicy.
-
-  It expects a dictionary with two entries:
-    - `global` which contains global image settings, e.g. .Values.global.image
-    - `local` which contains local image settings, e.g. .Values.image
-*/}}
-{{- define "gitlab.image.pullPolicy" -}}
-{{- $pullPolicy := coalesce .local.pullPolicy .global.pullPolicy -}}
-{{- if $pullPolicy }}
-imagePullPolicy: {{ $pullPolicy | quote }}
-{{- end -}}
-{{- end -}}
-
 {{/* ######### cert-manager templates */}}
 
 {{- define "gitlab.certmanager_annotations" -}}
 {{- if (pluck "configureCertmanager" .Values.ingress .Values.global.ingress (dict "configureCertmanager" false) | first) -}}
 cert-manager.io/issuer: "{{ .Release.Name }}-issuer"
+acme.cert-manager.io/http01-edit-in-place: "true"
 {{- end -}}
 {{- end -}}
 
@@ -161,7 +128,7 @@ use the name of the service the upstream chart creates
 */}}
 {{- define "gitlab.psql.host" -}}
 {{- $local := pluck "psql" $.Values | first -}}
-{{- coalesce (pluck "host" $local .Values.global.psql | first) (printf "%s.%s.svc" (include "postgresql.fullname" .) $.Release.Namespace) -}}
+{{- coalesce (pluck "host" $local .Values.global.psql | first) (printf "%s.%s.svc" (include "postgresql.primary.fullname" .) $.Release.Namespace) -}}
 {{- end -}}
 
 {{/*
@@ -175,19 +142,31 @@ use the name of the initdb scripts ConfigMap the upstream chart creates
 {{- end -}}
 
 {{/*
-Alias of gitlab.psql.initdbscripts
-*/}}
-{{- define "postgresql.initdbScriptsCM" -}}
-{{- template "gitlab.psql.initdbscripts" . -}}
-{{- end -}}
-
-{{/*
 Overrides the full name of PostegreSQL in the upstream chart.
 */}}
-{{- define "postgresql.fullname" -}}
+{{- define "postgresql.primary.fullname" -}}
 {{- $local := pluck "psql" $.Values | first -}}
 {{- coalesce (pluck "serviceName" $local .Values.global.psql | first) (printf "%s-%s" $.Release.Name "postgresql") -}}
 {{- end -}}
+
+{{/*
+Overrides the username of PostegreSQL in the upstream chart.
+
+Alias of gitlab.psql.username
+*/}}
+{{- define "postgresql.username" -}}
+{{- template "gitlab.psql.username" . -}}
+{{- end -}}
+
+{{/*
+Overrides the database name of PostegreSQL in the upstream chart.
+
+Alias of gitlab.psql.database
+*/}}
+{{- define "postgresql.database" -}}
+{{- template "gitlab.psql.database" . -}}
+{{- end -}}
+
 
 {{/*
 Return the db database name
@@ -226,13 +205,6 @@ Defaults to a release-based name and falls back to .Values.global.psql.secretNam
 {{- $local := pluck "psql" $.Values | first -}}
 {{- $localPass := pluck "password" $local | first -}}
 {{- default (printf "%s-%s" .Release.Name "postgresql-password") (pluck "secret" $localPass $.Values.global.psql.password | first ) | quote -}}
-{{- end -}}
-
-{{/*
-Alias of gitlab.psql.password.secret to override upstream postgresql chart naming
-*/}}
-{{- define "postgresql.secretName" -}}
-{{- template "gitlab.psql.password.secret" . -}}
 {{- end -}}
 
 {{/*
@@ -336,52 +308,6 @@ Defaults to nil
 {{- define "gitlab.psql.tcpUserTimeout" -}}
 {{- $local := pluck "psql" $.Values | first -}}
 {{ pluck "tcpUserTimeout" $local .Values.global.psql | first -}}
-{{- end -}}
-
-{{/* ######### ingress templates */}}
-
-{{/*
-Return the appropriate apiVersion for Ingress.
-
-It expects a dictionary with three entries:
-  - `global` which contains global ingress settings, e.g. .Values.global.ingress
-  - `local` which contains local ingress settings, e.g. .Values.ingress
-  - `context` which is the parent context (either `.` or `$`)
-
-Example usage:
-{{- $ingressCfg := dict "global" .Values.global.ingress "local" .Values.ingress "context" . -}}
-kubernetes.io/ingress.provider: "{{ template "gitlab.ingress.provider" $ingressCfg }}"
-*/}}
-{{- define "gitlab.ingress.apiVersion" -}}
-{{-   if .local.apiVersion -}}
-{{-     .local.apiVersion -}}
-{{-   else if .global.apiVersion -}}
-{{-     .global.apiVersion -}}
-{{-   else if .context.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" -}}
-{{-     print "networking.k8s.io/v1" -}}
-{{-   else if .context.Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/Ingress" -}}
-{{-     print "networking.k8s.io/v1beta1" -}}
-{{-   else -}}
-{{-     print "extensions/v1beta1" -}}
-{{-   end -}}
-{{- end -}}
-
-{{/*
-Returns the ingress provider
-
-It expects a dictionary with two entries:
-  - `global` which contains global ingress settings, e.g. .Values.global.ingress
-  - `local` which contains local ingress settings, e.g. .Values.ingress
-*/}}
-{{- define "gitlab.ingress.provider" -}}
-{{- default .global.provider .local.provider -}}
-{{- end -}}
-
-{{/*
-Overrides the ingress-nginx template to make sure gitlab-shell name matches
-*/}}
-{{- define "ingress-nginx.tcp-configmap" -}}
-{{ .Release.Name}}-nginx-ingress-tcp
 {{- end -}}
 
 {{/* ######### annotations */}}
@@ -510,36 +436,6 @@ Return true in any other case.
 {{- end -}}
 
 {{/*
-Constructs kubectl image name.
-*/}}
-{{- define "gitlab.kubectl.image" -}}
-{{- printf "%s:%s" .Values.global.kubectl.image.repository .Values.global.kubectl.image.tag -}}
-{{- end -}}
-
-{{/*
-Constructs busybox image name.
-*/}}
-{{- define "gitlab.busybox.image" -}}
-{{/*
-    # Earlier, init.image and init.tag were used to configure initContainer
-    # image details. We deprecated them in favor of init.image.repository and
-    # init.image.tag. However, deprecation checking happens after template
-    # rendering is done. So, we have to handle the case of `init.image` being a
-    # string to avoid the process being broken at rendering stage itself. It
-    # doesn't matter what we print there because once rendering is done
-    # deprecation check will kick-in and abort the process. That value will not
-    # be used.
-*/}}
-{{- if kindIs "map" .local.image }}
-{{- $image := default .global.busybox.image.repository .local.image.repository }}
-{{- $tag := default .global.busybox.image.tag .local.image.tag }}
-{{- printf "%s:%s" $image $tag -}}
-{{- else }}
-{{- printf "DEPRECATED:DEPRECATED" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Override upstream redis chart naming
 */}}
 {{- define "redis.secretName" -}}
@@ -606,4 +502,47 @@ emptyDir: {}
 {{- else -}}
 emptyDir: {{ toYaml $values | nindent 2 }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return init container specific securityContext template
+*/}}
+{{- define "gitlab.init.containerSecurityContext" }}
+{{- if .Values.init.containerSecurityContext }}
+securityContext:
+  {{- toYaml .Values.init.containerSecurityContext | nindent 2 }}
+{{- end }}
+{{- end }}
+
+{{/*
+Return container specific securityContext template
+*/}}
+{{- define "gitlab.containerSecurityContext" }}
+{{- if .Values.containerSecurityContext }}
+securityContext:
+  {{- toYaml .Values.containerSecurityContext | nindent 2 }}
+{{- end }}
+{{- end }}
+Return a PodSecurityContext definition.
+
+Usage:
+  {{ include "gitlab.podSecurityContext" .Values.securityContext }}
+*/}}
+{{- define "gitlab.podSecurityContext" -}}
+{{- $psc := . }}
+{{- if $psc }}
+securityContext:
+{{-   if not (empty $psc.runAsUser) }}
+  runAsUser: {{ $psc.runAsUser }}
+{{-   end }}
+{{-   if not (empty $psc.runAsGroup) }}
+  runAsGroup: {{ $psc.runAsGroup }}
+{{-   end }}
+{{-   if not (empty $psc.fsGroup) }}
+  fsGroup: {{ $psc.fsGroup }}
+{{-   end }}
+{{-   if not (empty $psc.fsGroupChangePolicy) }}
+  fsGroupChangePolicy: {{ $psc.fsGroupChangePolicy }}
+{{-   end }}
+{{- end }}
 {{- end -}}

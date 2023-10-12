@@ -1,24 +1,6 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "webservice.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{-   .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{-   $name := default .Chart.Name .Values.nameOverride }}
-{{-   if contains $name .Release.Name }}
-{{-     .Release.Name | trunc 63 | trimSuffix "-" }}
-{{-   else }}
-{{-     printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{-   end }}
-{{- end }}
-{{- end }}
-
-{{/*
 Create the fullname, with suffix of deployment.name
 Unless `ingress.path: /` or `name: default`
 
@@ -32,15 +14,19 @@ Unless `ingress.path: /` or `name: default`
 Returns the secret name for the Secret containing the TLS certificate and key.
 Uses `ingress.tls.secretName` first and falls back to `global.ingress.tls.secretName`
 if there is a shared tls secret for all ingresses.
+
+It expects a dictionary with two entries:
+  `root`: the root context
+  `local`: the ingress context
 */}}
 {{- define "webservice.tlsSecret" -}}
 {{- $defaultName := (dict "secretName" "") -}}
-{{- if $.Values.global.ingress.configureCertmanager -}}
-{{- $_ := set $defaultName "secretName" (printf "%s-gitlab-tls" $.Release.Name) -}}
+{{- if .root.Values.global.ingress.configureCertmanager -}}
+{{-   $_ := set $defaultName "secretName" (printf "%s-gitlab-tls" .root.Release.Name) -}}
 {{- else -}}
-{{- $_ := set $defaultName "secretName" (include "gitlab.wildcard-self-signed-cert-name" .) -}}
+{{-   $_ := set $defaultName "secretName" (include "gitlab.wildcard-self-signed-cert-name" .root) -}}
 {{- end -}}
-{{- pluck "secretName" $.Values.ingress.tls $.Values.global.ingress.tls $defaultName | first -}}
+{{- pluck "secretName" .local.tls .root.Values.global.ingress.tls $defaultName | first -}}
 {{- end -}}
 
 {{/*
@@ -88,49 +74,43 @@ image repository.
 {{- end -}}
 
 {{/*
-Returns ERB section for Workhorse direct object storage configuration.
+Returns gomplate section for Workhorse direct object storage configuration.
 
 If Minio in use, set AWS and keys.
 If consolidated object storage is in use, read the connection YAML
   If provider is AWS, render enabled as true.
 */}}
 {{- define "workhorse.object_storage.config" -}}
-{%- $supported_providers := slice "AWS" "AzureRM" -%}
-{%- $provider := "" -%}
-{%- $aws_access_key_id := "" -%}
-{%- $aws_secret_access_key := "" -%}
-{%- $azure_storage_account_name := "" -%}
-{%- $azure_storage_access_key := "" -%}
+{%- $supported_providers := slice "AWS" "AzureRM" "Google" -%}
+{%- $connection := coll.Dict "provider" "" -%}
 {%- if file.Exists "/etc/gitlab/minio/accesskey" %}
-  {%- $provider = "AWS" -%}
-  {%- $aws_access_key_id = file.Read "/etc/gitlab/minio/accesskey" | strings.TrimSpace -%}
-  {%- $aws_secret_access_key = file.Read "/etc/gitlab/minio/secretkey" | strings.TrimSpace -%}
+  {%- $aws_access_key_id := file.Read "/etc/gitlab/minio/accesskey" | strings.TrimSpace -%}
+  {%- $aws_secret_access_key := file.Read "/etc/gitlab/minio/secretkey" | strings.TrimSpace -%}
+  {%- $connection = coll.Dict "provider" "AWS" "aws_access_key_id" $aws_access_key_id "aws_secret_access_key" $aws_secret_access_key -%}
 {%- end %}
 {%- if file.Exists "/etc/gitlab/objectstorage/object_store" %}
-  {%- $connection := file.Read "/etc/gitlab/objectstorage/object_store" | strings.TrimSpace | data.YAML -%}
-  {%- $provider = $connection.provider -%}
-  {%- if has $connection "aws_access_key_id" -%}
-    {%- $aws_access_key_id = $connection.aws_access_key_id -%}
-    {%- $aws_secret_access_key = $connection.aws_secret_access_key -%}
-  {%- else if has $connection "azure_storage_account_name" -%}
-    {%- $azure_storage_account_name = $connection.azure_storage_account_name -%}
-    {%- $azure_storage_access_key = $connection.azure_storage_access_key -%}
-  {%- end -%}
+  {%- $connection = file.Read "/etc/gitlab/objectstorage/object_store" | strings.TrimSpace | data.YAML -%}
 {%- end %}
-{%- if has $supported_providers $provider %}
+{%- if has $supported_providers $connection.provider %}
 [object_storage]
-provider = "{% $provider %}"
-{%-   if eq $provider "AWS" %}
+provider = "{% $connection.provider %}"
+{%-   if eq $connection.provider "AWS" %}
+{%-     $connection = coll.Merge $connection (coll.Dict "aws_access_key_id" "" "aws_secret_access_key" "" ) %}
 # AWS / S3 object storage configuration.
 [object_storage.s3]
 # access/secret can be blank!
-aws_access_key_id = {% $aws_access_key_id | strings.TrimSpace | data.ToJSON %}
-aws_secret_access_key = {% $aws_secret_access_key | strings.TrimSpace | data.ToJSON %}
-{%-   else if eq $provider "AzureRM" %}
+aws_access_key_id = {% $connection.aws_access_key_id | strings.TrimSpace | data.ToJSON %}
+aws_secret_access_key = {% $connection.aws_secret_access_key | strings.TrimSpace | data.ToJSON %}
+{%-   else if eq $connection.provider "AzureRM" %}
+{%- $connection = coll.Merge $connection (coll.Dict "azure_storage_account_name" "" "azure_storage_account_name" "" ) %}
 # Azure Blob storage configuration.
 [object_storage.azurerm]
-azure_storage_account_name = {% $azure_storage_account_name | strings.TrimSpace | data.ToJSON %}
-azure_storage_access_key = {% $azure_storage_access_key | strings.TrimSpace | data.ToJSON %}
+azure_storage_account_name = {% $connection.azure_storage_account_name | strings.TrimSpace | data.ToJSON %}
+azure_storage_access_key = {% $connection.azure_storage_access_key | strings.TrimSpace | data.ToJSON %}
+{%-   else if eq $connection.provider "Google" %}
+# Google storage configuration.
+[object_storage.google]
+{% $connection | coll.Omit "provider" | data.ToTOML %}
 {%-   end %}
 {%- end %}
 {{- end -}}
@@ -242,10 +222,21 @@ Return the webservice TLS secret name
 {{- end -}}
 
 {{/*
-Return the webservice-metrics TLS secret name
+Return the webservice-metrics TLS secret name.
 */}}
 {{- define "webservice-metrics.tls.secret" -}}
-{{- default (printf "%s-webservice-metrics-tls" .Release.Name) $.Values.metrics.tls.secretName | quote -}}
+{{- $.Values.metrics.tls.secretName | default (include "webservice.tls.secret" .) }}
+{{- end -}}
+
+{{/*
+Return whether the webservice has TLS for metrics enabled.
+*/}}
+{{- define "webservice-metrics.tls.enabled" -}}
+{{- if hasKey $.Values.metrics.tls "enabled" }}
+{{-   $.Values.metrics.tls.enabled }}
+{{- else }}
+{{-   $.Values.tls.enabled }}
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -253,4 +244,54 @@ Return the Workhorse TLS Secret name
 */}}
 {{- define "workhorse.tls.secret" -}}
 {{- default (printf "%s-workhorse-tls" .Release.Name) $.Values.workhorse.tls.secretName | quote -}}
+{{- end -}}
+
+{{/*
+Return whether the Workhorse exporter has TLS enabled.
+*/}}
+{{- define "workhorse.monitoring.exporter.tls.enabled" -}}
+{{- if hasKey $.Values.workhorse.monitoring.exporter.tls "enabled" }}
+{{-   $.Values.workhorse.monitoring.exporter.tls.enabled }}
+{{- else }}
+{{-   $.Values.global.workhorse.tls.enabled }}
+{{- end }}
+{{- end -}}
+
+
+{{/*
+Return the workhorse redis configuration.
+*/}}
+{{- define "workhorse.redis.config" -}}
+{{- if $.Values.global.redis.workhorse }}
+{{-   $_ := set $ "redisConfigName" "workhorse" }}
+{{- end }}
+{{- include "gitlab.redis.selectedMergedConfig" . -}}
+[redis]
+{{- if not .redisMergedConfig.sentinels }}
+URL = "{{ template "gitlab.redis.scheme" $ }}://{{ template "gitlab.redis.host" $ }}:{{ template "gitlab.redis.port" $ }}"
+{{- else }}
+SentinelMaster = "{{ template "gitlab.redis.host" $ }}"
+Sentinel = [ {{ template "gitlab.redis.workhorse.sentinel-list" $ }} ]
+{{- end }}
+{{- if .redisMergedConfig.password.enabled }}
+{{-   $passwordPath := printf "%s-password" (default "redis" .redisConfigName) }}
+Password = {% file.Read "/etc/gitlab/redis/{{ $passwordPath }}" | strings.TrimSpace | data.ToJSON %}
+{{- end }}
+{{- $_ := set . "redisConfigName" "" }}
+{{- end -}}
+
+{{/*
+Return the bash setup commands for redis secrets.
+*/}}
+{{- define "workhorse.redis.secret-setup" -}}
+{{- if $.Values.global.redis.workhorse -}}
+{{-   $_ := set $ "redisConfigName" "workhorse" }}
+{{- end -}}
+{{- include "gitlab.redis.selectedMergedConfig" . -}}
+{{- if .redisMergedConfig.password.enabled -}}
+{{-   $passwordPath := printf "%s-password" (default "redis" .redisConfigName) -}}
+mkdir -p /init-secrets-workhorse/redis
+cp -v -r -L /init-config/redis/{{ $passwordPath }} /init-secrets-workhorse/redis/
+{{- end -}}
+{{- $_ := set . "redisConfigName" "" }}
 {{- end -}}
