@@ -57,7 +57,8 @@ spec:
     - host: {{ .host }}
       http:
         paths:
-          - path: {{ .deployment.ingress.path }}
+        {{- range $path := .deployment.ingress.paths }}
+          - path: {{ $path }}
             {{ if or (.root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") (eq $global.ingress.apiVersion "networking.k8s.io/v1") -}}
             pathType: {{ default .deployment.ingress.pathType $global.ingress.pathType }}
             backend:
@@ -70,6 +71,7 @@ spec:
               serviceName: {{ template "webservice.fullname.withSuffix" .deployment }}
               servicePort: {{ .root.Values.service.workhorseExternalPort }}
             {{- end -}}
+        {{- end }}
   {{- if (and .tlsSecret (eq (include "gitlab.ingress.tls.enabled" .root) "true" )) }}
   tls:
     - hosts:

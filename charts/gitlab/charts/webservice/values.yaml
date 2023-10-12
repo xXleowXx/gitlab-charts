@@ -123,7 +123,7 @@ extraIngress:
   proxyConnectTimeout: 15
   proxyReadTimeout: 600
   proxyBodySize: "512m"
-  # hostname: 
+  # hostname:
   tls: {}
     # secretName:
     # smartcardSecretName:
@@ -479,12 +479,13 @@ priorityClassName: ""
 #  resource for tracking.
 #  https://docs.gitlab.com/charts/charts/gitlab/webservice/#deployments
 deployments: {}
-  # There must always be at least one, with `xyz.ingress.path: /`
+  # There must always be at least one, with `xyz.ingress.paths: ["/"]`
   # unless `ingress.requireBasePath: false`
   #
   # default:
   #   ingress:
-  #     path: /
+  #     paths:
+  #       - /
 
 affinity:
   podAntiAffinity:
