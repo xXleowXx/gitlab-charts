@@ -55,6 +55,31 @@ To migrate from a Helm installation to a Linux package (Omnibus) installation:
 
 1. Copy the GitLab Helm backup to `/var/opt/gitlab/backups` on your Linux package instance, and
    [perform the restore](https://docs.gitlab.com/ee/raketasks/backup_restore.html#restore-for-omnibus-gitlab-installations).
+1. (Optional) Restore SSH host keys to avoid host mismatch errors on Git SSH clients:
+
+   1. Convert [`<name>-gitlab-shell-host-keys` secret](../secrets.md#ssh-host-keys) back to files
+   1. Copy / upload them to the Omnibus GitLab Rails nodes
+   1. On the target Rails node:
+      1. Back up the `/etc/ssh/` directory (for example `sudo tar cvf /root/ssh_dir.tar.gz /etc/ssh`)
+      1. Remove the existing host keys: `sudo find /etc/ssh -regex "/etc/ssh/ssh_host.+$" -delete`
+      1. Move the converted host key files in place (`/etc/ssh`)
+      1. Set owner / permissions:
+         1. Private keys:
+
+            ```shell
+            sudo find /etc/ssh -regex "/etc/ssh/ssh_host.+_key$" -exec \
+            sh -c "chown root:root {}; chmod 0600 {}" \;
+            ```
+
+         1. Public keys:
+
+            ```shell
+            sudo find /etc/ssh -regex "/etc/ssh/ssh_host.+_key\.pub$" -exec \
+            sh -c "chown root:root {}; chmod 0644 {}" \;
+            ```
+
+      1. Restart the SSH daemon (`systemctl restart ssh.service` / `service sshd restart`)
+
 1. After the restore is complete, run the [doctor Rake tasks](https://docs.gitlab.com/ee/administration/raketasks/check.html)
    to make sure that the secrets are valid.
 1. After everything is verified, you may [uninstall](../uninstall.md)
