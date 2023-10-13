@@ -16,8 +16,7 @@ spec:
     - name: {{ template "fullname" . }}
       namespace: {{ .Release.Namespace }}
       port: {{ include "gitlab.shell.port" . | int }}
-      {{- if .Values.global.shell.tcp.proxyProtocol -}}
-      # https://doc.traefik.io/traefik/routing/services/#proxy-protocol
+      {{- if .Values.global.shell.tcp.proxyProtocol }}
       proxyProtocol:
         version: 2
       {{- end }}
