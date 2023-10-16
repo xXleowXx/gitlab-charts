@@ -67,6 +67,7 @@ stages:
   - prepare
   - test
   - preflight
+  - prepare-review
   - review
   - staging
   - canary
@@ -232,6 +233,20 @@ lint_package:
           cronJob:
             apiVersion: batch/v1
 
+pin_image_versions:
+  stage: prepare-review
+  script:
+    - apk add skopeo
+    - bash ./scripts/ci/pin_image_digests.sh
+  artifacts:
+    paths:
+      - ci.digests.yaml
+  rules:
+    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
+
 .review_template:
   stage: review
   variables:
@@ -266,6 +281,7 @@ lint_package:
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
+  needs: ['pin_image_versions']
 
 review_gke122:
   variables:
