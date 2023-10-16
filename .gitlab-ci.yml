@@ -521,13 +521,13 @@ stop_review_eks:
 # or `canary` deploys, or you simply want more control over when you deploy
 # to production, uncomment the `when: manual` line in the `production` job.
 
+
+
 .run_script:
   extends: .source_autodevops
   variables:
   script:
-    - mkdir -p $(dirname "${VARIABLES_FILE}")
-    - set_context
-    - check_kube_domain
+    - !reference [.set_up_varfile_and_kubecontext:script]
     - >
       if [[ $CI_JOB_NAME =~ $REVIEW_JOB_REGEX_PATTERN ]]; then
         kubectl version
