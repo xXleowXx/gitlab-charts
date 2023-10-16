@@ -416,7 +416,7 @@ stop_review_eks:
 
 .stable:
   stage: stable
-  extends: .run_script
+  extends: .source_autodevops
   artifacts:
     paths:
     - variables
