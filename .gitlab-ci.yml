@@ -348,8 +348,6 @@ stop_review_eks:
   extends: .source_autodevops
   variables:
   script:
-    - echo $CI_ENVIRONMENT_SLUG
-    - echo $CI_JOB_NAME
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - set_context
     - check_kube_domain
@@ -361,7 +359,6 @@ stop_review_eks:
     - create_secret
     - deploy
     - wait_for_deploy
-    - echo $CI_JOB_NAME
     - >
       if [[ $CI_JOB_NAME =~ $STABLE_JOB_REGEX_PATTERN ]]; then
         check_domain_ip
