@@ -282,7 +282,7 @@ pin_image_versions:
     - set_context
     - check_kube_domain
 
-.set_up_namespace_secret_and_deploy:
+.set_up_namespace_secret_and_deploy: &set_up_namespace_secret_and_deploy
   script:
     - ensure_namespace
     - create_secret
