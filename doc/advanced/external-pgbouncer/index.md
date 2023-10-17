@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Configure the GitLab chart with an external PgBouncer
 
-This document documentats how to install and configure [PgBouncer](https://www.pgbouncer.org) with GitLab Helm Chart and external [PostgreSQL](https://www.postgresql.org).
+This document outlines how to install and configure [PgBouncer](https://www.pgbouncer.org) with GitLab Helm Chart and external [PostgreSQL](https://www.postgresql.org).
 
 [PgBouncer](https://www.pgbouncer.org) is a [PostgreSQL](https://www.postgresql.org/) connection pooler. Any target application can be connected to pgbouncer as if it were a PostgreSQL server, and pgbouncer will create a connection to the actual server, or it will reuse one of its existing connections.
 
@@ -92,20 +92,7 @@ pgbouncer:
 
 #### Authentication Query
 
-Authentication query returns the password hash (a.k.a `auth_query`). For this to work, the following must be setup in the chart configuration:
-
-```yaml
-pgbouncer:
-  # ...
-  pgbouncer:
-    # ...
-    auth_query: select uname, phash from pgbouncer_auth.user_lookup($1)
-```
-
-NOTE:
-When both `auth_query` and `auth_file` are defined, the `auth_query` is used only for roles not found in the `auth_file`.
-
-Whenever `auth_query` is used (with or without `auth_file`), a **secure function** must be created at the database server level and a superuser access to the `pg_shadow` table would be required. Secure function could look like:
+Secure function must be created at the database server level and a superuser access to the `pg_shadow` table is required. Example of secure function:
 
 ```sql
 CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(in i_username text, out uname text, out phash text)
@@ -120,7 +107,7 @@ REVOKE ALL ON FUNCTION pgbouncer.user_lookup(text) FROM public, pgbouncer;
 GRANT EXECUTE ON FUNCTION pgbouncer.user_lookup(text) TO pgbouncer;
 ```
 
-This function will allow us to fetch the hashed password of the database user name (assuming `gitlab` is the database username):
+This function allows to fetch the hashed password of the database user name (assuming `gitlab` is the database username):
 
 ```sql
 gitlabhq_production=# select uname, phash from pgbouncer_auth.user_lookup('gitlab');
@@ -130,13 +117,26 @@ gitlabhq_production=# select uname, phash from pgbouncer_auth.user_lookup('gitla
  gitlab | SCRAM-SHA-256...
 ```
 
+Authentication query returns the password hash (a.k.a `auth_query`). Chart configuration to enable `auth_query`:
+
+```yaml
+pgbouncer:
+  # ...
+  pgbouncer:
+    # ...
+    auth_query: select uname, phash from pgbouncer_auth.user_lookup($1)
+```
+
+NOTE:
+When both `auth_query` and `auth_file` are defined, the `auth_query` is used only for roles not found in the `auth_file`.
+
 For further information about how to configure the secure function, refer to the [PgBouncer official documentation](https://www.pgbouncer.org/config.html).
 
-Last but not least, make sure that the `auth_type` value matches the `password_encryption` value under the `postgresql.conf` configuration file in the database server(s), as well as in the client authentication `pg_hba.conf` file.
+`auth_type` value **has to** match `password_encryption` value under the `postgresql.conf` configuration file in the database server(s), as well as in the client authentication `pg_hba.conf` file.
 
 ### Configure TLS connection for PgBouncer
 
-In order to connect PgBouncer over TLS, to create a Kubernetes Secret containing both the key and the certificate(s) is needed in advance:
+In order to connect PgBouncer over TLS, create a Kubernetes Secret containing both the key and the certificate(s) is needed in advance:
 
 ```shell
 kubectl create secret generic gitlab-pgbouncer-tls --from-file=client.crt=client-pgbouncer-tls.crt=<path to certificate>
@@ -146,7 +146,7 @@ kubectl create secret generic gitlab-pgbouncer-tls --from-file=server.crt=server
 kubectl create secret generic gitlab-pgbouncer-tls --from-file=server.key=server-pgbouncer.key=<path to key>
 ```
 
-For them to be used, PgBouncer must contain these secrets mounted in the `pgbouncer` container, so that they can be referenced from the `pgbouncer.pgbouncer` Helm chart configuration. This can be achieved by using both the `extraVolumes` and `extraVolumeMounts` elements accordingly.
+PgBouncer has to mount above secrets in `pgbouncer` container, to be able to reference them in the `pgbouncer.pgbouncer` Helm chart configuration. This can be done using `extraVolumes` and `extraVolumeMounts` elements accordingly.
 
 ```yaml
 pgbouncer:
@@ -176,7 +176,7 @@ In order to configure above services, keep the `global.psql` configuration as is
 global:
   # ...
   psql:
-    host: host1.example.com
+    host: gitlab-pgbouncer # assuming the release name is gitlab
     password:
       secret: gitlab-database-credentials
       key: gitlab-passwd
