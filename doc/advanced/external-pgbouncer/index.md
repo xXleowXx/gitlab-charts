@@ -168,9 +168,9 @@ pgbouncer:
 
 ## Configure GitLab application to use PgBouncer
 
-Once PgBouncer is fully configured, the final step is to connect it to GitLab. For this to work, we only need to configure the `webservice`, `sidekiq` and `gitlab-exporter` GitLab components to go through PgBouncer.
+With PgBouncer fully configured, it could be referenced from GitLab chart. The only services requiring additional configuration are `webservice`, `sidekiq` and `gitlab-exporter`.
 
-In order to configure above services, keep the `global.psql` configuration as is, and modify the GitLab components as follows:
+To configure above services, keep the `global.psql` configuration as is, and modify the GitLab components configuration as follows:
 
 ```yaml
 global:
@@ -224,10 +224,12 @@ At this point GitLab is functionally ready to use PgBouncer.
 
 ### Enable PgBouncer exporter for monitoring
 
-To enable monitoring for the PgBouncer service, the following `pgbouncerExporter` must be enabled and configured:
+To enable monitoring for the PgBouncer service, `pgbouncerExporter` must be enabled and configured.
 
 NOTE:
 When enabling `pgbouncerExporter`, `PGBOUNCER_USER`, `PGBOUNCER_PORT`, and `PGBOUNCER_PWD` environment variables must be created.
+
+To automatically create a sidecar container start exposing metrics for each of the PgBouncer replicas add configuration:
 
 ```yaml
 pgbouncer:
@@ -252,5 +254,3 @@ pgbouncer:
             key: database-username-pwd
             optional: false
 ```
-
-This will automatically create a sidecar container and will start exposing metrics for each of the PgBouncer replicas.
