@@ -240,16 +240,29 @@ lint_package:
           cronJob:
             apiVersion: batch/v1
 
-.set_up_varfile_and_kubecontext: &set_up_varfile_and_kubecontext
+.set_up_varfile_and_kubecontext:
+  script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - set_context
     - check_kube_domain
 
-.set_up_namespace_secret_and_deploy: &set_up_namespace_secret_and_deploy
+.set_up_namespace_secret_and_deploy: 
+  script:
     - ensure_namespace
     - create_secret
     - deploy
     - wait_for_deploy
+
+# .set_up_varfile_and_kubecontext: &set_up_varfile_and_kubecontext
+#     - mkdir -p $(dirname "${VARIABLES_FILE}")
+#     - set_context
+#     - check_kube_domain
+
+# .set_up_namespace_secret_and_deploy: &set_up_namespace_secret_and_deploy
+#     - ensure_namespace
+#     - create_secret
+#     - deploy
+#     - wait_for_deploy
 
 
 .review_template:
@@ -260,9 +273,11 @@ lint_package:
     VARIABLES_FILE: "variables/${CI_JOB_NAME}"
   extends: .source_autodevops
   script:
-    - *set_up_varfile_and_kubecontext
+    # - *set_up_varfile_and_kubecontext
+    - !reference [.set_up_varfile_and_kubecontext, script]
     - kubectl version
-    - *set_up_namespace_secret_and_deploy
+    - !reference [.set_up_namespace_secret_and_deploy, script]
+    # - *set_up_namespace_secret_and_deploy
     - restart_toolbox
     - echo "export QA_ENVIRONMENT_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
