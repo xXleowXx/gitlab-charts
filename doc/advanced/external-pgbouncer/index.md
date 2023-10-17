@@ -25,10 +25,11 @@ In order to start using the `pgbouncer` within GitLab Helm chart, the following 
 - `pgbouncer.databases.<database-name>.host`. Set `<database-name>.host` to the host name of the database server.
 - `pgbouncer.databases.<database-name>.port`. Set `<database-name>.port` to the port of the database server.
 
-A more complete [example values file](../../../examples/pgbouncer/values-pgbouncer.yaml) is provided, which shows the
+A more complete [example values file](examples/pgbouncer/values-pgbouncer.yaml) is provided, which shows the
 appropriate set of configuration.
 
-NOTE: when using multiple replicas of PgBouncer, values for `min_pool_size` and `default_pool_size` are scaled according to the number of replicas. For example, if `min_pool_size: 20` and `replicaCount: 3` are configured, the resulting minimum pool size in the database server will be `20 * 3 = 60` minimum backend connections. The same logic applies to `default_pool_size`. Keep this in mind when scaling PgBouncer.
+NOTE:
+When using multiple replicas of PgBouncer, values for `min_pool_size` and `default_pool_size` are scaled according to the number of replicas. For example, if `min_pool_size: 20` and `replicaCount: 3` are configured, the resulting minimum pool size in the database server will be `20 * 3 = 60` minimum backend connections. The same logic applies to `default_pool_size`. Keep this in mind when scaling PgBouncer.
 
 ### User Authentication in PgBouncer
 
@@ -88,7 +89,6 @@ pgbouncer:
   userlist:
     user1: <pwd | md5 | scram-sha-256 >
 ```
-
 
 #### Authentication Query
 
