@@ -143,6 +143,23 @@ global:
     # applicationName:
     # preparedStatements: false
     # databaseTasks: true
+    main:
+      # host: postgresql.hostedsomewhere.else
+      # port: 123
+      # username: gitlab
+      # database: gitlabhq_production
+      # applicationName:
+      # preparedStatements: false
+      # databaseTasks: true
+    ci:
+      enabled: true
+      # host: postgresql.hostedsomewhere.else
+      # port: 123
+      # username: gitlab
+      # database: gitlabhq_production_ci
+      # applicationName:
+      # preparedStatements: false
+      # databaseTasks: false
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-redis-settings
   redis:
