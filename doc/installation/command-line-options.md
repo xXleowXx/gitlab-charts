@@ -310,7 +310,7 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `gitlab-runner.runners.privileged` | run in privileged mode, needed for `dind` | false |
 | `gitlab-runner.runners.cache.secretName` | secret to get `accesskey` and `secretkey` from | `gitlab-minio` |
 | `gitlab-runner.runners.config` | Runner configuration as string | See [Chart documentation](../charts/gitlab/gitlab-runner/index.md#default-runner-configuration) |
-| `gitlab-runner.unregisterRunners` | unregister all runners before termination | true |
+| `gitlab-runner.unregisterRunners` | Unregisters all runners in the local `config.toml` when the chart is installed. If the token is prefixed with `glrt-`, the runner manager is deleted, not the runner. The runner manager is identified by the runner and the machine that contains the `config.toml`. If the runner was registered with a registration token, the runner is deleted. | true |
 | `gitlab.geo-logcursor.securityContext.fsGroup` | Group ID under which the pod should be started | `1000` |
 | `gitlab.geo-logcursor.securityContext.runAsUser` | User ID under which the pod should be started | `1000` |
 | `gitlab.gitaly.authToken.key` | Key to Gitaly token in the secret | `token` |
