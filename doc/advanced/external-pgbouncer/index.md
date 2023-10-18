@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Configure the GitLab chart with an external PgBouncer
 
-This document shows how to install and configure [PgBouncer](https://www.pgbouncer.org) with GitLab Helm Chart and external [PostgreSQL](https://www.postgresql.org).
+This document outlines how to install and configure [PgBouncer](https://www.pgbouncer.org) with GitLab Helm Chart and external [PostgreSQL](https://www.postgresql.org).
 
 [PgBouncer](https://www.pgbouncer.org) is a [PostgreSQL](https://www.postgresql.org/) connection pooler. Any target application can be connected to pgbouncer as if it were a PostgreSQL server, and pgbouncer will create a connection to the actual server, or it will reuse one of its existing connections.
 
@@ -25,7 +25,7 @@ In order to start using the `pgbouncer` within GitLab Helm chart, the following 
 - `pgbouncer.databases.<database-name>.host`. Set `<database-name>.host` to the host name of the database server.
 - `pgbouncer.databases.<database-name>.port`. Set `<database-name>.port` to the port of the database server.
 
-A more complete [example values file](../../../examples/pgbouncer/values-pgbouncer.yaml) is provided, which shows the
+A more complete [example values file](examples/pgbouncer/values-pgbouncer.yaml) is provided, which shows the
 appropriate set of configuration.
 
 NOTE:
@@ -92,20 +92,7 @@ pgbouncer:
 
 #### Authentication Query
 
-Authentication query returns the password hash (a.k.a `auth_query`). For this to work, the following must be setup in the chart configuration:
-
-```yaml
-pgbouncer:
-  # ...
-  pgbouncer:
-    # ...
-    auth_query: select uname, phash from pgbouncer_auth.user_lookup($1)
-```
-
-NOTE:
-When both `auth_query` and `auth_file` are defined, the `auth_query` is used only for roles not found in the `auth_file`.
-
-Whenever `auth_query` is used (with or without `auth_file`), a **secure function** must be created at the database server level and a superuser access to the `pg_shadow` table would be required. Secure function could look like:
+Secure function must be created at the database server level and a superuser access to the `pg_shadow` table is required. Example of secure function:
 
 ```sql
 CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(in i_username text, out uname text, out phash text)
@@ -120,7 +107,7 @@ REVOKE ALL ON FUNCTION pgbouncer.user_lookup(text) FROM public, pgbouncer;
 GRANT EXECUTE ON FUNCTION pgbouncer.user_lookup(text) TO pgbouncer;
 ```
 
-This function will allow us to fetch the hashed password of the database user name (assuming `gitlab` is the database username):
+This function allows to fetch the hashed password of the database user name (assuming `gitlab` is the database username):
 
 ```sql
 gitlabhq_production=# select uname, phash from pgbouncer_auth.user_lookup('gitlab');
@@ -130,13 +117,26 @@ gitlabhq_production=# select uname, phash from pgbouncer_auth.user_lookup('gitla
  gitlab | SCRAM-SHA-256...
 ```
 
+Authentication query returns the password hash (a.k.a `auth_query`). Chart configuration to enable `auth_query`:
+
+```yaml
+pgbouncer:
+  # ...
+  pgbouncer:
+    # ...
+    auth_query: select uname, phash from pgbouncer_auth.user_lookup($1)
+```
+
+NOTE:
+When both `auth_query` and `auth_file` are defined, the `auth_query` is used only for roles not found in the `auth_file`.
+
 For further information about how to configure the secure function, refer to the [PgBouncer official documentation](https://www.pgbouncer.org/config.html).
 
-Last but not least, make sure that the `auth_type` value matches the `password_encryption` value under the `postgresql.conf` configuration file in the database server(s), as well as in the client authentication `pg_hba.conf` file.
+`auth_type` value **has to** match `password_encryption` value under the `postgresql.conf` configuration file in the database server(s), as well as in the client authentication `pg_hba.conf` file.
 
 ### Configure TLS connection for PgBouncer
 
-In order to connect PgBouncer over TLS, to create a Kubernetes Secret containing both the key and the certificate(s) is needed in advance:
+In order to connect PgBouncer over TLS, create a Kubernetes Secret containing both the key and the certificate(s) is needed in advance:
 
 ```shell
 kubectl create secret generic gitlab-pgbouncer-tls --from-file=client.crt=client-pgbouncer-tls.crt=<path to certificate>
@@ -146,7 +146,7 @@ kubectl create secret generic gitlab-pgbouncer-tls --from-file=server.crt=server
 kubectl create secret generic gitlab-pgbouncer-tls --from-file=server.key=server-pgbouncer.key=<path to key>
 ```
 
-For them to be used, PgBouncer must contain these secrets mounted in the `pgbouncer` container, so that they can be referenced from the `pgbouncer.pgbouncer` Helm chart configuration. This can be achieved by using both the `extraVolumes` and `extraVolumeMounts` elements accordingly.
+PgBouncer has to mount above secrets in `pgbouncer` container, to be able to reference them in the `pgbouncer.pgbouncer` Helm chart configuration. This can be done using `extraVolumes` and `extraVolumeMounts` elements accordingly.
 
 ```yaml
 pgbouncer:
@@ -168,9 +168,9 @@ pgbouncer:
 
 ## Configure GitLab application to use PgBouncer
 
-Once PgBouncer is fully configured, the final step is to connect it to GitLab. For this to work, we only need to configure the `webservice`, `sidekiq` and `gitlab-exporter` GitLab components to go through PgBouncer.
+With PgBouncer fully configured, it could be referenced from GitLab chart. The only services requiring additional configuration are `webservice`, `sidekiq` and `gitlab-exporter`.
 
-In order to configure above services, keep the `global.psql` configuration as is, and modify the GitLab components as follows:
+To configure above services, keep the `global.psql` configuration as is, and modify the GitLab components configuration as follows:
 
 ```yaml
 global:
@@ -224,10 +224,12 @@ At this point GitLab is functionally ready to use PgBouncer.
 
 ### Enable PgBouncer exporter for monitoring
 
-To enable monitoring for the PgBouncer service, the following `pgbouncerExporter` must be enabled and configured:
+To enable monitoring for the PgBouncer service, `pgbouncerExporter` must be enabled and configured.
 
 NOTE:
 When enabling `pgbouncerExporter`, `PGBOUNCER_USER`, `PGBOUNCER_PORT`, and `PGBOUNCER_PWD` environment variables must be created.
+
+To automatically create a sidecar container start exposing metrics for each of the PgBouncer replicas add configuration:
 
 ```yaml
 pgbouncer:
@@ -252,5 +254,3 @@ pgbouncer:
             key: database-username-pwd
             optional: false
 ```
-
-This will automatically create a sidecar container and will start exposing metrics for each of the PgBouncer replicas.
