@@ -25,7 +25,7 @@ To use PgBouncer within GitLab Helm chart, set the following properties:
 - `pgbouncer.databases.<database_name>.host`: Set `<database_name>.host` to the host name of the database server.
 - `pgbouncer.databases.<database_name>.port`: Set `<database_name>.port` to the port of the database server.
 
-For more information, see the [example values file](examples/pgbouncer/values-pgbouncer.yaml), which shows the
+For more information, see the [example values file](../../../examples/pgbouncer/values-pgbouncer.yaml), which shows the
 appropriate set of configuration.
 
 NOTE:
@@ -51,7 +51,7 @@ To securely configure this file:
    -- GRANT ALL PRIVILEGES ON DATABASE gitlab TO gitlab_user;
    ```
 
-2. Manually create a secret in advance, mounted in the `auth_file` location path for being referenced. Use the appropriate `extraVolumes` and `extraVolumeMounts` elements in the `pgbouncer` chart. 
+1. Manually create a secret in advance, mounted in the `auth_file` location path for being referenced. Use the appropriate `extraVolumes` and `extraVolumeMounts` elements in the `pgbouncer` chart. 
 
    ```shell
    cat > pgbouncer_auth_file << EOF
@@ -139,47 +139,48 @@ Prerequisite:
 NOTE:
 When both `auth_query` and `auth_file` are defined, the `auth_query` is used only for roles not found in the `auth_file`.
 
-For further information about how to configure the secure function, refer to the [PgBouncer official documentation](https://www.pgbouncer.org/config.html).
+For more information about how to configure the secure function, see the [PgBouncer official documentation](https://www.pgbouncer.org/config.html).
 
-`auth_type` value **has to** match `password_encryption` value under the `postgresql.conf` configuration file in the database server(s), as well as in the client authentication `pg_hba.conf` file.
+NOTE:
+The `auth_type` value **must** match the `password_encryption` value under the `postgresql.conf` configuration file in the database server(s), as well as in the client authentication `pg_hba.conf` file.
 
 ### Configure TLS connection for PgBouncer
 
-In order to connect PgBouncer over TLS, create a Kubernetes Secret containing both the key and the certificate(s) is needed in advance:
+To connect PgBouncer over TLS:
 
-```shell
-kubectl create secret generic gitlab-pgbouncer-tls --from-file=client.crt=client-pgbouncer-tls.crt=<path to certificate>
-kubectl create secret generic gitlab-pgbouncer-tls --from-file=client.key=client-pgbouncer.key=<path to key>
+1. Create a Kubernetes Secret containg both the key and the certificate(s).
 
-kubectl create secret generic gitlab-pgbouncer-tls --from-file=server.crt=server-pgbouncer-tls.crt=<path to certificate>
-kubectl create secret generic gitlab-pgbouncer-tls --from-file=server.key=server-pgbouncer.key=<path to key>
-```
+   ```shell
+   kubectl create secret generic gitlab-pgbouncer-tls --from-file=client.crt=client-pgbouncer-tls.crt=<path to certificate>
+   kubectl create secret generic gitlab-pgbouncer-tls --from-file=client.key=client-pgbouncer.key=<path to key>
 
-PgBouncer has to mount above secrets in `pgbouncer` container, to be able to reference them in the `pgbouncer.pgbouncer` Helm chart configuration. This can be done using `extraVolumes` and `extraVolumeMounts` elements accordingly.
+   kubectl create secret generic gitlab-pgbouncer-tls --from-file=server.crt=server-pgbouncer-tls.crt=<path to certificate>
+   kubectl create secret generic gitlab-pgbouncer-tls --from-file=server.key=server-pgbouncer.key=<path to key>
+   ```
 
-```yaml
-pgbouncer:
-  pgbouncer:
-    client_tls_key_file: /etc/pgbouncer/tls/client.crt
-    client_tls_cert_file: /etc/pgbouncer/tls/client.key
+1. PgBouncer has to mount these secrets in the `pgbouncer` container to be able to reference them in the `pgbouncer.pgbouncer` Helm chart configuration. Use the `extraVolumes` and `extraVolumeMounts` elements to do this:
 
-    server_tls_key_file: /etc/pgbouncer/tls/server.crt
-    server_tls_cert_file: /etc/pgbouncer/tls/server.key
-  extraVolumes:
-    - name: pgbouncer-tls
-      secret:
-        secretName: gitlab-pgbouncer-tls
-  extraVolumeMounts:
-    - name: pgbouncer-tls
-      mountPath: /etc/pgbouncer/tls
-      readonly: true
-```
+   ```yaml
+   pgbouncer:
+     pgbouncer:
+       client_tls_key_file: /etc/pgbouncer/tls/client.crt
+       client_tls_cert_file: /etc/pgbouncer/tls/client.key
+
+       server_tls_key_file: /etc/pgbouncer/tls/server.crt
+       server_tls_cert_file: /etc/pgbouncer/tls/server.key
+     extraVolumes:
+       - name: pgbouncer-tls
+         secret:
+           secretName: gitlab-pgbouncer-tls
+     extraVolumeMounts:
+       - name: pgbouncer-tls
+         mountPath: /etc/pgbouncer/tls
+         readonly: true
+   ```
 
 ## Configure GitLab application to use PgBouncer
 
-With PgBouncer fully configured, it could be referenced from GitLab chart. The only services requiring additional configuration are `webservice`, `sidekiq` and `gitlab-exporter`.
-
-To configure above services, keep the `global.psql` configuration as is, and modify the GitLab components configuration as follows:
+After you have configured PgBouncer, it can be referenced from GitLab chart. To do this, configure the `webservice`, `sidekiq` and `gitlab-exporter` services as follows:
 
 ```yaml
 global:
@@ -229,16 +230,18 @@ gitlab:
       username: gitlab
 ```
 
-At this point GitLab is functionally ready to use PgBouncer.
+You do not need to configure the `global.psql` service.
+
+GitLab is now ready to use PgBouncer.
 
 ### Enable PgBouncer exporter for monitoring
 
-To enable monitoring for the PgBouncer service, `pgbouncerExporter` must be enabled and configured.
+To enable monitoring for the PgBouncer service, you enable and configure `pgbouncerExporter`.
 
-NOTE:
-When enabling `pgbouncerExporter`, `PGBOUNCER_USER`, `PGBOUNCER_PORT`, and `PGBOUNCER_PWD` environment variables must be created.
+To do this, you:
 
-To automatically create a sidecar container start exposing metrics for each of the PgBouncer replicas add configuration:
+- Create the `PGBOUNCER_USER`, `PGBOUNCER_PORT`, and `PGBOUNCER_PWD` environment variables.
+- Create a sidecar container that automatically exposes metrics for each PgBouncer replica.
 
 ```yaml
 pgbouncer:
