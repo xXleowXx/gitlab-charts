@@ -97,7 +97,11 @@ You should not use this approach outside of experimentation.
 
 #### Authentication Query
 
-Secure function must be created at the database server level and a superuser access to the `pg_shadow` table is required. Example of secure function:
+Prerequisite:
+
+- Superuser access to the `pg_shadow` table.
+
+1. Create a secure function must be created at the database server level. An example of a secure function:
 
 ```sql
 CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(in i_username text, out uname text, out phash text)
