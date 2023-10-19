@@ -23,11 +23,6 @@ Kubernetes nodes must use the x86-64 architecture.
 Support for multiple architectures, including AArch64/ARM64, is under active development.
 See [issue 2899](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2899) for more information.
 
-NOTE:
-Disabling the in-chart NGINX Ingress Controller (`nginx-ingress.enabled=false`),
-allows the use of Kubernetes 1.16 or later. Alternatively, using version 1.2.1
-(`nginx-ingress.controller.image.tag=v1.2.1`) allows the use of Kubernetes 1.19 or later.
-
 - For cluster topology recommendations for an environment, see the
   [reference architectures](https://docs.gitlab.com/ee/administration/reference_architectures/#available-reference-architectures).
 - For an example of tuning the resources to fit in a 3 vCPU 12 GB cluster, see the
@@ -40,3 +35,13 @@ Create and connect to a Kubernetes cluster in your environment:
 - [Google Kubernetes Engine](gke.md)
 - [OpenShift](openshift.md)
 - [Oracle Container Engine for Kubernetes](oke.md)
+
+## Support for older Kubernetes versions
+
+To use older Kubernetes versions, disable the bundled cert-manager (`certmanager.install=false`),
+and use install a [cert-manager release](https://cert-manager.io/docs/releases/) that supports
+your cluster version.
+
+Also disable the in-chart NGINX Ingress Controller (`nginx-ingress.enabled=false`),
+to use of Kubernetes 1.16 or later or use the 1.2.1 controller image
+(`nginx-ingress.controller.image.tag=v1.2.1`) to use Kubernetes 1.19 or later.
