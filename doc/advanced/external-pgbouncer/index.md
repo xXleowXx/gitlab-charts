@@ -128,13 +128,13 @@ Prerequisite:
 
 1. Run the following chart configuration to enable the authentication query (`auth_query`) to return the password hash:
 
-```yaml
-pgbouncer:
-  # ...
-  pgbouncer:
-    # ...
-    auth_query: select uname, phash from pgbouncer_auth.user_lookup($1)
-```
+   ```yaml
+   pgbouncer:
+     # ...
+     pgbouncer:
+       # ...
+       auth_query: select uname, phash from pgbouncer_auth.user_lookup($1)
+   ```
 
 NOTE:
 When both `auth_query` and `auth_file` are defined, the `auth_query` is used only for roles not found in the `auth_file`.
