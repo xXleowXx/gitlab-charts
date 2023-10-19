@@ -12,20 +12,20 @@ PgBouncer is a PostgreSQL connection pooler. You can connect any target applicat
 
 Using PgBounce lowers the performance impact of opening new connections to PostgreSQL.
 
-## Prerequisites
+## Configure PgBouncer
+
+Prerequisite:
 
 - A deployment of PostgreSQL 12 or later.
 
-## Configure PgBouncer
-
-In order to start using the `pgbouncer` within GitLab Helm chart, the following properties must be set:
+To use PgBouncer within GitLab Helm chart, set the following properties:
 
 - `pgbouncer.enabled`: Set to `true` to enable the included PgBouncer chart.
-- `pgbouncer.databases.<database-name>`. Set `<database-name>` to the name of the database used for GitLab (e.g., `gitlabhq_production`).
-- `pgbouncer.databases.<database-name>.host`. Set `<database-name>.host` to the host name of the database server.
-- `pgbouncer.databases.<database-name>.port`. Set `<database-name>.port` to the port of the database server.
+- `pgbouncer.databases.<database_name>`: Set `<database_name>` to the name of the database used for GitLab (for example, `gitlabhq_production`).
+- `pgbouncer.databases.<database_name>.host`: Set `<database_name>.host` to the host name of the database server.
+- `pgbouncer.databases.<database_name>.port`: Set `<database_name>.port` to the port of the database server.
 
-A more complete [example values file](examples/pgbouncer/values-pgbouncer.yaml) is provided, which shows the
+For more information, see the [example values file](examples/pgbouncer/values-pgbouncer.yaml), which shows the
 appropriate set of configuration.
 
 NOTE:
@@ -33,11 +33,11 @@ When using multiple replicas of PgBouncer, values for `min_pool_size` and `defau
 
 ### User Authentication in PgBouncer
 
-There are a few different ways to authenticate users in PgBouncer.
+There are multiple ways to authenticate users in PgBouncer.
 
 #### Authentication File
 
-Authentication file contains the list of known roles and their password hash (a.k.a. `auth_file`). 
+The authentication file (also known as the `auth_file`) contains the list of known roles and their password hash. 
 
 There are two approaches for configuring it.
 
