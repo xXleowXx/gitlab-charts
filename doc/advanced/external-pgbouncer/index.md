@@ -43,42 +43,7 @@ There are two approaches for configuring it.
 
 More secure approach is to create manually a secret in advance, mounted in the `auth_file` location path for being referenced, using the appropriate `extraVolumes` and `extraVolumeMounts` elements in `pgbouncer` chart. For that, external PostgreSQL instance should already have `gitlab_user` and `gitlab` users created:
 
-```sql
-CREATE DATABASE gitlab;
-create user gitlab with encrypted password 'verylongverysecurepostgresqlpassword';
-create user gitlab_user with encrypted password 'xxxverysecretpasswordxxx';
--- GRANT ALL PRIVILEGES ON DATABASE gitlab TO gitlab;
--- GRANT ALL PRIVILEGES ON DATABASE gitlab TO gitlab_user;
-```
-
-```shell
-cat > pgbouncer_auth_file << EOF
-gitlab_user: xxxverysecretpasswordxxx
-gitlab: verylongverysecurepostgresqlpassword
-EOF
-
-kubectl create secret --namespace=gitlab generic pgbouncer --from-file=auth_file=pgbouncer_auth_file
-```
-
-```yaml
-pgbouncer:
-  pgbouncer:
-    auth_file: /etc/pgbouncer/auth_file
-  extraVolumes:
-    - name: pgbouncer_auth
-      secret:
-        secretName: pgbouncer
-        items:
-          - key: auth_file
-            path: auth_file
-  extraVolumeMounts:
-    - name: pgbouncer_auth
-      mountPath: /etc/pgbouncer/auth_file
-      subPath: auth_file
-      readonly: true
-```
-
-Alternatively, less secure (and **not recommended** outside of experimentation), is utilizing the `userlist` element. This will automatically generate a secret:
+An alternative, less secure approach is to use the `userlist` element to automatically generate a secret:
 
 ```yaml
 pgbouncer:
@@ -89,6 +54,9 @@ pgbouncer:
   userlist:
     user1: <pwd | md5 | scram-sha-256 >
 ```
+
+WARNING:
+You should not use this approach outside of experimentation.
 
 #### Authentication Query
 
