@@ -103,18 +103,18 @@ Prerequisite:
 
 1. Create a secure function must be created at the database server level. An example of a secure function:
 
-```sql
-CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(in i_username text, out uname text, out phash text)
-RETURNS record AS $$
-BEGIN
-    SELECT usename, passwd FROM pg_catalog.pg_shadow
-    WHERE usename = i_username INTO uname, phash;
-    RETURN;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-REVOKE ALL ON FUNCTION pgbouncer.user_lookup(text) FROM public, pgbouncer;
-GRANT EXECUTE ON FUNCTION pgbouncer.user_lookup(text) TO pgbouncer;
-```
+   ```sql
+   CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(in i_username text, out uname text, out phash text)
+   RETURNS record AS $$
+   BEGIN
+       SELECT usename, passwd FROM pg_catalog.pg_shadow
+       WHERE usename = i_username INTO uname, phash;
+       RETURN;
+   END;
+   $$ LANGUAGE plpgsql SECURITY DEFINER;
+   REVOKE ALL ON FUNCTION pgbouncer.user_lookup(text) FROM public, pgbouncer;
+   GRANT EXECUTE ON FUNCTION pgbouncer.user_lookup(text) TO pgbouncer;
+   ```
 
 1. Fetch the hashed password of the database user name (the following example assumes `gitlab` is the database username):
 
