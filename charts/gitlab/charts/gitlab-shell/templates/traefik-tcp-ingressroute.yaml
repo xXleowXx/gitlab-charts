@@ -1,3 +1,4 @@
+{{- if .Values.enabled -}}
 {{- if eq .Values.global.ingress.provider "traefik" -}}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRouteTCP
@@ -20,4 +21,5 @@ spec:
       proxyProtocol:
         version: 2
       {{- end }}
+{{- end -}}
 {{- end -}}
