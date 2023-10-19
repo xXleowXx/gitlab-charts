@@ -10,7 +10,7 @@ This documentation outlines how to install and configure [PgBouncer](https://www
 
 PgBouncer is a PostgreSQL connection pooler. You can connect any target application to PgBouncer as if it were a PostgreSQL server. PgBouncer then either creates a connection to the actual server, or reuses one of its existing connections.
 
-Using PgBounce lowers the performance impact of opening new connections to PostgreSQL.
+Using PgBouncer lowers the performance impact of opening new connections to PostgreSQL.
 
 ## Configure PgBouncer
 
@@ -148,7 +148,7 @@ The `auth_type` value **must** match the `password_encryption` value under the `
 
 To connect PgBouncer over TLS:
 
-1. Create a Kubernetes Secret containg both the key and the certificate(s).
+1. Create a Kubernetes Secret containing both the key and the certificate(s).
 
    ```shell
    kubectl create secret generic gitlab-pgbouncer-tls --from-file=client.crt=client-pgbouncer-tls.crt=<path to certificate>
