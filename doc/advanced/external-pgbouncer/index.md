@@ -93,7 +93,20 @@ pgbouncer:
 ```
 
 WARNING:
+An alternative, less secure approach is to use the `userlist` element to automatically generate a secret.
+
+WARNING:
 You should not use this approach outside of experimentation.
+
+```yaml
+pgbouncer:
+  # ...
+  pgbouncer:
+    # ...
+    auth_file: /etc/pgbouncer/userlist.txt
+  userlist:
+    user1: <pwd | md5 | scram-sha-256 >
+```
 
 #### Authentication Query
 
