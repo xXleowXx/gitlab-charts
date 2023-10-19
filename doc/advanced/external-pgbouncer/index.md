@@ -39,9 +39,46 @@ There are multiple ways to authenticate users in PgBouncer.
 
 The authentication file (also known as the `auth_file`) contains the list of known roles and their password hash. 
 
-There are two approaches for configuring it.
+To securely configure this file:
 
-More secure approach is to create manually a secret in advance, mounted in the `auth_file` location path for being referenced, using the appropriate `extraVolumes` and `extraVolumeMounts` elements in `pgbouncer` chart. For that, external PostgreSQL instance should already have `gitlab_user` and `gitlab` users created:
+1. Create the external PostgreSQL instance `gitlab_user` and `gitlab` users:
+
+   ```sql
+   CREATE DATABASE gitlab;
+   create user gitlab with encrypted password 'verylongverysecurepostgresqlpassword';
+   create user gitlab_user with encrypted password 'xxxverysecretpasswordxxx';
+   -- GRANT ALL PRIVILEGES ON DATABASE gitlab TO gitlab;
+   -- GRANT ALL PRIVILEGES ON DATABASE gitlab TO gitlab_user;
+   ```
+
+1. Manually create a secret in advance, mounted in the `auth_file` location path for being referenced. Use the appropriate `extraVolumes` and `extraVolumeMounts` elements in the `pgbouncer` chart. 
+
+   ```shell
+   cat > pgbouncer_auth_file << EOF
+   gitlab_user: xxxverysecretpasswordxxx
+   gitlab: verylongverysecurepostgresqlpassword
+   EOF
+
+   kubectl create secret --namespace=gitlab generic pgbouncer --from-file=auth_file=pgbouncer_auth_file
+   ```
+
+   ```yaml
+   pgbouncer:
+     pgbouncer:
+       auth_file: /etc/pgbouncer/auth_file
+     extraVolumes:
+       - name: pgbouncer_auth
+         secret:
+           secretName: pgbouncer
+           items:
+             - key: auth_file
+               path: auth_file
+     extraVolumeMounts:
+       - name: pgbouncer_auth
+         mountPath: /etc/pgbouncer/auth_file
+         subPath: auth_file
+         readonly: true
+   ```
 
 An alternative, less secure approach is to use the `userlist` element to automatically generate a secret:
 
