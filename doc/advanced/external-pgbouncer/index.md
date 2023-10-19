@@ -116,7 +116,7 @@ REVOKE ALL ON FUNCTION pgbouncer.user_lookup(text) FROM public, pgbouncer;
 GRANT EXECUTE ON FUNCTION pgbouncer.user_lookup(text) TO pgbouncer;
 ```
 
-This function allows to fetch the hashed password of the database user name (assuming `gitlab` is the database username):
+1. Fetch the hashed password of the database user name (the following example assumes `gitlab` is the database username):
 
 ```sql
 gitlabhq_production=# select uname, phash from pgbouncer_auth.user_lookup('gitlab');
