@@ -118,13 +118,13 @@ Prerequisite:
 
 1. Fetch the hashed password of the database user name (the following example assumes `gitlab` is the database username):
 
-```sql
-gitlabhq_production=# select uname, phash from pgbouncer_auth.user_lookup('gitlab');
+   ```sql
+   gitlabhq_production=# select uname, phash from pgbouncer_auth.user_lookup('gitlab');
 
- uname  |                                                                 phash
---------+---------------------------------------------------------------------------------------------------------------------------------------
- gitlab | SCRAM-SHA-256...
-```
+    uname  |                                                                 phash
+   --------+---------------------------------------------------------------------------------------------------------------------------------------
+    gitlab | SCRAM-SHA-256...
+   ```
 
 Authentication query returns the password hash (a.k.a `auth_query`). Chart configuration to enable `auth_query`:
 
