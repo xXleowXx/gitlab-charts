@@ -25,8 +25,8 @@ To use PgBouncer within GitLab Helm chart, set the following properties:
 - `pgbouncer.databases.<database_name>.host`: Set `<database_name>.host` to the host name of the database server.
 - `pgbouncer.databases.<database_name>.port`: Set `<database_name>.port` to the port of the database server.
 
-For more information, see the [example values file](../../../examples/pgbouncer/values-pgbouncer.yaml), which shows the
-appropriate set of configuration.
+For more information, see the [example values file](https://gitlab.com/gitlab-org/gitlab/-/tree/master/examples/pgbouncer/values-pgbouncer.yaml), which shows the
+appropriate configuration.
 
 NOTE:
 When using multiple replicas of PgBouncer, values for `min_pool_size` and `default_pool_size` are scaled according to the number of replicas. For example, if `min_pool_size: 20` and `replicaCount: 3` are configured, the resulting minimum pool size in the database server will be `20 * 3 = 60` minimum backend connections. The same logic applies to `default_pool_size`. Keep this in mind when scaling PgBouncer.
@@ -93,9 +93,6 @@ pgbouncer:
 ```
 
 WARNING:
-An alternative, less secure approach is to use the `userlist` element to automatically generate a secret.
-
-WARNING:
 You should not use this approach outside of experimentation.
 
 ```yaml
@@ -114,7 +111,7 @@ Prerequisite:
 
 - Superuser access to the `pg_shadow` table.
 
-1. Create a secure function must be created at the database server level. An example of a secure function:
+1. Create a secure function at the database server level. For example:
 
    ```sql
    CREATE OR REPLACE FUNCTION pgbouncer.user_lookup(in i_username text, out uname text, out phash text)
@@ -152,7 +149,7 @@ Prerequisite:
 NOTE:
 When both `auth_query` and `auth_file` are defined, the `auth_query` is used only for roles not found in the `auth_file`.
 
-For more information about how to configure the secure function, see the [PgBouncer official documentation](https://www.pgbouncer.org/config.html).
+For more information about how to configure the secure function, see the [PgBouncer documentation](https://www.pgbouncer.org/config.html).
 
 NOTE:
 The `auth_type` value **must** match the `password_encryption` value under the `postgresql.conf` configuration file in the database server(s), as well as in the client authentication `pg_hba.conf` file.
@@ -171,7 +168,7 @@ To connect PgBouncer over TLS:
    kubectl create secret generic gitlab-pgbouncer-tls --from-file=server.key=server-pgbouncer.key=<path to key>
    ```
 
-1. PgBouncer has to mount these secrets in the `pgbouncer` container to be able to reference them in the `pgbouncer.pgbouncer` Helm chart configuration. Use the `extraVolumes` and `extraVolumeMounts` elements to do this:
+1. PgBouncer has to mount these secrets in the `pgbouncer` container to be able to reference them in the `pgbouncer.pgbouncer` Helm chart configuration. To do this, use the `extraVolumes` and `extraVolumeMounts` elements:
 
    ```yaml
    pgbouncer:
