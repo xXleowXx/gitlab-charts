@@ -243,7 +243,7 @@ gitlab:
       username: gitlab
 ```
 
-You do not need to configure the `global.psql` service.
+You do not need to reconfigure the `global.psql` service.
 
 GitLab is now ready to use PgBouncer.
 
