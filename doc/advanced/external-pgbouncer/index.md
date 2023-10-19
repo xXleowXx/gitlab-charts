@@ -276,3 +276,8 @@ pgbouncer:
             key: database-username-pwd
             optional: false
 ```
+
+## Related topics
+
+- [PgBouncer exporter](https://docs.gitlab.com/ee/administration/monitoring/prometheus/pgbouncer_exporter.html)
+- [Working with the bundled PgBouncer service](https://docs.gitlab.com/ee/administration/postgresql/pgbouncer.html)
