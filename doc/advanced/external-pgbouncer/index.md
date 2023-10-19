@@ -51,7 +51,7 @@ To securely configure this file:
    -- GRANT ALL PRIVILEGES ON DATABASE gitlab TO gitlab_user;
    ```
 
-1. Manually create a secret in advance, mounted in the `auth_file` location path for being referenced. Use the appropriate `extraVolumes` and `extraVolumeMounts` elements in the `pgbouncer` chart. 
+2. Manually create a secret in advance, mounted in the `auth_file` location path for being referenced. Use the appropriate `extraVolumes` and `extraVolumeMounts` elements in the `pgbouncer` chart. 
 
    ```shell
    cat > pgbouncer_auth_file << EOF
