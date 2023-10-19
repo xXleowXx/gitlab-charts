@@ -41,7 +41,7 @@ The authentication file (also known as the `auth_file`) contains the list of kno
 
 To securely configure this file:
 
-1. Create the external PostgreSQL instance `gitlab_user` and `gitlab` users:
+1. Create the `gitlab_user` and `gitlab` users in the external PostgreSQL instance:
 
    ```sql
    CREATE DATABASE gitlab;
