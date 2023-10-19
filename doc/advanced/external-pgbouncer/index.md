@@ -126,7 +126,7 @@ Prerequisite:
     gitlab | SCRAM-SHA-256...
    ```
 
-Authentication query returns the password hash (a.k.a `auth_query`). Chart configuration to enable `auth_query`:
+1. Run the following chart configuration to enable the authentication query (`auth_query`) to return the password hash:
 
 ```yaml
 pgbouncer:
