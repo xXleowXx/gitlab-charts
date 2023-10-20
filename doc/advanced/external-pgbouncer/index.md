@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Configure the GitLab chart with an external PgBouncer
+# Configure the GitLab chart with an external PgBouncer **(EXPERIMENT)**
 
 > [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1944) in GitLab 15.11. This feature is an [Experiment](https://docs.gitlab.com/ee/policy/experiment-beta-support.html).
 
