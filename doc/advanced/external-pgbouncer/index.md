@@ -6,6 +6,8 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Configure the GitLab chart with an external PgBouncer
 
+> [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1944) in GitLab 15.11. This feature is an [Experiment](https://docs.gitlab.com/ee/policy/experiment-beta-support.html).
+
 This documentation outlines how to install and configure [PgBouncer](https://www.pgbouncer.org) with GitLab Helm Chart and external [PostgreSQL](https://www.postgresql.org).
 
 PgBouncer is a PostgreSQL connection pooler. You can connect any target application to PgBouncer as if it were a PostgreSQL server. PgBouncer then either creates a connection to the actual server, or reuses one of its existing connections.
