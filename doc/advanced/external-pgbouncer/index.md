@@ -12,7 +12,7 @@ This documentation outlines how to install and configure [PgBouncer](https://www
 
 PgBouncer is a PostgreSQL connection pooler. You can connect any target application to PgBouncer as if it were a PostgreSQL server. PgBouncer then either creates a connection to the actual server, or reuses one of its existing connections.
 
-Using PgBouncer lowers the performance impact of opening new connections to PostgreSQL.
+Using PgBouncer [lowers the performance impact of opening new connections to PostgreSQL](https://docs.gitlab.com/ee/development/database/database_debugging.html#reduce-connection-overhead-with-connection-pooling).
 
 ## Configure PgBouncer
 
