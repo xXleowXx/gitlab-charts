@@ -238,6 +238,24 @@ lint_package:
           cronJob:
             apiVersion: batch/v1
 
+.set_up_varfile_and_kubecontext:
+  script:
+    - mkdir -p $(dirname "${VARIABLES_FILE}")
+    - set_context
+    - check_kube_domain
+
+.set_up_namespace_secret_and_deploy: 
+  script:
+    - ensure_namespace
+    - create_secret
+    - deploy
+    - wait_for_deploy
+
+.get_qa_revision:
+  script:
+    - kubectl wait pods -n $NAMESPACE -l app=toolbox,release=$RELEASE_NAME  --for condition=Ready --timeout=60s
+    - echo "export QA_GITLAB_REVISION=`kubectl exec -i $(kubectl get pods -lrelease=$RELEASE_NAME,app=toolbox -o custom-columns=":metadata.name") -c toolbox -- cat /srv/gitlab/REVISION`" >> "${VARIABLES_FILE}"
+
 .review_template:
   stage: review
   variables:
@@ -246,22 +264,16 @@ lint_package:
     VARIABLES_FILE: "variables/${CI_JOB_NAME}"
   extends: .source_autodevops
   script:
-    - mkdir -p $(dirname "${VARIABLES_FILE}")
-    - set_context
-    - check_kube_domain
+    - !reference [.set_up_varfile_and_kubecontext, script]
     - kubectl version
-    - ensure_namespace
-    - create_secret
-    - deploy
-    - wait_for_deploy
+    - !reference [.set_up_namespace_secret_and_deploy, script]
     - restart_toolbox
     - echo "export QA_ENVIRONMENT_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
     - echo "export GITLAB_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"         >> "${VARIABLES_FILE}"
     - echo "export REGISTRY_URL=registry-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"     >> "${VARIABLES_FILE}"
     - echo "export S3_ENDPOINT=https://minio-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
-    - kubectl wait pods -n $NAMESPACE -l app=toolbox,release=$RELEASE_NAME  --for condition=Ready --timeout=60s
-    - echo "export QA_GITLAB_REVISION=`kubectl exec -i $(kubectl get pods -lrelease=$RELEASE_NAME,app=toolbox -o custom-columns=":metadata.name") -c toolbox -- cat /srv/gitlab/REVISION`" >> "${VARIABLES_FILE}"
+    - !reference [.get_qa_revision, script]
   artifacts:
     when: always
     paths:
@@ -400,18 +412,14 @@ stop_review_eks:
   stage: stable
   extends: .source_autodevops
   script:
-    - mkdir -p $(dirname "${VARIABLES_FILE}")
-    - set_context
-    - check_kube_domain
-    - ensure_namespace
-    - create_secret
-    - deploy
-    - wait_for_deploy
+    - !reference [.set_up_varfile_and_kubecontext, script]
+    - !reference [.set_up_namespace_secret_and_deploy, script]
     - check_domain_ip
     - restart_toolbox
     - echo "export QA_ENVIRONMENT_URL=gitlab.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
     - echo "export S3_ENDPOINT=https://minio.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
+    - !reference [.get_qa_revision, script]
   artifacts:
     paths:
     - variables
