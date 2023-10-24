@@ -2,6 +2,31 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.5.0 (2023-10-20)
+
+### Added (1 change)
+
+- [Add template to guard Monitoring objects](gitlab-org/charts/gitlab@cd06e2a6c1ccbadf28cd85e7781fa27a0ff17628) ([merge request](gitlab-org/charts/gitlab!3390))
+
+### Fixed (2 changes)
+
+- [Exclude HAProxy and Traefik templates when gitlab-shell is disabled](gitlab-org/charts/gitlab@4a3295dd4f63ff8895fe3bd70b5ece637e5e5ec4) by @jbblache ([merge request](gitlab-org/charts/gitlab!3433))
+- [Fix templating error in KEDA templates for Sidekiq and Web](gitlab-org/charts/gitlab@5611885e7e7720f1b9ce003f2893735863bfad18) ([merge request](gitlab-org/charts/gitlab!3425))
+
+### Changed (7 changes)
+
+- [Update gitlab-org/container-registry from 3.84.0-gitlab to 3.85.0-gitlab](gitlab-org/charts/gitlab@529399631d87ce5108a205f990d3ed10b4acd9fb) ([merge request](gitlab-org/charts/gitlab!3436))
+- [Update gitlab-org/gitlab-exporter from 13.3.0 to 13.4.0](gitlab-org/charts/gitlab@ba51e4978ad00f1b8d16f76aa87463b7c462adc3) ([merge request](gitlab-org/charts/gitlab!3420))
+- [Update gitlab-org/charts/gitlab-runner from 0.57.0 to 0.57.1](gitlab-org/charts/gitlab@88fbdbfcf1176f660947756998496efeb3513ef1) ([merge request](gitlab-org/charts/gitlab!3423))
+- [Update gitlab-org/gitlab-exporter from 13.2.0 to 13.3.0](gitlab-org/charts/gitlab@2de53f8855fbff484b007a2a99485f2ec978b80c) ([merge request](gitlab-org/charts/gitlab!3413))
+- [Update gitlab-org/container-registry from 3.83.0-gitlab to 3.84.0-gitlab](gitlab-org/charts/gitlab@8d5c2d3386a9a576529fd72c934de704af1d484f) ([merge request](gitlab-org/charts/gitlab!3412))
+- [Update gitlab-org/charts/gitlab-runner from 0.56.0 to 0.57.0](gitlab-org/charts/gitlab@d8e4d0c39ce28a73fcf838f4c06ec0928f25a8f8) ([merge request](gitlab-org/charts/gitlab!3399))
+- [Update gitlab-org/charts/gitlab-runner from 0.56.0 to 0.56.1](gitlab-org/charts/gitlab@39351c74a18bf92d577bc675914a900e6c62eb89) ([merge request](gitlab-org/charts/gitlab!3399))
+
+### Other (1 change)
+
+- [Enable dual-namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/charts/gitlab@08e94769a6169bdc380e7d46b3ed300aa9c9cfab) ([merge request](gitlab-org/charts/gitlab!3388))
+
 ## 7.4.1 (2023-09-28)
 
 No changes.
