@@ -13,6 +13,17 @@ From here on:
 {{-       $tlsSecret := include "webservice.tlsSecret" (dict "root" $ "local" $.Values.ingress) -}}
 {{-       $ingressCfg := dict "global" $global.ingress "context" $ "local" .ingress -}}
 {{-       include "webservice.ingress.template" (dict "root" $ "deployment" . "ingressCfg" $ingressCfg "host" $hostname "name" $ingressName "tlsSecret" $tlsSecret) }}
+{{-       if and .ingress.assetsShim (eq "nginx" (include  "gitlab.ingress.provider" $ingressCfg)) }}
+{{-         $ingressName = printf "%s-assets" $ingressName -}}
+{{-         $assetsIngressCfg := deepCopy $ingressCfg -}}
+{{-         $_ := set $assetsIngressCfg.local "path" "/assets" -}}
+{{-         $_ := set $assetsIngressCfg.local.annotations "nginx.ingress.kubernetes.io/service-upstream" "false" -}}
+{{-         $_ := set $assetsIngressCfg.local.annotations "nginx.ingress.kubernetes.io/proxy-next-upstream" "error timeout http_500 http_502 http_503 http_404" -}}
+{{-         $_ := set $assetsIngressCfg.local.annotations "nginx.ingress.kubernetes.io/proxy-next-upstream-timeout" "0" -}}
+{{-         $_ := set $assetsIngressCfg.local.annotations "nginx.ingress.kubernetes.io/proxy-next-upstream-tries" "10" -}}
+{{-         $_ := set $assetsIngressCfg.local "proxyBodySize" "1m" -}}
+{{-         include "webservice.ingress.template" (dict "root" $ "deployment" . "ingressCfg" $assetsIngressCfg "host" $hostname "name" $ingressName "tlsSecret" $tlsSecret) }}
+{{-       end }}
 {{-       if $.Values.extraIngress.enabled }}
 {{-         $hostname = $.Values.extraIngress.hostname | default $hostname -}}
 {{-         $_ := set $ingressCfg "local" .extraIngress -}}
