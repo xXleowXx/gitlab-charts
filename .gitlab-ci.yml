@@ -84,6 +84,7 @@ stages:
 
 include:
   - local: '/.gitlab/ci/rules.gitlab-ci.yml'
+  - local: '/.gitlab/ci/review-apps.gitlab-ci.yml'
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
@@ -237,6 +238,24 @@ lint_package:
         batch:
           cronJob:
             apiVersion: batch/v1
+
+"Validate 1.26.8":
+  extends: .kubeconform
+  variables:
+    KUBE_VERSION: "1.26.8"
+    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
+
+"Validate 1.27.5":
+  extends: .kubeconform
+  variables:
+    KUBE_VERSION: "1.27.5"
+    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
+
+"Validate 1.28.3":
+  extends: .kubeconform
+  variables:
+    KUBE_VERSION: "1.28.3"
+    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
 
 .set_up_varfile_and_kubecontext:
   script:
