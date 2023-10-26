@@ -812,6 +812,8 @@ global:
   zoekt:
     gateway:
       basicAuth: {}
+    indexer:
+      internalApi: {}
 
   ## https://docs.gitlab.com/charts/charts/globals
   extraEnv: {}
@@ -1289,3 +1291,9 @@ gitlab-zoekt:
     basicAuth:
       enabled: true
       secretName: '{{ include "gitlab.zoekt.gateway.basicAuth.secretName" $ }}'
+  indexer:
+    internalApi:
+      enabled: false
+      secretName: '{{ include "gitlab.zoekt.indexer.internalApi.secretName" $ }}'
+      secretKey: '{{ include "gitlab.zoekt.indexer.internalApi.secretKey" $ }}'
+      gitlabUrl: '{{ include "gitlab.zoekt.indexer.internalApi.gitlabUrl" $ }}'
