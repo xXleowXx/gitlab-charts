@@ -204,11 +204,6 @@ lint_package:
     - if: '$PIPELINE_TYPE == "NIGHTLY_PIPELINE"'
   needs: ['lint_package']
 
-"Validate 1.19.16":
-  extends: .kubeconform
-  variables:
-    KUBE_VERSION: "1.19.16"
-
 "Validate 1.20.7":
   extends: .kubeconform
   variables:
@@ -263,7 +258,7 @@ lint_package:
     - set_context
     - check_kube_domain
 
-.set_up_namespace_secret_and_deploy: 
+.set_up_namespace_secret_and_deploy:
   script:
     - ensure_namespace
     - create_secret
