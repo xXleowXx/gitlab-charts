@@ -33,6 +33,12 @@ entry.
 
 - [Enable dual-namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/charts/gitlab@08e94769a6169bdc380e7d46b3ed300aa9c9cfab) ([merge request](gitlab-org/charts/gitlab!3388))
 
+## 7.4.2 (2023-10-30)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.56.0 to 0.57.1](gitlab-org/security/charts/gitlab@31e21355635bd7767122652673cca0964d04bbd1)
+
 ## 7.4.1 (2023-09-28)
 
 No changes.
