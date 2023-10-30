@@ -195,7 +195,7 @@ global.busybox:
 {{ include "gitlab.checkConfig" . }}
 
 {{- $psqlUnified := ( include "gitlab.deprecate.psql.unified" . ) -}}
-{{- if ${psqlUnified -}}
+{{- if $psqlUnified -}}
 {{ $WARNING }}
 {{ $psqlUnified }}
 {{- end -}}
