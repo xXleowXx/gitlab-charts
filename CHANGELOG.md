@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.4.2 (2023-10-30)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.56.0 to 0.57.1](gitlab-org/security/charts/gitlab@31e21355635bd7767122652673cca0964d04bbd1)
+
 ## 7.4.1 (2023-09-28)
 
 No changes.
