@@ -151,3 +151,9 @@ redis:
 {{ include "gitlab.removals" . }}
 {{- /* run checkConfig */}}
 {{ include "gitlab.checkConfig" . }}
+
+{{- $psqlUnified := ( include "gitlab.deprecate.psql.unified" . ) -}}
+{{- if $psqlUnified -}}
+{{ $WARNING }}
+{{ $psqlUnified }}
+{{- end -}}
