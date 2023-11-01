@@ -71,7 +71,7 @@ To restore the rails secrets from a YAML file:
 1. Create the new secret using the same name as the old, and passing in your local YAML file
 
    ```shell
-   kubectl create secret generic <rails-secret-name> --from-file=secrets.yml=gitlab-secrets.yaml
+   kubectl create secret generic <rails-secret-name> --from-file=gitlab-secrets.yaml
    ```
 
 ### Restart the pods
