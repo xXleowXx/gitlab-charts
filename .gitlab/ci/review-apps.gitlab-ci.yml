@@ -40,28 +40,28 @@
 
 # Kubernetes 1.27
 
-review_vcluster_127:
-  extends: .review_app_template
-  variables:
-    VCLUSTER_K8S_VERSION: "1.27"
-    VCLUSTER_NAME: vcluster-1-27-${CI_COMMIT_REF_SLUG}
-  environment:
-    on_stop: stop_review_vcluster_127
+#review_vcluster_127:
+#  extends: .review_app_template
+#  variables:
+#    VCLUSTER_K8S_VERSION: "1.27"
+#    VCLUSTER_NAME: vcluster-1-27-${CI_COMMIT_REF_SLUG}
+#  environment:
+#    on_stop: stop_review_vcluster_127
 
-stop_review_vcluster_127:
-  extends: .stop_review_app_template
-  variables: !reference [review_vcluster_127, variables]
+#stop_review_vcluster_127:
+#  extends: .stop_review_app_template
+#  variables: !reference [review_vcluster_127, variables]
 
 # Kubernetes 1.28
 
-review_vcluster_128:
-  extends: .review_app_template
-  variables:
-    VCLUSTER_K8S_VERSION: "1.28"
-    VCLUSTER_NAME: vcluster-1-28-${CI_COMMIT_REF_SLUG}
-  environment:
-    on_stop: stop_review_vcluster_128
+#review_vcluster_128:
+#  extends: .review_app_template
+#  variables:
+#    VCLUSTER_K8S_VERSION: "1.28"
+#    VCLUSTER_NAME: vcluster-1-28-${CI_COMMIT_REF_SLUG}
+#  environment:
+#    on_stop: stop_review_vcluster_128
 
-stop_review_vcluster_128:
-  extends: .stop_review_app_template
-  variables: !reference [review_vcluster_128, variables]
+#stop_review_vcluster_128:
+#  extends: .stop_review_app_template
+#  variables: !reference [review_vcluster_128, variables]
