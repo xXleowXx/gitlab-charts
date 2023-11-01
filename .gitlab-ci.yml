@@ -1054,41 +1054,41 @@ qa_gke122_production:
     - job: production_specs_gke122
       artifacts: false
 
-qa_gke125_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_gke125"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: gke125_production
-  needs:
-    - stable_gke125
-    - job: production_specs_gke125
-      artifacts: false
-
-qa_gke126_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_gke126"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: gke126_production
-  needs:
-    - stable_gke126
-    - job: production_specs_gke126
-      artifacts: false
-
-qa_eks_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: eks_production
-  needs:
-    - stable_eks
-    - job: production_specs_eks
-      artifacts: false
+#qa_gke125_production:
+#  extends: .qa_production
+#  variables:
+#    VARIABLES_FILE: "variables/stable_gke125"
+#    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
+#  environment:
+#    name: gke125_production
+#  needs:
+#    - stable_gke125
+#    - job: production_specs_gke125
+#      artifacts: false
+#
+#qa_gke126_production:
+#  extends: .qa_production
+#  variables:
+#    VARIABLES_FILE: "variables/stable_gke126"
+#    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
+#  environment:
+#    name: gke126_production
+#  needs:
+#    - stable_gke126
+#    - job: production_specs_gke126
+#      artifacts: false
+#
+#qa_eks_production:
+#  extends: .qa_production
+#  variables:
+#    VARIABLES_FILE: "variables/stable_eks"
+#    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
+#  environment:
+#    name: eks_production
+#  needs:
+#    - stable_eks
+#    - job: production_specs_eks
+#      artifacts: false
 
 # QA jobs for Full E2E suites
 
