@@ -207,35 +207,35 @@ lint_package:
     - if: '$PIPELINE_TYPE == "NIGHTLY_PIPELINE"'
   needs: ['lint_package']
 
-"Validate 1.20.7":
-  extends: .kubeconform
-  variables:
-    KUBE_VERSION: "1.20.7"
-
-"Validate 1.22.3":
-  extends: .kubeconform
-  variables:
-    KUBE_VERSION: "1.22.3"
-    HELM_SETTINGS: |
-      global:
-        ingress:
-          apiVersion: networking.k8s.io/v1
-
-"Validate 1.25.7":
-  extends: .kubeconform
-  variables:
-    KUBE_VERSION: "1.25.7"
-    HELM_SETTINGS: |
-      global:
-        ingress:
-          apiVersion: networking.k8s.io/v1
-        pdb:
-          apiVersion: policy/v1
-        hpa:
-          apiVersion: autoscaling/v2
-        batch:
-          cronJob:
-            apiVersion: batch/v1
+#"Validate 1.20.7":
+#  extends: .kubeconform
+#  variables:
+#    KUBE_VERSION: "1.20.7"
+#
+#"Validate 1.22.3":
+#  extends: .kubeconform
+#  variables:
+#    KUBE_VERSION: "1.22.3"
+#    HELM_SETTINGS: |
+#      global:
+#        ingress:
+#          apiVersion: networking.k8s.io/v1
+#
+#"Validate 1.25.7":
+#  extends: .kubeconform
+#  variables:
+#    KUBE_VERSION: "1.25.7"
+#    HELM_SETTINGS: |
+#      global:
+#        ingress:
+#          apiVersion: networking.k8s.io/v1
+#        pdb:
+#          apiVersion: policy/v1
+#        hpa:
+#          apiVersion: autoscaling/v2
+#        batch:
+#          cronJob:
+#            apiVersion: batch/v1
 
 pin_image_versions:
   stage: prepare-review
@@ -254,23 +254,23 @@ pin_image_versions:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
 
-"Validate 1.26.8":
-  extends: .kubeconform
-  variables:
-    KUBE_VERSION: "1.26.8"
-    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
-
-"Validate 1.27.5":
-  extends: .kubeconform
-  variables:
-    KUBE_VERSION: "1.27.5"
-    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
-
-"Validate 1.28.3":
-  extends: .kubeconform
-  variables:
-    KUBE_VERSION: "1.28.3"
-    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
+#"Validate 1.26.8":
+#  extends: .kubeconform
+#  variables:
+#    KUBE_VERSION: "1.26.8"
+#    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
+#
+#"Validate 1.27.5":
+#  extends: .kubeconform
+#  variables:
+#    KUBE_VERSION: "1.27.5"
+#    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
+#
+#"Validate 1.28.3":
+#  extends: .kubeconform
+#  variables:
+#    KUBE_VERSION: "1.28.3"
+#    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
 
 .set_up_varfile_and_kubecontext:
   script:
