@@ -18,7 +18,7 @@ dependencies:
       - dependencies.io
       - group::distribution::deploy
       - group::distribution
-      - section::enablement
+      - section::core platform
       - devops::systems
       - type::maintenance
       - maintenance::dependency
