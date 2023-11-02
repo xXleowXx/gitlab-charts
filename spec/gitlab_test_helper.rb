@@ -282,7 +282,7 @@ module Gitlab
     end
 
     def ensure_backups_on_object_storage
-      storage_url = 'https://storage.googleapis.com/gitlab-charts-ci/test-backups'
+      storage_url = 'https://storage.cloud.google.com/test-backups-chart-issue-5074'
       backup_file_names = ["#{ENV['TEST_BACKUP_PREFIX']}_gitlab_backup.tar"]
       backup_file_names.each do |file_name|
         file = URI.open("#{storage_url}/#{file_name}").read
