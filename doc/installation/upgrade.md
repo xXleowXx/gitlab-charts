@@ -153,6 +153,17 @@ coalesce.go:199: warning: destination for password is a table. Ignoring non-tabl
 
 This is an indication that you are setting `global.redis.password` in your values file.
 
+### Enable useNewIngressClassNameField
+
+If you are upgrading an existing chart from `7.0`-`7.6` to `7.7` or later, and if you set
+`certmanager-issuer.useNewIngressClassNameField` to `true`, you will also need to update any existing Ingresses and Certificates
+to remove the old annotations.
+
+1. For pre-existing Ingresses:
+    1. Remove the `kubernetes.io/ingress.class` annotation.
+    1. Under the field `spec`, add `ingressClassName: <your-ingress-class-name>`.
+1. For pre-existing Certificates: remove the `acme.cert-manager.io/http01-override-ingress-name` annotation.
+
 ## Upgrade to version 6.0
 
 WARNING:
