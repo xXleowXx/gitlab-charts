@@ -30,11 +30,19 @@ reduce collision
 {{/*
 Returns the http01 solver's ingress class field. Takes the IngressClass as paramter.
 If the IngressClass is "none", the field is not set.
-  See: https://cert-manager.io/docs/configuration/acme/http01/#class
+  See: https://cert-manager.io/docs/configuration/acme/http01/#ingressclassname
+
+For backwards compatibility, the default is to use the legacy ingress class name
+attribute. It is still required by some ingress providers, such as GKE load balancers.
 */}}
-{{- define "certmanager-issuer.http01.ingress.class.field" -}}
-{{- $ingressClass := . | default "" -}}
+{{- define "certmanager-issuer.http01.ingress.class.spec" -}}
+{{- $ingressCfg := dict "global" $.Values.global.ingress "local" .ingress "context" $ -}}
+{{- $ingressClass := include "ingress.class.name" . | default "" -}}
 {{- if ne "none" $ingressClass -}}
+{{-   if $.Values.useNewIngressClassNameField | default false -}}
+ingressClassName: {{ $ingressClass }}
+{{-   else -}}
 class: {{ $ingressClass }}
+{{-   end -}}
 {{- end -}}
 {{- end -}}
