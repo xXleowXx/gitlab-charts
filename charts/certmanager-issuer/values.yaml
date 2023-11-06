@@ -16,3 +16,5 @@ priorityClassName: ""
 
 common:
   labels: {}
+
+useNewIngressClassNameField: false

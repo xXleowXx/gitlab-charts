@@ -28,9 +28,14 @@ describe 'GitLab Ingress configuration(s)' do
     template.dig("Service/#{service_name}", 'spec', 'ports')
   end
 
-  def get_certmanager_http01_solver_ingress_class_spec(template, issuer_config_name)
+  def get_certmanager_http01_solver_legacy_ingress_class_spec(template, issuer_config_name)
     issuer = YAML.safe_load(template.dig("ConfigMap/#{issuer_config_name}", 'data', 'issuer.yml'))
     issuer.dig('spec', 'acme', 'solvers', 0, 'http01', 'ingress', 'class')
+  end
+
+  def get_certmanager_http01_solver_new_ingress_class_spec(template, issuer_config_name)
+    issuer = YAML.safe_load(template.dig("ConfigMap/#{issuer_config_name}", 'data', 'issuer.yml'))
+    issuer.dig('spec', 'acme', 'solvers', 0, 'http01', 'ingress', 'ingressClassName')
   end
 
   let(:default_values) do
@@ -495,17 +500,36 @@ describe 'GitLab Ingress configuration(s)' do
       end
 
       with_them do
-        it 'populates expected ingress class to http01 solver' do
-          values = default_values.deep_merge(YAML.safe_load(%(
+        context "and when the default values are used" do
+          it 'populates the legacy ingress class to http01 solver' do
+            values = default_values.deep_merge(YAML.safe_load(%(
               global:
                 ingress:
                   class: #{class_name}
             )))
 
-          t = HelmTemplate.new(values)
-          expect(t.exit_code).to eq(0)
-          issuer_class_spec = get_certmanager_http01_solver_ingress_class_spec(t, "test-certmanager-issuer-certmanager")
-          expect(issuer_class_spec).to eq(expected_spec)
+            t = HelmTemplate.new(values)
+            expect(t.exit_code).to eq(0)
+            issuer_class_spec = get_certmanager_http01_solver_legacy_ingress_class_spec(t, "test-certmanager-issuer-certmanager")
+            expect(issuer_class_spec).to eq(expected_spec)
+          end
+        end
+
+        context "and when the useNewIngressClassNameField value is set to true" do
+          it 'populates the new ingress class to http01 solver' do
+            values = default_values.deep_merge(YAML.safe_load(%(
+              global:
+                ingress:
+                  class: #{class_name}
+              
+              certmanager-issuer:
+                useNewIngressClassNameField: true
+            )))
+            t = HelmTemplate.new(values)
+            expect(t.exit_code).to eq(0)
+            issuer_class_spec = get_certmanager_http01_solver_new_ingress_class_spec(t, "test-certmanager-issuer-certmanager")
+            expect(issuer_class_spec).to eq expected_spec
+          end
         end
       end
     end
