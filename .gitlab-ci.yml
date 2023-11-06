@@ -569,7 +569,7 @@ debug_review_gke122:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
 
 rubocop:
-  image: ruby:3.0-alpine
+  image: ruby:3.1-alpine
   stage: prepare
   dependencies: []
   before_script:
@@ -626,7 +626,7 @@ check_docs_links:
     - if: '$PIPELINE_TYPE =~ /BRANCH_PIPELINE$/'
 
 .review-docs:
-  image: ruby:3.0-alpine
+  image: ruby:3.1-alpine
   stage: review
   cache: {}
   dependencies: []
