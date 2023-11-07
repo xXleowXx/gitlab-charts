@@ -8,7 +8,7 @@ dependencies:
 - name: registry
   version: '*.*.*'
 - name: cert-manager
-  version: 1.11.1
+  version: 1.12.5
   repository: https://charts.jetstack.io/
   condition: certmanager.install
   alias: certmanager
@@ -25,7 +25,7 @@ dependencies:
   repository: oci://registry.cern.ch/pgbouncer
   condition: pgbouncer.enabled
 - name: gitlab-runner
-  version: 0.57.1
+  version: 0.58.1
   repository: https://charts.gitlab.io/
   condition: gitlab-runner.install
 - name: redis
@@ -40,7 +40,7 @@ dependencies:
   version: '*.*.*'
   alias: nginx-ingress-geo
 - name: gitlab-zoekt
-  version: 0.7.0
+  version: 0.8.0
   repository: https://charts.gitlab.io/
   condition: gitlab-zoekt.install
 - name: traefik

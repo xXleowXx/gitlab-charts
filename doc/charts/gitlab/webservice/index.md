@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Using the GitLab Webservice chart **(FREE SELF)**
 
 The `webservice` sub-chart provides the GitLab Rails webserver with two Webservice workers
-per pod. (The minimum necessary for a single pod to be able to serve any web request in GitLab)
+per pod, which is the minimum necessary for a single pod to be able to serve any web request in GitLab.
 
 The pods of this chart make use of two containers: `gitlab-workhorse` and `webservice`.
 [GitLab Workhorse](https://gitlab.com/gitlab-org/gitlab/-/tree/master/workhorse) listens on

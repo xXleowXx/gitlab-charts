@@ -812,6 +812,8 @@ global:
   zoekt:
     gateway:
       basicAuth: {}
+    indexer:
+      internalApi: {}
 
   ## https://docs.gitlab.com/charts/charts/globals
   extraEnv: {}
@@ -960,6 +962,8 @@ nginx-ingress-geo:
     ingressClassResource:
       name: '{{ include "gitlab.geo.ingress.class.name" $ | quote }}'
       controllerValue: 'k8s.io/nginx-ingress-geo'
+  # A pre-defined/static external IP can be configured with global.hosts.externalGeoIP.
+  externalIpTpl: '{{ .Values.global.hosts.externalGeoIP }}'
 
 haproxy:
   install: false
@@ -1224,6 +1228,9 @@ gitlab-runner:
     create: true
   runners:
     locked: false
+    # Set secret to an arbitrary value because the runner chart renders the gitlab-runner.secret template only if it is not empty.
+    # The parent/GitLab chart overrides the template to render the actual secret name.
+    secret: "nonempty"
     config: |
       [[runners]]
         [runners.kubernetes]
@@ -1288,3 +1295,9 @@ gitlab-zoekt:
     basicAuth:
       enabled: true
       secretName: '{{ include "gitlab.zoekt.gateway.basicAuth.secretName" $ }}'
+  indexer:
+    internalApi:
+      enabled: false
+      secretName: '{{ include "gitlab.zoekt.indexer.internalApi.secretName" $ }}'
+      secretKey: '{{ include "gitlab.zoekt.indexer.internalApi.secretKey" $ }}'
+      gitlabUrl: '{{ include "gitlab.zoekt.indexer.internalApi.gitlabUrl" $ }}'

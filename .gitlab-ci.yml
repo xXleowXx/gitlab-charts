@@ -70,6 +70,7 @@ stages:
   - prepare
   - test
   - preflight
+  - prepare-review
   - review
   - staging
   - canary
@@ -86,6 +87,7 @@ stages:
 
 include:
   - local: '/.gitlab/ci/rules.gitlab-ci.yml'
+  - local: '/.gitlab/ci/review-apps.gitlab-ci.yml'
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
@@ -173,6 +175,7 @@ lint_package:
     paths:
     - build
   rules:
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "NIGHTLY_PIPELINE"'
@@ -200,15 +203,11 @@ lint_package:
       --output json
       .
   rules:
+    - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
     - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "NIGHTLY_PIPELINE"'
   needs: ['lint_package']
-
-"Validate 1.19.16":
-  extends: .kubeconform
-  variables:
-    KUBE_VERSION: "1.19.16"
 
 "Validate 1.20.7":
   extends: .kubeconform
@@ -240,13 +239,48 @@ lint_package:
           cronJob:
             apiVersion: batch/v1
 
+pin_image_versions:
+  stage: prepare-review
+  script:
+    - apk add skopeo
+    - bash ./scripts/ci/pin_image_digests.sh
+  artifacts:
+    paths:
+      - ci.digests.yaml
+  rules:
+    # Rules from .stable
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
+    # Rules from .review_template
+    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
+
+"Validate 1.26.8":
+  extends: .kubeconform
+  variables:
+    KUBE_VERSION: "1.26.8"
+    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
+
+"Validate 1.27.5":
+  extends: .kubeconform
+  variables:
+    KUBE_VERSION: "1.27.5"
+    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
+
+"Validate 1.28.3":
+  extends: .kubeconform
+  variables:
+    KUBE_VERSION: "1.28.3"
+    HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
+
 .set_up_varfile_and_kubecontext:
   script:
     - mkdir -p $(dirname "${VARIABLES_FILE}")
     - set_context
     - check_kube_domain
 
-.set_up_namespace_secret_and_deploy: 
+.set_up_namespace_secret_and_deploy:
   script:
     - ensure_namespace
     - create_secret
@@ -265,6 +299,8 @@ lint_package:
     DOMAIN: "-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"
     VARIABLES_FILE: "variables/${CI_JOB_NAME}"
   extends: .source_autodevops
+  dependencies:
+    - pin_image_versions
   script:
     - !reference [.set_up_varfile_and_kubecontext, script]
     - kubectl version
@@ -413,6 +449,8 @@ stop_review_eks:
 .stable:
   stage: stable
   extends: .source_autodevops
+  dependencies:
+    - pin_image_versions
   script:
     - !reference [.set_up_varfile_and_kubecontext, script]
     - !reference [.set_up_namespace_secret_and_deploy, script]
@@ -533,7 +571,7 @@ debug_review_gke122:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
 
 rubocop:
-  image: ruby:3.0-alpine
+  image: ruby:3.1-alpine
   stage: prepare
   dependencies: []
   before_script:
@@ -590,7 +628,7 @@ check_docs_links:
     - if: '$PIPELINE_TYPE =~ /BRANCH_PIPELINE$/'
 
 .review-docs:
-  image: ruby:3.0-alpine
+  image: ruby:3.1-alpine
   stage: review
   cache: {}
   dependencies: []
