@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Configure the GitLab chart with an external PgBouncer **(EXPERIMENT)**
 
-> [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1944) in GitLab 15.11. This feature is an [Experiment](https://docs.gitlab.com/ee/policy/experiment-beta-support.html).
+> [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1944) in GitLab 16.6. This feature is an [Experiment](https://docs.gitlab.com/ee/policy/experiment-beta-support.html).
 
 This documentation outlines how to install and configure [PgBouncer](https://www.pgbouncer.org) with GitLab Helm Chart and external [PostgreSQL](https://www.postgresql.org).
 
@@ -33,11 +33,11 @@ appropriate configuration.
 NOTE:
 When using multiple replicas of PgBouncer, values for `min_pool_size` and `default_pool_size` are scaled according to the number of replicas. For example, if `min_pool_size: 20` and `replicaCount: 3` are configured, the resulting minimum pool size in the database server will be `20 * 3 = 60` minimum backend connections. The same logic applies to `default_pool_size`. Keep this in mind when scaling PgBouncer.
 
-### User Authentication in PgBouncer
+### User authentication in PgBouncer
 
 There are multiple ways to authenticate users in PgBouncer.
 
-#### Authentication File
+#### Authentication file
 
 The authentication file (also known as the `auth_file`) contains the list of known roles and their password hash. 
 
@@ -107,7 +107,7 @@ pgbouncer:
     user1: <pwd | md5 | scram-sha-256 >
 ```
 
-#### Authentication Query
+#### Authentication query
 
 Prerequisite:
 
