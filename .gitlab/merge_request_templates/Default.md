@@ -4,6 +4,25 @@
 
 %{first_multiline_commit}
 
+## How to set up and validate locally
+
+_Numbered steps to set up and validate the change are strongly suggested._
+
+<!--
+Example below:
+
+1. Check out the default branch `git checkout master`
+1. Install the helm chart with
+   ```shell
+   helm install gitlab . --set certmanager-issuer.email=email@example.com
+   ```
+1. Checkout the branch of this MR
+1. Upgrade the helm chart with
+   ```shell
+   helm upgrade gitlab . --reuse-values
+   ``` 
+-->
+
 ## Related issues
 
 <!-- Link related issues below. Insert the issue link or reference after the word "Closes" if merging this should automatically close it. -->
