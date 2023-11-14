@@ -152,7 +152,6 @@ global:
       # preparedStatements: false
       # databaseTasks: true
     ci:
-      enabled: true
       # host: postgresql.hostedsomewhere.else
       # port: 123
       # username: gitlab
