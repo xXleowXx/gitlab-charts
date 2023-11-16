@@ -244,3 +244,5 @@ affinity:
 # rateLimitTLSSourceIPBurst:
 # rateLimitTLSDomain:
 # rateLimitTLSDomainBurst:
+
+# namespaceInPath:

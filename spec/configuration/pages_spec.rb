@@ -505,6 +505,7 @@ describe 'GitLab Pages' do
                 serverWriteTimeout: 3h
                 serverKeepAlive: 4h
                 authCookieSessionTimeout: 1h
+                namespaceInPath: true
           ))
         end
 
@@ -556,6 +557,7 @@ describe 'GitLab Pages' do
             server-read-header-timeout=2h
             server-write-timeout=3h
             server-keep-alive=4h
+            namespace-in-path=true
           MSG
 
           expect(pages_enabled_template.exit_code).to eq(0), "Unexpected error code #{pages_enabled_template.exit_code} -- #{pages_enabled_template.stderr}"
