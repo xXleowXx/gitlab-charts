@@ -77,6 +77,7 @@ global:
 | :------------------------ | :-------: | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `domain`                  | String    | `example.com`  | The base domain. GitLab and Registry will be exposed on the subdomain of this setting. This defaults to `example.com`, but is not used for hosts that have their `name` property configured. See the `gitlab.name`, `minio.name`, and `registry.name` sections below.                                                     |
 | `externalIP`              |           | `nil`          | Set the external IP address that will be claimed from the provider. This will be templated into the [NGINX chart](nginx/index.md#configuring-nginx), in place of the more complex `nginx.service.loadBalancerIP`.                                                                                                         |
+| `externalGeoIP`           |           | `nil`          | Same as `externalIP` but for the [NGINX Geo chart](nginx/index.md#gitlab-geo). Needed to configure a static IP for [GitLab Geo](../advanced/geo/index.md) sites using a unified URL. Must be different from `externalIP`.                                                                                                 |
 | `https`                   | Boolean   | `true`         | If set to true, you will need to ensure the NGINX chart has access to the certificates. In cases where you have TLS-termination in front of your Ingresses, you probably want to look at [`global.ingress.tls.enabled`](#configure-ingress-settings). Set to false for external URLs to use `http://` instead of `https`. |
 | `hostSuffix`              | String    |                | [See Below](#hostsuffix).                                                                                                                                                                                                                                                                                                 |
 | `gitlab.https`            | Boolean   | `false`        | If `hosts.https` or `gitlab.https` are `true`, the GitLab external URL will use `https://` instead of `http://`.                                                                                                                                                                                                          |
@@ -139,6 +140,14 @@ The GitLab global host settings for CronJobs are located under the `global.batch
 | Name         | Type      | Default | Description                                                           |
 | :----------- | :-------: | :------ | :-------------------------------------------------------------------- |
 | `apiVersion` | String    |         | API version to use in the CronJob object definitions. |
+
+## Configure Monitoring settings
+
+The GitLab global settings for ServiceMonitors and PodMonitors are located under the `global.monitoring` key:
+
+| Name         | Type      | Default | Description                                                           |
+| :----------- | :-------: | :------ | :-------------------------------------------------------------------- |
+| `enabled`    | Boolean   | `false` | Enable monitoring resources regardless of the availability of the `monitoring.coreos.com/v1` API. |
 
 ## Configure Ingress settings
 
@@ -1571,6 +1580,7 @@ omniauth:
   providers: []
   # - secret: gitlab-google-oauth2
   #   key: provider
+  # - name: group_saml
 ```
 
 | Name                      | Type    | Default     | Description |
@@ -1600,6 +1610,13 @@ This property has two sub-keys: `secret` and `key`:
 - `secret`: *(required)* The name of a Kubernetes `Secret` containing the provider block.
 - `key`: *(optional)* The name of the key in the `Secret` containing the provider block.
   Defaults to `provider`
+
+Alternatively, if the provider has no other configuration than its name, you may
+use a second form with only a 'name' attribute, and optionally a `label` or
+`icon` attribute. The eligible providers are:
+
+- [`group_saml`](https://docs.gitlab.com/ee/integration/saml.html#configure-group-saml-sso-on-a-self-managed-instance)
+- [`kerberos`](https://docs.gitlab.com/ee/integration/saml.html#configure-group-saml-sso-on-a-self-managed-instance)
 
 The `Secret` for these entries contains YAML or JSON formatted blocks, as described
 in [OmniAuth Providers](https://docs.gitlab.com/ee/integration/omniauth.html). To
@@ -1642,12 +1659,6 @@ args:
   tenant_id: '<TENANT_ID>'
 ```
 
-[Group SAML](https://docs.gitlab.com/ee/integration/saml.html#configuring-group-saml-on-a-self-managed-gitlab-instance) configuration example:
-
-```yaml
-name: group_saml
-```
-
 This content can be saved as `provider.yaml`, and then a secret created from it:
 
 ```shell
@@ -1664,6 +1675,14 @@ omniauth:
     - secret: azure_activedirectory_v2
     - secret: gitlab-azure-oauth2
     - secret: gitlab-cas3
+```
+
+[Group SAML](https://docs.gitlab.com/ee/integration/saml.html#configuring-group-saml-on-a-self-managed-gitlab-instance) configuration example:
+
+```yaml
+omniauth:
+  providers:
+    - name: group_saml
 ```
 
 Example configuration `--set` items, when using the global chart:

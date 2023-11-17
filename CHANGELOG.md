@@ -2,6 +2,112 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.6.0 (2023-11-15)
+
+### Fixed (2 changes)
+
+- [Add custom static IP key for Geo NGINX controller](gitlab-org/charts/gitlab@e68ef0041ce05615acdff3cfb87da5c005f92ee0) ([merge request](gitlab-org/charts/gitlab!3407))
+- [Fix runner secret templating](gitlab-org/charts/gitlab@a974ffcbc415d49295b88455ffa09e8a7e16c9b1) ([merge request](gitlab-org/charts/gitlab!3445))
+
+### Changed (10 changes)
+
+- [Update gitlab-org/container-registry from 3.85.0-gitlab to 3.86.1-gitlab](gitlab-org/charts/gitlab@2568a6d03fac5dcee08e80ee09e941fc7de0efcd) ([merge request](gitlab-org/charts/gitlab!3466))
+- [Update cert-manager/cert-manager from 1.12.5 to 1.12.6](gitlab-org/charts/gitlab@3b1164b195b831444c9f7baa7fa61b8a836cfe46) ([merge request](gitlab-org/charts/gitlab!3478))
+- [Update gitlab-org/container-registry from 3.85.0-gitlab to 3.86.0-gitlab](gitlab-org/charts/gitlab@639394504513cc18f5aaeedf0e676226087d1213) ([merge request](gitlab-org/charts/gitlab!3466))
+- [Update gitlab-org/charts/gitlab-runner from 0.58.1 to 0.58.2](gitlab-org/charts/gitlab@fa3f2024db1e9fbb31800c2a56ada5dd434f6a6a) ([merge request](gitlab-org/charts/gitlab!3465))
+- [Add k8s 1.26 to documented support and drop k8s 1.19](gitlab-org/charts/gitlab@9cbad96b5340c92f50a60899483b8f1da34a56bc) by @twk3 ([merge request](gitlab-org/charts/gitlab!3444))
+- [Update gitlab-org/gitlab-qa from 12.4.1 to 12.5.0](gitlab-org/charts/gitlab@94d93fdf1ef79af1355c41a978f0ee92b21c7dc8) ([merge request](gitlab-org/charts/gitlab!3450))
+- [Bump gitlab-exporter to version 13.4.1](gitlab-org/charts/gitlab@0c35e7baaf7fc72fac088205202a87c74be8e536) ([merge request](gitlab-org/charts/gitlab!3432))
+- [Update gitlab-org/charts/gitlab-runner from 0.57.1 to 0.58.1](gitlab-org/charts/gitlab@895ba3c786d3b303f804779feb7aa287eda61a21) ([merge request](gitlab-org/charts/gitlab!3445))
+- [Update cert-manager from 1.11.1 to 1.12.5](gitlab-org/charts/gitlab@033b69ed2429807aabbd94e89293938fc9bf6651) ([merge request](gitlab-org/charts/gitlab!3446))
+- [Update gitlab-org/charts/gitlab-runner from 0.57.1 to 0.58.0](gitlab-org/charts/gitlab@ba5295e5f2deeb93b126ca9da7b9f99d871de72f) ([merge request](gitlab-org/charts/gitlab!3445))
+
+### Other (1 change)
+
+- [Deprecate namespace in mailroom.yml](gitlab-org/charts/gitlab@781a94d070a5ae221c33f1a31fdd9ecde15f2be6) ([merge request](gitlab-org/charts/gitlab!3419))
+
+## 7.5.2 (2023-11-14)
+
+No changes.
+
+## 7.5.1 (2023-10-30)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.57.1 to 0.58.0](gitlab-org/security/charts/gitlab@f22baeb579a3ed2caa78ae1fefc7566ffd71f8db)
+
+## 7.5.0 (2023-10-20)
+
+### Added (1 change)
+
+- [Add template to guard Monitoring objects](gitlab-org/charts/gitlab@cd06e2a6c1ccbadf28cd85e7781fa27a0ff17628) ([merge request](gitlab-org/charts/gitlab!3390))
+
+### Fixed (2 changes)
+
+- [Exclude HAProxy and Traefik templates when gitlab-shell is disabled](gitlab-org/charts/gitlab@4a3295dd4f63ff8895fe3bd70b5ece637e5e5ec4) by @jbblache ([merge request](gitlab-org/charts/gitlab!3433))
+- [Fix templating error in KEDA templates for Sidekiq and Web](gitlab-org/charts/gitlab@5611885e7e7720f1b9ce003f2893735863bfad18) ([merge request](gitlab-org/charts/gitlab!3425))
+
+### Changed (7 changes)
+
+- [Update gitlab-org/container-registry from 3.84.0-gitlab to 3.85.0-gitlab](gitlab-org/charts/gitlab@529399631d87ce5108a205f990d3ed10b4acd9fb) ([merge request](gitlab-org/charts/gitlab!3436))
+- [Update gitlab-org/gitlab-exporter from 13.3.0 to 13.4.0](gitlab-org/charts/gitlab@ba51e4978ad00f1b8d16f76aa87463b7c462adc3) ([merge request](gitlab-org/charts/gitlab!3420))
+- [Update gitlab-org/charts/gitlab-runner from 0.57.0 to 0.57.1](gitlab-org/charts/gitlab@88fbdbfcf1176f660947756998496efeb3513ef1) ([merge request](gitlab-org/charts/gitlab!3423))
+- [Update gitlab-org/gitlab-exporter from 13.2.0 to 13.3.0](gitlab-org/charts/gitlab@2de53f8855fbff484b007a2a99485f2ec978b80c) ([merge request](gitlab-org/charts/gitlab!3413))
+- [Update gitlab-org/container-registry from 3.83.0-gitlab to 3.84.0-gitlab](gitlab-org/charts/gitlab@8d5c2d3386a9a576529fd72c934de704af1d484f) ([merge request](gitlab-org/charts/gitlab!3412))
+- [Update gitlab-org/charts/gitlab-runner from 0.56.0 to 0.57.0](gitlab-org/charts/gitlab@d8e4d0c39ce28a73fcf838f4c06ec0928f25a8f8) ([merge request](gitlab-org/charts/gitlab!3399))
+- [Update gitlab-org/charts/gitlab-runner from 0.56.0 to 0.56.1](gitlab-org/charts/gitlab@39351c74a18bf92d577bc675914a900e6c62eb89) ([merge request](gitlab-org/charts/gitlab!3399))
+
+### Other (1 change)
+
+- [Enable dual-namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/charts/gitlab@08e94769a6169bdc380e7d46b3ed300aa9c9cfab) ([merge request](gitlab-org/charts/gitlab!3388))
+
+## 7.4.2 (2023-10-30)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.56.0 to 0.57.1](gitlab-org/security/charts/gitlab@31e21355635bd7767122652673cca0964d04bbd1)
+
+## 7.4.1 (2023-09-28)
+
+No changes.
+
+## 7.4.0 (2023-09-21)
+
+### Added (2 changes)
+
+- [Provide option to configure a separate workhorse redis](gitlab-org/charts/gitlab@9e99308a40948c35bf1173a1f54e55299d60ba8f) ([merge request](gitlab-org/charts/gitlab!3296))
+- [Support global image settings for Mailroom chart](gitlab-org/charts/gitlab@4c0e74693966166af1a45c2716a00b9aedbd45ee) ([merge request](gitlab-org/charts/gitlab!3362))
+
+### Fixed (1 change)
+
+- [Restore default `registry.gc.disabled` key](gitlab-org/charts/gitlab@748eb0b168329d312aa63359af5223907b992d12) ([merge request](gitlab-org/charts/gitlab!3394))
+
+### Changed (11 changes)
+
+- [Update gitlab-org/container-registry from 3.82.2-gitlab to 3.83.0-gitlab](gitlab-org/charts/gitlab@f132859596ad43ba618f852b89eddf5177c2759d) ([merge request](gitlab-org/charts/gitlab!3382))
+- [Update gitlab-org/gitlab-qa from 12.4.0 to 12.4.1](gitlab-org/charts/gitlab@3c1a462717ba873a5072310338707ef3ecbfcc19) ([merge request](gitlab-org/charts/gitlab!3381))
+- [Update gitlab-org/container-registry from 3.82.0-gitlab to 3.82.2-gitlab](gitlab-org/charts/gitlab@f7a02aaa7f43107f40f0fb3d2b693785d9af20d9) ([merge request](gitlab-org/charts/gitlab!3374))
+- [Warning user when a non-prod ready subchart is enabled](gitlab-org/charts/gitlab@c16b8a41795a3ff5615a883273913f2f6c225fc5) ([merge request](gitlab-org/charts/gitlab!3352))
+- [Update gitlab-org/container-registry from 3.80.0-gitlab to 3.82.0-gitlab](gitlab-org/charts/gitlab@dc78559c740fb9032a7def8820b54624fbfb5e61) ([merge request](gitlab-org/charts/gitlab!3366))
+- [Update gitlab-org/container-registry from 3.80.0-gitlab to 3.81.0-gitlab](gitlab-org/charts/gitlab@854e9ece8b8fbc2a4344853dcfd6485a7e4663d5) ([merge request](gitlab-org/charts/gitlab!3366))
+- [Update gitlab-org/gitlab-qa from 12.3.0 to 12.4.0](gitlab-org/charts/gitlab@c82d7d57cfae2cf93e9f8cca5dae80ead440a467) ([merge request](gitlab-org/charts/gitlab!3365))
+- [Enforce upgrade stop at 7.3/16.3](gitlab-org/charts/gitlab@46a2f45016f7440849cb7d60fd2427076d0d058a) ([merge request](gitlab-org/charts/gitlab!3342))
+- [Update gitlab-org/charts/gitlab-runner from 0.55.0 to 0.56.0](gitlab-org/charts/gitlab@f14cbc58591049e3e035ee5396b2f096207c4f24) ([merge request](gitlab-org/charts/gitlab!3350))
+- [Update gitlab-org/container-registry from 3.79.0-gitlab to 3.80.0-gitlab](gitlab-org/charts/gitlab@7f61401aaa147497b4a9a32fa25a1c6896bfe394) ([merge request](gitlab-org/charts/gitlab!3341))
+- [Update gitlab-org/gitlab-qa from 12.2.1 to 12.3.0](gitlab-org/charts/gitlab@021b652e4100e94f0f59985cdb21022015275b61) ([merge request](gitlab-org/charts/gitlab!3349))
+
+## 7.3.6 (2023-10-30)
+
+No changes.
+
+## 7.3.5 (2023-09-28)
+
+No changes.
+
+## 7.3.4 (2023-09-18)
+
+No changes.
+
 ## 7.3.3 (2023-09-12)
 
 No changes.
@@ -34,6 +140,14 @@ No changes.
 - [Update gitlab-org/container-registry from 3.78.0-gitlab to 3.79.0-gitlab](gitlab-org/charts/gitlab@1c63ea70ad695118c0a4dc1861f3400e3b8186e0) ([merge request](gitlab-org/charts/gitlab!3310))
 - [Update gitlab-org/gitlab-qa from 12.2.0 to 12.2.1](gitlab-org/charts/gitlab@eff824a0b05538a9d648e21601ac444fc578a701) ([merge request](gitlab-org/charts/gitlab!3299))
 - [Update gitlab-org/charts/gitlab-runner from 0.52.0 to 0.53.0](gitlab-org/charts/gitlab@44694d066d142a42600fd152cc7ce2ca532ab72b) ([merge request](gitlab-org/charts/gitlab!3192))
+
+## 7.2.8 (2023-09-28)
+
+No changes.
+
+## 7.2.7 (2023-09-18)
+
+No changes.
 
 ## 7.2.6 (2023-09-12)
 
