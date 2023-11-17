@@ -56,7 +56,7 @@ before you can interact with the cluster from the command line.
 
 ### Install Helm
 
-For this guide, we use the latest release of Helm v3 (v3.5.2 or later).
+For this guide, we use the latest release of Helm v3 (v3.9.4 or later).
 To install Helm, see the [Helm installation documentation](https://helm.sh/docs/intro/install/).
 
 ## Add the GitLab Helm repository

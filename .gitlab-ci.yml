@@ -29,9 +29,7 @@ default:
 
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
-  HELM_VERSION: "3.5.2"
-  # Use HELM_EXPERIMENTAL_OCI until HELM_VERSION >= 3.8.0
-  HELM_EXPERIMENTAL_OCI: "1"
+  HELM_VERSION: "3.9.4"
   KUBECTL_VERSION: "1.26.7"
   STABLE_REPO_URL: "https://charts.helm.sh/stable"
   GOOGLE_APPLICATION_CREDENTIALS: ${CI_PROJECT_DIR}/.google_keyfile.json
@@ -39,7 +37,7 @@ variables:
   # AUTO_DEVOPS_DOMAIN: domain.example.com
   GIT_CLONE_PATH: $CI_BUILDS_DIR/gitlab
   HELM_MAX_HISTORY: 20
-  TEST_BACKUP_PREFIX: "16.1.0"
+  TEST_BACKUP_PREFIX: "1699372374_2023_11_07_16.6.0-pre"
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
   ISSUE_BOT_LABELS_EXTRA: "group::distribution,type::maintenance,maintenance::pipelines"
@@ -52,7 +50,7 @@ variables:
   DEBIAN_VERSION: bullseye
   RUBY_VERSION: "3.0"
   CI_TOOLS_VERSION: "4.22.0"
-  GITLAB_QA_VERSION: "12.4.1"
+  GITLAB_QA_VERSION: "12.5.0"
   # STRICT_VERSIONS is used in RSpecs to ensure exact version match for tools like "helm" and "kubectl"
   STRICT_VERSIONS: "true"
   KUBE_CRD_SCHEMA_URL: "https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/v3/apis__apiextensions.k8s.io__v1_openapi.json"
@@ -592,7 +590,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 check_docs_markdown:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.18-vale-2.27.0-markdownlint-0.35.0-markdownlint2-0.8.1
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.18-vale-2.29.6-markdownlint-0.37.0-markdownlint2-0.10.0
   stage: prepare
   cache: {}
   dependencies: []
@@ -610,7 +608,7 @@ check_docs_markdown:
 
 # Perform link checks on published HTML files
 check_docs_links:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.18-ruby-3.2.2-6a53d93b
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.18-ruby-3.2.2-08fa6df8
   stage: prepare
   cache: {}
   dependencies: []
