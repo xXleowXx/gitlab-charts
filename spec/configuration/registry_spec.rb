@@ -293,6 +293,36 @@ describe 'registry configuration' do
           )
         end
       end
+
+      context 'when primary is provided' do
+        let(:values) do
+          YAML.safe_load(%(
+            registry:
+              database:
+                enabled: true
+                primary: "primary.record.fqdn"
+          )).deep_merge(default_values)
+        end
+
+        it 'populates the database primary settings correctly' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+            <<~CONFIG
+            database:
+              enabled: true
+              host: "test-postgresql.default.svc"
+              port: 5432
+              user: registry
+              password: "DB_PASSWORD_FILE"
+              dbname: registry
+              sslmode: disable
+              primary: primary.record.fqdn
+            CONFIG
+          )
+        end
+      end
     end
 
     describe 'redis cache config' do
