@@ -25,6 +25,9 @@ database:
   {{- if .Values.database.preparedstatements }}
   preparedstatements: true
   {{- end }}
+  {{- if .Values.database.primary }}
+  primary: {{ .Values.database.primary }}
+  {{- end }}
   {{- if .Values.database.pool }}
   pool:
     {{- if .Values.database.pool.maxidle }}
