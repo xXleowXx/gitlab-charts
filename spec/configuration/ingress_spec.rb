@@ -521,7 +521,6 @@ describe 'GitLab Ingress configuration(s)' do
               global:
                 ingress:
                   class: #{class_name}
-              
               certmanager-issuer:
                 useNewIngressClassNameField: true
             )))
