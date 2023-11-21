@@ -212,7 +212,7 @@ If you wish to use an external `cert-manager`, you must provide the following:
 
 ### `global.ingress.useNewIngressForCerts`
 
-Global setting that changes the behaviour of the `cert-manager` to perform the ACME challenge validation with
+Global setting that changes the behavior of the `cert-manager` to perform the ACME challenge validation with
 a new Ingress created dynamically each time.
 
 The default logic (when `global.ingress.useNewIngressForCerts` is `false`) reuses existing Ingresses for
