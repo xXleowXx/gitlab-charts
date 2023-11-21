@@ -37,12 +37,13 @@ attribute. It is still required by some ingress providers, such as GKE load bala
 */}}
 {{- define "certmanager-issuer.http01.ingress.class.spec" -}}
 {{- $ingressCfg := dict "global" $.Values.global.ingress "local" .ingress "context" $ -}}
-{{- $ingressClass := include "ingress.class.name" . | default "" -}}
-{{- if ne "none" $ingressClass -}}
-{{-   if $.Values.useNewIngressClassNameField | default false -}}
-ingressClassName: {{ $ingressClass }}
+{{- $ingressClassName := include "ingress.class.name" $ingressCfg -}}
+{{- if ne "none" $ingressClassName -}}
+{{-   $useNewIngressClassNameField := $ingressCfg.global.useNewIngressForCerts | default false -}}
+{{-   if $useNewIngressClassNameField -}}
+ingressClassName: {{ $ingressClassName }}
 {{-   else -}}
-class: {{ $ingressClass }}
+class: {{ $ingressClassName }}
 {{-   end -}}
 {{- end -}}
 {{- end -}}
