@@ -20,6 +20,14 @@ describe 'GitLab Ingress configuration(s)' do
     template.dig("Ingress/#{ingress_name}", 'metadata', 'annotations', 'kubernetes.io/ingress.class')
   end
 
+  def get_issuer_annotation(template, ingress_name)
+    template.dig("Ingress/#{ingress_name}", 'metadata', 'annotations', 'cert-manager.io/issuer')
+  end
+
+  def get_edit_in_place_annotation(template, ingress_name)
+    template.dig("Ingress/#{ingress_name}", 'metadata', 'annotations', 'acme.cert-manager.io/http01-edit-in-place')
+  end
+
   def get_ingress_class_spec(template, ingress_name)
     template.dig("Ingress/#{ingress_name}", 'spec', 'ingressClassName')
   end
@@ -501,7 +509,7 @@ describe 'GitLab Ingress configuration(s)' do
 
       with_them do
         context "and when the default values are used" do
-          it 'populates the legacy ingress class to http01 solver' do
+          it 'populates the legacy ingress class on the http01 solver' do
             values = default_values.deep_merge(YAML.safe_load(%(
               global:
                 ingress:
@@ -513,21 +521,55 @@ describe 'GitLab Ingress configuration(s)' do
             issuer_class_spec = get_certmanager_http01_solver_legacy_ingress_class_spec(t, "test-certmanager-issuer-certmanager")
             expect(issuer_class_spec).to eq(expected_spec)
           end
-        end
 
-        context "and when the useNewIngressClassNameField value is set to true" do
-          it 'populates the new ingress class to http01 solver' do
+          it 'sets the cert-manager issuer and http01-edit-in-place annotations' do
             values = default_values.deep_merge(YAML.safe_load(%(
               global:
                 ingress:
                   class: #{class_name}
-              certmanager-issuer:
-                useNewIngressClassNameField: true
+            )))
+
+            t = HelmTemplate.new(values)
+            expect(t.exit_code).to eq(0)
+            ingress_name = "test-webservice-default"
+            issuer_annotation = get_issuer_annotation(t, ingress_name)
+            edit_in_place_annotation = get_edit_in_place_annotation(t, ingress_name)
+
+            expect(issuer_annotation).to eq("test-issuer")
+            expect(edit_in_place_annotation).to be_truthy
+          end
+        end
+
+        context "and when the useNewIngressForCerts value is set to true" do
+          it 'populates the new ingress class on the http01 solver' do
+            values = default_values.deep_merge(YAML.safe_load(%(
+              global:
+                ingress:
+                  class: #{class_name}
+                  useNewIngressForCerts: true
             )))
             t = HelmTemplate.new(values)
             expect(t.exit_code).to eq(0)
             issuer_class_spec = get_certmanager_http01_solver_new_ingress_class_spec(t, "test-certmanager-issuer-certmanager")
             expect(issuer_class_spec).to eq expected_spec
+          end
+
+          it 'sets the cert-manager issuer but not the http01-edit-in-place annotations' do
+            values = enable_all_ingress.deep_merge(YAML.safe_load(%(
+              global:
+                ingress:
+                  class: #{class_name}
+                  useNewIngressForCerts: true
+            )))
+
+            t = HelmTemplate.new(values)
+            expect(t.exit_code).to eq(0)
+            ingress_name = "test-webservice-default"
+            issuer_annotation = get_issuer_annotation(t, ingress_name)
+            edit_in_place_annotation = get_edit_in_place_annotation(t, ingress_name)
+            
+            expect(issuer_annotation).to eq("test-issuer")
+            expect(edit_in_place_annotation).to be_nil
           end
         end
       end
