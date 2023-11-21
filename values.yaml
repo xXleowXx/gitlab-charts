@@ -77,7 +77,7 @@ global:
   ingress:
     apiVersion: ""
     configureCertmanager: true
-    certmanagerEditInPlace: true
+    useNewIngressForCerts: false
     provider: nginx
     # class:
     annotations: {}
