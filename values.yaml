@@ -143,7 +143,7 @@ global:
     # applicationName:
     # preparedStatements: false
     # databaseTasks: true
-    main:
+    main: {}
       # host: postgresql.hostedsomewhere.else
       # port: 123
       # username: gitlab
@@ -151,7 +151,7 @@ global:
       # applicationName:
       # preparedStatements: false
       # databaseTasks: true
-    ci:
+    ci: {}
       # host: postgresql.hostedsomewhere.else
       # port: 123
       # username: gitlab
