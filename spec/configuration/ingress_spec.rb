@@ -567,7 +567,7 @@ describe 'GitLab Ingress configuration(s)' do
             ingress_name = "test-webservice-default"
             issuer_annotation = get_issuer_annotation(t, ingress_name)
             edit_in_place_annotation = get_edit_in_place_annotation(t, ingress_name)
-            
+
             expect(issuer_annotation).to eq("test-issuer")
             expect(edit_in_place_annotation).to be_nil
           end
