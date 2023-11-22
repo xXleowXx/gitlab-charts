@@ -269,10 +269,10 @@ global:
       secret: gitlab-postgres
       key: psql-password
       file:
-    main:
+    main: {}
       # host: postgresql-main.hostedsomewhere.else
       # ...
-    ci:
+    ci: {}
       # host: postgresql-ci.hostedsomewhere.else
       # ...
 ```
