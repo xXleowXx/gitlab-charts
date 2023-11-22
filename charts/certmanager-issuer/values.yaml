@@ -17,4 +17,4 @@ priorityClassName: ""
 common:
   labels: {}
 
-useNewIngressClassNameField: false
+useNewIngressForCerts: false
