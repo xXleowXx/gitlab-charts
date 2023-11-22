@@ -224,7 +224,8 @@ describe 'GitLab Pages' do
             'local_store' => {
               'enabled' => false,
               'path' => nil
-            }
+            },
+            'namespace_in_path' => false
           )
         end
       end
@@ -252,6 +253,7 @@ describe 'GitLab Pages' do
                 localStore:
                   enabled: true
                   path: /random/path
+                namespaceInPath: true
           ))
         end
 
@@ -275,7 +277,8 @@ describe 'GitLab Pages' do
             'local_store' => {
               'enabled' => true,
               'path' => '/random/path'
-            }
+            },
+            'namespace_in_path' => true
           )
         end
 

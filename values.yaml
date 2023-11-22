@@ -676,6 +676,7 @@ global:
     authSecret: {}
       # secret:
       # key:
+    namespaceInPath: false
 
   ## GitLab Runner
   ## Secret created according to https://docs.gitlab.com/charts/installation/secrets#gitlab-runner-secret
