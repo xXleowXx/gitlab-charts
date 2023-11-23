@@ -9,6 +9,9 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 GitLab offers [FIPS-compliant](https://docs.gitlab.com/ee/development/fips_compliance.html)
 versions of its images, allowing you to run GitLab on FIPS-enabled clusters.
 
+These images are based upon [Red Hat Universal Base Images](https://access.redhat.com/articles/4238681).
+To function in fully-compliant FIPS mode, it is expected that all hosts are configured for FIPS mode.
+
 ## Sample values
 
 We provide an example for GitLab chart values in
