@@ -20,6 +20,7 @@ describe 'Labels configuration' do
       'Deployment/test-certmanager',
       'Deployment/test-gitlab-runner',
       'Deployment/test-prometheus-server',
+      'Deployment/test-pgbouncer',
       'Deployment/test-minio',
       'Deployment/test-nginx-ingress-controller',
       'Deployment/test-nginx-ingress-default-backend',

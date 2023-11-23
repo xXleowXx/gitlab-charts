@@ -101,6 +101,7 @@ describe 'Strategy configuration' do
       'Deployment/test-certmanager-webhook',
       'Deployment/test-certmanager',
       'Deployment/test-prometheus-server',
+      'Deployment/test-pgbouncer',
       'Deployment/test-nginx-ingress-controller',
       'Deployment/test-toolbox',
       'Deployment/test-minio',

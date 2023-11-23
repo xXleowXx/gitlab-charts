@@ -19,6 +19,8 @@ describe 'PodDisruptionBudget configuration' do
           enabled: true
         spamcheck:
           enabled: true
+      pgbouncer:
+        enabled: false
     ))
   end
 

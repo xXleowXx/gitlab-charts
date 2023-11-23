@@ -13,7 +13,8 @@ describe 'Certificates configuration' do
       # cert-manager Pods (2)
       'cainjector',
       'cert-manager', 'certmanager',
-      'prometheus'
+      'prometheus',
+      'pgbouncer'
     ]
   end
 

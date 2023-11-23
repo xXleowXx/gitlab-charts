@@ -20,6 +20,8 @@ describe 'global priorityClass configuration' do
       prometheus:
         server:
           priorityClassName: system-cluster-critical
+      pgbouncer:
+        enabled: false
     ))
   end
 
@@ -105,7 +107,8 @@ describe 'local priorityClass configuration' do
     [
       'Deployment/test-certmanager',
       'Deployment/test-certmanager-cainjector',
-      'Deployment/test-certmanager-webhook'
+      'Deployment/test-certmanager-webhook',
+      'Deployment/test-pgbouncer'
     ]
   end
 

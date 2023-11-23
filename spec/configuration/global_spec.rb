@@ -177,7 +177,8 @@ describe 'global configuration' do
       [
         'Deployment/test-gitlab-runner',
         'Deployment/test-prometheus-server',
-        'Deployment/test-minio'
+        'Deployment/test-minio',
+        'Deployment/test-pgbouncer'
       ]
     end
 
