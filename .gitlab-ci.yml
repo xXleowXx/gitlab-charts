@@ -29,7 +29,7 @@ default:
 
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
-  HELM_VERSION: "3.5.2"
+  HELM_VERSION: "3.9.4"
   KUBECTL_VERSION: "1.26.7"
   STABLE_REPO_URL: "https://charts.helm.sh/stable"
   GOOGLE_APPLICATION_CREDENTIALS: ${CI_PROJECT_DIR}/.google_keyfile.json
@@ -37,7 +37,7 @@ variables:
   # AUTO_DEVOPS_DOMAIN: domain.example.com
   GIT_CLONE_PATH: $CI_BUILDS_DIR/gitlab
   HELM_MAX_HISTORY: 20
-  TEST_BACKUP_PREFIX: "16.1.0"
+  TEST_BACKUP_PREFIX: "1699372374_2023_11_07_16.6.0-pre"
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
   ISSUE_BOT_LABELS_EXTRA: "group::distribution,type::maintenance,maintenance::pipelines"
@@ -50,7 +50,7 @@ variables:
   DEBIAN_VERSION: bullseye
   RUBY_VERSION: "3.0"
   CI_TOOLS_VERSION: "4.22.0"
-  GITLAB_QA_VERSION: "12.4.1"
+  GITLAB_QA_VERSION: "12.5.0"
   # STRICT_VERSIONS is used in RSpecs to ensure exact version match for tools like "helm" and "kubectl"
   STRICT_VERSIONS: "true"
   KUBE_CRD_SCHEMA_URL: "https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/v3/apis__apiextensions.k8s.io__v1_openapi.json"
@@ -63,6 +63,7 @@ variables:
           cron:
             enabled: true
   GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
+  REVIEW_APPS_AUTO_STOP_IN: "2 days"
 
 stages:
   - prepare
@@ -350,7 +351,7 @@ review_gke122:
     name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke122
-    auto_stop_in: 2 days
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
   resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 review_gke125:
@@ -361,7 +362,7 @@ review_gke125:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
-    auto_stop_in: 2 days
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
   resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 review_gke126:
@@ -372,7 +373,7 @@ review_gke126:
     name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
-    auto_stop_in: 2 days
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
   resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 review_eks:
@@ -383,7 +384,7 @@ review_eks:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
-    auto_stop_in: 2 days
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
   resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 .stop_review_template:
@@ -569,7 +570,7 @@ debug_review_gke122:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
 
 rubocop:
-  image: ruby:3.0-alpine
+  image: ruby:3.1-alpine
   stage: prepare
   dependencies: []
   before_script:
@@ -590,7 +591,7 @@ rubocop:
 
 # Perform documentation linting on Markdown files
 check_docs_markdown:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.18-vale-2.27.0-markdownlint-0.35.0-markdownlint2-0.8.1
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-markdown:alpine-3.18-vale-2.29.6-markdownlint-0.37.0-markdownlint2-0.10.0
   stage: prepare
   cache: {}
   dependencies: []
@@ -608,7 +609,7 @@ check_docs_markdown:
 
 # Perform link checks on published HTML files
 check_docs_links:
-  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.18-ruby-3.2.2-6a53d93b
+  image: registry.gitlab.com/gitlab-org/gitlab-docs/lint-html:alpine-3.18-ruby-3.2.2-08fa6df8
   stage: prepare
   cache: {}
   dependencies: []
@@ -626,7 +627,7 @@ check_docs_links:
     - if: '$PIPELINE_TYPE =~ /BRANCH_PIPELINE$/'
 
 .review-docs:
-  image: ruby:3.0-alpine
+  image: ruby:3.1-alpine
   stage: review
   cache: {}
   dependencies: []
