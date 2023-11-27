@@ -158,6 +158,7 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 | `apiVersion`                   | String  |                | API version to use in the Ingress object definitions.
 | `annotations.*annotation-key*` | String  |                | Where `annotation-key` is a string that will be used with the value as an annotation on every Ingress. For Example: `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. No global annotations are provided by default. |
 | `configureCertmanager`         | Boolean | `true`         | [See below](#globalingressconfigurecertmanager). |
+| `useNewIngressForCerts`        | Boolean | `false`        | [See below](#globalingressusenewingressforcerts). |
 | `class`                        | String  | `gitlab-nginx` | Global setting that controls `kubernetes.io/ingress.class` annotation or `spec.IngressClassName` in `Ingress` resources. Set to `none` to disable, or `""` for empty. Note: for `none` or `""`, set `nginx-ingress.enabled=false` to prevent the charts from deploying unnecessary Ingress resources. |
 | `enabled`                      | Boolean | `true`         | Global setting that controls whether to create Ingress objects for services that support them. |
 | `tls.enabled`                  | Boolean | `true`         | When set to `false`, this disables TLS in GitLab. This is useful for cases in which you cannot use TLS termination of Ingresses, such as when you have a TLS-terminating proxy before the Ingress Controller. If you want to disable https completely, this should be set to `false` together with [`global.hosts.https`](#configure-host-settings). |
@@ -208,6 +209,18 @@ If you wish to use an external `cert-manager`, you must provide the following:
 - `registry.ingress.tls.secretName`
 - `minio.ingress.tls.secretName`
 - `global.ingress.annotations`
+
+### `global.ingress.useNewIngressForCerts`
+
+Global setting that changes the behavior of the `cert-manager` to perform the ACME challenge validation with
+a new Ingress created dynamically each time.
+
+The default logic (when `global.ingress.useNewIngressForCerts` is `false`) reuses existing Ingresses for
+validation. This default is not suitable in some situations, setting the flag to `true` will mean that a new
+Ingress object is created for each validation.
+
+ `global.ingress.useNewIngressForCerts` cannot be set to `true` when used with GKE Ingress Controllers. If you
+ wish to enable this, see [release notes](../releases/7_0.md#bundled-certmanager) for full details.
 
 ## GitLab Version
 
