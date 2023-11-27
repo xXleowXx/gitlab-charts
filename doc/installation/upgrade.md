@@ -165,6 +165,7 @@ it to identify which Ingress method to use for that certificate. The annotation
 will not be automatically removed by only changing this attribute to `false`. 
 A manual action is needed, otherwise cert-manager will keep using the old 
 behavior for pre-existing Ingresses.
+
 ## Upgrade to version 6.0
 
 WARNING:
