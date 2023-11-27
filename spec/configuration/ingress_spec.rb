@@ -36,12 +36,12 @@ describe 'GitLab Ingress configuration(s)' do
     template.dig("Service/#{service_name}", 'spec', 'ports')
   end
 
-  def get_certmanager_http01_solver_legacy_ingress_class_spec(template, issuer_config_name)
+  def get_certmanager_http01_solver_ingress_class(template, issuer_config_name)
     issuer = YAML.safe_load(template.dig("ConfigMap/#{issuer_config_name}", 'data', 'issuer.yml'))
     issuer.dig('spec', 'acme', 'solvers', 0, 'http01', 'ingress', 'class')
   end
 
-  def get_certmanager_http01_solver_new_ingress_class_spec(template, issuer_config_name)
+  def get_certmanager_http01_solver_ingress_class_name(template, issuer_config_name)
     issuer = YAML.safe_load(template.dig("ConfigMap/#{issuer_config_name}", 'data', 'issuer.yml'))
     issuer.dig('spec', 'acme', 'solvers', 0, 'http01', 'ingress', 'ingressClassName')
   end
@@ -524,7 +524,7 @@ describe 'GitLab Ingress configuration(s)' do
         it { expect(template.exit_code).to eq(0) }
 
         it 'populates the legacy ingress class on the http01 solver' do
-          issuer_class_spec = get_certmanager_http01_solver_legacy_ingress_class_spec(template, "test-certmanager-issuer-certmanager")
+          issuer_class_spec = get_certmanager_http01_solver_ingress_class(template, "test-certmanager-issuer-certmanager")
           expect(issuer_class_spec).to eq(expected_spec)
         end
 
@@ -547,7 +547,7 @@ describe 'GitLab Ingress configuration(s)' do
         it { expect(template.exit_code).to eq(0) }
 
         it 'populates the new ingress class on the http01 solver' do
-          issuer_class_spec = get_certmanager_http01_solver_new_ingress_class_spec(template, "test-certmanager-issuer-certmanager")
+          issuer_class_spec = get_certmanager_http01_solver_ingress_class_name(template, "test-certmanager-issuer-certmanager")
           expect(issuer_class_spec).to eq expected_spec
         end
 
