@@ -16,6 +16,8 @@ found in the
 
 ## GitLab integration
 
+> [Model renamed](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/134717) in GitLab 16.6.
+
 To enable Zoekt for a top level group:
 
 1. Connect to the Rails console of the toolbox pod:
@@ -35,7 +37,7 @@ To enable Zoekt for a top level group:
 
    ```shell
    # create shard using the Zoekt ClusterIP Service
-   shard = ::Zoekt::Shard.find_or_create_by!(index_base_url: 'http://<release>-gitlab-zoekt:8080', search_base_url: 'http://<release>-gitlab-zoekt:8080')
+   shard = ::Search::Zoekt::Node.find_or_create_by!(index_base_url: 'http://<release>-gitlab-zoekt:8080', search_base_url: 'http://<release>-gitlab-zoekt:8080', uuid: '00000000-0000-0000-0000-000000000000')
    # use the name of your top level group
    group = '<top-level-group-to-index>'
    namespace = Namespace.find_by_full_path(group)
