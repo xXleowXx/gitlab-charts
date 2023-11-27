@@ -153,6 +153,19 @@ coalesce.go:199: warning: destination for password is a table. Ignoring non-tabl
 
 This is an indication that you are setting `global.redis.password` in your values file.
 
+### useNewIngressForCerts on Ingresses
+
+If you are upgrading an existing chart from `7.x` to a later version, and are changing
+`global.ingress.useNewIngressForCerts` to `true`, you will also need to update any existing
+cert-manager `Certificate` objects to delete the `acme.cert-manager.io/http01-override-ingress-name` annotation.
+
+This is needed because with this attribute set to `false` (default), 
+this annotation is added by default to the Certificates, and cert-manager uses 
+it to identify which Ingress method to use for that certificate. The annotation 
+will not be automatically removed by only changing this attribute to `false`. 
+A manual action is needed, otherwise cert-manager will keep using the old 
+behavior for pre-existing Ingresses.
+
 ## Upgrade to version 6.0
 
 WARNING:
