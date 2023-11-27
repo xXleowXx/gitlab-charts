@@ -164,7 +164,7 @@ this annotation is added by default to the certificates, and cert-manager uses
 it to identify which ingress method to use for that certificate. The annotation 
 will not be automatically removed by only changing this attribute to `false`. 
 A manual action is needed, otherwise cert-manager will keep using the old 
-behaviour for pre-existing ingresses.
+behavior for pre-existing ingresses.
 ## Upgrade to version 6.0
 
 WARNING:

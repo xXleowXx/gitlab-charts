@@ -510,7 +510,7 @@ describe 'GitLab Ingress configuration(s)' do
         ['foo',  'foo']
       ]
     end
-    
+
     with_them do
       context "when the default values are used and ingress class is set" do
         let(:values) do
@@ -558,5 +558,4 @@ describe 'GitLab Ingress configuration(s)' do
       end
     end
   end
-
 end
