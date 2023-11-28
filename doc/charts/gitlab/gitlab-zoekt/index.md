@@ -36,12 +36,12 @@ To enable Zoekt for a top level group:
 1. Setup indexing:
 
    ```shell
-   # create shard using the Zoekt ClusterIP Service
-   shard = ::Search::Zoekt::Node.find_or_create_by!(index_base_url: 'http://<release>-gitlab-zoekt:8080', search_base_url: 'http://<release>-gitlab-zoekt:8080', uuid: '00000000-0000-0000-0000-000000000000')
+   # create zoekt node using the Zoekt ClusterIP Service
+   node = ::Search::Zoekt::Node.find_or_create_by!(index_base_url: 'http://<release>-gitlab-zoekt:8080', search_base_url: 'http://<release>-gitlab-zoekt:8080', uuid: '00000000-0000-0000-0000-000000000000')
    # use the name of your top level group
    group = '<top-level-group-to-index>'
    namespace = Namespace.find_by_full_path(group)
-   ::Zoekt::IndexedNamespace.find_or_create_by!(shard: shard, namespace: namespace.root_ancestor)
+   node.indexed_namespaces.find_or_create_by!(namespace: namespace.root_ancestor)
    ```
 
 1. Zoekt will now index projects after they are updated or created.
