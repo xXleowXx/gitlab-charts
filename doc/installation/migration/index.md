@@ -15,3 +15,4 @@ Other migrations:
 
 - [Migrate between Helm versions.](helm.md)
 - [Migrate to the built-in MinIO service for object storage.](minio.md)
+- [Migrate from Gitaly chart to external Gitaly](../../advanced/external-gitaly/index.md#migrate-from-gitaly-chart-to-external-gitaly)
