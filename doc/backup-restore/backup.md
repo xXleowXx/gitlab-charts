@@ -52,7 +52,41 @@ You need to set the following parameters:
 
 ## Backup utility extra arguments
 
-The backup utility can take some extra arguments. See what those are with:
+The backup utility can take some extra arguments.
+
+### Skipping components
+
+Skip components by using the `--skip` argument. Valid components names are:
+
+- `db`.
+- `repositories`.
+- The name of any of the object storages. For example, `uploads`.
+
+Each component must have its own `--skip` argument. For example:
+
+```shell
+kubectl exec <Toolbox pod name> -it -- backup-utility --skip db --skip lfs
+```
+
+### Cleanup backups only
+
+Run the backup cleanup without creating a new backup. 
+
+```shell
+kubectl exec <Toolbox pod name> -it -- backup-utility --cleanup
+```
+
+### Specify S3 tool to use
+
+ S3 CLI tool to use. Can be either `s3cmd` or `awscli`.
+
+ ```shell
+ kubectl exec <Toolbox pod name> -it -- backup-utility --s3tool awscli
+ ```
+
+### Other arguments
+
+To see a complete list of available arguments, run the following command:
 
 ```shell
 kubectl exec <Toolbox pod name> -it -- backup-utility --help
