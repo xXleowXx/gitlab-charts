@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.5.3 (2023-11-30)
+
+### Changed (1 change)
+
+- [Update gitlab-runner chart from 0.58.1 to 0.58.2](gitlab-org/security/charts/gitlab@d5cb0431d91e4cb95645b7a7c692ed4658445e6f)
+
 ## 7.5.2 (2023-11-14)
 
 No changes.
