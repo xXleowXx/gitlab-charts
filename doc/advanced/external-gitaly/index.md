@@ -291,7 +291,7 @@ IP address for the external Gitaly service to the `nginx-ingress` configuration 
       -f ingress-only-allow-ext-gitaly.yml
     ```
 
-**7. Create list of repository checksums**
+**8. Create list of repository checksums**
 
 Prior to running the backup, [check all GitLab repositories](https://docs.gitlab.com/ee/administration/raketasks/check.html#check-all-gitlab-repositories)
 and create a list of repository checksums. Pipe the output to a file so we can `diff` the checksums after the migration:
