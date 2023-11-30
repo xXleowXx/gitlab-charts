@@ -33,6 +33,12 @@ entry.
 
 - [Deprecate namespace in mailroom.yml](gitlab-org/charts/gitlab@781a94d070a5ae221c33f1a31fdd9ecde15f2be6) ([merge request](gitlab-org/charts/gitlab!3419))
 
+## 7.5.3 (2023-11-30)
+
+### Changed (1 change)
+
+- [Update gitlab-runner chart from 0.58.1 to 0.58.2](gitlab-org/security/charts/gitlab@d5cb0431d91e4cb95645b7a7c692ed4658445e6f)
+
 ## 7.5.2 (2023-11-14)
 
 No changes.
