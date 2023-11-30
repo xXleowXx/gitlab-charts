@@ -2,6 +2,13 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.6.1 (2023-11-30)
+
+### Changed (2 changes)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.59.0 to 0.59.2](gitlab-org/security/charts/gitlab@b69ce97c14be61d7734a65b0a64f117f563158ca)
+- [Update gitlab-runner from 0.58.2 to 0.59.0](gitlab-org/security/charts/gitlab@520f8d9dace33be52b1b3cf50ba400b0c5e12e94)
+
 ## 7.6.0 (2023-11-15)
 
 ### Fixed (2 changes)
@@ -25,6 +32,12 @@ entry.
 ### Other (1 change)
 
 - [Deprecate namespace in mailroom.yml](gitlab-org/charts/gitlab@781a94d070a5ae221c33f1a31fdd9ecde15f2be6) ([merge request](gitlab-org/charts/gitlab!3419))
+
+## 7.5.3 (2023-11-30)
+
+### Changed (1 change)
+
+- [Update gitlab-runner chart from 0.58.1 to 0.58.2](gitlab-org/security/charts/gitlab@d5cb0431d91e4cb95645b7a7c692ed4658445e6f)
 
 ## 7.5.2 (2023-11-14)
 
@@ -60,6 +73,10 @@ No changes.
 ### Other (1 change)
 
 - [Enable dual-namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/charts/gitlab@08e94769a6169bdc380e7d46b3ed300aa9c9cfab) ([merge request](gitlab-org/charts/gitlab!3388))
+
+## 7.4.3 (2023-11-30)
+
+No changes.
 
 ## 7.4.2 (2023-10-30)
 
