@@ -352,7 +352,7 @@ kubectl exec <toolbox pod name> -it -- backup-utility --skip artifacts,ci_secure
 
    ::EndTabs
 
-1. Apply the new configuration using both `gitlab.yml`, `ingress-only-allow-ext-gitaly.yml` and `external-gitaly.yml` files:
+1. Apply the new configuration using the `gitlab.yml`, `ingress-only-allow-ext-gitaly.yml` and `external-gitaly.yml` files:
 
     ```shell
     helm upgrade --install gitlab gitlab/gitlab \
@@ -446,9 +446,9 @@ kubectl exec <toolbox pod name> -it -- backup-utility --skip artifacts,ci_secure
 
 1. If you are using GitLab Enterprise Edition, disable [maintenance mode](https://docs.gitlab.com/ee/administration/maintenance_mode/#enable-maintenance-mode) either through the UI, API or the Rails console:
 
-  ```shell
-  kubectl exec <toolbox pod name> -it -- gitlab-rails runner 'Gitlab::CurrentSettings.update!(maintenance_mode: false)'
-  ```
+    ```shell
+    kubectl exec <toolbox pod name> -it -- gitlab-rails runner 'Gitlab::CurrentSettings.update!(maintenance_mode: false)'
+    ```
 
 1. If you have multiple Gitaly storages, [configure where new repositories are stored](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#configure-where-new-repositories-are-stored).
 
@@ -466,12 +466,12 @@ kubectl exec <toolbox pod name> -it -- backup-utility --skip artifacts,ci_secure
 
 1. After you have confirmed everything is working as expected, you can delete the Gitaly PVC:
 
-  WARNING: Do not delete the Gitaly PVC until you have confirmed the checksums match as per [step 6](#step-6-restore-and-validate-repository-backup) and
+   WARNING: Do not delete the Gitaly PVC until you have confirmed the checksums match as per [step 6](#step-6-restore-and-validate-repository-backup) and
   double checked that everything is working as expected.
 
-   ```shell
-   kubectl delete pvc repo-data-<release>-gitaly-0
-   ```
+    ```shell
+    kubectl delete pvc repo-data-<release>-gitaly-0
+    ```
 
 ### Rollback
 
