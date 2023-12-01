@@ -170,8 +170,7 @@ Upgrading to `5.9.x` may lead to a situation where the Sidekiq pod does not beco
 
 This can be resolved from the **Admin Area**:
 
-1. On the left sidebar, select **Search or go to**.
-1. Select **Admin Area**.
+1. On the left sidebar, at the bottom, select **Admin Area**.
 1. Select **Settings > Metrics and profiling**.
 1. Expand **Metrics - Prometheus**.
 1. Ensure that **Enable health and performance metrics endpoint** is enabled.
