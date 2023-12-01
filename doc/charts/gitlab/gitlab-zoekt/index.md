@@ -18,9 +18,9 @@ found in the
 
 > [Model renamed](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/134717) in GitLab 16.6.
 
-To enable Zoekt for a top level group:
+To enable Zoekt for a top-level group:
 
-1. Connect to the Rails console of the toolbox pod:
+1. Connect to the Rails console of the Toolbox Pod:
 
    ```shell
    kubectl exec <Toolbox pod name> -it -c toolbox -- gitlab-rails console -e production
@@ -33,15 +33,15 @@ To enable Zoekt for a top level group:
    ::Feature.enable(:search_code_with_zoekt)
    ```
 
-1. Setup indexing:
+1. Set up indexing:
 
    ```shell
-   # create zoekt node using the Zoekt ClusterIP Service
+   # Create a Zoekt node with the Zoekt ClusterIP Service
    node = ::Search::Zoekt::Node.find_or_create_by!(index_base_url: 'http://<release>-gitlab-zoekt:8080', search_base_url: 'http://<release>-gitlab-zoekt:8080', uuid: '00000000-0000-0000-0000-000000000000')
-   # use the name of your top level group
+   # Use the name of your top-level group
    group = '<top-level-group-to-index>'
    namespace = Namespace.find_by_full_path(group)
    node.indexed_namespaces.find_or_create_by!(namespace: namespace.root_ancestor)
    ```
 
-1. Zoekt will now index projects after they are updated or created.
+Zoekt can now index projects after they are updated or created.
