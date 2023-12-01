@@ -56,11 +56,7 @@ The backup utility can take some extra arguments.
 
 ### Skipping components
 
-Skip components by using the `--skip` argument. Valid components names are:
-
-- `db`.
-- `repositories`.
-- The name of any of the object storages. For example, `uploads`.
+Skip components by using the `--skip` argument. Valid components names can be found at [Excluding specific directories from the backup](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#excluding-specific-directories-from-the-backup).
 
 Each component must have its own `--skip` argument. For example:
 
