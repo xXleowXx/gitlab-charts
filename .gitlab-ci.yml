@@ -347,14 +347,16 @@ pin_image_versions:
 # action. We get frequent failures during review_* jobs. Their accompanying
 # partially deployed environments then hang around forever which may eventually
 # cause resource exhaustion. These deployments must be  manually cleaned up. See
-# https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2185 for details.
+# https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2185 for details. Issue
+# https://gitlab.com/gitlab-org/gitlab/-/issues/382549 should address this
+# problem in the future.
 #
 # To ensure that deployment cleanup always occurs, we create the environment
 # using this job. It is designed to never fail and will always execute the
 # on_stop action either when manually performed or when
 # $REVIEW_APPS_AUTO_STOP_IN expires. The actual deployment is left to the
 # associated review_* job.
-auto_stop_review_gke122:
+create_review_gke122:
   stage: review
   variables:
     <<: *review_gke122_common_vars
@@ -379,8 +381,8 @@ review_gke122:
     action: access
   resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
-# See comments in auto_stop_review_gke122.
-auto_stop_review_gke125:
+# See comments in create_review_gke122.
+create_review_gke125:
   stage: review
   variables:
     <<: *review_gke125_common_vars
@@ -405,8 +407,8 @@ review_gke125:
     action: access
   resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
-# See comments in auto_stop_review_gke122.
-auto_stop_review_gke126:
+# See comments in create_review_gke122.
+create_review_gke126:
   stage: review
   variables:
     <<: *review_gke126_common_vars
@@ -432,8 +434,8 @@ review_gke126:
     action: access
   resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
-# See comments in auto_stop_review_gke122.
-auto_stop_review_eks:
+# See comments in create_review_gke122.
+create_review_eks:
   stage: review
   variables:
     <<: *review_eks_common_vars
