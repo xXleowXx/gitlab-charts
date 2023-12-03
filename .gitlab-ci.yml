@@ -63,7 +63,7 @@ variables:
           cron:
             enabled: true
   GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
-  REVIEW_APPS_AUTO_STOP_IN: "2 days"
+  REVIEW_APPS_AUTO_STOP_IN: "3 hours"
 
 stages:
   - prepare
@@ -311,6 +311,7 @@ pin_image_versions:
     - echo "export REGISTRY_URL=registry-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"     >> "${VARIABLES_FILE}"
     - echo "export S3_ENDPOINT=https://minio-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - !reference [.get_qa_revision, script]
+    - exit 1
   artifacts:
     when: always
     paths:
