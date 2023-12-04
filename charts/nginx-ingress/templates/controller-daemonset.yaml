@@ -230,9 +230,9 @@ spec:
       hostNetwork: {{ .Values.controller.hostNetwork }}
     {{- end }}
     {{- if .Values.controller.nodeSelector }}
-      nodeSelector: {{ toYaml .Values.controller.nodeSelector | nindent 8 }}
-    {{- else if include "gitlab.nodeSelector" . -}}
-      {{- include "gitlab.nodeSelector" . | nindent 8 }}
+      nodeSelector: {{ toYaml .Values.controller.nodeSelector | nindent 6 }}
+    {{- else if include "gitlab.nodeSelector" . }}
+      {{- include "gitlab.nodeSelector" . | nindent 6 }}
     {{- end }}
     {{- if .Values.controller.tolerations }}
       tolerations: {{ toYaml .Values.controller.tolerations | nindent 8 }}
