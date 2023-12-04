@@ -48,6 +48,8 @@ values for the `--set` flag. The index is zero based.
 
 ## Use multiple Redis instances
 
+<!-->this is a test comment <-->
+
 GitLab supports splitting several of the resource intensive
 Redis operations across multiple Redis instances. This chart supports distributing
 those persistence classes to other Redis instances.
