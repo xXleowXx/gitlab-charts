@@ -6,6 +6,11 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Using the GitLab-Zoekt chart **(PREMIUM SELF)**
 
+WARNING:
+GitLab Support cannot assist with configuring or troubleshooting the
+GitLab-Zoekt chart. For more information, see
+[Exact Code Search](/ee/user/search/exact_code_search.md).
+
 The Zoekt integration provides support for
 [Exact code search](https://docs.gitlab.com/ee/user/search/exact_code_search.html).
 This can be installed by setting `gitlab-zoekt.install` to `true`. For now
