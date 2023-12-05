@@ -1,7 +1,7 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Use custom Docker images for the GitLab chart
@@ -19,6 +19,23 @@ image:
 ```
 
 The end result will be `repo.example.com/image:custom-tag`.
+
+## Current images and tags
+
+When planning an upgrade, your current `values.yaml` and the target version of the
+GitLab chart can be used to generate a [Helm template](https://helm.sh/docs/helm/helm_template/).
+This template will contain the images and their respective tags that will be
+needed by the specified version of the chart.
+
+```shell
+# Gather the latest values
+helm get values gitlab > gitlab.yaml
+
+# Use the gitlab.yaml to find the images and tags
+helm template versionfinder gitlab/gitlab -f gitlab.yaml --version 7.3.0 | grep 'image:' | tr -d '[[:blank:]]' | sort --unique
+```
+
+This command can also be used to verify any custom configurations.
 
 ## Example values file
 

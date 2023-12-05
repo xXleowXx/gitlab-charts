@@ -7,15 +7,18 @@ dependencies:
       enabled: true
   settings:
     # Assign to maintainers by default
-    gitlab_assignee_ids:
-      - 597578  # @WarheadsSE (jplum)
-      - 42196   # @twk3 (dmountney)
-      - 5727219 # @mnielsen (mnielsen)
+    # gitlab_assignee_ids:
+      ## maintainers
+      # - 597578  # @WarheadsSE (jplum)
+      # - 5727219 # @mnielsen (mnielsen)
+      ## trainee maintainers
+      # - 13376698 # clemensbeck
+      # - 4849     # balasankarc (balu)
     gitlab_labels:
       - dependencies.io
       - group::distribution::deploy
       - group::distribution
-      - section::enablement
+      - section::core platform
       - devops::systems
       - type::maintenance
       - maintenance::dependency
@@ -60,3 +63,9 @@ dependencies:
         replace_in_files:
         - filename: .gitlab-ci.yml
           pattern: 'GITLAB_QA_VERSION: "(\S+)"'
+      # cert-manager subchart
+      https://github.com/cert-manager/cert-manager.git:
+        replace_in_files:
+        - filename: requirements.yaml
+          pattern: 'name: cert-manager\n  version: (\S+)'
+          range: '< 1.13.0'

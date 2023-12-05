@@ -1,7 +1,7 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Using the Container Registry **(FREE SELF)**
@@ -68,7 +68,7 @@ registry:
       interval: 24h
       dryrun: false
   image:
-    tag: 'v3.79.0-gitlab'
+    tag: 'v3.86.2-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -174,7 +174,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                                                                                                                           |                                                                                | Pull policy for the registry image                                                                                                                                                                                                                                                                                                           |
 | `image.pullSecrets`                                                                                                                          |                                                                                | Secrets to use for image repository                                                                                                                                                                                                                                                                                                          |
 | `image.repository`                                                                                                                           | `registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry`           | Registry image                                                                                                                                                                                                                                                                                                                               |
-| `image.tag`                                                                                                                                  | `v3.79.0-gitlab`                                                               | Version of the image to use                                                                                                                                                                                                                                                                                                                  |
+| `image.tag`                                                                                                                                  | `v3.86.2-gitlab`                                                               | Version of the image to use                                                                                                                                                                                                                                                                                                                  |
 | `init.image.repository`                                                                                                                      |                                                                                | initContainer image                                                                                                                                                                                                                                                                                                                          |
 | `init.image.tag`                                                                                                                             |                                                                                | initContainer image tag                                                                                                                                                                                                                                                                                                                      |
 | `init.containerSecurityContext`                                                                                                              |                                                                                | initContainer container specific [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core)                                                                                                                                                                                             |
@@ -219,6 +219,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `database.connecttimeout`                                                                                                                    | `0`                                                                            | Maximum time to wait for a connection. Zero or not specified means waiting indefinitely.                                                                                                                                                                                                                                                     |
 | `database.draintimeout`                                                                                                                      | `0`                                                                            | Maximum time to wait to drain all connections on shutdown. Zero or not specified means waiting indefinitely.                                                                                                                                                                                                                                 |
 | `database.preparedstatements`                                                                                                                | `false`                                                                        | Enable prepared statements. Disabled by default for compatibility with PgBouncer.                                                                                                                                                                                                                                                            |
+| `database.primary`                                                                                                                | `false`                                                                        | Target primary database server. This is used to specify a dedicated FQDN to target when running registry `database.migrations`. The `host` will be used to run `database.migrations` when not specified.                                                                                                                                                                                                                                                         |
 | `database.pool.maxidle`                                                                                                                      | `0`                                                                            | The maximum number of connections in the idle connection pool. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means no idle connections.                                                                                                                                 |
 | `database.pool.maxopen`                                                                                                                      | `0`                                                                            | The maximum number of open connections to the database. If `maxopen` is less than `maxidle`, then `maxidle` is reduced to match the `maxopen` limit. Zero or not specified means unlimited open connections.                                                                                                                                 |
 | `database.pool.maxlifetime`                                                                                                                  | `0`                                                                            | The maximum amount of time a connection may be reused. Expired connections may be closed lazily before reuse. Zero or not specified means unlimited reuse.                                                                                                                                                                                   |
@@ -226,11 +227,6 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `database.migrations.enabled`                                                                                                                | `true`                                                                         | Enable the migrations job to automatically run migrations upon initial deployment and upgrades of the Chart. Note that migrations can also be run manually from within any running Registry pods.                                                                                                                                            |
 | `database.migrations.activeDeadlineSeconds`                                                                                                  | `3600`                                                                         | Set the [activeDeadlineSeconds](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job.                                                                                                                                                                                           |
 | `database.migrations.backoffLimit`                                                                                                           | `6`                                                                            | Set the [backoffLimit](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job.                                                                                                                                                                                                    |
-| `database.discovery.enabled`                                                                                                                 | `false`                                                                        | Enable service discovery for the database. This is an experimental feature for the Registry metadata database. Do not use in production.                                                                                                                                                                                                     |
-| `database.discovery.nameserver`                                                                                                              |                                                                                | Set the server address or FQDN of the nameserver (DNS) for service discovery. Required when `database.discovery.enabled` is set to `true`.                                                                                                                                                                                                   |
-| `database.discovery.port`                                                                                                                    | `53`                                                                           | Set the nameserver's port. Defaults to `53`.                                                                                                                                                                                                                                                                                                 |
-| `database.discovery.primaryrecord`                                                                                                           |                                                                                | The SRV resource record that needs to be obtained from the `nameserver`. The `primaryrecord` will be used to run `database.migrations` on.                                                                                                                                                                                                   |
-| `database.discovery.tcp`                                                                                                                     | `false`                                                                        | Set to `true` when a TCP connection is needed instead of UDP.                                                                                                                                                                                                                                                                                |
 | `gc.disabled`                                                                                                                                | `true`                                                                         | When set to `true`, the online GC workers are disabled.                                                                                                                                                                                                                                                                                      |
 | `gc.maxbackoff`                                                                                                                              | `24h`                                                                          | The maximum exponential backoff duration used to sleep between worker runs when an error occurs. Also applied when there are no tasks to be processed unless `gc.noidlebackoff` is `true`. Please note that this is not the absolute maximum, as a randomized jitter factor of up to 33% is always added.                                    |
 | `gc.noidlebackoff`                                                                                                                           | `false`                                                                        | When set to `true`, disables exponential backoffs between worker runs when there are no tasks to be processed.                                                                                                                                                                                                                               |
@@ -335,7 +331,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v3.79.0-gitlab'`
+- `tag: 'v3.86.2-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
@@ -593,7 +589,8 @@ global:
         secret: gitlab-registry-notification
         key: secret
 
-  # If utilising Geo, and wishing to sync the container registry
+  # If utilising Geo, and wishing to sync the container registry.
+  # Define this in the primary site configs only.
   geo:
     registry:
       replication:
@@ -891,7 +888,9 @@ profiling:
 The `database` property is optional and enables the [metadata database](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database).
 
 NOTE:
-The metadata database is an experimental feature and _must not_ be used in production.
+The metadata database is a beta feature from version 16.4 and later. Please
+review the [feedback issue](https://gitlab.com/gitlab-org/gitlab/-/issues/423459)
+and associated documentation before enabling this feature.
 
 NOTE:
 This feature requires PostgreSQL 12 or newer.
@@ -915,6 +914,7 @@ database:
   connecttimeout: 5s
   draintimeout: 2m
   preparedstatements: false
+  primary: 'primary.record.fqdn'
   pool:
     maxidle: 25
     maxopen: 25
@@ -924,12 +924,6 @@ database:
     enabled: true
     activeDeadlineSeconds: 3600
     backoffLimit: 6
-  discovery:
-    enabled: true
-    nameserver: 'nameserver.fqdn'
-    port: 53
-    primaryrecord: 'primary.record.fqdn.'
-    tcp: false
 ```
 
 #### Creating the database
@@ -991,16 +985,18 @@ there will be some variation in how you connect.
    ...@gitlab-postgresql-0/$ exit
    ```
 
-### gc
+### `gc` property
 
-The `gc` property is optional and provides options related to
-[online garbage collection](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc).
-
-WARNING:
-This is an experimental feature and _must not_ be used in production.
+The `gc` property provides [online garbage collection](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc)
+options.
 
 NOTE:
-This feature requires the [metadata database](#database) to be enabled.
+The online garbage collection is a beta feature from version 16.4 and later. Please
+review the [feedback issue](https://gitlab.com/gitlab-org/gitlab/-/issues/423459)
+and associated documentation before enabling this feature.
+
+Online garbage collection requires the [metadata database](#database) to be enabled. You must use online garbage collection when using the database, though
+you can temporarily disable online garbage collection for maintenance and debugging.
 
 ```yaml
 gc:
@@ -1020,8 +1016,10 @@ gc:
 
 ### Redis cache
 
-WARNING:
-This is an experimental feature and _must not_ be used in production.
+NOTE:
+The Redis cache is a beta feature from version 16.4 and later. Please
+review the [feedback issue](https://gitlab.com/gitlab-org/gitlab/-/issues/423459)
+and associated documentation before enabling this feature.
 
 The `redis.cache` property is optional and provides options related to the
 [Redis cache](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#cache-1).
@@ -1074,6 +1072,11 @@ The Docker Registry will build up extraneous data over time which can be freed u
 [garbage collection](https://docs.docker.com/registry/garbage-collection/).
 As of [now](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1586) there is no
 fully automated or scheduled way to run the garbage collection with this Chart.
+
+WARNING:
+You must use [online garbage collection](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#gc) with the
+[metadata database](#database). Using manual garbage collection with the metadata database will lead to data loss.
+Online garbage collection fully replaces the need to manually run garbage collection.
 
 ### Manual Garbage Collection
 

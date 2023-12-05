@@ -13,6 +13,7 @@ group :test do
   gem 'hash-deep-merge'
   gem 'knapsack'
   gem 'tomlrb'
+  gem 'fugit'
 end
 
 group :rubocop do
@@ -21,6 +22,10 @@ end
 
 group :development, :test do
   gem 'pry'
+end
+
+group :development, :test, :danger do
+  gem 'gitlab-dangerfiles', '~> 3.12.0', require: false
 end
 
 group :development do

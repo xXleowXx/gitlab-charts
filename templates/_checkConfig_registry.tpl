@@ -41,28 +41,9 @@ registry:
     PostgreSQL 13 is the minimum required version for the registry database.
     See https://docs.gitlab.com/charts/charts/registry#database
 {{-     end -}}
-{{-     if and ($.Values.registry.database.discovery.enabled) }}
-{{-       if or (not (kindIs "string" $.Values.registry.database.discovery.nameserver)) (empty $.Values.registry.database.discovery.nameserver) }}
-registry:
-    Enabling database discovery requires a nameserver to be provided.
-    See https://docs.gitlab.com/charts/charts/registry#database.
-{{-       end -}}
-{{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{/* END gitlab.checkConfig.registry.database */}}
-
-{{/*
-Ensure Registry online garbage collection is configured properly and dependencies are met
-*/}}
-{{- define "gitlab.checkConfig.registry.gc" -}}
-{{-   if not (or $.Values.registry.gc.disabled $.Values.registry.database.enabled) }}
-registry:
-    Enabling online garbage collection requires the metadata database to be enabled.
-    See https://docs.gitlab.com/charts/charts/registry#gc
-{{-   end -}}
-{{- end -}}
-{{/* END gitlab.checkConfig.registry.gc */}}
 
 {{/*
 Ensure Registry Redis cache is configured properly and dependencies are met

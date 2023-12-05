@@ -13,8 +13,8 @@ class HelmTemplate
       @_helm_patch_version = parts[4].to_i
 
       # Check for Helm version below minimum supported version
-      if @_helm_major_version < 3 || (@_helm_major_version == 3 && @_helm_minor_version < 5 && @_helm_patch_version < 2)
-        puts "ERROR: Helm version needs to be greater than 3.5.2"
+      if @_helm_major_version < 3 || (@_helm_major_version == 3 && @_helm_minor_version < 9 && @_helm_patch_version < 4)
+        puts "ERROR: Helm version needs to be greater than 3.9.4"
         exit(1)
       end
     end
@@ -87,6 +87,10 @@ class HelmTemplate
     @mapped = yaml.to_h  { |doc|
       [ "#{doc['kind']}/#{doc['metadata']['name']}" , doc ]
     }
+  end
+
+  def [](arg)
+    dig(arg)
   end
 
   def dig(*args)
@@ -174,6 +178,11 @@ class HelmTemplate
 
     dig(item, 'spec', 'template', 'spec', containers)
       &.find { |container| container['name'] == container_name }
+  end
+
+  def find_image(item, container_name, init = false)
+    find_container(item, container_name, init)
+      &.dig('image')
   end
 
   def env(item, container_name, init = false)

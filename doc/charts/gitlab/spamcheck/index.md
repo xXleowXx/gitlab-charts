@@ -1,7 +1,7 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Using the GitLab-Spamcheck chart **(PREMIUM SELF)**
@@ -28,9 +28,8 @@ helm upgrade --force --install gitlab . \
 
 ### Configure GitLab to use Spamcheck
 
-1. On the left sidebar, expand the top-most chevron (**{chevron-down}**).
-1. Select **Admin Area**.
-1. Select **Settings > Reporting**
+1. On the left sidebar, at the bottom, select **Admin Area**.
+1. Select **Settings > Reporting**.
 1. Expand **Spam and Anti-bot Protection**.
 1. Update the Spam Check settings:
    1. Check the "Enable Spam Check via external API endpoint" checkbox
@@ -66,7 +65,10 @@ The table below contains all the possible charts configurations that can be supp
 | `hpa.memory.targetAverageValue`                 |                                                                                                      | Set the autoscaling memory target value                                                                                                                                                            |
 | `hpa.memory.targetAverageUtilization`           |                                                                                                      | Set the autoscaling memory target utilization                                                                                                                                                      |
 | `hpa.targetAverageValue`                        |                                                                                                      | **DEPRECATED** Set the autoscaling CPU target value                                                                                                                                                |
+| `image.registry`                                |                                                                                                      | Spamcheck image registry          |
 | `image.repository`                              | `registry.gitlab.com/gitlab-com/gl-security/engineering-and-research/automation-team/spam/spamcheck` | Spamcheck image repository                                                                                                                                                                         |
+| `image.tag`                                     |                                                                                                      | Spamcheck image tag                                                                                                                                                                                                      |
+| `image.digest`                                  |                                                                                                      | Spamcheck image digest                                                                                                                                                                                                   |
 | `keda.enabled`                                  | `false`                                                                                              | Use [KEDA](https://keda.sh/) `ScaledObjects` instead of `HorizontalPodAutoscalers`                                                                                                                 |
 | `keda.pollingInterval`                          | `30`                                                                                                 | The interval to check each trigger on                                                                                                                                                              |
 | `keda.cooldownPeriod`                           | `300`                                                                                                | The period to wait after the last trigger reported active before scaling the resource back to 0                                                                                                    |

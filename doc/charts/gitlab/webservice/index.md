@@ -1,13 +1,13 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Using the GitLab Webservice chart **(FREE SELF)**
 
 The `webservice` sub-chart provides the GitLab Rails webserver with two Webservice workers
-per pod. (The minimum necessary for a single pod to be able to serve any web request in GitLab)
+per pod, which is the minimum necessary for a single pod to be able to serve any web request in GitLab.
 
 The pods of this chart make use of two containers: `gitlab-workhorse` and `webservice`.
 [GitLab Workhorse](https://gitlab.com/gitlab-org/gitlab/-/tree/master/workhorse) listens on
@@ -145,8 +145,8 @@ to the `helm install` command using the `--set` flags.
 | `workerProcesses`                                   | `2`                                                                                                                                                                     | Webservice number of workers                                                                                                                                                                                                                                                                                                    |
 | `workhorse.keywatcher`                              | `true`                                                                                                                                                                  | Subscribe workhorse to Redis. This is **required** by any deployment servicing request to `/api/*`, but can be safely disabled for other deployments                                                                                                                                                                            |
 | `workhorse.shutdownTimeout`                         | `global.webservice.workerTimeout + 1` (seconds)                                                                                                                         | Time to wait for all Web requests to clear from Workhorse. Examples: `1min`, `65s`.                                                                                                                                                                                                                                             |
-| `workhorse.trustedCIDRsForPropagation`              |                                                                                                                                                                         | A list of CIDR blocks that can be trusted for propagating a correlation ID. The `-propagateCorrelationID` option must also be used in `workhorse.extraArgs` for this to work. See the [Workhorse documentation](https://gitlab.com/gitlab-org/gitlab/-/blob/master/workhorse/doc/operations/configuration.md) for more details. |
-| `workhorse.trustedCIDRsForXForwardedFor`            |                                                                                                                                                                         | A list of CIDR blocks that can be used to resolve the actual client IP via the `X-Forwarded-For` HTTP header. This is used with `workhorse.trustedCIDRsForPropagation`. See the [Workhorse documentation](https://gitlab.com/gitlab-org/gitlab/-/blob/master/workhorse/doc/operations/configuration.md) for more details.       |
+| `workhorse.trustedCIDRsForPropagation`              |                                                                                                                                                                         | A list of CIDR blocks that can be trusted for propagating a correlation ID. The `-propagateCorrelationID` option must also be used in `workhorse.extraArgs` for this to work. See the [Workhorse documentation](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/workhorse/configuration.md#propagate-correlation-ids) for more details. |
+| `workhorse.trustedCIDRsForXForwardedFor`            |                                                                                                                                                                         | A list of CIDR blocks that can be used to resolve the actual client IP via the `X-Forwarded-For` HTTP header. This is used with `workhorse.trustedCIDRsForPropagation`. See the [Workhorse documentation](https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/workhorse/configuration.md#propagate-correlation-ids) for more details.       |
 | `workhorse.livenessProbe.initialDelaySeconds`       | 20                                                                                                                                                                      | Delay before liveness probe is initiated                                                                                                                                                                                                                                                                                        |
 | `workhorse.livenessProbe.periodSeconds`             | 60                                                                                                                                                                      | How often to perform the liveness probe                                                                                                                                                                                                                                                                                         |
 | `workhorse.livenessProbe.timeoutSeconds`            | 30                                                                                                                                                                      | When the liveness probe times out                                                                                                                                                                                                                                                                                               |
@@ -508,6 +508,7 @@ webservice:
 | `ingress.tls.enabled`             | Boolean | `true`                    | When set to `false`, you disable TLS for GitLab Webservice. This is mainly useful for cases in which you cannot use TLS termination at Ingress-level, like when you have a TLS-terminating proxy before the Ingress Controller. |
 | `ingress.tls.secretName`          | String  | (empty)                   | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the GitLab URL. When not set, the `global.ingress.tls.secretName` value is used instead.                                                    |
 | `ingress.tls.smardcardSecretName` | String  | (empty)                   | The name of the Kubernetes TLS SEcret that contains a valid certificate and key for the GitLab smartcard URL if enabled. When not set, the `global.ingress.tls.secretName` value is used instead.                               |
+| `ingress.tls.useGeoClass`         | Boolean | false                     | Override the IngressClass with the Geo Ingress class (`global.geo.ingressClass`). Required for primary Geo sites.                                                                                                              |
 
 ### annotations
 
@@ -539,6 +540,12 @@ you can set the body size with either of the following two parameters too:
 
 - `gitlab.webservice.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
 - `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"`
+
+### Extra Ingress
+
+An extra Ingress can be deployed by setting `extraIngress.enabled=true`. The Ingress
+is named as the default Ingress with the `-extra` suffix and supports the same
+settings as the default Ingress.
 
 ## Resources
 
@@ -705,11 +712,12 @@ Pods to specific endpoints.
 ### Example Network Policy
 
 The webservice service requires Ingress connections for only the Prometheus
-exporter if enabled and traffic coming from the NGINX Ingress, and normally
+exporter if enabled and traffic coming from the NGINX Ingress, and typically
 requires Egress connections to various places. This examples adds the following
 network policy:
 
 - All Ingress requests from the network on TCP `10.0.0.0/8` port 8080 are allowed for metrics exporting and NGINX Ingress
+- All Ingress requests to port 8181 are allowed for general service operation
 - All Egress requests to the network on UDP `10.0.0.0/8` port 53 are allowed for DNS
 - All Egress requests to the network on TCP `10.0.0.0/8` port 5432 are allowed for PostgreSQL
 - All Egress requests to the network on TCP `10.0.0.0/8` port 6379 are allowed for Redis
@@ -719,7 +727,7 @@ network policy:
 
 _Note the example provided is only an example and may not be complete_
 
-_Note that the Webservice requires outbound connectivity to the public internet
+_Note the Webservice requires outbound connectivity to the public internet
 for images on [external object storage](../../../advanced/external-object-storage)_
 
 ```yaml
@@ -733,6 +741,9 @@ networkpolicy:
             cidr: 10.0.0.0/8
         ports:
         - port: 8080
+      - from:
+        ports:
+        - port: 8181
   egress:
     enabled: true
     rules:

@@ -1,7 +1,7 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Configure charts using globals **(FREE SELF)**
@@ -77,6 +77,7 @@ global:
 | :------------------------ | :-------: | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `domain`                  | String    | `example.com`  | The base domain. GitLab and Registry will be exposed on the subdomain of this setting. This defaults to `example.com`, but is not used for hosts that have their `name` property configured. See the `gitlab.name`, `minio.name`, and `registry.name` sections below.                                                     |
 | `externalIP`              |           | `nil`          | Set the external IP address that will be claimed from the provider. This will be templated into the [NGINX chart](nginx/index.md#configuring-nginx), in place of the more complex `nginx.service.loadBalancerIP`.                                                                                                         |
+| `externalGeoIP`           |           | `nil`          | Same as `externalIP` but for the [NGINX Geo chart](nginx/index.md#gitlab-geo). Needed to configure a static IP for [GitLab Geo](../advanced/geo/index.md) sites using a unified URL. Must be different from `externalIP`.                                                                                                 |
 | `https`                   | Boolean   | `true`         | If set to true, you will need to ensure the NGINX chart has access to the certificates. In cases where you have TLS-termination in front of your Ingresses, you probably want to look at [`global.ingress.tls.enabled`](#configure-ingress-settings). Set to false for external URLs to use `http://` instead of `https`. |
 | `hostSuffix`              | String    |                | [See Below](#hostsuffix).                                                                                                                                                                                                                                                                                                 |
 | `gitlab.https`            | Boolean   | `false`        | If `hosts.https` or `gitlab.https` are `true`, the GitLab external URL will use `https://` instead of `http://`.                                                                                                                                                                                                          |
@@ -139,6 +140,14 @@ The GitLab global host settings for CronJobs are located under the `global.batch
 | Name         | Type      | Default | Description                                                           |
 | :----------- | :-------: | :------ | :-------------------------------------------------------------------- |
 | `apiVersion` | String    |         | API version to use in the CronJob object definitions. |
+
+## Configure Monitoring settings
+
+The GitLab global settings for ServiceMonitors and PodMonitors are located under the `global.monitoring` key:
+
+| Name         | Type      | Default | Description                                                           |
+| :----------- | :-------: | :------ | :-------------------------------------------------------------------- |
+| `enabled`    | Boolean   | `false` | Enable monitoring resources regardless of the availability of the `monitoring.coreos.com/v1` API. |
 
 ## Configure Ingress settings
 
@@ -231,6 +240,12 @@ with the `-fips` extension to the image tag.
 ## Configure PostgreSQL settings
 
 The GitLab global PostgreSQL settings are located under the `global.psql` key.
+GitLab is using two database connections: one for `main` database and one for
+`ci`. By default, they point to the same PostgreSQL database.
+
+The values under `global.psql` are defaults and are applied to both database
+configurations. If you want to use [two databases](https://docs.gitlab.com/ee/administration/postgresql/multiple_databases.html),
+you can specifiy the connection details in `global.psql.main` and `global.psql.ci`.
 
 ```yaml
 global:
@@ -254,6 +269,12 @@ global:
       secret: gitlab-postgres
       key: psql-password
       file:
+    main: {}
+      # host: postgresql-main.hostedsomewhere.else
+      # ...
+    ci: {}
+      # host: postgresql-ci.hostedsomewhere.else
+      # ...
 ```
 
 | Name                 | Type      | Default                | Description                                                                                                                                                                                    |
@@ -275,8 +296,8 @@ global:
 | `keepalivesInterval` | Integer   |                        | The number of seconds after which a TCP keepalive message that is not acknowledged by the server should be retransmitted. A value of zero uses the system default.                             |
 | `keepalivesCount`    | Integer   |                        | The number of TCP keepalives that can be lost before the client's connection to the server is considered dead. A value of zero uses the system default.                                        |
 | `tcpUserTimeout`     | Integer   |                        | The number of milliseconds that transmitted data may remain unacknowledged before a connection is forcibly closed. A value of zero uses the system default.                                    |
-| `applicationName`    | String    |                        | The name of the application connecting to the database. Set to a blank string (`""`) to disable. By default, this will be set to the name of the running process (e.g. `sidekiq`, `puma`).     |
-| `ci.enabled`         | Boolean   | Not defined            | Enables [two database connections](#configure-multiple-database-connections).                                                                                                                  |
+| `applicationName`    | String    |                        | The name of the application connecting to the database. Set to a blank string (`""`) to disable. By default, this will be set to the name of the running process (e.g. `sidekiq`, `puma`).  |
+| `ci.enabled`         | Boolean   | `true`                 | Enables [two database connections](#configure-multiple-database-connections).                                                                                                                  |
 
 ### PostgreSQL per chart
 
@@ -517,6 +538,7 @@ for different persistence classes, currently:
 | `rateLimiting`    | Store rate-limiting usage for RackAttack and Application Limits |
 | `sessions`        | Store user session data                                         |
 | `repositoryCache` | Store repository related data                                   |
+| `workhorse`       | Pub/sub queue backend for Workhorse                             |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
@@ -537,59 +559,66 @@ global:
     cache:
       host: cache.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: cache-secret
         key: cache-password
     sharedState:
       host: shared.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: shared-secret
         key: shared-password
     queues:
       host: queues.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: queues-secret
         key: queues-password
     actioncable:
       host: cable.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: cable-secret
         key: cable-password
     traceChunks:
       host: traceChunks.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: traceChunks-secret
         key: traceChunks-password
     rateLimiting:
       host: rateLimiting.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: rateLimiting-secret
         key: rateLimiting-password
     sessions:
       host: sessions.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: sessions-secret
         key: sessions-password
     repositoryCache:
       host: repositoryCache.redis.example
       port: 6379
-      auth:
+      password:
         enabled: true
         secret: repositoryCache-secret
         key: repositoryCache-password
+    workhorse:
+      host: workhorse.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: workhorse-secret
+        key: workhorse-password
 ```
 
 The following table describes the attributes for each dictionary of the
@@ -599,9 +628,9 @@ Redis instances.
 |:------------------ |:-------:|:------- |:----------- |
 | `.host`            | String  |         | The hostname of the Redis server with the database to use. |
 | `.port`            | Integer | `6379`  | The port on which to connect to the Redis server. |
-| `.auth.enabled`| Boolean    | true    | The `auth.enabled` provides a toggle for using a password with the Redis instance. |
-| `.auth.key`    | String  |         | The `auth.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
-| `.auth.secret` | String  |         | The `auth.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
+| `.password.enabled`| Boolean | true    | The `password.enabled` provides a toggle for using a password with the Redis instance. |
+| `.password.key`    | String  |         | The `password.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
+| `.password.secret` | String  |         | The `password.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
 
 The primary Redis definition is required as there are additional persistence
 classes that have not been separated.
@@ -1199,7 +1228,7 @@ The `storage_options` are used to configure
 
 Setting a default encryption on an S3 bucket is the easiest way to
 enable encryption, but you may want to
-[set a bucket policy to ensure only encrypted objects are uploaded](https://aws.amazon.com/premiumsupport/knowledge-center/s3-bucket-store-kms-encrypted-objects/).
+[set a bucket policy to ensure only encrypted objects are uploaded](https://repost.aws/knowledge-center/s3-bucket-store-kms-encrypted-objects).
 To do this, you must configure GitLab to send the proper encryption headers
 in the `storage_options` configuration section:
 
@@ -1563,6 +1592,7 @@ omniauth:
   providers: []
   # - secret: gitlab-google-oauth2
   #   key: provider
+  # - name: group_saml
 ```
 
 | Name                      | Type    | Default     | Description |
@@ -1592,6 +1622,13 @@ This property has two sub-keys: `secret` and `key`:
 - `secret`: *(required)* The name of a Kubernetes `Secret` containing the provider block.
 - `key`: *(optional)* The name of the key in the `Secret` containing the provider block.
   Defaults to `provider`
+
+Alternatively, if the provider has no other configuration than its name, you may
+use a second form with only a 'name' attribute, and optionally a `label` or
+`icon` attribute. The eligible providers are:
+
+- [`group_saml`](https://docs.gitlab.com/ee/integration/saml.html#configure-group-saml-sso-on-a-self-managed-instance)
+- [`kerberos`](https://docs.gitlab.com/ee/integration/saml.html#configure-group-saml-sso-on-a-self-managed-instance)
 
 The `Secret` for these entries contains YAML or JSON formatted blocks, as described
 in [OmniAuth Providers](https://docs.gitlab.com/ee/integration/omniauth.html). To
@@ -1634,12 +1671,6 @@ args:
   tenant_id: '<TENANT_ID>'
 ```
 
-[Group SAML](https://docs.gitlab.com/ee/integration/saml.html#configuring-group-saml-on-a-self-managed-gitlab-instance) configuration example:
-
-```yaml
-name: group_saml
-```
-
 This content can be saved as `provider.yaml`, and then a secret created from it:
 
 ```shell
@@ -1656,6 +1687,14 @@ omniauth:
     - secret: azure_activedirectory_v2
     - secret: gitlab-azure-oauth2
     - secret: gitlab-cas3
+```
+
+[Group SAML](https://docs.gitlab.com/ee/integration/saml.html#configuring-group-saml-on-a-self-managed-gitlab-instance) configuration example:
+
+```yaml
+omniauth:
+  providers:
+    - name: group_saml
 ```
 
 Example configuration `--set` items, when using the global chart:
@@ -1764,7 +1803,7 @@ The routing rules list is an ordered array of tuples of query and
 corresponding queue:
 
 - The query is following the
-  [worker matching query](https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_processes.html#queue-selector) syntax.
+  [worker matching query](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#worker-matching-query) syntax.
 - The `<queue_name>` must match a valid Sidekiq queue name `sidekiq.pods[].queues` defined under [`sidekiq.pods`](gitlab/sidekiq/index.md#per-pod-settings). If the queue name
   is `nil`, or an empty string, the worker is routed to the queue generated
   by the name of the worker instead.
@@ -1878,7 +1917,7 @@ nginx-ingress:
 
 ### TCP proxy protocol
 
-You can enable handling [proxy protocol](https://www.haproxy.com/blog/use-the-proxy-protocol-to-preserve-a-clients-ip-address/) on the SSH Ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header.
+You can enable handling [proxy protocol](https://www.haproxy.com/blog/use-the-proxy-protocol-to-preserve-a-clients-ip-address) on the SSH Ingress to properly handle a connection from an upstream proxy that adds the proxy protocol header.
 By doing so, this will prevent SSH from receiving the additional headers and not break SSH.
 
 One common environment where one needs to enable handling of proxy protocol is when using AWS with an ELB handling the inbound connections to the cluster. You can consult the [AWS layer 4 loadbalancer example](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/examples/aws/elb-layer4-loadbalancer.yaml) to properly set it up.
@@ -1966,7 +2005,7 @@ gitlab:
     workerTimeout: 60
     extraEnv:
       GITLAB_RAILS_RACK_TIMEOUT: "60"
-      GITLAB_RAILS_WAIT_TIMEOUT: "90" 
+      GITLAB_RAILS_WAIT_TIMEOUT: "90"
 ```
 
 ## Custom Certificate Authorities

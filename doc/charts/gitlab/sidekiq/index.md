@@ -1,7 +1,7 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Using the GitLab-Sidekiq chart **(FREE SELF)**
@@ -412,7 +412,7 @@ on a per-pod basis.
 | `maxUnavailable`             | Integer | `1`       | Limit of maximum number of Pods to be unavailable                                                                                     |
 
 NOTE:
-[Detailed documentation of the Sidekiq memory killer is available](https://docs.gitlab.com/ee/administration/operations/sidekiq_memory_killer.html#sidekiq-memorykiller)
+[Detailed documentation of the Sidekiq memory killer is available](https://docs.gitlab.com/ee/administration/sidekiq/sidekiq_memory_killer.html)
 in the Linux package documentation.
 
 ## Per-pod Settings

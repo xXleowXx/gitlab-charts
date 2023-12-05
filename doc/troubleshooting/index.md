@@ -1,7 +1,7 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Troubleshooting the GitLab chart
@@ -370,7 +370,7 @@ Use the following steps to verify:
 1. Inspect the file `/srv/gitlab/config/workhorse-config.toml`. The `[redis]` configuration might be missing:
 
    ```shell
-   cat /srv/gitlab/config/workhorse-config.toml | grep '\[redis\]'
+   grep '\[redis\]' /srv/gitlab/config/workhorse-config.toml
    ```
 
 If the `[redis]` configuration is not present, the `workhorse.keywatcher` flag was set to `false` during deployment

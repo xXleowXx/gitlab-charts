@@ -1,6 +1,7 @@
 require 'active_support'
 require 'open-uri'
-require "base64"
+require 'base64'
+require 'fugit'
 
 module Gitlab
   def self.included(klass)
@@ -8,6 +9,20 @@ module Gitlab
   end
 
   module TestHelper
+    KUBE_TIMEOUT_DEFAULT = '2m'.freeze
+
+    def kube_timeout_parse(variable)
+      timeout = ENV[variable] || KUBE_TIMEOUT_DEFAULT
+
+      # Check the format, simplify.
+      duration = Fugit::Duration.parse(timeout)
+
+      # If invalid, return the error.
+      raise "kube_timeout_parse: #{variable}: invalid duration '#{timeout}'" if duration.nil?
+
+      duration.deflate.to_plain_s
+    end
+
     def full_command(cmd, env = {})
       "kubectl exec -it #{pod_name} -- env #{env_hash_to_str(env)} #{cmd}"
     end
@@ -48,7 +63,7 @@ module Gitlab
 
     def sign_in
       # DRY CSS selector for finding the user avatar
-      qa_avatar_selector = 'img[data-testid="user_avatar_content"],img[data-qa-selector="user_avatar_content"]'
+      qa_avatar_selector = 'img[data-testid="user-avatar-content"]'
 
       visit '/users/sign_in'
 
@@ -63,7 +78,7 @@ module Gitlab
 
       # Operate specifically within the user login form, avoiding registation form
       within('div#login-pane') do
-        fill_in 'Username or email', with: 'root'
+        fill_in 'Username or primary email', with: 'root'
         fill_in 'Password', with: ENV['GITLAB_PASSWORD']
       end
       click_button 'Sign in'
@@ -121,7 +136,7 @@ module Gitlab
 
       puts "Scaling Deployment ('#{filters}') to #{replicas}."
 
-      stdout, status = Open3.capture2e("kubectl scale deployment -l #{filters} --replicas=#{replicas}")
+      stdout, status = Open3.capture2e("kubectl scale deployment -l #{filters} --replicas=#{replicas}  --timeout=#{kube_timeout_parse('KUBE_SCALE_TIMEOUT')}")
       return [stdout, status]
     end
 
@@ -142,6 +157,21 @@ module Gitlab
       end
     end
 
+    def wait_for_rails_rollout
+      wait_for_rollout(type: "deployment", filters: "app in (webservice, sidekiq)")
+    end
+
+    def wait_for_rollout(type: nil, filters: nil)
+      raise ArgumentError, "Must supply both 'type' and 'filters'" if type.nil? || filters.nil?
+
+      if ENV['RELEASE_NAME']
+        filters="#{filters},release=#{ENV['RELEASE_NAME']}"
+      end
+
+      stdout, status = Open3.capture2e("kubectl rollout status #{type} -l'#{filters}' --timeout=#{kube_timeout_parse('KUBE_ROLLOUT_TIMEOUT')}")
+      raise stdout unless status.success?
+    end
+
     def restore_from_backup(skip: [])
       skip_flags=''
 
@@ -149,14 +179,14 @@ module Gitlab
         skip_flags += " --skip #{skipped}"
       end
 
-      cmd = full_command("backup-utility --restore -t original #{skip_flags}", { GITLAB_ASSUME_YES: "1" })
+      cmd = full_command("backup-utility --restore -t #{original_backup_prefix} #{skip_flags}", { GITLAB_ASSUME_YES: "1" })
       stdout, status = Open3.capture2e(cmd)
 
       return [stdout, status]
     end
 
     def backup_instance
-      cmd = full_command("backup-utility -t test-backup", { GITLAB_ASSUME_YES: "1" })
+      cmd = full_command("backup-utility -t #{new_backup_prefix}", { GITLAB_ASSUME_YES: "1" })
       stdout, status = Open3.capture2e(cmd)
 
       return [stdout, status]
@@ -252,17 +282,33 @@ module Gitlab
     end
 
     def ensure_backups_on_object_storage
-      storage_url = 'https://storage.googleapis.com/gitlab-charts-ci/test-backups'
-      backup_file_names = ["#{ENV['TEST_BACKUP_PREFIX']}_gitlab_backup.tar"]
-      backup_file_names.each do |file_name|
-        file = URI.open("#{storage_url}/#{file_name}").read
-        object_storage.put_object(
-          bucket: 'gitlab-backups',
-          key: 'original_gitlab_backup.tar',
-          body: file
-        )
-        puts "Uploaded #{file_name}"
-      end
+      file = URI.open(original_backup_source_url).read
+      object_storage.put_object(
+        bucket: 'gitlab-backups',
+        key: original_backup_name,
+        body: file
+      )
+      puts "Uploaded #{original_backup_name}"
+    end
+
+    def original_backup_prefix
+      ENV['TEST_BACKUP_PREFIX']
+    end
+
+    def original_backup_name
+      "#{original_backup_prefix}_gitlab_backup.tar"
+    end
+
+    def original_backup_source_url
+      "https://storage.googleapis.com/gitlab-charts-ci/test-backups/#{original_backup_name}"
+    end
+
+    def new_backup_prefix
+      'test-backup'
+    end
+
+    def new_backup_name
+      "#{new_backup_prefix}_gitlab_backup.tar"
     end
   end
 end

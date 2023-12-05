@@ -1,4 +1,5 @@
 config.yaml
+template_settings.yaml
 charts/*.tgz
 .DS_Store
 tags

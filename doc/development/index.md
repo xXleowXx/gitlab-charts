@@ -1,7 +1,7 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Contribute to Helm chart development
@@ -47,6 +47,10 @@ ChaosKube can be used to test the fault tolerance of highly available cloud-nati
 
 [Read more in the ChaosKube chart docs](chaoskube/index.md).
 
+### ClickHouse
+
+[Instructions](clickhouse.md) for configuring an external ClickHouse server with GitLab.
+
 ## Versioning and Release
 
 Details on the version scheme, branching and tags can be found in [release document](release.md).
@@ -54,6 +58,41 @@ Details on the version scheme, branching and tags can be found in [release docum
 ## Changelog Entries
 
 All `CHANGELOG.md` entries should be created via the [changelog entries](changelog.md) workflow.
+
+## Pipelines
+
+GitLab CI pipelines run on pipelines for:
+
+- Merge requests
+- Default branch
+- Stable branches
+- Tags
+
+The configuration for these CI pipelines is managed in:
+
+- [`.gitlab-ci.yml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/.gitlab-ci.yml)
+- Files under [`.gitlab/ci/`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/.gitlab/ci/)
+
+### Review apps
+
+We use [Review apps](https://docs.gitlab.com/ee/ci/review_apps/) in CI to
+deploy running instances of the Helm Charts and test against them.
+
+We deploy these Review apps to our EKS and GKE clusters, confirm that the Helm
+release is created successfully, and then run [GitLab QA](gitlab-qa/index.md)
+and other [RSpec tests](rspec.md).
+
+For merge requests specifically, we make use of
+[`vcluster`](https://www.vcluster.com) to create ephemeral clusters. This
+allows us to test against newer versions of Kubernetes more quickly due to the
+ease of configuration and simplified environments that do not include External
+DNS or Cert Manager dependencies. In this case, we simply deploy the Helm
+Charts, confirm the release was created successfully, and validate that
+Webservice is in the `Ready` state. This approach takes advantage of
+[Kubernetes readiness probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+to ensure that the application is in a healthy state. See
+[issue 5013](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5013) for
+more information on our `vcluster` implementation plan.
 
 ## When to fork upstream charts
 

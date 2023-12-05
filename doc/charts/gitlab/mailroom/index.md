@@ -1,12 +1,12 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Using the Mailroom chart **(FREE SELF)**
 
-The Mailroom Pod handles the ingestion of email into the GitLab application.
+The Mailroom Chart handles [incoming email](https://docs.gitlab.com/ee/administration/incoming_email.html).
 
 ## Configuration
 
@@ -91,8 +91,9 @@ serviceAccount:
 | `image.pullPolicy`                     | Mailroom image pull policy                                                                                                                                                                         | `IfNotPresent`                                                                                                                                                          |
 | `extraEnvFrom`                         | List of extra environment variables from other data sources to expose                                                                                                                              |                                                                                                                                                                         |
 | `image.pullSecrets`                    | Mailroom image pull secrets                                                                                                                                                                        |                                                                                                                                                                         |
+| `image.registry`                       | Mailroom image registry                                                                                                                                                                          |          |
 | `image.repository`                     | Mailroom image repository                                                                                                                                                                          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-mailroom`                                                                                                              |
-| `image.tag`                            | Mailroom image tag                                                                                                                                                                                 | `master`                                                                                                                                                                |
+| `image.tag`                            | Mailroom image tag                                                                                                                                                                                 |        |
 | `init.image.repository`                | Mailroom init image repository                                                                                                                                                                     |                                                                                                                                                                         |
 | `init.image.tag`                       | Mailroom init image tag                                                                                                                                                                            |                                                                                                                                                                         |
 | `init.resources`                       | Mailroom init container resource requirements                                                                                                                                                      | `{ requests: { cpu: 50m }}`                                                                                                                                             |
