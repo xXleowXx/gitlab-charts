@@ -16,7 +16,7 @@ found in the
 
 ## GitLab integration
 
-> [Model renamed](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/134717) in GitLab 16.6.
+> Shards [renamed](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/134717) to nodes in GitLab 16.6.
 
 To enable Zoekt for a top-level group:
 
