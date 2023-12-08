@@ -301,6 +301,9 @@ pin_image_versions:
   dependencies:
     - pin_image_versions
   script:
+    - echo "REVIEW_REF_PREFIX = $REVIEW_REF_PREFIX"
+    - echo "CI_COMMIT_REF_SLUG = $CI_COMMIT_REF_SLUG"
+    - compgen -v
     - !reference [.set_up_varfile_and_kubecontext, script]
     - kubectl version
     - !reference [.set_up_namespace_secret_and_deploy, script]
@@ -362,6 +365,9 @@ create_review_gke122:
     <<: *review_gke122_common_vars
     GIT_STRATEGY: none
   script:
+    - echo "REVIEW_REF_PREFIX = $REVIEW_REF_PREFIX"
+    - echo "CI_COMMIT_REF_SLUG = $CI_COMMIT_REF_SLUG"
+    - compgen -v
     - echo "Configuring gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
   environment:
     name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
