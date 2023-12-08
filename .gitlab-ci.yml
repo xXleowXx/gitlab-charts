@@ -301,6 +301,9 @@ pin_image_versions:
   dependencies:
     - pin_image_versions
   script:
+    - echo "REVIEW_REF_PREFIX = $REVIEW_REF_PREFIX"
+    - echo "CI_COMMIT_REF_SLUG = $CI_COMMIT_REF_SLUG"
+    - compgen -v
     - !reference [.set_up_varfile_and_kubecontext, script]
     - kubectl version
     - !reference [.set_up_namespace_secret_and_deploy, script]
@@ -343,6 +346,35 @@ pin_image_versions:
 .review_eks_common_vars: &review_eks_common_vars
   DNS_PROVIDER: "aws"
 
+# Jobs using auto_stop_in that exit with a failure will not execute the on_stop
+# action. We get frequent failures during review_* jobs. Their accompanying
+# partially deployed environments then hang around forever which may eventually
+# cause resource exhaustion. These deployments must be  manually cleaned up. See
+# https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2185 for details. Issue
+# https://gitlab.com/gitlab-org/gitlab/-/issues/382549 should address this
+# problem in the future.
+#
+# To ensure that deployment cleanup always occurs, we create the environment
+# using this job. It is designed to never fail and will always execute the
+# on_stop action either when manually performed or when
+# $REVIEW_APPS_AUTO_STOP_IN expires. The actual deployment is left to the
+# associated review_* job.
+create_review_gke122:
+  stage: review
+  variables:
+    <<: *review_gke122_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "REVIEW_REF_PREFIX = $REVIEW_REF_PREFIX"
+    - echo "CI_COMMIT_REF_SLUG = $CI_COMMIT_REF_SLUG"
+    - compgen -v
+    - echo "Configuring gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_gke122
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
+
 review_gke122:
   variables:
     <<: *review_gke122_common_vars
@@ -352,7 +384,22 @@ review_gke122:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke122
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
   resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+
+# See comments in create_review_gke122.
+create_review_gke125:
+  stage: review
+  variables:
+    <<: *review_gke125_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "Configuring gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_gke125
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
 
 review_gke125:
   variables:
@@ -363,7 +410,23 @@ review_gke125:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
   resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+
+# See comments in create_review_gke122.
+create_review_gke126:
+  stage: review
+  variables:
+    <<: *review_gke126_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "Configuring gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke126
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
 
 review_gke126:
   variables:
@@ -374,7 +437,22 @@ review_gke126:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
   resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+
+# See comments in create_review_gke122.
+create_review_eks:
+  stage: review
+  variables:
+    <<: *review_eks_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "Configuring eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_eks
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
 
 review_eks:
   variables:
@@ -385,6 +463,7 @@ review_eks:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
   resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 .stop_review_template:
