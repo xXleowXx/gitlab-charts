@@ -216,11 +216,11 @@ Global setting that changes the behavior of the `cert-manager` to perform the AC
 a new Ingress created dynamically each time.
 
 The default logic (when `global.ingress.useNewIngressForCerts` is `false`) reuses existing Ingresses for
-validation. This default is not suitable in some situations, setting the flag to `true` will mean that a new
+validation. This default is not suitable in some situations. Setting the flag to `true` will mean that a new
 Ingress object is created for each validation.
 
- `global.ingress.useNewIngressForCerts` cannot be set to `true` when used with GKE Ingress Controllers. If you
- wish to enable this, see [release notes](../releases/7_0.md#bundled-certmanager) for full details.
+`global.ingress.useNewIngressForCerts` cannot be set to `true` when used with GKE Ingress Controllers. For full details
+on enabling this, see [release notes](../releases/7_0.md#bundled-certmanager).
 
 ## GitLab Version
 
