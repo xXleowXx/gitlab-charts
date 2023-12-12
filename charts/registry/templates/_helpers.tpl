@@ -159,10 +159,11 @@ Failing that a serviceAccount will be generated automatically
 
 {{/*
 Create a default fully qualified job name.
-Due to the job only being allowed to run once, we add the chart revision so Helm
+Due to the job only being allowed to run once, we add a timestamp so helm
 upgrades don't cause errors trying to create the already ran job.
 */}}
 {{- define "registry.migrations.jobname" -}}
-{{- $name := include "registry.fullname" . | trunc 55 | trimSuffix "-" -}}
-{{- printf "%s-migrations-%d" $name .Release.Revision | trunc 63 | trimSuffix "-" -}}
+{{- $name := include "registry.fullname" . | trunc 41 | trimSuffix "-" -}}
+{{- $timestamp := include "gitlab.timestamp" . }}
+{{- printf "%s-%s" $name $timestamp | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
