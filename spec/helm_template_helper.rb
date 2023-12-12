@@ -199,6 +199,13 @@ class HelmTemplate
     @mapped.select{ |_, hash| hash['kind'] == kind }
   end
 
+  def resources_by_kind_and_labels(kind, labels)
+    @mapped.select{ |_, hash|
+      hash['kind'] == kind &&
+        labels.all? { |k,v| hash['metadata']['labels'][k] == v }
+    }
+  end
+
   def exit_code()
     @exit_code.to_i
   end
