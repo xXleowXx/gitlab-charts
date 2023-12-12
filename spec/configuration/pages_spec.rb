@@ -281,8 +281,9 @@ describe 'GitLab Pages' do
 
         describe 'access control' do
           it 'creates necessary secrets and configmaps and mounts them on migration job' do
+            migrations_job = pages_enabled_template.resources_by_kind_and_labels("Job", { "app" => "migrations" }).keys.first
             migrations_secret_mounts = pages_enabled_template.projected_volume_sources(
-              'Job/test-migrations-1',
+              migrations_job,
               'init-migrations-secrets'
             )
 
