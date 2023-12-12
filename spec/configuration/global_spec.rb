@@ -173,6 +173,10 @@ describe 'global configuration' do
       )).deep_merge(default_values)
     end
 
+    let(:t) do
+      HelmTemplate.new(shell_values)
+    end
+
     let(:ignored_deployments) do
       [
         'Deployment/test-gitlab-runner',
@@ -190,14 +194,13 @@ describe 'global configuration' do
 
     let(:ignored_jobs) do
       [
-        'Job/test-minio-create-buckets-1',
-        'Job/test-shared-secrets-1',
+        t.resources_by_kind_and_labels("Job", { "app" => "migrations" }).keys.first,
+        t.resources_by_kind_and_labels("Job", { "app" => "shared-secrets" }).keys.first,
         'Job/test-gitlab-upgrade-check'
       ]
     end
 
     it 'adds the provided suffix to all image tags' do
-      t = HelmTemplate.new(shell_values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
       objects = t.resources_by_kind('Deployment').reject { |key, _| ignored_deployments.include? key }
