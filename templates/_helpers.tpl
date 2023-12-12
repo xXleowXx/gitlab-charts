@@ -473,8 +473,8 @@ reduce collision
 */}}
 {{- define "shared-secrets.jobname" -}}
 {{- $name := include "shared-secrets.fullname" . | trunc 55 | trimSuffix "-" -}}
-{{- $rand := randAlphaNum 3 | lower }}
-{{- printf "%s-%d-%s" $name .Release.Revision $rand | trunc 63 | trimSuffix "-" -}}
+{{- $timestamp := include "gitlab.timestamp" . }}
+{{- printf "%s-%s" $name $timestamp | trunc 63 -}}
 {{- end -}}
 
 {{/*
@@ -545,4 +545,11 @@ securityContext:
   fsGroupChangePolicy: {{ $psc.fsGroupChangePolicy }}
 {{-   end }}
 {{- end }}
+{{- end -}}
+
+{{/*
+Return the current time formatted as: yyyy-MM-dd_HH-mm-ss.
+*/}}
+{{- define "gitlab.timestamp" -}}
+{{ now | date "2006-01-02_15-04-05" }}
 {{- end -}}
