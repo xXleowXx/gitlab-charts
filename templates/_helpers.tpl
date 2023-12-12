@@ -472,9 +472,9 @@ Due to the helm delete not cleaning up these jobs, we add a randome value to
 reduce collision
 */}}
 {{- define "shared-secrets.jobname" -}}
-{{- $name := include "shared-secrets.fullname" . | trunc 55 | trimSuffix "-" -}}
-{{- $rand := randAlphaNum 3 | lower }}
-{{- printf "%s-%d-%s" $name .Release.Revision $rand | trunc 63 | trimSuffix "-" -}}
+{{- $name := include "shared-secrets.fullname" . | trunc 41 | trimSuffix "-" -}}
+{{- $timestamp := include "gitlab.timestamp" . }}
+{{- printf "%s-%s" $name $timestamp | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -545,4 +545,11 @@ securityContext:
   fsGroupChangePolicy: {{ $psc.fsGroupChangePolicy }}
 {{-   end }}
 {{- end }}
+{{- end -}}
+
+{{/*
+Return the current UTC time formatted as: yyyy-MM-dd-HH-mm-ss.
+*/}}
+{{- define "gitlab.timestamp" -}}
+{{ dateInZone "2006-01-02-15-04-05" (now) "UTC" }}
 {{- end -}}
