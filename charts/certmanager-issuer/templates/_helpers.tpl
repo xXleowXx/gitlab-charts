@@ -23,8 +23,9 @@ Due to the helm delete not cleaning up these jobs, we add a random value to
 reduce collision
 */}}
 {{- define "certmanager-issuer.jobname" -}}
-{{- $name := printf "%s-issuer" .Release.Name | trunc 55 | trimSuffix "-" -}}
-{{- printf "%s-%d" $name .Release.Revision | trunc 63 | trimSuffix "-" -}}
+{{- $name := printf "%s-issuer" .Release.Name | trunc 41 | trimSuffix "-" -}}
+{{- $timestamp := include "gitlab.timestamp" . }}
+{{- printf "%s-%s" $name $timestamp | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
