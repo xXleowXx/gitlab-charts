@@ -551,3 +551,4 @@ Return the current UTC time formatted as: yyyy-MM-dd-HH-mm-ss.
 {{- define "gitlab.timestamp" -}}
 {{ dateInZone "2006-01-02-15-04-05" (now) "UTC" }}
 {{- end -}}
+
