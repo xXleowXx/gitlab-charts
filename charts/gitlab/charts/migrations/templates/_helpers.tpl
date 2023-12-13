@@ -2,12 +2,11 @@
 
 {{/*
 Create a default fully qualified job name.
-Due to the job only being allowed to run once, we add the chart revision so helm
+Due to the job only being allowed to run once, we add a timestamp so helm
 upgrades don't cause errors trying to create the already ran job.
-Due to the helm delete not cleaning up these jobs, we add a randome value to
-reduce collision
 */}}
 {{- define "migrations.jobname" -}}
-{{- $name := include "fullname" . | trunc 55 | trimSuffix "-" -}}
-{{- printf "%s-%d" $name .Release.Revision | trunc 63 | trimSuffix "-" -}}
+{{- $name := include "fullname" . | trunc 41 | trimSuffix "-" -}}
+{{- $timestamp := include "gitlab.timestamp" . }}
+{{- printf "%s-%s" $name $timestamp | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
