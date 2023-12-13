@@ -100,4 +100,30 @@ describe 'Labels configuration' do
       expect(local_template.dig(target_chart, 'spec', 'template', 'metadata', 'labels')).to include(chart_values['gitlab']['webservice']['podLabels'])
     end
   end
+
+  context "Job labels" do
+    let(:local_template) do
+      HelmTemplate.new(default_values.deep_merge(chart_values))
+    end
+
+    let(:revision_label) { "gitlab.com/helm-revision" }
+
+    let(:ignored_jobs) do
+      [
+        'Job/test-certmanager-startupapicheck',
+        'Job/test-gitlab-upgrade-check'
+      ]
+    end
+
+    fit "Renders the helm revision label" do
+      expect(local_template.exit_code).to eq(0), "Unexpected error code #{local_template.exit_code} -- #{local_template.stderr}"
+
+      jobs = local_template.resources_by_kind("Job").reject { |job_key, _| ignored_jobs.include?(job_key) }
+
+      jobs.each do |_, job|
+        expect(job.dig("metadata", "labels", revision_label)).to eql(1)
+        expect(job.dig("spec", "template", "metadata", "labels", revision_label)).to eql(1)
+      end
+    end
+  end
 end
