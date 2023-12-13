@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.6.2 (2023-12-13)
+
+No changes.
+
 ## 7.6.1 (2023-11-30)
 
 ### Changed (2 changes)
@@ -32,6 +36,10 @@ entry.
 ### Other (1 change)
 
 - [Deprecate namespace in mailroom.yml](gitlab-org/charts/gitlab@781a94d070a5ae221c33f1a31fdd9ecde15f2be6) ([merge request](gitlab-org/charts/gitlab!3419))
+
+## 7.5.4 (2023-12-13)
+
+No changes.
 
 ## 7.5.3 (2023-11-30)
 
@@ -73,6 +81,10 @@ No changes.
 ### Other (1 change)
 
 - [Enable dual-namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/charts/gitlab@08e94769a6169bdc380e7d46b3ed300aa9c9cfab) ([merge request](gitlab-org/charts/gitlab!3388))
+
+## 7.4.4 (2023-12-13)
+
+No changes.
 
 ## 7.4.3 (2023-11-30)
 
