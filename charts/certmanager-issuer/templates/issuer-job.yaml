@@ -8,6 +8,7 @@ metadata:
   labels:
     {{- include "gitlab.standardLabels" . | nindent 4 }}
     {{- include "gitlab.commonLabels" . | nindent 4 }}
+    {{- include "gitlab.revisionLabel" . | nindent 4 }}
 spec:
   activeDeadlineSeconds: 300
   template:
@@ -15,6 +16,7 @@ spec:
       labels:
         app: {{ template "name" . }}
         release: {{ .Release.Name }}
+        {{- include "gitlab.revisionLabel" . | nindent 8 }}
     spec:
       {{- include "gitlab.nodeSelector" . | nindent 6 }}
       securityContext:
