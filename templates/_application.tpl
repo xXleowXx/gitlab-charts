@@ -44,6 +44,10 @@ heritage: {{ .Release.Service }}
 {{- end -}}
 
 
+{{- define "gitlab.revisionLabel" -}}
+gitlab.com/helm-revision: {{ .Release.Revision | quote }}
+{{- end -}}
+
 {{- define "gitlab.nodeSelector" -}}
 {{- $nodeSelector := default .Values.global.nodeSelector .Values.nodeSelector -}}
 {{- if $nodeSelector }}
