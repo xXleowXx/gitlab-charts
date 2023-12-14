@@ -99,7 +99,8 @@ describe 'security context' do
     end
 
     it 'applied fsGroupChangePolicy to the migrations job' do
-      policy = template.dig("Job/test-migrations-1", 'spec', 'template', 'spec', 'securityContext', 'fsGroupChangePolicy')
+      migrations_job = template.resources_by_kind_and_labels("Job", { "app" => "migrations" }).values.first
+      policy = migrations_job.dig('spec', 'template', 'spec', 'securityContext', 'fsGroupChangePolicy')
       expect(policy).to eq("OnRootMismatch"), "Unexpected fsGroupChangePolicy #{policy}"
     end
 
