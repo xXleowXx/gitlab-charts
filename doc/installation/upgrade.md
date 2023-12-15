@@ -153,7 +153,7 @@ coalesce.go:199: warning: destination for password is a table. Ignoring non-tabl
 
 This is an indication that you are setting `global.redis.password` in your values file.
 
-### useNewIngressForCerts on Ingresses
+### `useNewIngressForCerts` on Ingresses
 
 If you are upgrading an existing chart from `7.x` to a later version, and are changing
 `global.ingress.useNewIngressForCerts` to `true`, you must also update any existing
