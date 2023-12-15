@@ -28,7 +28,11 @@ if [ "${STRICT_VERSIONS:-false}" == "true" ] && [ "${DOCKER_INSTALLED_VERSION}" 
     apt-get update -qq
     apt install -y docker-ce-cli=${DOCKER_DEB_VERSION}
 fi
+# Sometimes, `docker:dind` service is not ready yet, causing exit code of 1
+# We only care about the client, anyways!
+set +e
 docker version --format 'Effective: docker-{{ .Client.Version }}'
+set -e
 
 GOMPLATE_INSTALLED_VERSION=""
 if command -v gomaplate; then
