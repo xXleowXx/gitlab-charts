@@ -44,6 +44,7 @@ if [ "${STRICT_VERSIONS:-false}" == "true" ] && [ "${GOMPLATE_INSTALLED_VERSION}
     mv gomplate ${TARGET_DIR}/gomplate
 fi
 echo -n "Effective: "; gomplate -v
+echo -n "after Effective"
 
 
 HELM_INSTALLED_VERSION=""
@@ -53,6 +54,7 @@ if command -v helm; then
     HELM_INSTALLED_VERSION=$(helm version --template '{{.Version}}' | sed -e 's/^v//' )
     echo "Installed version: ${HELM_INSTALLED_VERSION}"
 fi
+echo -n "after Helm check"
 
 if [ "${STRICT_VERSIONS:-false}" == "true" ] && [ "${HELM_INSTALLED_VERSION}" != "${HELM_VERSION}" ] || [ -z "${HELM_INSTALLED_VERSION}" ]; then
     echo "Installing helm-${HELM_VERSION}"
@@ -61,6 +63,7 @@ if [ "${STRICT_VERSIONS:-false}" == "true" ] && [ "${HELM_INSTALLED_VERSION}" !=
     mv linux-amd64/helm ${TARGET_DIR}/helm
     rm -rf linux-amd64/
 fi
+echo -n "after Helm install"
 
 KUBECTL_INSTALLED_VERSION=""
 if command -v kubectl; then
@@ -69,6 +72,7 @@ if command -v kubectl; then
     KUBECTL_INSTALLED_VERSION=$(kubectl version --client=true -o yaml | awk '/gitVersion/ { sub("^v","",$2); print $2; }')
     echo "Installed kubectl version: ${KUBECTL_INSTALLED_VERSION}"
 fi
+echo -n "after kubectl check"
 
 if [ "${STRICT_VERSIONS:-false}" == "true" ] && [ "${KUBECTL_INSTALLED_VERSION}" != "${KUBECTL_VERSION}" ] || [ -z "${KUBECTL_INSTALLED_VERSION}" ]; then
     echo "Installing kubectl-${KUBECTL_VERSION}"
@@ -76,3 +80,4 @@ if [ "${STRICT_VERSIONS:-false}" == "true" ] && [ "${KUBECTL_INSTALLED_VERSION}"
     chmod +x kubectl
     mv kubectl ${TARGET_DIR}/kubectl
 fi
+echo -n "after kubectl install"
