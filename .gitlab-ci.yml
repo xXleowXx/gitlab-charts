@@ -27,7 +27,7 @@
 default:
   image: registry.gitlab.com/mnielsen/tmp-registry/gitlab-charts-build-base:charts-add-dependencies
   # TODO: restore the image below when dependency MR is merged.
-  # image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.7
+  # image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.9
 
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
@@ -52,7 +52,7 @@ variables:
   DEBIAN_VERSION: bullseye
   RUBY_VERSION: "3.0"
   CI_TOOLS_VERSION: "4.22.0"
-  GITLAB_QA_VERSION: "12.5.0"
+  GITLAB_QA_VERSION: "13.0.0"
   # STRICT_VERSIONS is used in RSpecs to ensure exact version match for tools like "helm" and "kubectl"
   STRICT_VERSIONS: "true"
   KUBE_CRD_SCHEMA_URL: "https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/v3/apis__apiextensions.k8s.io__v1_openapi.json"
@@ -65,6 +65,7 @@ variables:
           cron:
             enabled: true
   GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
+  REVIEW_APPS_AUTO_STOP_IN: "2 days"
 
 stages:
   - prepare
@@ -344,6 +345,32 @@ pin_image_versions:
 .review_eks_common_vars: &review_eks_common_vars
   DNS_PROVIDER: "aws"
 
+# Jobs using auto_stop_in that exit with a failure will not execute the on_stop
+# action. We get frequent failures during review_* jobs. Their accompanying
+# partially deployed environments then hang around forever which may eventually
+# cause resource exhaustion. These deployments must be  manually cleaned up. See
+# https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2185 for details. Issue
+# https://gitlab.com/gitlab-org/gitlab/-/issues/382549 should address this
+# problem in the future.
+#
+# To ensure that deployment cleanup always occurs, we create the environment
+# using this job. It is designed to never fail and will always execute the
+# on_stop action either when manually performed or when
+# $REVIEW_APPS_AUTO_STOP_IN expires. The actual deployment is left to the
+# associated review_* job.
+create_review_gke122:
+  stage: review
+  variables:
+    <<: *review_gke122_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "Configuring gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_gke122
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
+
 review_gke122:
   variables:
     <<: *review_gke122_common_vars
@@ -352,8 +379,23 @@ review_gke122:
     name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke122
-    auto_stop_in: 2 days
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
   resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+
+# See comments in create_review_gke122.
+create_review_gke125:
+  stage: review
+  variables:
+    <<: *review_gke125_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "Configuring gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_gke125
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
 
 review_gke125:
   variables:
@@ -363,8 +405,24 @@ review_gke125:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
-    auto_stop_in: 2 days
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
   resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+
+# See comments in create_review_gke122.
+create_review_gke126:
+  stage: review
+  variables:
+    <<: *review_gke126_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "Configuring gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke126
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
 
 review_gke126:
   variables:
@@ -374,8 +432,23 @@ review_gke126:
     name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
-    auto_stop_in: 2 days
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
   resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+
+# See comments in create_review_gke122.
+create_review_eks:
+  stage: review
+  variables:
+    <<: *review_eks_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "Configuring eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_eks
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
 
 review_eks:
   variables:
@@ -385,7 +458,8 @@ review_eks:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
-    auto_stop_in: 2 days
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
   resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 .stop_review_template:
@@ -905,7 +979,7 @@ wait_for_dev_images:
 .publish_chart_package:
   # publish chart into repo's Packages
   stage: package
-  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.7"
+  image: "registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.9"
   dependencies: []
   variables:
     # **Required** variable to set channel to which chart will be published:
