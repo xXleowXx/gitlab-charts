@@ -59,7 +59,7 @@ describe "Restoring a backup" do
       request = Net::HTTP::Get.new(uri)
       # request["Authorization"] = Base64.strict_encode64('root:Thorndon@123')
 
-      response=ApiHelper.invoke_http_request(uri, request)
+      response = ApiHelper.invoke_http_request(uri, request)
       request["Authorization"] = "Bearer glpat-Wy2CzMzBsRhru5rEoQ8K"
       request.each_header do |header_name, header_value|
         puts "#{header_name} : #{header_value}"
