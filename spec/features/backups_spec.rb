@@ -62,8 +62,8 @@ describe "Restoring a backup" do
       response=ApiHelper.invoke_http_request(uri, request)
       request["Authorization"] = "Bearer glpat-Wy2CzMzBsRhru5rEoQ8K"
       request.each_header do |header_name, header_value|
-      puts "#{header_name} : #{header_value}"
-    end
+        puts "#{header_name} : #{header_value}"
+      end
       vishal = JSON.parse(response.body)
       puts vishal
       # puts vishal.collect {|item| item["name"]}
