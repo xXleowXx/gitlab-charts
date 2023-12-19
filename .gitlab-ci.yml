@@ -78,7 +78,6 @@ stages:
   - specs
   - qa-manual
   - qa
-  - qa-report
   - staging-release
   - package
   - release-package
@@ -95,12 +94,8 @@ include:
   - project: 'gitlab-org/quality/pipeline-common'
     file:
       - '/ci/danger-review.yml'
-      - '/ci/allure-report.yml'
     rules:
-      - if: '$CI_SERVER_HOST == "gitlab.com"'
-  - local: '/gitlab-ci-config/gitlab-com.yml'
-    rules:
-      - if: '$CI_SERVER_HOST == "gitlab.com"'
+      - if: $CI_SERVER_HOST == "gitlab.com"
 
 dependency_scanning:
   needs: []
@@ -302,16 +297,22 @@ pin_image_versions:
   dependencies:
     - pin_image_versions
   script:
-    - !reference [.set_up_varfile_and_kubecontext, script]
+    - mkdir -p $(dirname "${VARIABLES_FILE}")
+    - set_context
+    - check_kube_domain
     - kubectl version
-    - !reference [.set_up_namespace_secret_and_deploy, script]
+    - ensure_namespace
+    - create_secret
+    - deploy
+    - wait_for_deploy
     - restart_toolbox
     - echo "export QA_ENVIRONMENT_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
     - echo "export GITLAB_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"         >> "${VARIABLES_FILE}"
     - echo "export REGISTRY_URL=registry-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN"     >> "${VARIABLES_FILE}"
     - echo "export S3_ENDPOINT=https://minio-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
-    - !reference [.get_qa_revision, script]
+    - kubectl wait pods -n $NAMESPACE -l app=toolbox,release=$RELEASE_NAME  --for condition=Ready --timeout=60s
+    - echo "export QA_GITLAB_REVISION=`kubectl exec -i $(kubectl get pods -lrelease=$RELEASE_NAME,app=toolbox -o custom-columns=":metadata.name") -c toolbox -- cat /srv/gitlab/REVISION`" >> "${VARIABLES_FILE}"
   artifacts:
     when: always
     paths:
@@ -485,14 +486,18 @@ review_eks:
 stop_review_gke122:
   extends: .stop_review_template
   variables:
-    <<:  *review_gke122_common_vars
+    AGENT_NAME: "gke122-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v122.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
 
 stop_review_gke125:
   variables:
-    <<:  *review_gke125_common_vars
+    AGENT_NAME: "gke125-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v125.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   extends: .stop_review_template
   environment:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
@@ -525,14 +530,18 @@ stop_review_eks:
   dependencies:
     - pin_image_versions
   script:
-    - !reference [.set_up_varfile_and_kubecontext, script]
-    - !reference [.set_up_namespace_secret_and_deploy, script]
+    - mkdir -p $(dirname "${VARIABLES_FILE}")
+    - set_context
+    - check_kube_domain
+    - ensure_namespace
+    - create_secret
+    - deploy
+    - wait_for_deploy
     - check_domain_ip
     - restart_toolbox
     - echo "export QA_ENVIRONMENT_URL=gitlab.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
     - echo "export S3_ENDPOINT=https://minio.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
-    - !reference [.get_qa_revision, script]
   artifacts:
     paths:
     - variables
@@ -548,8 +557,10 @@ stable_gke122:
     name: gke122_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
-    <<: *review_gke122_common_vars
     VARIABLES_FILE: "variables/stable_gke122"
+    AGENT_NAME: "gke122-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v122.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   resource_group: "gke122-production"
 
 stable_gke125:
@@ -558,8 +569,10 @@ stable_gke125:
     name: gke125_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
-    <<: *review_gke125_common_vars
     VARIABLES_FILE: "variables/stable_gke125"
+    AGENT_NAME: "gke125-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v125.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   resource_group: "gke125-production"
 
 stable_gke126:
@@ -578,14 +591,15 @@ stable_eks:
     name: eks_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   variables:
-    <<: *review_eks_common_vars
     VARIABLES_FILE: "variables/stable_eks"
   resource_group: "eks-production"
 
 review_helm_test_gke122:
   stage: qa
   variables:
-    <<:  *review_gke122_common_vars
+    AGENT_NAME: "gke122-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v122.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
@@ -604,7 +618,9 @@ review_helm_test_gke122:
 production_helm_test_gke122:
   stage: qa
   variables:
-    <<:  *review_gke122_common_vars
+    AGENT_NAME: "gke122-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v122.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke122_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
@@ -633,10 +649,11 @@ debug_review_gke122:
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke122
   variables:
-    <<: *review_gke122_common_vars
     HOST_SUFFIX: "$CI_ENVIRONMENT_SLUG"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v122.helm-charts.win"
     DOMAIN: "-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"
-
+    AGENT_NAME: "gke122-ci-cluster"
+    KUBE_NAMESPACE: "helm-charts-win"
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
@@ -791,9 +808,11 @@ review-docs-cleanup:
 review_specs_gke122:
   extends: .specs
   variables:
-    <<: *review_gke122_common_vars
     VARIABLES_FILE: "variables/review_gke122"
     RSPEC_TAGS: type:feature
+    AGENT_NAME: "gke122-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v122.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
@@ -807,9 +826,11 @@ review_specs_gke122:
 review_specs_gke125:
   extends: .specs
   variables:
-    <<: *review_gke125_common_vars
     VARIABLES_FILE: "variables/review_gke125"
     RSPEC_TAGS: type:feature
+    AGENT_NAME: "gke125-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v125.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
@@ -839,7 +860,6 @@ review_specs_gke126:
 review_specs_eks:
   extends: .specs
   variables:
-    <<:  *review_eks_common_vars
     VARIABLES_FILE: "variables/review_eks"
     RSPEC_TAGS: type:feature
   environment:
@@ -882,9 +902,11 @@ production_specs_without_cluster:
 production_specs_gke122:
   extends: .production_specs
   variables:
-    <<: *review_gke122_common_vars
     VARIABLES_FILE: "variables/stable_gke122"
     RSPEC_TAGS: type:feature
+    AGENT_NAME: "gke122-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v122.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke122_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
@@ -894,9 +916,11 @@ production_specs_gke122:
 production_specs_gke125:
   extends: .production_specs
   variables:
-    <<: *review_gke125_common_vars
     VARIABLES_FILE: "variables/stable_gke125"
     RSPEC_TAGS: type:feature
+    AGENT_NAME: "gke125-ci-cluster"
+    KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v125.helm-charts.win"
+    KUBE_NAMESPACE: "helm-charts-win"
   environment:
     name: gke125_production
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
@@ -919,7 +943,6 @@ production_specs_eks:
   extends: .production_specs
   allow_failure: true
   variables:
-    <<: *review_eks_common_vars
     VARIABLES_FILE: "variables/stable_eks"
     RSPEC_TAGS: type:feature
   environment:
@@ -934,7 +957,6 @@ production_specs_eks:
   services:
   - docker:${DOCKER_VERSION}-dind
   variables:
-    QA_GENERATE_ALLURE_REPORT: "true"
     DOCKER_HOST: tcp://docker:2375
     QA_ARTIFACTS_DIR: $CI_PROJECT_DIR
     QA_CAN_TEST_PRAEFECT: "false"
