@@ -54,27 +54,19 @@ describe "Restoring a backup" do
     # before { sign_in }
 
     it 'Home page should show projects' do
-      uri = URI.parse("http://gdk.test:3000/api/v4/search?scope=projects&search=testing")
-      uri = URI.parse("http://gdk.test:3000/api/v4/search?scope=projects&search=testing")
+      uri = URI.parse("http://gdk.test:3000/api/v4/search?scope=projects&search=Helloworld")
 
       request = Net::HTTP::Get.new(uri)
-      request["Authorization"] = Base64.strict_encode64('root:Thorndon@123')
+      # request["Authorization"] = Base64.strict_encode64('root:Thorndon@123')
 
-     response=ApiHelper.invoke_http_request(uri, request)
-    #  # request["Authorization"] = "Bearer glpat-Wy2CzMzBsRhru5rEoQ8K"
-    #   puts "INSIDE"
-    #   puts uri.hostname
-    #   puts uri.port
-    #   puts uri.path
-    #   puts uri.scheme
-    #   res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-    #     http.request(request)}
-    request.each_header do |header_name, header_value|
+      response=ApiHelper.invoke_http_request(uri, request)
+      request["Authorization"] = "Bearer glpat-Wy2CzMzBsRhru5rEoQ8K"
+      request.each_header do |header_name, header_value|
       puts "#{header_name} : #{header_value}"
     end
       vishal = JSON.parse(response.body)
       puts vishal
-        #puts vishal.collect {|item| item["name"]}
+      # puts vishal.collect {|item| item["name"]}
       # visit '/'
       # expect(page).to have_content 'Projects'
       # expect(page).to have_content 'Administrator / testproject1'
