@@ -3,64 +3,63 @@ require 'open-uri'
 require 'net/http'
 
 describe "Restoring a backup" do
-  # before(:all) do
-  #   stdout, status = wait_for_dependencies
-  #   fail stdout unless status.success?
+  before(:all) do
+    stdout, status = wait_for_dependencies
+    fail stdout unless status.success?
 
-  #   wait_until_app_ready
-  #   ensure_backups_on_object_storage
+    wait_until_app_ready
+    ensure_backups_on_object_storage
 
-  #   stdout, status = gitaly_purge_storage
-  #   fail stdout unless status.success?
+    stdout, status = gitaly_purge_storage
+    fail stdout unless status.success?
 
-  #   stdout, status = restore_from_backup(skip: 'repositories')
-  #   fail stdout unless status.success?
+    stdout, status = restore_from_backup(skip: 'repositories')
+    fail stdout unless status.success?
 
-  #   # scale the Rails deployments to 0
-  #   scale_rails_down
-  #   # wait for rollout to complete (change in replicas)
-  #   wait_for_rails_rollout
+    # scale the Rails deployments to 0
+    scale_rails_down
+    # wait for rollout to complete (change in replicas)
+    wait_for_rails_rollout
 
-  #   # We run migrations once early to get the db into a place where we can set the runner token and restore repos
-  #   # Ignore errors, we will run the migrations again after the token
-  #   stdout, status = run_migrations
-  #   warn "WARNING: Migrations did not succeed:\n#{stdout}" unless status.success?
+    # We run migrations once early to get the db into a place where we can set the runner token and restore repos
+    # Ignore errors, we will run the migrations again after the token
+    stdout, status = run_migrations
+    warn "WARNING: Migrations did not succeed:\n#{stdout}" unless status.success?
 
-  #   stdout, status = restore_from_backup(skip: 'db')
-  #   fail stdout unless status.success?
+    stdout, status = restore_from_backup(skip: 'db')
+    fail stdout unless status.success?
 
-  #   stdout, status = set_runner_token
-  #   fail stdout unless status.success?
+    stdout, status = set_runner_token
+    fail stdout unless status.success?
 
-  #   stdout, status = run_migrations
-  #   fail stdout unless status.success?
+    stdout, status = run_migrations
+    fail stdout unless status.success?
 
-  #   stdout, status = enforce_root_password(ENV['GITLAB_PASSWORD']) if ENV['GITLAB_PASSWORD']
-  #   fail stdout unless status.success?
+    stdout, status = enforce_root_password(ENV['GITLAB_PASSWORD']) if ENV['GITLAB_PASSWORD']
+    fail stdout unless status.success?
 
-  #   # scale the Rails code deployments up
-  #   scale_rails_up
-  #   # wait for rollout to complete (change in replicas)
-  #   wait_for_rails_rollout
+    # scale the Rails code deployments up
+    scale_rails_up
+    # wait for rollout to complete (change in replicas)
+    wait_for_rails_rollout
 
-  #   # Wait for the site to come up after the restore/migrations
-  #   wait_until_app_ready
+    # Wait for the site to come up after the restore/migrations
+    wait_until_app_ready
 
-  #   # Have the gitlab-runner re-register after the restore
-  #   restart_gitlab_runner
-  # end
+    # Have the gitlab-runner re-register after the restore
+    restart_gitlab_runner
+  end
 
   describe 'Restored gitlab instance' do
     # before { sign_in }
 
     it 'Home page should show projects' do
-      uri = URI.parse("http://gdk.test:3000/api/v4/search?scope=projects&search=Helloworld")
+      # uri = URI.parse("https://gitlab-gke122-review-tes-oetv01.cloud-native-v122.helm-charts.win//api/v4/search?scope=projects&search=Helloworld")
+      uri = URI.parse("https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN//api/v4/projects")
 
       request = Net::HTTP::Get.new(uri)
-      # request["Authorization"] = Base64.strict_encode64('root:Thorndon@123')
-
+      request["Authorization"] = Base64.strict_encode64('root:$ROOT_PASSWORD')
       response = ApiHelper.invoke_http_request(uri, request)
-      request["Authorization"] = "Bearer glpat-Wy2CzMzBsRhru5rEoQ8K"
       request.each_header do |header_name, header_value|
         puts "#{header_name} : #{header_value}"
       end
