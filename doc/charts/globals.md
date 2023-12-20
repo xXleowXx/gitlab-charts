@@ -530,19 +530,23 @@ for different persistence classes, currently:
 
 | Instance          | Purpose                                                         |
 |:------------------|:----------------------------------------------------------------|
-| `cache`           | Store cached data                                               |
-| `queues`          | Store Sidekiq background jobs                                   |
-| `sharedState`     | Store various persistent data such as distributed locks         |
 | `actioncable`     | Pub/Sub queue backend for ActionCable                           |
-| `traceChunks`     | Store job traces temporarily                                    |
+| `cache`           | Store cached data                                               |
+| `kas`             | Store gitlab-kas specific data                                  |
+| `queues`          | Store Sidekiq background jobs                                   |
 | `rateLimiting`    | Store rate-limiting usage for RackAttack and Application Limits |
-| `sessions`        | Store user session data                                         |
 | `repositoryCache` | Store repository related data                                   |
+| `sessions`        | Store user session data                                         |
+| `sharedState`     | Store various persistent data such as distributed locks         |
+| `traceChunks`     | Store job traces temporarily                                    |
 | `workhorse`       | Pub/sub queue backend for Workhorse                             |
 
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
 by `global.redis.host` or use the deployed Redis instance from the chart.
+The only exception is `global.redis.kas`. If undefined, `gitlab-kas` will fall back
+to use `global.redis.sharedState` and failing that, `global.redis.host`.
+
 For example:
 
 ```yaml
@@ -556,27 +560,6 @@ global:
       enabled: true
       secret: redis-secret
       key: redis-password
-    cache:
-      host: cache.redis.example
-      port: 6379
-      password:
-        enabled: true
-        secret: cache-secret
-        key: cache-password
-    sharedState:
-      host: shared.redis.example
-      port: 6379
-      password:
-        enabled: true
-        secret: shared-secret
-        key: shared-password
-    queues:
-      host: queues.redis.example
-      port: 6379
-      password:
-        enabled: true
-        secret: queues-secret
-        key: queues-password
     actioncable:
       host: cable.redis.example
       port: 6379
@@ -584,13 +567,27 @@ global:
         enabled: true
         secret: cable-secret
         key: cable-password
-    traceChunks:
-      host: traceChunks.redis.example
+    cache:
+      host: cache.redis.example
       port: 6379
       password:
         enabled: true
-        secret: traceChunks-secret
-        key: traceChunks-password
+        secret: cache-secret
+        key: cache-password
+    kas:
+      host: kas.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: kas-secret
+        key: kas-password
+    queues:
+      host: queues.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: queues-secret
+        key: queues-password
     rateLimiting:
       host: rateLimiting.redis.example
       port: 6379
@@ -598,13 +595,6 @@ global:
         enabled: true
         secret: rateLimiting-secret
         key: rateLimiting-password
-    sessions:
-      host: sessions.redis.example
-      port: 6379
-      password:
-        enabled: true
-        secret: sessions-secret
-        key: sessions-password
     repositoryCache:
       host: repositoryCache.redis.example
       port: 6379
@@ -612,6 +602,27 @@ global:
         enabled: true
         secret: repositoryCache-secret
         key: repositoryCache-password
+    sessions:
+      host: sessions.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: sessions-secret
+        key: sessions-password
+    sharedState:
+      host: shared.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: shared-secret
+        key: shared-password
+    traceChunks:
+      host: traceChunks.redis.example
+      port: 6379
+      password:
+        enabled: true
+        secret: traceChunks-secret
+        key: traceChunks-password
     workhorse:
       host: workhorse.redis.example
       port: 6379
