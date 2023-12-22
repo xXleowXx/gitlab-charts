@@ -182,15 +182,23 @@ kubectl get secret <release>-gitlab-shell-secret -ojsonpath='{.data.secret}' | b
 kubectl get secret <release>-gitaly-secret -ojsonpath='{.data.token}' | base64 -d
 ```
 
+::Tabs
+
+:::TabTitle Gitaly
+
 For a single Gitaly node:
 
 - The Gitaly token extracted here should be used for the `AUTH_TOKEN` value.
 - The GitLab Shell secret extracted here should be used for the `shellsecret` value.
 
+:::TabTitle Gitaly Cluster
+
 For Gitaly Cluster:
 
 - The Gitaly token extracted here should be used for the `PRAEFECT_EXTERNAL_TOKEN`.
 - The GitLab Shell secret extracted here should be used for the `GITLAB_SHELL_SECRET_TOKEN`.
+
+::EndTabs
 
 ### Step 3: Verify no Git changes can be made during migration
 
