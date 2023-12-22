@@ -305,7 +305,7 @@ kubectl exec <toolbox pod name> -it -- gitlab-rake gitlab:git:checksum_projects 
 [Create a backup](../../backup-restore/backup.md#create-the-backup) of your repositories only:
 
 ```shell
-kubectl exec <toolbox pod name> -it -- backup-utility --skip artifacts,ci_secure_files,db,external_diffs,lfs,packages,pages,registry,terraform_state,uploads
+kubectl exec <toolbox pod name> -it -- backup-utility --skip artifacts,ci_secure_files,db,external_diffs,lfs,packages,pages,registry,terraform_state,uploads,builds
 ```
 
 ### Step 5: Configure Instance to use new Gitaly Service
