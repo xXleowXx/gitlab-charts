@@ -824,7 +824,7 @@ The `external` key provides a configuration for Gitaly nodes external to the clu
 Each item of this list has 3 keys:
 
 - `name`: The name of the [storage](https://docs.gitlab.com/ee/administration/repository_storage_paths.html).
-  An entry with [`name: default` is required]().
+  An entry with [`name: default` is required](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#gitlab-requires-a-default-repository-storage).
 - `hostname`: The host of Gitaly services.
 - `port`: (optional) The port number to reach the host on. Defaults to `8075`.
 - `tlsEnabled`: (optional) Override `global.gitaly.tls.enabled` for this particular entry.
@@ -842,7 +842,7 @@ interchangeable, as from the viewpoint of the clients, there is no difference.
 
 It is possible to use both internal and external Gitaly nodes, but be aware that:
 
-- There [must always be a node named `default`](), which Internal provides by default.
+- There [must always be a node named `default`](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#gitlab-requires-a-default-repository-storage), which Internal provides by default.
 - External nodes will be populated first, then Internal.
 
 A sample [configuration of mixed internal and external nodes](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/examples/gitaly/values-multiple-mixed.yaml)
