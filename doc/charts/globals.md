@@ -544,7 +544,7 @@ for different persistence classes, currently:
 Any number of the instances may be specified. Any instances not specified
 will be handled by the primary Redis instance specified
 by `global.redis.host` or use the deployed Redis instance from the chart.
-The only exception is for the [GitLab agent server (KAS)](./gitlab/kas/index.md), which looks for Redis configuration in the following order:
+The only exception is for the [GitLab agent server (KAS)](gitlab/kas/index.md), which looks for Redis configuration in the following order:
 
 1. `global.redis.kas`
 1. `global.redis.sharedState`
