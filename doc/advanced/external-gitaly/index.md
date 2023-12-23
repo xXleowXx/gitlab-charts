@@ -407,7 +407,7 @@ kubectl exec <toolbox pod name> -it -- backup-utility --skip artifacts,ci_secure
 
 ### Step 6: Restore and validate repository backup
 
-1. [Restore the backup file](../../backup-restore/restore.md#restoring-the-backup-file) created previously.
+1. [Restore the backup file](../../backup-restore/restore.md#restoring-the-backup-file) created previously .
    The repositories in the backup file should be copied to the external Gitaly.
 
 1. [Check all GitLab repositories](https://docs.gitlab.com/ee/administration/raketasks/check.html#check-all-gitlab-repositories)
