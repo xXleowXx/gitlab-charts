@@ -68,6 +68,14 @@ function deploy() {
   if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
     PROMETHEUS_INSTALL="true"
   fi
+  cat << CIYAML > ci.prometheus.yaml
+  prometheus:
+    install: ${PROMETHEUS_INSTALL}
+    server:
+      retention: "4d"
+      extraArgs:
+        storage.tsdb.retention.size: "4GB"
+CIYAML      
 
   # helm's --set argument dislikes special characters, pass them as YAML
   cat << CIYAML > ci.details.yaml
@@ -147,6 +155,7 @@ CIYAML
     -f ci.scale.yaml \
     -f ci.psql.yaml \
     -f ci.digests.yaml \
+    -f ci.prometheus.yaml \
     --set releaseOverride="$RELEASE_NAME" \
     --set global.hosts.hostSuffix="$HOST_SUFFIX" \
     --set global.hosts.domain="$KUBE_INGRESS_BASE_DOMAIN" \
@@ -158,8 +167,6 @@ CIYAML
     --set nginx-ingress.controller.ingressClassByName=true \
     --set nginx-ingress.controller.ingressClassResource.controllerValue="ci.gitlab.com/$RELEASE_NAME" \
     --set certmanager.install=false \
-    --set prometheus.install=$PROMETHEUS_INSTALL \
-    --set prometheus.server.retention="4d" \
     --set global.extraEnv.GITLAB_LICENSE_MODE="test" \
     --set global.extraEnv.CUSTOMER_PORTAL_URL="https://customers.staging.gitlab.com" \
     --set global.gitlab.license.secret="$RELEASE_NAME-gitlab-license" \
