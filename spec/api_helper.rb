@@ -11,12 +11,11 @@ module ApiHelper
       verify_ssl: true,
       headers: {
         # "Authorization" => "Bearer gplat-XXXX"
-        "Authorization" => "#{GITLAB_ADMIN_TOKEN}"
+        "Authorization" => "#{GITLAB_ADMIN_TOKEN.to_s}"
       }
     }
     response = RestClient::Request.execute(default_args)
     puts response.to_s
-    json_response = JSON.parse(response.body)
-    return json_response
+    JSON.parse(response.body)
   end
 end
