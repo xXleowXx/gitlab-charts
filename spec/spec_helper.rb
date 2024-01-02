@@ -6,6 +6,7 @@ require 'capybara-screenshot/rspec'
 require 'selenium-webdriver'
 require 'rspec/retry'
 require 'gitlab_test_helper'
+require 'api_helper'
 require 'rspec-parameterized'
 require 'pry'
 
