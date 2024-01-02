@@ -107,7 +107,9 @@ module Gitlab
           "token = user.personal_access_tokens.create(scopes: ['api'], name: 'vishaltest token', expires_at: 365.days.from_now)" \
           "token.set_token('#{ENV['GITLAB_ADMIN_TOKEN']}')" \
           "token.save!" \
-        "end\"")
+        "end" \
+        "\""
+      )
 
       stdout, status = Open3.capture2e(cmd)
       return [stdout, status]
