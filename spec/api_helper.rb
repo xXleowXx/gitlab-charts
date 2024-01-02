@@ -1,9 +1,21 @@
-require 'net/http'
+require 'rest-client'
+require 'json'
 
 module ApiHelper
-  def self.invoke_http_request(uri, request)
-    Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-      http.request(request)
-    end
+  BASE_URL = "https://gitlab-${CI_ENVIRONMENT_SLUG}.${KUBE_INGRESS_BASE_DOMAIN}/api/v4/"
+  # BASE_URL = "https://gitlab-gke122-review-tes-oetv01.cloud-native-v122.helm-charts.win/api/v4/"
+  def self.invoke_get_request(uri)
+    default_args = {
+      method: :get,
+      url: "#{BASE_URL}#{uri}",
+      verify_ssl: true,
+      headers: {
+        # "Authorization" => "Bearer gplat-XXXX"
+        "Authorization" => "#{GITLAB_ADMIN_TOKEN}"
+      }
+    }
+    response = RestClient::Request.execute(default_args)
+    puts response.to_s
+    json_response = JSON.parse(response.body)
   end
 end

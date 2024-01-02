@@ -14,6 +14,7 @@ group :test do
   gem 'knapsack'
   gem 'tomlrb'
   gem 'fugit'
+  gem 'rest-client'
 end
 
 group :rubocop do
