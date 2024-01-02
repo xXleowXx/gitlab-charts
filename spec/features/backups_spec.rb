@@ -57,33 +57,33 @@ describe "Restoring a backup" do
     it 'testproject1 project should exist' do
       uri = "search?scope=projects&search=testproject1"
       response = ApiHelper.invoke_get_request(uri)
-      expect(response.collect {|item| item["name_with_namespace"]}).to have_content 'Administrator / testproject1'
+      expect(response.collect { |item| item["name_with_namespace"] }).to have_content 'Administrator / testproject1'
     end
 
     it 'Issue under testproject1 should exist' do
       uri = "search?scope=issues&search=test"
       response = ApiHelper.invoke_get_request(uri)
-      expect(response.collect {|item| item["title"]}).to have_content 'This is a test issue with attachment'
+      expect(response.collect { |item| item["title"] }).to have_content 'This is a test issue with attachment'
     end
 
     it 'Issue contains attachment in the description' do
       uri = "issues"
       response = ApiHelper.invoke_get_request(uri)
-      expect(response.collect {|item| item["description"]}).to have_content '![Screen_Shot_2018-05-01_at_2.53.34_PM](/uploads/90701344e9ebb53fa9ebac83d43afdcc/Screen_Shot_2018-05-01_at_2.53.34_PM.png)'
+      expect(response.collect { |item| item["description"] }).to have_content '![Screen_Shot_2018-05-01_at_2.53.34_PM](/uploads/90701344e9ebb53fa9ebac83d43afdcc/Screen_Shot_2018-05-01_at_2.53.34_PM.png)'
     end
 
     it 'Test repo should have Dockerfile' do
       uri = "projects/1/repository/tree"
       response = ApiHelper.invoke_get_request(uri)
-      expect(response.collect {|item| item["name"]})
+      expect(response.collect { |item| item["name"] })
         .to have_content('Dockerfile')
     end
 
     it 'Should have atleast 1 runner registered' do
       uri = "runners/all"
       response = ApiHelper.invoke_get_request(uri)
-      expect(response.collect {|item| item["status"]}).to have_content('online', minimum: 1)
-      expect(response.collect {|item| item["online"]}).to have_content('true', minimum: 1)
+      expect(response.collect { |item| item["status"] }).to have_content('online', minimum: 1)
+      expect(response.collect { |item| item["online"] }).to have_content('true', minimum: 1)
     end
 
     it 'Could pull image from registry' do

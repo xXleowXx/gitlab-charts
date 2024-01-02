@@ -109,8 +109,8 @@ module Gitlab
           "token.save!" \
         "end\"")
 
-        stdout, status = Open3.capture2e(cmd)
-        return [stdout, status]
+      stdout, status = Open3.capture2e(cmd)
+      return [stdout, status]
     end
 
     def gitlab_url
