@@ -110,7 +110,7 @@ module Gitlab
       #   "end" \
       #   "\""
       # )
-      cmd = full_command("gitlab-rails runner \"unless PersonalAccessToken.find_by_token('#{ENV['GITLAB_ADMIN_TOKEN']}'); user = User.find_by_username('root'); token = user.personal_access_tokens.create(scopes: ['api'], name: 'vishaltest token', expires_at: 365.days.from_now); token.set_token('#{ENV['GITLAB_ADMIN_TOKEN']}'); token.save!  end;\""
+      cmd = full_command("gitlab-rails runner \"unless PersonalAccessToken.find_by_token('#{ENV['GITLAB_ADMIN_TOKEN']}'); user = User.find_by_username('root'); token = user.personal_access_tokens.create(scopes: ['api'], name: 'vishaltest token', expires_at: 365.days.from_now); token.set_token('#{ENV['GITLAB_ADMIN_TOKEN']}'); token.save!  end;\"")
       stdout, status = Open3.capture2e(cmd)
       return [stdout, status]
     end
