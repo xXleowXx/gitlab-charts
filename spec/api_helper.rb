@@ -11,7 +11,7 @@ module ApiHelper
       verify_ssl: true,
       headers: {
         # "Authorization" => "Bearer gplat-XXXX"
-        "Authorization" => ENV['GITLAB_ADMIN_TOKEN'].to_s
+        "Authorization" => "Bearer #{ENV['GITLAB_ADMIN_TOKEN']}"
       }
     }
     response = RestClient::Request.execute(default_args)
