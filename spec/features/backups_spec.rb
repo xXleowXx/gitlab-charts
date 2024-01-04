@@ -37,6 +37,9 @@ describe "Restoring a backup" do
     stdout, status = enforce_root_password(ENV['GITLAB_PASSWORD']) if ENV['GITLAB_PASSWORD']
     fail stdout unless status.success?
 
+    stdout, status = set_admin_token
+    fail stdout unless status.success?
+
     # scale the Rails code deployments up
     scale_rails_up
     # wait for rollout to complete (change in replicas)
