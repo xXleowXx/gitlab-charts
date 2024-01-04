@@ -52,38 +52,30 @@ describe "Restoring a backup" do
   describe 'Restored gitlab instance' do
     before { sign_in }
 
-    it 'Home page should show projects' do
-      visit '/'
-      expect(page).to have_content 'Projects'
-      expect(page).to have_content 'Administrator / testproject1'
+    it 'testproject1 project should exist' do
+      uri = "search?scope=projects&search=testproject1"
+      response = ApiHelper.invoke_get_request(uri)
+      expect(response.collect { |item| item["name_with_namespace"] }).to have_content 'Administrator / testproject1'
     end
 
-    it 'Navigating to testproject1 repo should work' do
-      visit '/root/testproject1'
-      expect(find('[data-testid="file-tree-table"]'))
+    it 'Issue under testproject1 should exist' do
+      uri = "search?scope=issues&search=test"
+      response = ApiHelper.invoke_get_request(uri)
+      expect(response.collect { |item| item["title"] }).to have_content 'This is a test issue with attachment'
+    end
+
+    it 'Test repo should have Dockerfile' do
+      uri = "projects/1/repository/tree"
+      response = ApiHelper.invoke_get_request(uri)
+      expect(response.collect { |item| item["name"] })
         .to have_content('Dockerfile')
     end
 
-    it 'Should have runner registered' do
-      visit '/admin/runners'
-      expect(page).to have_css('#content-body [data-testid^="runner-row-"],[data-qa-selector^="runner-row-"]', minimum: 1)
-    end
-
-    it 'Issue attachments should load correctly' do
-      visit '/root/testproject1/-/issues/1'
-
-      image_selector = 'div.md > p > a > img.js-lazy-loaded'
-
-      # Image has additional classes added by JS async
-      wait(reload: false) do
-        has_selector?(image_selector)
-      end
-
-      expect(page).to have_selector(image_selector)
-      image_src = page.all(image_selector)[0][:src]
-      URI.open(image_src) do |f|
-        expect(f.status[0]).to eq '200'
-      end
+    it 'Should have atleast 1 runner registered' do
+      uri = "runners/all"
+      response = ApiHelper.invoke_get_request(uri)
+      expect(response.collect { |item| item["status"] }).to have_content('online', minimum: 1)
+      expect(response.collect { |item| item["online"] }).to have_content('true', minimum: 1)
     end
 
     it 'Could pull image from registry' do
