@@ -268,6 +268,28 @@ describe 'kas configuration' do
       end
 
       describe 'redis config' do
+        shared_examples 'mounts global redis secret' do
+          it do
+            kas_secret = kas_enabled_template.projected_volume_sources(
+              'Deployment/test-kas',
+              'init-etc-kas'
+            ).select {|c| c.dig('secret', 'name') == 'test-redis-secret' }.first
+
+            expect(kas_secret['secret']['items']).to eq([{"key"=>"secret", "path"=>"redis/redis-password"}])
+          end
+        end
+
+        shared_examples 'mounts shared state redis secret' do
+          it do
+            kas_secret = kas_enabled_template.projected_volume_sources(
+              'Deployment/test-kas',
+              'init-etc-kas'
+            ).select {|c| c.dig('secret', 'name') == 'shared-secret' }.first
+
+            expect(kas_secret['secret']['items']).to eq([{"key"=>"shared-key", "path"=>"redis/sharedState-password"}])
+          end
+        end
+
         let(:sentinels) do
           YAML.safe_load(%(
             redis:
@@ -319,6 +341,8 @@ describe 'kas configuration' do
                   address: test-redis-master.default.svc:6379
               )))
             end
+
+            it_behaves_like 'mounts global redis secret'
           end
 
           context 'when sentinel is setup' do
@@ -327,6 +351,8 @@ describe 'kas configuration' do
               vals['global'].deep_merge!(sentinels)
               vals.deep_merge!('redis' => { 'install' => false })
             end
+
+            it_behaves_like 'mounts global redis secret'
 
             it 'takes the global sentinel redis config' do
               expect(config_yaml_data['redis']).to include(YAML.safe_load(%(
@@ -376,6 +402,9 @@ describe 'kas configuration' do
                     address: shared.redis:6378
                 )))
               end
+
+              it_behaves_like 'mounts global redis secret'
+              it_behaves_like 'mounts shared state redis secret'
             end
           end
 
@@ -399,6 +428,9 @@ describe 'kas configuration' do
                   master_name: shared.redis
               )))
             end
+
+            it_behaves_like 'mounts global redis secret'
+            it_behaves_like 'mounts shared state redis secret'
           end
 
           context 'when redis has no password' do
@@ -432,6 +464,18 @@ describe 'kas configuration' do
                       key: kas-key
                     sentinels: #{sentinels.to_json}
               ))
+            end
+
+            it_behaves_like 'mounts global redis secret'
+
+            it 'mounts kas secret' do
+              kas_secret_mounts = kas_enabled_template.projected_volume_sources(
+                'Deployment/test-kas',
+                'init-etc-kas'
+              )
+              kas_secret = kas_secret_mounts.select {|c| c.dig('secret', 'name') == 'kas-secret' }.first
+
+              expect(kas_secret['secret']['items']).to eq([{"key"=>"kas-key", "path"=>"redis/kas-password"}])
             end
 
             it 'configures a kas sentinel config, overriding shared state' do
