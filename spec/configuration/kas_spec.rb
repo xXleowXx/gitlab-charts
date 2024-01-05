@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 require 'hash_deep_merge'
 require 'helm_template_helper'
@@ -273,9 +274,9 @@ describe 'kas configuration' do
             kas_secret = kas_enabled_template.projected_volume_sources(
               'Deployment/test-kas',
               'init-etc-kas'
-            ).select {|c| c.dig('secret', 'name') == 'test-redis-secret' }.first
+            ).find { |c| c.dig('secret', 'name') == 'test-redis-secret' }
 
-            expect(kas_secret['secret']['items']).to eq([{"key"=>"secret", "path"=>"redis/redis-password"}])
+            expect(kas_secret['secret']['items']).to eq([{ "key" => "secret", "path" => "redis/redis-password" }])
           end
         end
 
@@ -284,9 +285,9 @@ describe 'kas configuration' do
             kas_secret = kas_enabled_template.projected_volume_sources(
               'Deployment/test-kas',
               'init-etc-kas'
-            ).select {|c| c.dig('secret', 'name') == 'shared-secret' }.first
+            ).find { |c| c.dig('secret', 'name') == 'shared-secret' }
 
-            expect(kas_secret['secret']['items']).to eq([{"key"=>"shared-key", "path"=>"redis/sharedState-password"}])
+            expect(kas_secret['secret']['items']).to eq([{ "key" => "shared-key", "path" => "redis/sharedState-password" }])
           end
         end
 
@@ -473,9 +474,9 @@ describe 'kas configuration' do
                 'Deployment/test-kas',
                 'init-etc-kas'
               )
-              kas_secret = kas_secret_mounts.select {|c| c.dig('secret', 'name') == 'kas-secret' }.first
+              kas_secret = kas_secret_mounts.find { |c| c.dig('secret', 'name') == 'kas-secret' }
 
-              expect(kas_secret['secret']['items']).to eq([{"key"=>"kas-key", "path"=>"redis/kas-password"}])
+              expect(kas_secret['secret']['items']).to eq([{ "key" => "kas-key", "path" => "redis/kas-password" }])
             end
 
             it 'configures a kas sentinel config, overriding shared state' do
