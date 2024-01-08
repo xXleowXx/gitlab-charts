@@ -61,37 +61,6 @@ module Gitlab
       false
     end
 
-    # def sign_in
-    #   # DRY CSS selector for finding the user avatar
-    #   qa_avatar_selector = 'img[data-testid="user-avatar-content"]'
-
-    #   visit '/users/sign_in'
-
-    #   # Give time for the app to fully load
-    #   wait(max: 600, time: 3) do
-    #     has_css?('.login-page') || has_css?(qa_avatar_selector)
-    #   end
-
-    #   # Return if already signed in
-    #   return if has_selector?(qa_avatar_selector)
-    #   raise 'GITLAB_PASSWORD environment variable not set' if ENV['GITLAB_PASSWORD'].blank?
-
-    #   # Operate specifically within the user login form, avoiding registation form
-    #   within('div#login-pane') do
-    #     fill_in 'Username or primary email', with: 'root'
-    #     fill_in 'Password', with: ENV['GITLAB_PASSWORD']
-    #   end
-    #   click_button 'Sign in'
-
-    #   # Check the login was a success
-    #   wait(reload: false) do
-    #     has_current_path?('/', ignore_query: true) && has_css?(qa_avatar_selector)
-    #   end
-
-    #   expect(page).to have_current_path('/', ignore_query: true)
-    #   expect(page).to have_selector(qa_avatar_selector)
-    # end
-
     def enforce_root_password(password)
       cmd = full_command("gitlab-rails runner \"user = User.find(1); user.user_type = :human ; user.password='#{password}'; user.password_confirmation='#{password}'; user.save!\"")
 
