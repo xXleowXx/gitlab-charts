@@ -3,8 +3,8 @@ require 'json'
 
 module ApiHelper
   BASE_URL = "https://#{ENV['GITLAB_URL']}/api/v4/".freeze
-  puts "##################"
-  puts ENV['GITLAB_URL']
+  puts "#########"
+  puts BASE_URL
   def self.invoke_get_request(uri)
     default_args = {
       method: :get,
