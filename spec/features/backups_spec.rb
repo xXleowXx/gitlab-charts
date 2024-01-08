@@ -53,7 +53,7 @@ describe "Restoring a backup" do
   end
 
   describe 'Restored gitlab instance' do
-    before { sign_in }
+    # before { sign_in }
 
     it 'testproject1 project should exist' do
       uri = "search?scope=projects&search=testproject1"
@@ -79,6 +79,12 @@ describe "Restoring a backup" do
       response = ApiHelper.invoke_get_request(uri)
       expect(response.collect { |item| item["status"] }).to have_content('online', minimum: 1)
       expect(response.collect { |item| item["online"] }).to have_content('true', minimum: 1)
+    end
+
+    it 'Issue contains attachment in the description' do
+      uri = "issues"
+      response = ApiHelper.invoke_get_request(uri)
+      expect(response.collect { |item| item["description"] }).to have_content '![Screen_Shot_2018-05-01_at_2.53.34_PM](/uploads/90701344e9ebb53fa9ebac83d43afdcc/Screen_Shot_2018-05-01_at_2.53.34_PM.png)'
     end
 
     it 'Could pull image from registry' do
