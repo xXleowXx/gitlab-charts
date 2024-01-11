@@ -2,6 +2,14 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.7.2 (2024-01-10)
+
+No changes.
+
+## 7.7.1 (2023-12-23)
+
+No changes.
+
 ## 7.7.0 (2023-12-20)
 
 ### Added (1 change)
@@ -25,6 +33,14 @@ entry.
 ### Other (1 change)
 
 - [Doc: FIPS Add note of UBI expectations for FIPS mode host](gitlab-org/charts/gitlab@4274d077ab7d6b08b9ac640182640b02ea22b4f7) ([merge request](gitlab-org/charts/gitlab!3487))
+
+## 7.6.4 (2024-01-11)
+
+No changes.
+
+## 7.6.3 (2023-12-23)
+
+No changes.
 
 ## 7.6.2 (2023-12-13)
 
@@ -60,6 +76,14 @@ No changes.
 ### Other (1 change)
 
 - [Deprecate namespace in mailroom.yml](gitlab-org/charts/gitlab@781a94d070a5ae221c33f1a31fdd9ecde15f2be6) ([merge request](gitlab-org/charts/gitlab!3419))
+
+## 7.5.6 (2024-01-11)
+
+No changes.
+
+## 7.5.5 (2023-12-23)
+
+No changes.
 
 ## 7.5.4 (2023-12-13)
 
@@ -106,6 +130,10 @@ No changes.
 
 - [Enable dual-namespace polling for sidekiq probe in gitlab-exporter](gitlab-org/charts/gitlab@08e94769a6169bdc380e7d46b3ed300aa9c9cfab) ([merge request](gitlab-org/charts/gitlab!3388))
 
+## 7.4.5 (2024-01-11)
+
+No changes.
+
 ## 7.4.4 (2023-12-13)
 
 No changes.
@@ -148,6 +176,10 @@ No changes.
 - [Update gitlab-org/charts/gitlab-runner from 0.55.0 to 0.56.0](gitlab-org/charts/gitlab@f14cbc58591049e3e035ee5396b2f096207c4f24) ([merge request](gitlab-org/charts/gitlab!3350))
 - [Update gitlab-org/container-registry from 3.79.0-gitlab to 3.80.0-gitlab](gitlab-org/charts/gitlab@7f61401aaa147497b4a9a32fa25a1c6896bfe394) ([merge request](gitlab-org/charts/gitlab!3341))
 - [Update gitlab-org/gitlab-qa from 12.2.1 to 12.3.0](gitlab-org/charts/gitlab@021b652e4100e94f0f59985cdb21022015275b61) ([merge request](gitlab-org/charts/gitlab!3349))
+
+## 7.3.7 (2024-01-11)
+
+No changes.
 
 ## 7.3.6 (2023-10-30)
 
@@ -193,6 +225,10 @@ No changes.
 - [Update gitlab-org/container-registry from 3.78.0-gitlab to 3.79.0-gitlab](gitlab-org/charts/gitlab@1c63ea70ad695118c0a4dc1861f3400e3b8186e0) ([merge request](gitlab-org/charts/gitlab!3310))
 - [Update gitlab-org/gitlab-qa from 12.2.0 to 12.2.1](gitlab-org/charts/gitlab@eff824a0b05538a9d648e21601ac444fc578a701) ([merge request](gitlab-org/charts/gitlab!3299))
 - [Update gitlab-org/charts/gitlab-runner from 0.52.0 to 0.53.0](gitlab-org/charts/gitlab@44694d066d142a42600fd152cc7ce2ca532ab72b) ([merge request](gitlab-org/charts/gitlab!3192))
+
+## 7.2.9 (2024-01-11)
+
+No changes.
 
 ## 7.2.8 (2023-09-28)
 
@@ -256,6 +292,10 @@ No changes.
 ### Removed (1 change)
 
 - [Remove registry migration configuration](gitlab-org/charts/gitlab@7593db8956336c56f038542e6e89d5c8690f03de) ([merge request](gitlab-org/charts/gitlab!3280))
+
+## 7.1.6 (2024-01-11)
+
+No changes.
 
 ## 7.1.5 (2023-08-31)
 
