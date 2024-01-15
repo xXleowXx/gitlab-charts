@@ -12,6 +12,9 @@ corresponding to the specific release you want to upgrade to and look for any
 [release notes](version_mappings.md#release-notes-for-each-version) that might pertain to the new GitLab chart
 version.
 
+Upgrades have to follow a supported [upgrade path](https://docs.gitlab.com/ee/update/#upgrade-paths).
+See the [version mappings](../installation/version_mappings.md) between chart and GitLab versions.
+
 NOTE:
 **Zero-downtime upgrades** are not available with the GitLab charts.
 Ongoing work to support this feature can be tracked via
@@ -26,8 +29,6 @@ You can retrieve your previous `--set` arguments cleanly, with
 (`helm get values <release name> > gitlab.yaml`), you can safely pass this
 file via `-f`. Thus `helm upgrade gitlab gitlab/gitlab -f gitlab.yaml`.
 This safely replaces the behavior of `--reuse-values`
-
-See [mappings](../installation/version_mappings.md) between chart versioning and GitLab versioning.
 
 ## Steps
 
