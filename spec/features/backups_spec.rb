@@ -54,7 +54,7 @@ describe "Restoring a backup" do
 
   describe 'Restored gitlab instance' do
 
-    it 'testproject1 project should exist' do
+    it 'Project testproject1 should exist' do
       uri = "search?scope=projects&search=testproject1"
       response = ApiHelper.invoke_get_request(uri)
       expect(response.collect { |item| item["name_with_namespace"] }).to have_content 'Administrator / testproject1'
@@ -66,14 +66,14 @@ describe "Restoring a backup" do
       expect(response.collect { |item| item["title"] }).to have_content 'This is a test issue with attachment'
     end
 
-    it 'Test repo should have Dockerfile' do
+    it 'Test project repository should have Dockerfile' do
       uri = "projects/1/repository/tree"
       response = ApiHelper.invoke_get_request(uri)
       expect(response.collect { |item| item["name"] })
         .to have_content('Dockerfile')
     end
 
-    it 'Should have atleast 1 runner registered' do
+    it 'Should have at least 1 runner registered' do
       uri = "runners/all"
       response = ApiHelper.invoke_get_request(uri)
       expect(response.collect { |item| item["status"] }).to have_content('online', minimum: 1)
