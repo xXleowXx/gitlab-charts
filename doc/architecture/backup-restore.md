@@ -45,7 +45,7 @@ Backups are made using the following steps, in order:
 
 - `--skip <component>`
 
-  You can skip parts of the backup process by using `--skip <component>` for every component that you want to skip in the backup process. Skippable components are the database (`db`), repositories (`repositories`), and most of the [object storages](https://docs.gitlab.com/ee/administration/object_storage.html) (`registry`, `uploads`, `artifacts`, `lfs`, `packages`, `external_diffs`, `terraform_state`, `pages`, or `ci_secure_files`).
+  You can skip parts of the backup process by using `--skip <component>` for every component that you want to skip in the backup process. Skippable components are found in [Excluding specific data from the backup](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#excluding-specific-data-from-the-backup).
 
 - `-t <timestamp-override-value>`
 
