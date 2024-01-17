@@ -12,6 +12,14 @@ set -e
 # Usage:
 # $ bash ./scripts/ci/pin_image_digests.sh
 
+DIGESTS_FILE="${DIGESTS_FILE:-'ci.digests.yaml'}"
+
+function main() {
+  if [ $sourced -eq 0 ]; then
+    render_digests_file
+  fi
+}
+
 function get_gitlab_app_version_for_branch() {
   git fetch origin "${1}"
   git show origin/"${1}":Chart.yaml | grep 'appVersion:' | awk '{print $2}'
@@ -28,6 +36,7 @@ function get_image_branch_for_gitlab_app_version() {
 function get_tag() {
   # Use the gitlab version from the environment or use stable images when on the stable branch
   gitlab_app_version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
+  echo "$gitlab_app_version" > gav.txt  # DEBUG, remove before merge
   if [[ -n "${GITLAB_VERSION}" ]]; then
     image_branch=$GITLAB_VERSION
   elif [[ "${CI_COMMIT_BRANCH}" =~ -stable$ ]] && [[ "${gitlab_app_version}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -67,8 +76,12 @@ function tag_and_digest() {
   echo -n "${tag}@${digest}"
 }
 
-rm -f ci.digests.yaml
-cat << CIYAML > ci.digests.yaml
+# Render image digests to a file that is later provided for chart values.
+# Usage:
+#   `render_digests_file`
+function render_digests_file() {
+  rm -f $DIGESTS_FILE
+  cat << CIYAML > $DIGESTS_FILE
 # generated: $(date)
 global:
   gitlabBase:
@@ -112,4 +125,9 @@ registry:
     tag: "$(tag_and_digest gitlab-container-registry)"
 CIYAML
 
-echo 'Finished writing ci.digests.yaml.'
+  echo "Finished writing $DIGESTS_FILE."
+
+}
+
+(return 0 2>/dev/null) && sourced=1 || sourced=0
+main
