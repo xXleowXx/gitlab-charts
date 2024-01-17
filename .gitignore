@@ -10,3 +10,4 @@ gems
 build
 spec/examples.txt
 knapsack_rspec_report.json
+Chart.*.yaml
