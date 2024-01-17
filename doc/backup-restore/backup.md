@@ -60,7 +60,7 @@ The backup utility can take some extra arguments.
 
 ### Skipping components
 
-Skip components by using the `--skip` argument. Valid components names can be found at [Excluding specific data from the backup](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#excluding-specific-data-from-the-backup)..
+Skip components by using the `--skip` argument. Valid components names can be found at [Excluding specific data from the backup](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#excluding-specific-data-from-the-backup).
 
 Each component must have its own `--skip` argument. For example:
 
