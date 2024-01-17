@@ -11,13 +11,16 @@ set -e
 # Usage:
 # $ bats scripts/ci/pin_image_digests_test.sh
 
-@test "invoking script for stable pipeline" {
-  export DIGESTS_FILE='ci.digests.stable.yaml'
-  export CI_COMMIT_BRANCH='7-6-stable'
+@test "invoking script for master pipeline" {
+  export DIGESTS_FILE='ci.digests.master.yaml'
 
-  run scripts/ci/pin_image_digests.sh
+  expected='^master@sha256:[[:xdigit:]]{64}$'
+
+  source scripts/ci/pin_image_digests.sh
+  run tag_and_digest 'kubectl'
 
   [ "$status" -eq 0 ]
+  [[ "$output" =~ $expected ]]
 }
 
 # @teardown {

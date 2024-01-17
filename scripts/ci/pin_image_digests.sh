@@ -14,6 +14,12 @@ set -e
 
 DIGESTS_FILE="${DIGESTS_FILE:-'ci.digests.yaml'}"
 
+function main() {
+  if [ $sourced -eq 0 ]; then
+    render_digests_file
+  fi
+}
+
 function get_gitlab_app_version_for_branch() {
   git fetch origin "${1}"
   git show origin/"${1}":Chart.yaml | grep 'appVersion:' | awk '{print $2}'
@@ -70,8 +76,12 @@ function tag_and_digest() {
   echo -n "${tag}@${digest}"
 }
 
-rm -f $DIGESTS_FILE
-cat << CIYAML > $DIGESTS_FILE
+# Render image digests to a file that is later provided for chart values.
+# Usage:
+#   `render_digests_file`
+function render_digests_file() {
+  rm -f $DIGESTS_FILE
+  cat << CIYAML > $DIGESTS_FILE
 # generated: $(date)
 global:
   gitlabBase:
@@ -115,4 +125,9 @@ registry:
     tag: "$(tag_and_digest gitlab-container-registry)"
 CIYAML
 
-echo "Finished writing $DIGESTS_FILE."
+  echo "Finished writing $DIGESTS_FILE."
+
+}
+
+(return 0 2>/dev/null) && sourced=1 || sourced=0
+main
