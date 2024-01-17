@@ -13,6 +13,7 @@ set -e
 # $ bash ./scripts/ci/pin_image_digests.sh
 
 DIGESTS_FILE="${DIGESTS_FILE:-'ci.digests.yaml'}"
+CHART_FILE="${CHART_FILE:-$PWD/Chart.yaml}"
 
 function main() {
   if [ $sourced -eq 0 ]; then
@@ -35,7 +36,7 @@ function get_image_branch_for_gitlab_app_version() {
 #   `get_tag gitlab-webservice-ee`
 function get_tag() {
   # Use the gitlab version from the environment or use stable images when on the stable branch
-  gitlab_app_version=$(grep 'appVersion:' Chart.yaml | awk '{ print $2}')
+  gitlab_app_version=$(grep 'appVersion:' $CHART_FILE | awk '{ print $2}')
   echo "$gitlab_app_version" > gav.txt  # DEBUG, remove before merge
   if [[ -n "${GITLAB_VERSION}" ]]; then
     image_branch=$GITLAB_VERSION
