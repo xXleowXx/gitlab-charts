@@ -25,9 +25,65 @@ You can retrieve your previous `--set` arguments cleanly, with
 `helm get values <release name>`. If you direct this into a file
 (`helm get values <release name> > gitlab.yaml`), you can safely pass this
 file via `-f`. Thus `helm upgrade gitlab gitlab/gitlab -f gitlab.yaml`.
-This safely replaces the behavior of `--reuse-values`
+This safely replaces the behavior of `--reuse-values`.
 
 See [mappings](../installation/version_mappings.md) between chart versioning and GitLab versioning.
+
+## Use `--atomic` for automatic reverts when deployments go wrong
+
+WARNING:
+Use the `--atomic` flag at your own risk. It comes with many caveats
+which you should know before upgrading. For more information, see
+the discussion in [merge request 3029](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3029).
+
+From the [Helm documentation](https://helm.sh/docs/helm/helm_upgrade/#options),
+you can pass the `--atomic` flag during a `helm upgrade`, and the upgrade
+process rolls back changes made in case workloads do not become ready in time. `--atomic` sets
+`--wait` by default, which is based on the `--timeout` flag, which is 5 minutes
+by default. So, depending your environment, you might want to tweak this, if an
+upgrade takes more than 5 minutes. There's also another potentially useful
+flag, `--wait-for-jobs`, which can be used in combination with `--atomic` and
+`--timeout`.
+
+The rollback of the atomic flag might not always bring back the release in a
+functional state. For example, if the migration job upgrades the database
+partially, manual intervention may be required. However, the combination of
+`--wait-for-jobs` and `--atomic` could allow to detect these problems early.
+
+Without `--atomic` you could have a failed deployment and be left with GitLab in a
+non-working state. With `--atomic` there is a chance you roll back to a working
+version. Using `--atomic` is safest when you only upgrade one version at a
+time, and thus the database is guaranteed to be compatible.
+
+Timeouts, in combination with `--atomic`, can bring the application to a broken
+state . There might be many unexpected scenarios which could make a
+job/pod take much longer than expected.
+
+By upgrading one minor version at a time, with a long `--timeout`, and
+skipping the post-deploy migrations, you not only increase the chances of a
+successful deploy, but you also increase the chances of a successful revert.
+
+Of course, it depends on the migration type, and the set of migrations for a
+specific release.
+
+One single regular migration (also called pre-deployment) should be less than 3
+minutes. One single post-deployment migration should be less than 5 minutes.
+However, background migrations can take days.
+
+When a rollback is performed, a new `migrations` Job is created. In this case,
+if the image is downgraded a version (for example, 15.10.0 to 15.9.3), the
+older code won't know how to revert any pre-deployment migrations that did
+complete as part of the run at the newer version.
+
+Here's the general workflow:
+
+- Configure the appropriate `ENV` variable in `gitlab.migrations.env` which will prevent
+  `rake gitlab:db:configure` from performing post-deployment migrations.
+- Deploy the Helm chart.
+- Await all migrations to complete, and the application to come up.
+- When prepared to operate post-migrations (many checks later), use the
+  `toolbox` pod to run `/scripts/db-migrate`, which then performs all
+  post-migrations (not "batched background migrations").
 
 ## Steps
 
