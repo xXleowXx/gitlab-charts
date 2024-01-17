@@ -1310,7 +1310,7 @@ gitlab-zoekt:
       secretName: '{{ include "gitlab.zoekt.gateway.basicAuth.secretName" $ }}'
   indexer:
     internalApi:
-      enabled: false
+      enabled: true
       secretName: '{{ include "gitlab.zoekt.indexer.internalApi.secretName" $ }}'
       secretKey: '{{ include "gitlab.zoekt.indexer.internalApi.secretKey" $ }}'
       gitlabUrl: '{{ include "gitlab.zoekt.indexer.internalApi.gitlabUrl" $ }}'
