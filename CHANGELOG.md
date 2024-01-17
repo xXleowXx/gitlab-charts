@@ -2,6 +2,28 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.8.0 (2024-01-17)
+
+### Added (1 change)
+
+- [Make the traefik entrypoint for gitlab-shell configurable](gitlab-org/charts/gitlab@51160e095b4d441836df648fbcf89dd23bcb211f) by @macmenco ([merge request](gitlab-org/charts/gitlab!3548))
+
+### Fixed (1 change)
+
+- [Registry chart: set nodeSelector on Migrations Job](gitlab-org/charts/gitlab@304edc1ffb90cbb8624cf1ce59a1f6d8246456d0) ([merge request](gitlab-org/charts/gitlab!3560))
+
+### Changed (5 changes)
+
+- [Stop sidekiq namespaced probes in gitlab-exporter ](gitlab-org/charts/gitlab@aec9b2e9bad6c64b03a3f38abaf86c3731920915) ([merge request](gitlab-org/charts/gitlab!3479))
+- [Require upgrade stop at 16.7/chart 7.7](gitlab-org/charts/gitlab@25cd781235f9e91c8754cf6157ef4b75bf3cdc5b) ([merge request](gitlab-org/charts/gitlab!3559))
+- [Update gitlab-org/charts/gitlab-runner from 0.59.2 to 0.60.0](gitlab-org/charts/gitlab@aa2dfde6fe0556b1ab4c5fc270e120464a7fac4a) ([merge request](gitlab-org/charts/gitlab!3549))
+- [Update gitlab-org/gitlab-qa from 13.0.0 to 13.1.0](gitlab-org/charts/gitlab@02624f32e73ac31e78309e4fec083de88e14f6c4) ([merge request](gitlab-org/charts/gitlab!3539))
+- [Update cert-manager/cert-manager from 1.12.6 to 1.12.7](gitlab-org/charts/gitlab@8b1b89213e3370a220ab14f5102e656879e673b2) ([merge request](gitlab-org/charts/gitlab!3534))
+
+### Other (1 change)
+
+- [Provide option to configure kas redis using global.redis.kas](gitlab-org/charts/gitlab@3e03a63726406922b39057c804d1d7d43508946f) ([merge request](gitlab-org/charts/gitlab!3544))
+
 ## 7.7.3 (2024-01-13)
 
 No changes.
