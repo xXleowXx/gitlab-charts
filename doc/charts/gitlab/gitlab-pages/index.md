@@ -155,7 +155,7 @@ configurations that can be supplied to the `helm install` command using the
 | `serverWriteTimeout`        | `5m`     | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `serverKeepAlive`           | `15s`    | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `authCookieSessionTimeout`  | `10m`    | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
-| `namespaceInPath`           | `false`  | Enable namespace in the URL path.                                                                                                                                                                                                             |
+| `namespaceInPath`           | `false`  | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 
 ### Configuring the `ingress`
 
