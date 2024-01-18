@@ -13,7 +13,8 @@ corresponding to the specific release you want to upgrade to and look for any
 version.
 
 Upgrades have to follow a supported [upgrade path](https://docs.gitlab.com/ee/update/#upgrade-paths).
-See the [version mappings](version_mappings.md) between chart and GitLab versions.
+Because the GitLab chart versions don't follow the same numbering as GitLab versions,
+see the [version mappings](version_mappings.md) between them.
 
 NOTE:
 **Zero-downtime upgrades** are not available with the GitLab charts.
