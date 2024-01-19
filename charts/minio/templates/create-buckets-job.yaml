@@ -8,8 +8,9 @@ metadata:
   name: {{ template "minio.createBucketsJobName" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
-{{- include "gitlab.standardLabels" . | nindent 4 }}
-{{- include "gitlab.commonLabels" . | nindent 4 }}
+    {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.commonLabels" . | nindent 4 }}
+    {{- include "gitlab.revisionLabel" . | nindent 4 }}
 spec:
   activeDeadlineSeconds: 600
   template:
@@ -19,6 +20,7 @@ spec:
         {{- include "gitlab.standardLabels" . | nindent 8 }}
         {{- include "gitlab.commonLabels" . | nindent 8 }}
         {{- include "gitlab.podLabels" . | nindent 8 }}
+        {{- include "gitlab.revisionLabel" . | nindent 8 }}
       {{- if .Values.jobAnnotations }}
       annotations:
       {{-   range $key, $value := .Values.jobAnnotations }}
