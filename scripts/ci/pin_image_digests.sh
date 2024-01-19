@@ -16,7 +16,7 @@ DIGESTS_FILE="${DIGESTS_FILE:-'ci.digests.yaml'}"
 CHART_FILE="${CHART_FILE:-$PWD/Chart.yaml}"
 
 function main() {
-  if [ $sourced -eq 0 ]; then
+  if [ $SOURCED -eq 0 ]; then
     render_digests_file
   fi
 }
@@ -37,7 +37,7 @@ function get_image_branch_for_gitlab_app_version() {
 function get_tag() {
   # Use the gitlab version from the environment or use stable images when on the stable branch
   gitlab_app_version=$(grep 'appVersion:' $CHART_FILE | awk '{ print $2}')
-  echo "$gitlab_app_version" > gav.txt  # DEBUG, remove before merge
+
   if [[ -n "${GITLAB_VERSION}" ]]; then
     image_branch=$GITLAB_VERSION
   elif [[ "${CI_COMMIT_BRANCH}" =~ -stable$ ]] && [[ "${gitlab_app_version}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -130,5 +130,5 @@ CIYAML
 
 }
 
-(return 0 2>/dev/null) && sourced=1 || sourced=0
+(return 0 2>/dev/null) && SOURCED=1 || SOURCED=0
 main
