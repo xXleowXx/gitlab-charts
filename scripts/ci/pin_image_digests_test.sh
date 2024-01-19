@@ -64,7 +64,7 @@ set -e
 }
 
 @test "rendering digests file with helm template" {\
-  DIGESTS_FILE='ci.digests.test.yaml'
+  DIGESTS_FILE="$PWD/ci.digests.test.yaml"
 
   source scripts/ci/pin_image_digests.sh
 

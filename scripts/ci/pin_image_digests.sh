@@ -12,7 +12,7 @@ set -e
 # Usage:
 # $ bash ./scripts/ci/pin_image_digests.sh
 
-DIGESTS_FILE="${DIGESTS_FILE:-'ci.digests.yaml'}"
+DIGESTS_FILE="${DIGESTS_FILE:-$PWD/ci.digests.yaml}"
 CHART_FILE="${CHART_FILE:-$PWD/Chart.yaml}"
 
 function main() {
