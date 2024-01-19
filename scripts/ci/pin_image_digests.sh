@@ -22,7 +22,7 @@ function main() {
 }
 
 function get_gitlab_app_version_for_branch() {
-  git fetch origin "${1}"
+  git fetch origin "${1}" --quiet
   git show origin/"${1}":Chart.yaml | grep 'appVersion:' | awk '{print $2}'
 }
 
