@@ -7,6 +7,7 @@ set -e
 # Dependencies:
 # - skopeo  # from script being tested
 # - bats
+# - helm
 #
 # Usage:
 # $ bats scripts/ci/pin_image_digests_test.sh
@@ -62,6 +63,26 @@ set -e
   [[ "$output" =~ $expected ]]
 }
 
-# teardown() {
-#   echo
-# }
+@test "rendering digests file with helm template" {\
+  DIGESTS_FILE='ci.digests.test.yaml'
+
+  source scripts/ci/pin_image_digests.sh
+
+  image_tag="$(tag_and_digest gitlab-base)"
+
+  expected="image: \"registry.gitlab.com/gitlab-org/build/cng/gitlab-base:$image_tag\""
+
+  cat << CIYAML > $DIGESTS_FILE
+certmanager-issuer:
+  email: ci@gitlab.com
+global:
+  gitlabBase:
+    image:
+      tag: "$image_tag"
+CIYAML
+
+  run helm template . -f $DIGESTS_FILE
+
+  [ "$status" -eq 0 ]
+  [[ "$output" =~ $expected ]]
+}

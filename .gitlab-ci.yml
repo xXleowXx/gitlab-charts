@@ -242,7 +242,7 @@ lint_package:
 pin_image_versions:
   stage: prepare-review
   script:
-    - apk add skopeo bats
+    - apk add bats helm skopeo
     - bats ./scripts/ci/pin_image_digests_test.sh
     - bash ./scripts/ci/pin_image_digests.sh
   artifacts:
