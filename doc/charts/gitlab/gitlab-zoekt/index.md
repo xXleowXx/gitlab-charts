@@ -6,7 +6,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Zoekt chart **(PREMIUM SELF EXPERIMENT)**
 
-> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/105049) in GitLab 15.9 [with flags](../../administration/feature_flags.md) named `index_code_with_zoekt` and `search_code_with_zoekt`. Disabled by default.
+> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/105049) in GitLab 15.9 [with flags](https://docs.gitlab.com/ee/administration/feature_flags.html) named `index_code_with_zoekt` and `search_code_with_zoekt`. Disabled by default.
 
 FLAG:
 On self-managed GitLab, by default this feature is not available.
