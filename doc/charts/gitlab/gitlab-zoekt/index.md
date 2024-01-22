@@ -15,9 +15,7 @@ On GitLab.com, this feature is available.
 
 WARNING:
 This feature is an [Experiment](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#experiment).
-GitLab Support cannot assist with configuring or troubleshooting the
-Zoekt chart. For more information, see
-[exact code search](https://docs.gitlab.com/ee/user/search/exact_code_search.html).
+GitLab Support cannot assist with configuring or troubleshooting the Zoekt chart.
 
 The Zoekt integration provides support for
 [exact code search](https://docs.gitlab.com/ee/user/search/exact_code_search.html).
