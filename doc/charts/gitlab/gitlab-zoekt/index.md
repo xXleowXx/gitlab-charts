@@ -7,7 +7,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Using the GitLab-Zoekt chart **(PREMIUM SELF EXPERIMENT)**
 
 FLAG:
-On self-managed GitLab, by default this feature is disabled.
+On self-managed GitLab, by default this feature is not available.
 To make it available, an administrator can enable the feature flags named `index_code_with_zoekt` and `search_code_with_zoekt`.
 On GitLab.com, this feature is available.
 
