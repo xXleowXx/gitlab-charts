@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab-Zoekt chart **(PREMIUM SELF EXPERIMENT)**
+# Zoekt chart **(PREMIUM SELF EXPERIMENT)**
 
 > [Introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/105049) in GitLab 15.9 [with flags](../../administration/feature_flags.md) named `index_code_with_zoekt` and `search_code_with_zoekt`. Disabled by default.
 
@@ -16,17 +16,17 @@ On GitLab.com, this feature is available.
 WARNING:
 This feature is an [Experiment](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#experiment).
 GitLab Support cannot assist with configuring or troubleshooting the
-`gitlab-zoekt` chart. For more information, see
+Zoekt chart. For more information, see
 [exact code search](https://docs.gitlab.com/ee/user/search/exact_code_search.html).
 
 The Zoekt integration provides support for
 [exact code search](https://docs.gitlab.com/ee/user/search/exact_code_search.html).
 You can install the integration by setting `gitlab-zoekt.install` to `true`.
-For more information, see the [`gitlab-zoekt` chart](https://gitlab.com/gitlab-org/cloud-native/charts/gitlab-zoekt).
+For more information, see [`gitlab-zoekt`](https://gitlab.com/gitlab-org/cloud-native/charts/gitlab-zoekt).
 
-## Enable Zoekt
+## Enable the Zoekt chart
 
-To enable Zoekt, set these values:
+To enable the Zoekt chart, set the following values:
 
 ```shell
 --set gitlab-zoekt.install=true \
@@ -36,7 +36,7 @@ To enable Zoekt, set these values:
 
 ## Set CPU and memory usage
 
-You can define requests and limits for Zoekt by modifying the following GitLab.com default settings:
+You can define requests and limits for the Zoekt chart by modifying the following GitLab.com default settings:
 
 ```yaml
   webserver:
@@ -65,16 +65,16 @@ You can define requests and limits for Zoekt by modifying the following GitLab.c
         memory: 1Gi
 ```
 
-## Enable Zoekt for a top-level group
+## Configure the Zoekt chart in GitLab
 
 > Shards [renamed](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/134717) to nodes in GitLab 16.6.
 
-To enable Zoekt for a top-level group:
+To configure the Zoekt chart for a top-level group in GitLab:
 
-1. Connect to the Rails console of the Toolbox Pod:
+1. Connect to the Rails console of the toolbox pod:
 
    ```shell
-   kubectl exec <Toolbox pod name> -it -c toolbox -- gitlab-rails console -e production
+   kubectl exec <toolbox pod name> -it -c toolbox -- gitlab-rails console -e production
    ```
 
 1. Enable the Zoekt feature flags:
@@ -95,4 +95,4 @@ To enable Zoekt for a top-level group:
    node.indices.create!(zoekt_enabled_namespace_id: enabled_namespace.id, namespace_id: namespace.id, state: :ready)
    ```
 
-Zoekt can now index projects after they are updated or created.
+Zoekt can now index projects in that group after any project is updated or created.
