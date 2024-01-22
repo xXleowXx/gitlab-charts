@@ -81,6 +81,7 @@ global:
       tag: "$image_tag"
 CIYAML
 
+  helm dependency build
   run helm template . -f $DIGESTS_FILE
 
   [ "$status" -eq 0 ]
