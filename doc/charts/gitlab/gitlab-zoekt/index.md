@@ -34,9 +34,9 @@ To enable Zoekt, set these values:
 --set gitlab-zoekt.indexStorage=128Gi   # Zoekt node disk size. Zoekt uses about three times the repository storage.
 ```
 
-## Resources
+## Set CPU and memory usage
 
-You might want to also set proper requests/limits. Below you can see current GitLab.com values (as of 2024-01-17), which need to be tuned depending on your use case:
+You can define requests and limits for Zoekt by modifying the following GitLab.com default settings:
 
 ```yaml
   webserver:
