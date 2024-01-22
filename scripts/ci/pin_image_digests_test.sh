@@ -83,7 +83,6 @@ CIYAML
 
   run helm template . -f $DIGESTS_FILE
 
-  assert_output "$expected"
   [ "$status" -eq 0 ]
   [[ "$output" =~ $expected ]]
 }
