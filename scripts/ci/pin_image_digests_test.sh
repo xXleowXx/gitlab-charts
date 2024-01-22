@@ -63,7 +63,7 @@ set -e
   [[ "$output" =~ $expected ]]
 }
 
-@test "rendering digests file with helm template" {\
+@test "rendering digests file with helm template" {
   DIGESTS_FILE="$PWD/ci.digests.test.yaml"
 
   source scripts/ci/pin_image_digests.sh
