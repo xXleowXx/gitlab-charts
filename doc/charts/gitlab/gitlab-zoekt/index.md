@@ -9,6 +9,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 FLAG:
 On self-managed GitLab, by default this feature is disabled.
 To make it available, an administrator can enable the feature flags named `index_code_with_zoekt` and `search_code_with_zoekt`.
+On GitLab.com, this feature is available.
 
 WARNING:
 This feature is an [Experiment](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#experiment).
@@ -21,14 +22,14 @@ The Zoekt integration provides support for
 You can install the integration by setting `gitlab-zoekt.install` to `true`.
 For more information, see the [`gitlab-zoekt` chart](https://gitlab.com/gitlab-org/cloud-native/charts/gitlab-zoekt).
 
-## How to enable Zoekt
+## Enable Zoekt
 
-In order to enable Zoekt integration, you need to set these values:
+To enable Zoekt, set these values:
 
 ```shell
 --set gitlab-zoekt.install=true \
---set gitlab-zoekt.replicas=2 \         # Number of Zoekt pods. If want to use one, this can be skipped
---set gitlab-zoekt.indexStorage=128Gi   # Zoekt node disk size. Please note that Zoekt uses about x3 of the repository storage
+--set gitlab-zoekt.replicas=2 \         # Number of Zoekt pods. If want to use only one pod, you can skip this setting.
+--set gitlab-zoekt.indexStorage=128Gi   # Zoekt node disk size. Zoekt uses about three times the repository storage.
 ```
 
 ## Resources
@@ -62,7 +63,7 @@ You might want to also set proper requests/limits. Below you can see current Git
         memory: 1Gi
 ```
 
-## GitLab integration
+## Enable Zoekt for a top-level group
 
 > Shards [renamed](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/134717) to nodes in GitLab 16.6.
 
@@ -84,7 +85,7 @@ To enable Zoekt for a top-level group:
 1. Set up indexing:
 
    ```shell
-   # Select one of the zoekt nodes
+   # Select one of the Zoekt nodes
    node = ::Search::Zoekt::Node.last
    # Use the name of your top-level group
    namespace = Namespace.find_by_full_path('<top-level-group-to-index>')
