@@ -17,9 +17,9 @@ WARNING:
 This feature is an [Experiment](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#experiment).
 GitLab Support cannot assist with configuring or troubleshooting the Zoekt chart.
 
-The Zoekt integration provides support for
+The Zoekt chart provides support for
 [exact code search](https://docs.gitlab.com/ee/user/search/exact_code_search.html).
-You can install the integration by setting `gitlab-zoekt.install` to `true`.
+You can install the chart by setting `gitlab-zoekt.install` to `true`.
 For more information, see [`gitlab-zoekt`](https://gitlab.com/gitlab-org/cloud-native/charts/gitlab-zoekt).
 
 ## Enable the Zoekt chart
@@ -63,11 +63,11 @@ You can define requests and limits for the Zoekt chart by modifying the followin
         memory: 1Gi
 ```
 
-## Configure the Zoekt chart in GitLab
+## Configure Zoekt in GitLab
 
 > Shards [renamed](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/134717) to nodes in GitLab 16.6.
 
-To configure the Zoekt chart for a top-level group in GitLab:
+To configure Zoekt for a top-level group in GitLab:
 
 1. Connect to the Rails console of the toolbox pod:
 
