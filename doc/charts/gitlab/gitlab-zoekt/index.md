@@ -6,11 +6,11 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 # Using the GitLab-Zoekt chart **(PREMIUM SELF EXPERIMENT)**
 
-> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/105049) in GitLab 15.9 [with a flag](../../administration/feature_flags.md) named `index_code_with_zoekt` for indexing and `search_code_with_zoekt` for searching. Both are disabled by default.
+> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/105049) in GitLab 15.9 [with flags](../../administration/feature_flags.md) named `index_code_with_zoekt` and `search_code_with_zoekt`. Disabled by default.
 
 FLAG:
 On self-managed GitLab, by default this feature is not available.
-To make it available, an administrator can enable the feature flags named `index_code_with_zoekt` and `search_code_with_zoekt`.
+To make it available, an administrator can [enable the feature flags](https://docs.gitlab.com/ee/administration/feature_flags.html) named `index_code_with_zoekt` and `search_code_with_zoekt`.
 On GitLab.com, this feature is available.
 
 WARNING:
@@ -30,7 +30,7 @@ To enable Zoekt, set these values:
 
 ```shell
 --set gitlab-zoekt.install=true \
---set gitlab-zoekt.replicas=2 \         # Number of Zoekt pods. If want to use only one pod, you can skip this setting.
+--set gitlab-zoekt.replicas=2 \         # Number of Zoekt pods. If you want to use only one pod, you can skip this setting.
 --set gitlab-zoekt.indexStorage=128Gi   # Zoekt node disk size. Zoekt uses about three times the repository storage.
 ```
 
