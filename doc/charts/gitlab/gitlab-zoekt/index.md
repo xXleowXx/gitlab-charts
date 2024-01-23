@@ -76,7 +76,7 @@ To configure Zoekt for a top-level group in GitLab:
    kubectl exec <toolbox pod name> -it -c toolbox -- gitlab-rails console -e production
    ```
 
-1. Enable the Zoekt feature flags:
+1. Enable the feature flags for Zoekt:
 
    ```shell
    ::Feature.enable(:index_code_with_zoekt)
