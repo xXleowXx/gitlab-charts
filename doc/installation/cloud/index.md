@@ -17,14 +17,28 @@ you can reduce the defaults to fit into a smaller cluster.
 
 The GitLab Helm chart supports the following Kubernetes versions:
 
-- A cluster running Kubernetes 1.20 or newer is required for all components to work.
-- 1.26 support is fully tested as of Chart 7.5 (GitLab 16.5).
-- 1.27 and 1.28 are expected to also be compatible with Chart 7.6 (GitLab 16.6), and full testing is [in progress](https://gitlab.com/groups/gitlab-org/-/epics/11320).
+| Kubernetes release | Status                       | Minimum GitLab/chart version | Architectures | End of life |
+|--------------------|------------------------------|------------------------------|---------------|-------------|
+| 1.28 <sup>1<sup>              | In development/qualification | 16.6/7.6                     | x86-64        | 2024-10-28  |
+| 1.27  <sub>1<sup>             | In development/qualification | 16.6/7.6                     | x86-64        | 2024-06-28  |
+| 1.26               | Supported                    | 16.5/7.5                     | x86-64        | 2024-02-28  |
+| 1.25               | Deprecated                   | 16.5/7.5                     | x86-64        | 2023-10-28  |
+| 1.24               | Deprecated                   | 16.5/7.5                     | x86-64        | 2023-07-28  |
+| 1.23               | Deprecated                   | 16.5/7.5                     | x86-64        | 2023-02-28  |
+| 1.22               | Deprecated                   | 16.5/7.5                     | x86-64        | 2022-10-28  |
+
+<html>
+<small>Footnotes:
+  <ol>
+    <li>1.27 and 1.28 are expected to also be compatible with Chart 7.6 (GitLab 16.6), and full testing is [in progress](https://gitlab.com/groups/gitlab-org/-/epics/11320)..</li>
+  </ol>
+</small>
+</html>
 
 The GitLab Helm Chart aims to support new minor Kubernetes versions three months after their initial release.
-We welcome any compatibility issues with releases newer than those listed above in our [issue tracker](https://gitlab.com/gitlab-org/charts/gitlab/-/issues).
+We welcome any reports of compatibility issues with releases newer than those listed above in our [issue tracker](https://gitlab.com/gitlab-org/charts/gitlab/-/issues).
 
-Some GitLab features might not work on versions older than the versions listed above.
+Some GitLab features might not work on deprecated versions or versions older than the versions listed above.
 
 For some components, like the [agent for Kubernetes](https://docs.gitlab.com/ee/user/clusters/agent/#gitlab-agent-for-kubernetes-supported-cluster-versions) and [GitLab Operator](https://docs.gitlab.com/operator/installation.html#kubernetes), GitLab might support different cluster versions.
 
