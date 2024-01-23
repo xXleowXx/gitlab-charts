@@ -1,0 +1,10 @@
+gitlab:
+  gitlab-shell:
+    opensshd:
+      supplemental_config: |-
+        CASignatureAlgorithms ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,ssh-ed25519,rsa-sha2-512,rsa-sha2-256,ssh-rsa
+        TrustedUserCAKeys /etc/security/mycompany_user_ca.pub
+
+        AuthorizedPrincipalsCommandUser git
+        AuthorizedPrincipalsCommand /srv/gitlab-shell/bin/gitlab-shell-authorized-principals-checkhUsers %i sshUsers
+
