@@ -328,7 +328,6 @@ in two ways: `.opensshd.supplemental_config`, and via mounting configuration sni
 
 Any configuration supplied _must_ meet the functional requirements of `sshd_config`. Ensure you read the [manual page](https://man.openbsd.org/sshd_config).
 
-
 #### opensshd.supplemental_config
 
 The content of `.opensshd.supplemental_config` will be directly placed at the end the `sshd_config` file within the container.
@@ -365,7 +364,6 @@ extraVolumeMounts: |
     mountPath: /etc/ssh/sshd_config.d/extra.conf
     subPath: extra.conf
 ```
-
 
 ### Configuring the `networkpolicy`
 
