@@ -81,7 +81,7 @@ Items needed for execution, which
 - `GITLAB_PASSWORD`: This will be the password for the `root` user.
 - `GITLAB_ADMIN_USERNAME`: This will be `root`.
 - `GITLAB_ADMIN_PASSWORD`: This will be the password for the `root` user.
-- `GITLAB_URL`: The fully-qualified URL to the deployed instance. This should be
+- `QA_ENVIRONMENT_URL`: The fully-qualified URL to the deployed instance. This should be
   in the form of `https://gitlab.domain.tld`.
 - `EE_LICENSE`: A string containing a GitLab EE license. This can be handled
   via `export EE_LICENSE=$(cat GitLab.gitlab-license)`.
