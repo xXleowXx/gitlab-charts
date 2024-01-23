@@ -48,7 +48,7 @@ You need to set the following parameters:
 
 - `gitlab.toolbox.backups.cron.enabled`: Set to true to enable cron based backups
 - `gitlab.toolbox.backups.cron.schedule`: Set as per the Kubernetes schedule docs
-- `gitlab.toolbox.backups.cron.extraArgs`: Optionally set extra arguments for [backup-utility](https://gitlab.com/gitlab-org/build/CNG/blob/master/gitlab-toolbox/scripts/bin/backup-utility) (like `--skip db`)
+- `gitlab.toolbox.backups.cron.extraArgs`: Optionally set extra arguments for [backup-utility](https://gitlab.com/gitlab-org/build/CNG/blob/master/gitlab-toolbox/scripts/bin/backup-utility) (like `--skip db` or `--s3tool awscli`)
 
 ## Backup utility extra arguments
 
@@ -73,6 +73,11 @@ kubectl exec <Toolbox pod name> -it -- backup-utility --cleanup
 ```
 
 ### Specify S3 tool to use
+
+NOTE:
+The S3 CLI tool `awscli` is not intented to work with MinIO.
+See [issue 3157](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3157)
+for further details.
 
  S3 CLI tool to use. Can be either `s3cmd` or `awscli`.
 
