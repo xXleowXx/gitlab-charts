@@ -8,7 +8,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 The `registry` sub-chart provides the Registry component to a complete cloud-native
 GitLab deployment on Kubernetes. This sub-chart is based on the
-[upstream chart]((https://github.com/docker/distribution-library-image))
+[upstream chart](https://github.com/docker/distribution-library-image)
 and contains the GitLab [Container Registry](https://gitlab.com/gitlab-org/container-registry).
 
 This chart is composed of 3 primary parts:
