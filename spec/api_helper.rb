@@ -2,8 +2,8 @@ require 'rest-client'
 require 'json'
 
 module ApiHelper
-  # BASE_URL = "https://#{ENV['QA_ENVIRONMENT_URL']}/api/v4/".freeze
-  BASE_URL= "http://gdk.test:3000/api/v4/".freeze
+  BASE_URL = "https://#{ENV['QA_ENVIRONMENT_URL']}/api/v4/".freeze
+  # BASE_URL = "http://gdk.test:3000/api/v4/".freeze
   def self.invoke_get_request(uri)
     puts "######################"
     puts BASE_URL.to_s
