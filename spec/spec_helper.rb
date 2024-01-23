@@ -2,6 +2,7 @@ require 'aws-sdk-s3'
 require 'open-uri'
 require 'open3'
 require 'api_helper'
+require 'capybara/rspec'
 require 'rspec/retry'
 require 'gitlab_test_helper'
 require 'rspec-parameterized'
@@ -10,6 +11,7 @@ require 'pry'
 include Gitlab::TestHelper
 
 RSpec.configure do |config|
+  config.include Capybara::DSL
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
