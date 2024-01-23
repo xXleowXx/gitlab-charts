@@ -7,14 +7,18 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 # Using the Container Registry **(FREE SELF)**
 
 The `registry` sub-chart provides the Registry component to a complete cloud-native
-GitLab deployment on Kubernetes. This sub-chart makes use of the upstream
-[registry](https://hub.docker.com/_/registry/) [container](https://github.com/docker/distribution-library-image)
-containing [Docker Distribution](https://github.com/docker/distribution). This chart
-is composed of 3 primary parts: [Service](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/charts/registry/templates/service.yaml),
-[Deployment](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/charts/registry/templates/deployment.yaml),
-and [ConfigMap](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/charts/registry/templates/configmap.yaml).
+GitLab deployment on Kubernetes. This sub-chart is based on the
+[upstream chart]((https://github.com/docker/distribution-library-image))
+and contains GitLab's [Container Registry](https://gitlab.com/gitlab-org/container-registry).
 
-All configuration is handled according to the official [Registry configuration documentation](https://docs.docker.com/registry/configuration/)
+This chart is composed of 3 primary parts:
+
+- [Service](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/charts/registry/templates/service.yaml),
+- [Deployment](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/charts/registry/templates/deployment.yaml),
+- [ConfigMap](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/charts/registry/templates/configmap.yaml).
+
+All configuration is handled according to the
+[Registry configuration documentation](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md?ref_type=heads)
 using `/etc/docker/registry/config.yml` variables provided to the `Deployment` populated
 from the `ConfigMap`. The `ConfigMap` overrides the upstream defaults, but is
 [based on them](https://github.com/docker/distribution-library-image/blob/master/config-example.yml).
@@ -926,64 +930,10 @@ database:
     backoffLimit: 6
 ```
 
-#### Creating the database
+#### Manage the database
 
-If the Registry database is enabled, Registry will use its own database to track its state.
-
-Follow the steps below to manually create the database and role.
-
-NOTE:
-These instructions assume you are using the bundled PostgreSQL server. If you are using your own server,
-there will be some variation in how you connect.
-
-1. Create the secret with the database password:
-
-   ```shell
-   kubectl create secret generic RELEASE_NAME-registry-database-password --from-literal=password=randomstring
-   ```
-
-1. Log into your database instance:
-
-   ```shell
-   kubectl exec -it $(kubectl get pods -l app.kubernetes.io/name=postgresql -o custom-columns=NAME:.metadata.name --no-headers) -- bash
-   ```
-
-   ```shell
-   PGPASSWORD=${POSTGRES_POSTGRES_PASSWORD} psql -U postgres -d template1
-   ```
-
-1. Create the database user:
-
-   ```sql
-   CREATE ROLE registry WITH LOGIN;
-   ```
-
-1. Set the database user password.
-
-   1. Fetch the password:
-
-      ```shell
-      kubectl get secret RELEASE_NAME-registry-database-password -o jsonpath="{.data.password}" | base64 --decode
-      ```
-
-   1. Set the password in the `psql` prompt:
-
-      ```sql
-      \password registry
-      ```
-
-1. Create the database:
-
-   ```sql
-   CREATE DATABASE registry WITH OWNER registry;
-   ```
-
-1. Safely exit from the PostgreSQL command line and then from the container using `exit`:
-
-   ```shell
-   template1=# exit
-   ...@gitlab-postgresql-0/$ exit
-   ```
+See the [Container registry metadata database](metadata_database.md) page for
+more information about creating the database.
 
 ### `gc` property
 
