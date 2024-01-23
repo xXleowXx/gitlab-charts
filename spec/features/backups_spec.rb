@@ -53,7 +53,6 @@ describe "Restoring a backup" do
   end
 
   describe 'Restored gitlab instance' do
-    before { sign_in }
 
     it 'Project testproject1 should exist' do
       uri = "search?scope=projects&search=testproject1"
