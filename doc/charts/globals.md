@@ -1252,8 +1252,6 @@ You can use these defaults or configure the bucket names:
 
 #### storage_options
 
-> - Introduced in GitLab 13.4.
-
 The `storage_options` are used to configure
 [S3 Server Side Encryption](https://docs.gitlab.com/ee/administration/object_storage.html#server-side-encryption-headers).
 
