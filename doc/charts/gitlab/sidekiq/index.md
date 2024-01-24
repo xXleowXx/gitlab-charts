@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab-Sidekiq chart **(FREE SELF)**
+# Using the GitLab-Sidekiq chart
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 The `sidekiq` sub-chart provides configurable deployment of Sidekiq workers, explicitly
 designed to provide separation of queues across multiple `Deployment`s with individual
