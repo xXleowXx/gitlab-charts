@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Backup and restore a GitLab instance **(FREE SELF)**
+# Backup and restore a GitLab instance
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 GitLab Helm chart provides a utility pod from the Toolbox sub-chart that acts as an interface for the purpose of backing up and restoring GitLab instances. It is equipped with a `backup-utility` executable which interacts with other necessary pods for this task.
 Technical details for how the utility works can be found in the [architecture documentation](../architecture/backup-restore.md).

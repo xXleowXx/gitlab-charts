@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab `kas` chart **(FREE SELF)**
+# Using the GitLab `kas` chart
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 The `kas` sub-chart provides a configurable deployment of the
 [GitLab agent server (KAS)](https://docs.gitlab.com/ee/administration/clusters/kas.html).
