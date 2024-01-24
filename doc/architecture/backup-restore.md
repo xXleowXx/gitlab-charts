@@ -21,7 +21,7 @@ The image contains some [custom scripts](https://gitlab.com/gitlab-org/build/CNG
 ## Backup utility
 
 [Backup utility](https://gitlab.com/gitlab-org/build/CNG/-/blob/master/gitlab-toolbox/scripts/bin/backup-utility) is one of the scripts
-in the task runner container and as the name suggests it is a script used for doing backups but also handles restoring of an existing backup.
+in the toolbox container and as the name suggests it is a script used for doing backups but also handles restoring of an existing backup.
 
 ### Backups
 
