@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab-Gitaly chart **(FREE SELF)**
+# Using the GitLab-Gitaly chart
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 The `gitaly` sub-chart provides a configurable deployment of Gitaly Servers.
 

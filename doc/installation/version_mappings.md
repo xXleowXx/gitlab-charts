@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# GitLab chart versions **(FREE SELF)**
+# GitLab chart versions
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 The GitLab chart doesn't have the same version number as GitLab itself.
 Breaking changes are anticipated that may have to be introduced to the chart

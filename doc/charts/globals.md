@@ -4,7 +4,11 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Configure charts using globals **(FREE SELF)**
+# Configure charts using globals
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 To reduce configuration duplication when installing our wrapper Helm chart, several
 configuration settings are available to be set in the `global` section of `values.yaml`.
@@ -425,7 +429,7 @@ global:
 
 ### Configure multiple database connections
 
-> The `gitlab:db:decomposition:connection_status` Rake task was [introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/111927) in GitLab 15.11.
+> - The `gitlab:db:decomposition:connection_status` Rake task was [introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/111927) in GitLab 15.11.
 
 In GitLab 16.0, GitLab defaults to using two database connections
 that point to the same PostgreSQL database.
@@ -1248,7 +1252,7 @@ You can use these defaults or configure the bucket names:
 
 #### storage_options
 
-> Introduced in GitLab 13.4.
+> - Introduced in GitLab 13.4.
 
 The `storage_options` are used to configure
 [S3 Server Side Encryption](https://docs.gitlab.com/ee/administration/object_storage.html#server-side-encryption-headers).
@@ -2186,9 +2190,10 @@ global:
     disktype: ssd
 ```
 
-> **Note**: charts that are maintained externally do not respect the `global.nodeSelector`
-> at this time and may need to be configured separately based on available chart values.
-> This includes Prometheus, cert-manager, Redis, etc.
+NOTE:
+Charts that are maintained externally do not respect the `global.nodeSelector`
+at this time and may need to be configured separately based on available chart values.
+This includes Prometheus, cert-manager, Redis, etc.
 
 ## Labels
 
@@ -2505,7 +2510,7 @@ global:
 
 ## Log rotation
 
-> [Introduced](https://gitlab.com/gitlab-org/cloud-native/gitlab-logger/-/merge_requests/10) in GitLab 15.6.
+> - [Introduced](https://gitlab.com/gitlab-org/cloud-native/gitlab-logger/-/merge_requests/10) in GitLab 15.6.
 
 By default, the GitLab Helm chart does not rotate logs. This can cause ephemeral storage issues for containers that run for a long time.
 
