@@ -52,7 +52,7 @@ You need to set the following parameters:
 
 - `gitlab.toolbox.backups.cron.enabled`: Set to true to enable cron based backups
 - `gitlab.toolbox.backups.cron.schedule`: Set as per the Kubernetes schedule docs
-- `gitlab.toolbox.backups.cron.extraArgs`: Optionally set extra arguments for [backup-utility](https://gitlab.com/gitlab-org/build/CNG/blob/master/gitlab-toolbox/scripts/bin/backup-utility) (like `--skip db`)
+- `gitlab.toolbox.backups.cron.extraArgs`: Optionally set extra arguments for [backup-utility](https://gitlab.com/gitlab-org/build/CNG/blob/master/gitlab-toolbox/scripts/bin/backup-utility) (like `--skip db` or `--s3tool awscli`)
 
 ## Backup utility extra arguments
 
@@ -78,11 +78,31 @@ kubectl exec <Toolbox pod name> -it -- backup-utility --cleanup
 
 ### Specify S3 tool to use
 
- S3 CLI tool to use. Can be either `s3cmd` or `awscli`.
+The `backup-utility` command uses `s3cmd` by default to connect to object storage.
+You may want to override this extra argument in cases where the `s3cmd` is less reliable
+than other S3 tools.
+
+There is a [known issue](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3338)
+where a backup job crashes with `ERROR: S3 error: 404 (NoSuchKey): The specified key does not exist.`
+when GitLab uses an S3 bucket as CI job artifact storage and the default `s3cmd` CLI tool
+is being used. Switching from `s3cmd` to `awscli` allows backup jobs to run successfully.
+See [issue 3338](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3338) for further details.
+
+NOTE:
+The S3 CLI tool `awscli` is not intented to work with MinIO.
+See [issue 3157](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3157)
+for further details.
+
+The S3 CLI tool to use can be either `s3cmd` or `awscli`.
 
  ```shell
  kubectl exec <Toolbox pod name> -it -- backup-utility --s3tool awscli
  ```
+
+NOTE:
+The S3 CLI tool `s5cmd` support is under investigation.
+See [issue 523](https://gitlab.com/gitlab-org/build/CNG/-/issues/523) to track
+the progress.
 
 ### Other arguments
 
