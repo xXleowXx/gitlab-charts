@@ -52,7 +52,29 @@ You need to set the following parameters:
 
 - `gitlab.toolbox.backups.cron.enabled`: Set to true to enable cron based backups
 - `gitlab.toolbox.backups.cron.schedule`: Set as per the Kubernetes schedule docs
+
+### Excluding specific components from the backup
+
+The [backup-utility](https://gitlab.com/gitlab-org/build/CNG/blob/master/gitlab-toolbox/scripts/bin/backup-utility) will attempt to backup all components by default, including items in object storage. You can exclude specific components from the backup by setting extra arguments for `backup-utility`.
+
 - `gitlab.toolbox.backups.cron.extraArgs`: Optionally set extra arguments for [backup-utility](https://gitlab.com/gitlab-org/build/CNG/blob/master/gitlab-toolbox/scripts/bin/backup-utility) (like `--skip db`)
+
+The options for components that can be skipped follows:
+
+  - `--skip artifacts`
+  - `--skip external_diffs` 
+  - `--skip lfs` (LFS objects)
+  - `--skip packages` (Package Registry content)
+  - `--skip pages` (Pages content)
+  - `--skip registry` (Container Registry images)
+  - `--skip terraform_state` (Terraform states)
+  - `--skip uploads` (attachments)
+
+To skip CI job artifacts,  external diffs and Pages content, you would set `gitlab.toolbox.backups.cron.extraArgs` to include:
+
+```
+ --skip artifacts  --skip external_diffs --skip pages
+```
 
 ## Backup utility extra arguments
 
