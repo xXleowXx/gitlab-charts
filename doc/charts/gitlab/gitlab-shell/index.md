@@ -338,7 +338,7 @@ The content of `.opensshd.supplemental_config` will be directly placed at the en
 This value should be a mutli-line string.
 
 Example, enabling older clients using the `ssh-rsa` key exchange algorithms, which
-[have been deprecated by OpenSSH](https://www.openssh.com/txt/release-8.8):
+[have been deprecated by OpenSSH and are highly discouraged from being to expose to the internet](https://www.openssh.com/txt/release-8.8):
 
 ```yaml
 opensshd:
