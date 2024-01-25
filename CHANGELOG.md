@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.8.1 (2024-01-24)
+
+No changes.
+
 ## 7.8.0 (2024-01-17)
 
 ### Added (1 change)
@@ -23,6 +27,10 @@ entry.
 ### Other (1 change)
 
 - [Provide option to configure kas redis using global.redis.kas](gitlab-org/charts/gitlab@3e03a63726406922b39057c804d1d7d43508946f) ([merge request](gitlab-org/charts/gitlab!3544))
+
+## 7.7.4 (2024-01-24)
+
+No changes.
 
 ## 7.7.3 (2024-01-13)
 
@@ -59,6 +67,10 @@ No changes.
 ### Other (1 change)
 
 - [Doc: FIPS Add note of UBI expectations for FIPS mode host](gitlab-org/charts/gitlab@4274d077ab7d6b08b9ac640182640b02ea22b4f7) ([merge request](gitlab-org/charts/gitlab!3487))
+
+## 7.6.6 (2024-01-24)
+
+No changes.
 
 ## 7.6.5 (2024-01-13)
 
@@ -106,6 +118,10 @@ No changes.
 ### Other (1 change)
 
 - [Deprecate namespace in mailroom.yml](gitlab-org/charts/gitlab@781a94d070a5ae221c33f1a31fdd9ecde15f2be6) ([merge request](gitlab-org/charts/gitlab!3419))
+
+## 7.5.8 (2024-01-24)
+
+No changes.
 
 ## 7.5.7 (2024-01-13)
 
