@@ -17,7 +17,7 @@ passing the `-f` flag to regex match by test case names.
 The following example will run only tests with "rendering" in their name.
 
 ```shell
-$ bats scripts/ci/pin_image_digests_test.sh -f 'rendering'
+bats scripts/ci/pin_image_digests_test.sh -f 'rendering'
 ```
 
 Tests can also be filtered by tag, see [bats documentation](https://bats-core.readthedocs.io/en/stable/writing-tests.html#tagging-tests) for examples.
