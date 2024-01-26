@@ -12,6 +12,8 @@ set -e
 # Usage:
 # $ bats scripts/ci/pin_image_digests_test.sh
 
+PROJECT_ROOT="$(dirname -- "$BATS_TEST_FILENAME")/../.."
+
 @test "tag_and_digest, on master branch" {
   CHART_FILE='Chart.master.yaml'
   echo 'appVersion: master' > $CHART_FILE
@@ -64,7 +66,7 @@ set -e
 }
 
 @test "rendering digests file with helm template" {
-  DIGESTS_FILE="$PWD/ci.digests.test.yaml"
+  DIGESTS_FILE="$PROJECT_ROOT/ci.digests.test.yaml"
 
   source scripts/ci/pin_image_digests.sh
 

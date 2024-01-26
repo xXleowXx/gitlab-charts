@@ -12,8 +12,9 @@ set -e
 # Usage:
 # $ bash ./scripts/ci/pin_image_digests.sh
 
-DIGESTS_FILE="${DIGESTS_FILE:-$PWD/ci.digests.yaml}"
-CHART_FILE="${CHART_FILE:-$PWD/Chart.yaml}"
+PROJECT_ROOT="$(dirname -- "${BASH_SOURCE[0]}")/../.."
+DIGESTS_FILE="${DIGESTS_FILE:-$PROJECT_ROOT/ci.digests.yaml}"
+CHART_FILE="${CHART_FILE:-$PROJECT_ROOT/Chart.yaml}"
 
 function main() {
   if [ $SOURCED -eq 0 ]; then

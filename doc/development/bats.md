@@ -9,6 +9,17 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 The following are notes and conventions used for creating bats tests for the
 GitLab chart.
 
+## Naming and structure
+
+Bats test files should be placed in the same directory as the shell script they are testing, with the same file name using `.bats` extension instead of `.sh`.
+
+```
+./scripts/ci/pin_image_digests.sh    # Script to be tested
+./scripts/ci/pin_image_digests.bats  # Bats tests
+```
+
+This convention makes it easy to find bats test files alongside the scripts they are testing.
+
 ## Filtering bats tests
 
 To aid in development it is possible to filter which tests are executed by
@@ -17,7 +28,7 @@ passing the `-f` flag to regex match by test case names.
 The following example will run only tests with "rendering" in their name.
 
 ```shell
-bats scripts/ci/pin_image_digests_test.sh -f 'rendering'
+bats scripts/ci/pin_image_digests.bats -f 'rendering'
 ```
 
 Tests can also be filtered by tag, see [bats documentation](https://bats-core.readthedocs.io/en/stable/writing-tests.html#tagging-tests) for examples.
