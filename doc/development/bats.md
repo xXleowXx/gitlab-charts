@@ -13,7 +13,7 @@ GitLab chart.
 
 Bats test files should be placed in the same directory as the shell script they are testing, with the same file name using `.bats` extension instead of `.sh`.
 
-```
+```shell
 ./scripts/ci/pin_image_digests.sh    # Script to be tested
 ./scripts/ci/pin_image_digests.bats  # Bats tests
 ```
