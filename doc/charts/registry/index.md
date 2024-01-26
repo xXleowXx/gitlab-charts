@@ -889,7 +889,10 @@ profiling:
 
 ### database
 
-> [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/5521) in GitLab 16.4 as a [Beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) feature.
+DETAILS:
+**Status:** Beta
+
+> - [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/5521) in GitLab 16.4 as a [Beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) feature.
 
 The `database` property is optional and enables the [metadata database](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database).
 

@@ -1,6 +1,11 @@
-# Manage the container registry metadata database **(FREE SELF)**
+# Manage the container registry metadata database
 
-> [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/5521) in GitLab 16.4 as a [Beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) feature.
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
+**Status:** Beta
+
+> - [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/5521) in GitLab 16.4 as a [Beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) feature.
 
 The metadata database enables many new registry features, including
 online garbage collection, and increases the efficiency of many registry operations.
