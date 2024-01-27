@@ -811,7 +811,7 @@ middleware:
         # `privatekey` is auto-populated with the content from the privatekey Secret.
         privatekeySecret:
           secret: cloudfront-secret-name
-          # "key" value is going to be used to generate file name for PEM storage:
+          # "key" value is going to be used to generate filename for PEM storage:
           #   /etc/docker/registry/middleware.storage/<index>/<key>
           key: private-key-ABC.pem
         keypairid: ABCEDFGHIJKLMNOPQRST
