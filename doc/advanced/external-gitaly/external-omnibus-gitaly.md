@@ -31,7 +31,7 @@ based on the documentation for
 _**NOTE**: The values below should be replaced_
 
 - `AUTH_TOKEN` should be replaced with the value in the [`gitaly-secret` secret](../../installation/secrets.md#gitaly-secret)
-- `QA_ENVIRONMENT_URL` should be replaced with the URL of the GitLab instance
+- `GITLAB_URL` should be replaced with the URL of the GitLab instance
 - `SHELL_TOKEN` should be replaced with the value in the [`gitlab-shell-secret` secret](../../installation/secrets.md#gitlab-shell-secret)
 
 <!--
