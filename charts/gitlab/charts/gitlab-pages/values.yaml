@@ -245,3 +245,6 @@ affinity:
 # rateLimitTLSSourceIPBurst:
 # rateLimitTLSDomain:
 # rateLimitTLSDomainBurst:
+
+# TopologySpreadConstraints rules
+topologySpreadConstraints: []

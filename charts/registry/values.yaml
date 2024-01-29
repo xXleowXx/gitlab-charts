@@ -412,3 +412,6 @@ tls:
   # NGINX Ingress related
   verify: true
   caSecretName: # Kubernetes secret, type Opaque, with `ca.crt` key
+
+# TopologySpreadConstraints rules
+topologySpreadConstraints: []

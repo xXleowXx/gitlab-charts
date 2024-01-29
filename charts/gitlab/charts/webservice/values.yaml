@@ -489,3 +489,6 @@ deployments: {}
 affinity:
   podAntiAffinity:
     topologyKey:
+
+# TopologySpreadConstraints rules
+topologySpreadConstraints: []

@@ -187,3 +187,6 @@ sshDaemon: openssh
 affinity:
   podAntiAffinity:
     topologyKey:
+
+# TopologySpreadConstraints rules
+topologySpreadConstraints: []

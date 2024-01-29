@@ -115,3 +115,6 @@ serviceAccount:
   annotations: {}
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
   # name:
+
+# TopologySpreadConstraints rules
+topologySpreadConstraints: []

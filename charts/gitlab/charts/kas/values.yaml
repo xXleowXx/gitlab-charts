@@ -158,3 +158,6 @@ affinity:
 
 # Priority class assigned to pods
 priorityClassName: ""
+
+# TopologySpreadConstraints rules
+topologySpreadConstraints: []

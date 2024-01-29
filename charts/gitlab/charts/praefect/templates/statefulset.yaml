@@ -38,6 +38,9 @@ spec:
         prometheus.io/path: {{ .Values.metrics.path }}
       {{- end }}
     spec:
+      {{- with.Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
         podAntiAffinity:

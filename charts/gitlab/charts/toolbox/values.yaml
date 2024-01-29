@@ -273,3 +273,6 @@ deployment:
   strategy:
     type: Recreate
     rollingUpdate: null
+
+# TopologySpreadConstraints rules
+topologySpreadConstraints: []
