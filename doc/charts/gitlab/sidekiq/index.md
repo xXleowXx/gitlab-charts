@@ -536,6 +536,26 @@ pods:
         targetAverageValue: 350m
 ```
 
+### Full example of Sidekiq configuration using a separate Sidekiq pod for import-related jobs and another pod for everything else
+
+```YAML
+...
+global:
+  appConfig:
+    sidekiq:
+      routingRules:
+      - ["feature_category=importers", "import"]
+      - ["*", "default"]
+...
+gitlab:
+  sidekiq:
+    pods:
+    - name: import
+      queues: import
+    - name: default
+...
+```
+
 ## Configuring the `networkpolicy`
 
 This section controls the
