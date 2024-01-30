@@ -21,7 +21,6 @@ for the status of features related to the container registry database.
 
 ## Create the database
 
-If the Registry database is enabled, Registry will use its own database to track its state.
 Follow the steps below to manually create the database and role.
 
 NOTE:
@@ -77,7 +76,6 @@ there will be some variation in how you connect.
    ...@gitlab-postgresql-0/$ exit
    ```
 
-
 ## Enable the metadata database for Helm charts installations
 
 Prerequisites:
@@ -104,7 +102,7 @@ section of the Registry administration guide.
 To enable the database:
 
 1. [Create the database and Kubernetes secret](#create-the-database).
-1. Get the current Helm values for your release and save them into a file.
+1. Get the current Helm values for your release and save them to a file.
    For example, for a release named `gitlab` and a file named `values.yml`:
 
    ```shell
@@ -126,12 +124,6 @@ To enable the database:
       migrations:
         enabled: true # this option will execute the schema migration as part of the registry deployment
    ```
-
-   NOTE:
-   Setting the value of `registry.database.migrations.enabled` will execute
-   the schema migrations as part the registry deployment in a job with a 
-   name similar to `gitlab-registry-migrations-1`. The registry will 
-   fail to start if the schema migrations failed.
 
 1. Optional. You can verify the schema migrations have been applied properly.
    You can either:
