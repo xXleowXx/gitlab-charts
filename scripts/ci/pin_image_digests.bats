@@ -17,6 +17,7 @@ PROJECT_ROOT="$(dirname -- "$BATS_TEST_FILENAME")/../.."
 @test "tag_and_digest, on master branch" {
   CHART_FILE='Chart.master.yaml'
   echo 'appVersion: master' > $CHART_FILE
+  unset GITLAB_VERSION
 
   expected='^master@sha256:[[:xdigit:]]{64}$'
 
@@ -43,6 +44,7 @@ PROJECT_ROOT="$(dirname -- "$BATS_TEST_FILENAME")/../.."
   CI_COMMIT_BRANCH='7-8-stable'
   CHART_FILE='Chart.stable.yaml'
   echo 'appVersion: v16.8.0' > $CHART_FILE
+  unset GITLAB_VERSION
 
   expected='^[0-9]+-[0-9]+-stable@sha256:[[:xdigit:]]{64}$'
 
@@ -55,6 +57,7 @@ PROJECT_ROOT="$(dirname -- "$BATS_TEST_FILENAME")/../.."
 
 @test "tag_and_digest, on merge request branch targeting stable" {
   CI_MERGE_REQUEST_TARGET_BRANCH_NAME='7-8-stable'
+    unset GITLAB_VERSION
 
   expected='^[0-9]+-[0-9]+-stable@sha256:[[:xdigit:]]{64}$'
 
