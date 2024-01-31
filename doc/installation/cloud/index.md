@@ -34,7 +34,7 @@ The GitLab Helm chart supports the following Kubernetes releases:
 <small>Footnotes:
   <ol>
     <li>Full testing is <a href="https://gitlab.com/groups/gitlab-org/-/epics/11320">in progress</a> for release 1.27.</li>
-    <li>The default Helm configuration is not intended for production. The default configuration creates an implementation where all GitLab services are deployed in the cluster, which is not suitable for production workloads. For production deployments, you must follow the Cloud Native Hybrid reference architectures.</li>
+    <li>The default Helm configuration is not intended for production. The default configuration creates an implementation where all GitLab services are deployed in the cluster, which is not suitable for production workloads. For production deployments, you must follow the <a href="https://docs.gitlab.com/charts/installation/index.html#use-the-reference-architectures">Cloud Native Hybrid reference architectures</a>.</li>
   </ol>
 </small>
 </html>
