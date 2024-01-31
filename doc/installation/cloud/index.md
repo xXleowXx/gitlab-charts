@@ -23,8 +23,8 @@ The GitLab Helm chart supports the following Kubernetes releases:
 
 | Kubernetes release | Status                       | Minimum GitLab version | Architectures | End of life |
 |--------------------|------------------------------|------------------------|---------------|-------------|
-| 1.27  <sup>1<sup>  | In development/qualification | 16.6                   | x86-64        | 2024-06-28  |
-| 1.26               | Supported   <sup>2<sup>      | 16.5                   | x86-64        | 2024-02-28  |
+| 1.27             | [In development/qualification](https://gitlab.com/groups/gitlab-org/-/epics/11320) | 16.6                   | x86-64        | 2024-06-28  |
+| 1.26               | Supported   <sup>1<sup>      | 16.5                   | x86-64        | 2024-02-28  |
 | 1.25               | Deprecated                   | 16.5                   | x86-64        | 2023-10-28  |
 | 1.24               | Deprecated                   | 16.5                   | x86-64        | 2023-07-28  |
 | 1.23               | Deprecated                   | 16.5                   | x86-64        | 2023-02-28  |
@@ -33,8 +33,7 @@ The GitLab Helm chart supports the following Kubernetes releases:
 <html>
 <small>Footnotes:
   <ol>
-    <li>Full testing is <a href="https://gitlab.com/groups/gitlab-org/-/epics/11320">in progress</a> for release 1.27.</li>
-    <li>The default Helm configuration is not intended for production. The default configuration creates an implementation where all GitLab services are deployed in the cluster, which is not suitable for production workloads. For production deployments, you must follow the Cloud Native Hybrid reference architectures.</li>
+    <li>The default Helm configuration is not intended for production. The default configuration creates an implementation where all GitLab services are deployed in the cluster, which is not suitable for production workloads. For production deployments, you must follow the <a href="https://docs.gitlab.com/charts/installation/index.html#use-the-reference-architectures">Cloud Native Hybrid reference architectures</a>.</li>
   </ol>
 </small>
 </html>
