@@ -40,7 +40,7 @@ The GitLab Helm chart supports the following Kubernetes releases:
 </html>
 
 The GitLab Helm Chart aims to support new minor Kubernetes releases three months after their initial release.
-We welcome any reports of compatibility issues with releases newer than those listed above in our [issue tracker](https://gitlab.com/gitlab-org/charts/gitlab/-/issues).
+We welcome reports made in our [issue tracker](https://gitlab.com/gitlab-org/charts/gitlab/-/issues) of compatibility issues with releases newer than those listed above.
 
 Some GitLab features might not work on deprecated releases or releases older than the releases listed above.
 
