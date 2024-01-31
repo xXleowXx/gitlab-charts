@@ -489,12 +489,12 @@ these files in the GitLab source:
 1. [`app/workers/all_queues.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/workers/all_queues.yml)
 1. [`ee/app/workers/all_queues.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/app/workers/all_queues.yml)
 
-Besides configuring `gitlab.sidekiq.pods[].queues`, you also need to configure `global.appConfig.sidekiq.routingRules` 
-to make it work. See [Sidekiq routing rules settings](../../globals.md#sidekiq-routing-rules-settings) for details.
+In addition to configuring `gitlab.sidekiq.pods[].queues`, you must also configure `global.appConfig.sidekiq.routingRules`. For more information, see
+[Sidekiq routing rules settings](../../globals.md#sidekiq-routing-rules-settings).
 
 ### negateQueues (deprecated)
 
-See [Negate settings (deprecated)](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#negate-settings-deprecated) for details about the deprecation.
+For more information about the deprecation, see [Negate settings (deprecated)](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#negate-settings-deprecated).
 
 `negateQueues` is in the same format as [`queues`](#queues), but it represents
 queues to be ignored rather than processed.
@@ -536,7 +536,9 @@ pods:
         targetAverageValue: 350m
 ```
 
-### Full example of Sidekiq configuration using a separate Sidekiq pod for import-related jobs and another pod for everything else
+### Full example of Sidekiq configuration
+
+The following is a full example of Sidekiq configuration using a separate Sidekiq pod for import-related jobs and another pod for everything else.
 
 ```YAML
 ...
