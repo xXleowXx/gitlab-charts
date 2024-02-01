@@ -2,7 +2,7 @@ require 'rest-client'
 require 'json'
 
 module ApiHelper
-  BASE_URL = "https://#{ENV['QA_ENVIRONMENT_URL']}/api/v4/".freeze
+  BASE_URL = "https://#{ENV['GITLAB_URL']}/api/v4/".freeze
   def self.invoke_get_request(uri)
     default_args = {
       method: :get,
