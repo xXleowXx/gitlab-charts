@@ -92,6 +92,10 @@ Follow the instructions that match your situation:
   - [One-step migration](#one-step-migration). Only recommended for relatively small registries or no requirement to avoid downtime.
   - [Three-step migration](#three-step-migration). Recommended for larger container registries.
 
+NOTE:
+Users have reported step one import completed at [rates of 2 to 4 TB per hour](https://gitlab.com/gitlab-org/gitlab/-/issues/423459).
+At the slower speed, registries with over 100TB of data could take longer than 48 hours.
+
 ### Before you start
 
 Read the [before you start](https://docs.gitlab.com/ee/administration/packages/container_registry_metadata_database.html#before-you-start)
@@ -121,6 +125,12 @@ To enable the database:
         password:
           secret: gitlab-registry-database-password # must match the secret name
           key: password # must match the secret key to read the password from
+      sslmode: verify-full
+      ssl:
+         secret: gitlab-registry-postgresql-ssl # you will need to create this secret manually
+         clientKey: client-key.pem
+         clientCertificate: client-cert.pem
+         serverCA: server-ca.pem
       migrations:
         enabled: true # this option will execute the schema migration as part of the registry deployment
    ```
@@ -156,12 +166,6 @@ A few factors affect the duration of the migration:
 - Network latency between the registry, PostgresSQL and your configured Object Storage.
 
 NOTE:
-Users have reported step one import completed at [rates of 2 to 4 TB per hour](https://gitlab.com/gitlab-org/gitlab/-/issues/423459).
-At the slower speed, registries with over 100TB of data could take longer than 48 hours.
-
-Choose the one or three step method according to your registry installation.
-
-NOTE:
 [Automating the migration process](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293)
 is currently in development.
 
@@ -169,8 +173,6 @@ is currently in development.
 
 WARNING:
 The registry must remain in `read-only` mode during the migration.
-Only choose this method if you do not need to write to the registry during the migration
-and your registry contains a relatively small amount of data.
 
 WARNING:
 If the Pod where the migration is being executed is terminated,
@@ -191,6 +193,7 @@ and we are working to [automate the process]((https://gitlab.com/gitlab-org/char
 
    ```yaml
    registry:
+      priorityClassName: system-node-critical
       enabled: true
       maintenance:
         readonly:
@@ -202,6 +205,12 @@ and we are working to [automate the process]((https://gitlab.com/gitlab-org/char
         password:
           secret: gitlab-registry-database-password # must match the secret name
           key: password # must match the secret key to read the password from
+            sslmode: verify-full
+        ssl:
+          secret: gitlab-registry-postgresql-ssl # you will need to create this secret manually
+          clientKey: client-key.pem
+          clientCertificate: client-cert.pem
+          serverCA: server-ca.pem
       migrations:
         enabled: true # this option will execute the schema migration as part of the registry deployment
    ```
