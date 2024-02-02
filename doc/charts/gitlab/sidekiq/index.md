@@ -540,7 +540,7 @@ pods:
 
 The following is a full example of Sidekiq configuration using a separate Sidekiq pod for import-related jobs and another pod for everything else.
 
-```YAML
+```yaml
 ...
 global:
   appConfig:
