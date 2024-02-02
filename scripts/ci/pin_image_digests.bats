@@ -14,6 +14,10 @@ set -e
 
 PROJECT_ROOT="$(dirname -- "$BATS_TEST_FILENAME")/../.."
 
+setup() {
+  unset GITLAB_VERSION  # set by CNG-triggered pipelines
+}
+
 @test "tag_and_digest, on master branch" {
   CHART_FILE='Chart.master.yaml'
   echo 'appVersion: master' > $CHART_FILE
