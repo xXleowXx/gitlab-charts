@@ -355,6 +355,12 @@ pin_image_versions:
   KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v126.helm-charts.win"
   KUBE_NAMESPACE: "helm-charts-win"
 
+.review_gke127_common_vars: &review_gke127_common_vars
+  DNS_PROVIDER: "google"
+  AGENT_NAME: "gke127-ci-cluster"
+  KUBE_INGRESS_BASE_DOMAIN: "cloud-native-v127.helm-charts.win"
+  KUBE_NAMESPACE: "helm-charts-win"
+
 .review_eks_common_vars: &review_eks_common_vars
   DNS_PROVIDER: "aws"
 
@@ -449,6 +455,33 @@ review_gke126:
     action: access
   resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
+# See comments in create_review_gke127.
+create_review_gke127:
+  stage: review
+  variables:
+    <<: *review_gke127_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "Configuring gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke127
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
+
+review_gke127:
+  variables:
+    <<: *review_gke127_common_vars
+  extends: .review_template
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke127
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
+  resource_group: "gke127-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+
 # See comments in create_review_gke122.
 create_review_eks:
   stage: review
@@ -520,6 +553,14 @@ stop_review_gke126:
     name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
 
+stop_review_gke127:
+  variables:
+    <<:  *review_gke127_common_vars
+  extends: .stop_review_template
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    action: stop
+
 stop_review_eks:
   variables:
     <<: *review_eks_common_vars
@@ -585,6 +626,16 @@ stable_gke126:
     <<: *review_gke126_common_vars
     VARIABLES_FILE: "variables/stable_gke126"
   resource_group: "gke126-production"
+
+stable_gke127:
+  extends: .stable
+  environment:
+    name: gke127_production
+    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
+  variables:
+    <<: *review_gke127_common_vars
+    VARIABLES_FILE: "variables/stable_gke127"
+  resource_group: "gke127-production"
 
 stable_eks:
   extends: .stable
@@ -855,6 +906,22 @@ review_specs_gke126:
     - !reference [.specs, rules]
   needs: ['review_gke126']
 
+review_specs_gke127:
+  extends: .specs
+  variables:
+    <<: *review_gke127_common_vars
+    VARIABLES_FILE: "variables/review_gke127"
+    RSPEC_TAGS: type:feature
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke127
+  resource_group: "gke127-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  rules:
+    - !reference [.rule:skip_if_no_cluster]
+    - !reference [.specs, rules]
+  needs: ['review_gke127']
+
 review_specs_eks:
   extends: .specs
   variables:
@@ -933,6 +1000,18 @@ production_specs_gke126:
     url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
   resource_group: "gke126-production"
   needs: ['stable_gke126']
+
+production_specs_gke127:
+  extends: .production_specs
+  variables:
+    <<: *review_gke127_common_vars
+    VARIABLES_FILE: "variables/stable_gke127"
+    RSPEC_TAGS: type:feature
+  environment:
+    name: gke127_production
+    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
+  resource_group: "gke127-production"
+  needs: ['stable_gke127']
 
 production_specs_eks:
   extends: .production_specs
@@ -1123,6 +1202,19 @@ qa_gke126:
     - job: review_specs_gke126
       artifacts: false
 
+qa_gke127:
+  extends: .qa_branch
+  variables:
+    VARIABLES_FILE: "variables/review_gke127"
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_gke127
+  needs:
+    - review_gke127
+    - job: review_specs_gke127
+      artifacts: false
+
 qa_eks:
   extends: .qa_branch
   variables:
@@ -1170,6 +1262,18 @@ qa_gke126_production:
   needs:
     - stable_gke126
     - job: production_specs_gke126
+      artifacts: false
+
+qa_gke127_production:
+  extends: .qa_production
+  variables:
+    VARIABLES_FILE: "variables/stable_gke127"
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
+  environment:
+    name: gke127_production
+  needs:
+    - stable_gke127
+    - job: production_specs_gke127
       artifacts: false
 
 qa_eks_production:
@@ -1231,6 +1335,10 @@ qa_gke126_full_suite_manual_trigger:
   extends: .qa_full_suite_manual_trigger
   script: echo 'The job will trigger Full E2E suite against GKE126'
 
+qa_gke127_full_suite_manual_trigger:
+  extends: .qa_full_suite_manual_trigger
+  script: echo 'The job will trigger Full E2E suite against GKE127'
+
 qa_gke125_manual_full_suite:
   extends: .qa_branch
   parallel: 7
@@ -1252,6 +1360,17 @@ qa_gke126_manual_full_suite:
     name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_gke126
   needs: [ "qa_gke126_full_suite_manual_trigger"]
+
+qa_gke127_manual_full_suite:
+  extends: .qa_branch
+  parallel: 7
+  variables:
+    VARIABLES_FILE: "variables/review_gke127"
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    on_stop: stop_review_gke127
+  needs: [ "qa_gke127_full_suite_manual_trigger"]
 
 qa_eks_full_suite_manual_trigger:
   extends: .qa_full_suite_manual_trigger
