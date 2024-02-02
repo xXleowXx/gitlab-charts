@@ -103,7 +103,7 @@ global:
 | `kas.https`               | Boolean   | `false`        | If `hosts.https` or `kas.https` are `true`, the KAS external URL will use `wss://` instead of `ws://`.                                                                                                                                                                                                                    |
 | `pages.name`              | String    | `pages`        | The hostname for GitLab Pages. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings.                                                                                                                                                                             |
 | `pages.https`             | String    |                | If `global.pages.https` or `global.hosts.pages.https` or `global.hosts.https` are `true`, then URL for GitLab Pages in the Project settings UI will use `https://` instead of `http://`.                                                                                                                                  |
-| `ssh`                     | String    |                | The hostname for cloning repositories over SSH. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings.
+| `ssh`                     | String    |                | The hostname for cloning repositories over SSH. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 
 ### hostSuffix
 
@@ -159,7 +159,7 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 
 | Name                           | Type    | Default        | Description |
 |:------------------------------ |:-------:|:-------        |:----------- |
-| `apiVersion`                   | String  |                | API version to use in the Ingress object definitions.
+| `apiVersion`                   | String  |                | API version to use in the Ingress object definitions. |
 | `annotations.*annotation-key*` | String  |                | Where `annotation-key` is a string that will be used with the value as an annotation on every Ingress. For Example: `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. No global annotations are provided by default. |
 | `configureCertmanager`         | Boolean | `true`         | [See below](#globalingressconfigurecertmanager). |
 | `useNewIngressForCerts`        | Boolean | `false`        | [See below](#globalingressusenewingressforcerts). |
@@ -922,7 +922,7 @@ global:
 | psql.host       | String  |             | The hostname of the database server to use (when using an external database) |
 | psql.port       | String  |             | The port number of the database server (when using an external database) |
 | psql.user       | String  | `praefect` | The database user to use                                           |
-| psql.dbName | String | `praefect` | The name of the database to use
+| psql.dbName | String | `praefect` | The name of the database to use |
 
 ## Configure MinIO settings
 
