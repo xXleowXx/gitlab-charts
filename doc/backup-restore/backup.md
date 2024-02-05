@@ -70,7 +70,7 @@ kubectl exec <Toolbox pod name> -it -- backup-utility --skip db --skip lfs
 
 ### Cleanup backups only
 
-Run the backup cleanup without creating a new backup. 
+Run the backup cleanup without creating a new backup.
 
 ```shell
 kubectl exec <Toolbox pod name> -it -- backup-utility --cleanup
@@ -88,16 +88,22 @@ when GitLab uses an S3 bucket as CI job artifact storage and the default `s3cmd`
 is being used. Switching from `s3cmd` to `awscli` allows backup jobs to run successfully.
 See [issue 3338](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3338) for further details.
 
-NOTE:
-The S3 CLI tool `awscli` is not intented to work with MinIO.
-See [issue 3157](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3157)
-for further details.
-
 The S3 CLI tool to use can be either `s3cmd` or `awscli`.
 
  ```shell
  kubectl exec <Toolbox pod name> -it -- backup-utility --s3tool awscli
  ```
+
+#### Using MinIO with awscli
+
+To use MinIO as the object storage when using `awscli`, set the following extra parameters:
+
+| Parameter                                      | Description/Value                                                                            |
+|------------------------------------------------|---------------------------------------------------------------------------------------------|
+| `gitlab.toolbox.extraEnvFrom.AWS_ACCESS_KEY_ID.secretKeyRef.name` | MinIO access key |
+| `gitlab.toolbox.extraEnvFrom.AWS_SECRET_ACCESS_KEY.secretKeyRef.name` | MinIO secret key |
+| `gitlab.toolbox.extraEnv.AWS_DEFAULT_REGION` | MinIO default region (us-east-1) |
+| `gitlab.toolbox.backups.cron.extraArgs` | "--s3tool awscli --aws-s3-endpoint-url <MINIO-INGRESS-URL>" |
 
 NOTE:
 The S3 CLI tool `s5cmd` support is under investigation.
