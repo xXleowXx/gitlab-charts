@@ -312,9 +312,23 @@ function delete() {
 }
 
 function cleanup() {
-  kubectl -n "$NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,replicaset,job,pod,secret,configmap,pvc,pv,clusterrole,clusterrolebinding,role,rolebinding,sa 2>&1 \
+  kubectl -n "$NAMESPACE" delete \
+    $(get_resources "ingress,svc,pdb,hpa,deploy,statefulset,replicaset,job,pod,secret,configmap,clusterrole,clusterrolebinding,role,rolebinding,sa") \
+    || true
+
+  pvcs=$(get_resources "pvc")
+  for pvc in ${pvcs}; do
+    pv=$(kubectl -n "$NAMESPACE" get pvc "$pvc" -o jsonpath='{.spec.volumeName}' 2>&1)
+    volumeHandle=$(kubectl get pv "$pv" -o jsonpath='{.spec.csi.volumeHandle}' 2>&1)
+    # Delete PVC only, PV and volume should be handled by reclaim policy
+    echo "Deleting $pvc (PV: $pv, CSI volume: $volumeHandle)"
+    kubectl -n "$NAMESPACE" delete pvc "$pvc" || true
+  done
+}
+
+function get_resources() {
+  kubectl -n "$NAMESPACE" get "$1" --no-headers 2>&1 \
     | grep "$RELEASE_NAME" \
     | awk '{print $1}' \
-    | xargs kubectl -n "$NAMESPACE" delete \
-    || true
+    | xargs
 }
