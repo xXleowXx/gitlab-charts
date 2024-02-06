@@ -674,7 +674,7 @@ check_docs_markdown:
     # Lint prose
     - vale --minAlertLevel error doc
     # Lint Markdown
-    - markdownlint-cli2-config .markdownlint.yml 'doc/**/*.md'
+    - markdownlint-cli2 'doc/**/*.md'
   rules:
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
