@@ -81,7 +81,7 @@ there will be some variation in how you connect.
 Prerequisites:
 
 - GitLab 16.4 or later.
-- PostgreSQL database version 12 or later. It must be accessible from the registry pods.
+- PostgreSQL database version 12 or later, accessible from the registry pods.
 - Access to the Kubernetes cluster and the Helm deployment locally.
 - SSH access to the registry pods.
 
@@ -93,8 +93,8 @@ Follow the instructions that match your situation:
   - [Three-step migration](#three-step-migration). Recommended for larger container registries.
 
 NOTE:
-Users have reported step one import completed at [rates of 2 to 4 TB per hour](https://gitlab.com/gitlab-org/gitlab/-/issues/423459).
-At the slower speed, registries with over 100TB of data could take longer than 48 hours.
+Users have reported the one-step import completed at [rates of 2 to 4 TB per hour](https://gitlab.com/gitlab-org/gitlab/-/issues/423459).
+At the slower speed, registries with over 100 TB of data could take longer than 48 hours.
 
 ### Before you start
 
@@ -117,41 +117,41 @@ To enable the database:
 
    ```yaml
    registry:
-      enabled: true
-      database:
-        enabled: true
-        name: registry # must match the database name you created above
-        user: registry # must match the database username you created above
-        password:
-          secret: gitlab-registry-database-password # must match the secret name
-          key: password # must match the secret key to read the password from
-      sslmode: verify-full
-      ssl:
-         secret: gitlab-registry-postgresql-ssl # you will need to create this secret manually
-         clientKey: client-key.pem
-         clientCertificate: client-cert.pem
-         serverCA: server-ca.pem
-      migrations:
-        enabled: true # this option will execute the schema migration as part of the registry deployment
+     enabled: true
+     database:
+       enabled: true
+       name: registry  # must match the database name you created above
+       user: registry  # must match the database username you created above
+       password:
+         secret: gitlab-registry-database-password # must match the secret name
+         key: password  # must match the secret key to read the password from
+     sslmode: verify-full
+     ssl:
+       secret: gitlab-registry-postgresql-ssl # you will need to create this secret manually
+       clientKey: client-key.pem
+       clientCertificate: client-cert.pem
+       serverCA: server-ca.pem
+     migrations:
+       enabled: true  # this option will execute the schema migration as part of the registry deployment
    ```
 
 1. Optional. You can verify the schema migrations have been applied properly.
    You can either:
    - Review the log output of the migrations job, for example:
 
-      ```shell
-      kubectl logs jobs/gitlab-registry-migrations-1
-      ...
-      OK: applied 154 migrations in 13.752s
-      ```
+     ```shell
+     kubectl logs jobs/gitlab-registry-migrations-1
+     ...
+     OK: applied 154 migrations in 13.752s
+     ```
 
    - Or, connect to the Postgres database and query the `schema_migrations` table:
 
-      ```sql
-      SELECT * FROM schema_migrations;
-      ```
-      
-      Ensure the `applied_at` column timestamp is filled for all rows.
+     ```sql
+     SELECT * FROM schema_migrations;
+     ```
+
+     Ensure the `applied_at` column timestamp is filled for all rows.
 
 The registry is ready to use the metadata database!
 
@@ -166,18 +166,16 @@ A few factors affect the duration of the migration:
 - Network latency between the registry, PostgresSQL and your configured Object Storage.
 
 NOTE:
-[Automating the migration process](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293)
-is currently in development.
+Work to automate the migration process is being tracked in [issue 5293](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293).
 
 #### One-step migration
 
-WARNING:
-The registry must remain in `read-only` mode during the migration.
+When doing a one-step migration, be aware that:
 
-WARNING:
-If the Pod where the migration is being executed is terminated,
-you will have to restart the process. This is a known limitation
-and we are working to [automate the process]((https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293)).
+- The registry must remain in `read-only` mode during the migration.
+- If the Pod where the migration is being executed is terminated,
+  you have to completely restart the process. The work to improve this process is tracked in
+  [issue 5293]((https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293)).
 
 1. [Create the database and Kubernetes secret](#create-the-database).
 1. Get the current Helm values for your release and save them into a file.
@@ -188,31 +186,31 @@ and we are working to [automate the process]((https://gitlab.com/gitlab-org/char
    ```
 
 1. Find the `registry:` section in the `values.yml` file and
-   add the `database` section, set the `maintenance.readonly.enabled` 
+   add the `database` section, set the `maintenance.readonly.enabled`
    flag to `true`, and `migrations.enabled` to `true`:
 
    ```yaml
    registry:
-      priorityClassName: system-node-critical
-      enabled: true
-      maintenance:
-        readonly:
-          enabled: true # must remain set to true while the migration is executed
-      database:
-        enabled: true
-        name: registry # must match the database name you created above
-        user: registry # must match the database username you created above
-        password:
-          secret: gitlab-registry-database-password # must match the secret name
-          key: password # must match the secret key to read the password from
-            sslmode: verify-full
-        ssl:
-          secret: gitlab-registry-postgresql-ssl # you will need to create this secret manually
-          clientKey: client-key.pem
-          clientCertificate: client-cert.pem
-          serverCA: server-ca.pem
-      migrations:
-        enabled: true # this option will execute the schema migration as part of the registry deployment
+     priorityClassName: system-node-critical
+     enabled: true
+     maintenance:
+       readonly:
+         enabled: true  # must remain set to true while the migration is executed
+     database:
+       enabled: true
+       name: registry  # must match the database name you created above
+       user: registry  # must match the database username you created above
+       password:
+         secret: gitlab-registry-database-password # must match the secret name
+         key: password  # must match the secret key to read the password from
+           sslmode: verify-full
+       ssl:
+         secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
+         clientKey: client-key.pem
+         clientCertificate: client-cert.pem
+         serverCA: server-ca.pem
+     migrations:
+       enabled: true  # this option will execute the schema migration as part of the registry deployment
    ```
 
 1. Upgrade your Helm installation to apply changes in your deployment:
@@ -238,19 +236,19 @@ and we are working to [automate the process]((https://gitlab.com/gitlab-org/char
 
    ```yaml
    registry:
-      enabled: true
-      maintenance:
-        readonly:
-          enabled: false
-      database:
-        enabled: true
-        name: registry
-        user: registry
-        password:
-          secret: gitlab-registry-database-password
-          key: password
-      migrations:
-        enabled: true
+     enabled: true
+     maintenance:
+       readonly:
+         enabled: false
+     database:
+       enabled: true
+       name: registry
+       user: registry
+       password:
+         secret: gitlab-registry-database-password
+         key: password
+     migrations:
+       enabled: true
    ```
 
 1. Upgrade your Helm installation to apply changes in your deployment:
@@ -265,4 +263,4 @@ You can now use the metadata database for all operations!
 
 WARNING:
 The three-step process is not yet available for Helm chart installations,
-due to this [known limitation](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5292).
+due to a [known limitation](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5292).
