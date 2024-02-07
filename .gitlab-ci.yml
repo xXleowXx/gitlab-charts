@@ -262,10 +262,11 @@ approve_cluster_tests:
   stage: approve-review-apps
   image: alpine:latest
   script: echo "Proceeding to tests in CI clusters..."
-  when: manual
   rules:
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
+      when: manual
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+      when: manual
   needs:
     - job: danger-review
       optional: true
