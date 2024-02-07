@@ -268,6 +268,9 @@ approve_cluster_tests:
       when: manual
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
       when: manual
+  needs:
+    - job: danger-review
+      optional: true
 
 pin_image_versions:
   stage: prepare-review
