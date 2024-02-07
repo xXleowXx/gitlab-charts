@@ -265,7 +265,9 @@ approve_cluster_tests:
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
+      when: manual
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+      when: manual
 
 pin_image_versions:
   stage: prepare-review
