@@ -263,7 +263,6 @@ approve_cluster_tests:
   image: alpine:latest
   script: echo "Proceeding to tests in CI clusters..."
   rules:
-    - !reference [.rule:skip_if_no_cluster]
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
       when: manual
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
