@@ -240,24 +240,6 @@ lint_package:
           cronJob:
             apiVersion: batch/v1
 
-pin_image_versions:
-  stage: prepare-review
-  script:
-    - apk add bats skopeo
-    - bats --verbose-run ./scripts/ci/pin_image_digests.bats
-    - bash ./scripts/ci/pin_image_digests.sh
-  artifacts:
-    paths:
-      - ci.digests.yaml
-  rules:
-    # Rules from .stable
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-    # Rules from .review_template
-    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
-
 "Validate 1.26.8":
   extends: .kubeconform
   variables:
@@ -284,6 +266,24 @@ approve_cluster_tests:
     - !reference [.rule:skip_if_no_cluster]
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+
+pin_image_versions:
+  stage: prepare-review
+  script:
+    - apk add bats skopeo
+    - bats --verbose-run ./scripts/ci/pin_image_digests.bats
+    - bash ./scripts/ci/pin_image_digests.sh
+  artifacts:
+    paths:
+      - ci.digests.yaml
+  rules:
+    # Rules from .stable
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
+    # Rules from .review_template
+    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
 
 .set_up_varfile_and_kubecontext:
   script:
