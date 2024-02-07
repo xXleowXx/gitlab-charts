@@ -70,7 +70,7 @@ stages:
   - prepare
   - test
   - preflight
-  - review-approval
+  - approve-review-apps
   - prepare-review
   - review
   - staging
@@ -259,7 +259,7 @@ lint_package:
     HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
 
 approve_cluster_tests:
-  stage: review-approval
+  stage: approve-review-apps
   image: alpine:latest
   script: echo "Proceeding to tests in CI clusters..."
   when: manual
