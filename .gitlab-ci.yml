@@ -70,6 +70,7 @@ stages:
   - prepare
   - test
   - preflight
+  - review-approval
   - prepare-review
   - review
   - staging
@@ -239,24 +240,6 @@ lint_package:
           cronJob:
             apiVersion: batch/v1
 
-pin_image_versions:
-  stage: prepare-review
-  script:
-    - apk add bats skopeo
-    - bats --verbose-run ./scripts/ci/pin_image_digests.bats
-    - bash ./scripts/ci/pin_image_digests.sh
-  artifacts:
-    paths:
-      - ci.digests.yaml
-  rules:
-    # Rules from .stable
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-    # Rules from .review_template
-    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
-
 "Validate 1.26.8":
   extends: .kubeconform
   variables:
@@ -274,6 +257,36 @@ pin_image_versions:
   variables:
     KUBE_VERSION: "1.28.3"
     HELM_SETTINGS: !reference ["Validate 1.25.7", variables, HELM_SETTINGS]
+
+approve_cluster_tests:
+  stage: review-approval
+  image: alpine:latest
+  script: echo "Proceeding to tests in CI clusters..."
+  when: manual
+  rules:
+    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+  needs:
+    - job: danger-review
+      optional: true
+
+pin_image_versions:
+  stage: prepare-review
+  script:
+    - apk add bats skopeo
+    - bats --verbose-run ./scripts/ci/pin_image_digests.bats
+    - bash ./scripts/ci/pin_image_digests.sh
+  artifacts:
+    paths:
+      - ci.digests.yaml
+  rules:
+    # Rules from .stable
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
+    # Rules from .review_template
+    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+    - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
 
 .set_up_varfile_and_kubecontext:
   script:
