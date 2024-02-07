@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.8.2 (2024-02-07)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.60.0 to 0.61.0](gitlab-org/security/charts/gitlab@7d2d3c4d088a89ab953dc37aea7ec9b4333a63f2)
+
 ## 7.8.1 (2024-01-24)
 
 No changes.
@@ -27,6 +33,10 @@ No changes.
 ### Other (1 change)
 
 - [Provide option to configure kas redis using global.redis.kas](gitlab-org/charts/gitlab@3e03a63726406922b39057c804d1d7d43508946f) ([merge request](gitlab-org/charts/gitlab!3544))
+
+## 7.7.5 (2024-02-07)
+
+No changes.
 
 ## 7.7.4 (2024-01-24)
 
@@ -67,6 +77,10 @@ No changes.
 ### Other (1 change)
 
 - [Doc: FIPS Add note of UBI expectations for FIPS mode host](gitlab-org/charts/gitlab@4274d077ab7d6b08b9ac640182640b02ea22b4f7) ([merge request](gitlab-org/charts/gitlab!3487))
+
+## 7.6.7 (2024-02-07)
+
+No changes.
 
 ## 7.6.6 (2024-01-24)
 
