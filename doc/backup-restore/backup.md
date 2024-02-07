@@ -96,14 +96,28 @@ The S3 CLI tool to use can be either `s3cmd` or `awscli`.
 
 #### Using MinIO with awscli
 
-To use MinIO as the object storage when using `awscli`, set the following extra parameters:
+To use MinIO as the object storage when using `awscli`, set parameters as follows:
 
-| Parameter                                      | Description/Value                                                                            |
-|------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `gitlab.toolbox.extraEnvFrom.AWS_ACCESS_KEY_ID.secretKeyRef.name` | MinIO access key |
-| `gitlab.toolbox.extraEnvFrom.AWS_SECRET_ACCESS_KEY.secretKeyRef.name` | MinIO secret key |
-| `gitlab.toolbox.extraEnv.AWS_DEFAULT_REGION` | MinIO default region (us-east-1) |
-| `gitlab.toolbox.backups.cron.extraArgs` | `--s3tool awscli --aws-s3-endpoint-url <MINIO-INGRESS-URL>` |
+```yaml
+gitlab:
+  toolbox:
+    extraEnvFrom:
+      AWS_ACCESS_KEY_ID:
+        secretKeyRef:
+          name: <MINIO-SECRET-NAME>
+          key: accesskey
+      AWS_SECRET_ACCESS_KEY:
+        secretKeyRef:
+          name: <MINIO-SECRET-NAME>
+          key: secretkey
+    extraEnv:
+      AWS_DEFAULT_REGION: us-east-1 # Minio default
+      AWS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt  # think this is optional if you don't use custom CA
+    backups:
+      cron:
+        enabled: true
+        schedule: "@daily"
+        extraArgs: "--s3tool awscli --aws-s3-endpoint-url <MINIO-INGRESS-URL>"
 
 NOTE:
 The S3 CLI tool `s5cmd` support is under investigation.
