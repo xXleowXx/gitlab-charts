@@ -111,8 +111,7 @@ gitlab:
           name: <MINIO-SECRET-NAME>
           key: secretkey
     extraEnv:
-      AWS_DEFAULT_REGION: us-east-1 # Minio default
-      AWS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt  # think this is optional if you don't use custom CA
+      AWS_DEFAULT_REGION: us-east-1 # MinIO default
     backups:
       cron:
         enabled: true
