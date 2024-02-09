@@ -96,7 +96,7 @@ The S3 CLI tool to use can be either `s3cmd` or `awscli`.
 
 #### Using MinIO with awscli
 
-To use MinIO as the object storage when using `awscli`, set parameters as follows:
+To use MinIO as the object storage when using `awscli`, set the following parameters:
 
 ```yaml
 gitlab:
