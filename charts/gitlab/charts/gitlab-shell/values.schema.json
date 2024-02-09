@@ -387,6 +387,26 @@
     },
     "resources": {
       "properties": {
+        "limits": {
+          "properties": {
+            "cpu": {
+              "title": "CPU Limit",
+              "type": [
+                "string",
+                "number"
+              ]
+            },
+            "memory": {
+              "title": "Memory Limit",
+              "type": [
+                "string",
+                "number"
+              ]
+            }
+          },
+          "title": "Resource limits",
+          "type": "object"
+        },
         "requests": {
           "properties": {
             "cpu": {
