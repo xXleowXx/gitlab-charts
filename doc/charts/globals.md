@@ -2145,6 +2145,7 @@ global:
     enabled: false
     create: true
     annotations: {}
+    automountServiceAccountToken: false
     ## Name to be used for serviceAccount, otherwise defaults to chart fullname
     # name:
 ```
@@ -2152,6 +2153,7 @@ global:
 - Setting `global.serviceAccount.enabled` controls reference to a ServiceAccount for each component via `spec.serviceAccountName`.
 - Setting `global.serviceAccount.create` controls ServiceAccount object creation via Helm.
 - Setting `global.serviceAccount.name` controls the ServiceAccount object name and the name referenced by each component.
+- Setting `global.serviceAccount.automountServiceAccountToken` controls if the default ServiceAccount access token should be mounted in pods. Generally enabling this is undesired, but may be necessary for certain sidecars to work properly (like Istio)
 
 NOTE:
 Do not use `global.serviceAccount.create=true` with `global.serviceAccount.name`, as it instructs the charts

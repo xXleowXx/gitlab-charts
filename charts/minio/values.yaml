@@ -261,3 +261,6 @@ deployment:
   strategy:
     type: Recreate
     rollingUpdate: null
+
+serviceAccount:
+  automountServiceAccountToken: false

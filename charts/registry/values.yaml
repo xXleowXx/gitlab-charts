@@ -365,6 +365,7 @@ profiling:
 
 serviceAccount:
   create: false
+  automountServiceAccountToken: false
 
 # Disable metadata database by default
 # NOTE: The metadata database is a beta feature from version 16.4 and later. Please

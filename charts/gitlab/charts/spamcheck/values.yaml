@@ -93,6 +93,7 @@ resources:
 serviceAccount:
   enabled: false
   create: false
+  automountServiceAccountToken: false
 
 # Tolerations for pod scheduling
 tolerations: []

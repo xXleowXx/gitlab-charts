@@ -148,6 +148,7 @@ serviceAccount:
   enabled: false
   create: false
   annotations: {}
+  automountServiceAccountToken: false
   ## Name to be used for serviceAccount, otherwise defaults to chart fullname
   # name:
 
