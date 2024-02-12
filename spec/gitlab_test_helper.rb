@@ -137,6 +137,10 @@ module Gitlab
       wait_for_rollout(type: "deployment", filters: "app in (webservice, sidekiq)")
     end
 
+    def wait_for_runner_rollout
+      wait_for_rollout(type: "deployment", filters: "app=#{release}-gitlab-runner")
+    end
+
     def wait_for_rollout(type: nil, filters: nil)
       raise ArgumentError, "Must supply both 'type' and 'filters'" if type.nil? || filters.nil?
 
