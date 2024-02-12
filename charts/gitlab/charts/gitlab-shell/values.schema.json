@@ -390,14 +390,14 @@
         "limits": {
           "properties": {
             "cpu": {
-              "title": "CPU Limit",
+              "title": "CPU limit",
               "type": [
                 "string",
                 "number"
               ]
             },
             "memory": {
-              "title": "Memory Limit",
+              "title": "Memory limit",
               "type": [
                 "string",
                 "number"
