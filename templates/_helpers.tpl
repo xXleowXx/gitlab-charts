@@ -525,6 +525,8 @@ securityContext:
   {{- toYaml .Values.containerSecurityContext | nindent 2 }}
 {{- end }}
 {{- end }}
+
+{{/*
 Return a PodSecurityContext definition.
 
 Usage:
