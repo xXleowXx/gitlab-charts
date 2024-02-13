@@ -72,9 +72,14 @@ function deploy() {
   prometheus:
     install: ${PROMETHEUS_INSTALL}
     server:
-      retention: "4d"
+      retention: "3d"
       extraArgs:
-        storage.tsdb.retention.size: "4GB"
+        storage.tsdb.retention.size: "1GB"
+      resources:
+        requests:
+          memory: 2Gi
+        limits:
+          memory: 4Gi
 CIYAML
 
   # helm's --set argument dislikes special characters, pass them as YAML
