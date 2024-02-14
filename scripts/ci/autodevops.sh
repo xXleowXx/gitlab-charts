@@ -63,11 +63,18 @@ function deploy() {
 
   WAIT="--wait --timeout 900s"
 
-  # Only enable Prometheus on `master`
   PROMETHEUS_INSTALL="false"
+
+  # Only enable Prometheus on `master`
   if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
     PROMETHEUS_INSTALL="true"
   fi
+
+  # Allow Prometheus to be disabled on `master`
+  if [ "$PROMETHEUS_INSTALL_OVERRIDE" == "false" ]; then
+    PROMETHEUS_INSTALL="false"
+  fi
+
   cat << CIYAML > ci.prometheus.yaml
   prometheus:
     install: ${PROMETHEUS_INSTALL}
