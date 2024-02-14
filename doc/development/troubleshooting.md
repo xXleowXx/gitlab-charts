@@ -87,6 +87,6 @@ for more details:
 
 As a workaround, these installations can be manually deleted by running the associated
 `stop_review` job(s) in CI. To make this easier, use the
-[`helm_ci_triage.sh`](https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/scripts/ci/helm_ci_triage.sh)
+[`helm_ci_triage.sh`](../../scripts/ci/helm_ci_triage.sh)
 script to get a list of running installations and open the associated pipeline to run
 the `stop_review` job(s). Further usage details are available in the script.
