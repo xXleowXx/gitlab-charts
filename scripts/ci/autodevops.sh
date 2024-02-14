@@ -65,14 +65,9 @@ function deploy() {
 
   PROMETHEUS_INSTALL="false"
 
-  # Only enable Prometheus on `master`
-  if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+  # Only enable Prometheus on `master`. To override, set PROMETHEUS_INSTALL_OVERRIDE="false".
+  if [ "$CI_COMMIT_REF_NAME" == "master" ] && [ "${PROMETHEUS_INSTALL_OVERRIDE}" != "false" ]; then
     PROMETHEUS_INSTALL="true"
-  fi
-
-  # Allow Prometheus to be disabled on `master`
-  if [ "$PROMETHEUS_INSTALL_OVERRIDE" == "false" ]; then
-    PROMETHEUS_INSTALL="false"
   fi
 
   cat << CIYAML > ci.prometheus.yaml
