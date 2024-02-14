@@ -82,8 +82,8 @@ Installations are usually cleaned up automatically by the Review Apps logic in
 the pipeline, but this can fail for various reasons. See the following issues
 for more details:
 
-- https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2076
-- https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5338
+- [What can we do about cleaning up failed deploys in CI?](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2076)
+- [https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5338](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5338)
 
 As a workaround, these installations can be manually deleted by running the associated
 `stop_review` job(s) in CI. To make this easier, use the
