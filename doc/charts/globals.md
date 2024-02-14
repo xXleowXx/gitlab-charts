@@ -2517,7 +2517,7 @@ To enable log rotation, set the `GITLAB_LOGGER_TRUNCATE_LOGS` environment variab
 | Name        | Type    | Default | Description |
 | :---------- | :------ | :------ | :---------- |
 | `GITLAB_LOGGER_TRUNCATE_LOGS` | Boolean | `false` | When enabled, log files that exceed the size configured in `GITLAB_LOGGER_MAX_FILESIZE` will be truncated at the interval specified in `GITLAB_LOGGER_TRUNCATE_INTERVAL` |
-| `GITLAB_LOGGER_TRUNCATE_INTERVAL` | Integer | `300` | This is the interval at which log files that exceed the size configured in `GITLAB_LOGGER_MAX_FILESIZE` will be truncated when GITLAB_LOGGER_TRUNCATE_LOGS` is set to `true`. The interval is specified in seconds. |
+| `GITLAB_LOGGER_TRUNCATE_INTERVAL` | Integer | `300` | This is the interval at which log files that exceed the size configured in `GITLAB_LOGGER_MAX_FILESIZE` will be truncated when `GITLAB_LOGGER_TRUNCATE_LOGS` is set to `true`. The interval is specified in seconds. |
 | `GITLAB_LOGGER_MAX_FILESIZE` | Integer | `1000` | Log files that exceed this size will be truncated at the interval specified in `GITLAB_LOGGER_TRUNCATE_INTERVAL` when `GITLAB_LOGGER_TRUNCATE_LOGS` is set to `true`. This value is specified in bytes. | 
 
 For more information, see [GitLab Logger's documentation](https://gitlab.com/gitlab-org/cloud-native/gitlab-logger#configuration). In particular,
