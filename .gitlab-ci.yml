@@ -834,14 +834,6 @@ release_package:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
 
-.qa_production:
-  extends:
-    - .qa
-  parallel: 7
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-
 # QA jobs for Smoke and Reliable E2E suites
 
 qa_gke125:
@@ -883,47 +875,7 @@ qa_eks:
     - job: review_specs_eks
       artifacts: false
 
-qa_gke125_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_gke125"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: gke125_production
-  needs:
-    - stable_gke125
-    - job: production_specs_gke125
-      artifacts: false
-
-qa_gke126_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_gke126"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: gke126_production
-  needs:
-    - stable_gke126
-    - job: production_specs_gke126
-      artifacts: false
-
-qa_eks_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: eks_production
-  needs:
-    - stable_eks
-    - job: production_specs_eks
-      artifacts: false
-
 # QA jobs for Full E2E suites
-
-.qa_production_full_suite_manual_trigger:
-  extends: .qa_production
-  when: manual
 
 .qa_full_suite_manual_trigger:
   image: alpine
@@ -976,16 +928,6 @@ qa_eks_manual_full_suite:
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
-  needs: [ "qa_eks_full_suite_manual_trigger"]
-
-qa_eks_manual_full_suite_production:
-  extends: .qa_production_full_suite_manual_trigger
-  parallel: 7
-  variables:
-    VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
-  environment:
-    name: eks_production
   needs: [ "qa_eks_full_suite_manual_trigger"]
 
 knapsack-qa-report:
