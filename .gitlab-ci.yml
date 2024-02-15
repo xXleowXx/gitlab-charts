@@ -5,8 +5,7 @@
 # * storing the image in the container registry,
 # * running tests from a buildpack,
 # * running code quality analysis,
-# * creating a review app for each topic branch,
-# * and continuous deployment to production
+# * and creating a review app for each topic branch, default, and stable branch.
 #
 # In order to deploy, you must have a Kubernetes cluster configured either
 # via a project integration, or via group/project variables.
