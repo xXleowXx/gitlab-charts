@@ -17,7 +17,7 @@ you can reduce the defaults to fit into a smaller cluster.
 
 The GitLab Helm chart supports the following Kubernetes versions:
 
-- A cluster running Kubernetes 1.20 or newer is required for all components to work.
+- A cluster running Kubernetes 1.25 or newer is required for all components to work.
 - 1.26 support is fully tested as of Chart 7.5 (GitLab 16.5).
 - 1.27 and 1.28 are expected to also be compatible with Chart 7.6 (GitLab 16.6), and full testing is [in progress](https://gitlab.com/groups/gitlab-org/-/epics/11320).
 
