@@ -21,22 +21,16 @@ you can reduce the defaults to fit into a smaller cluster.
 
 The GitLab Helm chart supports the following Kubernetes releases:
 
-| Kubernetes release | Status                       | Minimum GitLab version | Architectures | End of life |
-|--------------------|------------------------------|------------------------|---------------|-------------|
-| 1.27             | [In development/qualification](https://gitlab.com/groups/gitlab-org/-/epics/11320) | 16.6                   | x86-64        | 2024-06-28  |
-| 1.26               | Supported   <sup>1<sup>      | 16.5                   | x86-64        | 2024-02-28  |
-| 1.25               | Deprecated                   | 16.5                   | x86-64        | 2023-10-28  |
-| 1.24               | Deprecated                   | 16.5                   | x86-64        | 2023-07-28  |
-| 1.23               | Deprecated                   | 16.5                   | x86-64        | 2023-02-28  |
-| 1.22               | Deprecated                   | 16.5                   | x86-64        | 2022-10-28  |
+| Kubernetes release | Status                                                                             | Minimum GitLab version | Architectures | End of life |
+|--------------------|------------------------------------------------------------------------------------|------------------------|---------------|-------------|
+| 1.27               | [In development/qualification](https://gitlab.com/groups/gitlab-org/-/epics/11320) | 16.6                   | x86-64        | 2024-06-28  |
+| 1.26               | Supported                                                                          | 16.5                   | x86-64        | 2024-02-28  |
+| 1.25               | Deprecated                                                                         | 16.5                   | x86-64        | 2023-10-28  |
+| 1.24               | Deprecated                                                                         | 16.5                   | x86-64        | 2023-07-28  |
+| 1.23               | Deprecated                                                                         | 16.5                   | x86-64        | 2023-02-28  |
+| 1.22               | Deprecated                                                                         | 16.5                   | x86-64        | 2022-10-28  |
 
-<html>
-<small>Footnotes:
-  <ol>
-    <li>The default Helm configuration is not intended for production. The default configuration creates an implementation where all GitLab services are deployed in the cluster, which is not suitable for production workloads. For production deployments, you must follow the <a href="https://docs.gitlab.com/charts/installation/index.html#use-the-reference-architectures">Cloud Native Hybrid reference architectures</a>.</li>
-  </ol>
-</small>
-</html>
+The default Helm configuration is not intended for production. The default configuration creates an implementation where all GitLab services are deployed in the cluster, which is not suitable for production workloads. For production deployments, you must follow the [Cloud Native Hybrid reference architectures](../index.md#use-the-reference-architectures).
 
 The GitLab Helm Chart aims to support new minor Kubernetes releases three months after their initial release.
 We welcome reports made to our [issue tracker](https://gitlab.com/gitlab-org/charts/gitlab/-/issues) about compatibility issues in releases newer than those listed above.
