@@ -264,9 +264,7 @@ pin_image_versions:
     paths:
       - ci.digests.yaml
   rules:
-    # Rules from .stable
     - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-    # Rules from .review_template
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
@@ -315,6 +313,7 @@ pin_image_versions:
     - variables
   rules:
     - !reference [.rule:skip_if_no_cluster]
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
@@ -471,64 +470,6 @@ stop_review_eks:
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
-
-# This job continuously deploys to production on every push to `master`.
-# To make this a manual process, either because you're enabling `staging`
-# or `canary` deploys, or you simply want more control over when you deploy
-# to production, uncomment the `when: manual` line in the `production` job.
-
-.stable:
-  stage: stable
-  extends: .source_autodevops
-  dependencies:
-    - pin_image_versions
-  script:
-    - !reference [.set_up_varfile_and_kubecontext, script]
-    - !reference [.set_up_namespace_secret_and_deploy, script]
-    - check_domain_ip
-    - restart_toolbox
-    - echo "export GITLAB_URL=gitlab.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
-    - echo "export GITLAB_ROOT_DOMAIN=$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
-    - echo "export S3_ENDPOINT=https://minio.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
-    - !reference [.get_qa_revision, script]
-  artifacts:
-    paths:
-    - variables
-  variables:
-    DOMAIN: ".$KUBE_INGRESS_BASE_DOMAIN"
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-
-stable_gke125:
-  extends: .stable
-  environment:
-    name: gke125_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_gke125_common_vars
-    VARIABLES_FILE: "variables/stable_gke125"
-  resource_group: "gke125-production"
-
-stable_gke126:
-  extends: .stable
-  environment:
-    name: gke126_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_gke126_common_vars
-    VARIABLES_FILE: "variables/stable_gke126"
-  resource_group: "gke126-production"
-
-stable_eks:
-  extends: .stable
-  environment:
-    name: eks_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_eks_common_vars
-    VARIABLES_FILE: "variables/stable_eks"
-  resource_group: "eks-production"
 
 debug_review_gke125:
   stage: qa
@@ -940,6 +881,7 @@ release_package:
   parallel: 7
   rules:
     - !reference [.rule:skip_if_no_cluster]
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
