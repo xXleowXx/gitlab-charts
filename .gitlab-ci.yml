@@ -5,8 +5,7 @@
 # * storing the image in the container registry,
 # * running tests from a buildpack,
 # * running code quality analysis,
-# * creating a review app for each topic branch,
-# * and continuous deployment to production
+# * and creating a review app for each topic branch, default, and stable branch.
 #
 # In order to deploy, you must have a Kubernetes cluster configured either
 # via a project integration, or via group/project variables.
@@ -264,9 +263,7 @@ pin_image_versions:
     paths:
       - ci.digests.yaml
   rules:
-    # Rules from .stable
     - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-    # Rules from .review_template
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
@@ -303,6 +300,7 @@ pin_image_versions:
     - !reference [.set_up_varfile_and_kubecontext, script]
     - kubectl version
     - !reference [.set_up_namespace_secret_and_deploy, script]
+    - check_domain_ip
     - restart_toolbox
     - echo "export GITLAB_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
@@ -315,6 +313,7 @@ pin_image_versions:
     - variables
   rules:
     - !reference [.rule:skip_if_no_cluster]
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
@@ -471,64 +470,6 @@ stop_review_eks:
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     action: stop
-
-# This job continuously deploys to production on every push to `master`.
-# To make this a manual process, either because you're enabling `staging`
-# or `canary` deploys, or you simply want more control over when you deploy
-# to production, uncomment the `when: manual` line in the `production` job.
-
-.stable:
-  stage: stable
-  extends: .source_autodevops
-  dependencies:
-    - pin_image_versions
-  script:
-    - !reference [.set_up_varfile_and_kubecontext, script]
-    - !reference [.set_up_namespace_secret_and_deploy, script]
-    - check_domain_ip
-    - restart_toolbox
-    - echo "export GITLAB_URL=gitlab.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
-    - echo "export GITLAB_ROOT_DOMAIN=$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
-    - echo "export S3_ENDPOINT=https://minio.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
-    - !reference [.get_qa_revision, script]
-  artifacts:
-    paths:
-    - variables
-  variables:
-    DOMAIN: ".$KUBE_INGRESS_BASE_DOMAIN"
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-
-stable_gke125:
-  extends: .stable
-  environment:
-    name: gke125_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_gke125_common_vars
-    VARIABLES_FILE: "variables/stable_gke125"
-  resource_group: "gke125-production"
-
-stable_gke126:
-  extends: .stable
-  environment:
-    name: gke126_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_gke126_common_vars
-    VARIABLES_FILE: "variables/stable_gke126"
-  resource_group: "gke126-production"
-
-stable_eks:
-  extends: .stable
-  environment:
-    name: eks_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_eks_common_vars
-    VARIABLES_FILE: "variables/stable_eks"
-  resource_group: "eks-production"
 
 debug_review_gke125:
   stage: qa
@@ -765,59 +706,6 @@ specs_without_cluster:
     - if: '$PIPELINE_TYPE == "RELEASE_PIPELINE"'
   needs: ['lint_package']
 
-.production_specs:
-  extends: .specs
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-
-production_specs_without_cluster:
-  extends: .production_specs
-  variables:
-    RSPEC_TAGS: ~type:feature
-  parallel: 6
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - !reference [.specs, rules]
-  needs: ['lint_package']
-
-production_specs_gke125:
-  extends: .production_specs
-  variables:
-    <<: *review_gke125_common_vars
-    VARIABLES_FILE: "variables/stable_gke125"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke125_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "gke125-production"
-  needs: ['stable_gke125']
-
-production_specs_gke126:
-  extends: .production_specs
-  variables:
-    <<: *review_gke126_common_vars
-    VARIABLES_FILE: "variables/stable_gke126"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke126_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "gke126-production"
-  needs: ['stable_gke126']
-
-production_specs_eks:
-  extends: .production_specs
-  allow_failure: true
-  variables:
-    <<: *review_eks_common_vars
-    VARIABLES_FILE: "variables/stable_eks"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: eks_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "eks-production"
-  needs: ['stable_eks']
-
 .qa:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/distribution_ci_tools:${CI_TOOLS_VERSION}
   stage: qa
@@ -940,18 +828,11 @@ release_package:
   parallel: 7
   rules:
     - !reference [.rule:skip_if_no_cluster]
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
-
-.qa_production:
-  extends:
-    - .qa
-  parallel: 7
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
 
 # QA jobs for Smoke and Reliable E2E suites
 
@@ -994,47 +875,7 @@ qa_eks:
     - job: review_specs_eks
       artifacts: false
 
-qa_gke125_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_gke125"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: gke125_production
-  needs:
-    - stable_gke125
-    - job: production_specs_gke125
-      artifacts: false
-
-qa_gke126_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_gke126"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: gke126_production
-  needs:
-    - stable_gke126
-    - job: production_specs_gke126
-      artifacts: false
-
-qa_eks_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: eks_production
-  needs:
-    - stable_eks
-    - job: production_specs_eks
-      artifacts: false
-
 # QA jobs for Full E2E suites
-
-.qa_production_full_suite_manual_trigger:
-  extends: .qa_production
-  when: manual
 
 .qa_full_suite_manual_trigger:
   image: alpine
@@ -1087,16 +928,6 @@ qa_eks_manual_full_suite:
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
     on_stop: stop_review_eks
-  needs: [ "qa_eks_full_suite_manual_trigger"]
-
-qa_eks_manual_full_suite_production:
-  extends: .qa_production_full_suite_manual_trigger
-  parallel: 7
-  variables:
-    VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
-  environment:
-    name: eks_production
   needs: [ "qa_eks_full_suite_manual_trigger"]
 
 knapsack-qa-report:
