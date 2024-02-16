@@ -1,3 +1,9 @@
+---
+stage: Systems
+group: Distribution
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
+---
+
 # Manage the container registry metadata database
 
 DETAILS:
@@ -175,7 +181,7 @@ When doing a one-step migration, be aware that:
 - The registry must remain in `read-only` mode during the migration.
 - If the Pod where the migration is being executed is terminated,
   you have to completely restart the process. The work to improve this process is tracked in
-  [issue 5293]((https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293)).
+  [issue 5293](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293).
 
 1. [Create the database and Kubernetes secret](#create-the-database).
 1. Get the current Helm values for your release and save them into a file.

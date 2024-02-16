@@ -63,18 +63,25 @@ function deploy() {
 
   WAIT="--wait --timeout 900s"
 
-  # Only enable Prometheus on `master`
   PROMETHEUS_INSTALL="false"
-  if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+
+  # Only enable Prometheus on `master`. To override, set PROMETHEUS_INSTALL_OVERRIDE="false".
+  if [ "$CI_COMMIT_REF_NAME" == "master" ] && [ "${PROMETHEUS_INSTALL_OVERRIDE}" != "false" ]; then
     PROMETHEUS_INSTALL="true"
   fi
+
   cat << CIYAML > ci.prometheus.yaml
   prometheus:
     install: ${PROMETHEUS_INSTALL}
     server:
-      retention: "4d"
+      retention: "3d"
       extraArgs:
-        storage.tsdb.retention.size: "4GB"
+        storage.tsdb.retention.size: "1GB"
+      resources:
+        requests:
+          memory: 2Gi
+        limits:
+          memory: 4Gi
 CIYAML
 
   # helm's --set argument dislikes special characters, pass them as YAML

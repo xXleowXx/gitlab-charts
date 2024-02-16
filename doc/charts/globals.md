@@ -1568,7 +1568,7 @@ See [Custom Certificate Authorities](#custom-certificate-authorities) for more i
 
 ### DuoAuth
 
-Use these settings to enable [two-factor authentication (2FA) with Duo](https://docs.gitlab.com/ee/user/profile/account/two_factor_authentication.html#enable-one-time-password).
+Use these settings to enable [two-factor authentication (2FA) with GitLab Duo](https://docs.gitlab.com/ee/user/profile/account/two_factor_authentication.html#enable-one-time-password).
 
 ```yaml
 global:
@@ -1584,16 +1584,16 @@ global:
 
 | Name              | Type    | Default | Description                                |
 |:----------------- |:-------:|:------- |:------------------------------------------ |
-| `enabled`         | Boolean | `false` | Enable or disable the integration with Duo |
-| `hostname`        | String  |         | Duo API hostname                           |
-| `integrationKey` | String  |         | Duo API integration key                    |
-| `secretKey`      |         |         | Duo API secret key that must be [configured with the name of secret and key name](#configure-the-duo-secret-key) |
+| `enabled`         | Boolean | `false` | Enable or disable the integration with GitLab Duo |
+| `hostname`        | String  |         | GitLab Duo API hostname                           |
+| `integrationKey` | String  |         | GitLab Duo API integration key                    |
+| `secretKey`      |         |         | GitLab Duo API secret key that must be [configured with the name of secret and key name](#configure-the-gitlab-duo-secret-key) |
 
-### Configure the Duo secret key
+### Configure the GitLab Duo secret key
 
-To configure Duo auth integration in the GitLab Helm chart you must provide a secret in the `global.appConfig.duoAuth.secretKey.secret` setting containing Duo auth secret_key value.
+To configure GitLab Duo auth integration in the GitLab Helm chart you must provide a secret in the `global.appConfig.duoAuth.secretKey.secret` setting containing GitLab Duo auth secret_key value.
 
-To create a Kubernetes secret object to store your Duo account `secretKey`, from the command line, run:
+To create a Kubernetes secret object to store your GitLab Duo account `secretKey`, from the command line, run:
 
 ```shell
 kubectl create secret generic <secret_object_name> --from-literal=secretKey=<duo_secret_key_value>

@@ -142,10 +142,7 @@ You can pass these parameters to the `helm install` command by using the `--set`
 
 ## Enable TLS communication
 
-> - The `gitlab.kas.privateApi.tls.enabled` and `gitlab.kas.privateApi.tls.secretName` attributes were
-    [deprecated](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3843) in GitLab 15.8, and will be
-    removed in GitLab 17.0. Enable TLS via the [global KAS attribute](../../globals.md#tls-settings-1)
-    instead.
+> - The `gitlab.kas.privateApi.tls.enabled` and `gitlab.kas.privateApi.tls.secretName` attributes were [deprecated](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3843) in GitLab 15.8, and will be removed in GitLab 17.0. Enable TLS via the [global KAS attribute](../../globals.md#tls-settings-1) instead.
 
 Enable TLS communication between your `kas` pods and other GitLab chart components,
 through the [global KAS attribute](../../globals.md#tls-settings-1).
