@@ -63,7 +63,7 @@ variables:
           cron:
             enabled: true
   GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
-  REVIEW_APPS_AUTO_STOP_IN: "2 days"
+  REVIEW_APPS_AUTO_STOP_IN: "2 hours"
 
 stages:
   - prepare
