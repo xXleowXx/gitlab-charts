@@ -523,6 +523,7 @@ debug_review_gke125:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
+    action: access
   variables:
     <<: *review_gke125_common_vars
     HOST_SUFFIX: "$CI_ENVIRONMENT_SLUG"
@@ -695,6 +696,7 @@ review_specs_gke125:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
+    action: access
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -710,6 +712,7 @@ review_specs_gke126:
     name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
+    action: access
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -725,6 +728,7 @@ review_specs_gke127:
     name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke127
+    action: access
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -740,6 +744,7 @@ review_specs_eks:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
+    action: access
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -894,6 +899,7 @@ qa_gke125:
   environment:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke125
+    action: access
   needs:
     - review_gke125
     - job: review_specs_gke125
@@ -907,6 +913,7 @@ qa_gke126:
   environment:
     name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke126
+    action: access
   needs:
     - review_gke126
     - job: review_specs_gke126
@@ -920,6 +927,7 @@ qa_gke127:
   environment:
     name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke127
+    action: access
   needs:
     - review_gke127
     - job: review_specs_gke127
@@ -933,6 +941,7 @@ qa_eks:
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_eks
+    action: access
   needs:
     - review_eks
     - job: review_specs_eks
@@ -969,6 +978,7 @@ qa_gke125_manual_full_suite:
   environment:
     name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke125
+    action: access
   needs: [ "qa_gke125_full_suite_manual_trigger"]
 
 qa_gke126_manual_full_suite:
@@ -980,6 +990,7 @@ qa_gke126_manual_full_suite:
   environment:
     name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke126
+    action: access
   needs: [ "qa_gke126_full_suite_manual_trigger"]
 
 qa_gke127_manual_full_suite:
@@ -991,6 +1002,7 @@ qa_gke127_manual_full_suite:
   environment:
     name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke127
+    action: access
   needs: [ "qa_gke127_full_suite_manual_trigger"]
 
 qa_eks_full_suite_manual_trigger:
@@ -1006,6 +1018,7 @@ qa_eks_manual_full_suite:
   environment:
     name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_eks
+    action: access
   needs: [ "qa_eks_full_suite_manual_trigger"]
 
 knapsack-qa-report:
