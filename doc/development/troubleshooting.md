@@ -69,3 +69,28 @@ Certain jobs in CI use a backup of GitLab during testing. Complete the steps bel
 1. Finally, update `.variables.TEST_BACKUP_PREFIX` in `.gitlab-ci.yml` to the new version of the backup.
 
 Future pipelines will now use the new backup artifact during testing.
+
+## CI: Review App environments
+
+CI will deploy instances of the GitLab Helm Charts to Kubernetes clusters for testing.
+These environments are implemented as [GitLab Review Apps](https://docs.gitlab.com/ee/ci/review_apps/).
+Environments will stay active for two hours by default, at which time they will be stopped automatically
+by associated CI jobs. The process works as follows:
+
+1. `create_review_*` jobs create the Review App environment.
+   - These jobs only `echo` environment information. This ensures that these jobs do not fail, meaning we
+     can create environments consistently and avoid leaving them in a broken state where they cannot be
+     automaticaly stopped by future CI Jobs.
+1. `review_*` jobs install the Helm Chart to the environment.
+1. `stop_review_*` jobs run after the duration defined in the variable named `REVIEW_APPS_AUTO_STOP_IN`.
+
+If you notice that one or more of the `review_*` jobs have failed and need to debug the environment, you can:
+
+1. Find the associated `create_review_*` job.
+1. At the top of the job page, click the environment link titled something like `This job is deployed to <cluster>/<commit>`.
+1. At the top right of the environment page, you will see buttons to:
+   - Pin the environment: marked by a pin icon, this button will prevent the environment from being stopped automatically.
+     If you click this, it will cancel the `stop_review_*` job. Be sure to run that job manually when you have finished debugging.
+     This option is helpful if you need more time to debug a failed environment.
+   - View deployment: this button will open the environment URL of the running instance of GitLab.
+   - Stop: this buttton will run the associated `stop_review_*` job.
