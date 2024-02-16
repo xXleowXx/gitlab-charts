@@ -360,9 +360,9 @@ create_review_gke125:
     <<: *review_gke125_common_vars
     GIT_STRATEGY: none
   script:
-    - echo "Configuring gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+    - echo "Configuring gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke125
     auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
     action: start
@@ -372,12 +372,12 @@ review_gke125:
     <<: *review_gke125_common_vars
   extends: .review_template
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
     action: access
-  resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
 
 # See comments in create_review_gke125.
 create_review_gke126:
@@ -386,9 +386,9 @@ create_review_gke126:
     <<: *review_gke126_common_vars
     GIT_STRATEGY: none
   script:
-    - echo "Configuring gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+    - echo "Configuring gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
     auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
@@ -399,12 +399,12 @@ review_gke126:
     <<: *review_gke126_common_vars
   extends: .review_template
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
     action: access
-  resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
 
 # See comments in create_review_gke125.
 create_review_gke127:
@@ -413,9 +413,9 @@ create_review_gke127:
     <<: *review_gke127_common_vars
     GIT_STRATEGY: none
   script:
-    - echo "Configuring gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+    - echo "Configuring gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
   environment:
-    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke127
     auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
@@ -426,12 +426,12 @@ review_gke127:
     <<: *review_gke127_common_vars
   extends: .review_template
   environment:
-    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke127
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
     action: access
-  resource_group: "gke127-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "gke127-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
 
 # See comments in create_review_gke125.
 create_review_eks:
@@ -440,9 +440,9 @@ create_review_eks:
     <<: *review_eks_common_vars
     GIT_STRATEGY: none
   script:
-    - echo "Configuring eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+    - echo "Configuring eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_eks
     auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
     action: start
@@ -452,12 +452,12 @@ review_eks:
     <<: *review_eks_common_vars
   extends: .review_template
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
     action: access
-  resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
 
 .stop_review_template:
   stage: review
@@ -485,7 +485,7 @@ stop_review_gke125:
     <<:  *review_gke125_common_vars
   extends: .stop_review_template
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     action: stop
 
 stop_review_gke126:
@@ -493,7 +493,7 @@ stop_review_gke126:
     <<:  *review_gke126_common_vars
   extends: .stop_review_template
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     action: stop
 
 stop_review_gke127:
@@ -501,7 +501,7 @@ stop_review_gke127:
     <<:  *review_gke127_common_vars
   extends: .stop_review_template
   environment:
-    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     action: stop
 
 stop_review_eks:
@@ -509,7 +509,7 @@ stop_review_eks:
     <<: *review_eks_common_vars
   extends: .stop_review_template
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     action: stop
 
 debug_review_gke125:
@@ -524,7 +524,7 @@ debug_review_gke125:
     paths:
     - variables
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
   variables:
@@ -696,10 +696,10 @@ review_specs_gke125:
     VARIABLES_FILE: "variables/review_gke125"
     RSPEC_TAGS: type:feature
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
-  resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -712,10 +712,10 @@ review_specs_gke126:
     VARIABLES_FILE: "variables/review_gke126"
     RSPEC_TAGS: type:feature
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
-  resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -728,10 +728,10 @@ review_specs_gke127:
     VARIABLES_FILE: "variables/review_gke127"
     RSPEC_TAGS: type:feature
   environment:
-    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke127
-  resource_group: "gke127-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "gke127-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -744,10 +744,10 @@ review_specs_eks:
     VARIABLES_FILE: "variables/review_eks"
     RSPEC_TAGS: type:feature
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
-  resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -900,7 +900,7 @@ qa_gke125:
     VARIABLES_FILE: "variables/review_gke125"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke125
   needs:
     - review_gke125
@@ -913,7 +913,7 @@ qa_gke126:
     VARIABLES_FILE: "variables/review_gke126"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke126
   needs:
     - review_gke126
@@ -926,7 +926,7 @@ qa_gke127:
     VARIABLES_FILE: "variables/review_gke127"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke127
   needs:
     - review_gke127
@@ -939,7 +939,7 @@ qa_eks:
     VARIABLES_FILE: "variables/review_eks"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_eks
   needs:
     - review_eks
@@ -975,7 +975,7 @@ qa_gke125_manual_full_suite:
     VARIABLES_FILE: "variables/review_gke125"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke125
   needs: [ "qa_gke125_full_suite_manual_trigger"]
 
@@ -986,7 +986,7 @@ qa_gke126_manual_full_suite:
     VARIABLES_FILE: "variables/review_gke126"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke126
   needs: [ "qa_gke126_full_suite_manual_trigger"]
 
@@ -997,7 +997,7 @@ qa_gke127_manual_full_suite:
     VARIABLES_FILE: "variables/review_gke127"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke127
   needs: [ "qa_gke127_full_suite_manual_trigger"]
 
@@ -1012,7 +1012,7 @@ qa_eks_manual_full_suite:
     VARIABLES_FILE: "variables/review_eks"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_eks
   needs: [ "qa_eks_full_suite_manual_trigger"]
 
