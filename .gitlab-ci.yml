@@ -462,7 +462,8 @@ review_eks:
   before_script: []
   dependencies: []
   script:
-    - git checkout master
+    # If the branch has already been deleted, fall back to `master`.
+    - git checkout "${CI_COMMIT_REF_NAME}" || git checkout master
     - source scripts/ci/autodevops.sh
     - set_context
     - delete
