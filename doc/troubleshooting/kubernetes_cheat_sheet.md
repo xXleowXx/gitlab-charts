@@ -223,29 +223,31 @@ all Kubernetes resources and dependent charts:
 
 ## Fast-Stats for KubeSOS reports
 
-- Run `fast-stats`. More details may be found in the [`fast-stats` page](https://gitlab.com/gitlab-com/support/toolbox/fast-stats).
+- Run `fast-stats`.
 
-```
-cat <file-name> | cut -d  ' ' -f2- | grep ^{ | fast-stats <options>
-```
+  ```shell
+  cat <file-name> | cut -d  ' ' -f2- | grep ^{ | fast-stats
+  ```
 
 - List errors.
 
-```
-cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats errors
-```
+  ```shell
+  cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats errors
+  ```
 
 - Run `fast-stats` top.
 
-```
-cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats top
-```
+  ```shell
+  cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats top
+  ```
 
 - The number of rows to print. Defaults to 10.
 
-```
-cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats -l <number of rows>
-```
+  ```shell
+  cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats -l <number of rows>
+  ```
+
+More details may be found at the [`fast-stats` page](https://gitlab.com/gitlab-com/support/toolbox/fast-stats).
 
 ## Installation of minimal GitLab configuration via minikube on macOS
 
