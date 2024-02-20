@@ -221,6 +221,32 @@ all Kubernetes resources and dependent charts:
   helm get manifest <release name>
   ```
 
+## Fast-Stats for KubeSOS reports
+
+- Run `fast-stats`. More details may be found in the [`fast-stats` page](https://gitlab.com/gitlab-com/support/toolbox/fast-stats).
+
+```
+cat <file-name> | cut -d  ' ' -f2- | grep ^{ | fast-stats <options>
+```
+
+- List errors.
+
+```
+cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats errors
+```
+
+- Run `fast-stats` top.
+
+```
+cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats top
+```
+
+- The number of rows to print. Defaults to 10.
+
+```
+cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats -l <number of rows>
+```
+
 ## Installation of minimal GitLab configuration via minikube on macOS
 
 This section is based on [Developing for Kubernetes with minikube](../development/minikube/index.md)
