@@ -7,7 +7,7 @@ The GitLab Helm charts are signed with a GNUPG keypair. The public portion of
 the keypair must be downloaded and possibly exported before it can be used to
 verify the charts. The
 [GNU Privacy Handbook](https://www.gnupg.org/gph/en/manual/x56.html) has
-detailed instructions on how manage GPG keys.
+detailed instructions on how to manage GPG keys.
 
 ## Download and export the GitLab Helm chart signing key
 
@@ -26,7 +26,7 @@ gpg --receive-keys --keyserver hkps://keys.openpgp.org 'E30F9C687683D663'
 For example,
 
 ```shell
-$ gpg --receive-keys --keyserver hkps://keys.openpgp.org 'E30F9C687683D663'
+$ gpg --receive-keys --keyserver hkps://keys.openpgp.org '5E46F79EF5836E986A663B4AE30F9C687683D663'
 gpg: key E30F9C687683D663: public key "GitLab, Inc. Helm charts <distribution@gitlab.com>" imported
 gpg: Total number processed: 1
 gpg:               imported: 1
@@ -40,8 +40,8 @@ options to create a new keyring that contains just the GitLab Chart signing key.
 For example,
 
 ```shell
-$ gpg --keyring /home/<example_user>/.gnupg/gitlab.pubring.kbx --no-default-keyring --receive-keys 5E46F79EF5836E986A663B4AE30F9C687683D663
-gpg: keybox '/home/<example_user>/.gnupg/gitlab.pubring.kbx' created
+$ gpg --keyring $HOME/.gnupg/gitlab.pubring.kbx --keyserver hkps://keys.openpgp.org --no-default-keyring --receive-keys 5E46F79EF5836E986A663B4AE30F9C687683D663
+gpg: keybox '$HOME/.gnupg/gitlab.pubring.kbx' created
 gpg: key E30F9C687683D663: public key "GitLab, Inc. Helm charts <distribution@gitlab.com>" imported
 gpg: Total number processed: 1
 gpg:               imported: 1
@@ -64,7 +64,7 @@ or use the `--no-default-keyring --keyring <keyring>` options to export the key
 from a separate keyring:
 
 ```shell
-gpg --export --output /home/<example_user>/.gnupg/gitlab.pubring.gpg  --keyring /home/<example_user>/.gnupg/gitlab.pubring.kbx  --no-default-keyring E30F9C687683D663
+gpg --export --output $HOME/.gnupg/gitlab.pubring.gpg  --keyring $HOME/.gnupg/gitlab.pubring.kbx  --no-default-keyring E30F9C687683D663
 ```
 
 ## Verify a chart
@@ -95,7 +95,7 @@ helm pull --prov gitlab/gitlab --version 7.9.0
 You can then use the `helm verify` command to verify the downloaded chart. For example:
 
 ```shell
-helm verify --keyring /home/<example_user>/.gnupg/gitlab.pubring.gpg gitlab-7.9.0.tgz
+helm verify --keyring $HOME/.gnupg/gitlab.pubring.gpg gitlab-7.9.0.tgz
 Signed by: GitLab, Inc. Helm charts <distribution@gitlab.com>
 Using Key With Fingerprint: 5E46F79EF5836E986A663B4AE30F9C687683D663
 Chart Hash Verified: sha256:789ec56d929c7ec403fc05249639d0c48ff6ab831f90db7c6ac133534d0aba19
@@ -106,7 +106,7 @@ You can combine the pull and verify commands using the `--verify` option with th
 For example,
 
 ```shell
-helm pull --prov gitlab/gitlab --verify --keyring /home/<example_user>/.gnupg/gitlab.pubring.gpg
+helm pull --prov gitlab/gitlab --verify --keyring $HOME/.gnupg/gitlab.pubring.gpg
 Signed by: GitLab, Inc. Helm charts <distribution@gitlab.com>
 Using Key With Fingerprint: 5E46F79EF5836E986A663B4AE30F9C687683D663
 Chart Hash Verified: sha256:789ec56d929c7ec403fc05249639d0c48ff6ab831f90db7c6ac133534d0aba19
@@ -120,11 +120,11 @@ either the `helm install` or `helm upgrade` command.
 - For example, `helm install`:
 
   ```shell
-  helm install --verify --keyring /home/<example_user>/.gnupg/gitlab.pubring.gpg gitlab gitlab/gitlab --set certmanager-issuer.email=<me@example.com> --set global.hosts.domain=<example.com>
+  helm install --verify --keyring $HOME/.gnupg/gitlab.pubring.gpg gitlab gitlab/gitlab --set certmanager-issuer.email=<me@example.com> --set global.hosts.domain=<example.com>
   ```
 
 - For example, `helm upgrade`:
 
   ```shell
-  helm upgrade --install --verify --keyring /home/<example_user>/.gnupg/gitlab.pubring.gpg gitlab gitlab/gitlab --set certmanager-issuer.email=<me@example.com> --set global.hosts.domain=<example.com>
+  helm upgrade --install --verify --keyring $HOME/.gnupg/gitlab.pubring.gpg gitlab gitlab/gitlab --set certmanager-issuer.email=<me@example.com> --set global.hosts.domain=<example.com>
   ```
