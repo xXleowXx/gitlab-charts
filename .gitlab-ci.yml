@@ -757,70 +757,6 @@ review-docs-cleanup:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
 
-review_specs_gke125:
-  extends: .specs
-  variables:
-    <<: *review_gke125_common_vars
-    VARIABLES_FILE: "variables/review_gke125"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
-    url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
-    on_stop: stop_review_gke125
-  resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - !reference [.specs, rules]
-  needs: ['review_gke125']
-
-review_specs_gke126:
-  extends: .specs
-  variables:
-    <<: *review_gke126_common_vars
-    VARIABLES_FILE: "variables/review_gke126"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
-    url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
-    on_stop: stop_review_gke126
-  resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - !reference [.specs, rules]
-  needs: ['review_gke126']
-
-review_specs_gke127:
-  extends: .specs
-  variables:
-    <<: *review_gke127_common_vars
-    VARIABLES_FILE: "variables/review_gke127"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
-    url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
-    on_stop: stop_review_gke127
-  resource_group: "gke127-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - !reference [.specs, rules]
-  needs: ['review_gke127']
-
-review_specs_eks:
-  extends: .specs
-  variables:
-    <<:  *review_eks_common_vars
-    VARIABLES_FILE: "variables/review_eks"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
-    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
-    on_stop: stop_review_eks
-  resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - !reference [.specs, rules]
-  needs: ['review_eks']
-
 specs_without_cluster:
   extends: .specs
   variables:
@@ -831,71 +767,6 @@ specs_without_cluster:
     - if: '$PIPELINE_TYPE == "AUTO_DEPLOY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "RELEASE_PIPELINE"'
   needs: ['lint_package']
-
-.production_specs:
-  extends: .specs
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-
-production_specs_without_cluster:
-  extends: .production_specs
-  variables:
-    RSPEC_TAGS: ~type:feature
-  parallel: 6
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - !reference [.specs, rules]
-  needs: ['lint_package']
-
-production_specs_gke125:
-  extends: .production_specs
-  variables:
-    <<: *review_gke125_common_vars
-    VARIABLES_FILE: "variables/stable_gke125"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke125_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "gke125-production"
-  needs: ['stable_gke125']
-
-production_specs_gke126:
-  extends: .production_specs
-  variables:
-    <<: *review_gke126_common_vars
-    VARIABLES_FILE: "variables/stable_gke126"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke126_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "gke126-production"
-  needs: ['stable_gke126']
-
-production_specs_gke127:
-  extends: .production_specs
-  variables:
-    <<: *review_gke127_common_vars
-    VARIABLES_FILE: "variables/stable_gke127"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke127_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "gke127-production"
-  needs: ['stable_gke127']
-
-production_specs_eks:
-  extends: .production_specs
-  allow_failure: true
-  variables:
-    <<: *review_eks_common_vars
-    VARIABLES_FILE: "variables/stable_eks"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: eks_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "eks-production"
-  needs: ['stable_eks']
 
 .qa:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/distribution_ci_tools:${CI_TOOLS_VERSION}
@@ -1044,8 +915,6 @@ qa_gke125:
     on_stop: stop_review_gke125
   needs:
     - review_gke125
-    - job: review_specs_gke125
-      artifacts: false
 
 qa_gke126:
   extends: .qa_branch
@@ -1057,8 +926,6 @@ qa_gke126:
     on_stop: stop_review_gke126
   needs:
     - review_gke126
-    - job: review_specs_gke126
-      artifacts: false
 
 qa_gke127:
   extends: .qa_branch
@@ -1070,8 +937,6 @@ qa_gke127:
     on_stop: stop_review_gke127
   needs:
     - review_gke127
-    - job: review_specs_gke127
-      artifacts: false
 
 qa_eks:
   extends: .qa_branch
@@ -1083,8 +948,6 @@ qa_eks:
     on_stop: stop_review_eks
   needs:
     - review_eks
-    - job: review_specs_eks
-      artifacts: false
 
 qa_gke125_production:
   extends: .qa_production
@@ -1095,8 +958,6 @@ qa_gke125_production:
     name: gke125_production
   needs:
     - stable_gke125
-    - job: production_specs_gke125
-      artifacts: false
 
 qa_gke126_production:
   extends: .qa_production
@@ -1107,8 +968,6 @@ qa_gke126_production:
     name: gke126_production
   needs:
     - stable_gke126
-    - job: production_specs_gke126
-      artifacts: false
 
 qa_gke127_production:
   extends: .qa_production
@@ -1119,8 +978,6 @@ qa_gke127_production:
     name: gke127_production
   needs:
     - stable_gke127
-    - job: production_specs_gke127
-      artifacts: false
 
 qa_eks_production:
   extends: .qa_production
@@ -1131,8 +988,6 @@ qa_eks_production:
     name: eks_production
   needs:
     - stable_eks
-    - job: production_specs_eks
-      artifacts: false
 
 # QA jobs for Full E2E suites
 
