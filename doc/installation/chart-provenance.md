@@ -1,6 +1,6 @@
 # GitLab Helm chart provenance
 
-The integrity and origin of GitLab Helm charts can be verified using
+You can verify the integrity and origin of GitLab Helm charts by using
 [Helm provenance](https://helm.sh/docs/topics/provenance/).
 
 The GitLab Helm charts are signed with a GNUPG keypair. The public portion of
@@ -9,13 +9,13 @@ verify the charts. The
 [GNU Privacy Handbook](https://www.gnupg.org/gph/en/manual/x56.html) has
 detailed instructions on how manage GPG keys.
 
-## Downloading and exporting the GitLab Helm chart signing key
+## Download and export the GitLab Helm chart signing key
 
 The official GitLab Helm Chart public signing key must be used to verify the
 provenance of the GitLab Helm charts. The key must first be downloaded and then
 possibly exported into a local keyring.
 
-### Downloading the public signing key
+### Download the public signing key
 
 To download the official GitLab Helm chart signing key use the command:
 
@@ -23,7 +23,7 @@ To download the official GitLab Helm chart signing key use the command:
 gpg --receive-keys --keyserver hkps://keys.openpgp.org 'E30F9C687683D663'
 ```
 
-For example:
+For example,
 
 ```shell
 $ gpg --receive-keys --keyserver hkps://keys.openpgp.org 'E30F9C687683D663'
@@ -36,17 +36,18 @@ The above command will download the key and add it to your default keyring. We
 recommend that you put the GitLab Helm chart signing key into a separate
 keyring. You can use the `--no-default-keyring --keyring <keyring>` `gpg`
 options to create a new keyring that contains just the GitLab Chart signing key.
-For example:
+
+For example,
 
 ```shell
-$ gpg --keyring /home/example_user/.gnupg/gitlab.pubring.kbx --no-default-keyring --receive-keys 5E46F79EF5836E986A663B4AE30F9C687683D663
-gpg: keybox '/home/example_user/.gnupg/gitlab.pubring.kbx' created
+$ gpg --keyring /home/<example_user>/.gnupg/gitlab.pubring.kbx --no-default-keyring --receive-keys 5E46F79EF5836E986A663B4AE30F9C687683D663
+gpg: keybox '/home/<example_user>/.gnupg/gitlab.pubring.kbx' created
 gpg: key E30F9C687683D663: public key "GitLab, Inc. Helm charts <distribution@gitlab.com>" imported
 gpg: Total number processed: 1
 gpg:               imported: 1
 ```
 
-### Exporting the signing key
+### Export the signing key
 
 By default, GnuPG v2 stores keyrings in a format that is incompatible with Helm
 chart provenance verification. You must first export the keyring into the legacy
@@ -63,21 +64,21 @@ or use the `--no-default-keyring --keyring <keyring>` options to export the key
 from a separate keyring:
 
 ```shell
-gpg --export --output /home/example_user/.gnupg/gitlab.pubring.gpg  --keyring /home/example_user/.gnupg/gitlab.pubring.kbx  --no-default-keyring E30F9C687683D663
+gpg --export --output /home/<example_user>/.gnupg/gitlab.pubring.gpg  --keyring /home/<example_user>/.gnupg/gitlab.pubring.kbx  --no-default-keyring E30F9C687683D663
 ```
 
-## Verifying a chart
+## Verify a chart
 
 A GitLab Helm chart can be verified either by:
 
 - Downloading the chart and running `helm verify`
 - Using the `--verify` option during chart installation
 
-### Verifying a downloaded chart
+### Verify a downloaded chart
 
 The `helm verify` command can be used to verify a downloaded chart. To download a verifiable chart, use the `helm pull --prov` command.
 
-For example:
+For example,
 
 ```shell
 helm pull --prov gitlab/gitlab
@@ -85,7 +86,7 @@ helm pull --prov gitlab/gitlab
 
 The `--version` option can be used to download a specify chart version.
 
-For example:
+For example,
 
 ```shell
 helm pull --prov gitlab/gitlab --version 7.9.0
@@ -94,7 +95,7 @@ helm pull --prov gitlab/gitlab --version 7.9.0
 You can then use the `helm verify` command to verify the downloaded chart. For example:
 
 ```shell
-helm verify --keyring /home/example_user/.gnupg/gitlab.pubring.gpg gitlab-7.9.0.tgz
+helm verify --keyring /home/<example_user>/.gnupg/gitlab.pubring.gpg gitlab-7.9.0.tgz
 Signed by: GitLab, Inc. Helm charts <distribution@gitlab.com>
 Using Key With Fingerprint: 5E46F79EF5836E986A663B4AE30F9C687683D663
 Chart Hash Verified: sha256:789ec56d929c7ec403fc05249639d0c48ff6ab831f90db7c6ac133534d0aba19
@@ -102,25 +103,28 @@ Chart Hash Verified: sha256:789ec56d929c7ec403fc05249639d0c48ff6ab831f90db7c6ac1
 
 You can combine the pull and verify commands using the `--verify` option with the `helm pull command`.
 
-For example:
+For example,
 
 ```shell
-helm pull --prov gitlab/gitlab --verify --keyring /home/example_user/.gnupg/gitlab.pubring.gpg
+helm pull --prov gitlab/gitlab --verify --keyring /home/<example_user>/.gnupg/gitlab.pubring.gpg
 Signed by: GitLab, Inc. Helm charts <distribution@gitlab.com>
 Using Key With Fingerprint: 5E46F79EF5836E986A663B4AE30F9C687683D663
 Chart Hash Verified: sha256:789ec56d929c7ec403fc05249639d0c48ff6ab831f90db7c6ac133534d0aba19
 ```
 
-### Verifying a chart during installation
+### Verify a chart during installation
 
-A chart can be verified during installation using the `--verify` option to the `helm install` or `helm upgrade` commands. For example:
+You can verify a chart during installation by using the `--verify` option to
+either the `helm install` or `helm upgrade` command.
 
-```shell
-helm install --verify --keyring /home/example_user/.gnupg/gitlab.pubring.gpg gitlab gitlab/gitlab --set certmanager-issuer.email=me@example.com --set global.hosts.domain=example.com
-```
+- For example, `helm install`:
 
-or:
+  ```shell
+  helm install --verify --keyring /home/<example_user>/.gnupg/gitlab.pubring.gpg gitlab gitlab/gitlab --set certmanager-issuer.email=<me@example.com> --set global.hosts.domain=<example.com>
+  ```
 
-```shell
-helm upgrade --install --verify --keyring /home/example_user/.gnupg/gitlab.pubring.gpg gitlab gitlab/gitlab --set certmanager-issuer.email=me@example.com --set global.hosts.domain=example.com
-```
+- For example, `helm upgrade`:
+
+  ```shell
+  helm upgrade --install --verify --keyring /home/<example_user>/.gnupg/gitlab.pubring.gpg gitlab gitlab/gitlab --set certmanager-issuer.email=<me@example.com> --set global.hosts.domain=<example.com>
+  ```

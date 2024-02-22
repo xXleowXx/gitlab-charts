@@ -63,9 +63,9 @@ Instructions for installing a development branch rather than a tagged release ca
 
 ## Verifying the integrity and origin of GitLab Helm charts
 
-The integrity and origin of GitLab Helm charts can be verified using
-[Helm provenance](https://helm.sh/docs/topics/provenance/). See
-[GitLab Helm Chart provenance](chart-provenance.md) for details.
+You can verify the integrity and origin of GitLab Helm charts by using
+[Helm provenance](https://helm.sh/docs/topics/provenance/). For more
+information, see [GitLab Helm Chart provenance](chart-provenance.md).
 
 ## Monitoring the Deployment
 
