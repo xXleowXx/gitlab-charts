@@ -20,7 +20,7 @@ possibly exported into a local keyring.
 To download the official GitLab Helm chart signing key use the command:
 
 ```shell
-gpg --receive-keys --keyserver hkps://keys.openpgp.org 'E30F9C687683D663'
+gpg --receive-keys --keyserver hkps://keys.openpgp.org '5E46F79EF5836E986A663B4AE30F9C687683D663'
 ```
 
 For example,
@@ -40,7 +40,7 @@ options to create a new keyring that contains just the GitLab Chart signing key.
 For example,
 
 ```shell
-$ gpg --keyring $HOME/.gnupg/gitlab.pubring.kbx --keyserver hkps://keys.openpgp.org --no-default-keyring --receive-keys 5E46F79EF5836E986A663B4AE30F9C687683D663
+$ gpg --keyring $HOME/.gnupg/gitlab.pubring.kbx --keyserver hkps://keys.openpgp.org --no-default-keyring --receive-keys '5E46F79EF5836E986A663B4AE30F9C687683D663'
 gpg: keybox '$HOME/.gnupg/gitlab.pubring.kbx' created
 gpg: key E30F9C687683D663: public key "GitLab, Inc. Helm charts <distribution@gitlab.com>" imported
 gpg: Total number processed: 1
@@ -57,14 +57,14 @@ commands to export the keyring into the proper format:
 To export from the default keyring:
 
 ```shell
-gpg --export --output gitlab.pubring.gpg E30F9C687683D663
+gpg --export --output gitlab.pubring.gpg '5E46F79EF5836E986A663B4AE30F9C687683D663'
 ```
 
 or use the `--no-default-keyring --keyring <keyring>` options to export the key
 from a separate keyring:
 
 ```shell
-gpg --export --output $HOME/.gnupg/gitlab.pubring.gpg  --keyring $HOME/.gnupg/gitlab.pubring.kbx  --no-default-keyring E30F9C687683D663
+gpg --export --output $HOME/.gnupg/gitlab.pubring.gpg  --keyring $HOME/.gnupg/gitlab.pubring.kbx  --no-default-keyring '5E46F79EF5836E986A663B4AE30F9C687683D663'
 ```
 
 ## Verify a chart
