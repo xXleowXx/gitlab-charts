@@ -74,7 +74,6 @@ stages:
   - review
   - staging
   - canary
-  - stable
   - specs
   - qa-manual
   - qa
