@@ -38,7 +38,7 @@ variables:
   # AUTO_DEVOPS_DOMAIN: domain.example.com
   GIT_CLONE_PATH: $CI_BUILDS_DIR/gitlab
   HELM_MAX_HISTORY: 20
-  TEST_BACKUP_PREFIX: "1708623546_2024_02_22_16.9.1-ee"
+  TEST_BACKUP_PREFIX: "1708639806_2024_02_22_16.10.0-pre"
   NAMESPACE: $KUBE_NAMESPACE
   REVIEW_REF_PREFIX: ""
   ISSUE_BOT_LABELS_EXTRA: "group::distribution,type::maintenance,maintenance::pipelines"
