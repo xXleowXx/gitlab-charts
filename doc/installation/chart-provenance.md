@@ -17,13 +17,13 @@ possibly exported into a local keyring.
 
 ### Download the public signing key
 
-To download the official GitLab Helm chart signing key use the command:
+To download the official GitLab Helm chart signing key, run:
 
 ```shell
 gpg --receive-keys --keyserver hkps://keys.openpgp.org '5E46F79EF5836E986A663B4AE30F9C687683D663'
 ```
 
-For example,
+For example:
 
 ```shell
 $ gpg --receive-keys --keyserver hkps://keys.openpgp.org '5E46F79EF5836E986A663B4AE30F9C687683D663'
@@ -32,12 +32,12 @@ gpg: Total number processed: 1
 gpg:               imported: 1
 ```
 
-The above command will download the key and add it to your default keyring. We
-recommend that you put the GitLab Helm chart signing key into a separate
-keyring. You can use the `--no-default-keyring --keyring <keyring>` `gpg`
-options to create a new keyring that contains just the GitLab Chart signing key.
+This command downloads the key and adds it to your default keyring. You should
+put the GitLab Helm chart signing key into a separate keyring. You can use the
+`--no-default-keyring --keyring <keyring>` `gpg` options to create a new keyring
+that contains just the GitLab Chart signing key.
 
-For example,
+For example:
 
 ```shell
 $ gpg --keyring $HOME/.gnupg/gitlab.pubring.kbx --keyserver hkps://keys.openpgp.org --no-default-keyring --receive-keys '5E46F79EF5836E986A663B4AE30F9C687683D663'
@@ -51,48 +51,47 @@ gpg:               imported: 1
 
 By default, GnuPG v2 stores keyrings in a format that is incompatible with Helm
 chart provenance verification. You must first export the keyring into the legacy
-format before it can be used to verify an Helm chart. Use one of the following
-commands to export the keyring into the proper format:
+format before it can be used to verify an Helm chart. To export the keyring into
+the proper format, either:
 
-To export from the default keyring:
+- Export from the default keyring:
 
-```shell
-gpg --export --output gitlab.pubring.gpg '5E46F79EF5836E986A663B4AE30F9C687683D663'
-```
+  ```shell
+  gpg --export --output gitlab.pubring.gpg '5E46F79EF5836E986A663B4AE30F9C687683D663'
+  ```
 
-or use the `--no-default-keyring --keyring <keyring>` options to export the key
-from a separate keyring:
+- Use the `--no-default-keyring --keyring <keyring>` options to export the key
+  from a separate keyring:
 
-```shell
-gpg --export --output $HOME/.gnupg/gitlab.pubring.gpg  --keyring $HOME/.gnupg/gitlab.pubring.kbx  --no-default-keyring '5E46F79EF5836E986A663B4AE30F9C687683D663'
-```
+  ```shell
+  gpg --export --output $HOME/.gnupg/gitlab.pubring.gpg  --keyring $HOME/.gnupg/gitlab.pubring.kbx  --no-default-keyring '5E46F79EF5836E986A663B4AE30F9C687683D663'
+  ```
 
 ## Verify a chart
 
 A GitLab Helm chart can be verified either by:
 
-- Downloading the chart and running `helm verify`
-- Using the `--verify` option during chart installation
+- Downloading the chart and running `helm verify`.
+- Using the `--verify` option during chart installation.
 
 ### Verify a downloaded chart
 
-The `helm verify` command can be used to verify a downloaded chart. To download a verifiable chart, use the `helm pull --prov` command.
-
-For example,
+You can use the `helm verify` command to verify a downloaded chart. To download a
+verifiable chart, use the `helm pull --prov` command. For example:
 
 ```shell
 helm pull --prov gitlab/gitlab
 ```
 
-The `--version` option can be used to download a specify chart version.
-
-For example,
+Use the `--version` option to download a specify chart version. For example:
 
 ```shell
 helm pull --prov gitlab/gitlab --version 7.9.0
 ```
 
-You can then use the `helm verify` command to verify the downloaded chart. For example:
+You can then use the `helm verify` command to verify the downloaded chart.
+
+For example:
 
 ```shell
 helm verify --keyring $HOME/.gnupg/gitlab.pubring.gpg gitlab-7.9.0.tgz
@@ -103,7 +102,7 @@ Chart Hash Verified: sha256:789ec56d929c7ec403fc05249639d0c48ff6ab831f90db7c6ac1
 
 You can combine the pull and verify commands using the `--verify` option with the `helm pull command`.
 
-For example,
+For example:
 
 ```shell
 helm pull --prov gitlab/gitlab --verify --keyring $HOME/.gnupg/gitlab.pubring.gpg
