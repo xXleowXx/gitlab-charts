@@ -355,6 +355,7 @@ pin_image_versions:
 
 create_review_gke125:
   stage: review
+  image: busybox
   variables:
     <<: *review_gke125_common_vars
     GIT_STRATEGY: none
@@ -380,6 +381,7 @@ review_gke125:
 # See comments in create_review_gke125.
 create_review_gke126:
   stage: review
+  image: busybox
   variables:
     <<: *review_gke126_common_vars
     GIT_STRATEGY: none
@@ -406,6 +408,7 @@ review_gke126:
 # See comments in create_review_gke125.
 create_review_gke127:
   stage: review
+  image: busybox
   variables:
     <<: *review_gke127_common_vars
     GIT_STRATEGY: none
@@ -432,6 +435,7 @@ review_gke127:
 # See comments in create_review_gke125.
 create_review_eks:
   stage: review
+  image: busybox
   variables:
     <<: *review_eks_common_vars
     GIT_STRATEGY: none
