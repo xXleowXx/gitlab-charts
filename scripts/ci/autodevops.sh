@@ -2,14 +2,14 @@
 
 # Auto DevOps variables and functions
 [[ "$TRACE" ]] && set -x
-export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_SHORT_SHA
 export CI_APPLICATION_TAG=$CI_COMMIT_SHA
 export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
 
 # Derive the Helm RELEASE argument from CI_ENVIRONMENT_SLUG
 if [[ $CI_ENVIRONMENT_SLUG =~ ^[^-]+-review ]]; then
-  # if a "review", use $REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
-  RELEASE_NAME=rvw-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}
+  # if a "review", use $REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
+  RELEASE_NAME=rvw-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}
   # Trim release name to leave room for prefixes/suffixes
   RELEASE_NAME=${RELEASE_NAME:0:30}
   # Trim any hyphens in the suffix
