@@ -5,8 +5,7 @@
 # * storing the image in the container registry,
 # * running tests from a buildpack,
 # * running code quality analysis,
-# * creating a review app for each topic branch,
-# * and continuous deployment to production
+# * and creating a review app for each topic branch, default, and stable branch.
 #
 # In order to deploy, you must have a Kubernetes cluster configured either
 # via a project integration, or via group/project variables.
@@ -64,7 +63,7 @@ variables:
           cron:
             enabled: true
   GITLAB_AUTH_TOKEN: $DANGER_GITLAB_API_TOKEN
-  REVIEW_APPS_AUTO_STOP_IN: "2 days"
+  REVIEW_APPS_AUTO_STOP_IN: "2 hours"
 
 stages:
   - prepare
@@ -75,7 +74,6 @@ stages:
   - review
   - staging
   - canary
-  - stable
   - specs
   - qa-manual
   - qa
@@ -278,9 +276,7 @@ pin_image_versions:
     paths:
       - ci.digests.yaml
   rules:
-    # Rules from .stable
     - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-    # Rules from .review_template
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
@@ -317,6 +313,7 @@ pin_image_versions:
     - !reference [.set_up_varfile_and_kubecontext, script]
     - kubectl version
     - !reference [.set_up_namespace_secret_and_deploy, script]
+    - check_domain_ip
     - restart_toolbox
     - echo "export GITLAB_URL=gitlab-$HOST_SUFFIX.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
     - echo "export GITLAB_ROOT_DOMAIN=$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
@@ -329,6 +326,7 @@ pin_image_versions:
     - variables
   rules:
     - !reference [.rule:skip_if_no_cluster]
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
@@ -374,9 +372,9 @@ create_review_gke122:
     <<: *review_gke122_common_vars
     GIT_STRATEGY: none
   script:
-    - echo "Configuring gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+    - echo "Configuring gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
   environment:
-    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke122
     auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
     action: start
@@ -386,12 +384,12 @@ review_gke122:
     <<: *review_gke122_common_vars
   extends: .review_template
   environment:
-    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke122
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
     action: access
-  resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
 
 # See comments in create_review_gke122.
 create_review_gke125:
@@ -400,9 +398,9 @@ create_review_gke125:
     <<: *review_gke125_common_vars
     GIT_STRATEGY: none
   script:
-    - echo "Configuring gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+    - echo "Configuring gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke125
     auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
     action: start
@@ -412,12 +410,11 @@ review_gke125:
     <<: *review_gke125_common_vars
   extends: .review_template
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
     action: access
-  resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 # See comments in create_review_gke122.
 create_review_gke126:
@@ -426,9 +423,9 @@ create_review_gke126:
     <<: *review_gke126_common_vars
     GIT_STRATEGY: none
   script:
-    - echo "Configuring gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+    - echo "Configuring gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
     auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
@@ -439,23 +436,47 @@ review_gke126:
     <<: *review_gke126_common_vars
   extends: .review_template
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
     action: access
-  resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
-# See comments in create_review_gke122.
+# See comments in create_review_gke125.
+create_review_gke127:
+  stage: review
+  variables:
+    <<: *review_gke127_common_vars
+    GIT_STRATEGY: none
+  script:
+    - echo "Configuring gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke127
+    auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
+    action: start
+
+review_gke127:
+  variables:
+    <<: *review_gke127_common_vars
+  extends: .review_template
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
+    url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke127
+    auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
+    action: access
+
 create_review_eks:
   stage: review
   variables:
     <<: *review_eks_common_vars
     GIT_STRATEGY: none
   script:
-    - echo "Configuring eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
+    - echo "Configuring eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA to automatically stop in $REVIEW_APPS_AUTO_STOP_IN."
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_eks
     auto_stop_in: $REVIEW_APPS_AUTO_STOP_IN
     action: start
@@ -465,12 +486,11 @@ review_eks:
     <<: *review_eks_common_vars
   extends: .review_template
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
     auto_stop_in: "${REVIEW_APPS_AUTO_STOP_IN}"
     action: access
-  resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
 
 .stop_review_template:
   stage: review
@@ -479,7 +499,8 @@ review_eks:
   before_script: []
   dependencies: []
   script:
-    - git checkout master
+    # If the branch has already been deleted, fall back to `master`.
+    - git checkout "${CI_COMMIT_REF_NAME}" || git checkout master
     - source scripts/ci/autodevops.sh
     - set_context
     - delete
@@ -498,7 +519,7 @@ stop_review_gke122:
   variables:
     <<:  *review_gke122_common_vars
   environment:
-    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     action: stop
 
 stop_review_gke125:
@@ -506,7 +527,7 @@ stop_review_gke125:
     <<:  *review_gke125_common_vars
   extends: .stop_review_template
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     action: stop
 
 stop_review_gke126:
@@ -514,7 +535,15 @@ stop_review_gke126:
     <<:  *review_gke126_common_vars
   extends: .stop_review_template
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
+    action: stop
+
+stop_review_gke127:
+  variables:
+    <<:  *review_gke127_common_vars
+  extends: .stop_review_template
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     action: stop
 
 stop_review_eks:
@@ -522,83 +551,15 @@ stop_review_eks:
     <<: *review_eks_common_vars
   extends: .stop_review_template
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     action: stop
-
-# This job continuously deploys to production on every push to `master`.
-# To make this a manual process, either because you're enabling `staging`
-# or `canary` deploys, or you simply want more control over when you deploy
-# to production, uncomment the `when: manual` line in the `production` job.
-
-.stable:
-  stage: stable
-  extends: .source_autodevops
-  dependencies:
-    - pin_image_versions
-  script:
-    - !reference [.set_up_varfile_and_kubecontext, script]
-    - !reference [.set_up_namespace_secret_and_deploy, script]
-    - check_domain_ip
-    - restart_toolbox
-    - echo "export GITLAB_URL=gitlab.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
-    - echo "export GITLAB_ROOT_DOMAIN=$KUBE_INGRESS_BASE_DOMAIN"        >> "${VARIABLES_FILE}"
-    - echo "export S3_ENDPOINT=https://minio.$KUBE_INGRESS_BASE_DOMAIN" >> "${VARIABLES_FILE}"
-    - !reference [.get_qa_revision, script]
-  artifacts:
-    paths:
-    - variables
-  variables:
-    DOMAIN: ".$KUBE_INGRESS_BASE_DOMAIN"
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-
-stable_gke122:
-  extends: .stable
-  environment:
-    name: gke122_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_gke122_common_vars
-    VARIABLES_FILE: "variables/stable_gke122"
-  resource_group: "gke122-production"
-
-stable_gke125:
-  extends: .stable
-  environment:
-    name: gke125_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_gke125_common_vars
-    VARIABLES_FILE: "variables/stable_gke125"
-  resource_group: "gke125-production"
-
-stable_gke126:
-  extends: .stable
-  environment:
-    name: gke126_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_gke126_common_vars
-    VARIABLES_FILE: "variables/stable_gke126"
-  resource_group: "gke126-production"
-
-stable_eks:
-  extends: .stable
-  environment:
-    name: eks_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  variables:
-    <<: *review_eks_common_vars
-    VARIABLES_FILE: "variables/stable_eks"
-  resource_group: "eks-production"
 
 review_helm_test_gke122:
   stage: qa
   variables:
     <<:  *review_gke122_common_vars
   environment:
-    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke122
   extends: .source_autodevops
@@ -612,22 +573,6 @@ review_helm_test_gke122:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
   needs: ['review_specs_gke122']
 
-production_helm_test_gke122:
-  stage: qa
-  variables:
-    <<:  *review_gke122_common_vars
-  environment:
-    name: gke122_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  extends: .source_autodevops
-  script:
-    - set_context
-    - helm test "$RELEASE_NAME"
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-  needs: ['production_specs_gke122']
-
 debug_review_gke122:
   stage: qa
   when: on_failure
@@ -640,9 +585,10 @@ debug_review_gke122:
     paths:
     - variables
   environment:
-    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke122
+    action: access
   variables:
     <<: *review_gke122_common_vars
     HOST_SUFFIX: "$CI_ENVIRONMENT_SLUG"
@@ -799,6 +745,7 @@ review-docs-cleanup:
     paths:
     - gems
   rules:
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
@@ -811,10 +758,10 @@ review_specs_gke122:
     VARIABLES_FILE: "variables/review_gke122"
     RSPEC_TAGS: type:feature
   environment:
-    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke122
-  resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+  resource_group: "gke122-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}"
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -827,10 +774,10 @@ review_specs_gke125:
     VARIABLES_FILE: "variables/review_gke125"
     RSPEC_TAGS: type:feature
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke125
-  resource_group: "gke125-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+    action: access
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -843,14 +790,30 @@ review_specs_gke126:
     VARIABLES_FILE: "variables/review_gke126"
     RSPEC_TAGS: type:feature
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_gke126
-  resource_group: "gke126-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+    action: access
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
   needs: ['review_gke126']
+
+review_specs_gke127:
+  extends: .specs
+  variables:
+    <<: *review_gke127_common_vars
+    VARIABLES_FILE: "variables/review_gke127"
+    RSPEC_TAGS: type:feature
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
+    url: https://gitlab-$CI_ENVIRONENMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
+    on_stop: stop_review_gke127
+    action: access
+  rules:
+    - !reference [.rule:skip_if_no_cluster]
+    - !reference [.specs, rules]
+  needs: ['review_gke127']
 
 review_specs_eks:
   extends: .specs
@@ -859,10 +822,10 @@ review_specs_eks:
     VARIABLES_FILE: "variables/review_eks"
     RSPEC_TAGS: type:feature
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     url: https://gitlab-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN
     on_stop: stop_review_eks
-  resource_group: "eks-review-app-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}"
+    action: access
   rules:
     - !reference [.rule:skip_if_no_cluster]
     - !reference [.specs, rules]
@@ -878,71 +841,6 @@ specs_without_cluster:
     - if: '$PIPELINE_TYPE == "AUTO_DEPLOY_PIPELINE"'
     - if: '$PIPELINE_TYPE == "RELEASE_PIPELINE"'
   needs: ['lint_package']
-
-.production_specs:
-  extends: .specs
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
-
-production_specs_without_cluster:
-  extends: .production_specs
-  variables:
-    RSPEC_TAGS: ~type:feature
-  parallel: 6
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - !reference [.specs, rules]
-  needs: ['lint_package']
-
-production_specs_gke122:
-  extends: .production_specs
-  variables:
-    <<: *review_gke122_common_vars
-    VARIABLES_FILE: "variables/stable_gke122"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke122_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "gke122-production"
-  needs: ['stable_gke122']
-
-production_specs_gke125:
-  extends: .production_specs
-  variables:
-    <<: *review_gke125_common_vars
-    VARIABLES_FILE: "variables/stable_gke125"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke125_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "gke125-production"
-  needs: ['stable_gke125']
-
-production_specs_gke126:
-  extends: .production_specs
-  variables:
-    <<: *review_gke126_common_vars
-    VARIABLES_FILE: "variables/stable_gke126"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: gke126_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "gke126-production"
-  needs: ['stable_gke126']
-
-production_specs_eks:
-  extends: .production_specs
-  allow_failure: true
-  variables:
-    <<: *review_eks_common_vars
-    VARIABLES_FILE: "variables/stable_eks"
-    RSPEC_TAGS: type:feature
-  environment:
-    name: eks_production
-    url: https://gitlab.$KUBE_INGRESS_BASE_DOMAIN
-  resource_group: "eks-production"
-  needs: ['stable_eks']
 
 .qa:
   image: registry.gitlab.com/gitlab-org/gitlab-omnibus-builder/distribution_ci_tools:${CI_TOOLS_VERSION}
@@ -1066,18 +964,11 @@ release_package:
   parallel: 7
   rules:
     - !reference [.rule:skip_if_no_cluster]
+    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
-
-.qa_production:
-  extends:
-    - .qa
-  parallel: 7
-  rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /DEFAULT_BRANCH_PIPELINE$/'
 
 # QA jobs for Smoke and Reliable E2E suites
 
@@ -1087,7 +978,7 @@ qa_gke122:
     VARIABLES_FILE: "variables/review_gke122"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke122
   needs:
     - review_gke122
@@ -1100,8 +991,9 @@ qa_gke125:
     VARIABLES_FILE: "variables/review_gke125"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke125
+    action: access
   needs:
     - review_gke125
     - job: review_specs_gke125
@@ -1113,11 +1005,26 @@ qa_gke126:
     VARIABLES_FILE: "variables/review_gke126"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke126
+    action: access
   needs:
     - review_gke126
     - job: review_specs_gke126
+      artifacts: false
+
+qa_gke127:
+  extends: .qa_branch
+  variables:
+    VARIABLES_FILE: "variables/review_gke127"
+    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
+    on_stop: stop_review_gke127
+    action: access
+  needs:
+    - review_gke127
+    - job: review_specs_gke127
       artifacts: false
 
 qa_eks:
@@ -1126,66 +1033,15 @@ qa_eks:
     VARIABLES_FILE: "variables/review_eks"
     TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_eks
+    action: access
   needs:
     - review_eks
     - job: review_specs_eks
       artifacts: false
 
-qa_gke122_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_gke122"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: gke122_production
-  needs:
-    - stable_gke122
-    - job: production_specs_gke122
-      artifacts: false
-
-qa_gke125_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_gke125"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: gke125_production
-  needs:
-    - stable_gke125
-    - job: production_specs_gke125
-      artifacts: false
-
-qa_gke126_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_gke126"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: gke126_production
-  needs:
-    - stable_gke126
-    - job: production_specs_gke126
-      artifacts: false
-
-qa_eks_production:
-  extends: .qa_production
-  variables:
-    VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: $QA_SANITY_SUITE_OPTIONS
-  environment:
-    name: eks_production
-  needs:
-    - stable_eks
-    - job: production_specs_eks
-      artifacts: false
-
 # QA jobs for Full E2E suites
-
-.qa_production_full_suite_manual_trigger:
-  extends: .qa_production
-  when: manual
 
 .qa_full_suite_manual_trigger:
   image: alpine
@@ -1206,18 +1062,8 @@ qa_gke122_manual_full_suite:
     VARIABLES_FILE: "variables/review_gke122"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke122_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke122
-  needs: [ "qa_gke122_full_suite_manual_trigger"]
-
-qa_gke122_manual_full_suite_production:
-  extends: .qa_production_full_suite_manual_trigger
-  parallel: 7
-  variables:
-    VARIABLES_FILE: "variables/stable_gke122"
-    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
-  environment:
-    name: gke122_production
   needs: [ "qa_gke122_full_suite_manual_trigger"]
 
 qa_gke125_full_suite_manual_trigger:
@@ -1235,8 +1081,9 @@ qa_gke125_manual_full_suite:
     VARIABLES_FILE: "variables/review_gke125"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke125_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke125
+    action: access
   needs: [ "qa_gke125_full_suite_manual_trigger"]
 
 qa_gke126_manual_full_suite:
@@ -1246,9 +1093,22 @@ qa_gke126_manual_full_suite:
     VARIABLES_FILE: "variables/review_gke126"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: gke126_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_gke126
+    action: access
   needs: [ "qa_gke126_full_suite_manual_trigger"]
+
+qa_gke127_manual_full_suite:
+  extends: .qa_branch
+  parallel: 7
+  variables:
+    VARIABLES_FILE: "variables/review_gke127"
+    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
+  environment:
+    name: gke127_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
+    on_stop: stop_review_gke127
+    action: access
+  needs: [ "qa_gke127_full_suite_manual_trigger"]
 
 qa_eks_full_suite_manual_trigger:
   extends: .qa_full_suite_manual_trigger
@@ -1261,18 +1121,9 @@ qa_eks_manual_full_suite:
     VARIABLES_FILE: "variables/review_eks"
     TEST_SUITE: $QA_FULL_SUITE_OPTIONS
   environment:
-    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
+    name: eks_review/$REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
     on_stop: stop_review_eks
-  needs: [ "qa_eks_full_suite_manual_trigger"]
-
-qa_eks_manual_full_suite_production:
-  extends: .qa_production_full_suite_manual_trigger
-  parallel: 7
-  variables:
-    VARIABLES_FILE: "variables/stable_eks"
-    TEST_SUITE: $QA_FULL_SUITE_OPTIONS
-  environment:
-    name: eks_production
+    action: access
   needs: [ "qa_eks_full_suite_manual_trigger"]
 
 knapsack-qa-report:
