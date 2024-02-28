@@ -44,13 +44,7 @@ spec:
           tolerations:
             {{- toYaml .Values.tolerations | nindent 12 }}
           {{- end }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
-            runAsGroup: {{ .Values.securityContext.runAsGroup }}
-            fsGroup: {{ .Values.securityContext.fsGroup }}
-            {{- if not (empty .Values.securityContext.fsGroupChangePolicy) }}
-            fsGroupChangePolicy: {{ .Values.securityContext.fsGroupChangePolicy }}
-            {{- end }}
+          {{- include "gitlab.podSecurityContext" .Values.securityContext | nindent 10 }}
           {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
           serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
           {{- end }}
