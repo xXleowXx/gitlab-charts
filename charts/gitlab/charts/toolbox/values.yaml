@@ -12,7 +12,9 @@ init:
   resources:
     requests:
       cpu: 50m
-  containerSecurityContext: {}
+  containerSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
 
 # Tolerations for pod scheduling
 tolerations: []
