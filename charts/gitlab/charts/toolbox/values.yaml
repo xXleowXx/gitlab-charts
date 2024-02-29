@@ -12,9 +12,7 @@ init:
   resources:
     requests:
       cpu: 50m
-  containerSecurityContext:
-    runAsUser: 1000
-    runAsGroup: 1000
+  containerSecurityContext: {}
 
 # Tolerations for pod scheduling
 tolerations: []
@@ -263,7 +261,6 @@ securityContext:
 ## Allow to overwrite the specific security context under which the container is running.
 containerSecurityContext:
   runAsUser: 1000
-  runAsGroup: 1000
 
 ## Enable deployment to use a serviceAccount
 serviceAccount:
