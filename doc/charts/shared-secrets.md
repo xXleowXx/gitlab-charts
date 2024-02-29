@@ -32,10 +32,10 @@ the `helm install` command using the `--set` flag:
 | `env`                      | `production`        | Rails environment                   |
 | `podLabels`                |                     | Supplemental Pod labels. Will not be used for selectors. |
 | `annotations`              |                     | Supplemental Pod annotations.       |
-| `image.pullPolicy`         | `Always`            | Gitaly image pull policy            |
+| `image.pullPolicy`         | `Always`            | Image pull policy            |
 | `image.pullSecrets`        |                     | Secrets for the image repository    |
-| `image.repository`         | `registry.gitlab.com/gitlab-org/build/cng/kubectl` | Gitaly image repository |
-| `image.tag`                | `1f8690f03f7aeef27e727396927ab3cc96ac89e7` | Gitaly image tag |
+| `image.repository`         | `registry.gitlab.com/gitlab-org/build/cng/kubectl` | Image repository |
+| `image.tag`                | `1f8690f03f7aeef27e727396927ab3cc96ac89e7` | Image tag |
 | `priorityClassName`        |                     | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods |
 | `rbac.create`              | `true`              | Create RBAC roles and bindings      |
 | `resources`                |                     | resource requests, limits           |
