@@ -62,6 +62,8 @@ spec:
               image: {{ include "gitlab.configure.image" (dict "root" $ "image" .Values.init.image) | quote }}
               {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 14 }}
               env:
+                - name: TZ
+                  value: {{ .Values.global.time_zone | quote }}
                 {{- include "gitlab.extraEnv" $ | nindent 16 }}
                 {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 16 }}
               volumeMounts:
@@ -95,6 +97,8 @@ spec:
               image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}{{ include "gitlab.image.tagSuffix" . }}"
               {{- include "gitlab.image.pullPolicy" $imageCfg | indent 14 }}
               env:
+                - name: TZ
+                  value: {{ .Values.global.time_zone | quote }}
                 {{- include "gitlab.extraEnv" $ | nindent 16 }}
                 {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 16 }}
                 - name: ARTIFACTS_BUCKET_NAME

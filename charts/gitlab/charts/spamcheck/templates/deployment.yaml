@@ -73,6 +73,8 @@ spec:
             - name: grpc
               containerPort: {{ $.Values.service.internalPort }}
           env:
+            - name: TZ
+              value: {{ .Values.global.time_zone | quote }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
           resources:

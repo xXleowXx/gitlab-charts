@@ -63,8 +63,10 @@ spec:
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           {{- include "gitlab.init.containerSecurityContext" . | indent 10 }}
           env:
-          {{- include "gitlab.extraEnv" . | nindent 10 }}
-          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
+            - name: TZ
+              value: {{ .Values.global.time_zone | quote }}
+            {{- include "gitlab.extraEnv" . | nindent 10 }}
+            {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" . | nindent 10 }}
           - name: gitaly-config
@@ -123,6 +125,8 @@ spec:
               name: http-metrics
            {{- end }}
           env:
+            - name: TZ
+              value: {{ .Values.global.time_zone | quote }}
             - name: CONFIG_TEMPLATE_DIRECTORY
               value: '/etc/gitaly/templates'
             - name: CONFIG_DIRECTORY
