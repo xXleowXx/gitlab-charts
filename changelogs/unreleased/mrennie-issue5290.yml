@@ -1,0 +1,5 @@
+---
+title: Make 'automountServiceAccountToken' configurable - #5290
+merge_request: https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3652
+author: Mike Rennie
+type: fixed
