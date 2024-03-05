@@ -22,7 +22,7 @@ With the SSL-enabled installation options below, if you want to clone repositori
 
 - Make sure that you're running MacOS >= 13 (Ventura).
 - Install [`colima`](https://github.com/abiosoft/colima#installation).
-- Install [`Rosetta`](https://support.apple.com/en-us/HT211861):
+- Install [`Rosetta`](https://support.apple.com/en-us/102527):
 
   ```shell
   softwareupdate --install-rosetta
