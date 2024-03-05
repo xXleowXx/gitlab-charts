@@ -739,7 +739,7 @@ For details on `enabled`, `host`, `api` and `tokenIssuer` see documentation for 
 ### notifications
 
 This setting is used to configure
-[Registry notifications](https://docs.docker.com/registry/configuration/#notifications).
+[Registry notifications](https://distribution.github.io/distribution/about/notifications/).
 It takes in a map (following upstream specification), but with an added feature
 of providing sensitive headers as Kubernetes secrets. For example, consider the
 following snippet where the Authorization header contains sensitive data while

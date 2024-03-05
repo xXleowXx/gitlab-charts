@@ -166,8 +166,8 @@ Due to the complexity of these charts and their level of flexibility, there are 
 ## Verifying registry
 
 In development mode, verifying Registry with Docker clients can be difficult. This is partly due to issues with certificate of
-the registry. You can either [add the certificate](https://docs.docker.com/registry/insecure/#use-self-signed-certificates) or
-[expose the registry over HTTP](https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry) (see `global.hosts.registry.https`).
+the registry. You can either [add the certificate](https://distribution.github.io/distribution#use-self-signed-certificates) or
+[expose the registry over HTTP](https://distribution.github.io/distribution#deploy-a-plain-http-registry) (see `global.hosts.registry.https`).
 Note that adding the certificate is more secure than the insecure registry solution.
 
 Please keep in mind that Registry uses the external domain name of MinIO service (see `global.hosts.minio.name`). You may

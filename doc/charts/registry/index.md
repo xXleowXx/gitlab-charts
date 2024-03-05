@@ -46,7 +46,7 @@ This chart makes use of two required secrets and one optional:
   GitLab instance(s). See [documentation](https://docs.gitlab.com/ee/administration/packages/container_registry.html#use-an-external-container-registry-with-gitlab-as-an-auth-endpoint)
   on using GitLab as an auth endpoint.
 - `global.registry.httpSecret.secret`: A global secret that will contain the
-  [shared secret](https://docs.docker.com/registry/configuration/#http) between registry pods.
+  [shared secret](https://distribution.github.io/distribution/about/configuration/#http) between registry pods.
 
 ### Optional
 
@@ -554,7 +554,7 @@ The following properties of this chart pertain to the configuration of the under
 [registry](https://hub.docker.com/_/registry/) container. Only the most critical values
 for integration with GitLab are exposed. For this integration, we make use of the `auth.token.x`
 settings of [Docker Distribution](https://github.com/docker/distribution), controlling
-authentication to the registry via JWT [authentication tokens](https://docs.docker.com/registry/spec/auth/token/).
+authentication to the registry via JWT [authentication tokens](https://distribution.github.io/distribution/spec/auth/token/).
 
 ### httpSecret
 
@@ -686,13 +686,13 @@ the `deny` field.
 
 ### notifications
 
-The `notifications` field is used to configure [Registry notifications](https://docs.docker.com/registry/notifications/#configuration).
+The `notifications` field is used to configure [Registry notifications](https://distribution.github.io/distribution/about/notifications/#configuration).
 It has an empty hash as default value.
 
 |    Name     | Type  | Default |                                                     Description                                                      |
 | :---------: | :---: | :------ | :------------------------------------------------------------------------------------------------------------------: |
-| `endpoints` | Array | `[]`    | List of items where each item correspond to an [endpoint](https://docs.docker.com/registry/configuration/#endpoints) |
-|  `events`   | Hash  | `{}`    |        Information provided in [event](https://docs.docker.com/registry/configuration/#events) notifications         |
+| `endpoints` | Array | `[]`    | List of items where each item correspond to an [endpoint](https://distribution.github.io/distribution/about/configuration/#endpoints) |
+|  `events`   | Hash  | `{}`    |        Information provided in [event](https://distribution.github.io/distribution/about/configuration/#events) notifications         |
 
 An example setting will look like the following:
 
@@ -734,18 +734,18 @@ storage:
 ```
 
 The `storage` field is a reference to a Kubernetes Secret and associated key. The content
-of this secret is taken directly from [Registry Configuration: `storage`](https://docs.docker.com/registry/configuration/#storage).
+of this secret is taken directly from [Registry Configuration: `storage`](https://distribution.github.io/distribution/about/configuration/#storage).
 Please refer to that documentation for more details.
 
-Examples for [AWS s3](https://docs.docker.com/registry/storage-drivers/s3/) and
-[Google GCS](https://docs.docker.com/registry/storage-drivers/gcs/) drivers can be
+Examples for [AWS s3](https://distribution.github.io/distribution/storage-drivers/s3/) and
+[Google GCS](https://distribution.github.io/distribution/storage-drivers/gcs/) drivers can be
 found in [`examples/objectstorage`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage):
 
 - [`registry.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.s3.yaml)
 - [`registry.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.gcs.yaml)
 
 For S3, make sure you give the correct
-[permissions for registry storage](https://docs.docker.com/registry/storage-drivers/s3/#s3-permission-scopes). For more information about storage configuration, see
+[permissions for registry storage](https://distribution.github.io/distribution#s3-permission-scopes). For more information about storage configuration, see
 [Container Registry storage driver](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-storage-driver) in the administration documentation.
 
 Place the *contents* of the `storage` block into the secret, and provide the following
@@ -855,7 +855,7 @@ metrics:
 
 The `health` property is optional, and contains preferences for
 a periodic health check on the storage driver's backend storage.
-For more details, see Docker's [configuration documentation](https://docs.docker.com/registry/configuration/#health).
+For more details, see Docker's [configuration documentation](https://distribution.github.io/distribution#health).
 
 ```yaml
 health:
@@ -1027,7 +1027,7 @@ redis:
 ## Garbage Collection
 
 The Docker Registry will build up extraneous data over time which can be freed using
-[garbage collection](https://docs.docker.com/registry/garbage-collection/).
+[garbage collection](https://distribution.github.io/distribution/about/garbage-collection/).
 As of [now](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/1586) there is no
 fully automated or scheduled way to run the garbage collection with this Chart.
 
