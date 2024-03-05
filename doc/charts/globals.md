@@ -739,7 +739,7 @@ For details on `enabled`, `host`, `api` and `tokenIssuer` see documentation for 
 ### notifications
 
 This setting is used to configure
-[Registry notifications](https://docs.docker.com/registry/configuration/#notifications).
+[Registry notifications](https://distribution.github.io/distribution/about/notifications/).
 It takes in a map (following upstream specification), but with an added feature
 of providing sensitive headers as Kubernetes secrets. For example, consider the
 following snippet where the Authorization header contains sensitive data while
@@ -1776,7 +1776,7 @@ global:
 | `enabled`        | Boolean | `false`  | Enable or Disable the integration |
 | `dsn`            | String  |        | Sentry DSN for backend errors |
 | `clientside_dsn` | String  |        | Sentry DSN for front-end errors |
-| `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/product/sentry-basics/environments/) |
+| `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/product/sentry-basics/concepts/environments/) |
 
 ### `gitlab_docs` settings
 
