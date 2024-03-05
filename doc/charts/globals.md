@@ -690,7 +690,7 @@ To connect to Redis with SSL:
 
    This configuration is required because [Redis defaults to mutual TLS](https://redis.io/docs/management/security/encryption/#client-certificate-authentication), which not all chart components support.
 
-1. Follow Bitnami's [steps to enable TLS](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/). Make sure the chart components trust the certificate authority used to create Redis certificates.
+1. Follow Bitnami's [steps to enable TLS](https://github.com/bitnami/charts/tree/main/bitnami/redis#securing-traffic-using-tls). Make sure the chart components trust the certificate authority used to create Redis certificates.
 1. Optional. If you use a custom certificate authority, see the [Custom Certificate Authorities](#custom-certificate-authorities) global configuration.
 
 ### Password-less Redis Servers

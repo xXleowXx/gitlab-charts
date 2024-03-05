@@ -147,7 +147,7 @@ Now that the root CA is downloaded, you can add it to your local chain (instruct
 NOTE:
 If you need to log into the registry with `docker login`, you will need to take additional steps to configure the registry to work with your self-signed certificates. More instructions can be found in:
 
-- [Run an externally-accessible registry](https://distribution.github.io/distribution#run-an-externally-accessible-registry)
+- [Run an externally-accessible registry](https://distribution.github.io/distribution/about/deploying/#run-an-externally-accessible-registry)
 - [Adding self-signed registry certificates to Docker and Docker for macOS](https://blog.container-solutions.com/adding-self-signed-registry-certs-docker-mac).
 
 ### NGINX Ingress NodePort without SSL
@@ -165,7 +165,7 @@ helm upgrade --install gitlab gitlab/gitlab \
 Access GitLab at `http://gitlab.(your host IP).nip.io`.
 
 NOTE:
-If you need to log into the registry with `docker login`, you will need to tell Docker to [trust your insecure registry](https://distribution.github.io/distribution#deploy-a-plain-http-registry).
+If you need to log into the registry with `docker login`, you will need to tell Docker to [trust your insecure registry](https://distribution.github.io/distribution/about/insecure/#deploy-a-plain-http-registry).
 
 ### Handling DNS
 
