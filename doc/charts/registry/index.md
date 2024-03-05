@@ -745,7 +745,7 @@ found in [`examples/objectstorage`](https://gitlab.com/gitlab-org/charts/gitlab/
 - [`registry.gcs.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.gcs.yaml)
 
 For S3, make sure you give the correct
-[permissions for registry storage](https://distribution.github.io/distribution#s3-permission-scopes). For more information about storage configuration, see
+[permissions for registry storage](https://distribution.github.io/distribution/storage-drivers/s3/#s3-permission-scopes). For more information about storage configuration, see
 [Container Registry storage driver](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-storage-driver) in the administration documentation.
 
 Place the *contents* of the `storage` block into the secret, and provide the following
@@ -855,7 +855,7 @@ metrics:
 
 The `health` property is optional, and contains preferences for
 a periodic health check on the storage driver's backend storage.
-For more details, see Docker's [configuration documentation](https://distribution.github.io/distribution#health).
+For more details, see Docker's [configuration documentation](https://distribution.github.io/distribution/about/configuration/#health#health).
 
 ```yaml
 health:
