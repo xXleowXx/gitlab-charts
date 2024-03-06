@@ -67,7 +67,7 @@ spec:
           {{- include "gitlab.init.containerSecurityContext" $ | indent 10 }}
           env:
             - name: TZ
-              value: {{ .Values.global.time_zone | quote }}
+              value: {{ $.Values.global.time_zone | quote }}
             {{- include "gitlab.extraEnv" . | nindent 10 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
           volumeMounts:
@@ -93,7 +93,7 @@ spec:
           {{- include "gitlab.containerSecurityContext" $ | indent 10 }}
           env:
             - name: TZ
-              value: {{ .Values.global.time_zone | quote }}
+              value: {{ $.Values.global.time_zone | quote }}
             {{- include "gitlab.extraEnv" . | nindent 10 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
           volumeMounts:

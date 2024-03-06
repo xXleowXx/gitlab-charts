@@ -64,7 +64,7 @@ spec:
           {{- include "gitlab.init.containerSecurityContext" . | indent 10 }}
           env:
             - name: TZ
-              value: {{ .Values.global.time_zone | quote }}
+              value: {{ $.Values.global.time_zone | quote }}
             {{- include "gitlab.extraEnv" . | nindent 10 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
           volumeMounts:
@@ -126,7 +126,7 @@ spec:
            {{- end }}
           env:
             - name: TZ
-              value: {{ .Values.global.time_zone | quote }}
+              value: {{ $.Values.global.time_zone | quote }}
             - name: CONFIG_TEMPLATE_DIRECTORY
               value: '/etc/gitaly/templates'
             - name: CONFIG_DIRECTORY

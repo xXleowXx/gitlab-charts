@@ -84,7 +84,7 @@ spec:
             - "--configuration-file=/etc/kas/config.yaml"
           env:
             - name: TZ
-              value: {{ .Values.global.time_zone | quote }}
+              value: {{ $.Values.global.time_zone | quote }}
             - name: OWN_PRIVATE_API_HOST
               value: {{ include "gitlab.kas.serviceHost" . }}
             - name: POD_IP
