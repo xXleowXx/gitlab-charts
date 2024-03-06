@@ -683,7 +683,7 @@ When a request being hanled by a Puma worker crosses the memory limit treshold, 
 Due to the nature of Puma forked processes this will not necessarily kill or restart the webservice pod itself. This will cause the request to return a 502 timeout. 
 In the logs this will present as a Puma worker being created shortly after the 502 error is logged. 
 
-```
+```console
 2024-01-19T14:12:08.949263522Z {"correlation_id":"XXXXXXXXXXXX","duration_ms":1261,"error":"badgateway: failed to receive response: context canceled"....
 2024-01-19T14:12:24.214148186Z {"component": "gitlab","subcomponent":"puma.stdout","timestamp":"2024-01-19T14:12:24.213Z","pid":1,"message":"- Worker 2 (PID: 7414) booted in 0.84s, phase: 0"}
 ```
