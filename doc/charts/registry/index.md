@@ -855,7 +855,7 @@ metrics:
 
 The `health` property is optional, and contains preferences for
 a periodic health check on the storage driver's backend storage.
-For more details, see Docker's [configuration documentation](https://distribution.github.io/distribution/about/configuration/#health#health).
+For more details, see Docker's [configuration documentation](https://distribution.github.io/distribution/about/configuration/#health).
 
 ```yaml
 health:
