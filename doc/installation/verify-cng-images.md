@@ -19,7 +19,7 @@ locally using the corresponding public key. Moving to a keyless
 signing/verification with GitLab.com OIDC provider is being discussed
 [here](https://gitlab.com/gitlab-org/build/CNG/-/issues/638)
 
-1. Download the public key used for signing from [TODO: ADD PUBLIC_KEY_URL](https://dummy.com)
+1. Download the public key used for signing from [https://charts.gitlab.io/cosign.pub](https://charts.gitlab.io/cosign.pub)
 
    ```shell
    wget <PUBLIC_KEY_URL> -O cng_key.pub
