@@ -1,10 +1,14 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab-Migrations chart **(FREE SELF)**
+# Using the GitLab-Migrations chart
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 The `migrations` sub-chart provides a single migration [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) that handles seeding/migrating the GitLab database. The chart runs using the GitLab Rails codebase.
 

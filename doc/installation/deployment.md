@@ -1,10 +1,14 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Deploy the GitLab Helm chart **(FREE SELF)**
+# Deploy the GitLab Helm chart
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 Before running `helm install`, you need to make some decisions about how you will run GitLab.
 Options can be specified using Helm's `--set option.name=value` command-line option.
@@ -56,6 +60,12 @@ You can also use `--version <installation version>` option if you would like to 
 For mappings between chart versions and GitLab versions, read [GitLab version mappings](version_mappings.md).
 
 Instructions for installing a development branch rather than a tagged release can be found in the [developer deploy documentation](../development/deploy.md).
+
+## Verifying the integrity and origin of GitLab Helm charts
+
+You can verify the integrity and origin of GitLab Helm charts by using
+[Helm provenance](https://helm.sh/docs/topics/provenance/). For more
+information, see [GitLab Helm Chart provenance](chart-provenance.md).
 
 ## Monitoring the Deployment
 

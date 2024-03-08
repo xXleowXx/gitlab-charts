@@ -1,7 +1,7 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Helm chart releases
@@ -102,7 +102,7 @@ Related to releasing using the proposed branching strategy
 
 Releasing a new version of the chart is handled by the Helm release tasks in the [release tools repository](https://gitlab.com/gitlab-org/release-tools).
 
-Releases are done as part of GitLab releases. When necessary, the [Distribution](https://about.gitlab.com/handbook/engineering/development/enablement/systems/distribution/)
+Releases are done as part of GitLab releases. When necessary, the [Distribution](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/)
 team may initiate additional chart releases. The release tool triggers pipelines for packaging and publishing the
 chart. See the `release_chart` job in the [`charts.gitlab.io` repository](https://gitlab.com/charts/charts.gitlab.io).
 

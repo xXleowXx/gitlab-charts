@@ -2,14 +2,14 @@
 
 # Auto DevOps variables and functions
 [[ "$TRACE" ]] && set -x
-export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+export CI_APPLICATION_REPOSITORY=$CI_REGISTRY_IMAGE/$CI_COMMIT_SHORT_SHA
 export CI_APPLICATION_TAG=$CI_COMMIT_SHA
 export CI_CONTAINER_NAME=ci_job_build_${CI_JOB_ID}
 
 # Derive the Helm RELEASE argument from CI_ENVIRONMENT_SLUG
 if [[ $CI_ENVIRONMENT_SLUG =~ ^[^-]+-review ]]; then
-  # if a "review", use $REVIEW_REF_PREFIX$CI_COMMIT_REF_SLUG
-  RELEASE_NAME=rvw-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}
+  # if a "review", use $REVIEW_REF_PREFIX$CI_COMMIT_SHORT_SHA
+  RELEASE_NAME=rvw-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}
   # Trim release name to leave room for prefixes/suffixes
   RELEASE_NAME=${RELEASE_NAME:0:30}
   # Trim any hyphens in the suffix
@@ -63,11 +63,26 @@ function deploy() {
 
   WAIT="--wait --timeout 900s"
 
-  # Only enable Prometheus on `master`
   PROMETHEUS_INSTALL="false"
-  if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+
+  # Only enable Prometheus on `master`. To override, set PROMETHEUS_INSTALL_OVERRIDE="false".
+  if [ "$CI_COMMIT_REF_NAME" == "master" ] && [ "${PROMETHEUS_INSTALL_OVERRIDE}" != "false" ]; then
     PROMETHEUS_INSTALL="true"
   fi
+
+  cat << CIYAML > ci.prometheus.yaml
+  prometheus:
+    install: ${PROMETHEUS_INSTALL}
+    server:
+      retention: "3d"
+      extraArgs:
+        storage.tsdb.retention.size: "1GB"
+      resources:
+        requests:
+          memory: 2Gi
+        limits:
+          memory: 4Gi
+CIYAML
 
   # helm's --set argument dislikes special characters, pass them as YAML
   cat << CIYAML > ci.details.yaml
@@ -147,6 +162,7 @@ CIYAML
     -f ci.scale.yaml \
     -f ci.psql.yaml \
     -f ci.digests.yaml \
+    -f ci.prometheus.yaml \
     --set releaseOverride="$RELEASE_NAME" \
     --set global.hosts.hostSuffix="$HOST_SUFFIX" \
     --set global.hosts.domain="$KUBE_INGRESS_BASE_DOMAIN" \
@@ -158,8 +174,6 @@ CIYAML
     --set nginx-ingress.controller.ingressClassByName=true \
     --set nginx-ingress.controller.ingressClassResource.controllerValue="ci.gitlab.com/$RELEASE_NAME" \
     --set certmanager.install=false \
-    --set prometheus.install=$PROMETHEUS_INSTALL \
-    --set prometheus.server.retention="4d" \
     --set global.extraEnv.GITLAB_LICENSE_MODE="test" \
     --set global.extraEnv.CUSTOMER_PORTAL_URL="https://customers.staging.gitlab.com" \
     --set global.gitlab.license.secret="$RELEASE_NAME-gitlab-license" \
@@ -305,9 +319,23 @@ function delete() {
 }
 
 function cleanup() {
-  kubectl -n "$NAMESPACE" get ingress,svc,pdb,hpa,deploy,statefulset,replicaset,job,pod,secret,configmap,pvc,pv,clusterrole,clusterrolebinding,role,rolebinding,sa 2>&1 \
+  kubectl -n "$NAMESPACE" delete \
+    $(get_resources "ingress,svc,pdb,hpa,deploy,statefulset,replicaset,job,pod,secret,configmap,clusterrole,clusterrolebinding,role,rolebinding,sa") \
+    || true
+
+  pvcs=$(get_resources "pvc")
+  for pvc in ${pvcs}; do
+    pv=$(kubectl -n "$NAMESPACE" get pvc "$pvc" -o jsonpath='{.spec.volumeName}' 2>&1)
+    volumeHandle=$(kubectl get pv "$pv" -o jsonpath='{.spec.csi.volumeHandle}' 2>&1)
+    # Delete PVC only, PV and volume should be handled by reclaim policy
+    echo "Deleting $pvc (PV: $pv, CSI volume: $volumeHandle)"
+    kubectl -n "$NAMESPACE" delete pvc "$pvc" || true
+  done
+}
+
+function get_resources() {
+  kubectl -n "$NAMESPACE" get "$1" --no-headers 2>&1 \
     | grep "$RELEASE_NAME" \
     | awk '{print $1}' \
-    | xargs kubectl -n "$NAMESPACE" delete \
-    || true
+    | xargs
 }

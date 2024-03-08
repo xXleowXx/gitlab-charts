@@ -1,10 +1,14 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab-Spamcheck chart **(PREMIUM SELF)**
+# Using the GitLab-Spamcheck chart
+
+DETAILS:
+**Tier:** Premium, Ultimate
+**Offering:** Self-managed
 
 The `spamcheck` sub-chart provides a deployment of [Spamcheck](https://gitlab.com/gitlab-org/spamcheck) which is an anti-spam engine developed by GitLab originally to combat the rising amount of spam in GitLab.com, and later made public to be used in self-managed GitLab instances.
 
@@ -28,9 +32,8 @@ helm upgrade --force --install gitlab . \
 
 ### Configure GitLab to use Spamcheck
 
-1. On the left sidebar, select **Search or go to**.
-1. Select **Admin Area**.
-1. Select **Settings > Reporting**
+1. On the left sidebar, at the bottom, select **Admin Area**.
+1. Select **Settings > Reporting**.
 1. Expand **Spam and Anti-bot Protection**.
 1. Update the Spam Check settings:
    1. Check the "Enable Spam Check via external API endpoint" checkbox

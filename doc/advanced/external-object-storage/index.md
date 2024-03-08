@@ -1,7 +1,7 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
 # Configure the GitLab chart with an external object storage
@@ -24,7 +24,7 @@ This documentation specifies usage of access and secret keys for AWS. It is also
 
 ## S3 encryption
 
-> [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2251) in GitLab 13.4.
+> - [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2251) in GitLab 13.4.
 
 GitLab supports [Amazon KMS](https://aws.amazon.com/kms/)
 to [encrypt data stored in S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets).
@@ -40,8 +40,6 @@ See the [GitLab documentation on encrypted S3 buckets](https://docs.gitlab.com/e
 for more details.
 
 ## Azure Blob Storage
-
-> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/25877) in GitLab 13.4.
 
 Direct support for Azure Blob storage is available for
 [uploaded attachments, CI job artifacts, LFS, and other object types supported via the consolidated settings](https://docs.gitlab.com/ee/administration/object_storage.html#storage-specific-configuration). In previous GitLab versions, an [Azure MinIO gateway](azure-minio-gateway.md) was needed.
@@ -92,12 +90,13 @@ Configuration of object storage for the `registry` chart is done via the `regist
 --set global.registry.bucket=bucket-name
 ```
 
-> **Note**: The bucket name needs to be set both in the secret, and in `global.registry.bucket`. The secret is used in the registry server, and
+NOTE:
+The bucket name needs to be set both in the secret, and in `global.registry.bucket`. The secret is used in the registry server, and
 the global is used by GitLab backups.
 
 Create the secret per [registry chart documentation on storage](../../charts/registry/index.md#storage), then configure the chart to make use of this secret.
 
-Examples for [S3](https://docs.docker.com/registry/storage-drivers/s3/)(S3 compatible storages, but Azure MinIO gateway not supported, see [Azure Blob Storage](#azure-blob-storage)), [Azure](https://docs.docker.com/registry/storage-drivers/azure/) and [GCS](https://docs.docker.com/registry/storage-drivers/gcs/) drivers can be found in
+Examples for [S3](https://distribution.github.io/distribution/storage-drivers/s3/)(S3 compatible storages, but Azure MinIO gateway not supported, see [Azure Blob Storage](#azure-blob-storage)), [Azure](https://distribution.github.io/distribution/storage-drivers/azure/) and [GCS](https://distribution.github.io/distribution/storage-drivers/gcs/) drivers can be found in
 [`examples/objectstorage`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage).
 
 - [`registry.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.s3.yaml)
@@ -253,8 +252,8 @@ configured to authenticate as a user with sufficient access to read/write to all
 
      ```ini
      [default]
-     access_key = BOGUS_ACCESS_KEY
-     secret_key = BOGUS_SECRET_KEY
+     access_key = AWS_ACCESS_KEY
+     secret_key = AWS_SECRET_KEY
      bucket_location = us-east-1
      multipart_chunk_size_mb = 128 # default is 15 (MB)
      ```
@@ -285,9 +284,9 @@ configured to authenticate as a user with sufficient access to read/write to all
 
      # Setup access keys
      # Access Key = Azure Storage Account name
-     access_key = BOGUS_ACCOUNT_NAME
+     access_key = AZURE_ACCOUNT_NAME
      # Secret Key = Azure Storage Account Key
-     secret_key = BOGUS_KEY
+     secret_key = AZURE_ACCOUNT_KEY
 
      # Use S3 v4 signature APIs
      signature_v2 = False
@@ -301,7 +300,7 @@ configured to authenticate as a user with sufficient access to read/write to all
 
 ## Google Cloud CDN
 
-> [Introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/98010) in GitLab 15.5.
+> - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/98010) in GitLab 15.5.
 
 You can use [Google Cloud CDN](https://cloud.google.com/cdn) to cache
 and fetch data from the artifacts bucket. This can help improve

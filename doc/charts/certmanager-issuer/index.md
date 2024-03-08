@@ -1,10 +1,14 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Using certmanager-issuer for CertManager Issuer creation **(FREE SELF)**
+# Using certmanager-issuer for CertManager Issuer creation
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 This chart is a helper for [Jetstack's CertManager Helm chart](https://cert-manager.io/docs/installation/helm/).
 It automatically provisions an Issuer object, used by CertManager when requesting TLS certificates for

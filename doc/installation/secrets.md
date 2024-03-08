@@ -1,10 +1,14 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Configure secrets for the GitLab chart **(FREE SELF)**
+# Configure secrets for the GitLab chart
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 GitLab requires a variety of secrets to operate:
 
@@ -230,8 +234,6 @@ production:
   db_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
   encrypted_settings_key_base: $(head -c 512 /dev/urandom | LC_CTYPE=C tr -cd 'a-zA-Z0-9' | head -c 128)
   openid_connect_signing_key: |
-$(openssl genrsa 2048 | awk '{print "    " $0}')
-  ci_jwt_signing_key: |
 $(openssl genrsa 2048 | awk '{print "    " $0}')
 EOF
 
@@ -533,7 +535,7 @@ Use the `Secret` name, not the _actual password_ when configuring the Helm prope
 
 ### Microsoft Graph client secret for Service Desk emails
 
-To let GitLab have access to [service_desk emails](https://docs.gitlab.com/ee/user/project/service_desk.html#using-custom-email-address)
+To let GitLab have access to [service_desk emails](https://docs.gitlab.com/ee/user/project/service_desk/configure.html#custom-email-address)
 store the password of the IMAP account in a Kubernetes secret:
 
 ```shell

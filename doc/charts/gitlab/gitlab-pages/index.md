@@ -1,10 +1,14 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Using the GitLab Pages chart **(FREE SELF)**
+# Using the GitLab Pages chart
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 The `gitlab-pages` subchart provides a daemon for serving static websites from
 GitLab projects.
@@ -154,6 +158,7 @@ configurations that can be supplied to the `helm install` command using the
 | `serverReadHeaderTimeout`   | `1s`     | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `serverWriteTimeout`        | `5m`     | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `serverKeepAlive`           | `15s`    | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
+| `authTimeout`               | `5s`     | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `authCookieSessionTimeout`  | `10m`    | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 
 ### Configuring the `ingress`

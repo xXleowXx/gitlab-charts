@@ -1,10 +1,14 @@
 ---
 stage: Enablement
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/engineering/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#designated-technical-writers
 ---
 
-# Using Traefik **(FREE SELF)**
+# Using Traefik
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 The [Traefik Helm chart](https://artifacthub.io/packages/helm/traefik/traefik) can replace the
 [bundled NGINX Helm chart](../nginx/index.md) as the Ingress controller.
@@ -40,4 +44,4 @@ Following are links for more information on Traefik Enterprise:
 - [Traefik Enterprise FIPS image](https://doc.traefik.io/traefik-enterprise/operations/fips-image/)
 - [Traefik Enterprise Helm chart](https://doc.traefik.io/traefik-enterprise/installing/kubernetes/helm/)
 - [Traefik Enterprise Operator on ArtifactHub](https://artifacthub.io/packages/olm/community-operators/traefikee-operator)
-- [Traefik Enterprise Certified OpenShift Operator on RedHat Catalog](https://catalog.redhat.com/software/operators/detail/5e98745a6c5dcb34dfbb1a0a)
+- [Traefik Enterprise Certified OpenShift Operator on RedHat Catalog](https://catalog.redhat.com/software/container-stacks/detail/5e98745a6c5dcb34dfbb1a0a)

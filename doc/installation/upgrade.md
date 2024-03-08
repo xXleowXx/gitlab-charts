@@ -1,16 +1,24 @@
 ---
 stage: Systems
 group: Distribution
-info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://about.gitlab.com/handbook/product/ux/technical-writing/#assignments
+info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Upgrade the GitLab chart **(FREE SELF)**
+# Upgrade the GitLab chart
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
 
 Before upgrading your GitLab installation, you need to check the
 [changelog](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/CHANGELOG.md)
 corresponding to the specific release you want to upgrade to and look for any
 [release notes](version_mappings.md#release-notes-for-each-version) that might pertain to the new GitLab chart
 version.
+
+Upgrades have to follow a supported [upgrade path](https://docs.gitlab.com/ee/update/#upgrade-paths).
+Because the GitLab chart versions don't follow the same numbering as GitLab versions,
+see the [version mappings](version_mappings.md) between them.
 
 NOTE:
 **Zero-downtime upgrades** are not available with the GitLab charts.
@@ -26,8 +34,6 @@ You can retrieve your previous `--set` arguments cleanly, with
 (`helm get values <release name> > gitlab.yaml`), you can safely pass this
 file via `-f`. Thus `helm upgrade gitlab gitlab/gitlab -f gitlab.yaml`.
 This safely replaces the behavior of `--reuse-values`
-
-See [mappings](../installation/version_mappings.md) between chart versioning and GitLab versioning.
 
 ## Steps
 
@@ -153,6 +159,19 @@ coalesce.go:199: warning: destination for password is a table. Ignoring non-tabl
 
 This is an indication that you are setting `global.redis.password` in your values file.
 
+### `useNewIngressForCerts` on Ingresses
+
+If you are upgrading an existing chart from `7.x` to a later version, and are changing
+`global.ingress.useNewIngressForCerts` to `true`, you must also update any existing
+cert-manager `Certificate` objects to delete the `acme.cert-manager.io/http01-override-ingress-name` annotation.
+
+You must make this change because with this attribute set to `false` (default),
+this annotation is added by default to the Certificates, and cert-manager uses
+it to identify which Ingress method to use for that certificate. The annotation
+is not automatically removed by only changing this attribute to `false`.
+A manual action is needed otherwise cert-manager keeps using the old
+behavior for pre-existing Ingresses.
+
 ## Upgrade to version 6.0
 
 WARNING:
@@ -170,8 +189,7 @@ Upgrading to `5.9.x` may lead to a situation where the Sidekiq pod does not beco
 
 This can be resolved from the **Admin Area**:
 
-1. On the left sidebar, select **Search or go to**.
-1. Select **Admin Area**.
+1. On the left sidebar, at the bottom, select **Admin Area**.
 1. Select **Settings > Metrics and profiling**.
 1. Expand **Metrics - Prometheus**.
 1. Ensure that **Enable health and performance metrics endpoint** is enabled.
