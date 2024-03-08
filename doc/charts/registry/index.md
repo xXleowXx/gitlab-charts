@@ -182,7 +182,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                          |                                                                      | Pull policy for the registry image |
 | `image.pullSecrets`                         |                                                                      | Secrets to use for image repository |
 | `image.repository`                          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry` | Registry image |
-| `image.tag`                                 | `v3.89.0-gitlab`                                                     | Version of the image to use |
+| `image.tag`                                 | `v3.90.0-gitlab`                                                     | Version of the image to use |
 | `init.image.repository`                     |                                                                      | initContainer image |
 | `init.image.tag`                            |                                                                      | initContainer image tag |
 | `init.containerSecurityContext`             |                                                                      | initContainer container specific [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) |
