@@ -22,7 +22,7 @@ while the [NGINX Ingress controller](https://github.com/kubernetes/ingress-nginx
 
 ## Configuring HAProxy
 
-See the [HAProxy Helm chart documentation](https://www.haproxy.com/documentation/kubernetes/latest/community/configuration-reference)
+See the [HAProxy Helm chart documentation](https://www.haproxy.com/documentation/kubernetes-ingress/enterprise/configuration-reference/)
 or the [Helm values file](https://github.com/haproxytech/helm-charts/blob/main/kubernetes-ingress/values.yaml).
 for configuration details.
 
