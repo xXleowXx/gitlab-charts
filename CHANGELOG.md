@@ -2,6 +2,24 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.10.0 (2024-03-20)
+
+### Changed (9 changes)
+
+- [Update gitlab-org/container-registry from 3.89.0-gitlab to 3.90.0-gitlab](gitlab-org/charts/gitlab@b82291ff1d78afb95a2d55a978a84d46f26da2e5) ([merge request](gitlab-org/charts/gitlab!3658))
+- [Update gitlab-org/gitlab-qa from 14.3.0 to 14.4.0](gitlab-org/charts/gitlab@713d12bc7be342e3f30fff239114999758112763) ([merge request](gitlab-org/charts/gitlab!3657))
+- [Update gitlab-org/gitlab-qa from 14.2.1 to 14.3.0](gitlab-org/charts/gitlab@4b72c7c045932c255cd71de7efe4a49a57ad6427) ([merge request](gitlab-org/charts/gitlab!3651))
+- [Update gitlab-org/charts/gitlab-runner from 0.62.0 to 0.62.1](gitlab-org/charts/gitlab@a14f5ba89f65d70be8f364dcb5f0aca91dc8a399) ([merge request](gitlab-org/charts/gitlab!3650))
+- [Update gitlab-org/container-registry from 3.88.1-gitlab to 3.89.0-gitlab](gitlab-org/charts/gitlab@a8ba9c02ff05dd1e7b7a2de4d5bf721c88e23b0b) ([merge request](gitlab-org/charts/gitlab!3644))
+- [Update cert-manager/cert-manager from 1.12.7 to 1.12.8](gitlab-org/charts/gitlab@ce81ff03c1ad199649b8b84a68d2be45724141b9) ([merge request](gitlab-org/charts/gitlab!3640))
+- [Update gitlab-org/gitlab-qa from 14.1.0 to 14.2.1](gitlab-org/charts/gitlab@38eefa738d0328466230901330fdf77a31d464a2) ([merge request](gitlab-org/charts/gitlab!3635))
+- [Update gitlab-org/charts/gitlab-runner from 0.61.2 to 0.62.0](gitlab-org/charts/gitlab@c66880b8075b62b72fce398b4d241a440d39b03c) ([merge request](gitlab-org/charts/gitlab!3629))
+- [Update gitlab-org/gitlab-exporter from 14.2.0 to 14.3.0](gitlab-org/charts/gitlab@fd371d09c2d02a23b70f82ef6e9a12ad212e368c) ([merge request](gitlab-org/charts/gitlab!3628))
+
+### Deprecated (1 change)
+
+- [Removed kubernetes 1.22 testing](gitlab-org/charts/gitlab@ca9ec21a32e28e63b8e731c317d5089384c9c782) ([merge request](gitlab-org/charts/gitlab!3597))
+
 ## 7.9.2 (2024-03-06)
 
 No changes.
