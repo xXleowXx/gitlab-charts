@@ -50,7 +50,7 @@ variables:
   DEBIAN_VERSION: bullseye
   RUBY_VERSION: "3.0"
   CI_TOOLS_VERSION: "4.22.0"
-  GITLAB_QA_VERSION: "14.3.0"
+  GITLAB_QA_VERSION: "14.4.0"
   # STRICT_VERSIONS is used in RSpecs to ensure exact version match for tools like "helm" and "kubectl"
   STRICT_VERSIONS: "true"
   KUBE_CRD_SCHEMA_URL: "https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/v3/apis__apiextensions.k8s.io__v1_openapi.json"
@@ -474,11 +474,7 @@ review_eks:
   when: manual
   allow_failure: true
   rules:
-    - !reference [.rule:skip_if_no_cluster]
-    - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /STABLE_BRANCH_PIPELINE$/'
-    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
-    - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
+    - !reference [.review_template, rules]
 
 stop_review_gke125:
   variables:
