@@ -63,9 +63,9 @@ spec:
                 values:
                 - us-east1-c
                 - us-east1-b
-      {{- end }}          
-      {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
+      {{- end }}
       affinity:
+      {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
@@ -74,7 +74,6 @@ spec:
                   app: {{ template "name" . }}
                   release: {{ .Release.Name }}
       {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
-      affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
@@ -84,6 +83,25 @@ spec:
                 matchLabels:
                   app: {{ template "name" . }}
                   release: {{ .Release.Name }}
+      {{- end }}
+      {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "hard" }}
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: {{ default .Values.global.affinity.nodeAffinity.key .Values.affinity.nodeAffinity.key | quote }}
+                operator: In
+                values: {{ default .Values.global.affinity.nodeAffinity.values .Values.affinity.nodeAffinity.values | toYaml | nindent 16 }}
+      {{- end }}
+      {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "soft" }}
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: {{ default .Values.global.affinity.nodeAffinity.key .Values.affinity.nodeAffinity.key | quote }}
+                  operator: In
+                  values: {{ default .Values.global.affinity.nodeAffinity.values .Values.affinity.nodeAffinity.values | toYaml | nindent 18 }}
       {{- end }}
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "registry.serviceAccount.name" $ }}

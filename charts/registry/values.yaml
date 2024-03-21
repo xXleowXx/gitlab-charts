@@ -215,6 +215,9 @@ nodeSelector: {}
 affinity:
   podAntiAffinity:
     topologyKey:
+  nodeAffinity:
+    key:
+    values:
 
 # Protocol/Host only. '/jwt/auth' will be appended.
 authEndpoint:

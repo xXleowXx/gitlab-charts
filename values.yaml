@@ -746,9 +746,16 @@ global:
     annotations: {}
 
   antiAffinity: soft
+  # Set to hard or soft
+  nodeAffinity: hard
   affinity:
     podAntiAffinity:
       topologyKey: "kubernetes.io/hostname"
+    nodeAffinity:
+      key: topology.kubernetes.io/zone
+      values:
+      - a
+      - b
 
   # Priority class assigned to pods, may be overridden for individual components
   # https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
