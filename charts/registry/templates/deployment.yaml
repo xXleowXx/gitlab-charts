@@ -52,6 +52,18 @@ spec:
         {{- toYaml .Values.tolerations | nindent 8 }}
       {{- end }}
       {{- include "gitlab.podSecurityContext" .Values.securityContext | nindent 6 }}
+      {{- if .Values.zonal }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east1-c
+                - us-east1-b
+      {{- end }}          
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
         podAntiAffinity:
