@@ -52,8 +52,15 @@ spec:
         {{- toYaml .Values.tolerations | nindent 8 }}
       {{- end }}
       {{- include "gitlab.podSecurityContext" .Values.securityContext | nindent 6 }}
-      {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
+      {{- $affinityOptions := list "hard" "soft" }}
+      {{- if or 
+        (in (default .Values.global.antiAffinity "") $affinityOptions) 
+        (in (default .Values.antiAffinity "") $affinityOptions)
+        (in (default .Values.global.nodeAffinity "") $affinityOptions) 
+        (in (default .Values.nodeAffinity "") $affinityOptions) 
+      }}
       affinity:
+      {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
@@ -90,6 +97,7 @@ spec:
                 - key: {{ default .Values.global.affinity.nodeAffinity.key .Values.affinity.nodeAffinity.key | quote }}
                   operator: In
                   values: {{ default .Values.global.affinity.nodeAffinity.values .Values.affinity.nodeAffinity.values | toYaml | nindent 18 }}
+      {{- end }}
       {{- end }}
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "registry.serviceAccount.name" $ }}
