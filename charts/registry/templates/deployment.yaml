@@ -52,8 +52,8 @@ spec:
         {{- toYaml .Values.tolerations | nindent 8 }}
       {{- end }}
       {{- include "gitlab.podSecurityContext" .Values.securityContext | nindent 6 }}
-      affinity:
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
+      affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
