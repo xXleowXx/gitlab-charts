@@ -175,3 +175,31 @@ for both distributions was based upon the following:
   - Required for RHEL certification and inclusion into the OpenShift Marketplace / RedHat Catalog
 
 Further discussion on this topic can be found in [issue #3095](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/3095).
+
+## Kubernetes release support policy
+
+Date: 2024-03-26
+
+GitLab will officially support three minor releases of Kubernetes: `N`, `N-1`,
+and `N-2`. `N` is either:
+
+- The latest released minor version of Kubernetes, if we have finished
+  qualifying it.
+- The next most recent version, if we have not finished or started qualifying
+  the most recent version.
+
+Details can be found at [Distribution Team Kubernetes and OpenShift release support policy](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/k8s-release-support-policy/)
+
+## OpenShift release support policy
+
+Date: 2024-03-26
+
+GitLab will officially support four minor releases of OpenShift -- `N`, `N-1`,
+and `N-2` and `N-3`. Like Kubernetes, `N` is either:
+
+- The latest released minor version of OpenShift, if we have finished qualifying
+  it.
+- The next most recent version, if we have not finished or started qualifying
+  the most recent version.
+
+Details can be found at [Distribution Team Kubernetes and OpenShift release support policy](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/k8s-release-support-policy/)
