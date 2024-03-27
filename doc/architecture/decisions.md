@@ -185,8 +185,8 @@ and `N-2`. `N` is either:
 
 - The latest released minor version of Kubernetes, if we have finished
   qualifying it.
-- The next most recent version, if we have not finished or started qualifying
-  the most recent version.
+- The next most recent minor version, if we have not finished or started qualifying
+  the most recent minor version.
 
 Details can be found at [Distribution Team Kubernetes and OpenShift release support policy](https://handbook.gitlab.com/handbook/engineering/infrastructure/core-platform/systems/distribution/k8s-release-support-policy/)
 
