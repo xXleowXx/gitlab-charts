@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.10.1 (2024-03-27)
+
+No changes.
+
 ## 7.10.0 (2024-03-20)
 
 ### Changed (9 changes)
@@ -19,6 +23,10 @@ entry.
 ### Deprecated (1 change)
 
 - [Removed kubernetes 1.22 testing](gitlab-org/charts/gitlab@ca9ec21a32e28e63b8e731c317d5089384c9c782) ([merge request](gitlab-org/charts/gitlab!3597))
+
+## 7.9.3 (2024-03-27)
+
+No changes.
 
 ## 7.9.2 (2024-03-06)
 
@@ -49,6 +57,10 @@ No changes.
 - [Zoekt: Enable internalApi by default](gitlab-org/charts/gitlab@f2d5eed2a4ad8c2e66dc5ea21e68d48c9a31ab1e) ([merge request](gitlab-org/charts/gitlab!3572))
 - [Update gitlab-org/gitlab-exporter from 13.5.0 to 14.0.0](gitlab-org/charts/gitlab@6cedee72b82377bbea9ca4c915c4e9bd83d22a45) ([merge request](gitlab-org/charts/gitlab!3542))
 - [Update gitlab-org/gitlab-qa from 13.1.0 to 13.2.1](gitlab-org/charts/gitlab@8c970eb366b508ef20d30c6369a6aeee57fed149) ([merge request](gitlab-org/charts/gitlab!3573))
+
+## 7.8.5 (2024-03-27)
+
+No changes.
 
 ## 7.8.4 (2024-03-06)
 
