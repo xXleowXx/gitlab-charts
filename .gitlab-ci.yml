@@ -338,6 +338,7 @@ pin_image_versions:
 
 .review_eks_common_vars: &review_eks_common_vars
   DNS_PROVIDER: "aws"
+  AGENT_NAME: "eks127-ci-cluster"
 
 # Jobs using auto_stop_in that exit with a failure will not execute the on_stop
 # action. We get frequent failures during review_* jobs. Their accompanying
