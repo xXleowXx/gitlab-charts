@@ -180,7 +180,7 @@ init:
     fi
     # Insert Database password, if enabled
     if [ -f /config/database_password ] ; then
-      sed -i -e 's@DB_PASSWORD_FILE@'"$(cat /config/database_password)"'@' /registry/config.yml
+      sed -i -e 's@DB_PASSWORD_FILE@'"$(sed -e 's/[&\/]/\\&/g' /config/database_password)"'@' /registry/config.yml
     fi
     # Insert Redis password, if enabled
     if [ -f /config/registry/redis-password ] ; then
