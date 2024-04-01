@@ -84,6 +84,8 @@ spec:
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           {{- include "gitlab.init.containerSecurityContext" $ | indent 10 }}
           env:
+          - name: TZ
+            value: {{ $.Values.global.time_zone | quote }}
           {{- include "gitlab.extraEnv" $ | nindent 12 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
           volumeMounts:
@@ -117,6 +119,8 @@ spec:
               value: '/etc/gitlab-pages/config'
             - name: GITLAB_PAGES_LOG_FORMAT
               value: {{ .Values.logFormat | quote }}
+            - name: TZ
+              value: {{ $.Values.global.time_zone | quote }}
           volumeMounts:
             {{- include "gitlab.extraVolumeMounts" $ | nindent 12 }}
             - name: pages-config

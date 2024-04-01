@@ -81,6 +81,8 @@ spec:
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
+          - name: TZ
+            value: {{ .Values.global.time_zone | quote }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" . | nindent 10 }}
           {{- include "gitlab.psql.ssl.volumeMount" . | nindent 10 }}
@@ -103,6 +105,8 @@ spec:
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           {{- include "gitlab.containerSecurityContext" . | indent 10 }}
           env:
+            - name: TZ
+              value: {{ .Values.global.time_zone | quote }}
             - name: CONFIG_TEMPLATE_DIRECTORY
               value: '/var/opt/gitlab-exporter/templates'
             - name: CONFIG_DIRECTORY
