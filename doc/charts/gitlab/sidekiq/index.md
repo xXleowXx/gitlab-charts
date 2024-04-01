@@ -538,7 +538,7 @@ pods:
 
 ### Full example of Sidekiq configuration
 
-The following is a full example of Sidekiq configuration using a separate Sidekiq pod for import-related jobs and another pod for everything else.
+The following is a full example of Sidekiq configuration using a separate Sidekiq pod for import-related jobs, a Sidekiq pod for export-related jobs using a separate Redis instance and another pod for everything else.
 
 ```yaml
 ...
@@ -547,13 +547,21 @@ global:
     sidekiq:
       routingRules:
       - ["feature_category=importers", "import"]
+      - ["feature_category=exporters", "export", "exporter"]
       - ["*", "default"]
+  redis:
+    redisYmlOverride:
+      queues_shard_exporter: ...
 ...
 gitlab:
   sidekiq:
     pods:
     - name: import
       queues: import
+    - name: export
+      queues: export
+      extraEnv:
+        SIDEKIQ_SHARD_NAME: queues_shard_exporter # to match key in global.redis.redisYmlOverride
     - name: default
 ...
 ```
