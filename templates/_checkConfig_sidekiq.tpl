@@ -54,7 +54,7 @@ Ensure that Sidekiq routingRules configuration is in a valid format
 {{-     range $rule := . }}
 {{-       if (not (kindIs "slice" $rule)) }}
 {{-         $validRoutingRules = false }}
-{{-       else if (and (ne (len $rule) 2) (ne (len $rule) 3)) }}
+{{-       else if not (or (eq (len $rule) 2) (eq (len $rule) 3)) }}
 {{-         $validRoutingRules = false }}
 {{/*      The first item (routing query) must be a string */}}
 {{-       else if not (kindIs "string" (index $rule 0)) }}
