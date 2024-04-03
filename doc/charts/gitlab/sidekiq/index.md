@@ -547,11 +547,11 @@ global:
     sidekiq:
       routingRules:
       - ["feature_category=importers", "import"]
-      - ["feature_category=exporters", "export", "exporter"]
+      - ["feature_category=exporters", "export", "queues_shard_extra_shard"]
       - ["*", "default"]
   redis:
     redisYmlOverride:
-      queues_shard_exporter: ...
+      queues_shard_extra_shard: ...
 ...
 gitlab:
   sidekiq:
@@ -561,7 +561,7 @@ gitlab:
     - name: export
       queues: export
       extraEnv:
-        SIDEKIQ_SHARD_NAME: queues_shard_exporter # to match key in global.redis.redisYmlOverride
+        SIDEKIQ_SHARD_NAME: queues_shard_extra_shard # to match key in global.redis.redisYmlOverride
     - name: default
 ...
 ```
