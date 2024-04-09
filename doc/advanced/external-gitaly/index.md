@@ -311,7 +311,7 @@ Once connectivity is confirmed, we can proceed to scheduling the repository stor
 a repository storage move [for a project](https://docs.gitlab.com/ee/api/project_repository_storage_moves.html#schedule-a-repository-storage-move-for-a-project), or for [all projects](https://docs.gitlab.com/ee/api/project_repository_storage_moves.html#schedule-repository-storage-moves-for-all-projects-on-a-storage-shard).
 1. Use the [group repository storage moves API](https://docs.gitlab.com/ee/api/group_repository_storage_moves.html)
 a repository storage move [for a group](https://docs.gitlab.com/ee/api/group_repository_storage_moves.html#schedule-a-repository-storage-move-for-a-group), or for [all groups](https://docs.gitlab.com/ee/api/group_repository_storage_moves.html#schedule-repository-storage-moves-for-all-groups-on-a-storage-shard).
-1. Use the [snippet repository storage moves API](https://docs.gitlab.com/ee/api/group_repository_storage_moves.html)
+1. Use the [snippet repository storage moves API](https://docs.gitlab.com/ee/api/snippet_repository_storage_moves.html)
 a repository storage move [for a snippet](https://docs.gitlab.com/ee/api/snippet_repository_storage_moves.html#schedule-a-repository-storage-move-for-a-snippet), or for [all snippets](https://docs.gitlab.com/ee/api/snippet_repository_storage_moves.html#schedule-repository-storage-moves-for-all-snippets-on-a-storage-shard).
 
 #### Step 5: Final configuration and validation
