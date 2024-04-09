@@ -374,6 +374,8 @@ a repository storage move [for a snippet](https://docs.gitlab.com/ee/api/snippet
 
 1. After you have confirmed everything is working as expected, you can delete the Gitaly PVC:
 
+   WARNING: Do not delete the Gitaly PVC until you have double checked that everything is working as expected.
+
    ```shell
    kubectl delete pvc repo-data-<release>-gitaly-0
    ```
