@@ -372,6 +372,8 @@ a repository storage move [for a snippet](https://docs.gitlab.com/ee/api/snippet
 
 1. Optional. In the Admin Area, set `default` to a weight of zero to prevent repositories being stored there.
 
+1. Optional. Remove the changes made to each external Gitaly `/etc/hosts` file after following the [get the Gitaly pod IP and hostnames](#step-3-get-the-gitaly-pod-ip-and-hostnames) step.
+
 1. After you have confirmed everything is working as expected, you can delete the Gitaly PVC:
 
    WARNING: Do not delete the Gitaly PVC until you have double checked that everything is working as expected.
