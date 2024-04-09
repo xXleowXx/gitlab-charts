@@ -324,6 +324,54 @@ a repository storage move [for a snippet](https://docs.gitlab.com/ee/api/snippet
     helm get values <release> gitlab/gitlab -o yaml > gitlab.yml
     ```
 
+1. Disable the internal Gitaly subchart in the `gitlab.yml` file. [GitLab requires a default repository storage](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#gitlab-requires-a-default-repository-storage) so we need to point this to the external Gitaly service when the internal Gitaly suchart is disabled:
+
+   :::TabTitle Gitaly
+
+   ```yaml
+   global:
+     gitaly:
+       enabled: false                      # Disable the internal Gitaly subchart
+       external:
+         - name: ext-gitaly                # required
+           hostname: node1.git.example.com # required
+           port: 8075                      # optional, default shown
+           tlsEnabled: false               # optional, overrides gitaly.tls.enabled
+         - name: default                   # Add the default repository storage, use the same settings as ext-gitaly
+           hostname: node1.git.example.com
+           port: 8075
+           tlsEnabled: false
+   ```
+
+   :::TabTitle Gitaly Cluster
+
+   ```yaml
+   global:
+     gitaly:
+       enabled: false                      # Disable the internal Gitaly subchart
+       external:
+         - name: ext-gitaly-cluster        # required
+           hostname: ha.git.example.com    # required
+           port: 2305                      # Praefect uses port 2305
+           tlsEnabled: false               # optional, overrides gitaly.tls.enabled
+         - name: default                   # Add the default repository storage, use the same settings as ext-gitaly-cluster
+           hostname: ha.git.example.com
+           port: 2305
+           tlsEnabled: false
+   ```
+
+   ::EndTabs
+
+1. Apply the new configuration:
+
+   ```shell
+   helm upgrade --install gitlab gitlab/gitlab \
+     -f gitlab.yml \
+     -f mixed-gitaly.yml
+   ```
+
+1. Optional. In the Admin Area, set `default` to a weight of zero to prevent repositories being stored there.
+
 1. After you have confirmed everything is working as expected, you can delete the Gitaly PVC:
 
    ```shell
