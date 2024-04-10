@@ -194,7 +194,7 @@ lint_package:
       helm kubeconform --strict --summary
       -f ./template_settings.yaml
       --kubernetes-version $KUBE_VERSION
-      --schema-location default
+      --schema-location "${KUBECONFORM_SCHEMA_LOCATION:-default}"
       --schema-location "$KUBE_CRD_SCHEMA_URL"
       --output json
       .
