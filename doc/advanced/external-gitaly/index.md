@@ -370,7 +370,7 @@ a repository storage move [for a snippet](https://docs.gitlab.com/ee/api/snippet
      -f mixed-gitaly.yml
    ```
 
-1. Optional. In the Admin Area, set `default` to a weight of zero to prevent repositories being stored there.
+1. Optional. In the [Admin Area](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#configure-where-new-repositories-are-stored), set `default` to a weight of zero to prevent repositories being stored there.
 
 1. Optional. Remove the changes made to each external Gitaly `/etc/hosts` file after following the [get the Gitaly pod IP and hostnames](#step-3-get-the-gitaly-pod-ip-and-hostnames) step.
 
