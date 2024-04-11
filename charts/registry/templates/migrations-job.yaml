@@ -9,9 +9,9 @@ metadata:
     {{- include "gitlab.commonLabels" . | nindent 4 }}
   {{- if .Values.database.migrations.annotations }}
   annotations:
-  {{- range $key, $value := .Values.database.migrations.annotations }}
+  {{-   range $key, $value := .Values.database.migrations.annotations }}
     {{ $key }}: {{ $value | quote }}
-  {{- end }}
+  {{-   end }}
   {{- end }}
 spec:
   activeDeadlineSeconds: {{ .Values.database.migrations.activeDeadlineSeconds }}
