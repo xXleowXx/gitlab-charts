@@ -171,7 +171,7 @@ upgrades don't cause errors trying to create the already ran job.
 Create a node affinity rule optionally to deploy 
 registry pods in a specific zone
 */}}
-{{- define "gitlab.affinity" -}}
+{{- define "registry.affinity" -}}
 {{- $affinityOptions := list "hard" "soft" }}
 {{- if or 
   (has (default .Values.global.antiAffinity "") $affinityOptions) 
