@@ -32,6 +32,12 @@ No changes.
 
 - [Removed kubernetes 1.22 testing](gitlab-org/charts/gitlab@ca9ec21a32e28e63b8e731c317d5089384c9c782) ([merge request](gitlab-org/charts/gitlab!3597))
 
+## 7.9.5 (2024-04-12)
+
+### Deprecated (1 change)
+
+- [[CI] remove references to 1.22 cluster](gitlab-org/charts/gitlab@c155a8ca9aa5cd0f894dde51c9d8175aedecd328) ([merge request](gitlab-org/charts/gitlab!3677))
+
 ## 7.9.4 (2024-04-09)
 
 No changes.
