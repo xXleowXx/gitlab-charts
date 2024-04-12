@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.8.7 (2024-04-12)
+
+### Deprecated (1 change)
+
+- [[CI] remove references to 1.22 cluster](gitlab-org/charts/gitlab@ce1ea8b564e9fe31852d59f79bd543455836d1ed) ([merge request](gitlab-org/charts/gitlab!3678))
+
 ## 7.8.6 (2024-04-09)
 
 No changes.
