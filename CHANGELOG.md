@@ -76,6 +76,12 @@ No changes.
 - [Update gitlab-org/gitlab-exporter from 13.5.0 to 14.0.0](gitlab-org/charts/gitlab@6cedee72b82377bbea9ca4c915c4e9bd83d22a45) ([merge request](gitlab-org/charts/gitlab!3542))
 - [Update gitlab-org/gitlab-qa from 13.1.0 to 13.2.1](gitlab-org/charts/gitlab@8c970eb366b508ef20d30c6369a6aeee57fed149) ([merge request](gitlab-org/charts/gitlab!3573))
 
+## 7.8.7 (2024-04-12)
+
+### Deprecated (1 change)
+
+- [[CI] remove references to 1.22 cluster](gitlab-org/charts/gitlab@ce1ea8b564e9fe31852d59f79bd543455836d1ed) ([merge request](gitlab-org/charts/gitlab!3678))
+
 ## 7.8.6 (2024-04-09)
 
 No changes.
