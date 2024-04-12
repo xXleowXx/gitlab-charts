@@ -52,15 +52,7 @@ spec:
         {{- toYaml .Values.tolerations | nindent 8 }}
       {{- end }}
       {{- include "gitlab.podSecurityContext" .Values.securityContext | nindent 6 }}
-      {{- $affinityOptions := list "hard" "soft" }}
-      {{- if or 
-        (has (default .Values.global.antiAffinity "") $affinityOptions) 
-        (has (default .Values.antiAffinity "") $affinityOptions)
-        (has (default .Values.global.nodeAffinity "") $affinityOptions) 
-        (has (default .Values.nodeAffinity "") $affinityOptions) 
-      }}
-      {{- include "registry.affinity" .}}
-      {{- end }}
+      {{- include "gitlab.affinity" .}}
       {{- if or $.Values.serviceAccount.enabled $.Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "registry.serviceAccount.name" $ }}
       {{- end }}
