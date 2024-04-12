@@ -45,6 +45,7 @@ The table below maps some of the key previous chart versions and GitLab versions
 | 7.10.2 | 16.10.2 |
 | 7.10.1 | 16.10.1 |
 | 7.10.0 | 16.10.0 |
+| 7.9.5 | 16.9.5 |
 | 7.9.4 | 16.9.4 |
 | 7.9.3 | 16.9.3 |
 | 7.9.2 | 16.9.2 |
