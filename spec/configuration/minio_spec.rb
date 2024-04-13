@@ -6,7 +6,7 @@ require 'hash_deep_merge'
 describe 'MinIO configuration' do
   context 'When customer provides additional persistence annotations' do
     let(:values) do
-      HelmTemplate.yaml_values(%(
+      HelmTemplate.with_defaults(%(
         minio:
           persistence:
             annotations:
