@@ -180,43 +180,44 @@ registry pods in a specific zone
   (has (default .Values.nodeAffinity "") $affinityOptions) 
 }}
 affinity:
-      {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
-              labelSelector:
-                matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
-      {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
-              labelSelector:
-                matchLabels:
-                  app: {{ template "name" . }}
-                  release: {{ .Release.Name }}
-      {{- end }}
-      {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "hard" }}
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
+  {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
+          labelSelector:
+            matchLabels:
+              app: {{ template "name" . }}
+              release: {{ .Release.Name }}
+  {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          podAffinityTerm:
+            topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
+            labelSelector:
+              matchLabels:
+                app: {{ template "name" . }}
+                release: {{ .Release.Name }}
+  {{- end }}
+  {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "hard" }}
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
               - key: {{ default .Values.global.affinity.nodeAffinity.key .Values.affinity.nodeAffinity.key | quote }}
                 operator: In
                 values: {{ default .Values.global.affinity.nodeAffinity.values .Values.affinity.nodeAffinity.values | toYaml | nindent 16 }}
-      {{- end }}
-      {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "soft" }}
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 1
-              nodeSelectorTerms:
-              - matchExpressions:
+  {{- end }}
+  {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "soft" }}
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          nodeSelectorTerms:
+            - matchExpressions:
                 - key: {{ default .Values.global.affinity.nodeAffinity.key .Values.affinity.nodeAffinity.key | quote }}
                   operator: In
                   values: {{ default .Values.global.affinity.nodeAffinity.values .Values.affinity.nodeAffinity.values | toYaml | nindent 18 }}
-      {{- end }}
-    {{- end }}
-{{- end }}      
+{{- end -}}
+{{- end -}}
+{{- end }}
+
