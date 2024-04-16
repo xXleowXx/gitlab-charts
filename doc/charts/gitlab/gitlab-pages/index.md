@@ -281,6 +281,11 @@ To have TLS access to the GitLab Pages feature you must:
 1. Create a DNS entry in your DNS provider with the name `*.pages.<yourdomaindomain>`
    pointing to your LoadBalancer.
 
+
+WARNING:
+**Creating a GitLab pages project would require a domain of the form `name.example.io` or `name.pages.example.io`. This setup forces admins to setup wildcard DNS records and SSL/TLS certificates (i.e.: `*.pages.example.io`).** 
+Refer to [epic 13404](https://gitlab.com/groups/gitlab-org/-/epics/13404) for more details. 
+
 ### Configuring KEDA
 
 This `keda` section enables the installation of [KEDA](https://keda.sh/) `ScaledObjects` instead of regular `HorizontalPodAutoscalers`.
