@@ -79,10 +79,12 @@ gitaly['configuration'] = {
     # Make Gitaly accept connections on all network interfaces. You must use
     # firewalls to restrict access to this address/port.
     # Comment out following line if you only want to support TLS connections
-    listen_addr: "0.0.0.0:8075",
+    listen_addr: '0.0.0.0:8075',
     # Authentication token to ensure only authorized servers can communicate with
     # Gitaly server
-    auth_token: 'AUTH_TOKEN',
+    auth: {
+        token: 'AUTH_TOKEN',
+    },
 }
 
 git_data_dirs({
