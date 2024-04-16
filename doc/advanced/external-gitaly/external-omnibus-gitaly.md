@@ -85,7 +85,6 @@ gitaly['configuration'] = {
     auth_token: 'AUTH_TOKEN',
 }
 
-
 git_data_dirs({
  'default' => {
    'path' => '/var/opt/gitlab/git-data'
