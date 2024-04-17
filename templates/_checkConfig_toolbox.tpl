@@ -3,7 +3,7 @@ Ensure that a valid object storage config secret is provided.
 */}}
 {{- define "gitlab.toolbox.backups.objectStorage.config.secret" -}}
 {{-   if .Values.gitlab.toolbox.enabled -}}
-{{-     if or .Values.gitlab.toolbox.backups.objectStorage.config (not (or .Values.global.minio.enabled .Values.global.appConfig.object_store.enabled)) }}
+{{-     if or .Values.gitlab.toolbox.backups.objectStorage.config (not .Values.global.minio.enabled) }}
 {{-       if not .Values.gitlab.toolbox.backups.objectStorage.config.secret -}}
 toolbox:
     A valid object storage config secret is needed for backups.
