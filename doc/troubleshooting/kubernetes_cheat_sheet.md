@@ -228,25 +228,25 @@ all Kubernetes resources and dependent charts:
 - Run `fast-stats`:
 
   ```shell
-  cat <file-name> | cut -d  ' ' -f2- | grep ^{ | fast-stats
+  cut -d  ' ' -f2- <file-name> | grep ^{ | fast-stats
   ```
 
 - List errors:
 
   ```shell
-  cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats errors
+  cut -d  ' ' -f2- <file-name> | grep ^{ | fast-stats errors
   ```
 
 - Run `fast-stats` top:
 
   ```shell
-  cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats top
+  cut -d  ' ' -f2- <file-name> | grep ^{ | fast-stats top
   ```
 
 - Change the number of rows printed. By default, 10 rows are printed.
 
   ```shell
-  cat <file-name> | cut -d ' ' -f2- | grep ^{ | fast-stats -l <number of rows>
+  cut -d  ' ' -f2- <file-name> | grep ^{ | fast-stats -l <number of rows>
   ```
 
 ## Installation of minimal GitLab configuration via minikube on macOS
