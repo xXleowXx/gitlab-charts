@@ -747,7 +747,8 @@ global:
         - name: CustomListener
           url: https://mycustomlistener.com
           timeout: 500mx
-          threshold: 5
+          threshold: 5 # DEPRECATED: use maxretries instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.
+          maxretries: 5
           backoff: 1s
           headers:
             X-Random-Config: [plain direct]
