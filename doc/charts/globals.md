@@ -2128,12 +2128,6 @@ certmanager:
 
 GitLab Helm chart uses a common GitLab base image for various initialization tasks.
 This image support UBI builds and shares layers with other images.
-It replaces the now deprecated busybox image.
-
-NOTE:
-If custom busybox settings are defined, the chart falls back to the legacy busybox.
-This `busybox` configuration fallback will eventually be removed.
-Please migrate your settings to `global.gitlabBase`.
 
 ## Service Accounts
 
