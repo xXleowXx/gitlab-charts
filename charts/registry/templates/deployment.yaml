@@ -94,7 +94,7 @@ spec:
             {{- toYaml .Values.init.resources | nindent 12 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
-          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
+          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
         {{- if .Values.database.enabled }}
         - name: dependencies
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}{{ include "gitlab.image.tagSuffix" . }}"
@@ -109,7 +109,7 @@ spec:
             {{- toYaml .Values.init.resources | nindent 12 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
-          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
+          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
         {{- end }}
       {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
       containers:
@@ -119,7 +119,7 @@ spec:
           {{- include "gitlab.containerSecurityContext" $ | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
-          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
+          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
           volumeMounts:
           - name: registry-server-config
             mountPath: /etc/docker/registry/
