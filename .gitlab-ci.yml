@@ -45,8 +45,8 @@ variables:
   CANONICAL_PROJECT_PATH: 'gitlab-org/charts/gitlab'
   SECURITY_PROJECT_PATH: 'gitlab-org/security/charts/gitlab'
   DEV_PROJECT_PATH: 'gitlab/charts/gitlab'
-  QA_FULL_SUITE_OPTIONS: '--tag ~smoke --tag ~reliable --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
-  QA_SANITY_SUITE_OPTIONS: '--tag smoke --tag reliable --tag ~skip_live_env --tag ~orchestrated'
+  QA_FULL_SUITE_OPTIONS: '--tag ~smoke --tag ~blocking --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
+  QA_SANITY_SUITE_OPTIONS: '--tag smoke --tag blocking --tag ~skip_live_env --tag ~orchestrated'
   DEBIAN_VERSION: bullseye
   RUBY_VERSION: "3.0"
   CI_TOOLS_VERSION: "4.22.0"
@@ -893,7 +893,7 @@ release_package:
     - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
     - if: '$PIPELINE_TYPE == "QA_KNAPSACK_UPDATE_PIPELINE"'
 
-# QA jobs for Smoke and Reliable E2E suites
+# QA jobs for Smoke and Blocking E2E suites
 
 qa_gke125:
   extends: .qa_branch
