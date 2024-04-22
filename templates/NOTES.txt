@@ -120,24 +120,6 @@ Using `PAGES_UPDATE_LEGACY_STORAGE` environment variable with bundled Pages serv
 {{-   end }}
 {{- end }}
 
-{{- /* Deprecation notice for `gitlab.deprecate.kas.privateApi.tls.enabled` setting */}}
-{{- if eq true $.Values.gitlab.kas.privateApi.tls.enabled }}
-{{ $NOTICE }}
-kas:
-    The configuration of `gitlab.kas.privateApi.tls.enabled` has moved. Please use `global.kas.tls.enabled` instead.
-    Other components of the GitLab chart other than KAS also need to be configured to talk to KAS via TLS.
-    With a global value the chart can take care of these configurations without the need for other specific values.
-{{- end }}
-
-{{- /* Deprecation notice for `gitlab.deprecate.kas.privateApi.tls.secretName` setting */}}
-{{- if hasKey $.Values.gitlab.kas.privateApi.tls "secretName" }}
-{{ $NOTICE }}
-kas:
-    The configuration of `gitlab.kas.privateApi.tls.secretName` has moved. Please use `global.kas.tls.secretName` instead.
-    Other components of the GitLab chart other than KAS also need to be configured to talk to KAS via TLS.
-    With a global value the chart can take care of these configurations without the need for other specific values.
-{{- end }}
-
 {{- /* Deprecation notice for `gitlab.deprecate.sidekiq.queueSelector` setting */}}
 {{- if and (hasKey .Values.gitlab.sidekiq "queueSelector") (eq true .Values.gitlab.sidekiq.queueSelector) -}}
 {{ $NOTICE }}
