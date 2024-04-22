@@ -168,16 +168,16 @@ upgrades don't cause errors trying to create the already ran job.
 {{- end -}}
 
 {{/*
-Create a node affinity rule optionally to deploy 
+Create a node affinity rule optionally to deploy
 registry pods in a specific zone
 */}}
 {{- define "registry.affinity" -}}
 {{- $affinityOptions := list "hard" "soft" }}
-{{- if or 
-  (has (default .Values.global.antiAffinity "") $affinityOptions) 
+{{- if or
+  (has (default .Values.global.antiAffinity "") $affinityOptions)
   (has (default .Values.antiAffinity "") $affinityOptions)
-  (has (default .Values.global.nodeAffinity "") $affinityOptions) 
-  (has (default .Values.nodeAffinity "") $affinityOptions) 
+  (has (default .Values.global.nodeAffinity "") $affinityOptions)
+  (has (default .Values.nodeAffinity "") $affinityOptions)
 }}
 affinity:
   {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
@@ -198,7 +198,7 @@ affinity:
               matchLabels:
                 app: {{ template "name" . }}
                 release: {{ .Release.Name }}
-  {{- end }}
+  {{- end -}}
   {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "hard" }}
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -207,8 +207,8 @@ affinity:
               - key: {{ default .Values.global.affinity.nodeAffinity.key .Values.affinity.nodeAffinity.key | quote }}
                 operator: In
                 values: {{ default .Values.global.affinity.nodeAffinity.values .Values.affinity.nodeAffinity.values | toYaml | nindent 16 }}
-  {{- end }}
-  {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "soft" }}
+
+  {{- else if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "soft" }}
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
         - weight: 1
@@ -217,7 +217,7 @@ affinity:
                 - key: {{ default .Values.global.affinity.nodeAffinity.key .Values.affinity.nodeAffinity.key | quote }}
                   operator: In
                   values: {{ default .Values.global.affinity.nodeAffinity.values .Values.affinity.nodeAffinity.values | toYaml | nindent 18 }}
-{{- end -}}
+  {{- end -}}
 {{- end -}}
 {{- end }}
 
