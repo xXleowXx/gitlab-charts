@@ -99,8 +99,9 @@ Follow the instructions that match your situation:
   - [Three-step migration](#three-step-migration). Recommended for larger container registries.
 
 NOTE:
-Users have reported the one-step import completed at [rates of 2 to 4 TB per hour](https://gitlab.com/gitlab-org/gitlab/-/issues/423459).
-At the slower speed, registries with over 100 TB of data could take longer than 48 hours.
+[This table](https://gitlab.com/gitlab-org/gitlab/-/issues/423459#completed-tests-and-user-reports)
+lists the import times of various test and user registries. These times are a helpful reference; however,
+your registry deployment is unique and your import times may be longer than the ones reported here.
 
 ### Before you start
 
