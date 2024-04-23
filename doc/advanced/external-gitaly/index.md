@@ -215,7 +215,8 @@ kubectl get secret <release>-gitaly-secret -ojsonpath='{.data.token}' | base64 -
    global:
      gitaly:
        internal:
-         - default
+         names:
+           - default
        external:
          - name: ext-gitaly                # required
            hostname: node1.git.example.com # required
@@ -229,7 +230,8 @@ kubectl get secret <release>-gitaly-secret -ojsonpath='{.data.token}' | base64 -
    global:
      gitaly:
        internal:
-         - default
+         names:
+           - default
        external:
          - name: ext-gitaly-cluster        # required
            hostname: ha.git.example.com    # required
