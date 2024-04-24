@@ -99,9 +99,7 @@ Follow the instructions that match your situation:
   - [Three-step migration](#three-step-migration). Recommended for larger container registries.
 
 NOTE:
-[This table](https://gitlab.com/gitlab-org/gitlab/-/issues/423459#completed-tests-and-user-reports)
-lists the import times of various test and user registries. These times are a helpful reference; however,
-your registry deployment is unique and your import times may be longer than the ones reported here.
+For a list of import times for various test and user registries, see [this table in issue 423459](https://gitlab.com/gitlab-org/gitlab/-/issues/423459#completed-tests-and-user-reports). Your registry deployment is unique, and your import times might be longer than those reported in the issue.
 
 ### Before you start
 
