@@ -245,6 +245,94 @@ describe 'registry configuration' do
           )
         end
       end
+
+      context 'when database is disabled and configure is enabled' do
+        let(:values) do
+          YAML.safe_load(%(
+            registry:
+              database:
+                configure: true
+                enabled: false
+          )).deep_merge(default_values)
+        end
+
+        it 'populates the database primary settings correctly ' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+            <<~CONFIG
+            database:
+              enabled: false
+              host: "test-postgresql.default.svc"
+              port: 5432
+              user: registry
+              password: "DB_PASSWORD_FILE"
+              dbname: registry
+              sslmode: disable
+            CONFIG
+          )
+        end
+      end
+
+      # This tests shows backwards compatibility before .registry.database.configure was introduced.
+      context 'when database is enabled and configure is disabled' do
+        let(:values) do
+          YAML.safe_load(%(
+            registry:
+              database:
+                configure: false
+                enabled: true
+          )).deep_merge(default_values)
+        end
+
+        it 'populates the database primary settings correctly ' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+            <<~CONFIG
+            database:
+              enabled: true
+              host: "test-postgresql.default.svc"
+              port: 5432
+              user: registry
+              password: "DB_PASSWORD_FILE"
+              dbname: registry
+              sslmode: disable
+            CONFIG
+          )
+        end
+      end
+
+      context 'when database is disabled and configure is disabled' do
+        let(:values) do
+          YAML.safe_load(%(
+            registry:
+              database:
+                configure: false
+                enabled: false
+          )).deep_merge(default_values)
+        end
+
+        it 'populates the database primary settings correctly ' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).not_to include(
+            <<~CONFIG
+            database:
+              enabled: false
+              host: "test-postgresql.default.svc"
+              port: 5432
+              user: registry
+              password: "DB_PASSWORD_FILE"
+              dbname: registry
+              sslmode: disable
+            CONFIG
+          )
+        end
+      end
     end
 
     describe 'redis cache config' do
