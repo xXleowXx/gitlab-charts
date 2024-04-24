@@ -88,7 +88,7 @@ when restoring a backup.
 ### Backups to Azure blob storage
 
 Azure blob storage can be used to store backups by setting
-`gitlab.toolbox.backups.objectStorage.backend` to `azure`. This will enable
+`gitlab.toolbox.backups.objectStorage.backend` to `azure`. This enables
 Toolbox to use the included copy of `azcopy` to transmit and retrieve the
 backup files to the Azure blob storage.
 
