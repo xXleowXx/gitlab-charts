@@ -34,6 +34,10 @@ entry.
 
 - [Allow routing rules to contain shard information](gitlab-org/charts/gitlab@aad02140fdabbf2a045e2701b8f1f5b6c3ab81c5) ([merge request](gitlab-org/charts/gitlab!3682))
 
+## 7.10.4 (2024-04-24)
+
+No changes.
+
 ## 7.10.3 (2024-04-12)
 
 No changes.
