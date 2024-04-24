@@ -212,6 +212,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `profiling.stackdriver.credentials.key`     | `credentials`                                                        | Secret key in which the credentials are stored |
 | `profiling.stackdriver.service`             | `RELEASE-registry` (templated Service name)                          | Name of the Stackdriver service to record profiles under |
 | `profiling.stackdriver.projectid`           | GCP project where running                                            | GCP project to report profiles to |
+| `database.configure`                        | `false`                                                              | Populate database configuration in the registry chart without enabling it. Required when running the [three-step migration process](metadata_database.md#three-step-migration). |
 | `database.enabled`                          | `false`                                                              | Enable metadata database. This is an experimental feature and must not be used in production environments. |
 | `database.host`                             | `global.psql.host`                                                   | The database server hostname. |
 | `database.port`                             | `global.psql.port`                                                   | The database server port. |
