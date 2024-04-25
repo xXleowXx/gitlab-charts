@@ -69,7 +69,7 @@ before proceeding with the upgrade. Failure to perform these steps as documented
 the loss of your database. Ensure you have a separate backup.
 
 If you are using an external PostgreSQL database, you should first upgrade the database to version 12 or greater. Then
-follow the [standard upgrade steps](#steps).
+follow the [standard upgrade steps](upgrade.md#steps).
 
 If you are using the bundled PostgreSQL database, you should follow the [bundled database upgrade steps](database_upgrade.md#steps-for-upgrading-the-bundled-postgresql).
 
@@ -94,7 +94,7 @@ before proceeding with the upgrade. Failure to perform these steps as documented
 the loss of your database. Ensure you have a separate backup.
 
 If you are using an external PostgreSQL database, you should first upgrade the database to version 11 or greater. Then
-follow the [standard upgrade steps](#steps).
+follow the [standard upgrade steps](upgrade.md#steps).
 
 If you are using the bundled PostgreSQL database, you should follow the [bundled database upgrade steps](database_upgrade.md#steps-for-upgrading-the-bundled-postgresql).
 

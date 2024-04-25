@@ -39,7 +39,7 @@ This safely replaces the behavior of `--reuse-values`
 
 NOTE:
 If you're upgrading to the `7.0` version of the chart, follow the [manual upgrade steps for 7.0](#upgrade-to-version-70).
-If you're upgrading to the `5.0` version of the chart, follow the [manual upgrade steps for 6.0](#upgrade-to-version-60).
+If you're upgrading to the `6.0` version of the chart, follow the [manual upgrade steps for 6.0](#upgrade-to-version-60).
 If you're upgrading to an older version of the chart, follow the [upgrade steps for older versions](upgrade_old.md).
 
 Before you upgrade, reflect on your set values and if you've possibly "over-configured" your settings. We expect you to maintain a small list of modified values, and leverage most of the chart defaults. If you've explicitly set a large number of settings by:
