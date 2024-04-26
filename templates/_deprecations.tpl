@@ -39,6 +39,10 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.pods.updateStrategy" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.cluster" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.pods.cluster" .) -}}
+{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.queueSelector" .) -}}
+{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.pods.queueSelector" .) -}}
+{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.negateQueues" .) -}}
+{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.pods.negateQueues" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.local.kubectl" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.gitlab.gitaly.enabled" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.initContainerImage" .) -}}
@@ -405,6 +409,42 @@ sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
 {{- end -}}
 {{- end -}}
 {{/* END gitlab.deprecate.sidekiq.pods.cluster */}}
+
+{{- define "gitlab.deprecate.sidekiq.queueSelector" -}}
+{{- if and (hasKey .Values.gitlab.sidekiq "queueSelector") (eq true .Values.gitlab.sidekiq.queueSelector) }}
+sidekiq:
+    The configuration of 'gitlab.sidekiq.queueSelector' should be removed. Please follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues.
+{{- end }}
+{{- end }}
+{{/* END gitlab.deprecate.sidekiq.queueSelector */}}
+
+{{- define "gitlab.deprecate.sidekiq.pods.queueSelector" -}}
+{{- range $index, $pod := .Values.gitlab.sidekiq.pods -}}
+{{-   if and (hasKey $pod "queueSelector") }}
+sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
+    The configuration of 'gitlab.sidekiq.pods[{{ $index }}].queueSelector' should be removed. Please follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues.
+{{-   end -}}
+{{- end }}
+{{- end }}
+{{/* END gitlab.deprecate.sidekiq.pods.queueSelector */}}
+
+{{- define "gitlab.deprecate.sidekiq.negateQueues" -}}
+{{- if hasKey .Values.gitlab.sidekiq "negateQueues" }}
+sidekiq:
+    The configuration of 'gitlab.sidekiq.negateQueues' should be removed. Please follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues.
+{{- end }}
+{{- end }}
+{{/* END gitlab.deprecate.sidekiq.negateQueues */}}
+
+{{- define "gitlab.deprecate.sidekiq.pods.negateQueues" -}}
+{{- range $index, $pod := .Values.gitlab.sidekiq.pods -}}
+{{-   if hasKey $pod "negateQueues" }}
+sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
+    The configuration of 'gitlab.sidekiq.pods[{{ $index }}].negateQueues' should be removed. Please follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues.
+{{-   end -}}
+{{- end }}
+{{- end }}
+{{/* END gitlab.deprecate.sidekiq.pods.negateQueues */}}
 
 {{- define "certmanager.createCustomResource" -}}
 {{- if hasKey .Values.certmanager "createCustomResource" -}}
