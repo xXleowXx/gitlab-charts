@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.11.1 (2024-04-24)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.63.0 to 0.64.0](gitlab-org/security/charts/gitlab@a19301c97eb50c24d0857a6695ef26c4c6276195)
+
 ## 7.11.0 (2024-04-17)
 
 ### Added (3 changes)
@@ -27,6 +33,10 @@ entry.
 ### Other (1 change)
 
 - [Allow routing rules to contain shard information](gitlab-org/charts/gitlab@aad02140fdabbf2a045e2701b8f1f5b6c3ab81c5) ([merge request](gitlab-org/charts/gitlab!3682))
+
+## 7.10.4 (2024-04-24)
+
+No changes.
 
 ## 7.10.3 (2024-04-12)
 
@@ -57,6 +67,10 @@ No changes.
 ### Deprecated (1 change)
 
 - [Removed kubernetes 1.22 testing](gitlab-org/charts/gitlab@ca9ec21a32e28e63b8e731c317d5089384c9c782) ([merge request](gitlab-org/charts/gitlab!3597))
+
+## 7.9.6 (2024-04-24)
+
+No changes.
 
 ## 7.9.5 (2024-04-12)
 
