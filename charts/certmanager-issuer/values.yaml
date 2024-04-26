@@ -14,6 +14,10 @@ resources:
 # Priority class assigned to pods
 priorityClassName: ""
 
+containerSecurityContext:
+  runAsUser: 65534
+  runAsGroup: 65534
+
 common:
   labels: {}
 
