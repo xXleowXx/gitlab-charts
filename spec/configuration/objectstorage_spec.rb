@@ -49,6 +49,9 @@ describe 'ObjectStorage configuration' do
               proxy_download: true
             uploads:
               bucket: uploads-bucket
+            ciSecureFiles:
+              enabled: true
+              bucket: ci-secure-files-bucket
       )).deep_merge(default_values)
     end
 
@@ -70,6 +73,7 @@ describe 'ObjectStorage configuration' do
           expect(object_store_config.dig('objects', 'lfs', 'bucket')).to eq('lfs-bucket')
           expect(object_store_config.dig('objects', 'uploads', 'proxy_download')).to be true
           expect(object_store_config.dig('objects', 'uploads', 'bucket')).to eq('uploads-bucket')
+          expect(object_store_config.dig('objects', 'ci_secure_files', 'bucket')).to eq('ci-secure-files-bucket')
         end
       end
     end
