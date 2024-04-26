@@ -58,9 +58,7 @@ spec:
       tolerations:
         {{- toYaml .Values.upgradeCheck.tolerations | nindent 8 }}
       {{- end }}
-      securityContext:
-        runAsUser: {{ .Values.upgradeCheck.securityContext.runAsUser }}
-        fsGroup: {{ .Values.upgradeCheck.securityContext.fsGroup }}
+      {{- include "gitlab.podSecurityContext" .Values.upgradeCheck.securityContext | nindent 6 }}
       restartPolicy: Never
       {{- include "gitlab.image.pullSecrets" $imageCfg | nindent 6}}
       containers:
@@ -73,6 +71,7 @@ spec:
               value: '{{ coalesce .Values.global.gitlabVersion .Chart.AppVersion }}'
             - name: CHART_VERSION
               value: '{{ .Chart.Version }}'
+          {{- include "gitlab.containerSecurityContext" $ | indent 10 }}
           volumeMounts:
             - name: chart-info
               mountPath: /chart-info

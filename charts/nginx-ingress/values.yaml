@@ -17,7 +17,9 @@ controller:
     pullPolicy: IfNotPresent
     # www-data -> uid 101
     runAsUser: 101
+    runAsNonRoot: true
     allowPrivilegeEscalation: true
+    seccompProfile: {}
 
   # Use an existing PSP instead of creating one
   existingPsp: ""
