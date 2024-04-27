@@ -126,7 +126,7 @@ the progress.
 
 ### Server-side repository backups
 
-> - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/438393) in GitLab 16.11.
+> - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/438393) in GitLab 17.0.
 
 Instead of storing large repository backups in the backup archive, repository
 backups can be configured so that the Gitaly node that hosts each repository is
