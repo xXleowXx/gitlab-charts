@@ -151,8 +151,10 @@ redis:
 {{/* WARN: Usage of unsupported persistence with minio */}}
 {{- if .Values.minio.persistence.annotations }}
 {{-   if eq (index .Values.minio.persistence.annotations "helm.sh/resource-policy" | default "missing-key" ) "keep" }}
-WARN: You've told Helm to keep the MinIO PVC; as a reminder, the in-chart MinIO should not be used for production deployments.
-    See https://docs.gitlab.com/charts/charts/minio/#enable-the-sub-chart for more details.
+{{ $WARNING }}
+You've told Helm to keep the MinIO PVC by setting
+`minio.persistence.annotations`.
+As a reminder, the in-chart MinIO should not be used for production deployments.
 {{-   end }}
 {{- end }}
 
