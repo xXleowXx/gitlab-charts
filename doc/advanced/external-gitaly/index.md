@@ -321,7 +321,7 @@ Schedule the move by following the steps indicated in [moving repositories](http
     helm get values <RELEASE_NAME> -o yaml > gitlab.yml
     ```
 
-1. Disable the internal Gitaly subchart in the `gitlab.yml` file. [GitLab requires a default repository storage](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#gitlab-requires-a-default-repository-storage) so we need to point this to the external Gitaly service when the internal Gitaly subchart is disabled:
+1. Disable the internal Gitaly subchart in the `gitlab.yml` file, and point the new `default` repository storage to the external Gitaly service. [GitLab requires a default repository storage](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#gitlab-requires-a-default-repository-storage):
 
    :::TabTitle Gitaly
 
