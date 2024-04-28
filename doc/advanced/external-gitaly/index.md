@@ -309,12 +309,7 @@ Once connectivity is confirmed, we can proceed to scheduling the repository stor
 
 #### Step 4: Schedule the repository storage move
 
-1. Use the [repository storage moves API](https://docs.gitlab.com/ee/api/project_repository_storage_moves.html) to schedule
-a repository storage move [for a project](https://docs.gitlab.com/ee/api/project_repository_storage_moves.html#schedule-a-repository-storage-move-for-a-project), or for [all projects](https://docs.gitlab.com/ee/api/project_repository_storage_moves.html#schedule-repository-storage-moves-for-all-projects-on-a-storage-shard).
-1. Use the [group repository storage moves API](https://docs.gitlab.com/ee/api/group_repository_storage_moves.html)
-a repository storage move [for a group](https://docs.gitlab.com/ee/api/group_repository_storage_moves.html#schedule-a-repository-storage-move-for-a-group), or for [all groups](https://docs.gitlab.com/ee/api/group_repository_storage_moves.html#schedule-repository-storage-moves-for-all-groups-on-a-storage-shard).
-1. Use the [snippet repository storage moves API](https://docs.gitlab.com/ee/api/snippet_repository_storage_moves.html)
-a repository storage move [for a snippet](https://docs.gitlab.com/ee/api/snippet_repository_storage_moves.html#schedule-a-repository-storage-move-for-a-snippet), or for [all snippets](https://docs.gitlab.com/ee/api/snippet_repository_storage_moves.html#schedule-repository-storage-moves-for-all-snippets-on-a-storage-shard).
+Schedule the move by following the steps indicated in [moving repositories](https://docs.gitlab.com/ee/administration/operations/moving_repositories.html#moving-repositories).
 
 #### Step 5: Final configuration and validation
 
@@ -323,7 +318,7 @@ a repository storage move [for a snippet](https://docs.gitlab.com/ee/api/snippet
 1. Consider generating a consolidated `gitlab.yml` for the future that includes the external Gitaly configuration:
 
     ```shell
-    helm get values <release> gitlab/gitlab -o yaml > gitlab.yml
+    helm get values <RELEASE_NAME> -o yaml > gitlab.yml
     ```
 
 1. Disable the internal Gitaly subchart in the `gitlab.yml` file. [GitLab requires a default repository storage](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#gitlab-requires-a-default-repository-storage) so we need to point this to the external Gitaly service when the internal Gitaly subchart is disabled:
@@ -368,9 +363,7 @@ a repository storage move [for a snippet](https://docs.gitlab.com/ee/api/snippet
 
    ```shell
    helm upgrade --install gitlab gitlab/gitlab \
-     -f gitlab.yml \
-     -f mixed-gitaly.yml
-   ```
+     -f gitlab.yml
 
 1. Optional. In the [Admin Area](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#configure-where-new-repositories-are-stored), set `default` to a weight of zero to prevent repositories being stored there.
 
