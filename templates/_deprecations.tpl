@@ -541,7 +541,7 @@ global.busybox:
 {{- define "gitlab.deprecate.kas.privateApi.tls" -}}
 {{- if hasKey $.Values.gitlab.kas.privateApi "tls" }}
 kas:
-    The configuration of `gitlab.kas.privateApi.tls.enabled` and `gitlab.kas.privateApi.tls.secretName` has moved.
+    The configuration of `gitlab.kas.privateApi.tls.enabled` and `gitlab.kas.privateApi.tls.secretName` have moved.
     Please use `global.kas.tls.enabled` and `global.kas.tls.secretName` instead.
     Other components of the GitLab chart other than KAS also need to be configured to talk to KAS via TLS.
     With a global value the chart can take care of these configurations without the need for other specific values.
