@@ -24,8 +24,6 @@ This documentation specifies usage of access and secret keys for AWS. It is also
 
 ## S3 encryption
 
-> - [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2251) in GitLab 13.4.
-
 GitLab supports [Amazon KMS](https://aws.amazon.com/kms/)
 to [encrypt data stored in S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets).
 You can enable this in two ways:
