@@ -59,77 +59,81 @@ gitlab:
     securityContext:
       fsGroup: '1000'
       runAsUser: '1000'
+      runAsGroup: '1000'
+    containerSecurityContext:
+      runAsUser: '1000'
 ```
 
-| Parameter                                            | Description                                                                                                                                                                  | Default                                                      |
-|------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| `annotations`                                        | Annotations to add to the Toolbox Pods and Jobs                                                                                                                              | `{}`                                                         |
-| `common.labels`                                      | Supplemental labels that are applied to all objects created by this chart.                                                                                                   | `{}`                                                         |
-| `antiAffinityLabels.matchLabels`                     | Labels for setting anti-affinity options                                                                                                                                     |                                                              |
-| `backups.cron.activeDeadlineSeconds`                 | Backup CronJob active deadline seconds (if null, no active deadline is applied)                                                                                              | `null`                                                       |
-| `backups.cron.safeToEvict`                           | Autoscaling safe-to-evict annotation                                                                                                                                         | false                                                        |
-| `backups.cron.backoffLimit`                          | Backup CronJob backoff limit                                                                                                                                                 | `6`                                                          |
-| `backups.cron.concurrencyPolicy`                     | Kubernetes Job concurrency policy                                                                                                                                            | `Replace`                                                    |
-| `backups.cron.enabled`                               | Backup CronJob enabled flag                                                                                                                                                  | false                                                        |
-| `backups.cron.extraArgs`                             | String of arguments to pass to the backup utility                                                                                                                            |                                                              |
-| `backups.cron.failedJobsHistoryLimit`                | Number of failed backup jobs list in history                                                                                                                                 | `1`                                                          |
-| `backups.cron.persistence.accessMode`                | Backup cron persistence access mode                                                                                                                                          | `ReadWriteOnce`                                              |
-| `backups.cron.persistence.enabled`                   | Backup cron enable persistence flag                                                                                                                                          | false                                                        |
-| `backups.cron.persistence.matchExpressions`          | Label-expression matches to bind                                                                                                                                             |                                                              |
-| `backups.cron.persistence.matchLabels`               | Label-value matches to bind                                                                                                                                                  |                                                              |
-| `backups.cron.persistence.useGenericEphemeralVolume` | Use a [generic ephemeral volume](https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes)                                                   | false                                                        |
-| `backups.cron.persistence.size`                      | Backup cron persistence volume size                                                                                                                                          | `10Gi`                                                       |
-| `backups.cron.persistence.storageClass`              | StorageClass name for provisioning                                                                                                                                           |                                                              |
-| `backups.cron.persistence.subPath`                   | Backup cron persistence volume mount path                                                                                                                                    |                                                              |
-| `backups.cron.persistence.volumeName`                | Existing persistent volume name                                                                                                                                              |                                                              |
-| `backups.cron.resources.requests.cpu`                | Backup cron minimum needed CPU                                                                                                                                               | `50m`                                                        |
-| `backups.cron.resources.requests.memory`             | Backup cron minimum needed memory                                                                                                                                            | `350M`                                                       |
-| `backups.cron.restartPolicy`                         | Backup cron restart policy (`Never` or `OnFailure`)                                                                                                                          | `OnFailure`                                                  |
-| `backups.cron.schedule`                              | Cron style schedule string                                                                                                                                                   | `0 1 * * *`                                                  |
-| `backups.cron.startingDeadlineSeconds`               | Backup cron job starting deadline, in seconds (if null, no starting deadline is applied)                                                                                     | `null`                                                       |
-| `backups.cron.successfulJobsHistoryLimit`            | Number of successful backup jobs list in history                                                                                                                             | `3`                                                          |
-| `backups.cron.suspend`                               | Backup cron job is suspended                                                                                                                                                 | `false`                                                      |
-| `backups.objectStorage.backend`                      | Object storage provider to use (`s3`, `gcs` or `azure`)                                                                                                                      | `s3`                                                         |
-| `backups.objectStorage.config.gcpProject`            | GCP Project to use when backend is `gcs`                                                                                                                                     | ""                                                           |
-| `backups.objectStorage.config.key`                   | Key containing credentials in secret                                                                                                                                         | ""                                                           |
-| `backups.objectStorage.config.secret`                | Object storage credentials secret                                                                                                                                            | ""                                                           |
-| `common.labels`                                      | Supplemental labels that are applied to all objects created by this chart.                                                                                                   | `{}`                                                         |
-| `deployment.strategy`                                | Allows one to configure the update strategy utilized by the deployment                                                                                                       | { `type`: `Recreate` }                                       |
-| `enabled`                                            | Toolbox enablement flag                                                                                                                                                      | true                                                         |
-| `extra`                                              | YAML block for [extra `gitlab.yml` configuration](https://gitlab.com/gitlab-org/gitlab/-/blob/8d2b59dbf232f17159d63f0359fa4793921896d5/config/gitlab.yml.example#L1193-1199) | {}                                                           |
-| `image.pullPolicy`                                   | Toolbox image pull policy                                                                                                                                                    | `IfNotPresent`                                               |
-| `image.pullSecrets`                                  | Toolbox image pull secrets                                                                                                                                                   |                                                              |
-| `image.repository`                                   | Toolbox image repository                                                                                                                                                     | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee` |
-| `image.tag`                                          | Toolbox image tag                                                                                                                                                            | `master`                                                     |
-| `init.image.repository`                              | Toolbox init image repository                                                                                                                                                |                                                              |
-| `init.image.tag`                                     | Toolbox init image tag                                                                                                                                                       |                                                              |
-| `init.resources`                                     | Toolbox init container resource requirements                                                                                                                                 | { `requests`: { `cpu`: `50m` }}                              |
-| `init.containerSecurityContext`                      | initContainer container specific [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core)                             | {}                                                           |
-| `nodeSelector`                                       | Toolbox and backup job node selection                                                                                                                                        |                                                              |
-| `persistence.accessMode`                             | Toolbox persistence access mode                                                                                                                                              | `ReadWriteOnce`                                              |
-| `persistence.enabled`                                | Toolbox enable persistence flag                                                                                                                                              | false                                                        |
-| `persistence.matchExpressions`                       | Label-expression matches to bind                                                                                                                                             |                                                              |
-| `persistence.matchLabels`                            | Label-value matches to bind                                                                                                                                                  |                                                              |
-| `persistence.size`                                   | Toolbox persistence volume size                                                                                                                                              | `10Gi`                                                       |
-| `persistence.storageClass`                           | StorageClass name for provisioning                                                                                                                                           |                                                              |
-| `persistence.subPath`                                | Toolbox persistence volume mount path                                                                                                                                        |                                                              |
-| `persistence.volumeName`                             | Existing PersistentVolume name                                                                                                                                               |                                                              |
-| `podLabels`                                          | Labels for running Toolbox Pods                                                                                                                                              | {}                                                           |
-| `priorityClassName`                                  | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods.                                                         |                                                              |
-| `replicas`                                           | Number of Toolbox Pods to run                                                                                                                                                | `1`                                                          |
-| `resources.limits`                                   | Toolbox maximum requested resources                                                                                                                                          | {}                                                           |
-| `resources.requests`                                 | Toolbox minimum requested resources                                                                                                                                          | { `cpu`: `50m`, `memory`: `350M`                             |
-| `securityContext.fsGroup`                            | Group ID under which the pod should be started                                                                                                                               | `1000`                                                       |
-| `securityContext.runAsUser`                          | User ID under which the pod should be started                                                                                                                                | `1000`                                                       |
-| `securityContext.fsGroupChangePolicy`                | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23)                                                                                        |                                                              |
-| `containerSecurityContext`                           | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started      |                                                              |
-| `containerSecurityContext.runAsUser`                 | Allow to overwrite the specific security context under which the container is started                                                                                        | `1000`                                                       |
-| `serviceAccount.annotations`                         | Annotations for ServiceAccount                                                                                                                                               | {}                                                           |
-| `serviceAccount.enabled`                             | Flag for using ServiceAccount                                                                                                                                                | false                                                        |
-| `serviceAccount.create`                              | Flag for creating a ServiceAccount                                                                                                                                           | false                                                        |
-| `serviceAccount.name`                                | Name of ServiceAccount to use                                                                                                                                                |                                                              |
-| `tolerations`                                        | Tolerations to add to the Toolbox                                                                                                                                            |                                                              |
-| `extraEnvFrom`                                       | List of extra environment variables from other data sources to expose                                                                                                        |                                                              |
+| Parameter                                   | Description                                  | Default                      |
+|---------------------------------------------|----------------------------------------------|------------------------------|
+| `annotations`                               | Annotations to add to the Toolbox Pods and Jobs | `{}`                      |
+| `common.labels`                             | Supplemental labels that are applied to all objects created by this chart.  | `{}` |
+| `antiAffinityLabels.matchLabels`            | Labels for setting anti-affinity options     |                              |
+| `backups.cron.activeDeadlineSeconds`        | Backup CronJob active deadline seconds (if null, no active deadline is applied)| `null` |
+| `backups.cron.safeToEvict`                  | Autoscaling safe-to-evict annotation         | false                        |
+| `backups.cron.backoffLimit`                 | Backup CronJob backoff limit| `6` |
+| `backups.cron.concurrencyPolicy`            | Kubernetes Job concurrency policy            | `Replace`                    |
+| `backups.cron.enabled`                      | Backup CronJob enabled flag                  | false                        |
+| `backups.cron.extraArgs`                    | String of arguments to pass to the backup utility |                              |
+| `backups.cron.failedJobsHistoryLimit`       | Number of failed backup jobs list in history | `1`                          |
+| `backups.cron.persistence.accessMode`       | Backup cron persistence access mode          | `ReadWriteOnce`              |
+| `backups.cron.persistence.enabled`          | Backup cron enable persistence flag          | false                        |
+| `backups.cron.persistence.matchExpressions` | Label-expression matches to bind             |                              |
+| `backups.cron.persistence.matchLabels`      | Label-value matches to bind                  |                              |
+| `backups.cron.persistence.useGenericEphemeralVolume` | Use a [generic ephemeral volume](https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes) | false |
+| `backups.cron.persistence.size`             | Backup cron persistence volume size          | `10Gi`                       |
+| `backups.cron.persistence.storageClass`     | StorageClass name for provisioning           |                              |
+| `backups.cron.persistence.subPath`          | Backup cron persistence volume mount path    |                              |
+| `backups.cron.persistence.volumeName`       | Existing persistent volume name              |                              |
+| `backups.cron.resources.requests.cpu`       | Backup cron minimum needed CPU               | `50m`                        |
+| `backups.cron.resources.requests.memory`    | Backup cron minimum needed memory            | `350M`                       |
+| `backups.cron.restartPolicy`                | Backup cron restart policy (`Never` or `OnFailure`) | `OnFailure` |
+| `backups.cron.schedule`                     | Cron style schedule string                   | `0 1 * * *`                  |
+| `backups.cron.startingDeadlineSeconds`      | Backup cron job starting deadline, in seconds (if null, no starting deadline is applied) | `null`                      |
+| `backups.cron.successfulJobsHistoryLimit`   | Number of successful backup jobs list in history | `3`                      |
+| `backups.cron.suspend`                      | Backup cron job is suspended | `false`                      |
+| `backups.objectStorage.backend`             | Object storage provider to use (`s3`, `gcs` or `azure`) | `s3`                       |
+| `backups.objectStorage.config.gcpProject`   | GCP Project to use when backend is `gcs`     | ""                           |
+| `backups.objectStorage.config.key`          | Key containing credentials in secret         | ""                           |
+| `backups.objectStorage.config.secret`       | Object storage credentials secret            | ""                           |
+| `common.labels`                             | Supplemental labels that are applied to all objects created by this chart. | `{}` |
+| `deployment.strategy`                       | Allows one to configure the update strategy utilized by the deployment | { `type`: `Recreate` } |
+| `enabled`                                   | Toolbox enablement flag                  | true                         |
+| `extra`                                     | YAML block for [extra `gitlab.yml` configuration](https://gitlab.com/gitlab-org/gitlab/-/blob/8d2b59dbf232f17159d63f0359fa4793921896d5/config/gitlab.yml.example#L1193-1199) | {}                          |
+| `image.pullPolicy`                          | Toolbox image pull policy                | `IfNotPresent`               |
+| `image.pullSecrets`                         | Toolbox image pull secrets               |                              |
+| `image.repository`                          | Toolbox image repository                 | `registry.gitlab.com/gitlab-org/build/cng/gitlab-toolbox-ee` |
+| `image.tag`                                 | Toolbox image tag                        | `master`                     |
+| `init.image.repository`                     | Toolbox init image repository            |                              |
+| `init.image.tag`                            | Toolbox init image tag                   |                              |
+| `init.resources`                            | Toolbox init container resource requirements | { `requests`: { `cpu`: `50m` }} |
+| `init.containerSecurityContext`             | initContainer container specific [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) | {} |
+| `nodeSelector`                              | Toolbox and backup job node selection    |                              |
+| `persistence.accessMode`                    | Toolbox persistence access mode          | `ReadWriteOnce`              |
+| `persistence.enabled`                       | Toolbox enable persistence flag          | false                        |
+| `persistence.matchExpressions`              | Label-expression matches to bind             |                              |
+| `persistence.matchLabels`                   | Label-value matches to bind                  |                              |
+| `persistence.size`                          | Toolbox persistence volume size          | `10Gi`                       |
+| `persistence.storageClass`                  | StorageClass name for provisioning           |                              |
+| `persistence.subPath`                       | Toolbox persistence volume mount path    |                              |
+| `persistence.volumeName`                    | Existing PersistentVolume name               |                              |
+| `podLabels`                                 | Labels for running Toolbox Pods          | {}                           |
+| `priorityClassName`                         | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods. |                              |
+| `replicas`                                  | Number of Toolbox Pods to run            | `1`                          |
+| `resources.limits`                          | Toolbox maximum requested resources      | {}                               |
+| `resources.requests`                        | Toolbox minimum requested resources      | { `cpu`: `50m`, `memory`: `350M`}|
+| `securityContext.fsGroup`                   | File System Group ID under which the pod should be started | `1000`                     |
+| `securityContext.runAsUser`                 | User ID under which the pod should be started  | `1000`                     |
+| `securityContext.runAsGroup`                | Group ID under which the pod should be started | `1000`                     |
+| `securityContext.fsGroupChangePolicy`       | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) | |
+| `containerSecurityContext`                  | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started | |
+| `containerSecurityContext.runAsUser`        | Allow to overwrite the specific security context under which the container is started | `1000` |
+| `serviceAccount.annotations`                | Annotations for ServiceAccount               | {}                           |
+| `serviceAccount.enabled`                    | Flag for using ServiceAccount                | false                        |
+| `serviceAccount.create`                     | Flag for creating a ServiceAccount           | false                        |
+| `serviceAccount.name`                       | Name of ServiceAccount to use                |                              |
+| `tolerations`                               | Tolerations to add to the Toolbox        |                              |
+| `extraEnvFrom`                              | List of extra environment variables from other data sources to expose  | |
 
 ## Configuring backups
 
