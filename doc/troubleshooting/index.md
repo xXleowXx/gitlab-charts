@@ -217,8 +217,6 @@ Sidekiq pods did not receive a unique selector prior to chart release
 Upgrades to `3.0.0` using Helm will automatically delete the old Sidekiq deployments and create new ones by appending `-v1` to the
 name of the Sidekiq `Deployments`,`HPAs`, and `Pods`.
 
-Starting from `5.5.0` Helm will delete old Sidekiq deployments from prior versions and will use `-v2` suffix for `Pods`, `Deployments` and `HPAs`.
-
 If you continue to run into this error on the Sidekiq deployment when installing `3.0.0`, resolve these with the following
 steps:
 
@@ -399,8 +397,7 @@ There are a number of potential causes for this error:
   Git clients sometimes open a connection and leave it idling, like when compressing objects.
   Settings like `timeout client` in HAProxy might cause these idle connections to be terminated.
 
-  In [GitLab 14.0 (chart version 5.0)](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2049)
-  and later, you can set a keepalive in `sshd`:
+  you can set a keepalive in `sshd`:
 
   ```yaml
   gitlab:
@@ -448,10 +445,6 @@ For example, change this:
 key1: value1
 key2: value2
 ```
-
-This change ensures that the configuration can be populated correctly by
-[gomplate](https://gomplate.ca), which was added in GitLab 14.5 (chart version 5.5.0)
-via [MR 2218](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/2218).
 
 ## TLS and certificates
 
@@ -676,3 +669,16 @@ NOTE:
 The example syntax eliminates the `securityContext` setting entirely.
 Setting `securityContext: {}` or `securityContext:` does not work due
 to the way Helm merges default values with user provided configuration.
+
+### Intermittent 502 errors
+
+When a request being handled by a Puma worker crosses the memory limit threshold, it is killed by the node's OOMKiller.
+However, killing the request does not necessarily kill or restart the webservice pod itself. This situation causes the request to return a `502` timeout.
+In the logs, this appears as a Puma worker being created shortly after the `502` error is logged.
+
+```shell
+2024-01-19T14:12:08.949263522Z {"correlation_id":"XXXXXXXXXXXX","duration_ms":1261,"error":"badgateway: failed to receive response: context canceled"....
+2024-01-19T14:12:24.214148186Z {"component": "gitlab","subcomponent":"puma.stdout","timestamp":"2024-01-19T14:12:24.213Z","pid":1,"message":"- Worker 2 (PID: 7414) booted in 0.84s, phase: 0"}
+```
+
+To solve this problem, [raise memory limits for the webservice pods](../charts/gitlab/webservice/index.md#memory-requestslimits).

@@ -19,7 +19,7 @@ source "${SCRIPT_PATH}/common.sh"
 # Documentation: doc/installation/cloud/eks.md
 cluster_name=${CLUSTER_NAME-gitlab-cluster}
 nodes=${NUM_NODES-2}
-kubernetes_version=${CLUSTER_VERSION-1.21}
+kubernetes_version=${CLUSTER_VERSION-1.29}
 ebs_csi_required_min_version="1.23"
 ebs_csi_role_name="AmazonEKS_EBS_CSI_DriverRole"
 region="${REGION-us-east-2}"
@@ -34,7 +34,7 @@ function print_help(){
 Usage: ${0} ARGS (up|down|list|creds|add_ebs_csi_driver)
 -c NAME - Name of the cluster to use. Defaults to gitlab-cluster
 -n NODES - number of nodes to use. Defaults to 2
--k VERSION - Kubernetes version to use. Defaults to 1.21
+-k VERSION - Kubernetes version to use. Defaults to 1.29
 -r REGION - Region to install the cluster in. Defaults to us-east-2
 -m TYPE - Type of nodes to use. Default m5.xlarge
 
@@ -156,11 +156,12 @@ function do_ebs_csi_driver() {
                                   --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy \
                                   --approve \
                                   --role-only \
-                                  --role-name "${ebs_csi_role_name}"
+                                  --role-name "${ebs_csi_role_name}" \
+                                  --region "${region}"
 
   echo "Installing the aws-ebs-csi-driver add on"
   eksctl create addon --name aws-ebs-csi-driver --cluster "${cluster_name}" \
-                      --service-account-role-arn "${role_arn}" --force
+                      --service-account-role-arn "${role_arn}" --force --region "${region}"
 
 }
 

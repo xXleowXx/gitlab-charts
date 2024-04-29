@@ -233,6 +233,9 @@ describe 'Gitaly configuration' do
             serviceLabels:
               service: true
               global: service
+            persistence:
+              labels:
+                foo: global
       )).deep_merge(default_values)
     end
 
@@ -248,6 +251,7 @@ describe 'Gitaly configuration' do
         expect(t.dig('StatefulSet/test-gitaly', 'spec', 'template', 'metadata', 'labels')).to include('pod' => 'true')
         expect(t.dig('StatefulSet/test-gitaly', 'spec', 'template', 'metadata', 'labels')).to include('global_pod' => 'true')
         expect(t.dig('StatefulSet/test-gitaly', 'spec', 'volumeClaimTemplates', 0, 'metadata', 'labels')).not_to include('global' => 'gitaly')
+        expect(t.dig('StatefulSet/test-gitaly', 'spec', 'volumeClaimTemplates', 0, 'metadata', 'labels')).to include('foo' => 'global')
         expect(t.dig('PodDisruptionBudget/test-gitaly', 'metadata', 'labels')).to include('global' => 'gitaly')
         expect(t.dig('Service/test-gitaly', 'metadata', 'labels')).to include('global' => 'service')
         expect(t.dig('Service/test-gitaly', 'metadata', 'labels')).to include('gitaly' => 'gitaly')
@@ -448,6 +452,33 @@ describe 'Gitaly configuration' do
         expect(template.exit_code).to eq(0)
         expect(template.stderr).not_to include("Gitaly have stopped reading `gitconfig`")
       end
+    end
+  end
+
+  context 'server side backups' do
+    let(:values) do
+      YAML.safe_load(%(
+        gitlab:
+          gitaly:
+            backup:
+              goCloudUrl: 'gs://gitaly-backups'
+      )).deep_merge(default_values)
+    end
+
+    let(:template) { HelmTemplate.new(values) }
+    let(:gitaly_config) { template.dig('ConfigMap/test-gitaly', 'data', 'config.toml.tpl') }
+
+    it 'renders the template' do
+      expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+    end
+
+    it 'sets the object storage url' do
+      expect(gitaly_config).to include(
+        <<~CONFIG
+        [backup]
+        go_cloud_url = "gs://gitaly-backups"
+        CONFIG
+      )
     end
   end
 end
