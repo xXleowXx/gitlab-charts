@@ -206,8 +206,8 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `priorityClassName`                         |                                                                      | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods. |
 | `resource.limits.cpu`                       |                                                                      | GitLab registry maximum CPU |
 | `resource.limits.memory`                    |                                                                      | GitLab registry maximum memory |
-| `maintenance.uploadpurging.interval`        | `50m`                                                                | GitLab registry minimum CPU |
-| `maintenance.uploadpurging.interval`        | `32Mi`                                                               | GitLab registry minimum memroy |
+| `resource.requests.cpu`                     | `50m`                                                                | GitLab registry minimum CPU |
+| `resource.requests.memory`                  | `32Mi`                                                               | GitLab registry minimum memory |
 | `reporting.sentry.enabled`                  | `false`                                                              | Enable reporting using Sentry |
 | `reporting.sentry.dsn`                      |                                                                      | The Sentry DSN (Data Source Name) |
 | `reporting.sentry.environment`              |                                                                      | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/concepts/environments/) |
