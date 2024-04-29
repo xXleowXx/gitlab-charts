@@ -435,15 +435,6 @@ global:
 In GitLab 16.0, GitLab defaults to using two database connections
 that point to the same PostgreSQL database.
 
-If you wish to switch back to single database connection, set the `ci.enabled` key to `false`:
-
-```yaml
-global:
-  psql:
-    ci:
-      enabled: false
-```
-
 ## Configure Redis settings
 
 The GitLab global Redis settings are located under the `global.redis` key.
