@@ -120,7 +120,8 @@ gitlab:
 | `podLabels`                                 | Labels for running Toolbox Pods          | {}                           |
 | `priorityClassName`                         | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods. |                              |
 | `replicas`                                  | Number of Toolbox Pods to run            | `1`                          |
-| `resources.requests`                        | Toolbox minimum requested resources      | { `cpu`: `50m`, `memory`: `350M` |
+| `resources.limits`                          | Toolbox maximum requested resources      | {}                               |
+| `resources.requests`                        | Toolbox minimum requested resources      | { `cpu`: `50m`, `memory`: `350M`}|
 | `securityContext.fsGroup`                   | File System Group ID under which the pod should be started | `1000`                     |
 | `securityContext.runAsUser`                 | User ID under which the pod should be started  | `1000`                     |
 | `securityContext.runAsGroup`                | Group ID under which the pod should be started | `1000`                     |
