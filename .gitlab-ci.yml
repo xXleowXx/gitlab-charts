@@ -156,7 +156,7 @@ lint_package:
   stage: preflight
   when: always
   script:
-    - kubectl version --client=true
+    - kubectl version --client=true --output=json
     - helm version --template='Helm Version - {{.Version}}'
     - helm repo add gitlab https://charts.gitlab.io
     - helm repo add jetstack https://charts.jetstack.io
@@ -182,7 +182,7 @@ lint_package:
   stage: preflight
   when: always
   script:
-    - kubectl version --client=true
+    - kubectl version --client=true --output=json
     - helm version --template='{{.Version}}'
     - helm plugin list
     - helm repo add gitlab https://charts.gitlab.io
@@ -298,7 +298,7 @@ pin_image_versions:
     - pin_image_versions
   script:
     - !reference [.set_up_varfile_and_kubecontext, script]
-    - kubectl version
+    - kubectl version --output=json
     - !reference [.set_up_namespace_secret_and_deploy, script]
     - check_domain_ip
     - restart_toolbox
