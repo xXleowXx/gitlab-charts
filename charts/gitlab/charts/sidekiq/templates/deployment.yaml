@@ -334,7 +334,7 @@ spec:
           - secret:
               name: {{ template "gitlab.registry.certificate.secret" $ }}
               items:
-                - key: registry-auth.key
+                - key: {{ template "gitlab.registry.certificate.privateKey" $ }}
                   path: registry/gitlab-registry.key
           {{- include "gitlab.registry.notificationSecret.mount" $ | nindent 10 -}}
           {{- include "gitlab.pages.mountSecrets" $ | nindent 10 }}

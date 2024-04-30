@@ -143,7 +143,7 @@ generate_secret_if_needed {{ template "gitlab.appConfig.serviceDeskEmail.authTok
 # Registry certificates
 mkdir -p certs
 openssl req -new -newkey rsa:4096 -subj "/CN={{ coalesce .Values.registry.tokenIssuer  (dig "registry" "tokenIssuer" "gitlab-issuer" .Values.global ) }}" -nodes -x509 -keyout certs/registry-example-com.key -out certs/registry-example-com.crt -days 3650
-generate_secret_if_needed {{ template "gitlab.registry.certificate.secret" . }} --from-file=registry-auth.key=certs/registry-example-com.key --from-file=registry-auth.crt=certs/registry-example-com.crt
+generate_secret_if_needed {{ template "gitlab.registry.certificate.secret" . }} --from-file={{ template "gitlab.registry.certificate.privateKey" . }}=certs/registry-example-com.key --from-file={{ template "gitlab.registry.certificate.crt" . }}=certs/registry-example-com.crt
 
 # config/secrets.yaml
 if [ -n "$env" ]; then

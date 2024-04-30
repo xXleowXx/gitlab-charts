@@ -89,7 +89,8 @@ registry:
   tokenIssuer:
   certificate:
     secret: gitlab-registry
-    key: registry-auth.crt
+    crt: registry-auth.crt
+    privateKey: registry-auth.key
   deployment:
     terminationGracePeriodSeconds: 30
   draintimeout: '0'
@@ -152,6 +153,9 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `authAutoRedirect`                          | `true`                                                               | Auth auto-redirect (must be true for Windows clients to work) |
 | `authEndpoint`                              | `global.hosts.gitlab.name`                                           | Auth endpoint (only host and port) |
 | `certificate.secret`                        | `gitlab-registry`                                                    | JWT certificate |
+| `certificate.crt`                           | `registry-auth.crt`                                                  | Secret key in which the certificate chain is stored |
+| `certificate.privateKey`                    | `registry-auth.key`                                                  | Secret key in which the private key is stored |
+
 | `debug.addr.port`                           | `5001`                                                               | Debug port  |
 | `debug.tls.enabled`                         | `false`                                                              | Enable TLS for the debug port for the registry. Impacts liveness and readiness probes, as well as the metrics endpoint (if enabled) |
 | `debug.tls.secretName`                      |                                                                      | The name of the Kubernetes TLS Secret that contains a valid certificate and key for the registry debug endpoint. When not set and `debug.tls.enabled=true` - the debug TLS configuration will default to the registry's TLS certificate. |
@@ -646,7 +650,8 @@ Default Example:
 ```yaml
 certificate:
   secret: gitlab-registry
-  key: registry-auth.crt
+  crt: registry-auth.crt
+  privateKey: registry-auth.key
 ```
 
 ### readiness and liveness probe

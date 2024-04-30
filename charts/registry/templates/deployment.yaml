@@ -175,7 +175,7 @@ spec:
           - secret:
               name: {{ template "gitlab.registry.certificate.secret" . }}
               items:
-                  - key: registry-auth.crt
+                  - key: {{ template "gitlab.registry.certificate.crt" . }}
                     path: certificate.crt
           - secret:
               name: {{ template "gitlab.registry.httpSecret.secret" . }}
