@@ -10,7 +10,7 @@ DETAILS:
 **Tier:** Free, Premium, Ultimate
 **Offering:** Self-managed
 
-Upgrade instructions for older versions are available on this page. 
+Upgrade instructions for older versions are available on this page.
 
 If you are looking to upgrade a recent version of the GitLab chart, see the [Upgrade Guide](upgrade.md).
 
