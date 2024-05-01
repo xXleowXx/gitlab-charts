@@ -135,8 +135,6 @@ nginx-ingress:
     kind: DaemonSet
     nodeSelector:
       workload: webservice
-    scope:
-      enabled: false
 
 registry:
   storage:
