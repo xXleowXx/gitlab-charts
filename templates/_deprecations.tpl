@@ -63,6 +63,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.hpa.behaviorMispell" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.global.grafana" .) -}}
 {{- $deprecated = append $deprecated (include "gitlab.deprecate.busybox" .) -}}
+{{- $deprecated = append $deprecated (include "gitlab.deprecate.kas.privateApi.tls" .) -}}
 
 {{- /* we're ready to deprecate top-level registry entries for workhorse and sidekiq, but not enforcing yet */ -}}
 {{- /* $deprecated = append $deprecated (include "gitlab.deprecate.registry.topLevel" .) */ -}}
@@ -534,5 +535,15 @@ registry:
 global.busybox:
     Support for busybox based based init containers was removed.
     Please use the GitLab base container (`global.gitlabBase`) instead.
+{{- end -}}
+{{- end -}}
+
+{{- define "gitlab.deprecate.kas.privateApi.tls" -}}
+{{- if hasKey $.Values.gitlab.kas.privateApi "tls" }}
+kas:
+    The configuration of `gitlab.kas.privateApi.tls.enabled` and `gitlab.kas.privateApi.tls.secretName` have moved.
+    Please use `global.kas.tls.enabled` and `global.kas.tls.secretName` instead.
+    Other components of the GitLab chart other than KAS also need to be configured to talk to KAS via TLS.
+    With a global value the chart can take care of these configurations without the need for other specific values.
 {{- end -}}
 {{- end -}}
