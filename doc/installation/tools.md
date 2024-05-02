@@ -23,7 +23,7 @@ of the version running in your cluster.
 
 ### Helm
 
-Install Helm v3.9.4 or later by following [the Helm documentation](https://helm.sh/docs/intro/install/).
+Install Helm v3.10.3 or later by following [the Helm documentation](https://helm.sh/docs/intro/install/).
 
 ### PostgreSQL
 
