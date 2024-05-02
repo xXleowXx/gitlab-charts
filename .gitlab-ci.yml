@@ -256,7 +256,8 @@ approve_cluster_tests:
 pin_image_versions:
   stage: prepare-review
   script:
-    - apk add bats skopeo
+    - apt-get update -qq
+    - apt install -y bats skopeo
     - bats --verbose-run ./scripts/ci/pin_image_digests.bats
     - bash ./scripts/ci/pin_image_digests.sh
   artifacts:
