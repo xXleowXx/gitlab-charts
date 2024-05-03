@@ -18,6 +18,7 @@ init:
   resources: {}
   image: {}
     # pullPolicy: IfNotPresent
+  containerSecurityContext: {}
 
 metrics:
   enabled: true
@@ -34,6 +35,10 @@ securityContext:
   runAsUser: 1000
   fsGroup: 1000
   # fsGroupChangePolicy: OnRootMismatch
+
+## Allow to overwrite the specific security context under which the container is running.
+containerSecurityContext:
+  runAsUser: 1000
 
 replicas: 2
 
