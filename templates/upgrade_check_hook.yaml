@@ -66,12 +66,15 @@ spec:
           image: {{ include "gitlab.configure.image" (dict "root" $ "image" .Values.upgradeCheck.image) | quote }}
           command: ['/bin/sh', '/scripts/runcheck']
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
+          {{- if .Values.upgradeCheck.containerSecurityContext }}
+          securityContext:
+            {{- toYaml .Values.upgradeCheck.containerSecurityContext | nindent 12 }}
+          {{- end }}
           env:
             - name: GITLAB_VERSION
               value: '{{ coalesce .Values.global.gitlabVersion .Chart.AppVersion }}'
             - name: CHART_VERSION
               value: '{{ .Chart.Version }}'
-          {{- include "gitlab.containerSecurityContext" $ | indent 10 }}
           volumeMounts:
             - name: chart-info
               mountPath: /chart-info
