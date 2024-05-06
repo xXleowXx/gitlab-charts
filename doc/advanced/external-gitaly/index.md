@@ -193,6 +193,9 @@ kubectl get secret <release>-gitaly-secret -ojsonpath='{.data.token}' | base64 -
 
 ::EndTabs
 
+Lastly, ensure that the firewall for the external Gitaly service allows traffic on the configured
+Gitaly port for your Kubernetes pod IP range.
+
 #### Step 2: Configure Instance to use new Gitaly Service
 
 1. Configure GitLab to use the external Gitaly.
