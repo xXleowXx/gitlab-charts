@@ -152,20 +152,20 @@ kubectl exec -it <toolbox-pod> -- echo | /usr/bin/openssl s_client -connect <git
 If you are using the Gitaly Chart to provide the Gitaly service and you need to migrate all of your
 repositories to an external Gitaly service, this can be done with one of the following methods:
 
-1. Recommended. [Migrate with the repository storage moves API](#migrate-with-the-repository-storage-moves-api)
-1. [Migrate with the backup/restore method](#migrate-with-the-backuprestore-method)
+1. [Migrate with the repository storage moves API (recommended)](#migrate-with-the-repository-storage-moves-api).
+1. [Migrate with the backup/restore method](#migrate-with-the-backuprestore-method).
 
 ### Migrate with the repository storage moves API
 
 This method:
 
 - Uses the [repository storage moves API](https://docs.gitlab.com/ee/api/project_repository_storage_moves.html)
-to migrate repositories from the Gitaly chart to the external Gitaly service. 
+  to migrate repositories from the Gitaly chart to the external Gitaly service. 
 - Can be performed with zero downtime.
 - Requires that the external Gitaly service resides within the same VPC/zone as the Gitaly pods.
 - Has not been tested with the [Praefect chart](../../charts/gitlab/praefect/index.md) and is not supported.
 
-#### Step 1: Setup external Gitaly Service or Gitaly Cluster
+#### Step 1: Set up external Gitaly Service or Gitaly Cluster
 
 Set up an [external Gitaly](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html)
 or [external Gitaly Cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html). You must
@@ -305,7 +305,7 @@ need to add the hostnames to the hosts file on each external Gitaly service runn
    ping <gitaly pod hostname>
    ```
 
-Once connectivity is confirmed, we can proceed to scheduling the repository storage move.
+After connectivity is confirmed, we can proceed to scheduling the repository storage move.
 
 #### Step 4: Schedule the repository storage move
 
