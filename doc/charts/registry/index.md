@@ -319,7 +319,7 @@ tolerations:
 `affinity` is an optional parameter that allows you to set either or both
 
 - `podAntiAffinity` rules to not schedule pods in the same domain as the Pods that match the expression corresponding to the `topology key`, it also allows you to set two modes of `podAntiAffinity` rules: required (ie:`requiredDuringSchedulingIgnoredDuringExecution`) and preferred (ie:`preferredDuringSchedulingIgnoredDuringExecution`)
-via variable named `antiAffinity` in values.yaml , setting it to `soft` implies the preferred mode will be applied, setting it to `hard` implies the required mode will be applied.
+via variable named `antiAffinity` in `values.yaml` , setting it to `soft` implies the preferred mode will be applied, setting it to `hard` implies the required mode will be applied.
 
 - `nodeAffinity` rules allows you to schedule pods to nodes that belong to a specific zone or zones, it also allows you to set two modes of `nodeAffinity` rules: required (ie: `requiredDuringSchedulingIgnoredDuringExecution`) and preferred (ie:`preferredDuringSchedulingIgnoredDuringExecution`), setting it to `soft` implies the preferred mode will be applied, setting it to `hard` implies the required mode will be applied. It is currently implemented only for the registry chart.
 
