@@ -364,6 +364,7 @@ Schedule the move by following the steps indicated in [moving repositories](http
    ```shell
    helm upgrade --install gitlab gitlab/gitlab \
      -f gitlab.yml
+   ```
 
 1. Optional. In the [Admin Area](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#configure-where-new-repositories-are-stored), set `default` to a weight of zero to prevent repositories being stored there.
 
