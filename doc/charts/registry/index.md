@@ -317,32 +317,37 @@ tolerations:
 ### affinity
 
 `affinity` is an optional parameter that allows you to set either or both
-- `podAntiAffinity` rules to not schedule pods in the same domain as the Pods that match the expression          corresponding to the `topology key`, it also allows you to set two modes of `podAntiAffinity` rules: required (ie: `requiredDuringSchedulingIgnoredDuringExecution`) and preferred (ie:`preferredDuringSchedulingIgnoredDuringExecution`)
+
+- `podAntiAffinity` rules to not schedule pods in the same domain as the Pods that match the expression corresponding to the `topology key`, it also allows you to set two modes of `podAntiAffinity` rules: required (ie:`requiredDuringSchedulingIgnoredDuringExecution`) and preferred (ie:`preferredDuringSchedulingIgnoredDuringExecution`)
 via variable named `antiAffinity` in values.yaml , setting it to `soft` implies the preferred mode will be applied, setting it to `hard` implies the required mode will be applied.
 
-- `nodeAffinity` rules allows you to schedule pods to nodes that belong to a specific zone or zones, it also allows you to set two modes of `nodeAffinity` rules: required (ie: `requiredDuringSchedulingIgnoredDuringExecution`) and preferred (ie:`preferredDuringSchedulingIgnoredDuringExecution`)
+- `nodeAffinity` rules allows you to schedule pods to nodes that belong to a specific zone or zones, it also allows you to set two modes of `nodeAffinity` rules: required (ie: `requiredDuringSchedulingIgnoredDuringExecution`) and preferred (ie:`preferredDuringSchedulingIgnoredDuringExecution`), setting it to `soft` implies the preferred mode will be applied, setting it to `hard` implies the required mode will be applied. It is currently implemented only for the registry chart.
+
+For more information please refer [this](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
 
 Below is an example use of `affinity`:
 ( when both `nodeAffinity` and `antiAffinity` is set to `hard`)
 
 ```yaml
-affinity:
-  podAntiAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      - topologyKey: "kubernetes.io/hostname"
-        labelSelector:
-          matchLabels:
-            app: {{ template "name" . }}
-            release: {{ .Release.Name }}
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: "topology.kubernetes.io/zone"
-          operator: In
-          values:
-            - "us-east1-d"
-            - "us-east1-c"
+global:
+  nodeAffinity: "hard"
+  antiAffinity: "hard"
+  affinity:
+    nodeAffinity:
+      key: "test.com/zone"
+      values:
+      - us-east1-a
+      - us-east1-b
+    podAntiAffinity:
+      topologyKey: "test.com/hostname"
+registry:
+  nodeAffinity: "hard"
+  antiAffinity: "hard"
+  affinity:
+    nodeAffinity:
+      key: "override.com/zone"
+    podAntiAffinity:
+      topologyKey: "override.com/hostname"
 ```
 
 ### annotations
@@ -781,12 +786,12 @@ For S3, make sure you give the correct
 [permissions for registry storage](https://distribution.github.io/distribution/storage-drivers/s3/#s3-permission-scopes). For more information about storage configuration, see
 [Container Registry storage driver](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-storage-driver) in the administration documentation.
 
-Place the *contents* of the `storage` block into the secret, and provide the following
+Place the _contents_ of the `storage` block into the secret, and provide the following
 as items to the `storage` map:
 
 - `secret`: name of the Kubernetes Secret housing the YAML block.
 - `key`: name of the key in the secret to use. Defaults to `config`.
-- `extraKey`: *(optional)* name of an extra key in the secret, which will be mounted
+- `extraKey`: _(optional)_ name of an extra key in the secret, which will be mounted
   to `/etc/docker/registry/storage/${extraKey}` within the container. This can be
   used to provide the `keyfile` for the `gcs` driver.
 

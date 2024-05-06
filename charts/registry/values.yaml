@@ -369,6 +369,7 @@ profiling:
 serviceAccount:
   create: false
 
+
 # Disable metadata database by default
 # NOTE: The metadata database is a beta feature from version 16.4 and later. Please
 # review the [feedback issue](https://gitlab.com/gitlab-org/gitlab/-/issues/423459)

@@ -745,9 +745,11 @@ global:
   deployment:
     annotations: {}
 
-  antiAffinity: soft
-  # Set to hard or soft
+
+  # Node Affinity only applies for the registry chart for now
   nodeAffinity: ~
+
+  antiAffinity: soft
   affinity:
     podAntiAffinity:
       topologyKey: "kubernetes.io/hostname"
