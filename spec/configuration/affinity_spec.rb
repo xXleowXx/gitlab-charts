@@ -3,14 +3,30 @@ require 'helm_template_helper'
 require 'yaml'
 require 'hash_deep_merge'
 
-NODE_AFFINITY_DEPLOYMENTS = %w[Deployment/test-registry].freeze
+SUPPORTED_NODE_AFFINITY_DEPLOYMENTS = %w[Deployment/test-registry].freeze
+IGNORED_DEPLOYMENTS = [
+  'Deployment/test-certmanager',
+  'Deployment/test-certmanager-cainjector',
+  'Deployment/test-certmanager-webhook',
+  'Deployment/test-cert-manager',
+  'Deployment/test-cert-manager-cainjector',
+  'Deployment/test-cert-manager-webhook',
+  'Deployment/test-gitlab-runner',
+  'Deployment/test-minio',
+  'Deployment/test-nginx-ingress-controller',
+  'Deployment/test-prometheus-server'
+].freeze
 
 describe 'global affinity configuration' do
   let(:default_values) do
+    HelmTemplate.defaults
+  end
+
+  let(:overridden_values) do
     HelmTemplate.with_defaults(%(
       global:
         nodeAffinity: "hard"
-        antiAffinity: "soft"
+        antiAffinity: "hard"
         affinity:
           nodeAffinity:
             key: "test.com/zone"
@@ -23,48 +39,58 @@ describe 'global affinity configuration' do
   end
 
   let(:ignored_deployments) do
-    [
-      'Deployment/test-certmanager',
-      'Deployment/test-certmanager-cainjector',
-      'Deployment/test-certmanager-webhook',
-      'Deployment/test-cert-manager',
-      'Deployment/test-cert-manager-cainjector',
-      'Deployment/test-cert-manager-webhook',
-      'Deployment/test-gitlab-runner',
-      'Deployment/test-minio',
-      'Deployment/test-nginx-ingress-controller',
-      'Deployment/test-prometheus-server'
-    ]
+    IGNORED_DEPLOYMENTS
   end
 
   let(:supported_node_affinity_deployments) do
-    [
-      'Deployment/test-registry'
-    ]
+    SUPPORTED_NODE_AFFINITY_DEPLOYMENTS
+  end
+
+  context 'when left with default values' do
+    it 'specifies soft antiAffinity' do
+      t = HelmTemplate.new(default_values)
+      expect(t.exit_code).to eq(0)
+
+      deployments = t.resources_by_kind('Deployment').reject { |key, _| ignored_deployments.include? key }
+      deployments.each do |key, _|
+        expect(t.dig(key, 'spec', 'template', 'spec', 'affinity', 'podAntiAffinity', 'preferredDuringSchedulingIgnoredDuringExecution')).to be_present
+        expect(t.dig(key, 'spec', 'template', 'spec', 'affinity', 'podAntiAffinity', 'preferredDuringSchedulingIgnoredDuringExecution')[0]['podAffinityTerm']['topologyKey']).to eq('kubernetes.io/hostname')
+      end
+    end
+
+    it 'does not specify nodeAffinity' do
+      t = HelmTemplate.new(default_values)
+      expect(t.exit_code).to eq(0)
+
+      deployments = t.resources_by_kind('Deployment').reject { |key, _| ignored_deployments.include? key }
+      deployments.each do |key, _|
+        expect(t.dig(key, 'spec', 'template', 'spec', 'affinity', 'nodeAffinity')).not_to be_present
+      end
+    end
   end
 
   context 'when enabling nodeAffinity' do
     it 'populates nodeAffinity rules for all Deployments' do
-      t = HelmTemplate.new(default_values)
+      t = HelmTemplate.new(overridden_values)
       expect(t.exit_code).to eq(0)
 
       deployments = t.resources_by_kind('Deployment').select { |key, _| supported_node_affinity_deployments.include? key }
 
       deployments.each do |key, _|
-        expect(t.dig(key, 'spec', 'template', 'spec', 'affinity', 'nodeAffinity')).should be_present
+        expect(t.dig(key, 'spec', 'template', 'spec', 'affinity', 'nodeAffinity')).to be_present
       end
     end
   end
 
   context 'when overriding antiAffinity' do
     it 'applies to all Deployments' do
-      t = HelmTemplate.new(default_values)
+      t = HelmTemplate.new(overridden_values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
       deployments = t.resources_by_kind('Deployment').reject { |key, _| ignored_deployments.include? key }
 
       deployments.each do |key, _|
-        expect(t.dig(key, 'spec', 'template', 'spec', 'affinity', 'podAntiAffinity', 'preferredDuringSchedulingIgnoredDuringExecution')).to be_present
+        expect(t.dig(key, 'spec', 'template', 'spec', 'affinity', 'podAntiAffinity', 'requiredDuringSchedulingIgnoredDuringExecution')).to be_present
       end
     end
   end
@@ -72,9 +98,11 @@ end
 
 describe 'local affinity configuration' do
   let(:supported_node_affinity_deployments) do
-    [
-      'Deployment/test-registry'
-    ]
+    SUPPORTED_NODE_AFFINITY_DEPLOYMENTS
+  end
+
+  let(:ignored_deployments) do
+    IGNORED_DEPLOYMENTS
   end
 
   let(:default_values) do
@@ -99,21 +127,6 @@ describe 'local affinity configuration' do
           podAntiAffinity:
             topologyKey: "override.com/hostname"
     ))
-  end
-
-  let(:ignored_deployments) do
-    [
-      'Deployment/test-certmanager',
-      'Deployment/test-certmanager-cainjector',
-      'Deployment/test-certmanager-webhook',
-      'Deployment/test-cert-manager',
-      'Deployment/test-cert-manager-cainjector',
-      'Deployment/test-cert-manager-webhook',
-      'Deployment/test-gitlab-runner',
-      'Deployment/test-minio',
-      'Deployment/test-nginx-ingress-controller',
-      'Deployment/test-prometheus-server'
-    ]
   end
 
   context 'when setting a local antiAffinity override' do
