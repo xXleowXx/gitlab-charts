@@ -745,10 +745,17 @@ global:
   deployment:
     annotations: {}
 
+
+  # Node Affinity only applies for the registry chart for now
+  nodeAffinity: ~
+
   antiAffinity: soft
   affinity:
     podAntiAffinity:
       topologyKey: "kubernetes.io/hostname"
+    nodeAffinity:
+      key: topology.kubernetes.io/zone
+      values: []
 
   # Priority class assigned to pods, may be overridden for individual components
   # https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
