@@ -5,20 +5,19 @@ require 'hash_deep_merge'
 
 SUPPORTED_NODE_AFFINITY_DEPLOYMENTS = %w[Deployment/test-registry].freeze
 IGNORED_DEPLOYMENTS = [
-      'Deployment/test-certmanager',
-      'Deployment/test-certmanager-cainjector',
-      'Deployment/test-certmanager-webhook',
-      'Deployment/test-cert-manager',
-      'Deployment/test-cert-manager-cainjector',
-      'Deployment/test-cert-manager-webhook',
-      'Deployment/test-gitlab-runner',
-      'Deployment/test-minio',
-      'Deployment/test-nginx-ingress-controller',
-      'Deployment/test-prometheus-server'
-  ].freeze
+  'Deployment/test-certmanager',
+  'Deployment/test-certmanager-cainjector',
+  'Deployment/test-certmanager-webhook',
+  'Deployment/test-cert-manager',
+  'Deployment/test-cert-manager-cainjector',
+  'Deployment/test-cert-manager-webhook',
+  'Deployment/test-gitlab-runner',
+  'Deployment/test-minio',
+  'Deployment/test-nginx-ingress-controller',
+  'Deployment/test-prometheus-server'
+].freeze
 
 describe 'global affinity configuration' do
-
   let(:default_values) do
     HelmTemplate.defaults
   end
