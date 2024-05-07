@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# Configure a new installation GitLab chart with multiple external databases (Beta)
+## Configure a new installation GitLab chart with multiple external databases (Beta)
 
 WARNING:
 This feature is not ready for production use. Due to [known issues](https://docs.gitlab.com/ee/administration/postgresql/multiple_databases.html#known-issues), configuring GitLab with multiple databases is in [**Alpha**](https://docs.gitlab.com/ee/policy/experiment-beta-support.html).
@@ -97,9 +97,9 @@ To set up multiple external databases:
    helm upgrade --install gitlab gitlab/gitlab --timeout=900s -f gitlab-values.yaml
    ```
 
-# Migrate an existing installation to multiple databases
+## Migrate an existing installation to multiple databases
 
-## Preparation
+### Preparation
 
 - Take a backup of the database, by following the steps [here](../../backup-restore/backup.md)
 - Locate the toolbox pod: `kubectl get pods -lrelease=RELEASE_NAME,app=toolbox`
@@ -111,12 +111,12 @@ that `sudo gitlab-psql` can be omitted because you already accessed the database
 - Exit the database console using the command `\q`
 - Exit the toolbox pod using the command `exit`.
 
-## Shutting down GitLab
+### Shutting down GitLab
 
 To prevent GitLab from writing to the database while switching to multiple databases setup, we need to shutdown
 all the services that write to the GitLab current database.
 
-### Saving the existing replicas for each database accessing deployment
+#### Saving the existing replicas for each database accessing deployment
 
    ```shell
    rm -f /tmp/deployments.txt
@@ -128,24 +128,24 @@ all the services that write to the GitLab current database.
    done
    ```
 
-### Scaling down the database accessing deployments
+#### Scaling down the database accessing deployments
 
    ```shell
    kubectl scale deployment --replicas 0 --selector 'app in (webservice, sidekiq, kas, gitlab-exporter)'
    ```
 
-## Migration of the database
+### Migration of the database
 
 - Access bash on the toolbox pod using the command: `kubectl exec <Toolbox pod name> -it  -c toolbox -- bash`
 - From the toolbox pod, run the command `gitlab-rake gitlab:db:decomposition:migrate`. It should print this message
 to the standard output `Database migration finished!`.
 - Exit the toolbox pod using the command `exit`.
 
-## Reconfigure GitLab with two databases
+### Reconfigure GitLab with two databases
 
 Switch GitLab to use two databases `main` and `ci`, using this command
 
-   ```bash
+   ```shell
    helm upgrade gitlab gitlab/gitlab \
      --set global.psql.database=null \
      --set global.psql.main.database=gitlabhq_production \
@@ -155,14 +155,14 @@ Switch GitLab to use two databases `main` and `ci`, using this command
      --reuse-values
    ```
 
-## Verification
+### Verification
 
 - Locate the new toolbox pod using the command: `kubectl get pods -lrelease=RELEASE_NAME,app=toolbox`
 - Access the bash on the toolbox pod using the command: `kubectl exec <Toolbox pod name> -it  -c toolbox -- bash`
 - Run `cat /srv/gitlab/config/database.yml` to make sure that GitLab config contains both `main` and `ci` and that both
 of them are pointing to two different databases: `gitlabhq_production` and `gitlabhq_production_ci`.
 
-## Post-migration and clean up
+### Post-migration and clean up
 
 Before we start GitLab again, we need to make sure we lock the legacy tables for writes, and clean them up.
 Use these commands
@@ -175,7 +175,7 @@ From inside the toolbox pod, run these commands
    gitlab-rake gitlab:db:truncate_legacy_tables:ci
    ```
 
-## Starting GitLab again
+### Starting GitLab again
 
    ```shell
    while read line; do
