@@ -250,11 +250,11 @@ describe 'registry configuration' do
         using RSpec::Parameterized::TableSyntax
 
         where(:enabled, :configure, :include_db_config) do
+          # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
           false | false | false
-          # This tests shows backwards compatibility before .registry.database.configure was introduced.
-          true | false | true
-          false | true | true
-          true | true | true
+          true  | false | true # Backwards compatibility with .registry.database.enabled.
+          false | true  | true
+          true  | true  | true
         end
 
         with_them do
