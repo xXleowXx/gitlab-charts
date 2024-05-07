@@ -246,24 +246,31 @@ describe 'registry configuration' do
         end
       end
 
-      context 'when database is disabled and configure is enabled' do
-        let(:values) do
-          YAML.safe_load(%(
-            registry:
-              database:
-                configure: true
-                enabled: false
-          )).deep_merge(default_values)
+      context "when database configuration is required" do
+        using RSpec::Parameterized::TableSyntax
+
+        where(:enabled, :configure, :include_db_config) do
+          false | false | false
+          # This tests shows backwards compatibility before .registry.database.configure was introduced.
+          true | false | true
+          false | true | true
+          true | true | true
         end
 
-        it 'populates the database primary settings correctly ' do
-          t = HelmTemplate.new(values)
-          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+        with_them do
+          let(:values) do
+            YAML.safe_load(%(
+            registry:
+              database:
+                configure: #{configure}
+                enabled: #{enabled}
+          )).deep_merge(default_values)
+          end
 
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          let(:config) do
             <<~CONFIG
             database:
-              enabled: false
+              enabled: #{enabled}
               host: "test-postgresql.default.svc"
               port: 5432
               user: registry
@@ -271,66 +278,18 @@ describe 'registry configuration' do
               dbname: registry
               sslmode: disable
             CONFIG
-          )
-        end
-      end
+          end
 
-      # This tests shows backwards compatibility before .registry.database.configure was introduced.
-      context 'when database is enabled and configure is disabled' do
-        let(:values) do
-          YAML.safe_load(%(
-            registry:
-              database:
-                configure: false
-                enabled: true
-          )).deep_merge(default_values)
-        end
+          it 'populates the database settings correctly' do
+            t = HelmTemplate.new(values)
+            expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
-        it 'populates the database primary settings correctly ' do
-          t = HelmTemplate.new(values)
-          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
-            <<~CONFIG
-            database:
-              enabled: true
-              host: "test-postgresql.default.svc"
-              port: 5432
-              user: registry
-              password: "DB_PASSWORD_FILE"
-              dbname: registry
-              sslmode: disable
-            CONFIG
-          )
-        end
-      end
-
-      context 'when database is disabled and configure is disabled' do
-        let(:values) do
-          YAML.safe_load(%(
-            registry:
-              database:
-                configure: false
-                enabled: false
-          )).deep_merge(default_values)
-        end
-
-        it 'populates the database primary settings correctly ' do
-          t = HelmTemplate.new(values)
-          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).not_to include(
-            <<~CONFIG
-            database:
-              enabled: false
-              host: "test-postgresql.default.svc"
-              port: 5432
-              user: registry
-              password: "DB_PASSWORD_FILE"
-              dbname: registry
-              sslmode: disable
-            CONFIG
-          )
+            if include_db_config
+              expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(config)
+            else
+              expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).not_to include(config)
+            end
+          end
         end
       end
     end
