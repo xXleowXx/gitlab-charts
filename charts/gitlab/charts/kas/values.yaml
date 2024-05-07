@@ -22,7 +22,11 @@ init:
   resources:
     requests:
       cpu: 50m
-  containerSecurityContext: {}
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
 
 hpa:
   # targetAverageValue: 100m  # DEPRECATED: in favor of `hpa.cpu.targetAverageValue` below
@@ -134,10 +138,16 @@ securityContext:
   runAsGroup: 65532
   fsGroup: 65532
   # fsGroupChangePolicy: OnRootMismatch
+  seccompProfile:
+    type: "RuntimeDefault"
 
 ## Allow to overwrite the specific security context under which the container is running.
 containerSecurityContext:
   runAsUser: 65532
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  capabilities:
+    drop: [ "ALL" ]
 
 redis:
   enabled: true

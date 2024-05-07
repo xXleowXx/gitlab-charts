@@ -132,7 +132,12 @@ init:
   resources:
     requests:
       cpu: 50m
-  containerSecurityContext: {}
+  containerSecurityContext:
+    runAsUser: 1000
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
   script: |-
     if [ -e /config/accesskey ] ; then
       sed -e 's@ACCESS_KEY@'"$(cat /config/accesskey)"'@' -e 's@SECRET_KEY@'"$(cat /config/secretkey)"'@' /config/config.yml > /registry/config.yml
@@ -342,10 +347,16 @@ securityContext:
   runAsUser: 1000
   fsGroup: 1000
   # fsGroupChangePolicy: OnRootMismatch
+  seccompProfile:
+    type: "RuntimeDefault"
 
 ## Allow to overwrite the specific security context under which the container is running.
 containerSecurityContext:
   runAsUser: 1000
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  capabilities:
+    drop: [ "ALL" ]
 
 # Disable reporting by default
 # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#reporting
