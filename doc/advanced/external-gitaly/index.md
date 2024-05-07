@@ -326,6 +326,8 @@ Schedule the move by following the steps indicated in [moving repositories](http
 
 1. Disable the internal Gitaly subchart in the `gitlab.yml` file, and point the new `default` repository storage to the external Gitaly service. [GitLab requires a default repository storage](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#gitlab-requires-a-default-repository-storage):
 
+   ::Tabs
+
    :::TabTitle Gitaly
 
    ```yaml
@@ -368,8 +370,6 @@ Schedule the move by following the steps indicated in [moving repositories](http
    helm upgrade --install gitlab gitlab/gitlab \
      -f gitlab.yml
    ```
-
-1. Optional. In the [Admin Area](https://docs.gitlab.com/ee/administration/repository_storage_paths.html#configure-where-new-repositories-are-stored), set `default` to a weight of zero to prevent repositories being stored there.
 
 1. Optional. Remove the changes made to each external Gitaly `/etc/hosts` file after following the [get the Gitaly pod IP and hostnames](#step-3-get-the-gitaly-pod-ip-and-hostnames) step.
 
