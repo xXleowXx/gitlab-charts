@@ -98,7 +98,7 @@ spec:
         - mountPath: /init-secrets
           name: gitaly-secrets
           resources:
-            {{- toYaml .Values.init.resources | nindent 12 }}
+            {{- toYaml .Values.cgroups.init.resources | nindent 12 }}
       {{- end }}
       affinity:
         podAntiAffinity:
