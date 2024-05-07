@@ -105,7 +105,7 @@ To set up multiple external databases:
 - Locate the toolbox pod: `kubectl get pods -lrelease=RELEASE_NAME,app=toolbox`
 - Access the database console using the command `kubectl exec <Toolbox pod name> -it -c toolbox -- gitlab-rails dbconsole`, by providing
 the database password. Feel free to replace this a suitable `psql` command from any host that has a direct access to the database server.
-- Make sure you you have enough disk space, plan for the downtime and create the new `gitlabhq_production_ci` database
+- Make sure you have enough disk space, plan for the downtime and create the new `gitlabhq_production_ci` database
 using SQL commands outlined [here](../../../ee/administration/postgresql/multiple_databases.md#preparation). Please note
 that `sudo gitlab-psql` can be omitted because you already accessed the database console.
 - Exit the database console using the command `\q`
@@ -116,7 +116,23 @@ that `sudo gitlab-psql` can be omitted because you already accessed the database
 To prevent GitLab from writing to the database while switching to multiple databases setup, we need to shutdown
 all the services that write to the GitLab current database.
 
-- TODO: Looking into a solution inspired by https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/scripts/database-upgrade?ref_type=heads
+### Saving the existing replicas for each database accessing deployment
+
+   ```shell
+   rm -f /tmp/deployments.txt
+   deployments=$(kubectl get deployment --selector 'app in (webservice, sidekiq, kas, gitlab-exporter)'  --no-headers -o custom-columns=":metadata.name")
+   for deployment in ${deployments}
+   do
+   replicas=$(kubectl get deployment $deployment -o=jsonpath='{.status.replicas}')
+   echo "$deployment/$replicas" >> /tmp/deployments.txt
+   done
+   ```
+
+### Scaling down the database accessing deployments
+
+   ```shell
+   kubectl scale deployment --replicas 0 --selector 'app in (webservice, sidekiq, kas, gitlab-exporter)'
+   ```
 
 ## Migration of the database
 
@@ -161,4 +177,10 @@ From inside the toolbox pod, run these commands
 
 ## Starting GitLab again
 
-TODO
+   ```shell
+   while read line; do
+     deployment=$(echo $line|cut -d'/' -f 1)
+     replicas=$(echo $line|cut -d'/' -f 2)
+     kubectl patch deployment "${deployment}" -p "{\"spec\": {\"replicas\": ${replicas}}}"
+   done < /tmp/deployments.txt
+   ```
