@@ -24,7 +24,7 @@
 # Note: Auto CI does not work with multiple buildpacks yet
 
 default:
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images:gitlab-charts-build-base-helm-3.9
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images/debian-bookworm-slim-ruby-3.2:kubectl-1.30-helm-3.10-helm_kubeconform-0.1.17-vcluster-0.19-awscli-1.32.93
 
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
@@ -256,7 +256,8 @@ approve_cluster_tests:
 pin_image_versions:
   stage: prepare-review
   script:
-    - apk add bats skopeo
+    - apt-get update -qq
+    - apt install -y bats skopeo
     - bats --verbose-run ./scripts/ci/pin_image_digests.bats
     - bash ./scripts/ci/pin_image_digests.sh
   artifacts:
