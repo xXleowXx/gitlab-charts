@@ -14,7 +14,15 @@ global:
   redis:
     auth: {}
 
-gitaly: {}
+gitaly: {
+  cgroups: {
+    enabled: false,
+    initContainer: {},
+    mountpoint: "",
+    hierarchyRoot: gitaly,
+    repositories: {},
+  }
+}
 # serviceName:
 
 internal: {}

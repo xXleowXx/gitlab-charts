@@ -83,9 +83,9 @@ spec:
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       {{- if .Values.cgroups.enabled }}
         - name: init-cgroups
-          image: {{- toYaml .Values.cgroups.init.image | nindent 10 }}
-          securityContext: {{- toYaml .Values.cgroups.init.securityContext | nindent 10 }}
-          imagePullPolicy: {{- toYaml .Values.cgroups.init.imagePullPolicy | nindent 10 }}
+          image: {{- toYaml .Values.cgroups.initContainer.image | nindent 10 }}
+          securityContext: {{- toYaml .Values.cgroups.initContainer.securityContext | nindent 10 }}
+          imagePullPolicy: {{- toYaml .Values.cgroups.initContainer.imagePullPolicy | nindent 10 }}
           env:
             - name: GITALY_POD_UID
               valueFrom:
@@ -98,7 +98,7 @@ spec:
         - mountPath: /init-secrets
           name: gitaly-secrets
           resources:
-            {{- toYaml .Values.cgroups.init.resources | nindent 12 }}
+            {{- toYaml .Values.cgroups.initContainer.resources | nindent 12 }}
       {{- end }}
       affinity:
         podAntiAffinity:

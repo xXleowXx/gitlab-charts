@@ -181,20 +181,20 @@ data:
     mountpoint = {{ .mountpoint | quote }}
     {{-     end }}
     {{-     if .dir }}
-    hierarchy_root = {{ .hierarchy_root | quote }}
+    hierarchy_root = {{ .hierarchyRoot | quote }}
     {{-     end }}
     [cgroups.repositories]
     {{-     if .repositories.count }}
     count = {{ .repositories.count }}
     {{-     end }}
-    {{-     if .repositories.memory_bytes }}
-    memory_bytes = {{ .repositories.memory_bytes }}
+    {{-     if .repositories.memoryBytes }}
+    memory_bytes = {{ .repositories.memoryBytes }}
     {{-     end }}
-    {{-     if .repositories.cpu_shares }}
-    cpu_shares = {{ .repositories.cpu_shares }}
+    {{-     if .repositories.cpuShares }}
+    cpu_shares = {{ .repositories.cpuShares }}
     {{-     end }}
-    {{-     if .repositories.cpu_quota_us }}
-    cpu_quota_us = {{ .repositories.cpu_quota_us }}
+    {{-     if .repositories.cpuQuotaUs }}
+    cpu_quota_us = {{ .repositories.cpuQuotaUs }}
     {{-     end }}
     {{-   end }}
     {{- end }}
