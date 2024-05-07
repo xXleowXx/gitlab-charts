@@ -152,8 +152,8 @@ kubectl exec -it <toolbox-pod> -- echo | /usr/bin/openssl s_client -connect <git
 If you are using the Gitaly Chart to provide the Gitaly service and you need to migrate all of your
 repositories to an external Gitaly service, this can be done with one of the following methods:
 
-1. [Migrate with the repository storage moves API (recommended)](#migrate-with-the-repository-storage-moves-api).
-1. [Migrate with the backup/restore method](#migrate-with-the-backuprestore-method).
+- [Migrate with the repository storage moves API (recommended)](#migrate-with-the-repository-storage-moves-api).
+- [Migrate with the backup/restore method](#migrate-with-the-backuprestore-method).
 
 ### Migrate with the repository storage moves API
 
