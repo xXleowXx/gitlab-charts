@@ -249,13 +249,14 @@ describe 'registry configuration' do
       context "when database configuration is required" do
         using RSpec::Parameterized::TableSyntax
 
+        # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
         where(:enabled, :configure, :include_db_config) do
-          # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
           false | false | false
           true  | false | true # Backwards compatibility with .registry.database.enabled.
           false | true  | true
           true  | true  | true
         end
+        # rubocop:enable Lint/BinaryOperatorWithIdenticalOperands
 
         with_them do
           let(:values) do
