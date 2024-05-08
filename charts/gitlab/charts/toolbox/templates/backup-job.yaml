@@ -27,6 +27,9 @@ spec:
       {{- if .Values.backups.cron.activeDeadlineSeconds }}
       activeDeadlineSeconds: {{ .Values.backups.cron.activeDeadlineSeconds }}
       {{- end }}
+      {{- if .Values.backups.cron.ttlSecondsAfterFinished }}
+      ttlSecondsAfterFinished: {{ .Values.backups.cron.ttlSecondsAfterFinished }}
+      {{- end }}
       template:
         metadata:
           labels:
