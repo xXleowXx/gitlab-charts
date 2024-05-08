@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 7.11.2 (2024-05-07)
+
+No changes.
+
 ## 7.11.1 (2024-04-24)
 
 ### Changed (1 change)
@@ -33,6 +37,10 @@ entry.
 ### Other (1 change)
 
 - [Allow routing rules to contain shard information](gitlab-org/charts/gitlab@aad02140fdabbf2a045e2701b8f1f5b6c3ab81c5) ([merge request](gitlab-org/charts/gitlab!3682))
+
+## 7.10.5 (2024-05-07)
+
+No changes.
 
 ## 7.10.4 (2024-04-24)
 
@@ -67,6 +75,10 @@ No changes.
 ### Deprecated (1 change)
 
 - [Removed kubernetes 1.22 testing](gitlab-org/charts/gitlab@ca9ec21a32e28e63b8e731c317d5089384c9c782) ([merge request](gitlab-org/charts/gitlab!3597))
+
+## 7.9.7 (2024-05-07)
+
+No changes.
 
 ## 7.9.6 (2024-04-24)
 

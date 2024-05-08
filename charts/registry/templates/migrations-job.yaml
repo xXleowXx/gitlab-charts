@@ -1,4 +1,6 @@
-{{- if and .Values.enabled .Values.database.enabled .Values.database.migrations.enabled }}
+{{- if and .Values.enabled (or .Values.database.enabled .Values.database.configure) .Values.database.migrations.enabled }}
+{{- $imageCfg := dict "global" .Values.global.image "local" .Values.image -}}
+{{- $initImageCfg := include "gitlab.configure.config" .Values | fromYaml -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -46,7 +48,11 @@ spec:
       {{- include "gitlab.certificates.initContainer" . | nindent 6 }}
       - name: configure
         image: {{ include "gitlab.configure.image" (dict "root" $ "image" .Values.init.image) | quote }}
+        {{- if .Values.init.image.pullPolicy }}
         imagePullPolicy: {{ .Values.init.image.pullPolicy }}
+        {{- else }}
+        {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 8 }}
+        {{- end }}
         command: ['sh', '/config/configure']
         volumeMounts:
           - name: registry-secrets
@@ -64,7 +70,11 @@ spec:
       {{- include "gitlab.extraContainers" . | nindent 6 }}
       - name: migrations
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}{{ include "gitlab.image.tagSuffix" . }}"
-        imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
+        {{- if  .Values.image.pullPolicy }}
+        imagePullPolicy: {{  .Values.image.pullPolicy}}
+        {{- else }}
+        {{- include "gitlab.image.pullPolicy" $imageCfg | indent 8 }}
+        {{- end }}
         args:
         - /scripts/wait-for-deps
         - /scripts/db-migrate

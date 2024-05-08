@@ -21,7 +21,9 @@ The minimum required version of PostgreSQL is now 13. See https://gitlab.com/git
 {{- /* If the Container Registry metadata database is enabled, note it is not production ready */}}
 {{- if eq .Values.registry.database.enabled true }}
 {{ $WARNING }}
-The Container Registry metadata database has been enabled. Please note that it is an experimental feature and must not be used in production.
+The Container Registry metadata database has been enabled. Please note that it is a beta feature.
+Carefully review the documentation https://docs.gitlab.com/charts/charts/registry/metadata_database.html before enabling the registry database in production!
+If you encounter a problem with either the import or operation of the registry, please add a comment in the feedback issue https://gitlab.com/gitlab-org/gitlab/-/issues/423459#supported-feature-status.
 {{- end }}
 
 {{- /* If shared-secrets is disable, manual secret creation will be needed */}}
@@ -118,24 +120,6 @@ GitLab Pages configured to use disk storage via `{{ $component }}.extraEnv.PAGES
 Using `PAGES_UPDATE_LEGACY_STORAGE` environment variable with bundled Pages service is not recommended. This setting is specifically used when using an external GitLab Pages deployment.
 {{-     end }}
 {{-   end }}
-{{- end }}
-
-{{- /* Deprecation notice for `gitlab.deprecate.kas.privateApi.tls.enabled` setting */}}
-{{- if eq true $.Values.gitlab.kas.privateApi.tls.enabled }}
-{{ $NOTICE }}
-kas:
-    The configuration of `gitlab.kas.privateApi.tls.enabled` has moved. Please use `global.kas.tls.enabled` instead.
-    Other components of the GitLab chart other than KAS also need to be configured to talk to KAS via TLS.
-    With a global value the chart can take care of these configurations without the need for other specific values.
-{{- end }}
-
-{{- /* Deprecation notice for `gitlab.deprecate.kas.privateApi.tls.secretName` setting */}}
-{{- if hasKey $.Values.gitlab.kas.privateApi.tls "secretName" }}
-{{ $NOTICE }}
-kas:
-    The configuration of `gitlab.kas.privateApi.tls.secretName` has moved. Please use `global.kas.tls.secretName` instead.
-    Other components of the GitLab chart other than KAS also need to be configured to talk to KAS via TLS.
-    With a global value the chart can take care of these configurations without the need for other specific values.
 {{- end }}
 
 {{- /* Deprecation notice for global.redis.password */}}
