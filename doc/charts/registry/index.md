@@ -115,7 +115,7 @@ registry:
         deny: []
   notifications: {}
   tolerations: []
-  affinity: []
+  affinity: {}
   ingress:
     enabled: false
     tls:
@@ -255,7 +255,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `tokenService`                              | `container_registry`                                                 | JWT token service |
 | `tokenIssuer`                               | `gitlab-issuer`                                                      | JWT token issuer |
 | `tolerations`                               | `[]`                                                                 | Toleration labels for pod assignment |
-| `affinity`                               | `[]`                                                                 | affinity rules for pod assignment |
+| `affinity`                               | `{}`                                                                 | affinity rules for pod assignment |
 | `middleware.storage`                        |                                                                      | configuration layer for midleware storage ([s3 for instance](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#example-middleware-configuration)) |
 | `redis.cache.enabled`                       | `false`                                                              | When set to `true`, the Redis cache is enabled. This feature is dependent on the [metadata database](#database) being enabled. Repository metadata will be cached on the configured Redis instance. |
 | `redis.cache.host`                          | `<Redis URL>`                                                        | The hostname of the Redis instance. If empty, the value will be filled as `global.redis.host:global.redis.port`. |
@@ -329,25 +329,16 @@ Below is an example use of `affinity`:
 ( when both `nodeAffinity` and `antiAffinity` is set to `hard`)
 
 ```yaml
-global:
-  nodeAffinity: "hard"
-  antiAffinity: "hard"
-  affinity:
-    nodeAffinity:
-      key: "test.com/zone"
-      values:
-      - us-east1-a
-      - us-east1-b
-    podAntiAffinity:
-      topologyKey: "test.com/hostname"
-registry:
-  nodeAffinity: "hard"
-  antiAffinity: "hard"
-  affinity:
-    nodeAffinity:
-      key: "override.com/zone"
-    podAntiAffinity:
-      topologyKey: "override.com/hostname"
+nodeAffinity: "hard"
+antiAffinity: "hard"
+affinity:
+  nodeAffinity:
+    key: "test.com/zone"
+    values:
+    - us-east1-a
+    - us-east1-b
+  podAntiAffinity:
+    topologyKey: "test.com/hostname"
 ```
 
 ### annotations
