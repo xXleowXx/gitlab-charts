@@ -27,8 +27,19 @@ function vcluster_run() {
   vcluster connect $(vcluster_name) -- $@
 }
 
+function vcluster_ns() {
+  vcluster_run kubectl config view --minify -o jsonpath='{..namespace}'
+}
+
 function vcluster_helm_deploy() {
   helm dependency update
+
+  namespace=$(vcluster_ns)
+  vcluster_run kubectl label --overwrite ns "$namespace" \
+    pod-security.kubernetes.io/enforce=restricted \
+    pod-security.kubernetes.io/enforce-version=latest
+
+  kubectl get ns "$namespace" --show-labels
 
   vcluster_run helm upgrade --install \
     gitlab \
