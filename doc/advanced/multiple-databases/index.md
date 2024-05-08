@@ -4,7 +4,18 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-## Configure a new installation GitLab chart with multiple external databases (Beta)
+# Configure the GitLab chart with multiple external databases
+
+DETAILS:
+**Tier:** Free, Premium, Ultimate
+**Offering:** Self-managed
+**Status:** Beta
+
+By default, GitLab uses a single application database, referred to as the `main` database.
+
+To scale GitLab, you can configure GitLab to use multiple application databases.
+
+## Configure a new installation GitLab chart with multiple external databases
 
 WARNING:
 This feature is not ready for production use. Due to [known issues](https://docs.gitlab.com/ee/administration/postgresql/multiple_databases.html#known-issues), configuring GitLab with multiple databases is in [**Alpha**](https://docs.gitlab.com/ee/policy/experiment-beta-support.html).
