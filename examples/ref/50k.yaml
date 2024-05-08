@@ -138,25 +138,6 @@ global:
   registry:
     bucket: example-registry-storage
 
-# Run Prometheus
-prometheus:
-  install: true
-  alertmanager:
-    nodeSelector:
-      workload: support
-  kubeStateMetrics:
-    nodeSelector:
-      workload: support
-  nodeExporter:
-    nodeSelector:
-      workload: support
-  pushgateway:
-    nodeSelector:
-      workload: support
-  server:
-    nodeSelector:
-      workload: support
-
 # Run NGinx pods on Webservice nodes as DaemonSet
 nginx-ingress:
   controller:
