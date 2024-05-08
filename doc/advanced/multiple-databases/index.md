@@ -18,7 +18,7 @@ To scale GitLab, you can configure GitLab to use multiple application databases.
 ## Configure a new installation GitLab chart with multiple external databases
 
 WARNING:
-This feature may not ready for production use, due to [known issues](https://docs.gitlab.com/ee/administration/postgresql/multiple_databases.html#known-issues).
+Because of [known issues](https://docs.gitlab.com/ee/administration/postgresql/multiple_databases.html#known-issues), this feature may not be ready for production use.
 
 By default, GitLab uses a single application database, referred to as the `main` database.
 
@@ -110,6 +110,8 @@ To set up multiple external databases:
 
 ## Migrate an existing installation to multiple databases
 
+You can migrate an existing installation to multiple databases.
+
 ### Preparation
 
 Before migrating an existing installation to multiple databases:
@@ -121,17 +123,17 @@ Before migrating an existing installation to multiple databases:
    kubectl get pods -lrelease=RELEASE_NAME,app=toolbox
    ```
 
-1. Access the database console and provide the database password when asked:
+1. Access the database console and provide the database password:
 
    ```shell
    kubectl exec <toolbox pod name> -it -c toolbox -- gitlab-rails dbconsole
    ```
 
-   Feel free to replace this a suitable `psql` command from any host that has a direct access to the database server.
+   You can replace this command with a suitable `psql` command from any host that has a direct access to the database server.
 
-1. Make sure you have enough disk space, plan for the downtime and create the new `gitlabhq_production_ci` database
-using SQL commands outlined in the [multiple databases](https://docs.gitlab.com/ee/administration/postgresql/multiple_databases.html#preparation) documentation. Note
-that `sudo gitlab-psql` can be omitted because you've already accessed the database console.
+1. Make sure you have enough disk space, plan for the downtime, and create the new `gitlabhq_production_ci` database using SQL commands outlined in the
+   [multiple databases](https://docs.gitlab.com/ee/administration/postgresql/multiple_databases.html#preparation) documentation. Because you've already accessed the
+   database console, you can omit the `sudo gitlab-psql` command.
 1. Exit the database console:
 
    ```shell
@@ -147,7 +149,7 @@ that `sudo gitlab-psql` can be omitted because you've already accessed the datab
 ### Shut down GitLab
 
 To prevent GitLab from writing to the database while switching to multiple databases, you need to shut down
-all the services that write to the GitLab current database:
+all the services that write to the current GitLab database.
 
 1. Save the existing replicas for each database accessing deployment:
 
@@ -171,7 +173,7 @@ all the services that write to the GitLab current database:
 
 To migrate the database:
 
-1. Access the bash shell on the toolbox pod:
+1. Access the Bash shell on the toolbox pod:
 
    ```shell
    kubectl exec <toolbox_pod_name> -it  -c toolbox -- bash
@@ -183,7 +185,7 @@ To migrate the database:
    gitlab-rake gitlab:db:decomposition:migrate
    ```
 
-   It should print the following message: `Database migration finished!`.
+   The command should print the following message: `Database migration finished!`.
 
 1. Exit the toolbox pod:
 
@@ -219,14 +221,14 @@ helm upgrade gitlab gitlab/gitlab \
    kubectl exec <toolbox_pod_name> -it  -c toolbox -- bash
    ```
 
-1. Run `cat /srv/gitlab/config/database.yml` to make sure that GitLab config contains both `main` and `ci` and that both
-of them are pointing to two different databases: `gitlabhq_production` and `gitlabhq_production_ci`.
+1. Run `cat /srv/gitlab/config/database.yml` to make sure that GitLab configuration contains both `main` and `ci` and that both of them are pointing to two different databases:
+   `gitlabhq_production` and `gitlabhq_production_ci`.
 
 ### Post-migration and clean up
 
 Before you start GitLab again, you need to make sure you lock the legacy tables for writes, and clean them up.
 
-From inside the toolbox pod:
+From inside the toolbox pod, run:
 
 ```shell
 gitlab-rake gitlab:db:lock_writes
@@ -235,6 +237,8 @@ gitlab-rake gitlab:db:truncate_legacy_tables:ci
 ```
 
 ### Start GitLab
+
+To start GitLab, run the following:
 
 ```shell
 while read line; do
