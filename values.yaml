@@ -64,7 +64,7 @@ global:
     hostSuffix:
     https: true
     externalIP:
-    ssh: ~
+    ssh:
     gitlab: {}
     minio: {}
     registry: {}
@@ -747,7 +747,7 @@ global:
 
 
   # Node Affinity only applies for the registry chart for now
-  nodeAffinity: ~
+  nodeAffinity:
 
   antiAffinity: soft
   affinity:
