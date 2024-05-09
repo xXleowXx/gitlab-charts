@@ -52,10 +52,9 @@ spec:
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}
       {{- end }}
-      {{- include "gitlab.priorityClassName" . | nindent 6 }}
       terminationGracePeriodSeconds: 30
       {{- if .Values.priorityClassName }}
-      priorityClassName: {{ .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | default (include "gitlab.priorityClassName" .) | quote }}
       {{- end }}
       initContainers:
         {{- include "gitlab.extraInitContainers" . | nindent 8 }}
