@@ -177,14 +177,15 @@ data:
     {{- if .Values.cgroups.enabled }}
     [cgroups]
     {{-   with .Values.cgroups }}
-    {{-     if .dir }}
+    {{-     if .mountpoint }}
     mountpoint = {{ .mountpoint | quote }}
     {{-     end }}
-    {{-     if .dir }}
+    {{-     if .hierarchyRoot }}
     hierarchy_root = {{ .hierarchyRoot | quote }}
     {{-     end }}
+    {{-   if .repositories.count }}
     [cgroups.repositories]
-    {{-     if .repositories.count }}
+    {{-     if gt (.repositories.count | default 0) }}
     count = {{ .repositories.count }}
     {{-     end }}
     {{-     if .repositories.memoryBytes }}
@@ -196,5 +197,6 @@ data:
     {{-     if .repositories.cpuQuotaUs }}
     cpu_quota_us = {{ .repositories.cpuQuotaUs }}
     {{-     end }}
+    {{-   end }}
     {{-   end }}
     {{- end }}
