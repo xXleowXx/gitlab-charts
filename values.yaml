@@ -746,7 +746,9 @@ global:
     annotations: {}
 
 
-  # Node Affinity only applies for the registry chart for now
+  # Setting a global nodeAffinity only applies to the registry chart for now.
+  # See issue https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25403 for more information
+
   nodeAffinity:
 
   antiAffinity: soft
