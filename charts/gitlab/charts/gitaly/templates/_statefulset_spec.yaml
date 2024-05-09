@@ -54,6 +54,9 @@ spec:
       {{- end }}
       {{- include "gitlab.priorityClassName" . | nindent 6 }}
       terminationGracePeriodSeconds: 30
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       initContainers:
         {{- include "gitlab.extraInitContainers" . | nindent 8 }}
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
@@ -202,6 +205,10 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
       {{- include "gitlab.extraVolumes" . | nindent 6 }}
+      - name: cgroup
+        hostPath:
+          path: /sys/fs/cgroup
+          type: ""
       - name: gitaly-config
         configMap:
           {{- $cmName := include "fullname" . -}}
