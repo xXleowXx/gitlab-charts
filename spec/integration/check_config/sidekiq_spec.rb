@@ -3,40 +3,6 @@ require 'check_config_helper'
 require 'hash_deep_merge'
 
 describe 'checkConfig sidekiq' do
-  describe 'sidekiq.queues.mixed' do
-    let(:success_values) do
-      YAML.safe_load(%(
-        gitlab:
-          sidekiq:
-            pods:
-            - name: valid-1
-              queues: merge
-            - name: valid-2
-              negateQueues: post_receive
-      )).merge(default_required_values)
-    end
-
-    let(:error_values) do
-      YAML.safe_load(%(
-        gitlab:
-          sidekiq:
-            pods:
-            - name: invalid-1
-              queues: merge
-              negateQueues: post_receive
-            - name: invalid-2
-              queues: merge
-              negateQueues: post_receive
-      )).merge(default_required_values)
-    end
-
-    let(:error_output) { '`negateQueues` is not usable if `queues` is provided' }
-
-    include_examples 'config validation',
-                     success_description: 'when Sidekiq pods use either queues or negateQueues',
-                     error_description: 'when Sidekiq pods use both queues and negateQueues'
-  end
-
   describe 'sidekiq.queues' do
     let(:success_values) do
       YAML.safe_load(%(
@@ -45,8 +11,6 @@ describe 'checkConfig sidekiq' do
             pods:
             - name: valid-1
               queues: merge,post_receive
-            - name: valid-2
-              negateQueues: merge,post_receive
       )).merge(default_required_values)
     end
 
@@ -57,8 +21,6 @@ describe 'checkConfig sidekiq' do
             pods:
             - name: invalid-1
               queues: [merge]
-            - name: invalid-2
-              negateQueues: [merge]
       )).merge(default_required_values)
     end
 
@@ -218,7 +180,7 @@ describe 'checkConfig sidekiq' do
                   - ["feature_category=pages", null]
                   - ["feature_category=search", "search"]
                   - ["feature_category=memory|resource_boundary=memory", "memory-bound"]
-                  - ["*", "default"]
+                  - ["*", "default", "default"]
         )).deep_merge(default_required_values)
       end
 
@@ -303,7 +265,7 @@ describe 'checkConfig sidekiq' do
       end
     end
 
-    context 'one rule has 3 elements' do
+    context 'one rule has 4 elements' do
       let(:values) do
         YAML.safe_load(%(
           global:
@@ -311,7 +273,7 @@ describe 'checkConfig sidekiq' do
               sidekiq:
                 routingRules:
                 - ["resource_boundary=cpu", "cpu_boundary"]
-                - ["resource_boundary=cpu", "cpu_boundary", "something"]
+                - ["resource_boundary=cpu", "cpu_boundary", "something", "something"]
         )).deep_merge(default_required_values)
       end
 
@@ -331,6 +293,25 @@ describe 'checkConfig sidekiq' do
                 routingRules:
                 - ["resource_boundary=cpu", "cpu_boundary"]
                 - ["rule", 123]
+        )).deep_merge(default_required_values)
+      end
+
+      it 'returns an error' do
+        expect(exit_code).to be > 0
+        expect(stdout).to be_empty
+        expect(stderr).to include(error_output)
+      end
+    end
+
+    context "one rule's shard is invalid" do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            appConfig:
+              sidekiq:
+                routingRules:
+                - ["resource_boundary=cpu", "cpu_boundary"]
+                - ["rule", "default", 123]
         )).deep_merge(default_required_values)
       end
 

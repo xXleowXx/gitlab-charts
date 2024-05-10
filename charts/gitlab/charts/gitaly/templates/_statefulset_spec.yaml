@@ -64,7 +64,7 @@ spec:
           {{- include "gitlab.init.containerSecurityContext" . | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
-          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
+          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" . | nindent 10 }}
           - name: gitaly-config
@@ -133,7 +133,7 @@ spec:
               value: '/etc/ssl/certs'
             {{- include "gitlab.tracing.env" . | nindent 12 }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
-            {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
+            {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 12 }}
           volumeMounts:
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
             {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
@@ -262,6 +262,7 @@ spec:
 
   {{-  $persistence := .Values.persistence.enabled -}}
   {{-  $accessMode := .Values.persistence.accessMode -}}
+  {{-  $labels := .Values.persistence.labels -}}
   {{-  $annotations := .Values.persistence.annotations -}}
   {{-  $size := .Values.persistence.size -}}
   {{-  $storageClass := .Values.persistence.storageClass -}}
@@ -273,6 +274,9 @@ spec:
   {{-        $persistence = .storage.persistence.enabled -}}
   {{-        if .storage.persistence.accessMode -}}
   {{-          $accessMode = .storage.persistence.accessMode -}}
+  {{-        end -}}
+  {{-        if .storage.persistence.labels -}}
+  {{-          $labels = .storage.persistence.labels -}}
   {{-        end -}}
   {{-        if .storage.persistence.annotations -}}
   {{-          $annotations = .storage.persistence.annotations -}}
@@ -303,6 +307,9 @@ spec:
           {{- if .storage }}
           storage: {{ .storage.name }}
           {{- end }}
+        {{- range $key, $value := $labels }}
+          {{ $key }}: {{ $value | quote }}
+        {{- end }}
         annotations:
         {{- range $key, $value := $annotations }}
           {{ $key }}: {{ $value | quote }}

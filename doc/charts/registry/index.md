@@ -76,7 +76,7 @@ registry:
       interval: 24h
       dryrun: false
   image:
-    tag: 'v3.90.0-gitlab'
+    tag: 'v4.0.0-gitlab'
     pullPolicy: IfNotPresent
   annotations:
   service:
@@ -183,7 +183,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `image.pullPolicy`                          |                                                                      | Pull policy for the registry image |
 | `image.pullSecrets`                         |                                                                      | Secrets to use for image repository |
 | `image.repository`                          | `registry.gitlab.com/gitlab-org/build/cng/gitlab-container-registry` | Registry image |
-| `image.tag`                                 | `v3.90.0-gitlab`                                                     | Version of the image to use |
+| `image.tag`                                 | `v4.0.0-gitlab`                                                     | Version of the image to use |
 | `init.image.repository`                     |                                                                      | initContainer image |
 | `init.image.tag`                            |                                                                      | initContainer image tag |
 | `init.containerSecurityContext`             |                                                                      | initContainer container specific [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) |
@@ -213,6 +213,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `profiling.stackdriver.credentials.key`     | `credentials`                                                        | Secret key in which the credentials are stored |
 | `profiling.stackdriver.service`             | `RELEASE-registry` (templated Service name)                          | Name of the Stackdriver service to record profiles under |
 | `profiling.stackdriver.projectid`           | GCP project where running                                            | GCP project to report profiles to |
+| `database.configure`                        | `false`                                                              | Populate database configuration in the registry chart without enabling it. Required when running the [three-step migration process](metadata_database.md#three-step-migration). |
 | `database.enabled`                          | `false`                                                              | Enable metadata database. This is an experimental feature and must not be used in production environments. |
 | `database.host`                             | `global.psql.host`                                                   | The database server hostname. |
 | `database.port`                             | `global.psql.port`                                                   | The database server port. |
@@ -235,6 +236,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `database.pool.maxidletime`                 | `0`                                                                  | The maximum amount of time a connection may be idle. Expired connections may be closed lazily before reuse. Zero or not specified means unlimited duration. |
 | `database.migrations.enabled`               | `true`                                                               | Enable the migrations job to automatically run migrations upon initial deployment and upgrades of the Chart. Note that migrations can also be run manually from within any running Registry pods. |
 | `database.migrations.activeDeadlineSeconds` | `3600`                                                               | Set the [activeDeadlineSeconds](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
+| `database.migrations.annotations`           | `{}`                                                                 | Additional annotations to add to the migrations job. |
 | `database.migrations.backoffLimit`          | `6`                                                                  | Set the [backoffLimit](https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup) on the migrations job. |
 | `gc.disabled`                               | `true`                                                               | When set to `true`, the online GC workers are disabled. |
 | `gc.maxbackoff`                             | `24h`                                                                | The maximum exponential backoff duration used to sleep between worker runs when an error occurs. Also applied when there are no tasks to be processed unless `gc.noidlebackoff` is `true`. Please note that this is not the absolute maximum, as a randomized jitter factor of up to 33% is always added. |
@@ -368,7 +370,7 @@ You can change the included version of the Registry and `pullPolicy`.
 
 Default settings:
 
-- `tag: 'v3.90.0-gitlab'`
+- `tag: 'v4.0.0-gitlab'`
 - `pullPolicy: 'IfNotPresent'`
 
 ## Configuring the `service`
