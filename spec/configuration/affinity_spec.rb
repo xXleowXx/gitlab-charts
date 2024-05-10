@@ -105,7 +105,7 @@ describe 'local affinity configuration' do
     IGNORED_DEPLOYMENTS
   end
 
-  let(:default_values) do
+  let(:values_with_override) do
     HelmTemplate.with_defaults(%(
       global:
         nodeAffinity: "hard"
@@ -131,7 +131,7 @@ describe 'local affinity configuration' do
 
   context 'when setting a local antiAffinity override' do
     it 'applies to a single Deployment' do
-      t = HelmTemplate.new(default_values)
+      t = HelmTemplate.new(values_with_override)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
       deployments = t.resources_by_kind('Deployment').reject { |key, _| ignored_deployments.include? key }
@@ -152,7 +152,7 @@ describe 'local affinity configuration' do
 
   context 'when setting a local nodeAffinity override' do
     it 'applies to a single Deployment' do
-      t = HelmTemplate.new(default_values)
+      t = HelmTemplate.new(values_with_override)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
       deployments = t.resources_by_kind('Deployment').select { |key, _| supported_node_affinity_deployments.include? key }
