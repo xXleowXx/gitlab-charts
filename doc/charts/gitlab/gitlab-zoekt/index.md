@@ -15,11 +15,6 @@ DETAILS:
 > - [Enabled on GitLab.com](https://gitlab.com/gitlab-org/gitlab/-/issues/388519) in GitLab 16.6.
 > - Feature flags `index_code_with_zoekt` and `search_code_with_zoekt` [removed](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/148378) in GitLab 17.1.
 
-FLAG:
-On self-managed GitLab, by default this feature is not available.
-To make it available, an administrator can [enable the feature flags](https://docs.gitlab.com/ee/administration/feature_flags.html) named `index_code_with_zoekt` and `search_code_with_zoekt`.
-On GitLab.com, this feature is available.
-
 WARNING:
 This feature is in [Beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) and subject to change without notice.
 For more information, see [epic 9404](https://gitlab.com/groups/gitlab-org/-/epics/9404).
