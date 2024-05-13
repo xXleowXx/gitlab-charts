@@ -195,7 +195,7 @@ module Gitlab
         "gitlab-rails runner \"" \
         "settings = ApplicationSetting.current_without_cache; " \
         "settings.update_columns(encrypted_customers_dot_jwt_signing_key_iv: nil, encrypted_customers_dot_jwt_signing_key: nil, encrypted_ci_jwt_signing_key_iv: nil, encrypted_ci_jwt_signing_key: nil, error_tracking_access_token_encrypted: nil); " \
-        "settings.set_runners_registration_token('#{runner_registration_token}'); " \
+        "settings.set_runners_token('#{runner_token}'); " \
         "settings.save!; " \
         "Ci::Runner.delete_all" \
         "\""
@@ -232,9 +232,9 @@ module Gitlab
       @gitaly_pod ||= find_pod_name(filters)
     end
 
-    def runner_registration_token
-      @runner_registration_token ||= Base64.decode64(
-        IO.popen(%W[kubectl get secret -o jsonpath="{.data.runner-registration-token}" -- #{ENV['RELEASE_NAME']}-gitlab-runner-secret], &:read)
+    def runner_token
+      @runner_token ||= Base64.decode64(
+        IO.popen(%W[kubectl get secret -o jsonpath="{.data.runner-token}" -- #{ENV['RELEASE_NAME']}-gitlab-runner-secret], &:read)
       )
     end
 
