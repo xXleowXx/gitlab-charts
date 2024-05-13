@@ -173,14 +173,10 @@ A few factors affect the duration of the migration:
 NOTE:
 Work to automate the migration process is being tracked in [issue 5293](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293).
 
-#### One-step migration
+#### Requirements
 
-When doing a one-step migration, be aware that:
-
-- The registry must remain in `read-only` mode during the migration.
-- If the Pod where the migration is being executed is terminated,
-  you have to completely restart the process. The work to improve this process is tracked in
-  [issue 5293](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293).
+You will need to complete the following steps before attempting the one-step or
+three-step migration.
 
 1. [Create the database and Kubernetes secret](#create-the-database).
 1. Get the current Helm values for your release and save them into a file.
@@ -190,6 +186,16 @@ When doing a one-step migration, be aware that:
    helm get values gitlab > values.yml
    ```
 
+#### One-step migration
+
+When doing a one-step migration, be aware that:
+
+- The registry must remain in `read-only` mode during the migration.
+- If the Pod where the migration is being executed is terminated,
+  you have to completely restart the process. The work to improve this process is tracked in
+  [issue 5293](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5293).
+
+1. Follow the steps described in the [requirements section](#requirements).
 1. Find the `registry:` section in the `values.yml` file and
    add the `database` section, set the `maintenance.readonly.enabled`
    flag to `true`, and `migrations.enabled` to `true`:
@@ -208,7 +214,7 @@ When doing a one-step migration, be aware that:
        password:
          secret: gitlab-registry-database-password # must match the secret name
          key: password  # must match the secret key to read the password from
-           sslmode: verify-full
+       sslmode: verify-full
        ssl:
          secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
          clientKey: client-key.pem
@@ -266,6 +272,177 @@ You can now use the metadata database for all operations!
 
 #### Three-step migration
 
+Follow this guide to migrate your existing container registry data.
+This procedure is recommended for larger sets of data or if you are
+trying to minimize downtime while completing the migration.
+
+NOTE:
+Users have reported step one import completed at [rates of 2 to 4 TB per hour](https://gitlab.com/gitlab-org/gitlab/-/issues/423459).
+At the slower speed, registries with over 100TB of data could take longer than 48 hours.
+
+##### Pre-import repositories (step one)
+
+For larger instances, this command can take hours to days to complete, depending
+on the size of your registry. You may continue to use the registry as normal while
+step one is being completed.
+
 WARNING:
-The three-step process is not yet available for Helm chart installations,
-due to a [known limitation](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5292).
+It is [not yet possible](https://gitlab.com/gitlab-org/container-registry/-/issues/1162)
+to restart the migration, so it's important to let the migration run to completion.
+If you must halt the operation, you have to restart this step.
+
+1. Follow the steps described in the [requirements section](#requirements).
+1. Find the `registry:` section in the `values.yml` file and
+   add the `database` section, set the `database.configure`
+   flag to `true`, `database.enabled` to `false`  and `migrations.enabled` to `true`:
+
+   ```yaml
+   registry:
+     priorityClassName: system-node-critical
+     enabled: true
+     database:
+       configure: true
+       enabled: false  # must be false!
+       name: registry  # must match the database name you created above
+       user: registry  # must match the database username you created above
+       password:
+         secret: gitlab-registry-database-password # must match the secret name
+         key: password  # must match the secret key to read the password from
+       sslmode: verify-full
+       ssl:
+         secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
+         clientKey: client-key.pem
+         clientCertificate: client-cert.pem
+         serverCA: server-ca.pem
+       migrations:
+         enabled: true  # this option will execute the schema migration as part of the registry deployment
+   ```
+
+1. Save the file and upgrade your Helm installation to apply changes in your deployment:
+
+   ```shell
+   helm upgrade gitlab gitlab/gitlab -f values.yml
+   ```
+
+1. Connect to one of the registry pods via SSH, for example for a pod named `gitlab-registry-5ddcd9f486-bvb57`:
+
+   ```shell
+   kubectl exec -ti gitlab-registry-5ddcd9f486-bvb57 bash
+   ```
+
+1. Change to the home directory and then run the following command:
+
+   ```shell
+   cd ~
+   /usr/bin/registry database import --step-one /etc/docker/registry/config.yml
+   ```
+
+Once the message `registry import complete` is shown, the first step is done.
+
+NOTE:
+You should try to schedule the following step as soon as possible
+to reduce the amount of downtime required. Ideally, less than one week
+after step one completes. Any new data written to the registry between steps one and two,
+causes step two to take more time.
+
+##### Import all repository data (step two)
+
+This step requires the registry to be set in `read-only` mode.
+Allow enough time for downtime while step two is being executed.
+
+1. Set the registry to `read-only` mode, and enable the database
+in your `values.yml` file:
+
+   ```yaml
+   registry:
+     priorityClassName: system-node-critical
+     enabled: true
+     maintenance:
+       readonly:
+         enabled: true   # must be true!
+     database:
+         configure: true
+         enabled: true   # must be true!
+         name: registry  # must match the database name you created above
+         user: registry  # must match the database username you created above
+         password:
+           secret: gitlab-registry-database-password # must match the secret name
+           key: password  # must match the secret key to read the password from
+         sslmode: verify-full
+         ssl:
+           secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
+           clientKey: client-key.pem
+           clientCertificate: client-cert.pem
+           serverCA: server-ca.pem
+         migrations:
+           enabled: true  # this option will execute the schema migration as part of the registry deployment
+   ```
+
+1. Save the file and upgrade your Helm installation to apply changes in your deployment:
+
+   ```shell
+   helm upgrade gitlab gitlab/gitlab -f values.yml
+   ```
+
+1. Connect to one of the registry pods via SSH, for example for a pod named `gitlab-registry-5ddcd9f486-bvb57`:
+
+   ```shell
+   kubectl exec -ti gitlab-registry-5ddcd9f486-bvb57 bash
+   ```
+
+1. Change to the home directory and then run the following command:
+
+   ```shell
+   cd ~
+   /usr/bin/registry database import --step-two /etc/docker/registry/config.yml
+   ```
+
+1. If the command completed successfully, all images are now fully imported. You
+   can now enable the database, turn off read-only mode in the configuration:
+
+   ```yaml
+   registry:
+     priorityClassName: system-node-critical
+     enabled: true
+     maintenance:        # this section can be removed
+       readonly:
+         enabled: false
+     database:
+         configure: true
+         enabled: true   # must be true!
+         name: registry  # must match the database name you created above
+         user: registry  # must match the database username you created above
+         password:
+           secret: gitlab-registry-database-password # must match the secret name
+           key: password  # must match the secret key to read the password from
+         sslmode: verify-full
+         ssl:
+           secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
+           clientKey: client-key.pem
+           clientCertificate: client-cert.pem
+           serverCA: server-ca.pem
+         migrations:
+           enabled: true  # this option will execute the schema migration as part of the registry deployment
+   ```
+
+1. Save the file and upgrade your Helm installation to apply changes in your deployment:
+
+   ```shell
+   helm upgrade gitlab gitlab/gitlab -f values.yml
+   ```
+
+You can now use the metadata database for all operations!
+
+##### Import the rest of the data (step three)
+
+Even though the registry is now fully using the database for its metadata, it
+does not yet have access to any potentially unused layer blobs.
+
+To complete the process, run the final step of the migration.
+
+```shell
+cd ~
+/usr/bin/registry database import --step-three /etc/docker/registry/config.yml
+```
+
+After that command exists successfully, the registry is now fully migrated to the database!
