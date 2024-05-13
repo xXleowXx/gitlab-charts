@@ -94,6 +94,10 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.uid
+            - name: CGROUP_PATH
+              value: /sys/fs/cgroup/kubepods.slice/
+            - name: OUTPUT_PATH
+              value: /init-secrets/gitaly-pod-cgroup
           volumeMounts:
         - mountPath: /sys/fs/cgroup
           name: cgroup
