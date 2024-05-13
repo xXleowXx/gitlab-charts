@@ -21,8 +21,8 @@ To make it available, an administrator can [enable the feature flags](https://do
 On GitLab.com, this feature is available.
 
 WARNING:
-This feature is an [Experiment](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#experiment).
-GitLab Support cannot assist with configuring or troubleshooting the Zoekt chart.
+This feature is in [Beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) and subject to change without notice.
+For more information, see [epic 9404](https://gitlab.com/groups/gitlab-org/-/epics/9404).
 
 The Zoekt chart provides support for
 [exact code search](https://docs.gitlab.com/ee/user/search/exact_code_search.html).
