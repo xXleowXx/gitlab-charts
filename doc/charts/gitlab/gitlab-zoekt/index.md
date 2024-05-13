@@ -11,7 +11,7 @@ DETAILS:
 **Offering:** GitLab.com, Self-managed
 **Status:** Beta
 
-> - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/105049) in GitLab 15.9 [with flags](https://docs.gitlab.com/ee/administration/feature_flags.html) named `index_code_with_zoekt` and `search_code_with_zoekt`. Disabled by default.
+> - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/105049) as a [Beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) in GitLab 15.9 [with flags](https://docs.gitlab.com/ee/administration/feature_flags.html) named `index_code_with_zoekt` and `search_code_with_zoekt`. Disabled by default.
 > - [Enabled on GitLab.com](https://gitlab.com/gitlab-org/gitlab/-/issues/388519) in GitLab 16.6.
 > - Feature flags `index_code_with_zoekt` and `search_code_with_zoekt` [removed](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/148378) in GitLab 17.1.
 
