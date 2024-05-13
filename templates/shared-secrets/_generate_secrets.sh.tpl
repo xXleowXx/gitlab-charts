@@ -102,7 +102,7 @@ generate_secret_if_needed {{ template "gitlab.minio.credentials.secret" . }} --f
 {{ end }}
 
 # Gitlab runner secret
-generate_secret_if_needed {{ template "gitlab.gitlab-runner.registrationToken.secret" . }} --from-literal=runner-registration-token=$(gen_random 'a-zA-Z0-9' 64) --from-literal=runner-token=""
+generate_secret_if_needed {{ template "gitlab.gitlab-runner.registrationToken.secret" . }} --from-literal=runner-token=$(gen_random 'a-zA-Z0-9' 64) --from-literal=runner-registration-token=""
 
 # GitLab Pages API secret
 {{ if or (eq $.Values.global.pages.enabled true) (not (empty $.Values.global.pages.host)) }}
