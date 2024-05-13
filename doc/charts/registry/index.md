@@ -257,7 +257,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `tokenService`                              | `container_registry`                                                 | JWT token service |
 | `tokenIssuer`                               | `gitlab-issuer`                                                      | JWT token issuer |
 | `tolerations`                               | `[]`                                                                 | Toleration labels for pod assignment |
-| `affinity`                               | `{}`                                                                 | affinity rules for pod assignment |
+| `affinity`                                 | `{}`                                                                 | Affinity rules for pod assignment |
 | `middleware.storage`                        |                                                                      | configuration layer for midleware storage ([s3 for instance](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#example-middleware-configuration)) |
 | `redis.cache.enabled`                       | `false`                                                              | When set to `true`, the Redis cache is enabled. This feature is dependent on the [metadata database](#database) being enabled. Repository metadata will be cached on the configured Redis instance. |
 | `redis.cache.host`                          | `<Redis URL>`                                                        | The hostname of the Redis instance. If empty, the value will be filled as `global.redis.host:global.redis.port`. |
@@ -318,17 +318,22 @@ tolerations:
 
 ### affinity
 
-`affinity` is an optional parameter that allows you to set either or both
+`affinity` is an optional parameter that allows you to set either or both:
 
-- `podAntiAffinity` rules to not schedule pods in the same domain as the Pods that match the expression corresponding to the `topology key`, it also allows you to set two modes of `podAntiAffinity` rules: required (ie:`requiredDuringSchedulingIgnoredDuringExecution`) and preferred (ie:`preferredDuringSchedulingIgnoredDuringExecution`)
-via variable named `antiAffinity` in `values.yaml` , setting it to `soft` implies the preferred mode will be applied, setting it to `hard` implies the required mode will be applied.
+- `podAntiAffinity` rules to:
+  - Not schedule pods in the same domain as the pods that match the expression corresponding to the `topology key`.
+  - Set two modes of `podAntiAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
+    (`preferredDuringSchedulingIgnoredDuringExecution`). Using the variable `antiAffinity` in `values.yaml`, set the setting to `soft` so that the preferred mode is
+    applied or set it to `hard` so that the required mode is applied.
+- `nodeAffinity` rules to:
+  - Schedule pods to nodes that belong to a specific zone or zones.
+  - Set two modes of `nodeAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
+    (`preferredDuringSchedulingIgnoredDuringExecution`). When set to `soft`, the preferred mode is applied. When set to `hard`, the required mode is applied. This
+    rule is implemented only for the registry chart.
 
-- `nodeAffinity` rules allows you to schedule pods to nodes that belong to a specific zone or zones, it also allows you to set two modes of `nodeAffinity` rules: required (ie: `requiredDuringSchedulingIgnoredDuringExecution`) and preferred (ie:`preferredDuringSchedulingIgnoredDuringExecution`), setting it to `soft` implies the preferred mode will be applied, setting it to `hard` implies the required mode will be applied. It is currently implemented only for the registry chart.
+For more information, see [the relevant Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).
 
-For more information please refer [this](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
-
-Below is an example use of `affinity`:
-( when both `nodeAffinity` and `antiAffinity` is set to `hard`)
+The following example sets `affinity`, with both `nodeAffinity` and `antiAffinity` set to `hard`:
 
 ```yaml
 nodeAffinity: "hard"
