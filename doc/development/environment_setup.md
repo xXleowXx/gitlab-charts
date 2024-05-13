@@ -14,7 +14,7 @@ Kubernetes cluster are required.
 The minimum tools required for charts development are documented on the [Required tools page](../installation/tools.md).
 
 You should use [`asdf`](https://github.com/asdf-vm/asdf) to install these tools.
-This allows us to easily switch between versions, such as different kubectl or helm versions.
+This allows us to easily switch between versions, such as different kubectl or Helm versions.
 
 We provide a [`.tool-versions` file](https://gitlab.com/gitlab-org/charts/gitlab/blob/master/.tool-versions)
 that specifies these tools with their recommended versions. To install or update them:
