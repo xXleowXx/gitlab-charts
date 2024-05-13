@@ -302,7 +302,7 @@ If you must halt the operation, you have to restart this step.
      enabled: true
      database:
        configure: true
-       enabled: false
+       enabled: false  # must be false!
        name: registry  # must match the database name you created above
        user: registry  # must match the database username you created above
        password:
@@ -336,3 +336,113 @@ If you must halt the operation, you have to restart this step.
    cd ~
    /usr/bin/registry database import --step-one /etc/docker/registry/config.yml
    ```
+
+Once the message `registry import complete` is shown, the first step is done.
+
+NOTE:
+You should try to schedule the following step as soon as possible
+to reduce the amount of downtime required. Ideally, less than one week
+after step one completes. Any new data written to the registry between steps one and two,
+causes step two to take more time.
+
+##### Import all repository data (step two)
+
+This step requires the registry to be set in `read-only` mode.
+Allow enough time for downtime while step two is being executed.
+
+1. Set the registry to `read-only` mode, and enable the database
+in your `values.yml` file:
+
+   ```yaml
+   registry:
+     priorityClassName: system-node-critical
+     enabled: true
+   maintenance:
+     readonly:
+       enabled: true   # must be true!
+   database:
+       configure: true
+       enabled: true   # must be true!
+       name: registry  # must match the database name you created above
+       user: registry  # must match the database username you created above
+       password:
+         secret: gitlab-registry-database-password # must match the secret name
+         key: password  # must match the secret key to read the password from
+       sslmode: verify-full
+       ssl:
+         secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
+         clientKey: client-key.pem
+         clientCertificate: client-cert.pem
+         serverCA: server-ca.pem
+       migrations:
+         enabled: true  # this option will execute the schema migration as part of the registry deployment
+   ```
+
+1. Save the file and upgrade your Helm installation to apply changes in your deployment:
+
+   ```shell
+   helm upgrade gitlab gitlab/gitlab -f values.yml
+   ```
+
+1. Connect to one of the registry pods via SSH, for example for a pod named `gitlab-registry-5ddcd9f486-bvb57`:
+
+   ```shell
+   kubectl exec -ti gitlab-registry-5ddcd9f486-bvb57 bash
+   ```
+
+1. Change to the home directory and then run the following command:
+
+   ```shell
+   cd ~
+   /usr/bin/registry database import --step-two /etc/docker/registry/config.yml
+   ```
+
+1. If the command completed successfully, all images are now fully imported. You
+   can now enable the database, turn off read-only mode in the configuration:
+
+   ```yaml
+   registry:
+     priorityClassName: system-node-critical
+     enabled: true
+   maintenance:        # this section can be removed
+     readonly:
+       enabled: false
+   database:
+       configure: true
+       enabled: true   # must be true!
+       name: registry  # must match the database name you created above
+       user: registry  # must match the database username you created above
+       password:
+         secret: gitlab-registry-database-password # must match the secret name
+         key: password  # must match the secret key to read the password from
+       sslmode: verify-full
+       ssl:
+         secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
+         clientKey: client-key.pem
+         clientCertificate: client-cert.pem
+         serverCA: server-ca.pem
+       migrations:
+         enabled: true  # this option will execute the schema migration as part of the registry deployment
+   ```
+
+1. Save the file and upgrade your Helm installation to apply changes in your deployment:
+
+   ```shell
+   helm upgrade gitlab gitlab/gitlab -f values.yml
+   ```
+
+You can now use the metadata database for all operations!
+
+##### Import the rest of the data (step three)
+
+Even though the registry is now fully using the database for its metadata, it
+does not yet have access to any potentially unused layer blobs.
+
+To complete the process, run the final step of the migration.
+
+```shell
+cd ~
+/usr/bin/registry database import --step-three /etc/docker/registry/config.yml
+```
+
+After that command exists successfully, the registry is now fully migrated to the database!
