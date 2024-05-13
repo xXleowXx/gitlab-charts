@@ -15,6 +15,8 @@ describe 'global priorityClass configuration' do
           enabled: true  # DELETE THIS WHEN KAS BECOMES ENABLED BY DEFAULT
         spamcheck:
           enabled: true  # DELETE THIS WHEN SPAMCHECK BECOMES ENABLED BY DEFAULT
+        gitlab-pages:
+          enabled: true  # DELETE THIS WHEN PAGES BECOMES ENABLED BY DEFAULT
       gitlab-runner:
         priorityClassName: system-cluster-critical
       prometheus:
