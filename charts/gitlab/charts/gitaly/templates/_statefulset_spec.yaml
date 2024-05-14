@@ -131,6 +131,12 @@ spec:
               value: '/etc/gitaly/config.toml'
             - name: SSL_CERT_DIR
               value: '/etc/ssl/certs'
+            {{- if .Values.resources.limits.memory }}
+            - name: GOMEMLIMIT
+              valueFrom:
+                resourceFieldRef:
+                  resource: limits.memory
+            {{- end }}
             {{- include "gitlab.tracing.env" . | nindent 12 }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 12 }}
