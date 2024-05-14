@@ -166,8 +166,7 @@ Create a default fully qualified job name.
 {{- end -}}
 
 {{/*
-Create a node affinity rule optionally to deploy
-registry pods in a specific zone
+Optionally create a node affinity rule to optionally deploy registry pods in a specific zone
 */}}
 {{- define "registry.affinity" -}}
 {{- $affinityOptions := list "hard" "soft" }}
