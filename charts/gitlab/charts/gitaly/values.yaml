@@ -14,7 +14,12 @@ global:
   redis:
     auth: {}
 
-gitaly: {}
+gitaly:
+  resources: 
+    limits:
+    cpu: ""
+    memory: ""
+
 # serviceName:
 
 internal: {}
