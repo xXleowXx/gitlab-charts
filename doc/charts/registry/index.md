@@ -115,6 +115,7 @@ registry:
         deny: []
   notifications: {}
   tolerations: []
+  affinity: {}
   ingress:
     enabled: false
     tls:
@@ -256,6 +257,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `tokenService`                              | `container_registry`                                                 | JWT token service |
 | `tokenIssuer`                               | `gitlab-issuer`                                                      | JWT token issuer |
 | `tolerations`                               | `[]`                                                                 | Toleration labels for pod assignment |
+| `affinity`                                 | `{}`                                                                 | Affinity rules for pod assignment |
 | `middleware.storage`                        |                                                                      | configuration layer for midleware storage ([s3 for instance](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#example-middleware-configuration)) |
 | `redis.cache.enabled`                       | `false`                                                              | When set to `true`, the Redis cache is enabled. This feature is dependent on the [metadata database](#database) being enabled. Repository metadata will be cached on the configured Redis instance. |
 | `redis.cache.host`                          | `<Redis URL>`                                                        | The hostname of the Redis instance. If empty, the value will be filled as `global.redis.host:global.redis.port`. |
@@ -312,6 +314,39 @@ tolerations:
   operator: "Equal"
   value: "true"
   effect: "NoExecute"
+```
+
+### affinity
+
+`affinity` is an optional parameter that allows you to set either or both:
+
+- `podAntiAffinity` rules to:
+  - Not schedule pods in the same domain as the pods that match the expression corresponding to the `topology key`.
+  - Set two modes of `podAntiAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
+    (`preferredDuringSchedulingIgnoredDuringExecution`). Using the variable `antiAffinity` in `values.yaml`, set the setting to `soft` so that the preferred mode is
+    applied or set it to `hard` so that the required mode is applied.
+- `nodeAffinity` rules to:
+  - Schedule pods to nodes that belong to a specific zone or zones.
+  - Set two modes of `nodeAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
+    (`preferredDuringSchedulingIgnoredDuringExecution`). When set to `soft`, the preferred mode is applied. When set to `hard`, the required mode is applied. This
+    rule is implemented only for the registry chart.
+  - `nodeAffinity` only implements [`In` operator](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#operators), others may be added in the future.
+
+For more information, see [the relevant Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).
+
+The following example sets `affinity`, with both `nodeAffinity` and `antiAffinity` set to `hard`:
+
+```yaml
+nodeAffinity: "hard"
+antiAffinity: "hard"
+affinity:
+  nodeAffinity:
+    key: "test.com/zone"
+    values:
+    - us-east1-a
+    - us-east1-b
+  podAntiAffinity:
+    topologyKey: "test.com/hostname"
 ```
 
 ### annotations
@@ -750,12 +785,12 @@ For S3, make sure you give the correct
 [permissions for registry storage](https://distribution.github.io/distribution/storage-drivers/s3/#s3-permission-scopes). For more information about storage configuration, see
 [Container Registry storage driver](https://docs.gitlab.com/ee/administration/packages/container_registry.html#container-registry-storage-driver) in the administration documentation.
 
-Place the *contents* of the `storage` block into the secret, and provide the following
+Place the _contents_ of the `storage` block into the secret, and provide the following
 as items to the `storage` map:
 
 - `secret`: name of the Kubernetes Secret housing the YAML block.
 - `key`: name of the key in the secret to use. Defaults to `config`.
-- `extraKey`: *(optional)* name of an extra key in the secret, which will be mounted
+- `extraKey`: _(optional)_ name of an extra key in the secret, which will be mounted
   to `/etc/docker/registry/storage/${extraKey}` within the container. This can be
   used to provide the `keyfile` for the `gcs` driver.
 
