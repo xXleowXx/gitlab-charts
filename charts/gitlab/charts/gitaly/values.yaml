@@ -17,8 +17,8 @@ global:
 gitaly:
   resources: 
     limits:
-    cpu: ""
-    memory: ""
+      cpu: ""
+      memory: ""
 
 # serviceName:
 
