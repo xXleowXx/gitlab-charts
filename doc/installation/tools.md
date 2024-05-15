@@ -62,7 +62,6 @@ You should set up an
 For all the available configuration settings, see the
 [Gitaly globals documentation](../charts/globals.md#configure-gitaly-settings).
 
-
 ## Decide on other options
 
 You use the following options with `helm install` when you deploy GitLab.
