@@ -15,6 +15,7 @@ global:
     auth: {}
 
 gitaly: {}
+
 # serviceName:
 
 internal: {}
