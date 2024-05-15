@@ -330,7 +330,7 @@ tolerations:
   - Set two modes of `nodeAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
     (`preferredDuringSchedulingIgnoredDuringExecution`). When set to `soft`, the preferred mode is applied. When set to `hard`, the required mode is applied. This
     rule is implemented only for the registry chart.
-  - nodeAffinity currently only supports the `in` operator
+  - nodeAffinity currently only supports the `In` operator
 
 For more information, see [the relevant Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).
 
