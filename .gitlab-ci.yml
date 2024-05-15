@@ -293,6 +293,7 @@ pin_image_versions:
     HOST_SUFFIX: "$CI_ENVIRONMENT_SLUG"
     DOMAIN: "-$CI_ENVIRONMENT_SLUG.$KUBE_INGRESS_BASE_DOMAIN"
     VARIABLES_FILE: "variables/${CI_JOB_NAME}"
+  retry: 2
   extends: .source_autodevops
   dependencies:
     - pin_image_versions
