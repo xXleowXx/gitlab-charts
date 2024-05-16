@@ -135,7 +135,6 @@ helps reduce the network resources required to create and restore a backup.
 
 See [Create server-side repository backups](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#create-server-side-repository-backups).
 
-
 ### Other arguments
 
 To see a complete list of available arguments, run the following command:
