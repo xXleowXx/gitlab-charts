@@ -215,6 +215,9 @@ nodeSelector: {}
 affinity:
   podAntiAffinity:
     topologyKey:
+  nodeAffinity:
+    key:
+    values:
 
 # Protocol/Host only. '/jwt/auth' will be appended.
 authEndpoint:
@@ -365,6 +368,7 @@ profiling:
 
 serviceAccount:
   create: false
+
 
 # Disable metadata database by default
 # NOTE: The metadata database is a beta feature from version 16.4 and later. Please
