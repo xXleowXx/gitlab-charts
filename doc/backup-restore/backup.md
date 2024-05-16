@@ -133,12 +133,8 @@ backups can be configured so that the Gitaly node that hosts each repository is
 responsible for creating the backup and streaming it to object storage. This
 helps reduce the network resources required to create and restore a backup.
 
-1. [Configure a server-side backup destination in Gitaly](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-server-side-backups).
-1. Create a back up using the `--repositories-server-side` option.
+See [Create server-side repository backups](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#create-server-side-repository-backups).
 
-   ```shell
-   kubectl exec <Toolbox pod name> -it -- backup-utility --repositories-server-side
-   ```
 
 ### Other arguments
 
