@@ -934,11 +934,11 @@ profiling:
 DETAILS:
 **Status:** Beta
 
-> - [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/5521) in GitLab 16.4 as a [Beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) feature.
+> - [Introduced](https://gitlab.com/groups/gitlab-org/-/epics/5521) in GitLab 16.4 as a [beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) feature.
 
 The `database` property is optional and enables the [metadata database](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database).
 
-This is a [Beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) feature.
+This is a [beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html#beta) feature.
 See the [feedback issue](https://gitlab.com/gitlab-org/gitlab/-/issues/423459)
 and associated documentation before enabling this feature.
 
