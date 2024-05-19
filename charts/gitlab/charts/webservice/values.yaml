@@ -106,6 +106,7 @@ ingress:
   proxyConnectTimeout: 15
   proxyReadTimeout: 600
   proxyBodySize: "512m"
+  extraHosts: []
   tls: {}
     # secretName:
     # smartcardSecretName:
@@ -123,7 +124,8 @@ extraIngress:
   proxyConnectTimeout: 15
   proxyReadTimeout: 600
   proxyBodySize: "512m"
-  # hostname: 
+  # hostname:
+  extraHosts: []
   tls: {}
     # secretName:
     # smartcardSecretName:

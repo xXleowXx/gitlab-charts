@@ -70,10 +70,31 @@ spec:
               serviceName: {{ template "webservice.fullname.withSuffix" .deployment }}
               servicePort: {{ .root.Values.service.workhorseExternalPort }}
             {{- end -}}
+    {{- range $extraHost := .ingressCfg.local.extraHosts }}
+    - host: {{ $extraHost }}
+      http:
+        paths:
+          - path: {{ $.deployment.ingress.path }}
+            {{ if or ($.root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") (eq $global.ingress.apiVersion "networking.k8s.io/v1") -}}
+            pathType: {{ default $.deployment.ingress.pathType $global.ingress.pathType }}
+            backend:
+              service:
+                  name: {{ template "webservice.fullname.withSuffix" $.deployment }}
+                  port:
+                    number: {{ $.root.Values.service.workhorseExternalPort }}
+            {{- else -}}
+            backend:
+              serviceName: {{ template "webservice.fullname.withSuffix" $.deployment }}
+              servicePort: {{ $.root.Values.service.workhorseExternalPort }}
+            {{- end }}
+    {{- end }}
   {{- if (and .tlsSecret (eq (include "gitlab.ingress.tls.enabled" .root) "true" )) }}
   tls:
     - hosts:
       - {{ .host }}
+      {{- range $extraHost := .ingressCfg.local.extraHosts }}
+      - {{ $extraHost }}
+      {{- end }}
       secretName: {{ .tlsSecret }}
   {{- else }}
   tls: []

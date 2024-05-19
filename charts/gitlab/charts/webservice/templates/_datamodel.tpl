@@ -54,6 +54,8 @@ This is output as YAML, it can be read back in as a dict via `toYaml`.
   pathType: Prefix
   annotations:
     {{- $v.annotations | toYaml | nindent 4 }}
+  extraHosts:
+    {{- $v.extraHosts | toYaml | nindent 4 }}
   proxyConnectTimeout: {{ $v.proxyConnectTimeout }}
   proxyReadTimeout: {{ $v.proxyReadTimeout }}
   proxyBodySize: {{ $v.proxyBodySize | quote }}
