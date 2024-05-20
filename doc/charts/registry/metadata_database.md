@@ -198,9 +198,12 @@ When doing a one-step migration, be aware that:
 To migrate existing container registry to the metadata database in one step:
 
 1. Follow the steps described in the [requirements section](#requirements).
-1. Find the `registry:` section in the `values.yml` file and
-   add the `database` section, set the `maintenance.readonly.enabled`
-   flag to `true`, and `migrations.enabled` to `true`:
+1. Find the `registry:` section in the `values.yml` file and add the `database` section.
+   Set:
+   - `database.configure` to `true`.
+   - `database.enabled` to `false`.
+   - `maintenance.readonly.enabled` to true.
+   - `migrations.enabled` to `true`.
 
    ```yaml
    registry:
@@ -210,7 +213,8 @@ To migrate existing container registry to the metadata database in one step:
        readonly:
          enabled: true  # must remain set to true while the migration is executed
      database:
-       enabled: true
+       configure: true
+       enabled: false
        name: registry  # must match the database name you created above
        user: registry  # must match the database username you created above
        password:
@@ -245,7 +249,7 @@ To migrate existing container registry to the metadata database in one step:
    /usr/bin/registry database import /etc/docker/registry/config.yml
    ```
 
-1. Update the registry configuration to disable read-only mode:
+1. Update the registry configuration to enable the database and disable read-only mode:
 
    ```yaml
    registry:
@@ -373,7 +377,7 @@ Allow enough time for downtime during this process.
          enabled: true   # must be true!
      database:
          configure: true
-         enabled: true   # must be true!
+         enabled: false  # must be false!
          name: registry  # must match the database name you created above
          user: registry  # must match the database username you created above
          password:
