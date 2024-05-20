@@ -4,7 +4,7 @@ group: Distribution
 info: To determine the technical writer assigned to the Stage/Group associated with this page, see https://handbook.gitlab.com/handbook/product/ux/technical-writing/#assignments
 ---
 
-# GitLab Helm chart Beta
+# GitLab Helm chart beta
 
 We have been working hard on the chart and it's underlying containers, and are excited to reach beta and share it with the GitLab community.
 
