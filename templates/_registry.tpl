@@ -64,7 +64,7 @@ endpoints:
     timeout: 2s
     {{/* DEPRECATED: use maxretries instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.*/}}
     threshold: 5
-    maxretries: 5
+    maxretries: 0
     backoff: 1s
     headers:
       Authorization:
