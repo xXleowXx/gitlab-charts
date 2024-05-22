@@ -390,8 +390,8 @@ as well as commits created by GitLab, such as merge commits and squashes.
 
 ### Server-side backups
 
-The chart supports [server-side backups](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-server-side-backups)
-for Gitaly.
+The chart supports [Gitaly server-side backup](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-server-side-backups).
+In order to use it:
 
 1. Create a bucket to store the backups.
 1. Configure the object store credentials and the storage URL.
@@ -410,7 +410,7 @@ for Gitaly.
               name: gitlab-rails-storage
               key: aws_secret_access_key
        backup:
-         # Object store connection URL for Gitaly server side backups.
+         # TODO(user): This is the connection string for Gitaly server side backups. Change this.
          goCloudUrl: "s3://gitaly-backups?region=us-west-1"
    ```
 
