@@ -286,15 +286,15 @@ which is recommended if:
 
 To migrate in three steps, you must:
 
-1. Pre-import repositories
-1. Import all repository data
-1. Import the rest of the data
+1. Pre-import repositories (step one)
+1. Import all repository data (step two)
+1. Import common blobs (step three)
 
 NOTE:
 Users have reported step one import completed at [rates of 2 to 4 TB per hour](https://gitlab.com/gitlab-org/gitlab/-/issues/423459).
 At the slower speed, registries with over 100TB of data could take longer than 48 hours.
 
-##### Pre-import repositories
+##### Pre-import repositories (step one)
 
 For larger instances, this process can take hours or even days to complete, depending
 on the size of your registry. You can still use the registry during this process.
@@ -360,7 +360,7 @@ to reduce the amount of downtime required. Ideally, less than one week
 after step one completes. Any new data written to the registry before the next step
 causes that step to take more time.
 
-##### Import all repository data
+##### Import all repository data (step two)
 
 This step requires the registry to be set in `read-only` mode.
 Allow enough time for downtime during this process.
@@ -448,7 +448,7 @@ Allow enough time for downtime during this process.
 
 You can now use the metadata database for all operations!
 
-##### Import the rest of the data
+##### Import common blobs (step three)
 
 The registry is now fully using the database for its metadata, but it
 does not yet have access to any potentially unused layer blobs.
