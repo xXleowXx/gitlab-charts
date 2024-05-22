@@ -1168,7 +1168,10 @@ redis:
   metrics:
     enabled: true
 
-## Installation & configuration of stable/prostgresql
+session_store:
+  session_cookie_token_prefix: ""
+
+## Installation & configuration of stable/postgresql
 ## See requirements.yaml for current version
 postgresql:
   install: true
