@@ -61,7 +61,7 @@ function deploy() {
 
   helm dependency update .
 
-  WAIT="--wait --timeout 900s"
+  WAIT="--wait --timeout 1200s"
 
   PROMETHEUS_INSTALL="false"
 
