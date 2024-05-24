@@ -287,7 +287,6 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `minio.persistence.storageClass`     | MinIO storageClassName for provisioning |                                |
 | `minio.persistence.subPath`          | MinIO persistence volume mount path     |                                |
 | `minio.persistence.volumeName`       | MinIO existing persistent volume name   |                                |
-| `minio.replicas`                     | MinIO number of replicas                | `4`                            |
 | `minio.resources.requests.cpu`       | MinIO minimum CPU requested             | `250m`                         |
 | `minio.resources.requests.memory`    | MinIO minimum memory requested          | `256Mi`                        |
 | `minio.service.annotations`          | Annotations to add to the `Service`     | {}                             |
