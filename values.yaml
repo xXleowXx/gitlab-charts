@@ -693,8 +693,9 @@ global:
     authSecret: {}
       # secret:
       # key:
-    clientCertKeyPairs:
-    caCerts:
+    clientCert:
+    clientKey:
+    clientCACerts:
 
   ## GitLab Runner
   ## Secret created according to https://docs.gitlab.com/charts/installation/secrets#gitlab-runner-secret

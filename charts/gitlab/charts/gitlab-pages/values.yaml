@@ -245,5 +245,6 @@ affinity:
 # rateLimitTLSDomain:
 # rateLimitTLSDomainBurst:
 
-# clientCertKeyPairs
+# clientCert
+# clientKey
 # caCerts

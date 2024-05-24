@@ -510,8 +510,9 @@ describe 'GitLab Pages' do
                 serverKeepAlive: 4h
                 authTimeout: 10s
                 authCookieSessionTimeout: 1h
-                clientCertKeyPairs: /path/to/client.crt:/path/to/client.key
-                caCerts: /path/to/ca.crt
+                clientCert: /path/to/client.crt
+                clientKey: /path/to/client.key
+                clientCACerts: /path/to/ca.crt
           ))
         end
 
@@ -564,8 +565,9 @@ describe 'GitLab Pages' do
             server-read-header-timeout=2h
             server-write-timeout=3h
             server-keep-alive=4h
-            client-cert-key-pairs=/path/to/client.crt:/path/to/client.key
-            ca-certs=/path/to/ca.crt
+            client-cert=/path/to/client.crt
+            client-key=/path/to/client.key
+            client-ca-certs=/path/to/ca.crt
           MSG
 
           expect(pages_enabled_template.exit_code).to eq(0), "Unexpected error code #{pages_enabled_template.exit_code} -- #{pages_enabled_template.stderr}"
