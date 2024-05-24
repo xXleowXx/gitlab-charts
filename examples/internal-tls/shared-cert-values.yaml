@@ -45,6 +45,10 @@ gitlab:
         enabled: true
         secretName: *internal-tls
   gitlab-pages:
+    mtls:
+      enabled: true
+      secretName: *internal-tls
+      caSecretName: *internal-ca
     metrics:
       tls:
         enabled: true

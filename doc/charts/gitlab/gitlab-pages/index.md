@@ -160,9 +160,8 @@ configurations that can be supplied to the `helm install` command using the
 | `serverKeepAlive`           | `15s`    | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `authTimeout`               | `5s`     | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `authCookieSessionTimeout`  | `10m`    | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
-| `clientCert`                |          | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
-| `clientKey`                 |          | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
-| `clientCACerts`             |          | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
+| `gitlab.mtls.enabled`       | `false`                            | Enable mutual TLS authentication with GitLab API.                                                                                                                                                                  |
+| `gitlab.mtls.secretName`    | `{Release.Name}-pages-gitlab-mtls` | Secret for client full chain certificate, client key and root CA certificate utilized for mutual TLS authentication with GitLab API.                                                                               |
 
 ### Configuring the `ingress`
 

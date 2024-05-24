@@ -19,3 +19,17 @@ Return the pages-metrics TLS secret name
 {{- define "pages-metrics.tls.secret" -}}
 {{- default (printf "%s-pages-metrics-tls" .Release.Name) $.Values.metrics.tls.secretName | quote -}}
 {{- end -}}
+
+{{/*
+Return the pages gitlab mTLS secret name
+*/}}
+{{- define "pages.mtls.secret" -}}
+{{- default (printf "%s-pages-mtls" .Release.Name) $.Values.mtls.secretName | quote -}}
+{{- end -}}
+
+{{/*
+Return the pages gitlab mTLS CA secret name
+*/}}
+{{- define "pages.mtls.ca.secret" -}}
+{{- default (printf "%s-pages-mtls-ca" .Release.Name) $.Values.mtls.caSecretName | quote -}}
+{{- end -}}

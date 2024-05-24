@@ -187,6 +187,20 @@ spec:
                 - key: "tls.key"
                   path: "pages-metrics/pages-metrics.key"
           {{- end }}
+          {{- if $.Values.mtls.enabled }}
+          - secret:
+              name: {{ template "pages.mtls.secret" $ }}
+              items:
+                - key: "tls.crt"
+                  path: "pages/mtls/client.crt"
+                - key: "tls.key"
+                  path: "pages/mtls/client.key"
+          - secret:
+              name: {{ template "pages.mtls.ca.secret" $ }}
+              items:
+                - key: "ca.crt"
+                  path: "pages/mtls/client_ca.crt"
+          {{- end }}
       - name: pages-secrets
         emptyDir:
           medium: "Memory"

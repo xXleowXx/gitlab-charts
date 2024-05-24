@@ -2001,9 +2001,6 @@ global:
 | `localStore.path`               | String    | `/srv/gitlab/shared/pages` | Path where pages files will be stored; only used if localStore is set to true. |
 | `apiSecret.secret`              | String    |                            | Secret containing 32 bit API key in Base64 encoded form. |
 | `apiSecret.key`                 | String    |                            | Key within the API key secret where the API key is stored. |
-| `clientCert`                    | String    |                            | GitLab client certificate utilized for mutual TLS authentication with GitLab API. |
-| `clientKey`                     | String    |                            | GitLab client key utilized for mutual TLS authentication with GitLab API. |
-| `clientCACerts`                 | String    |                            | Root CA certificates utilized for signing GitLab client certificates |
 
 ## Configure Webservice
 

@@ -170,14 +170,10 @@ data:
     {{- if .Values.serverKeepAlive }}
     server-keep-alive={{ .Values.serverKeepAlive }}
     {{- end }}
-    {{- if .Values.clientCert }}
-    client-cert={{ .Values.clientCert }}
-    {{- end }}
-    {{- if .Values.clientKey }}
-    client-key={{ .Values.clientKey }}
-    {{- end }}
-    {{- if .Values.clientCACerts }}
-    client-ca-certs={{ .Values.clientCACerts }}
+    {{- if $.Values.mtls.enabled }}
+    client-cert=/etc/gitlab-secrets/pages/mtls/client.crt
+    client-key=/etc/gitlab-secrets/pages/mtls/client.key
+    client-ca-certs=/etc/gitlab-secrets/pages/mtls/client_ca.crt
     {{- end }}
   configure: |
     {{- include "gitlab.scripts.configure.secrets" (dict "required" "pages" "optional" "none") | nindent 4 }}
@@ -185,4 +181,10 @@ data:
       mkdir -p /init-secrets/pages-metrics
       cp -v -L /init-config/pages-metrics/pages-metrics.crt /init-secrets/pages-metrics/pages-metrics.crt
       cp -v -L /init-config/pages-metrics/pages-metrics.key /init-secrets/pages-metrics/pages-metrics.key
+    {{- end }}
+    {{- if $.Values.mtls.enabled }}
+      mkdir -p /init-secrets/pages/mtls
+      cp -v -L /init-config/pages/mtls/client.crt /init-secrets/pages/mtls/client.crt
+      cp -v -L /init-config/pages/mtls/client.key /init-secrets/pages/mtls/client.key
+      cp -v -L /init-config/pages/mtls/client_ca.crt /init-secrets/pages/mtls/client_ca.crt
     {{- end }}

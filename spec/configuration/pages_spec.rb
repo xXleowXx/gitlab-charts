@@ -510,9 +510,6 @@ describe 'GitLab Pages' do
                 serverKeepAlive: 4h
                 authTimeout: 10s
                 authCookieSessionTimeout: 1h
-                clientCert: /path/to/client.crt
-                clientKey: /path/to/client.key
-                clientCACerts: /path/to/ca.crt
           ))
         end
 
@@ -565,9 +562,6 @@ describe 'GitLab Pages' do
             server-read-header-timeout=2h
             server-write-timeout=3h
             server-keep-alive=4h
-            client-cert=/path/to/client.crt
-            client-key=/path/to/client.key
-            client-ca-certs=/path/to/ca.crt
           MSG
 
           expect(pages_enabled_template.exit_code).to eq(0), "Unexpected error code #{pages_enabled_template.exit_code} -- #{pages_enabled_template.stderr}"
@@ -593,6 +587,26 @@ describe 'GitLab Pages' do
         it 'populates the config.tpl pages metrics tls settings' do
           expect(config_data).to include('metrics-certificate=/etc/gitlab-secrets/pages-metrics/pages-metrics.crt')
           expect(config_data).to include('metrics-key=/etc/gitlab-secrets/pages-metrics/pages-metrics.key')
+        end
+      end
+
+      context 'when GitLab mTLS support is enabled' do
+        let(:pages_enabled_values) do
+          YAML.safe_load(%(
+            global:
+              pages:
+                enabled: true
+            gitlab:
+              gitlab-pages:
+                mtls:
+                  enabled: true
+          ))
+        end
+
+        it 'populates the config.tpl pages mtls settings' do
+          expect(config_data).to include('client-cert=/etc/gitlab-secrets/pages/mtls/client.crt')
+          expect(config_data).to include('client-key=/etc/gitlab-secrets/pages/mtls/client.key')
+          expect(config_data).to include('client-ca-certs=/etc/gitlab-secrets/pages/mtls/client_ca.crt')
         end
       end
     end
