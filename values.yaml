@@ -1049,7 +1049,7 @@ prometheus:
       seccompProfile:
         type: "RuntimeDefault"
   podSecurityPolicy:
-    enabled: true
+    enabled: false
   configmapReload:
     prometheus:
       containerSecurityContext:
@@ -1204,11 +1204,7 @@ redis:
 postgresql:
   install: true
   auth:
-    ## These need to be set, for the sake of bitnami/postgresql upgrade patterns.
-    ## They are overridden by use of `existingSecret`
     username: "gitlab"
-    #password: bogus-satisfy-upgrade
-    #postgresPassword: bogus-satisfy-upgrade
     database: '{{ include "postgresql.database" . }}'
     ##
     usePasswordFiles: false
