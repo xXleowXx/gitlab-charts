@@ -3,7 +3,7 @@ require 'helm_template_helper'
 require 'yaml'
 require 'hash_deep_merge'
 
-describe 'ClickHouse configuration' do
+describe 'Session store configuration' do
   let(:charts) do
     {
       'webservice' => {
@@ -21,22 +21,47 @@ describe 'ClickHouse configuration' do
     }
   end
 
-  let(:values) do
-    HelmTemplate.with_defaults(%(
+  context 'with default values' do
+    let(:values) do
+      HelmTemplate.with_defaults(%(
         global:
           rails:
             session_store:
               session_cookie_token_prefix: ''
     ))
+    end
+
+    it 'generates the session_store.yml file with default values', :aggregate_failures do
+      expect(template.exit_code).to eq(0)
+      charts.each_key do |chart|
+        session_store_erb = template.dig("ConfigMap/test-#{chart}", 'data', 'session_store.yml.erb')
+        session_store_config = YAML.safe_load(session_store_erb)['production']
+        expect(session_store_config).to eq({"session_cookie_token_prefix" => ""})
+      end
+    end
   end
 
-  let(:template) { HelmTemplate.new(values) }
+  context 'with custom session_store configuration' do
+    let(:values) do
+      HelmTemplate.with_defaults(
+        %(
+          global:
+            rails:
+              session_store:
+                session_cookie_token_prefix: 'custom_prefix_'
+        )
+      )
+    end
 
-  it 'generates the session_store.yml file with default values', :aggregate_failures do
-    expect(template.exit_code).to eq(0)
-    charts.each_key do |chart|
-      session_store_erb = template.dig("ConfigMap/test-#{chart}", 'data', 'sessoin_store.yml.erb')
-      expect(session_store_erb).to be_nil
+    let(:template) { HelmTemplate.new(values) }
+
+    it 'generates the session_store.yml file with default values', :aggregate_failures do
+      expect(template.exit_code).to eq(0)
+      charts.each_key do |chart|
+        session_store_erb = template.dig("ConfigMap/test-#{chart}", 'data', 'session_store.yml.erb')
+        session_store_config = YAML.safe_load(session_store_erb)['production']
+        expect(session_store_config).to eq({"session_cookie_token_prefix" => "custom_prefix_"})
+      end
     end
   end
 end
