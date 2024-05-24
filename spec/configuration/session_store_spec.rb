@@ -36,7 +36,7 @@ describe 'Session store configuration' do
       charts.each_key do |chart|
         session_store_erb = template.dig("ConfigMap/test-#{chart}", 'data', 'session_store.yml.erb')
         session_store_config = YAML.safe_load(session_store_erb)['production']
-        expect(session_store_config).to eq({"session_cookie_token_prefix" => ""})
+        expect(session_store_config).to eq({ "session_cookie_token_prefix" => "" })
       end
     end
   end
@@ -60,7 +60,7 @@ describe 'Session store configuration' do
       charts.each_key do |chart|
         session_store_erb = template.dig("ConfigMap/test-#{chart}", 'data', 'session_store.yml.erb')
         session_store_config = YAML.safe_load(session_store_erb)['production']
-        expect(session_store_config).to eq({"session_cookie_token_prefix" => "custom_prefix_"})
+        expect(session_store_config).to eq({ "session_cookie_token_prefix" => "custom_prefix_" })
       end
     end
   end
