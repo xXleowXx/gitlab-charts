@@ -543,6 +543,10 @@ securityContext:
 {{-   if not (empty $psc.fsGroupChangePolicy) }}
   fsGroupChangePolicy: {{ $psc.fsGroupChangePolicy }}
 {{-   end }}
+{{-   if $psc.seccompProfile }}
+  seccompProfile:
+    {{- toYaml $psc.seccompProfile | nindent 4 }}
+{{- end }}
 {{- end }}
 {{- end -}}
 
