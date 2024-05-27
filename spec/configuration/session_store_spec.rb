@@ -21,6 +21,8 @@ describe 'Session store configuration' do
     }
   end
 
+  let(:template) { HelmTemplate.new(values) }
+
   context 'with default values' do
     let(:values) do
       HelmTemplate.with_defaults(%(
@@ -52,8 +54,6 @@ describe 'Session store configuration' do
         )
       )
     end
-
-    let(:template) { HelmTemplate.new(values) }
 
     it 'generates the session_store.yml file with default values', :aggregate_failures do
       expect(template.exit_code).to eq(0)
