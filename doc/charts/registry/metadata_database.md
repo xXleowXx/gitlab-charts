@@ -365,7 +365,7 @@ causes that step to take more time.
 This step requires the registry to be set in `read-only` mode.
 Allow enough time for downtime during this process.
 
-1. Set the registry to `read-only` mode, and enable the database
+1. Set the registry to `read-only` mode
    in your `values.yml` file:
 
    ```yaml
@@ -376,21 +376,21 @@ Allow enough time for downtime during this process.
        readonly:
          enabled: true   # must be true!
      database:
-         configure: true
-         enabled: false  # must be false!
-         name: registry  # must match the database name you created above
-         user: registry  # must match the database username you created above
-         password:
-           secret: gitlab-registry-database-password  # must match the secret name
-           key: password  # must match the secret key to read the password from
-         sslmode: verify-full
-         ssl:
-           secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
-           clientKey: client-key.pem
-           clientCertificate: client-cert.pem
-           serverCA: server-ca.pem
-         migrations:
-           enabled: true  # this option will execute the schema migration as part of the registry deployment
+       configure: true
+       enabled: false  # must be false!
+       name: registry  # must match the database name you created above
+       user: registry  # must match the database username you created above
+       password:
+         secret: gitlab-registry-database-password  # must match the secret name
+         key: password  # must match the secret key to read the password from
+       sslmode: verify-full
+       ssl:
+         secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
+         clientKey: client-key.pem
+         clientCertificate: client-cert.pem
+         serverCA: server-ca.pem
+       migrations:
+         enabled: true  # this option will execute the schema migration as part of the registry deployment
    ```
 
 1. Save the file and upgrade your Helm installation to apply changes in your deployment:
@@ -423,21 +423,21 @@ Allow enough time for downtime during this process.
        readonly:
          enabled: false
      database:
-         configure: true
-         enabled: true   # must be true!
-         name: registry  # must match the database name you created above
-         user: registry  # must match the database username you created above
-         password:
-           secret: gitlab-registry-database-password  # must match the secret name
-           key: password  # must match the secret key to read the password from
-         sslmode: verify-full
-         ssl:
-           secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
-           clientKey: client-key.pem
-           clientCertificate: client-cert.pem
-           serverCA: server-ca.pem
-         migrations:
-           enabled: true  # this option will execute the schema migration as part of the registry deployment
+       configure: true
+       enabled: true   # must be true!
+       name: registry  # must match the database name you created above
+       user: registry  # must match the database username you created above
+       password:
+         secret: gitlab-registry-database-password  # must match the secret name
+         key: password  # must match the secret key to read the password from
+       sslmode: verify-full
+       ssl:
+         secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
+         clientKey: client-key.pem
+         clientCertificate: client-cert.pem
+         serverCA: server-ca.pem
+       migrations:
+         enabled: true  # this option will execute the schema migration as part of the registry deployment
    ```
 
 1. Save the file and upgrade your Helm installation to apply changes in your deployment:
