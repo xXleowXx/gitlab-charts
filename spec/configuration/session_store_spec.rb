@@ -23,6 +23,21 @@ describe 'Session store configuration' do
 
   let(:template) { HelmTemplate.new(values) }
 
+  context 'with no set values' do
+    let(:values) do
+      HelmTemplate.with_defaults({})
+    end
+
+    it 'generates the session_store.yml file with default values', :aggregate_failures do
+      expect(template.exit_code).to eq(0)
+      charts.each_key do |chart|
+        session_store_erb = template.dig("ConfigMap/test-#{chart}", 'data', 'session_store.yml.erb')
+        session_store_config = YAML.safe_load(session_store_erb)['production']
+        expect(session_store_config).to eq({ "session_cookie_token_prefix" => "" })
+      end
+    end
+  end
+
   context 'with default values' do
     let(:values) do
       HelmTemplate.with_defaults(%(
@@ -33,7 +48,7 @@ describe 'Session store configuration' do
     ))
     end
 
-    it 'generates the session_store.yml file with default values', :aggregate_failures do
+    it 'generates the session_store.yml file with the set default values', :aggregate_failures do
       expect(template.exit_code).to eq(0)
       charts.each_key do |chart|
         session_store_erb = template.dig("ConfigMap/test-#{chart}", 'data', 'session_store.yml.erb')
