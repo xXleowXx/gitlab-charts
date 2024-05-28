@@ -496,17 +496,15 @@ describe 'Gitaly configuration' do
       )).merge(default_values)
     end
 
+    let(:gitaly_stateful_set) { 'StatefulSet/test-gitaly' }
     shared_examples 'extraEnv sets gomemlimit' do
       it 'takes precedence' do
         t = HelmTemplate.new(values)
         gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
         gitaly_container_env = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['env']
-        expect(gitaly_container_env).to have_key('GOMEMLIMIT')
-        expect(gitaly_container_env['GOMEMLIMIT']).to eq(resources_limits_memory)
+        expect(gitaly_container_env).to include('name' => 'GOMEMLIMIT', 'value' => resources_limits_memory)
       end
     end
-
-    let(:gitaly_stateful_set) { 'StatefulSet/test-gitaly' }
 
     context 'when enabled' do
       let(:gomemlimit_enabled) { 'true' }
@@ -517,8 +515,13 @@ describe 'Gitaly configuration' do
         t = HelmTemplate.new(values)
         gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
         gitaly_container_env = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['env']
-        expect(gitaly_container_env).to have_key('GOMEMLIMIT')
-        expect(gitaly_container_env['GOMEMLIMIT']).to eq(resources_limits_memory)
+        expect(gitaly_container_env).to include('name' => 'GOMEMLIMIT', 'value' => resources_limits_memory)
+      end
+
+      context 'when gomemlimit is set in extraEnv' do
+        let(:extra_env_gomemlimit) { '200Mi' }
+        let(:extra_environment) { ["GOMEMLIMIT=#{extra_env_gomemlimit}"] }
+        it_behaves_like 'extraEnv sets gomemlimit'
       end
     end
 
@@ -531,21 +534,12 @@ describe 'Gitaly configuration' do
         t = HelmTemplate.new(values)
         gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
         gitaly_container_env = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['env']
-        expect(gitaly_container_env).not_to have_key('GOMEMLIMIT')
+        expect(gitaly_container_env.map { |env| env['name'] }).not_to include('GOMEMLIMIT')
       end
-    end
 
-    context 'when gomemlimit is set in extraEnv' do
-      let(:extra_env_gomemlimit) { '200Mi' }
-      let(:resources_limits_memory) { '' }
-      let(:extra_environment) { ["GOMEMLIMIT=#{extra_env_gomemlimit}"] }
-
-      context 'when gomemlimit is enabled' do
-        let(:gomemlimit_enabled) { 'true' }
-        it_behaves_like 'extraEnv sets gomemlimit'
-      end
-      context 'when gomemlimit is disabled' do
-        let(:gomemlimit_enabled) { 'false' }
+      context 'when gomemlimit is set in extraEnv' do
+        let(:extra_env_gomemlimit) { '200Mi' }
+        let(:extra_environment) { ["GOMEMLIMIT=#{extra_env_gomemlimit}"] }
         it_behaves_like 'extraEnv sets gomemlimit'
       end
     end
