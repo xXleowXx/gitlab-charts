@@ -16,6 +16,12 @@ global:
 
 gitaly: {}
 # serviceName:
+cgroups: 
+  enabled: false
+  initContainer: {}
+  mountpoint: ""
+  hierarchyRoot: gitaly
+  repositories: {}
 
 internal: {}
 image:
