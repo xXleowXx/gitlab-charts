@@ -520,6 +520,12 @@ describe 'Gitaly configuration' do
         expect(gitaly_container_env).to have_key('GOMEMLIMIT')
         expect(gitaly_container_env['GOMEMLIMIT']).to eq(resources_limits_memory)
       end
+
+      context 'when gomemlimit is set in extraEnv' do
+        let(:extra_env_gomemlimit) { '200Mi' }
+        let(:extra_environment) { ["GOMEMLIMIT=#{extra_env_gomemlimit}"] }
+        it_behaves_like 'extraEnv sets gomemlimit'
+      end
     end
 
     context 'when not enabled' do
@@ -533,19 +539,10 @@ describe 'Gitaly configuration' do
         gitaly_container_env = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['env']
         expect(gitaly_container_env).not_to have_key('GOMEMLIMIT')
       end
-    end
 
-    context 'when gomemlimit is set in extraEnv' do
-      let(:extra_env_gomemlimit) { '200Mi' }
-      let(:resources_limits_memory) { '' }
-      let(:extra_environment) { ["GOMEMLIMIT=#{extra_env_gomemlimit}"] }
-
-      context 'when gomemlimit is enabled' do
-        let(:gomemlimit_enabled) { 'true' }
-        it_behaves_like 'extraEnv sets gomemlimit'
-      end
-      context 'when gomemlimit is disabled' do
-        let(:gomemlimit_enabled) { 'false' }
+      context 'when gomemlimit is set in extraEnv' do
+        let(:extra_env_gomemlimit) { '200Mi' }
+        let(:extra_environment) { ["GOMEMLIMIT=#{extra_env_gomemlimit}"] }
         it_behaves_like 'extraEnv sets gomemlimit'
       end
     end
