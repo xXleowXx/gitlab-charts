@@ -481,4 +481,62 @@ describe 'Gitaly configuration' do
       )
     end
   end
+
+  context 'gomemlimit' do
+    let(:values) do
+      YAML.safe_load(%(
+        gitlab:
+          gitaly:
+            resources:
+              limits:
+                memory: #{resources_limits_memory}
+            gomemlimit:
+              enabled: #{gomemlimit_enabled}
+            extraEnv: #{extra_environment}
+      )).merge(default_values)
+    end
+
+    t = HelmTemplate.new(values)
+    let(:gitaly_stateful_set) { 'StatefulSet/test-gitaly' }
+    gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
+    gitaly_container_env = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['env']
+
+    shared_examples 'extraEnv sets gomemlimit' do
+      it 'takes precedence' do
+        expect(gitaly_container_env).to have_key('GOMEMLIMIT')
+        expect(gitaly_container_env['GOMEMLIMIT']).to eq(resources_limits_memory)
+      end
+    end
+
+    context 'when enabled' do
+      let(:gomemlimit_enabled) { 'true' }
+      let(:resources_limits_memory) { '100Mi' }
+      let(:extra_environment) { [] }
+
+      it 'sets the env var GOMEMLIMIT' do
+        expect(gitaly_container_env).to have_key('GOMEMLIMIT')
+        expect(gitaly_container_env['GOMEMLIMIT']).to eq(resources_limits_memory)
+      end
+
+      it 'will populate env var if it is still set in extraEnv' do
+        let(:extra_env_gomemlimit) { '200Mi' }
+        let(:extra_environment) { ["GOMEMLIMIT=#{extra_env_gomemlimit}"] }
+        it_behaves_like 'extraEnv sets gomemlimit'
+      end
+    end
+
+    context 'when not enabled' do
+      let(:gomemlimit_enabled) { 'false' }
+
+      it 'does not set the env var GOMEMLIMIT' do
+        expect(gitaly_container_env).not_to have_key('GOMEMLIMIT')
+      end
+
+      it 'will populate env var if it is still set in extraEnv' do
+        let(:extra_env_gomemlimit) { '200Mi' }
+        let(:extra_environment) { ["GOMEMLIMIT=#{extra_env_gomemlimit}"] }
+        it_behaves_like 'extraEnv sets gomemlimit'
+      end
+    end
+  end
 end

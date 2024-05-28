@@ -131,13 +131,12 @@ spec:
               value: '/etc/gitaly/config.toml'
             - name: SSL_CERT_DIR
               value: '/etc/ssl/certs'
-            {{- if and (not .Values.gomemlimitDisabled) (not .Values.gomemlimit) }}
-              {{- if (((.Values.resources).limits).memory) }}
+            {{- if and (.Values.gomemlimit.enabled) (((.Values.resources).limits).memory) }}
             - name: GOMEMLIMIT
               valueFrom:
                 resourceFieldRef:
+                  containerName: {{ .Chart.Name }}
                   resource: limits.memory
-              {{- end }}
             {{- end }}
             {{- include "gitlab.tracing.env" . | nindent 12 }}
             {{- include "gitlab.extraEnv" . | nindent 12 }}
