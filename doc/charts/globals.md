@@ -1768,7 +1768,7 @@ global:
 | `enabled`        | Boolean | `false`  | Enable or Disable the integration |
 | `dsn`            | String  |        | Sentry DSN for backend errors |
 | `clientside_dsn` | String  |        | Sentry DSN for front-end errors |
-| `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/product/sentry-basics/concepts/environments/) |
+| `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/concepts/key-terms/environments/) |
 
 ### `gitlab_docs` settings
 
