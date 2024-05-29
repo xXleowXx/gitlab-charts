@@ -188,5 +188,6 @@ gpgSigning: {}
 backup: {}
   # goCloudUrl:
 
+# default enable gomemlimit to avoid gc related OOM errors
 gomemlimit:
-  enabled: true ## default enable gomemlimit to avoid gc related oom errors
+  enabled: true
