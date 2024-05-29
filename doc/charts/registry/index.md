@@ -210,7 +210,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `priorityClassName`                         |                                                                      | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods. |
 | `reporting.sentry.enabled`                  | `false`                                                              | Enable reporting using Sentry |
 | `reporting.sentry.dsn`                      |                                                                      | The Sentry DSN (Data Source Name) |
-| `reporting.sentry.environment`              |                                                                      | The Sentry [environment](https://docs.sentry.io/product/sentry-basics/concepts/environments/) |
+| `reporting.sentry.environment`              |                                                                      | The Sentry [environment](https://docs.sentry.io/concepts/key-terms/environments/) |
 | `profiling.stackdriver.enabled`             | `false`                                                              | Enable continuous profiling using Stackdriver |
 | `profiling.stackdriver.credentials.secret`  | `gitlab-registry-profiling-creds`                                    | Name of the secret containing credentials |
 | `profiling.stackdriver.credentials.key`     | `credentials`                                                        | Secret key in which the credentials are stored |
