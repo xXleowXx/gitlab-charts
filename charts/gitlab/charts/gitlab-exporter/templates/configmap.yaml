@@ -53,6 +53,8 @@ data:
           redis_url: {{ template "gitlab.redis.url" . }}
           redis_enable_client: false
           probe_non_namespaced: true
+          redis_sentinels:
+            {{- include "gitlab.redis.sentinelsList" . | nindent 12 }}
 
       ruby: &ruby
         methods:
