@@ -390,8 +390,8 @@ as well as commits created by GitLab, such as merge commits and squashes.
 
 ### Server-side backups
 
-The chart supports [Gitaly server-side backup](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-server-side-backups).
-In order to use it:
+The chart supports [Gitaly server-side backups](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configure-server-side-backups).
+To use them:
 
 1. Create a bucket to store the backups.
 1. Configure the object store credentials and the storage URL.
