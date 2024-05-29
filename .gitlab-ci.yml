@@ -24,7 +24,7 @@
 # Note: Auto CI does not work with multiple buildpacks yet
 
 default:
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images/debian-bookworm-slim-ruby-3.2:kubectl-1.30-helm-3.10-helm_kubeconform-0.1.17-vcluster-0.19-awscli-1.32.93
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images/debian-${DEBIAN_VERSION}-slim-ruby-${RUBY_VERSION}:kubectl-1.30-helm-3.10-helm_kubeconform-0.1.17-vcluster-0.19-awscli-1.32.93
 
 variables:
   AUTO_DEPLOY_TAG_REGEX: '^[0-9]+\.[0-9]+\.[0-9]+\+[a-z0-9]{7,}$'
@@ -47,8 +47,8 @@ variables:
   DEV_PROJECT_PATH: 'gitlab/charts/gitlab'
   QA_FULL_SUITE_OPTIONS: '--tag ~smoke --tag ~blocking --tag ~skip_live_env --tag ~orchestrated --tag ~transient'
   QA_SANITY_SUITE_OPTIONS: '--tag smoke --tag blocking --tag ~skip_live_env --tag ~orchestrated'
-  DEBIAN_VERSION: bullseye
-  RUBY_VERSION: "3.0"
+  DEBIAN_VERSION: bookworm
+  RUBY_VERSION: "3.1.5"
   CI_TOOLS_VERSION: "4.22.0"
   GITLAB_QA_VERSION: "14.10.0"
   # STRICT_VERSIONS is used in RSpecs to ensure exact version match for tools like "helm" and "kubectl"
@@ -580,7 +580,7 @@ review-docs-cleanup:
 # ---------------------------------------------------------------------------
 
 .specs: &specs
-  image: registry.gitlab.com/gitlab-org/gitlab-build-images/debian-${DEBIAN_VERSION}-ruby-3.1.patched-golang-1.21-rust-1.73-node-18.17-postgresql-14:rubygems-3.4-git-2.36-lfs-2.9-chrome-120-yarn-1.22-graphicsmagick-1.3.36
+  image: registry.gitlab.com/gitlab-org/gitlab-build-images/debian-${DEBIAN_VERSION}-ruby-${RUBY_VERSION}-golang-1.21-rust-1.73-node-20.12-postgresql-14:rubygems-3.4-git-2.36-lfs-2.9-chrome-123-yarn-1.22-graphicsmagick-1.3.36
   stage: specs
   services:
   - docker:${DOCKER_VERSION}-dind
