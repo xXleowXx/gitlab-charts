@@ -118,6 +118,7 @@ the `helm install` command using the `--set` flags.
 | `metrics.serviceMonitor.additionalLabels`        | `{}`                                              | Additional labels to add to the ServiceMonitor                                                                                                                                 |
 | `metrics.serviceMonitor.endpointConfig`          | `{}`                                              | Additional endpoint configuration for the ServiceMonitor                                                                                                                       |
 | `metrics.metricsPort`                            |                                                   | **DEPRECATED** Use `metrics.port`                                                                                                                                              |
+| `gomemlimit.enabled`                            | `true`                                             |This will automatically set the `GOMEMLIMIT` environment variable for the Gitaly container to `resources.limits.memory`, if that limit is also set. Users can override this value by setting this value false and setting `GOMEMLIMIT` in `extraEnv`. |
 
 ## Chart configuration examples
 
