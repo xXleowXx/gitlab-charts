@@ -72,15 +72,22 @@ Return the password section of the Redis URI, if needed.
 {{/*
 Build the structure describing sentinels
 */}}
+{{- define "gitlab.redis.sentinelsList" -}}
+{{- include "gitlab.redis.selectedMergedConfig" . -}}
+{{- if .redisMergedConfig.sentinels -}}
+{{- range $i, $entry := .redisMergedConfig.sentinels }}
+- host: {{ $entry.host }}
+  port: {{ default 26379 $entry.port }}
+{{- end }}
+{{- end -}}
+{{- end -}}
+
 {{- define "gitlab.redis.sentinels" -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
 {{- if .redisMergedConfig.sentinels -}}
 sentinels:
-{{- range $i, $entry := .redisMergedConfig.sentinels }}
-  - host: {{ $entry.host }}
-    port: {{ default 26379 $entry.port }}
+{{- include "gitlab.redis.sentinelsList" . | nindent 2 }}
 {{- end }}
-{{- end -}}
 {{- end -}}
 
 {{/*Set redisMergedConfig*/}}
