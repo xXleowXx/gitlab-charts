@@ -35,8 +35,8 @@ describe 'Session store configuration' do
       HelmTemplate.with_defaults(%(
         global:
           rails:
-            session_store:
-              session_cookie_token_prefix: ''
+            sessionStore:
+              sessionCookieTokenPrefix: ''
       ))
     end
 
@@ -48,8 +48,8 @@ describe 'Session store configuration' do
       HelmTemplate.with_defaults(%(
            global:
              rails:
-               session_store:
-                 session_cookie_token_prefix: 'custom_prefix_'
+               sessionStore:
+                 sessionCookieTokenPrefix: 'custom_prefix_'
       ))
     end
 

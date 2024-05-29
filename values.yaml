@@ -621,8 +621,8 @@ global:
   rails:
     bootsnap: # Enable / disable Shopify/Bootsnap cache
       enabled: true
-    session_store:
-      session_cookie_token_prefix: ""
+    sessionStore:
+      sessionCookieTokenPrefix: ""
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-registry-settings
   registry:
