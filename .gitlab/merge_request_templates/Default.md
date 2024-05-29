@@ -23,9 +23,9 @@ For anything in this list which will not be completed, please provide a reason i
 - [ ] Tests added/updated, and test plan for scenarios not covered by automated tests.
 - [ ] Equivalent MR/issue for [omnibus-gitlab](https://gitlab.com/gitlab-org/omnibus-gitlab) opened.
 
-## Reviewers
+## Reviewers checklist
 
 - [ ] MR has a green pipeline on https://gitlab.com/gitlab-org/charts/gitlab.
-- [ ] Consider downstream impact to the Operator, as per see [evaluating impact from changes to GitLab Chart](https://docs.gitlab.com/operator/developer/charts_dependency).
+- [ ] Consider downstream impact to the Operator, as per [evaluating impact from changes to GitLab Chart](https://docs.gitlab.com/operator/developer/charts_dependency).
 
 <!-- template sourced from https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/.gitlab/merge_request_templates/Default.md -->
