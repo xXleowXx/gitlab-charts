@@ -400,7 +400,7 @@ To use them:
    gitlab:
      gitaly:
        extraEnvFrom:
-          # Mount secret from existing rails secret.
+          # TODO(user): Mount the exisitign object store secret to the expected environment variables. Change this.
           AWS_ACCESS_KEY_ID:
             secretKeyRef:
               name: gitlab-rails-storage
