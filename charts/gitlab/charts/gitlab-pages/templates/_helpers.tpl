@@ -39,8 +39,7 @@ affinity:
         - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
           labelSelector:
             matchLabels:
-              app: {{ template "name" . }}
-              release: {{ .Release.Name }}
+              {{- include "gitlab.selectorLabels" . | nindent 18 }}
   {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -49,8 +48,7 @@ affinity:
             topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
             labelSelector:
               matchLabels:
-                app: {{ template "name" . }}
-                release: {{ .Release.Name }}
+                {{- include "gitlab.selectorLabels" . | nindent 18 }}
   {{- end -}}
   {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "hard" }}
     nodeAffinity:
