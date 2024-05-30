@@ -740,12 +740,18 @@ notifications:
     - name: FooListener
       url: https://foolistener.com/event
       timeout: 500ms
+      # DEPRECATED: use `maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.
+      # When using `maxretries`, `threshold` is ignored: https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md?ref_type=heads#endpoints
       threshold: 10
+      maxretries: 10
       backoff: 1s
     - name: BarListener
       url: https://barlistener.com/event
       timeout: 100ms
+      # DEPRECATED: use `maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.
+      # When using `maxretries`, `threshold` is ignored: https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md?ref_type=heads#endpoints
       threshold: 3
+      maxretries: 5
       backoff: 1s
   events:
     includereferences: true
