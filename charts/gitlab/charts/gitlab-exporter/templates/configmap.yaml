@@ -57,6 +57,7 @@ data:
           {{- if $sentinels }}
           redis_sentinels:
             {{- $sentinels | nindent 12 }}
+          redis_sentinel_password: "{{ include "gitlab.redis.sentinel.password" . }}"
           {{- end }}
 
       ruby: &ruby

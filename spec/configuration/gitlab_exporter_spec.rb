@@ -107,6 +107,69 @@ describe 'gitlab-exporter configuration' do
           { 'host' => 'sentinel2.example.com', 'port' => 26379 }
         ])
     end
+
+    context 'with Sentinel password as string' do
+      let(:sentinel_password) { 'my-sentinel-pass' }
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            redis:
+              host: global.host
+              sentinels:
+              - host: sentinel1.example.com
+                port: 26379
+              - host: sentinel2.example.com
+                port: 26379
+              sentinelPassword: #{sentinel_password}
+        )).deep_merge(default_values)
+      end
+
+      it 'configures Sentinels with password' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+        expect(sidekiq_config['opts']['redis_url']).to eq("redis://:#{password}@global.host:6379")
+        expect(sidekiq_config['opts']['redis_sentinels']).to eq(
+          [
+            { 'host' => 'sentinel1.example.com', 'port' => 26379, 'password' => sentinel_password },
+            { 'host' => 'sentinel2.example.com', 'port' => 26379, 'password' => sentinel_password }
+          ])
+      end
+    end
+
+    context 'with Sentinel password as secret' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            redis:
+              host: global.host
+              sentinels:
+              - host: sentinel1.example.com
+                port: 26379
+              - host: sentinel2.example.com
+                port: 26379
+              sentinelPassword:
+                enabled: true
+                secret: test-redis-sentinel-secret
+                key: password
+        )).deep_merge(default_values)
+      end
+
+      let(:volumes) { template.dig('Deployment/test-gitlab-exporter', 'spec', 'template', 'spec', 'volumes') }
+      let(:secret_volumes) { volumes.find { |volume| volume['name'] == 'init-gitlab-exporter-secrets' } }
+      let(:secret_names) { secret_volumes.dig('projected', 'sources').map { |source| source['secret'] }.map { |secret| secret['name'] } }
+
+      it 'configures Sentinels with password' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+        expect(sidekiq_config['opts']['redis_url']).to eq("redis://:#{password}@global.host:6379")
+        expect(sidekiq_config['opts']['redis_sentinel_password']).to eq(RuntimeTemplate::JUNK_PASSWORD)
+        expect(sidekiq_config['opts']['redis_sentinels']).to eq(
+          [
+            { 'host' => 'sentinel1.example.com', 'port' => 26379 },
+            { 'host' => 'sentinel2.example.com', 'port' => 26379 }
+          ])
+
+        expect(secret_names).to include('test-redis-sentinel-secret')
+      end
+    end
   end
 
   context 'When customer enables TLS' do

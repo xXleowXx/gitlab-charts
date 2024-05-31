@@ -70,6 +70,15 @@ Return the password section of the Redis URI, if needed.
 {{- end -}}
 
 {{/*
+Return the Sentinel password, if available.
+*/}}
+{{- define "gitlab.redis.sentinel.password" -}}
+{{- include "gitlab.redis.configMerge" . -}}
+{{- $password := printf "%s-%ssentinel-password" (default "redis" .redisConfigName) (ternary "override-" "" (default false .usingOverride)) -}}
+{{- if .redisMergedConfig.sentinelPassword.enabled -}}<%= File.read("/etc/gitlab/redis-sentinel/{{ $password }}").strip %>{{- end -}}
+{{- end -}}
+
+{{/*
 Build the structure describing sentinels
 */}}
 {{- define "gitlab.redis.sentinelsList" -}}
@@ -99,12 +108,22 @@ sentinels:
 {{- end -}}
 {{-   if not (kindIs "map" (get $.redisMergedConfig "password")) -}}
 {{-     $_ := set $.redisMergedConfig "password" $.Values.global.redis.auth -}}
-{{-   end -}}
-{{- range $key := keys $.Values.global.redis.auth -}}
-{{-   if not (hasKey $.redisMergedConfig.password $key) -}}
-{{-     $_ := set $.redisMergedConfig.password $key (index $.Values.global.redis.auth $key) -}}
+{{-   else -}}
+{{-    range $key := keys $.Values.global.redis.auth -}}
+{{-      if not (hasKey $.redisMergedConfig.password $key) -}}
+{{-        $_ := set $.redisMergedConfig.password $key (index $.Values.global.redis.auth $key) -}}
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
+{{-   if not (kindIs "map" (get $.redisMergedConfig "sentinelPassword")) -}}
+{{-     $_ := set $.redisMergedConfig "sentinelPassword" $.Values.global.redis.sentinelPassword -}}
+{{-   else -}}
+{{-     range $key := keys $.Values.global.redis.sentinelPassword -}}
+{{-       if not (hasKey $.redisMergedConfig.sentinelPassword $key) -}}
+{{-         $_ := set $.redisMergedConfig.sentinelPassword $key (index $.Values.global.redis.sentinelPassword $key) -}}
+{{-       end -}}
+{{-     end -}}
+{{-   end -}}
 {{- end -}}
 
 {{/*
@@ -174,3 +193,38 @@ instances.
 {{- end }}
 {{- end -}}
 
+{{/*
+Takes a dict with `globalContext` and `instances` as keys. The former specifies
+the root context `$`, and the latter a list of instances to mount secrets for.
+If instances is not specified, we mount secrets for all enabled Redis
+instances.
+*/}}
+{{- define "gitlab.redisSentinel.secrets" -}}
+{{- $ := .globalContext }}
+{{- $mountRedisYmlOverrideSecrets := true }}
+{{- if hasKey . "mountRedisYmlOverrideSecrets" }}
+{{- $mountRedisYmlOverrideSecrets = .mountRedisYmlOverrideSecrets }}
+{{- end }}
+{{- $redisInstances := list "cache" "clusterCache" "sharedState" "queues" "actioncable" "traceChunks" "rateLimiting" "clusterRateLimiting" "sessions" "repositoryCache" "workhorse" }}
+{{- if .instances }}
+{{- $redisInstances = splitList " " .instances }}
+{{- end }}
+{{- range $redis := $redisInstances -}}
+{{-   if index $.Values.global.redis $redis -}}
+{{-     $_ := set $ "redisConfigName" $redis }}
+{{      include "gitlab.redisSentinel.secret" $ }}
+{{-   end }}
+{{- end -}}
+{{- end -}}
+
+{{- define "gitlab.redisSentinel.secret" -}}
+{{- include "gitlab.redis.configMerge" . -}}
+{{- if .redisMergedConfig.sentinelPassword.enabled }}
+{{-   $passwordPath := printf "%s-%ssentinel-password" (default "redis" .redisConfigName) (ternary "override-" "" (default false .usingOverride)) -}}
+- secret:
+    name: {{ template "gitlab.redis.sentinelPassword.secret" . }}
+    items:
+      - key: {{ template "gitlab.redis.sentinelPassword.key" . }}
+        path: redis-sentinel/{{ $passwordPath }}
+{{- end }}
+{{- end -}}
