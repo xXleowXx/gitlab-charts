@@ -132,22 +132,20 @@ and they will assist you with any issues you are having.
 
   # open rails console
   # rails console can be also called from other GitLab pods
-  /srv/gitlab/bin/rails console
+  gitlab-rails console
 
   # source-style commands should also work
-  cd /srv/gitlab && bundle exec rake gitlab:check RAILS_ENV=production
+  gitlab-rake gitlab:check RAILS_ENV=production
 
   # run GitLab check. The output can be confusing and invalid because of the specific structure of GitLab installed via helm chart
-  /usr/local/bin/gitlab-rake gitlab:check
+  gitlab-rake gitlab:check
 
   # open console without entering pod
-  kubectl exec -it <toolbox-pod-name> -- /srv/gitlab/bin/rails console
+  kubectl exec -it <toolbox-pod-name> -- gitlab-rails console
 
   # check the status of DB migrations
-  kubectl exec -it <toolbox-pod-name> -- /usr/local/bin/gitlab-rake db:migrate:status
+  kubectl exec -it <toolbox-pod-name> -- gitlab-rake db:migrate:status
   ```
-
-  You can also use `gitlab-rake`, instead of `/usr/local/bin/gitlab-rake`.
 
 - Troubleshooting **Infrastructure > Kubernetes clusters** integration:
 
@@ -168,7 +166,7 @@ and they will assist you with any issues you are having.
 - How to connect to a GitLab PostgreSQL database.
 
   ```shell
-  kubectl exec -it <toolbox-pod-name> -- /srv/gitlab/bin/rails dbconsole --include-password --database main
+  kubectl exec -it <toolbox-pod-name> -- gitlab-rails dbconsole --include-password --database main
   ```
 
 - How to get information about Helm installation status:
