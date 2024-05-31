@@ -16,6 +16,25 @@ global:
 
 gitaly: {}
 # serviceName:
+cgroups: 
+  enabled: false
+  initContainer: 
+    image: 
+      repository: registry.gitlab.com/gitlab-org/build/cng/gitaly-init-cgroups
+      # Default tag is `global.gitlabVersion` or `master` if the former one is undefined.
+      # tag: master
+      pullPolicy: IfNotPresent
+      # pullSecrets: []
+    containerSecurityContext: 
+      runAsUser: 0
+      fsGroup: 0 
+    resources: 
+      requests:
+        cpu: 100m
+        memory: 128Mi
+  mountpoint: /etc/gitlab-secrets/gitaly-pod-cgroup
+  hierarchyRoot: gitaly
+  repositories: {}
 
 internal: {}
 image:
@@ -44,7 +63,7 @@ init:
 tolerations: []
 
 ## The Gitaly StatefulSet's priorityClassName
-# priorityClassName:
+#priorityClassName:
 
 logging:
   format: "json"
