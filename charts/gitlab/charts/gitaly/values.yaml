@@ -17,9 +17,15 @@ global:
 gitaly: {}
 # serviceName:
 cgroups: 
-  enabled: false
-  initContainer: {}
-  mountpoint: ""
+  enabled: true
+  initContainer: 
+    image: 
+      repository: registry.gitlab.com/gitlab-org/build/cng/gitaly-init-cgroups
+      # Default tag is `global.gitlabVersion` or `master` if the former one is undefined.
+      # tag: master
+      pullPolicy: IfNotPresent
+    # resources: {}
+  mountpoint: /etc/gitlab-secrets/gitaly-pod-cgroup
   hierarchyRoot: gitaly
   repositories: {}
 
