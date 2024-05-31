@@ -33,22 +33,33 @@ Build a dict of redis configuration
 {{-     end -}}
 {{-   end -}}
 
+{{/*
+Build a dict of Redis Sentinel configuration
+
+- redisYmlOverride is used by GitLab Rails, which uses the redis-rb gem (https://github.com/redis/redis-rb).
+- The code below maps `sentinel_password` to the `sentinelAuth` structure.
+- redis-rb v5 specifies `sentinel_password` and `sentinel_username` as parameters.
+- Note that both redis-rb v4 and v5 can pass `password` and `username` as parameters in the Sentinel host list as well.
+- We use `global.redis.sentinelAuth` to be consistent with `global.redis.auth`.
+- Currently GitLab doesn't support Redis usernames, but this will likely be needed in the future.
+  This could be done by introducing `global.redis.sentinelAuth.usernameKey` and `sentinel_username` in redisYmlOverride.
+*/}}
 {{-   $hasOverrideSentinelSecret := false -}}
 {{-   if and $.Values.global.redis.redisYmlOverride $.redisConfigName -}}
 {{-     $hasOverrideSentinelSecret = (kindIs "map" (dig $.redisConfigName "sentinel_password" "" $.Values.global.redis.redisYmlOverride)) -}}
 {{-   end -}}
 {{-   if and $hasOverrideSentinelSecret $.usingOverride -}}
-{{-     $_ := set $.redisMergedConfig "sentinelPassword" (get (index $.Values.global.redis.redisYmlOverride $.redisConfigName) "sentinel_password") -}}
-{{-   else if kindIs "map" (get (index $.Values.global.redis $.redisConfigName) "sentinelPassword")  -}}
-{{-     $_ := set $.redisMergedConfig "sentinelPassword" (get (index $.Values.global.redis $.redisConfigName) "sentinelPassword") -}}
-{{-   else if (kindIs "map" (get $.Values.global.redis "sentinelPassword")) -}}
-{{-     $_ := set $.redisMergedConfig "sentinelPassword" (get $.Values.global.redis "sentinelPassword") -}}
+{{-     $_ := set $.redisMergedConfig "sentinelAuth" (get (index $.Values.global.redis.redisYmlOverride $.redisConfigName) "sentinel_password") -}}
+{{-   else if kindIs "map" (get (index $.Values.global.redis $.redisConfigName) "sentinelAuth")  -}}
+{{-     $_ := set $.redisMergedConfig "sentinelAuth" (get (index $.Values.global.redis $.redisConfigName) "sentinelAuth") -}}
+{{-   else if (kindIs "map" (get $.Values.global.redis "sentinelAuth")) -}}
+{{-     $_ := set $.redisMergedConfig "sentinelAuth" (get $.Values.global.redis "sentinelAuth") -}}
 {{-   else -}}
-{{-     $_ := set $.redisMergedConfig "sentinelPassword" $.Values.global.redis.auth -}}
+{{-     $_ := set $.redisMergedConfig "sentinelAuth" $.Values.global.redis.sentinelAuth -}}
 {{-   end -}}
-{{-   range $key := keys $.Values.global.redis.sentinelPassword -}}
-{{-     if not (hasKey $.redisMergedConfig.sentinelPassword $key) -}}
-{{-       $_ := set $.redisMergedConfig.sentinelPassword $key (index $.Values.global.redis.sentinelPassword $key) -}}
+{{-   range $key := keys $.Values.global.redis.sentinelAuth -}}
+{{-     if not (hasKey $.redisMergedConfig.sentinelAuth $key) -}}
+{{-       $_ := set $.redisMergedConfig.sentinelAuth $key (index $.Values.global.redis.sentinelAuth $key) -}}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
@@ -80,27 +91,27 @@ global.redis.auth.enabled
 {{- end -}}
 
 {{/*
-Return the redis sentinel password secret name
+Return the Redis Sentinel auth secret name
 */}}
-{{- define "gitlab.redis.sentinelPassword.secret" -}}
+{{- define "gitlab.redis.sentinelAuth.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- default (printf "%s-redis-sentinel-secret" .Release.Name) .redisMergedConfig.sentinelPassword.secret | quote -}}
+{{- default (printf "%s-redis-sentinel-secret" .Release.Name) .redisMergedConfig.sentinelAuth.secret | quote -}}
 {{- end -}}
 
 {{/*
-Return the redis password secret key
+Return the Redis Sentinel password secret key
 */}}
-{{- define "gitlab.redis.sentinelPassword.key" -}}
+{{- define "gitlab.redis.sentinelAuth.key" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- default "secret" .redisMergedConfig.sentinelPassword.key | quote -}}
+{{- default "secret" .redisMergedConfig.sentinelAuth.key | quote -}}
 {{- end -}}
 
 {{/*
-Return a merged setting between global.redis.sentinelPassword.enabled,
-global.redis.[subkey/"redisConfigName"].sentinelPassword.enabled, or
+Return a merged setting between global.redis.sentinelAuth.enabled,
+global.redis.[subkey/"redisConfigName"].sentinelAuth.enabled, or
 global.redis.auth.enabled
 */}}
-{{- define "gitlab.redis.sentinelPassword.enabled" -}}
+{{- define "gitlab.redis.sentinelAuth.enabled" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{ ternary "true" "" .redisMergedConfig.sentinelPassword.enabled }}
+{{ ternary "true" "" .redisMergedConfig.sentinelAuth.enabled }}
 {{- end -}}

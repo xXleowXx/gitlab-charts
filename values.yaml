@@ -173,10 +173,10 @@ global:
     # sentinels:
     #   - host:
     #     port:
-    # sentinelPassword:
-    #   enabled: true
-    #   secret: redis-sentinel-password
-    #   key: password
+    sentinelAuth:
+      enabled: false
+      # secret: redis-sentinel-auth
+      # key: password
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-gitaly-settings
   gitaly:

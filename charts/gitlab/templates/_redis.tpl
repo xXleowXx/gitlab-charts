@@ -75,7 +75,7 @@ Return the Sentinel password, if available.
 {{- define "gitlab.redis.sentinel.password" -}}
 {{- include "gitlab.redis.configMerge" . -}}
 {{- $password := printf "%s-%ssentinel-password" (default "redis" .redisConfigName) (ternary "override-" "" (default false .usingOverride)) -}}
-{{- if .redisMergedConfig.sentinelPassword.enabled -}}<%= File.read("/etc/gitlab/redis-sentinel/{{ $password }}").strip %>{{- end -}}
+{{- if .redisMergedConfig.sentinelAuth.enabled -}}<%= File.read("/etc/gitlab/redis-sentinel/{{ $password }}").strip %>{{- end -}}
 {{- end -}}
 
 {{/*
@@ -115,13 +115,10 @@ sentinels:
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
-{{-   if not (kindIs "map" (get $.redisMergedConfig "sentinelPassword")) -}}
-{{-     $_ := set $.redisMergedConfig "sentinelPassword" $.Values.global.redis.sentinelPassword -}}
-{{-   else -}}
-{{-     range $key := keys $.Values.global.redis.sentinelPassword -}}
-{{-       if not (hasKey $.redisMergedConfig.sentinelPassword $key) -}}
-{{-         $_ := set $.redisMergedConfig.sentinelPassword $key (index $.Values.global.redis.sentinelPassword $key) -}}
-{{-       end -}}
+{{/* Set redisMergedConfig.sentinelAuth. */}}
+{{-   range $key := keys $.Values.global.redis.sentinelAuth -}}
+{{-     if not (hasKey $.redisMergedConfig.sentinelAuth $key) -}}
+{{-       $_ := set $.redisMergedConfig.sentinelAuth $key (index $.Values.global.redis.sentinelAuth $key) -}}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
@@ -219,12 +216,12 @@ instances.
 
 {{- define "gitlab.redisSentinel.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- if .redisMergedConfig.sentinelPassword.enabled }}
+{{- if .redisMergedConfig.sentinelAuth.enabled }}
 {{-   $passwordPath := printf "%s-%ssentinel-password" (default "redis" .redisConfigName) (ternary "override-" "" (default false .usingOverride)) -}}
 - secret:
-    name: {{ template "gitlab.redis.sentinelPassword.secret" . }}
+    name: {{ template "gitlab.redis.sentinelAuth.secret" . }}
     items:
-      - key: {{ template "gitlab.redis.sentinelPassword.key" . }}
+      - key: {{ template "gitlab.redis.sentinelAuth.key" . }}
         path: redis-sentinel/{{ $passwordPath }}
 {{- end }}
 {{- end -}}

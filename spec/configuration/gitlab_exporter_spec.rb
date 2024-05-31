@@ -108,33 +108,6 @@ describe 'gitlab-exporter configuration' do
         ])
     end
 
-    context 'with Sentinel password as string' do
-      let(:sentinel_password) { 'my-sentinel-pass' }
-      let(:values) do
-        YAML.safe_load(%(
-          global:
-            redis:
-              host: global.host
-              sentinels:
-              - host: sentinel1.example.com
-                port: 26379
-              - host: sentinel2.example.com
-                port: 26379
-              sentinelPassword: #{sentinel_password}
-        )).deep_merge(default_values)
-      end
-
-      it 'configures Sentinels with password' do
-        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
-        expect(sidekiq_config['opts']['redis_url']).to eq("redis://:#{password}@global.host:6379")
-        expect(sidekiq_config['opts']['redis_sentinels']).to eq(
-          [
-            { 'host' => 'sentinel1.example.com', 'port' => 26379, 'password' => sentinel_password },
-            { 'host' => 'sentinel2.example.com', 'port' => 26379, 'password' => sentinel_password }
-          ])
-      end
-    end
-
     context 'with Sentinel password as secret' do
       let(:values) do
         YAML.safe_load(%(
@@ -146,7 +119,7 @@ describe 'gitlab-exporter configuration' do
                 port: 26379
               - host: sentinel2.example.com
                 port: 26379
-              sentinelPassword:
+              sentinelAuth:
                 enabled: true
                 secret: test-redis-sentinel-secret
                 key: password
