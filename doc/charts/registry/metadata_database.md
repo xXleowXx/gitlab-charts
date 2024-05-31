@@ -207,7 +207,6 @@ To migrate existing container registry to the metadata database in one step:
 
    ```yaml
    registry:
-     priorityClassName: system-node-critical
      enabled: true
      maintenance:
        readonly:
@@ -313,7 +312,6 @@ If you must halt the operation, you have to restart this step.
 
    ```yaml
    registry:
-     priorityClassName: system-node-critical
      enabled: true
      database:
        configure: true
@@ -370,7 +368,6 @@ Allow enough time for downtime during this process.
 
    ```yaml
    registry:
-     priorityClassName: system-node-critical
      enabled: true
      maintenance:
        readonly:
@@ -417,7 +414,6 @@ Allow enough time for downtime during this process.
 
    ```yaml
    registry:
-     priorityClassName: system-node-critical
      enabled: true
      maintenance:        # this section can be removed
        readonly:
