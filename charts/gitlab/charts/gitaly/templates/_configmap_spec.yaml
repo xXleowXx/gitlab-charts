@@ -175,28 +175,30 @@ data:
     {{- end }}
 
     {{- if .Values.cgroups.enabled }}
+
     [cgroups]
     {{-   with .Values.cgroups }}
-    {{-     if .mountpoint }}
-    mountpoint = {{ .mountpoint | quote }}
+    {{- if .mountpoint }}
+    mountpoint = {% file.Read "{{.mountpoint}}" | strings.TrimSpace %}
     {{-     end }}
     {{-     if .hierarchyRoot }}
     hierarchy_root = {{ .hierarchyRoot | quote }}
     {{-     end }}
-    {{-   if .repositories.count }}
+    {{-     if .repositories.count }}
     [cgroups.repositories]
-    {{-     if gt (.repositories.count | default 0) }}
-    count = {{ .repositories.count }}
-    {{-     end }}
-    {{-     if .repositories.memoryBytes }}
+    {{-       $repoCount := .repositories.count | default 0 }}
+    {{-       if gt $repoCount 0 }}
+    count = {{ $repoCount }}
+    {{-         if .repositories.memoryBytes }}
     memory_bytes = {{ .repositories.memoryBytes }}
-    {{-     end }}
-    {{-     if .repositories.cpuShares }}
+    {{-         end }}
+    {{-         if .repositories.cpuShares }}
     cpu_shares = {{ .repositories.cpuShares }}
-    {{-     end }}
-    {{-     if .repositories.cpuQuotaUs }}
+    {{-         end }}
+    {{-         if .repositories.cpuQuotaUs }}
     cpu_quota_us = {{ .repositories.cpuQuotaUs }}
+    {{-         end }}
+    {{-       end }}
     {{-     end }}
-    {{-   end }}
     {{-   end }}
     {{- end }}
