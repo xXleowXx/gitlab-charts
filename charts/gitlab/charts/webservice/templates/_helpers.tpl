@@ -278,6 +278,10 @@ Sentinel = [ {{ template "gitlab.redis.workhorse.sentinel-list" $ }} ]
 {{-   $passwordPath := printf "%s-password" (default "redis" .redisConfigName) }}
 Password = {% file.Read "/etc/gitlab/redis/{{ $passwordPath }}" | strings.TrimSpace | data.ToJSON %}
 {{- end }}
+{{- if .redisMergedConfig.sentinelAuth.enabled }}
+{{-   $passwordPath := printf "%s-sentinel-password" (default "redis" .redisConfigName) }}
+SentinelPassword = {% file.Read "/etc/gitlab/redis/{{ $passwordPath }}" | strings.TrimSpace | data.ToJSON %}
+{{- end }}
 {{- $_ := set . "redisConfigName" "" }}
 {{- end -}}
 
@@ -293,6 +297,11 @@ Return the bash setup commands for redis secrets.
 {{-   $passwordPath := printf "%s-password" (default "redis" .redisConfigName) -}}
 mkdir -p /init-secrets-workhorse/redis
 cp -v -r -L /init-config/redis/{{ $passwordPath }} /init-secrets-workhorse/redis/
+{{- end -}}
+{{- if .redisMergedConfig.sentinelAuth.enabled -}}
+{{-   $passwordPath := printf "%s-sentinel-password" (default "redis" .redisConfigName) -}}
+mkdir -p /init-secrets-workhorse/redis-sentinel
+cp -v -r -L /init-config/redis-sentinel/{{ $passwordPath }} /init-secrets-workhorse/redis-sentinel/
 {{- end -}}
 {{- $_ := set . "redisConfigName" "" }}
 {{- end -}}
