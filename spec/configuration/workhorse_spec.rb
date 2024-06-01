@@ -4,6 +4,7 @@ require 'helm_template_helper'
 require 'tomlrb'
 require 'yaml'
 require 'hash_deep_merge'
+require 'runtime_template_helper'
 
 describe 'Workhorse configuration' do
   let(:default_values) do
@@ -39,6 +40,16 @@ describe 'Workhorse configuration' do
 
       Tomlrb.parse(stdout)
     end
+  end
+
+  def render_erb(raw_template)
+    files = {
+      '/etc/gitlab/redis/workhorse-password' => workhorse_redis_password,
+      '/etc/gitlab/redis-sentinel/workhorse-sentinel-password' => workhorse_redis_sentinel_password
+    }
+
+    yaml = RuntimeTemplate.erb(raw_template: raw_template, files: files)
+    YAML.safe_load(yaml)
   end
 
   it 'renders a TOML configuration file' do
@@ -249,7 +260,13 @@ describe 'Workhorse configuration' do
         )).merge(default_values)
       end
 
+      let(:webservice_config) { template.dig('ConfigMap/test-webservice', 'data') }
+      let(:redis_workhorse_raw_yml) { webservice_config.dig('redis.workhorse.yml.erb') }
+      let(:redis_workhorse_yml) { render_erb(redis_workhorse_raw_yml) }
+
       it 'overrides global redis config' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+
         toml = render_toml(raw_toml)
 
         expect(toml.keys).to match_array(%w[shutdown_timeout listeners image_resizer redis])
@@ -324,8 +341,12 @@ describe 'Workhorse configuration' do
           expect(redis_config['Password']).to eq(workhorse_redis_password)
           expect(redis_config['SentinelPassword']).to eq(workhorse_redis_sentinel_password)
 
+          expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+
           expect(template.dig("ConfigMap/test-workhorse-default", "data", 'workhorse-config.toml.tpl')).to include('redis/workhorse-password')
           expect(template.dig('ConfigMap/test-workhorse-default', 'data', 'configure')).to include('init-config/redis/workhorse-password')
+
+          expect(redis_workhorse_yml['production']['sentinel_password']).to eq(workhorse_redis_sentinel_password)
         end
       end
     end
