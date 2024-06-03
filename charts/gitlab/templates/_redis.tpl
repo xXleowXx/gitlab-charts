@@ -74,7 +74,7 @@ Return the Sentinel password, if available.
 */}}
 {{- define "gitlab.redis.sentinel.password" -}}
 {{- include "gitlab.redis.configMerge" . -}}
-{{- $password := printf "%s-%ssentinel-password" (default "redis" .redisConfigName) (ternary "override-" "" (default false .usingOverride)) -}}
+{{- $password := printf "%s-sentinel-password" (default "redis" .redisConfigName) -}}
 {{- if .redisMergedConfig.sentinelAuth.enabled -}}<%= File.read("/etc/gitlab/redis-sentinel/{{ $password }}").strip %>{{- end -}}
 {{- end -}}
 
@@ -84,9 +84,11 @@ Build the structure describing sentinels
 {{- define "gitlab.redis.sentinelsList" -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
 {{- if .redisMergedConfig.sentinels -}}
+{{- $password := printf `File.read("/etc/gitlab/redis-sentinel/%s-sentinel-password").strip` (default "redis" .redisConfigName) -}}
 {{- range $i, $entry := .redisMergedConfig.sentinels }}
 - host: {{ $entry.host }}
   port: {{ default 26379 $entry.port }}
+  password: "<%= {{ $password }} %>"
 {{- end }}
 {{- end -}}
 {{- end -}}

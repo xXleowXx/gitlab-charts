@@ -347,6 +347,34 @@ describe 'kas configuration' do
               )))
             end
           end
+
+          context 'when sentinel is setup with a password' do
+            let(:kas_values) do
+              vals = default_kas_values
+              vals['global'].deep_merge!(sentinels)
+
+              vals.deep_merge!(YAML.safe_load(%(
+                global:
+                  redis:
+                    sentinelAuth:
+                      enabled: true
+              )))
+            end
+
+            it_behaves_like 'mounts global redis secret'
+
+            it 'takes the global sentinel redis auth config' do
+              expect(config_yaml_data['redis']).to include(YAML.safe_load(%(
+                password_file: /etc/kas/redis/redis-password
+                sentinel:
+                  addresses:
+                    - sentinel1.example.com:26379
+                    - sentinel2.example.com:26379
+                  master_name: global.host
+                  sentinel_password_file: /etc/kas/redis-sentinel/redis-sentinel-password
+              )))
+            end
+          end
         end
 
         context 'when a redis sharedState is setup' do
