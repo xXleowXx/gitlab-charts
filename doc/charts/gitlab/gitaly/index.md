@@ -400,18 +400,18 @@ To use them:
    gitlab:
      gitaly:
        extraEnvFrom:
-          # TODO(user): Mount the exisitign object store secret to the expected environment variables. Change this.
+          # Mount the exisitign object store secret to the expected environment variables.
           AWS_ACCESS_KEY_ID:
             secretKeyRef:
-              name: gitlab-rails-storage
+              name: <Rails object store secret>
               key: aws_access_key_id
           AWS_SECRET_ACCESS_KEY:
             secretKeyRef:
-              name: gitlab-rails-storage
+              name: <Rails object store secret>
               key: aws_secret_access_key
        backup:
-         # TODO(user): This is the connection string for Gitaly server side backups. Change this.
-         goCloudUrl: "s3://gitaly-backups?region=us-west-1"
+         # This is the connection string for Gitaly server side backups.
+         goCloudUrl: <object store connection URL>
    ```
 
    For the expected environment variables and storage URL format for your object storage backend, see
