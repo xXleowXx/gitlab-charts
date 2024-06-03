@@ -109,7 +109,7 @@ Return the Redis Sentinel password secret key
 {{/*
 Return a merged setting between global.redis.sentinelAuth.enabled,
 global.redis.[subkey/"redisConfigName"].sentinelAuth.enabled, or
-global.redis.auth.enabled
+global.redis.sentinelAuth.enabled
 */}}
 {{- define "gitlab.redis.sentinelAuth.enabled" -}}
 {{- include "gitlab.redis.configMerge" . -}}
