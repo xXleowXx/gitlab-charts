@@ -178,7 +178,7 @@ data:
 
     [cgroups]
     {{-   with .Values.cgroups }}
-    {{- if .mountpoint }}
+    {{-     if .mountpoint }}
     mountpoint = {% file.Read "{{.mountpoint}}" | strings.TrimSpace %}
     {{-     end }}
     {{-     if .hierarchyRoot }}
@@ -193,21 +193,22 @@ data:
     {{-     if .cpuQuotaUs }}
     cpu_quota_us = {{ .cpuQuotaUs }}
     {{-     end }}
-    {{-     if .repositories.count }}
+    {{-  end }}
+
+    {{-   with .Values.cgroups.repositories }}
+    {{-     if .count }}
+
     [cgroups.repositories]
-    {{-       $repoCount := .repositories.count | default 0 }}
-    {{-       if gt $repoCount 0 }}
-    count = {{ $repoCount }}
-    {{-         if .repositories.memoryBytes }}
-    memory_bytes = {{ .repositories.memoryBytes }}
-    {{-         end }}
-    {{-         if .repositories.cpuShares }}
-    cpu_shares = {{ .repositories.cpuShares }}
-    {{-         end }}
-    {{-         if .repositories.cpuQuotaUs }}
-    cpu_quota_us = {{ .repositories.cpuQuotaUs }}
-    {{-         end }}
-    {{-       end }}
+    count = {{ .count }}
+    {{-     end }}
+    {{-     if .memoryBytes }}
+    memory_bytes = {{ .memoryBytes }}
+    {{-     end }}
+    {{-     if .cpuShares }}
+    cpu_shares = {{ .cpuShares }}
+    {{-     end }}
+    {{-     if .cpuQuotaUs }}
+    cpu_quota_us = {{ .cpuQuotaUs }}
     {{-     end }}
     {{-   end }}
     {{- end }}
