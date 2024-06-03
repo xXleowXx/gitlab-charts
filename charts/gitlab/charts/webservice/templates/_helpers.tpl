@@ -280,7 +280,7 @@ Password = {% file.Read "/etc/gitlab/redis/{{ $passwordPath }}" | strings.TrimSp
 {{- end }}
 {{- if .redisMergedConfig.sentinelAuth.enabled }}
 {{-   $passwordPath := printf "%s-sentinel-password" (default "redis" .redisConfigName) }}
-SentinelPassword = {% file.Read "/etc/gitlab/redis/{{ $passwordPath }}" | strings.TrimSpace | data.ToJSON %}
+SentinelPassword = {% file.Read "/etc/gitlab/redis-sentinel/{{ $passwordPath }}" | strings.TrimSpace | data.ToJSON %}
 {{- end }}
 {{- $_ := set . "redisConfigName" "" }}
 {{- end -}}
@@ -300,6 +300,7 @@ cp -v -r -L /init-config/redis/{{ $passwordPath }} /init-secrets-workhorse/redis
 {{- end -}}
 {{- if .redisMergedConfig.sentinelAuth.enabled -}}
 {{-   $passwordPath := printf "%s-sentinel-password" (default "redis" .redisConfigName) -}}
+{{ "\n" -}}
 mkdir -p /init-secrets-workhorse/redis-sentinel
 cp -v -r -L /init-config/redis-sentinel/{{ $passwordPath }} /init-secrets-workhorse/redis-sentinel/
 {{- end -}}

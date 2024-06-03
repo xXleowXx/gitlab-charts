@@ -36,31 +36,11 @@ Build a dict of redis configuration
 {{/*
 Build a dict of Redis Sentinel configuration
 
-- redisYmlOverride is used by GitLab Rails, which uses the redis-rb gem (https://github.com/redis/redis-rb).
-- The code below maps `sentinel_password` to the `sentinelAuth` structure.
-- redis-rb v5 specifies `sentinel_password` and `sentinel_username` as parameters.
-- Note that both redis-rb v4 and v5 can pass `password` and `username` as parameters in the Sentinel host list as well.
-- We use `global.redis.sentinelAuth` to be consistent with `global.redis.auth`.
-- Currently GitLab doesn't support Redis usernames, but this will likely be needed in the future.
-  This could be done by introducing `global.redis.sentinelAuth.usernameKey` and `sentinel_username` in redisYmlOverride.
+- For simplicity, we do not allow different Sentinel passwords across types.
 */}}
-{{-   $hasOverrideSentinelSecret := false -}}
-{{-   if and $.Values.global.redis.redisYmlOverride $.redisConfigName -}}
-{{-     $hasOverrideSentinelSecret = (kindIs "map" (dig $.redisConfigName "sentinel_password" "" $.Values.global.redis.redisYmlOverride)) -}}
-{{-   end -}}
-{{-   if and $hasOverrideSentinelSecret $.usingOverride -}}
-{{-     $_ := set $.redisMergedConfig "sentinelAuth" (get (index $.Values.global.redis.redisYmlOverride $.redisConfigName) "sentinel_password") -}}
-{{-   else if kindIs "map" (get (index $.Values.global.redis $.redisConfigName) "sentinelAuth")  -}}
-{{-     $_ := set $.redisMergedConfig "sentinelAuth" (get (index $.Values.global.redis $.redisConfigName) "sentinelAuth") -}}
-{{-   else if (kindIs "map" (get $.Values.global.redis "sentinelAuth")) -}}
+
+{{-   if (kindIs "map" (get $.Values.global.redis "sentinelAuth")) -}}
 {{-     $_ := set $.redisMergedConfig "sentinelAuth" (get $.Values.global.redis "sentinelAuth") -}}
-{{-   else -}}
-{{-     $_ := set $.redisMergedConfig "sentinelAuth" $.Values.global.redis.sentinelAuth -}}
-{{-   end -}}
-{{-   range $key := keys $.Values.global.redis.sentinelAuth -}}
-{{-     if not (hasKey $.redisMergedConfig.sentinelAuth $key) -}}
-{{-       $_ := set $.redisMergedConfig.sentinelAuth $key (index $.Values.global.redis.sentinelAuth $key) -}}
-{{-     end -}}
 {{-   end -}}
 {{- end -}}
 

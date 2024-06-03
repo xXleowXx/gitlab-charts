@@ -202,10 +202,7 @@ instances.
 */}}
 {{- define "gitlab.redisSentinel.secrets" -}}
 {{- $ := .globalContext }}
-{{- $mountRedisYmlOverrideSecrets := true }}
-{{- if hasKey . "mountRedisYmlOverrideSecrets" }}
-{{- $mountRedisYmlOverrideSecrets = .mountRedisYmlOverrideSecrets }}
-{{- end }}
+{{- $_ := set $ "usingOverride" false }}
 {{- $redisInstances := list "cache" "clusterCache" "sharedState" "queues" "actioncable" "traceChunks" "rateLimiting" "clusterRateLimiting" "sessions" "repositoryCache" "workhorse" }}
 {{- if .instances }}
 {{- $redisInstances = splitList " " .instances }}
@@ -216,12 +213,18 @@ instances.
 {{      include "gitlab.redisSentinel.secret" $ }}
 {{-   end }}
 {{- end -}}
+{{/* Include global Redis Sentinel secrets */}}
+{{/* reset 'redisConfigName', to get global.redisSentinel.auth's Secret item */}}
+{{- $_ := set $ "redisConfigName" "" }}
+{{- if eq (include "gitlab.redis.sentinelAuth.enabled" $) "true" }}
+{{    include "gitlab.redisSentinel.secret" $ }}
+{{- end }}
 {{- end -}}
 
 {{- define "gitlab.redisSentinel.secret" -}}
 {{- include "gitlab.redis.configMerge" . -}}
 {{- if .redisMergedConfig.sentinelAuth.enabled }}
-{{-   $passwordPath := printf "%s-%ssentinel-password" (default "redis" .redisConfigName) (ternary "override-" "" (default false .usingOverride)) -}}
+{{-   $passwordPath := printf "%s-sentinel-password" (default "redis" .redisConfigName) -}}
 - secret:
     name: {{ template "gitlab.redis.sentinelAuth.secret" . }}
     items:
