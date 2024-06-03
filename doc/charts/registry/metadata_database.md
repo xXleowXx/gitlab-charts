@@ -202,7 +202,7 @@ To migrate existing container registry to the metadata database in one step:
    Set:
    - `database.configure` to `true`.
    - `database.enabled` to `false`.
-   - `maintenance.readonly.enabled` to true.
+   - `maintenance.readonly.enabled` to `true`.
    - `migrations.enabled` to `true`.
 
    ```yaml
@@ -217,9 +217,9 @@ To migrate existing container registry to the metadata database in one step:
        name: registry  # must match the database name you created above
        user: registry  # must match the database username you created above
        password:
-         secret: gitlab-registry-database-password # must match the secret name
+         secret: gitlab-registry-database-password  # must match the secret name
          key: password  # must match the secret key to read the password from
-       sslmode: verify-full # SSL connection mode. See http://www.postgresql.cn/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS for more options.
+       sslmode: verify-full  # SSL connection mode. See http://www.postgresql.cn/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS for more options.
        ssl:
          secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
          clientKey: client-key.pem
@@ -285,9 +285,9 @@ which is recommended if:
 
 To migrate in three steps, you must:
 
-1. Pre-import repositories (step one)
-1. Import all repository data (step two)
-1. Import common blobs (step three)
+1. Pre-import repositories
+1. Import all repository data
+1. Import common blobs
 
 NOTE:
 Users have reported step one import completed at [rates of 2 to 4 TB per hour](https://gitlab.com/gitlab-org/gitlab/-/issues/423459).
@@ -319,9 +319,9 @@ If you must halt the operation, you have to restart this step.
        name: registry  # must match the database name you created above
        user: registry  # must match the database username you created above
        password:
-         secret: gitlab-registry-database-password # must match the secret name
+         secret: gitlab-registry-database-password  # must match the secret name
          key: password  # must match the secret key to read the password from
-       sslmode: verify-full # SSL connection mode. See http://www.postgresql.cn/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS for more options.
+       sslmode: verify-full  # SSL connection mode. See http://www.postgresql.cn/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS for more options.
        ssl:
          secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
          clientKey: client-key.pem
@@ -380,7 +380,7 @@ Allow enough time for downtime during this process.
        password:
          secret: gitlab-registry-database-password  # must match the secret name
          key: password  # must match the secret key to read the password from
-       sslmode: verify-full # SSL connection mode. See http://www.postgresql.cn/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS for more options.
+       sslmode: verify-full  # SSL connection mode. See http://www.postgresql.cn/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS for more options.
        ssl:
          secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
          clientKey: client-key.pem
@@ -426,7 +426,7 @@ Allow enough time for downtime during this process.
        password:
          secret: gitlab-registry-database-password  # must match the secret name
          key: password  # must match the secret key to read the password from
-       sslmode: verify-full # SSL connection mode. See http://www.postgresql.cn/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS for more options.
+       sslmode: verify-full  # SSL connection mode. See http://www.postgresql.cn/docs/current/libpq-ssl.html#LIBPQ-SSL-SSLMODE-STATEMENTS for more options.
        ssl:
          secret: gitlab-registry-postgresql-ssl  # you will need to create this secret manually
          clientKey: client-key.pem
