@@ -1,5 +1,6 @@
 {{- $imageCfg := dict "global" .Values.global.image "local" .Values.image -}}
 {{- $initImageCfg := include "gitlab.configure.config" .Values | fromYaml -}}
+{{- $initCgroupsImageCfg := dict "global" .Values.global.image "local" .Values.cgroups.initContainer.image -}}
 spec:
   selector:
     matchLabels:
@@ -60,10 +61,8 @@ spec:
       {{- if .Values.cgroups.enabled }}
         - name: init-cgroups
           image: {{ include "gitlab.configure.image" (dict "root" $ "image" .Values.cgroups.initContainer.image) | quote }}
-          imagePullPolicy: {{ .Values.cgroups.initContainer.image.pullPolicy }}
-          securityContext: 
-            runAsUser: 0
-            fsGroup: 0
+          {{- include "gitlab.image.pullPolicy" $initCgroupsImageCfg | indent 10 }}
+          {{- include "gitlab.podSecurityContextRoot" .Values.cgroups.initContainer.securityContext | nindent 10 }}
           env:
             - name: GITALY_POD_UID
               valueFrom:
