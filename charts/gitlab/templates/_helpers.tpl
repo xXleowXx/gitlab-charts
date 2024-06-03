@@ -77,7 +77,7 @@ affinity:
           labelSelector:
             matchLabels:
               {{- include "gitlab.selectorLabels" . | nindent 18 }}
-              {{- include "selectorLabelsBySubchart.Labels | nindent 18 }}
+              {{- include "selectorLabelsBySubchart.Labels" | nindent 18 }}
   {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
