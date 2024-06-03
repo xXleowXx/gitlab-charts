@@ -46,7 +46,7 @@ spec:
 
     spec:
       {{- include "gitlab.podSecurityContext" .Values.securityContext | nindent 6 }}
-      {{- include "gitlabexporter.affinity" . | nindent 6 }}
+      {{- include "gitlab.affinity" . | nindent 6 }}
       {{- if or .Values.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
       serviceAccountName: {{ include "gitlab.serviceAccount.name" . }}
       {{- end }}
