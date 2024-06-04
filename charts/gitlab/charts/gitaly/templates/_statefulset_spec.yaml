@@ -68,7 +68,7 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.uid
             - name: CGROUP_PATH
-              value: /sys/fs/cgroup/kubepods.slice/
+              value: /run/gitaly/cgroup/kubepods.slice/
             - name: OUTPUT_PATH
               value: /init-secrets/gitaly-pod-cgroup
           {{- include "gitlab.extraEnv" . | nindent 10 }}
@@ -82,6 +82,9 @@ spec:
               readOnly: true
             - name: gitaly-secrets
               mountPath: /init-secrets
+              readOnly: false
+            - name: cgroup
+              mountPath: /run/gitaly/cgroup
               readOnly: false
           {{- if .Values.cgroups.initContainer.resources }}
           resources: {{- toYaml .Values.cgroups.initContainer.resources | nindent 12 }}
@@ -169,6 +172,10 @@ spec:
           volumeMounts:
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
             {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
+            {{- if .Values.cgroups.enabled }}
+            - name: gitaly-config
+              mountPath: '/run/gitaly/cgroup'
+            {{- end }}
             - name: gitaly-config
               mountPath: '/etc/gitaly/templates'
             - name: gitaly-secrets
