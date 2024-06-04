@@ -1,5 +1,7 @@
 ## Contributing
 
+FAKE CHANGE TO TEST TEMPLATE
+
 Thank you for your interest in contributing to this GitLab project! We welcome
 all contributions. By participating in this project, you agree to abide by the
 [code of conduct](#code-of-conduct).
