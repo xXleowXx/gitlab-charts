@@ -481,4 +481,96 @@ describe 'Gitaly configuration' do
       )
     end
   end
+
+  context 'cgroups' do
+    let(:values) do
+      YAML.safe_load(%(
+        gitlab:
+          gitaly:
+            cgroups:
+              enabled: #{cgroups_enabled}
+              initContainer:
+                image:
+                  repository: registry.gitlab.com/gitlab-org/build/cng/gitaly-init-cgroups
+                  tag: master
+                  pullPolicy: IfNotPresent
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 128Mi
+              mountpoint: /etc/gitlab-secrets/gitaly-pod-cgroup
+              hierarchyRoot: gitaly
+              memoryBytes: 64424509440
+              cpuShares: 1024
+              cpuQuotaUs: 400000
+              repositories:
+                count: 1000
+                memoryBytes: 32212254720
+                cpuShares: 512
+                cpuQuotaUs: 200000
+      )).deep_merge(default_values)
+    end
+
+    let(:gitaly_stateful_set) { 'StatefulSet/test-gitaly' }
+
+    context 'when enabled' do
+      let(:cgroups_enabled) { true }
+
+      let(:template) { HelmTemplate.new(values) }
+      let(:gitaly_config) { template.dig('ConfigMap/test-gitaly', 'data', 'config.toml.tpl') }
+
+      it 'renders the template' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+      end
+
+      it 'sets the cgroups config' do
+        expect(gitaly_config).to include(
+          <<~CONFIG
+          [cgroups]
+          mountpoint = {% file.Read "/etc/gitlab-secrets/gitaly-pod-cgroup" | strings.TrimSpace %}
+          hierarchy_root = "gitaly"
+          memory_bytes = 6.442450944e+10
+          cpu_shares = 1024
+          cpu_quota_us = 400000
+
+          [cgroups.repositories]
+          count = 1000
+          memory_bytes = 3.221225472e+10
+          cpu_shares = 512
+          cpu_quota_us = 200000
+          CONFIG
+        )
+      end
+
+      it 'sets the cgroups init container' do
+        gitaly_set = template.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
+        gitaly_init_container = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['initContainers'][0]
+        gitaly_init_container_env = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['initContainers'][0]['env']
+        expect(gitaly_init_container['name']).to eq('init-cgroups')
+        expect(gitaly_init_container['image']).to eq('registry.gitlab.com/gitlab-org/build/cng/gitaly-init-cgroups:master')
+        expect(gitaly_init_container['imagePullPolicy']).to eq('IfNotPresent')
+        expect(gitaly_init_container['securityContext']).to include('runAsUser' => 0, 'fsGroup' => 0)
+        expect(gitaly_init_container_env.map { |env| env['name'] }).to match_array(['GITALY_POD_UID', 'CGROUP_PATH', 'OUTPUT_PATH'])
+      end
+    end
+
+    context 'when disabled' do
+      let(:cgroups_enabled) { false }
+
+      let(:template) { HelmTemplate.new(values) }
+
+      it 'does not populate a cgroups field in config.toml.tpl' do
+        config_toml = template.dig('ConfigMap/test-gitaly','data','config.toml.tpl')
+
+        expect(config_toml).not_to match /^\[cgroups\]/
+        expect(config_toml).not_to match /^\[cgroups.repositories\]/
+      end
+
+      it 'does not add an initContainer to gitaly' do
+        gitaly_set = template.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
+        gitaly_init_containers = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['initContainers']
+        expect(gitaly_init_containers.map { |c| c['name'] }).not_to include('init-cgroups')
+      end
+    end
+  end
 end
