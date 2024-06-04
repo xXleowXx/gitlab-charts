@@ -489,3 +489,6 @@ deployments: {}
 affinity:
   podAntiAffinity:
     topologyKey:
+nodeAffinity:
+  key:
+  values:

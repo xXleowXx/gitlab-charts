@@ -368,3 +368,6 @@ priorityClassName: ""
 affinity:
   podAntiAffinity:
     topologyKey:
+nodeAffinity:
+  key:
+  values:
