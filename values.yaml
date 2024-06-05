@@ -173,6 +173,10 @@ global:
     # sentinels:
     #   - host:
     #     port:
+    sentinelAuth:
+      enabled: false
+      # secret:
+      # key:
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-gitaly-settings
   gitaly:
