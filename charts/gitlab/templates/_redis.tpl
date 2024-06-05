@@ -113,15 +113,9 @@ sentinels:
 {{-   end -}}
 {{- end -}}
 {{/* Set redisMergedConfig.sentinelAuth. */}}
-{{-   if not (kindIs "map" (get $.redisMergedConfig "sentinelAuth")) -}}
-{{-     $_ := set $.redisMergedConfig "sentinelAuth" $.Values.global.redis.sentinelAuth -}}
-{{-   else -}}
-{{-     range $key := keys $.Values.global.redis.sentinelAuth -}}
-{{-       if not (hasKey $.redisMergedConfig.sentinelAuth $key) -}}
-{{-         $_ := set $.redisMergedConfig.sentinelAuth $key (index $.Values.global.redis.sentinelAuth $key) -}}
-{{-       end -}}
-{{-     end -}}
-{{-   end -}}
+{{- if not (kindIs "map" (get $.redisMergedConfig "sentinelAuth")) -}}
+{{-   $_ := set $.redisMergedConfig "sentinelAuth" $.Values.global.redis.sentinelAuth -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
