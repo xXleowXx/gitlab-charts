@@ -1,4 +1,32 @@
 {{/*
+Renders an Ingress path rule for the specified host.
+
+It expects a dictionary with the following entries:
+  - `host`: the hostname for the Ingress rule
+  - `deployment`: the context of the deployment to render the Ingress for
+  - `root`: the root context
+  - `global`: the global configuration
+*/}}
+{{- define "ingress-path" -}}
+- host: {{ .host }}
+  http:
+    paths:
+      - path: {{ .deployment.ingress.path }}
+        {{- if or (.root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") (eq .global.ingress.apiVersion "networking.k8s.io/v1") -}}
+        pathType: {{ default .deployment.ingress.pathType .global.ingress.pathType }}
+        backend:
+          service:
+            name: {{ template "webservice.fullname.withSuffix" .deployment }}
+            port:
+              number: {{ .root.Values.service.workhorseExternalPort }}
+        {{- else }}
+        backend:
+          serviceName: {{ template "webservice.fullname.withSuffix" .deployment }}
+          servicePort: {{ .root.Values.service.workhorseExternalPort }}
+        {{- end }}
+{{- end }}
+
+{{/*
 Renders a Ingress for the webservice
 
 It expects a dictionary with three entries:
@@ -54,39 +82,9 @@ spec:
     {{- include "ingress.class.field" .ingressCfg | nindent 2 }}
   {{- end }}
   rules:
-    - host: {{ .host }}
-      http:
-        paths:
-          - path: {{ .deployment.ingress.path }}
-            {{ if or (.root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") (eq $global.ingress.apiVersion "networking.k8s.io/v1") -}}
-            pathType: {{ default .deployment.ingress.pathType $global.ingress.pathType }}
-            backend:
-              service:
-                  name: {{ template "webservice.fullname.withSuffix" .deployment }}
-                  port:
-                    number: {{ .root.Values.service.workhorseExternalPort }}
-            {{- else -}}
-            backend:
-              serviceName: {{ template "webservice.fullname.withSuffix" .deployment }}
-              servicePort: {{ .root.Values.service.workhorseExternalPort }}
-            {{- end -}}
+    {{- include "ingress-path" (dict "host" .host "deployment" .deployment "root" .root "global" $global) | nindent 4 }}
     {{- range $extraHost := .ingressCfg.local.extraHosts }}
-    - host: {{ $extraHost }}
-      http:
-        paths:
-          - path: {{ $.deployment.ingress.path }}
-            {{ if or ($.root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") (eq $global.ingress.apiVersion "networking.k8s.io/v1") -}}
-            pathType: {{ default $.deployment.ingress.pathType $global.ingress.pathType }}
-            backend:
-              service:
-                  name: {{ template "webservice.fullname.withSuffix" $.deployment }}
-                  port:
-                    number: {{ $.root.Values.service.workhorseExternalPort }}
-            {{- else -}}
-            backend:
-              serviceName: {{ template "webservice.fullname.withSuffix" $.deployment }}
-              servicePort: {{ $.root.Values.service.workhorseExternalPort }}
-            {{- end }}
+    {{- include "ingress-path" (dict "host" $extraHost "deployment" $.deployment "root" $.root "global" $global) | nindent 4 }}
     {{- end }}
   {{- if (and .tlsSecret (eq (include "gitlab.ingress.tls.enabled" .root) "true" )) }}
   tls:
