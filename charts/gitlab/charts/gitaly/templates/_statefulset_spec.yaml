@@ -74,21 +74,14 @@ spec:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
           volumeMounts:
-            - name: gitaly-config
-              mountPath: /config
-              readOnly: true
-            - name: init-gitaly-secrets
-              mountPath: /init-config
-              readOnly: true
             - name: gitaly-secrets
               mountPath: /init-secrets
               readOnly: false
             - name: cgroup
               mountPath: /run/gitaly/cgroup
               readOnly: false
-          {{- if .Values.cgroups.initContainer.resources }}
-          resources: {{- toYaml .Values.cgroups.initContainer.resources | nindent 12 }}
-          {{- end }}
+          resources:
+            {{- toYaml .Values.init.resources | nindent 12 }}
       {{- end }}
         {{- include "gitlab.extraInitContainers" . | nindent 8 }}
         {{- include "gitlab.certificates.initContainer" . | nindent 8 }}
@@ -181,7 +174,7 @@ spec:
             {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
             {{- include "gitlab.certificates.volumeMount" . | nindent 12 }}
             {{- if .Values.cgroups.enabled }}
-            - name: gitaly-config
+            - name: cgroup
               mountPath: '/run/gitaly/cgroup'
             {{- end }}
             - name: gitaly-config
@@ -234,7 +227,7 @@ spec:
       - name: cgroup
         hostPath:
           path: /sys/fs/cgroup
-          type: ""
+          type: Directory
       {{- end }}
       - name: gitaly-config
         configMap:
