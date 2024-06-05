@@ -175,41 +175,38 @@ data:
     {{- end }}
 
     {{- if .Values.cgroups.enabled }}
-
-    [cgroups]
     {{-   with .Values.cgroups }}
+    [cgroups]
     {{-     if .mountpoint }}
-    mountpoint = {% file.Read "{{.mountpoint}}" | strings.TrimSpace %}
+    mountpoint = {{ .mountpoint }}
     {{-     end }}
     {{-     if .hierarchyRoot }}
     hierarchy_root = {{ .hierarchyRoot | quote }}
     {{-     end }}
     {{-     if .memoryBytes }}
-    memory_bytes = {{ .memoryBytes }}
+    memory_bytes = {{ .memoryBytes | int64 }}
     {{-     end }}
     {{-     if .cpuShares }}
-    cpu_shares = {{ .cpuShares }}
+    cpu_shares = {{ .cpuShares | int64 }}
     {{-     end }}
     {{-     if .cpuQuotaUs }}
-    cpu_quota_us = {{ .cpuQuotaUs }}
+    cpu_quota_us = {{ .cpuQuotaUs | int64 }}
     {{-     end }}
     {{-  end }}
 
     {{-   with .Values.cgroups.repositories }}
-    {{-     if .count }}
-
     [cgroups.repositories]
-    count = {{ .count }}
+    {{-     if .count }}
+    count = {{ .count | int64 }}
     {{-     end }}
     {{-     if .memoryBytes }}
-    memory_bytes = {{ .memoryBytes }}
+    memory_bytes = {{ .memoryBytes | int64 }}
     {{-     end }}
     {{-     if .cpuShares }}
-    cpu_shares = {{ .cpuShares }}
+    cpu_shares = {{ .cpuShares | int64 }}
     {{-     end }}
     {{-     if .cpuQuotaUs }}
-    cpu_quota_us = {{ .cpuQuotaUs }}
+    cpu_quota_us = {{ .cpuQuotaUs | int64 }}
     {{-     end }}
     {{-   end }}
     {{- end }}
-    

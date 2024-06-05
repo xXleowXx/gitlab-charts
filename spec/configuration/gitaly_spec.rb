@@ -536,10 +536,6 @@ describe 'Gitaly configuration' do
                   repository: registry.gitlab.com/gitlab-org/build/cng/gitaly-init-cgroups
                   tag: master
                   pullPolicy: IfNotPresent
-                resources:
-                  requests:
-                    cpu: 100m
-                    memory: 128Mi
               mountpoint: /etc/gitlab-secrets/gitaly-pod-cgroup
               hierarchyRoot: gitaly
               memoryBytes: 64424509440
@@ -571,13 +567,13 @@ describe 'Gitaly configuration' do
           [cgroups]
           mountpoint = {% file.Read "/etc/gitlab-secrets/gitaly-pod-cgroup" | strings.TrimSpace %}
           hierarchy_root = "gitaly"
-          memory_bytes = 6.442450944e+10
+          memory_bytes = 64424509440
           cpu_shares = 1024
           cpu_quota_us = 400000
 
           [cgroups.repositories]
           count = 1000
-          memory_bytes = 3.221225472e+10
+          memory_bytes = 32212254720
           cpu_shares = 512
           cpu_quota_us = 200000
           CONFIG
