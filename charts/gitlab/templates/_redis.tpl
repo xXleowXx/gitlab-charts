@@ -70,6 +70,13 @@ Return the password section of the Redis URI, if needed.
 {{- end -}}
 
 {{/*
+Return the Sentinel password, if available.
+*/}}
+{{- define "gitlab.redis.sentinel.password" -}}
+{{- if $.Values.global.redis.sentinelAuth.enabled -}}<%= File.read("/etc/gitlab/redis-sentinel/redis-sentinel-password").strip %>{{- end -}}
+{{- end -}}
+
+{{/*
 Build the structure describing sentinels
 */}}
 {{- define "gitlab.redis.sentinelsList" -}}
@@ -104,6 +111,10 @@ sentinels:
 {{-   if not (hasKey $.redisMergedConfig.password $key) -}}
 {{-     $_ := set $.redisMergedConfig.password $key (index $.Values.global.redis.auth $key) -}}
 {{-   end -}}
+{{- end -}}
+{{/* Set redisMergedConfig.sentinelAuth. */}}
+{{- if not (kindIs "map" (get $.redisMergedConfig "sentinelAuth")) -}}
+{{-   $_ := set $.redisMergedConfig "sentinelAuth" $.Values.global.redis.sentinelAuth -}}
 {{- end -}}
 {{- end -}}
 
@@ -174,3 +185,13 @@ instances.
 {{- end }}
 {{- end -}}
 
+{{- define "gitlab.redisSentinel.secret" -}}
+{{- include "gitlab.redis.configMerge" . -}}
+{{- if .redisMergedConfig.sentinelAuth.enabled }}
+- secret:
+    name: {{ template "gitlab.redis.sentinelAuth.secret" . }}
+    items:
+      - key: {{ template "gitlab.redis.sentinelAuth.key" . }}
+        path: redis-sentinel/redis-sentinel-password
+{{- end }}
+{{- end -}}
