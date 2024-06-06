@@ -235,8 +235,9 @@ approve_cluster_tests:
   rules:
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
       when: manual
-    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/'
+    - if: '$PIPELINE_TYPE =~ /FEATURE_BRANCH_PIPELINE$/ && $PIPELINE_TYPE != "CANONICAL_FEATURE_BRANCH_PIPELINE"'
       when: manual
+    - if: '$PIPELINE_TYPE == "CANONICAL_FEATURE_BRANCH_PIPELINE"'
   needs:
     - job: danger-review
       optional: true
