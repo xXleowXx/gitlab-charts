@@ -521,7 +521,7 @@ check_docs_links:
   before_script: []
   script:
     # Check Markdown links
-    - lychee --offline --include-fragments doc/**/*.md
+    - lychee --offline --include-fragments doc
   rules:
     - if: '$PIPELINE_TYPE == "DOCS_PIPELINE"'
     - if: '$PIPELINE_TYPE =~ /MR_PIPELINE$/'
