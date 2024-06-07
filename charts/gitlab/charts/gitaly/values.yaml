@@ -52,7 +52,7 @@ cgroups:
       # pullPolicy: IfNotPresent
     securityContext:
       runAsUser: 0
-      fsGroup: 0
+      runAsGroup: 0
   mountpoint: '{% file.Read "/etc/gitlab-secrets/gitaly-pod-cgroup" | strings.TrimSpace %}'
   hierarchyRoot: gitaly
   # memoryBytes: 2147483648 # 2GiB
