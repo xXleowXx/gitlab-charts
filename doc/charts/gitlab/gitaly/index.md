@@ -119,6 +119,19 @@ the `helm install` command using the `--set` flags.
 | `metrics.serviceMonitor.endpointConfig`          | `{}`                                              | Additional endpoint configuration for the ServiceMonitor                                                                                                                       |
 | `metrics.metricsPort`                            |                                                   | **DEPRECATED** Use `metrics.port`                                                                                                                                              |
 | `gomemlimit.enabled`                            | `true`                                             | This will automatically set the `GOMEMLIMIT` environment variable for the Gitaly container to `resources.limits.memory`, if that limit is also set. Users can override this value by setting this value false and setting `GOMEMLIMIT` in `extraEnv`. This must meet [documented format criteria](https://pkg.go.dev/runtime#hdr-Environment_Variables). |
+| `cgroups.enabled`                                |`false`                                            | Gitaly has built-in cgroups control. When configured, Gitaly assigns Git processes to a cgroup based on the repository the Git command is operating in. This parameter will enable repository cgroups. Note only cgroups v2 will be supported if enabled.                                                                                 |
+| `cgroups.initContainer.image.repository`         | `registry.com/gitlab-org/build/cng/gitaly-init-cgroups`        | Gitaly image repository |
+| `cgroups.initContainer.image.tag`                | `master`                                          | Gitaly image tag |
+| `cgroups.initContainer.image.pullPolicy`         | `IfNotPresent`                                    | Gitaly image pull policy |
+| `cgroups.mountpoint`                             |`/etc/gitlab-secrets/gitaly-pod-cgroup`            | Where the parent cgroup directory is mounted.|
+| `cgroups.hierarchyRoot`                          |`gitaly`                                           | Parent cgroup under which Gitaly creates groups, and is expected to be owned by the user and group Gitaly runs as.|
+| `cgroups.memoryBytes`                           |                                                   | The total memory limit that is imposed collectively on all Git processes that Gitaly spawns. 0 implies no limit.|
+| `cgroups.cpuShares`                             |                                                   | The CPU limit that is imposed collectively on all Git processes that Gitaly spawns. 0 implies no limit. The maximum is 1024 shares, which represents 100% of CPU. |
+| `cgroups.cpuQuotaUs`                           |                                                   | Used to throttle the cgroups’ processes if they exceed this quota value. We set cpuQuotaUs to 100ms so 1 core is 100000. 0 implies no limit.  |
+| `cgroups.repositories.count`                     |                                                   | The number of cgroups in the cgroups pool. Each time a new Git command is spawned, Gitaly assigns it to one of these cgroups based on the repository the command is for. A circular hashing algorithm assigns Git commands to these cgroups, so a Git command for a repository is always assigned to the same cgroup.|
+| `cgroups.repositories.memoryBytes`              |                                                   | The total memory limit imposed on all Git processes contained in a repository cgroup. 0 implies no limit. This value cannot exceed that of the top level memoryBytes.                                                                                |
+| `cgroups.repositories.cpuShares`                |                                                   | The CPU limit that is imposed on all Git processes contained in a repository cgroup. 0 implies no limit. The maximum is 1024 shares, which represents 100% of CPU. This value cannot exceed that of the top level cpuShares.                                                                                |
+| `cgroups.repositories.cpuQuotaUs`              |                                                   | The cpuQuotaUs that is imposed on all Git processes contained in a repository cgroup. A Git process can’t use more then the given quota. We set cpuQuotaUs to 100ms so 1 core is 100000. 0 implies no limit.                                                                                |
 
 ## Chart configuration examples
 
@@ -241,6 +254,42 @@ git:
       value: 4
     - key: "fsck.missingSpaceBeforeDate"
       value: ignore
+```
+
+### cgroups
+
+To prevent exhaustion, Gitaly uses **cgroups** to assign Git processes to a 
+repository cgroup based on the repository being operated on. Each cgroup has memory 
+and CPU limits, ensuring system stability and preventing resource hogging.
+
+Please note that the initContainer that must be called before Gitaly starts requires it to be 
+**run as root**. This container will configure the permissions so that Gitaly can manage cgroups. 
+Hence, it will mount a volume on the filesystem to have write access to /sys/fs/cgroup.
+
+[Example of Oversubscription](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configuring-oversubscription)
+
+```yaml
+cgroups: 
+  enabled: true
+  initContainer: 
+    image: 
+      repository: registry.gitlab.com/gitlab-org/build/cng/gitaly-init-cgroups
+      tag: master
+      pullPolicy: IfNotPresent
+    resources: 
+      requests:
+        cpu: 100m
+        memory: 128Mi
+  mountpoint: /etc/gitlab-secrets/gitaly-pod-cgroup # mount point to a file that contains the full pod's cgroup path
+  hierarchyRoot: gitaly
+  memoryBytes: 64424509440, # 60gb
+  cpuShares: 1024,
+  cpuQuotaUs: 400000 # 4 cores
+  repositories: 
+    count: 1000,
+      memoryBytes: 32212254720, # 20gb
+      cpuShares: 512,
+      cpuQuotaUs: 200000 # 2 cores
 ```
 
 ## External Services

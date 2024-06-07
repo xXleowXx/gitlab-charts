@@ -40,6 +40,30 @@ init:
       cpu: 50m
   containerSecurityContext: {}
 
+# Gitaly built-in cgroups, spawns Git processes into a cgroup per repository, protecting the service/pod from OOM events
+# ref: https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#control-groups
+cgroups:
+  enabled: false
+  initContainer:
+    image:
+      repository: registry.gitlab.com/gitlab-org/build/cng/gitaly-init-cgroups
+      # Default tag is `global.gitlabVersion` or `master` if the former one is undefined.
+      # tag: master
+      # pullPolicy: IfNotPresent
+    securityContext:
+      runAsUser: 0
+      fsGroup: 0
+  mountpoint: '{% file.Read "/etc/gitlab-secrets/gitaly-pod-cgroup" | strings.TrimSpace %}'
+  hierarchyRoot: gitaly
+  # memoryBytes: 2147483648 # 2GiB
+  # cpuShares: 1024
+  # cpuQuotaUs: 200000 # 2 cores
+  repositories: {}
+    # count: 10
+    # memoryBytes: 1073741824 # 1GiB
+    # cpuShares: 512
+    # cpuQuotaUs: 100000 # 1 core
+
 ## Support for tolerations for pod scheduling
 tolerations: []
 
