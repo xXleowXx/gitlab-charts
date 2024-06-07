@@ -178,7 +178,7 @@ data:
     {{-   with .Values.cgroups }}
     [cgroups]
     {{-     if .mountpoint }}
-    mountpoint = {{ .mountpoint }}
+    mountpoint = "{{ .mountpoint }}"
     {{-     end }}
     {{-     if .hierarchyRoot }}
     hierarchy_root = {{ .hierarchyRoot | quote }}
