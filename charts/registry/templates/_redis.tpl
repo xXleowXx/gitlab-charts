@@ -44,8 +44,18 @@ Expectation: input contents has .sentinels, which is a List of Dict
 {{- end -}}
 {{- end -}}
 
+{{- define "gitlab.registry.redisRateLimiterSecret.mount" -}}
+{{- if .Values.redis.rateLimiter.password.enabled }}
+- secret:
+    name: {{ default (include  "redis.secretName" . ) ( .Values.redis.rateLimiter.password.secret | quote) }}
+    items:
+      - key: {{ default (include "redis.secretPasswordKey" . ) ( .Values.redis.rateLimiter.password.key | quote) }}
+        path: registry/redis-rateLimiter-password
+{{- end }}
+{{- end -}}
+
 {{/*
-Return migration configuration.
+Return Redis configuration.
 */}}
 {{- define "registry.redis.config" -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
@@ -96,6 +106,54 @@ redis:
       {{- end }}
       {{- if .Values.redis.cache.pool.idletimeout }}
       idletimeout: {{ .Values.redis.cache.pool.idletimeout }}
+      {{- end -}}
+    {{- end -}}
+  ratelimiter:
+    enabled: {{ .Values.redis.rateLimiter.enabled | eq true }}
+    {{- if .Values.redis.rateLimiter.sentinels }}
+    addr: {{ include "registry.redis.host.sentinels" .Values.redis.rateLimiter | quote }}
+    mainname: {{ .Values.redis.rateLimiter.host }}
+    {{- else if .redisMergedConfig.sentinels }}
+    addr: {{ include "registry.redis.host.sentinels" .redisMergedConfig | quote }}
+    mainname: {{ template "gitlab.redis.host" . }}
+    {{- else if .Values.redis.rateLimiter.host  }}
+    addr: {{ printf "%s:%d" .Values.redis.rateLimiter.host (int .Values.redis.rateLimiter.port | default 6379) | quote }}
+    {{- else }}
+    addr: {{ printf "%s:%s" ( include "gitlab.redis.host" . ) ( include "gitlab.redis.port" . ) | quote }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiter.username }}
+    username: .Values.redis.rateLimiter.username
+    {{- end }}
+    {{- if .Values.redis.rateLimiter.password.enabled }}
+    password: "REDIS_RATE_LIMITER_PASSWORD"
+    {{- end }}
+    {{- if hasKey .Values.rateLimiter.cache "db" }}
+    db: {{ .Values.redis.rateLimiter.db }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiter.dialtimeout }}
+    dialtimeout: {{ .Values.redis.rateLimiter.dialtimeout }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiter.readtimeout }}
+    readtimeout: {{ .Values.redis.rateLimiter.readtimeout }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiter.writetimeout }}
+    writetimeout: {{ .Values.redis.rateLimiter.writetimeout }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiter.tls }}
+    tls:
+      enabled: {{ .Values.redis.rateLimiter.tls.enabled | eq true }}
+      insecure: {{ .Values.redis.rateLimiter.tls.insecure | eq true }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiter.pool }}
+    pool:
+      {{- if .Values.redis.rateLimiter.pool.size }}
+      size: {{ .Values.redis.rateLimiter.pool.size }}
+      {{- end }}
+      {{- if .Values.redis.rateLimiter.pool.maxlifetime }}
+      maxlifetime: {{ .Values.redis.rateLimiter.pool.maxlifetime }}
+      {{- end }}
+      {{- if .Values.redis.rateLimiter.pool.idletimeout }}
+      idletimeout: {{ .Values.redis.rateLimiter.pool.idletimeout }}
       {{- end -}}
     {{- end -}}
 {{- end -}}

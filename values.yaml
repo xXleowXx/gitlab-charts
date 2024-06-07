@@ -646,6 +646,8 @@ global:
     redis:
       cache:
         password: {}
+      rateLimiter:
+        password: {}
     # https://docs.docker.com/registry/notifications/#configuration
     notifications: {}
       # endpoints:

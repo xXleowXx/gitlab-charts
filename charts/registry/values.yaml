@@ -180,9 +180,13 @@ init:
     if [ -f /config/database_password ] ; then
       sed -i -e 's@DB_PASSWORD_FILE@'"$(cat /config/database_password)"'@' /registry/config.yml
     fi
-    # Insert Redis password, if enabled
+    # Insert Redis(cache) password, if enabled
     if [ -f /config/registry/redis-password ] ; then
       sed -i -e 's@REDIS_CACHE_PASSWORD@'"$(cat /config/registry/redis-password)"'@' /registry/config.yml
+    fi
+    # Insert Redis(rate-limiter) password, if enabled
+    if [ -f /config/registry/redis-rateLimiter-password ] ; then
+      sed -i -e 's@REDIS_RATE_LIMITER_PASSWORD@'"$(cat /config/registry/redis-rateLimiter-password)"'@' /registry/config.yml
     fi
     # Copy the database TLS connection files to the expected location and set permissions
     if [ -d /config/ssl ]; then
@@ -390,11 +394,18 @@ database:
     # Annotations for the job
     annotations: {}
 
-# Redis cache to be used in conjunction with the metadata database.
-# NOTE: This is an experimental feature and must not be used in production.
-# https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#cache-1
 redis:
+  # Redis cache to be used in conjunction with the metadata database.
+  # NOTE: This is an experimental feature and must not be used in production.
+  # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#cache-1
   cache:
+    enabled: false
+    password:
+      enabled: false
+  # Redis rate-limiter connection settings
+  # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md?ref_type=heads#ratelimiter
+  # TODO: add behavior settings https://gitlab.com/gitlab-org/container-registry/-/issues/1224
+  rateLimiter:
     enabled: false
     password:
       enabled: false
