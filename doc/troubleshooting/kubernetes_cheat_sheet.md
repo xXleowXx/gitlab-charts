@@ -125,11 +125,8 @@ and they will assist you with any issues you are having.
   # find the pod
   kubectl --namespace gitlab get pods -lapp=toolbox
 
-  # enter it
-  kubectl --namespace gitlab exec -it <toolbox-pod-name> -- bash
-
-  # open rails console
-  gitlab-rails console
+  # open the Rails console
+  kubectl --namespace gitlab exec -it -c toolbox <toolbox-pod-name> -- gitlab-rails console
 
   # run GitLab check. The output can be confusing and invalid because of the specific structure of GitLab installed via helm chart
   gitlab-rake gitlab:check
