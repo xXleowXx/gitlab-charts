@@ -89,8 +89,6 @@ and they will assist you with any issues you are having.
 
 ## GitLab-specific Kubernetes information
 
-- Minimal configuration that can be used to [test a Kubernetes Helm chart](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/620).
-
 - Tailing logs of a separate pod. An example for a `webservice` pod:
 
   ```shell
@@ -131,11 +129,7 @@ and they will assist you with any issues you are having.
   kubectl --namespace gitlab exec -it <toolbox-pod-name> -- bash
 
   # open rails console
-  # rails console can be also called from other GitLab pods
   gitlab-rails console
-
-  # source-style commands should also work
-  gitlab-rake gitlab:check RAILS_ENV=production
 
   # run GitLab check. The output can be confusing and invalid because of the specific structure of GitLab installed via helm chart
   gitlab-rake gitlab:check
@@ -151,8 +145,6 @@ and they will assist you with any issues you are having.
 
   - Check the output of `kubectl get events -w --all-namespaces`.
   - Check the logs of pods within `gitlab-managed-apps` namespace.
-  - On the side of GitLab check Sidekiq log and Kubernetes log. When GitLab is installed
-    via Helm chart, `kubernetes.log` can be found inside the Sidekiq pod.
 
 - How to get your initial administrator password <https://docs.gitlab.com/charts/installation/deployment.html#initial-login>:
 
@@ -172,7 +164,7 @@ and they will assist you with any issues you are having.
 - How to get information about Helm installation status:
 
   ```shell
-  helm status name-of-installation
+  helm status <release name>
   ```
 
 - How to update GitLab installed using Helm chart:
