@@ -83,7 +83,31 @@ spec:
       serviceAccountName: {{ include "gitlab.serviceAccount.name" $ }}
       {{- end }}
       automountServiceAccountToken: false
-      {{- include "gitlab.affinity" . | nindent 6 }}
+      {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
+              labelSelector:
+                matchLabels:
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }}
+                  {{- if .storage }}
+                  storage: {{ .storage.name }}
+                  {{- end }}
+      {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
+              labelSelector:
+                matchLabels:
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }}
+                  {{- if .storage }}
+                  storage: {{ .storage.name }}
+                  {{- end }}
+      {{- end }}
       initContainers:
         {{- include "gitlab.extraInitContainers" $ | nindent 8 }}
         {{- include "gitlab.certificates.initContainer" $ | nindent 8 }}
