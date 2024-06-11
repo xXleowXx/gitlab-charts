@@ -74,4 +74,7 @@ statefulset:
 affinity:
   podAntiAffinity:
     topologyKey:
+    nodeAffinity:
+       key:
+       values:
 

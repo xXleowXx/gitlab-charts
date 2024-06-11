@@ -232,9 +232,9 @@ workhorse: {}
 affinity:
   podAntiAffinity:
     topologyKey:
-nodeAffinity:
-  key:
-  values:
+  nodeAffinity:
+       key:
+       values:
 
 # authTimeout:
 # authCookieSessionTimeout:

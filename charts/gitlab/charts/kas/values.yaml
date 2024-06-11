@@ -152,9 +152,9 @@ networkpolicy:
 affinity:
   podAntiAffinity:
     topologyKey:
-nodeAffinity:
-  key:
-  values:
+  nodeAffinity:
+       key:
+       values:
 
 # Priority class assigned to pods
 priorityClassName: ""
