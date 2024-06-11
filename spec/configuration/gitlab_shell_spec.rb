@@ -45,12 +45,14 @@ describe 'gitlab-shell configuration' do
               proxyPolicy: #{proxy_policy}
               proxyHeaderTimeout: #{proxy_header_timeout}
               loginGraceTime: #{login_grace_time}
+              publicKeyAlgorithms:
+                - ssh-rsa
       )).deep_merge(default_values)
     end
 
     let(:config) { t.dig('ConfigMap/test-gitlab-shell', 'data', 'config.yml.tpl') }
 
-    it 'renders gitlab-sshd config' do
+    fit 'renders gitlab-sshd config' do
       expect_successful_exit_code
       expect(config).to match(/^sshd:$/)
       expect(config).to include("proxy_protocol: #{proxy_protocol}")
@@ -60,6 +62,7 @@ describe 'gitlab-shell configuration' do
       expect(config).to match(/ciphers:\n    - aes128-gcm@openssh.com/m)
       expect(config).to match(/kex_algorithms:\n    - curve25519-sha256/m)
       expect(config).to match(/macs:\n    - hmac-sha2-256-etm@openssh.com/m)
+      expect(config).to match(/public_key_algorithms:\n    - ssh-rsa/m)
       expect(config).to include("login_grace_time: #{login_grace_time}")
     end
 
