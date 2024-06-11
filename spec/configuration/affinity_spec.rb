@@ -4,14 +4,14 @@ require 'yaml'
 require 'hash_deep_merge'
 
 SUPPORTED_NODE_AFFINITY_DEPLOYMENTS = %w[
-Deployment/test-registry,
-Deployment/test-toolbox,
-Deployment/test-kas,
-Deployment/test-gitlab-shell,
-Deployment/test-gitlab-exporter,
-Deployment/test-gitlab-shell,
-Deployment/test-toolbox,
-StatefulSet/test-gitaly
+  Deployment/test-registry
+  Deployment/test-toolbox
+  Deployment/test-kas
+  Deployment/test-gitlab-shell
+  Deployment/test-gitlab-exporter
+  Deployment/test-gitlab-shell
+  Deployment/test-toolbox
+  StatefulSet/test-gitaly
 ].freeze
 IGNORED_DEPLOYMENTS = [
   'Deployment/test-certmanager',
