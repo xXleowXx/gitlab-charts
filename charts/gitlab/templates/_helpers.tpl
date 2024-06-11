@@ -122,10 +122,4 @@ Selector Labels by subchart for podAntiAffinity
   storage: {{ .storage.name }}
   {{- end }}
 {{- end -}}
-{{- if eq.Chart.Name "webservice" }}
-{{- include "webservice.labels" . | nindent 18}}
-{{- end -}}
-{{- if eq.Chart.Name "sidekiq" }}
-queue-pod-name: {{ .name }}
-{{- end -}}
 {{- end }}
