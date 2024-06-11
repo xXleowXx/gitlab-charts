@@ -122,4 +122,7 @@ Selector Labels by subchart for podAntiAffinity
   storage: {{ .storage.name }}
   {{- end }}
 {{- end -}}
+{{- if eq.Chart.Name "toolbox" }}
+{{- toYaml .Values.antiAffinityLabels.matchLabels | nindent 18 }}
+{{- end }}
 {{- end }}
