@@ -2,6 +2,10 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 8.0.2 (2024-06-11)
+
+No changes.
+
 ## 8.0.1 (2024-05-21)
 
 No changes.
@@ -37,6 +41,10 @@ No changes.
 - [Remove kas.privateApi.tls.enabled and secretName](gitlab-org/charts/gitlab@bb51a4de6f204e854f287463712d665e9c6370a2) ([merge request](gitlab-org/charts/gitlab!3716))
 - [Remove deprecated queue selector and negate options from Sidekiq chart](gitlab-org/charts/gitlab@6c3bf44290e29b230132bb17d244d38e218eb15b) ([merge request](gitlab-org/charts/gitlab!3697))
 - [Remove support for busybox init containers](gitlab-org/charts/gitlab@f85e7f94cc4863038461daece756081e9d1d960a) ([merge request](gitlab-org/charts/gitlab!3709))
+
+## 7.11.4 (2024-06-11)
+
+No changes.
 
 ## 7.11.3 (2024-05-21)
 
@@ -77,6 +85,10 @@ No changes.
 ### Other (1 change)
 
 - [Allow routing rules to contain shard information](gitlab-org/charts/gitlab@aad02140fdabbf2a045e2701b8f1f5b6c3ab81c5) ([merge request](gitlab-org/charts/gitlab!3682))
+
+## 7.10.7 (2024-06-11)
+
+No changes.
 
 ## 7.10.6 (2024-05-21)
 
