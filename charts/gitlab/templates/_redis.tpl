@@ -113,11 +113,17 @@ Return Sentinel list in format for Workhorse
 {{- define "gitlab.redis.workhorse.sentinel-list" }}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
 {{- $sentinelList := list }}
+{{- $scheme := "tcp" }}
+{{- if eq .global.redis.scheme "rediss" }}
+  {{- $scheme = "rediss" }}
+{{- end }}
 {{- range $i, $entry := .redisMergedConfig.sentinels }}
-  {{- $sentinelList = append $sentinelList (quote (print "tcp://" (trim $entry.host) ":" ( default 26379 $entry.port | int ) ) ) }}
+  {{- $sentinelList = append $sentinelList (quote (print $scheme "://" (trim $entry.host) ":" ( default 26379 $entry.port 
+| int ) ) ) }}
 {{- end }}
 {{- $sentinelList | join "," }}
 {{- end -}}
+
 
 
 {{/*
