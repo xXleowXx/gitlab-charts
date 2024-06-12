@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'helm_template_helper'
+require 'runtime_template_helper'
 require 'yaml'
 require 'hash_deep_merge'
 
