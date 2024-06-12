@@ -73,7 +73,7 @@ describe 'gitlab-shell configuration' do
     end
 
     it 'sets 5 seconds smaller grace period' do
-      expect(config).to include("grace_period: #{grace_period - 5}")
+      expect(rendered_config['sshd']['grace_period']).to eq(grace_period - 5)
     end
   end
 
