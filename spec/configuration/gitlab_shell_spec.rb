@@ -63,7 +63,7 @@ describe 'gitlab-shell configuration' do
 
       expect(rendered_config['sshd']['proxy_protocol']).to eq(proxy_protocol)
       expect(rendered_config['sshd']['proxy_policy']).to eq(proxy_policy)
-      expect(rendered_config['sshd']['client_alive_interval']).to eq(client_alice_interval)
+      expect(rendered_config['sshd']['client_alive_interval']).to eq(client_alive_interval)
       expect(rendered_config['sshd']['proxy_header_timeout']).to eq(proxy_header_timeout)
       expect(rendered_config['sshd']['login_grace_time']).to eq(login_grace_time)
 
