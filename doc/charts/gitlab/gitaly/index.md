@@ -259,37 +259,28 @@ git:
 ### cgroups
 
 To prevent exhaustion, Gitaly uses **cgroups** to assign Git processes to a 
-repository cgroup based on the repository being operated on. Each cgroup has memory 
-and CPU limits, ensuring system stability and preventing resource hogging.
+ cgroup based on the repository being operated on. Each cgroup has memory 
+and CPU limits, ensuring system stability and preventing resource saturation.
 
-Please note that the initContainer that must be called before Gitaly starts requires it to be 
-**run as root**. This container will configure the permissions so that Gitaly can manage cgroups. 
-Hence, it will mount a volume on the filesystem to have write access to /sys/fs/cgroup.
+Please note that the initContainer that runs before Gitaly starts requires to be 
+**executed as root**. This container will configure the permissions so that Gitaly can manage cgroups. 
+Hence, it will mount a volume on the filesystem to have write access to `/sys/fs/cgroup`.
 
 [Example of Oversubscription](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configuring-oversubscription)
 
 ```yaml
-cgroups: 
+cgroups:
   enabled: true
-  initContainer: 
-    image: 
-      repository: registry.gitlab.com/gitlab-org/build/cng/gitaly-init-cgroups
-      tag: master
-      pullPolicy: IfNotPresent
-    resources: 
-      requests:
-        cpu: 100m
-        memory: 128Mi
-  mountpoint: /etc/gitlab-secrets/gitaly-pod-cgroup # mount point to a file that contains the full pod's cgroup path
-  hierarchyRoot: gitaly
-  memoryBytes: 64424509440, # 60gb
-  cpuShares: 1024,
-  cpuQuotaUs: 400000 # 4 cores
-  repositories: 
-    count: 1000,
-      memoryBytes: 32212254720, # 20gb
-      cpuShares: 512,
-      cpuQuotaUs: 200000 # 2 cores
+  # Total limit across all repository cgroups
+  memoryBytes: 64424509440 # 60GiB
+  cpuShares: 1024
+  cpuQuotaUs: 1200000 # 12 cores
+  # Per repository limits, 1000 repository cgroups
+  repositories:
+    count: 1000
+    memoryBytes: 32212254720 # 30GiB
+    cpuShares: 512
+    cpuQuotaUs: 400000 # 4 cores
 ```
 
 ## External Services
