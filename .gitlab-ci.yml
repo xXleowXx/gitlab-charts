@@ -91,9 +91,11 @@ include:
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
   - template: Jobs/SAST-IaC.latest.gitlab-ci.yml
+  - component: ${CI_SERVER_FQDN}/gitlab-org/components/danger-review/danger-review@1.2.0
+    rules:
+      - if: '$CI_SERVER_HOST == "gitlab.com"'
   - project: 'gitlab-org/quality/pipeline-common'
     file:
-      - '/ci/danger-review.yml'
       - '/ci/allure-report.yml'
     rules:
       - if: '$CI_SERVER_HOST == "gitlab.com"'
