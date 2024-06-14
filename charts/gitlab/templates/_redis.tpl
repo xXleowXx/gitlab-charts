@@ -125,7 +125,6 @@ Return Sentinel list in format for Workhorse
 {{- end -}}
 
 
-
 {{/*
 Takes a dict with `globalContext` and `instances` as keys. The former specifies
 the root context `$`, and the latter a list of instances to mount secrets for.
