@@ -123,6 +123,6 @@ Selector Labels by subchart for podAntiAffinity
   {{- end }}
 {{- end -}}
 {{- if eq .Chart.Name "toolbox" }}
-{{- toYaml .Values.antiAffinityLabels.matchLabels | nindent 18 }}
+{{- toYaml .Values.antiAffinityLabels.matchLabels }}
 {{- end }}
 {{- end }}
