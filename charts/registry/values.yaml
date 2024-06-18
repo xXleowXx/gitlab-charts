@@ -135,9 +135,7 @@ init:
   containerSecurityContext: {}
   script: |-
     if [ -e /config/accesskey ] ; then
-      sed -e 's@ACCESS_KEY@'"$(cat /config/accesskey)"'@' -e 's@SECRET_KEY@'"$(cat /config/secretkey)"'@' /config/config.yml > /registry/config.yml
-    else
-      cp -v -r -L /config/config.yml  /registry/config.yml
+      sed -i -e 's@ACCESS_KEY@'"$(cat /config/accesskey)"'@' -e 's@SECRET_KEY@'"$(cat /config/secretkey)"'@' /registry/config.yml
     fi
     # Place the `http.secret` value from the kubernetes secret
     sed -i -e 's@HTTP_SECRET@'"$(cat /config/httpSecret)"'@' /registry/config.yml
