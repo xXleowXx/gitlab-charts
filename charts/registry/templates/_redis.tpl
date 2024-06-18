@@ -25,6 +25,15 @@ Expectation: input contents has .sentinels, which is a List of Dict
 
 {{- define "gitlab.registry.redisSentinelSecret.mount" -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
+{{- if .Values.redis.cache.sentinelpassword }}
+{{-   if .Values.redis.cache.sentinelpassword.enabled }}
+- secret:
+    name: {{ .Values.redis.cache.sentinelpassword.secret | quote }}
+    items:
+      - key: {{ .Values.redis.cache.sentinelpassword.key | quote }}
+        path: redis-sentinel/redis-sentinel-password
+{{-   end }}
+{{- else }}
 {{- if .redisMergedConfig.sentinelAuth.enabled }}
 - secret:
     name: {{ template "gitlab.redis.sentinelAuth.secret" . }}
@@ -32,6 +41,7 @@ Expectation: input contents has .sentinels, which is a List of Dict
       - key: {{ template "gitlab.redis.sentinelAuth.key" . }}
         path: redis-sentinel/redis-sentinel-password
 {{- end }}
+{{- end -}}
 {{- end -}}
 
 {{/*
