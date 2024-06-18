@@ -535,7 +535,7 @@ describe 'registry configuration' do
         end
       end
 
-      context 'when customer provides a custom redis cache configuration with Sentinel password' do
+      context 'when customer provides a custom redis cache configuration with a registry Sentinel password' do
         let(:values) do
           YAML.safe_load(%(
             global:
@@ -548,7 +548,59 @@ describe 'registry configuration' do
                     port: 26379
                 sentinelAuth:
                   enabled: true
-                  secret: redis-sentinel-secret
+                  secret: global-redis-sentinel-secret
+                  key: password
+            registry:
+              database:
+                enabled: true
+              redis:
+                cache:
+                  enabled: true
+                  sentinelpassword:
+                    enabled: true
+                    secret: local-redis-sentinel-secret
+                    key: password
+        )).deep_merge(default_values)
+        end
+
+        it 'populates the redis cache settings in the expected manner' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+
+          registry_yml = render_yaml(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl'))
+          redis = registry_yml.dig('redis', 'cache')
+          expect(redis['enabled']).to eq(true)
+          expect(redis['addr']).to eq("sentinel1.example.com:26379,sentinel2.example.com:26379")
+          expect(redis['mainname']).to eq('redis.example.com')
+          expect(redis['sentinelpassword']).to eq(sentinel_password)
+
+          projected_secret = t.get_projected_secret('Deployment/test-registry', 'registry-secrets', 'local-redis-sentinel-secret')
+          expect(projected_secret).to eql(
+            "name" => "local-redis-sentinel-secret",
+            "items" => [
+              {
+                "key" => "password",
+                "path" => "redis-sentinel/redis-sentinel-password"
+              }
+            ]
+          )
+        end
+      end
+
+      context 'when customer provides a custom redis cache configuration with global Sentinel password' do
+        let(:values) do
+          YAML.safe_load(%(
+            global:
+              redis:
+                host: redis.example.com
+                sentinels:
+                  - host: sentinel1.example.com
+                    port: 26379
+                  - host: sentinel2.example.com
+                    port: 26379
+                sentinelAuth:
+                  enabled: true
+                  secret: global-redis-sentinel-secret
                   key: password
             registry:
               database:
@@ -569,6 +621,17 @@ describe 'registry configuration' do
           expect(redis['addr']).to eq("sentinel1.example.com:26379,sentinel2.example.com:26379")
           expect(redis['mainname']).to eq('redis.example.com')
           expect(redis['sentinelpassword']).to eq(sentinel_password)
+
+          projected_secret = t.get_projected_secret('Deployment/test-registry', 'registry-secrets', 'global-redis-sentinel-secret')
+          expect(projected_secret).to eql(
+            "name" => "global-redis-sentinel-secret",
+            "items" => [
+              {
+                "key" => "password",
+                "path" => "redis-sentinel/redis-sentinel-password"
+              }
+            ]
+          )
         end
       end
     end
