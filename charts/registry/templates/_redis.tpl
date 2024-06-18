@@ -108,6 +108,7 @@ redis:
       idletimeout: {{ .Values.redis.cache.pool.idletimeout }}
       {{- end -}}
     {{- end -}}
+  {{- if .Values.redis.rateLimiter.enabled }}
   ratelimiter:
     enabled: {{ .Values.redis.rateLimiter.enabled | eq true }}
     {{- if .Values.redis.rateLimiter.sentinels }}
@@ -127,7 +128,7 @@ redis:
     {{- if .Values.redis.rateLimiter.password.enabled }}
     password: "REDIS_RATE_LIMITER_PASSWORD"
     {{- end }}
-    {{- if hasKey .Values.rateLimiter.cache "db" }}
+    {{- if hasKey .Values.redis.rateLimiter "db" }}
     db: {{ .Values.redis.rateLimiter.db }}
     {{- end }}
     {{- if .Values.redis.rateLimiter.dialtimeout }}
@@ -156,4 +157,5 @@ redis:
       idletimeout: {{ .Values.redis.rateLimiter.pool.idletimeout }}
       {{- end -}}
     {{- end -}}
+  {{- end }}
 {{- end -}}
