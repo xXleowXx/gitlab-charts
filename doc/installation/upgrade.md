@@ -173,4 +173,4 @@ manual changes required in `6.0` so you can [follow the regular release upgrade 
 ## Older upgrade instructions
 
 If you're upgrading from versions of GitLab chart older than 5.x, see the
-[GitLab Docs Archives](https://archives.docs.gitlab.com) to access older versions of the documentation.
+[GitLab Docs archives](https://docs.gitlab.com/archives/) to access older versions of the documentation.
