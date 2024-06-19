@@ -76,7 +76,9 @@ affinity:
         - topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
           labelSelector:
             matchLabels:
-              {{- include "gitlab.selectorLabels" . | nindent 18 }}
+              {{- if ne .Chart.Name "toolbox" }}
+                {{- include "gitlab.selectorLabels" . | nindent 18 }}
+              {{- end -}}
               {{- include "selectorLabelsBySubchart.Labels" . | nindent 18 }}
   {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
     podAntiAffinity:
@@ -86,7 +88,9 @@ affinity:
             topologyKey: {{ default .Values.global.affinity.podAntiAffinity.topologyKey .Values.affinity.podAntiAffinity.topologyKey | quote }}
             labelSelector:
               matchLabels:
-                {{- include "gitlab.selectorLabels" . | nindent 18 }}
+                {{- if ne .Chart.Name "toolbox" }}
+                  {{- include "gitlab.selectorLabels" . | nindent 18 }}
+                {{- end -}}
                 {{- include "selectorLabelsBySubchart.Labels" . | nindent 18 }}
   {{- end -}}
   {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "hard" }}
