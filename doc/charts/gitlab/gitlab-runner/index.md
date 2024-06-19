@@ -26,7 +26,7 @@ In GitLab 16.0, we introduced a new runner creation workflow that uses runner au
 register runners. The legacy workflow that uses registration tokens is deprecated and disabled by default
 in GitLab 17.0. It will be removed in GitLab 18.0. 
 
-If you want to use the new workflow (recommended):
+To use the recommended workflow:
 
 - [You must generate a authentication token.](https://docs.gitlab.com/ee/ci/runners/new_creation_workflow.html#prevent-your-runner-registration-workflow-from-breaking)
 - The configuration is not handled by the [`shared-secrets`](../../shared-secrets.md) Job and the
@@ -39,7 +39,7 @@ If you want to use the new workflow (recommended):
       locked: null
   ```
 
-If you want to use the legacy workflow:
+If you want to use the legacy workflow (not recommended):
 
 - You must [re-enable the legacy workflow](https://docs.gitlab.com/ee/administration/settings/continuous_integration.html#enable-runner-registrations-tokens).
 - The registration token is populated by the [`shared-secrets`](../../shared-secrets.md) Job.
