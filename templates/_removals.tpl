@@ -1,11 +1,11 @@
 {{/*
-Template for handling deprecation messages
+Template for blocking upgrades if removed features are configured.
 
 The messages templated here will be combined into a single `fail` call. This creates a means for the user to receive all messages at one time, in place a frustrating iterative approach.
 
-- `define` a new template, prefixed `gitlab.deprecate.`
+- `define` a new template, prefixed `gitlab.removed.`
 - Check for deprecated values / patterns, and directly output messages (see message format below)
-- Add a line to `gitlab.deprecations` to include the new template.
+- Add a line to `gitlab.removals` to include the new template.
 
 Message format:
 
@@ -21,65 +21,65 @@ Compile all deprecations into a single message, and call fail.
 
 Due to gotpl scoping, we can't make use of `range`, so we have to add action lines.
 */}}
-{{- define "gitlab.deprecations" -}}
-{{- $deprecated := list -}}
+{{- define "gitlab.removals" -}}
+{{- $removed := list -}}
 {{/* add templates here */}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.rails.appConfig" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.minio" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.registryStorage" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.registryHttpSecret" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.registry.replicas" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.registry.updateStrategy" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.webservice.omniauth" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.webservice.ldap" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.webservice.webServer.unicorn" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.global.appConfig.ldap.password" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.cronJobs" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.updateStrategy" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.pods.updateStrategy" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.cluster" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.pods.cluster" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.queueSelector" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.pods.queueSelector" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.negateQueues" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.sidekiq.pods.negateQueues" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.local.kubectl" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.gitlab.gitaly.enabled" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.initContainerImage" .) -}}
-{{- $deprecated = append $deprecated (include "external.deprecate.initContainerImage" .) -}}
-{{- $deprecated = append $deprecated (include "external.deprecate.initContainerPullPolicy" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.redis-ha.enabled" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.redis.enabled" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.gitlab.webservice.service.configuration" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.gitlab.gitaly.serviceName" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.global.psql.pool" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.global.appConfig.extra.piwik" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.global.geo.registry.syncEnabled" .) -}}
-{{- $deprecated = append $deprecated (include "certmanager.createCustomResource" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.global.imagePullPolicy" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.task-runner" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.gitaly-gitconfig-volume" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.hpa.legacyCpuTarget" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.hpa.behaviorMispell" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.global.grafana" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.busybox" .) -}}
-{{- $deprecated = append $deprecated (include "gitlab.deprecate.kas.privateApi.tls" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.rails.appConfig" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.minio" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.registryStorage" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.registryHttpSecret" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.registry.replicas" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.registry.updateStrategy" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.webservice.omniauth" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.webservice.ldap" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.webservice.webServer.unicorn" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.global.appConfig.ldap.password" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.sidekiq.cronJobs" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.sidekiq.updateStrategy" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.sidekiq.pods.updateStrategy" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.sidekiq.cluster" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.sidekiq.pods.cluster" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.sidekiq.queueSelector" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.sidekiq.pods.queueSelector" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.sidekiq.negateQueues" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.sidekiq.pods.negateQueues" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.local.kubectl" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.gitlab.gitaly.enabled" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.initContainerImage" .) -}}
+{{- $removed = append $removed (include "external.removal.initContainerImage" .) -}}
+{{- $removed = append $removed (include "external.removal.initContainerPullPolicy" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.redis-ha.enabled" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.redis.enabled" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.gitlab.webservice.service.configuration" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.gitlab.gitaly.serviceName" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.global.psql.pool" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.global.appConfig.extra.piwik" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.global.geo.registry.syncEnabled" .) -}}
+{{- $removed = append $removed (include "certmanager.createCustomResource" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.global.imagePullPolicy" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.task-runner" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.gitaly-gitconfig-volume" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.hpa.legacyCpuTarget" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.hpa.behaviorMispell" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.global.grafana" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.busybox" .) -}}
+{{- $removed = append $removed (include "gitlab.removed.kas.privateApi.tls" .) -}}
 
 {{- /* we're ready to deprecate top-level registry entries for workhorse and sidekiq, but not enforcing yet */ -}}
-{{- /* $deprecated = append $deprecated (include "gitlab.deprecate.registry.topLevel" .) */ -}}
+{{- /* $removed = append $removed (include "gitlab.removed.registry.topLevel" .) */ -}}
 
 {{- /* prepare output */}}
-{{- $deprecated = without $deprecated "" -}}
-{{- $message := join "\n" $deprecated -}}
+{{- $removed = without $removed "" -}}
+{{- $message := join "\n" $removed -}}
 
 {{- /* print output */}}
 {{- if $message -}}
-{{-   printf "\nDEPRECATIONS:\n%s" $message | fail -}}
+{{-   printf "\nREMOVALS:\n%s" $message | fail -}}
 {{- end -}}
 {{- end -}}
 
 {{/* Migration of rails shared lfs/artifacts/uploads blocks to globals */}}
-{{- define "gitlab.deprecate.rails.appConfig" -}}
+{{- define "gitlab.removed.rails.appConfig" -}}
 {{- range $chart := list "webservice" "sidekiq" "toolbox" -}}
 {{-   if index $.Values.gitlab $chart -}}
 {{-     range $i, $block := list "lfs" "artifacts" "uploads" -}}
@@ -105,7 +105,7 @@ gitlab.{{ $chart }}:
 {{- end -}}
 
 {{/* Deprecation behaviors for global configuration of Minio */}}
-{{- define "gitlab.deprecate.minio" -}}
+{{- define "gitlab.removed.minio" -}}
 {{- if ( hasKey .Values.minio "enabled" ) }}
 minio:
     Chart-local `enabled` property has been moved to global. Please remove `minio.enabled` from your properties, and set `global.minio.enabled` instead.
@@ -138,7 +138,7 @@ gitlab.toolbox:
 {{/* END deprecate.minio */}}
 
 {{/* Migration of Registry `storage` dict to a secret */}}
-{{- define "gitlab.deprecate.registryStorage" -}}
+{{- define "gitlab.removed.registryStorage" -}}
 {{- if .Values.registry.storage -}}
 {{-   $keys := without (keys .Values.registry.storage) "secret" "key" "extraKey" "redirect" -}}
 {{-   if len $keys | ne 0 }}
@@ -149,7 +149,7 @@ registry:
 {{- end -}}
 
 {{/* Migration of Registry `httpSecret` property to secret */}}
-{{- define "gitlab.deprecate.registryHttpSecret" -}}
+{{- define "gitlab.removed.registryHttpSecret" -}}
 {{- if .Values.registry.httpSecret -}}
 registry:
     The `httpSecret` property has been moved into a secret. Please create a secret with these contents, and set `global.registry.httpSecret.secret` and `global.registry.httpSecret.key`.
@@ -157,7 +157,7 @@ registry:
 {{- end -}}
 
 {{/* Migration of Registry `minReplicas` and `maxReplicas` to `hpa.*` */}}
-{{- define "gitlab.deprecate.registry.replicas" -}}
+{{- define "gitlab.removed.registry.replicas" -}}
 {{- if or (hasKey .Values.registry "minReplicas") (hasKey .Values.registry "maxReplicas") -}}
 registry:
     The `minReplicas` property has been moved under the hpa object. Please create a configuration with the new path: `registry.hpa.minReplicas`.
@@ -167,7 +167,7 @@ registry:
 {{/* END deprecate.registry.replicas */}}
 
 {{/* Deprecation behaviors for configuration of Omniauth */}}
-{{- define "gitlab.deprecate.webservice.omniauth" -}}
+{{- define "gitlab.removed.webservice.omniauth" -}}
 {{- if hasKey .Values.gitlab.webservice "omniauth" -}}
 webservice:
     Chart-local configuration of Omniauth has been moved to global. Please remove `webservice.omniauth.*` settings from your properties, and set `global.appConfig.omniauth.*` instead.
@@ -176,7 +176,7 @@ webservice:
 {{/* END deprecate.webservice.omniauth */}}
 
 {{/* Deprecation behaviors for configuration of LDAP */}}
-{{- define "gitlab.deprecate.webservice.ldap" -}}
+{{- define "gitlab.removed.webservice.ldap" -}}
 {{- if hasKey .Values.gitlab.webservice "ldap" -}}
 webservice:
     Chart-local configuration of LDAP has been moved to global. Please remove `webservice.ldap.*` settings from your properties, and set `global.appConfig.ldap.*` instead.
@@ -184,7 +184,7 @@ webservice:
 {{- end -}}
 {{/* END deprecate.webservice.ldap */}}
 
-{{- define "gitlab.deprecate.global.appConfig.ldap.password" -}}
+{{- define "gitlab.removed.global.appConfig.ldap.password" -}}
 {{- if .Values.global.appConfig.ldap.servers -}}
 {{-   $hasPlaintextPassword := dict -}}
 {{-   range $name, $config := .Values.global.appConfig.ldap.servers -}}
@@ -194,13 +194,13 @@ webservice:
 {{-   end -}}
 {{-   if hasKey $hasPlaintextPassword "true" -}}
 global.appConfig.ldap:
-     Plain-text configuration of LDAP passwords has been deprecated in favor of secret configuration. Please create a secret containing the password, and set `password.secret` and `password.key`.
+     Plain-text configuration of LDAP passwords has been removed in favor of secret configuration. Please create a secret containing the password, and set `password.secret` and `password.key`.
 {{-   end -}}
 {{- end -}}
-{{- end -}}{{/* "gitlab.deprecate.global.appConfig.ldap.password" */}}
+{{- end -}}{{/* "gitlab.removed.global.appConfig.ldap.password" */}}
 
 {{/* Deprecation behaviors for configuration of cron jobs */}}
-{{- define "gitlab.deprecate.sidekiq.cronJobs" -}}
+{{- define "gitlab.removed.sidekiq.cronJobs" -}}
 {{- if hasKey .Values.gitlab.sidekiq "cron_jobs" -}}
 sidekiq:
     Chart-local configuration of cron jobs has been moved to global. Please remove `sidekiq.cron_jobs.*` settings from your properties, and set `global.appConfig.cron_jobs.*` instead.
@@ -209,7 +209,7 @@ sidekiq:
 {{/* END deprecate.sidekiq.cronJobs */}}
 
 {{/* Deprecation behaviors for configuration of local kubectl images */}}
-{{- define "gitlab.deprecate.local.kubectl" -}}
+{{- define "gitlab.removed.local.kubectl" -}}
 {{- range $chart := list "certmanager-issuer" "shared-secrets" -}}
 {{-   if hasKey (index $.Values $chart) "image" -}}
 {{ $chart }}:
@@ -220,81 +220,81 @@ sidekiq:
 {{-   end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.local.kubectl */}}
+{{/* END gitlab.removed.local.kubectl */}}
 
 {{/* Deprecation behaviors for configuration of Gitaly */}}
-{{- define "gitlab.deprecate.gitlab.gitaly.enabled" -}}
+{{- define "gitlab.removed.gitlab.gitaly.enabled" -}}
 {{-   if hasKey .Values.gitlab.gitaly "enabled" -}}
 gitlab:
     Chart-local configuration of Gitaly features has been moved to global. Please remove `gitlab.gitaly.enabled` from your properties, and set `global.gitaly.enabled` instead.
 {{-   end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.gitaly.enabled */}}
+{{/* END gitlab.removed.gitaly.enabled */}}
 
 {{/* Deprecation behavious for configuration of initContainer images of gitlab sub-charts */}}
-{{- define "gitlab.deprecate.initContainerImage" -}}
+{{- define "gitlab.removed.initContainerImage" -}}
 {{- range $chart:= list "geo-logcursor" "gitaly" "gitlab-exporter" "gitlab-shell" "mailroom" "migrations" "sidekiq" "toolbox" "webservice" }}
 {{-     if hasKey (index $.Values.gitlab $chart) "init" -}}
 {{-         with $config := index $.Values.gitlab $chart "init" -}}
 {{-             if or (and (hasKey $config "image") (kindIs "string" $config.image)) (hasKey $config "tag") }}
 gitlab.{{ $chart }}:
-    Configuring image for initContainers using gitlab.{{ $chart }}.init.image and gitlab.{{ $chart }}.init.tag has been deprecated. Please use gitlab.{{ $chart }}.init.image.repository and gitlab.{{ $chart }}.init.image.tag for that.
+    Configuring image for initContainers using gitlab.{{ $chart }}.init.image and gitlab.{{ $chart }}.init.tag has been removed. Please use gitlab.{{ $chart }}.init.image.repository and gitlab.{{ $chart }}.init.image.tag for that.
 {{-             end -}}
 {{-         end -}}
 {{-     end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.initContainerImage */}}
+{{/* END gitlab.removed.initContainerImage */}}
 
 {{/* Deprecation behavious for configuration of initContainer images of external charts */}}
-{{- define "external.deprecate.initContainerImage" -}}
+{{- define "external.removal.initContainerImage" -}}
 {{- range $chart:= list "minio" "registry" "redis" "redis-ha" }}
 {{-     if hasKey (index $.Values $chart) "init" -}}
 {{-         with $config := index $.Values $chart "init" -}}
 {{-             if or (and (hasKey $config "image") (kindIs "string" $config.image)) (hasKey $config "tag") }}
 {{ $chart }}:
-    Configuring image for initContainers using {{ $chart }}.init.image and {{ $chart }}.init.tag has been deprecated. Please use {{ $chart }}.init.image.repository and {{ $chart }}.init.image.tag for that.
+    Configuring image for initContainers using {{ $chart }}.init.image and {{ $chart }}.init.tag has been removed. Please use {{ $chart }}.init.image.repository and {{ $chart }}.init.image.tag for that.
 {{-             end -}}
 {{-         end -}}
 {{-     end -}}
 {{- end -}}
 {{- end -}}
-{{/* END external.deprecate.initContainerImage */}}
+{{/* END external.removal.initContainerImage */}}
 
 {{/* Deprecation behavious for configuration of initContainer image pull policy of external charts */}}
-{{- define "external.deprecate.initContainerPullPolicy" -}}
+{{- define "external.removal.initContainerPullPolicy" -}}
 {{- range $chart:= list "minio" "registry" }}
 {{-     if hasKey (index $.Values $chart) "init" -}}
 {{-         with $config := index $.Values $chart "init" -}}
 {{-             if hasKey $config "pullPolicy" }}
 {{ $chart }}:
-    Configuring pullPolicy for initContainer images using {{ $chart }}.init.pullPolicy has been deprecated. Please use {{ $chart }}.init.image.pullPolicy for that.
+    Configuring pullPolicy for initContainer images using {{ $chart }}.init.pullPolicy has been removed. Please use {{ $chart }}.init.image.pullPolicy for that.
 {{-             end -}}
 {{-         end -}}
 {{-     end -}}
 {{- end -}}
 {{- end -}}
-{{/* END external.deprecate.initContainerPullPolicy*/}}
+{{/* END external.removal.initContainerPullPolicy*/}}
 
 {{/* Deprecation behaviors for redis-ha.enabled */}}
-{{- define "gitlab.deprecate.redis-ha.enabled" -}}
+{{- define "gitlab.removed.redis-ha.enabled" -}}
 {{-   if hasKey (index .Values "redis-ha") "enabled" -}}
 redis-ha:
-    The `redis-ha.enabled` has been deprecated. Redis HA is now implemented by the Redis chart.
+    The `redis-ha.enabled` has been removed. Redis HA is now implemented by the Redis chart.
 {{-   end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.redis-ha.enabled */}}
+{{/* END gitlab.removed.redis-ha.enabled */}}
 
 {{/* Deprecation behaviors for redis.enabled */}}
-{{- define "gitlab.deprecate.redis.enabled" -}}
+{{- define "gitlab.removed.redis.enabled" -}}
 {{-   if hasKey .Values.redis "enabled" -}}
 redis:
-    The `redis.enabled` has been deprecated. Please use `redis.install` to install the Redis service.
+    The `redis.enabled` has been removed. Please use `redis.install` to install the Redis service.
 {{-   end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.redis.enabled */}}
+{{/* END gitlab.removed.redis.enabled */}}
 
-{{- define "gitlab.deprecate.gitlab.webservice.service.configuration" -}}
+{{- define "gitlab.removed.gitlab.webservice.service.configuration" -}}
 {{-   range $chart := list "gitaly" "gitlab-shell" -}}
 {{-     if index $.Values.gitlab $chart -}}
 {{-       if hasKey (index $.Values.gitlab $chart) "webservice" }}
@@ -305,17 +305,17 @@ gitlab.{{ $chart }}:
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.gitlab.webservice.service.configuration */}}
+{{/* END gitlab.removed.gitlab.webservice.service.configuration */}}
 
-{{- define "gitlab.deprecate.gitlab.gitaly.serviceName" -}}
+{{- define "gitlab.removed.gitlab.gitaly.serviceName" -}}
 {{-   if hasKey $.Values.gitlab.gitaly "serviceName" -}}
 gitlab.gitaly.serviceName:
       The configuration of 'gitlab.gitaly.serviceName' has been moved to 'global.gitaly.serviceName' to fix an issue with consistent templating. Please relocate this property.
 {{-   end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.gitlab.gitaly.serviceName */}}
+{{/* END gitlab.removed.gitlab.gitaly.serviceName */}}
 
-{{- define "gitlab.deprecate.global.psql.pool" -}}
+{{- define "gitlab.removed.global.psql.pool" -}}
 {{-   if hasKey $.Values.global "psql" -}}
 {{-     if hasKey $.Values.global.psql "pool" }}
 global.psql.pool:
@@ -336,9 +336,9 @@ gitlab.{{ $chart }}.psql.pool:
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.global.psql.pool */}}
+{{/* END gitlab.removed.global.psql.pool */}}
 
-{{- define "gitlab.deprecate.global.appConfig.extra.piwik" -}}
+{{- define "gitlab.removed.global.appConfig.extra.piwik" -}}
 {{- if .Values.global.appConfig.extra.piwikSiteId }}
 global.appConfig.extra.piwikSiteId:
       Piwik config keys have been renamed to reflect the rebranding to Matomo. Please rename `piwikSiteId` to `matomoSiteId`.
@@ -348,27 +348,27 @@ global.appConfig.extra.piwikUrl:
       Piwik config keys have been renamed to reflect the rebranding to Matomo. Please rename `piwikUrl` to `matomoUrl`
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.global.appConfig.extra.piwik */}}
+{{/* END gitlab.removed.global.appConfig.extra.piwik */}}
 
 {{/* Migration from `updateStrategy` to `deployment.strategy` for Deployment Kubernetes type */}}
-{{- define "gitlab.deprecate.registry.updateStrategy" -}}
+{{- define "gitlab.removed.registry.updateStrategy" -}}
 {{- if .Values.registry.updateStrategy }}
 registry:
     The configuration of `registry.updateStrategy` has moved. Please use
 `registry.deployment.strategy` instead.
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.registry.updateStrategy */}}
+{{/* END gitlab.removed.registry.updateStrategy */}}
 
-{{- define "gitlab.deprecate.sidekiq.updateStrategy" -}}
+{{- define "gitlab.removed.sidekiq.updateStrategy" -}}
 {{- if hasKey .Values.gitlab.sidekiq "updateStrategy" -}}
 sidekiq:
     The configuration of 'gitlab.sidekiq.updateStrategy' has moved. Please use 'gitlab.sidekiq.deployment.strategy' instead.
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.sidekiq.updateStrategy */}}
+{{/* END gitlab.removed.sidekiq.updateStrategy */}}
 
-{{- define "gitlab.deprecate.sidekiq.pods.updateStrategy" -}}
+{{- define "gitlab.removed.sidekiq.pods.updateStrategy" -}}
 {{- range $index, $pod := .Values.gitlab.sidekiq.pods -}}
 {{-   if hasKey $pod "updateStrategy" }}
 sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
@@ -376,16 +376,16 @@ sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
 {{-   end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.sidekiq.pods.updateStrategy */}}
+{{/* END gitlab.removed.sidekiq.pods.updateStrategy */}}
 
-{{- define "gitlab.deprecate.global.geo.registry.syncEnabled" -}}
+{{- define "gitlab.removed.global.geo.registry.syncEnabled" -}}
 {{- if and (eq true .Values.global.geo.enabled) (hasKey .Values.global.geo.registry "syncEnabled") -}}
 geo:
   The configuration of `global.geo.registry.syncEnabled` has moved. Please use `global.geo.registry.replication.enabled` instead.
 {{- end -}}
 {{- end -}}
 
-{{- define "gitlab.deprecate.webservice.webServer.unicorn" -}}
+{{- define "gitlab.removed.webservice.webServer.unicorn" -}}
 {{/* WARN: Unicorn is deprecated and is removed in 14.0 */}}
 {{- if eq .Values.gitlab.webservice.webServer "unicorn" -}}
 webservice:
@@ -393,15 +393,15 @@ webservice:
 {{- end }}
 {{- end }}
 
-{{- define "gitlab.deprecate.sidekiq.cluster" -}}
+{{- define "gitlab.removed.sidekiq.cluster" -}}
 {{- if hasKey .Values.gitlab.sidekiq "cluster" -}}
 sidekiq:
     The configuration of 'gitlab.sidekiq.cluster' should be removed. Sidekiq is now always in cluster mode.
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.sidekiq.cluster */}}
+{{/* END gitlab.removed.sidekiq.cluster */}}
 
-{{- define "gitlab.deprecate.sidekiq.pods.cluster" -}}
+{{- define "gitlab.removed.sidekiq.pods.cluster" -}}
 {{- range $index, $pod := .Values.gitlab.sidekiq.pods -}}
 {{-   if hasKey $pod "cluster" }}
 sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
@@ -409,17 +409,17 @@ sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
 {{-   end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.sidekiq.pods.cluster */}}
+{{/* END gitlab.removed.sidekiq.pods.cluster */}}
 
-{{- define "gitlab.deprecate.sidekiq.queueSelector" -}}
+{{- define "gitlab.removed.sidekiq.queueSelector" -}}
 {{- if hasKey .Values.gitlab.sidekiq "queueSelector" }}
 sidekiq:
     The configuration of 'gitlab.sidekiq.queueSelector' should be removed. Please follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues.
 {{- end }}
 {{- end }}
-{{/* END gitlab.deprecate.sidekiq.queueSelector */}}
+{{/* END gitlab.removed.sidekiq.queueSelector */}}
 
-{{- define "gitlab.deprecate.sidekiq.pods.queueSelector" -}}
+{{- define "gitlab.removed.sidekiq.pods.queueSelector" -}}
 {{- range $index, $pod := .Values.gitlab.sidekiq.pods -}}
 {{-   if hasKey $pod "queueSelector" }}
 sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
@@ -427,17 +427,17 @@ sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
 {{-   end -}}
 {{- end }}
 {{- end }}
-{{/* END gitlab.deprecate.sidekiq.pods.queueSelector */}}
+{{/* END gitlab.removed.sidekiq.pods.queueSelector */}}
 
-{{- define "gitlab.deprecate.sidekiq.negateQueues" -}}
+{{- define "gitlab.removed.sidekiq.negateQueues" -}}
 {{- if hasKey .Values.gitlab.sidekiq "negateQueues" }}
 sidekiq:
     The configuration of 'gitlab.sidekiq.negateQueues' should be removed. Please follow the steps at https://docs.gitlab.com/ee/administration/sidekiq/extra_sidekiq_processes.html#start-multiple-processes, to run Sidekiq with multiple processes while listening to all queues.
 {{- end }}
 {{- end }}
-{{/* END gitlab.deprecate.sidekiq.negateQueues */}}
+{{/* END gitlab.removed.sidekiq.negateQueues */}}
 
-{{- define "gitlab.deprecate.sidekiq.pods.negateQueues" -}}
+{{- define "gitlab.removed.sidekiq.pods.negateQueues" -}}
 {{- range $index, $pod := .Values.gitlab.sidekiq.pods -}}
 {{-   if hasKey $pod "negateQueues" }}
 sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
@@ -445,7 +445,7 @@ sidekiq.pods[{{ $index }}] ({{ $pod.name }}):
 {{-   end -}}
 {{- end }}
 {{- end }}
-{{/* END gitlab.deprecate.sidekiq.pods.negateQueues */}}
+{{/* END gitlab.removed.sidekiq.pods.negateQueues */}}
 
 {{- define "certmanager.createCustomResource" -}}
 {{- if hasKey .Values.certmanager "createCustomResource" -}}
@@ -456,7 +456,7 @@ certmanager:
 {{/* END certmanager.createCustomResource */}}
 
 {{/* Deprecation behaviors for configuration of global imagePullPolicy */}}
-{{- define "gitlab.deprecate.global.imagePullPolicy" -}}
+{{- define "gitlab.removed.global.imagePullPolicy" -}}
 {{- if .Values.global.imagePullPolicy }}
 global.imagePullPolicy:
     The configuration of `global.imagePullPolicy` has moved. Please use `global.image.pullPolicy` instead.
@@ -465,7 +465,7 @@ global.imagePullPolicy:
 {{- end -}}
 
 {{/* Deprecation behaviors for task-runner rename to toolbox */}}
-{{- define "gitlab.deprecate.task-runner" -}}
+{{- define "gitlab.removed.task-runner" -}}
 {{-   if index .Values.gitlab "task-runner" }}
 gitlab.task-runner:
     The configuration of `gitlab.task-runner` has been renamed. Please use `gitlab.toolbox` instead.
@@ -473,7 +473,7 @@ gitlab.task-runner:
 {{-   end -}}
 {{- end -}}
 
-{{- define "gitlab.deprecate.gitaly-gitconfig-volume" -}}
+{{- define "gitlab.removed.gitaly-gitconfig-volume" -}}
 {{-   if hasKey .Values.gitlab.gitaly "extraVolumes" -}}
 {{-     if regexMatch "- *name:[^\n]*git-?config" .Values.gitlab.gitaly.extraVolumes -}}
 gitaly:
@@ -482,7 +482,7 @@ gitaly:
 {{-   end -}}
 {{- end -}}
 
-{{- define "gitlab.deprecate.hpa.legacyCpuTarget" -}}
+{{- define "gitlab.removed.hpa.legacyCpuTarget" -}}
 {{-   range $chart := list "gitlab-pages" "gitlab-shell" "kas" "sidekiq" "spamcheck" "webservice" -}}
 {{-     if and (hasKey $.Values.gitlab $chart) (hasKey (index $.Values.gitlab $chart) "hpa") -}}
 {{-       if hasKey (index $.Values.gitlab $chart).hpa "targetAverageValue" }}
@@ -493,7 +493,7 @@ gitlab.{{ $chart }}:
 {{-   end -}}
 {{- end -}}
 
-{{- define "gitlab.deprecate.hpa.behaviorMispell" -}}
+{{- define "gitlab.removed.hpa.behaviorMispell" -}}
 {{-   if and (hasKey $.Values.registry "hpa") (hasKey $.Values.registry.hpa "behaviour") }}
 registry:
     The configuration of `registry.hpa.behaviour` has moved. Please use `registry.hpa.behavior` instead.
@@ -509,7 +509,7 @@ gitlab.{{ $chart }}:
 {{- end -}}
 
 {{/* Deprecation behaviors for Grafana*/}}
-{{- define "gitlab.deprecate.global.grafana" -}}
+{{- define "gitlab.removed.global.grafana" -}}
 {{- if kindIs "map" (index .Values.global "grafana") }}
 {{-   if and ( hasKey .Values.global.grafana "enabled" ) (eq true .Values.global.grafana.enabled)}}
 grafana:
@@ -517,9 +517,9 @@ grafana:
 {{-   end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.deprecate.global.grafana */}}
+{{/* END gitlab.removed.global.grafana */}}
 
-{{- define "gitlab.deprecate.registry.topLevel" -}}
+{{- define "gitlab.removed.registry.topLevel" -}}
 {{-   if hasKey $.Values.gitlab.webservice "registry" }}
 registry:
     The configuration of `gitlab.webservice.registry` has moved. Please use `global.registry` instead
@@ -530,7 +530,7 @@ registry:
 {{-   end -}}
 {{- end -}}
 
-{{- define "gitlab.deprecate.busybox" -}}
+{{- define "gitlab.removed.busybox" -}}
 {{- if hasKey .Values.global "busybox" }}
 global.busybox:
     Support for busybox based based init containers was removed.
@@ -538,7 +538,7 @@ global.busybox:
 {{- end -}}
 {{- end -}}
 
-{{- define "gitlab.deprecate.kas.privateApi.tls" -}}
+{{- define "gitlab.removed.kas.privateApi.tls" -}}
 {{- if hasKey $.Values.gitlab.kas.privateApi "tls" }}
 kas:
     The configuration of `gitlab.kas.privateApi.tls.enabled` and `gitlab.kas.privateApi.tls.secretName` have moved.

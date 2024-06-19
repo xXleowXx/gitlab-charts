@@ -147,7 +147,7 @@ redis:
     https://docs.gitlab.com/charts/installation/upgrade.html#use-of-globalredispassword
 {{- end -}}
 
-{{- /* run deprecations */}}
-{{ include "gitlab.deprecations" . }}
+{{- /* run removals */}}
+{{ include "gitlab.removals" . }}
 {{- /* run checkConfig */}}
 {{ include "gitlab.checkConfig" . }}
