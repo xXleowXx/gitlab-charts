@@ -138,6 +138,8 @@ class HelmTemplate
     secrets['projected']['sources'].each do |s|
       return s['secret'] if s.has_key?('secret') && s['secret'].has_key?('name') && s['secret']['name'] == secret
     end
+
+    nil
   end
 
   def find_projected_secret(item, mount, secret)

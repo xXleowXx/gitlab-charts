@@ -710,9 +710,6 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              cache:
-                enabled: false
-                addr: "global.redis.example.com:16379"
               ratelimiter:
                 enabled: true
                 addr: "global.redis.example.com:16379"
@@ -754,9 +751,6 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              cache:
-                enabled: false
-                addr: "global.redis.example.com:16379"
               ratelimiter:
                 enabled: true
                 addr: "redis.example.com:12345"
@@ -797,9 +791,6 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              cache:
-                enabled: false
-                addr: "global.redis.example.com:16379"
               ratelimiter:
                 enabled: true
                 addr: "redis.example.com:6379"
@@ -832,9 +823,6 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              cache:
-                enabled: false
-                addr: "global.redis.example.com:16379"
               ratelimiter:
                 enabled: true
                 addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
@@ -866,9 +854,6 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              cache:
-                enabled: false
-                addr: "global.redis.example.com:16379"
               ratelimiter:
                 enabled: true
                 addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
@@ -908,9 +893,6 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              cache:
-                enabled: false
-                addr: "global.redis.example.com:16379"
               ratelimiter:
                 enabled: true
                 addr: "local1.example.com:26379,local2.example.com:26379"

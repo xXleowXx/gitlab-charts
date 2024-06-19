@@ -60,6 +60,7 @@ Return Redis configuration.
 {{- define "registry.redis.config" -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
 redis:
+  {{- if .Values.redis.cache.enabled }}
   cache:
     enabled: {{ .Values.redis.cache.enabled | eq true }}
     {{- if .Values.redis.cache.sentinels }}
@@ -108,6 +109,7 @@ redis:
       idletimeout: {{ .Values.redis.cache.pool.idletimeout }}
       {{- end -}}
     {{- end -}}
+  {{- end }}
   {{- if .Values.redis.rateLimiter.enabled }}
   ratelimiter:
     enabled: {{ .Values.redis.rateLimiter.enabled | eq true }}
