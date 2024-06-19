@@ -727,6 +727,7 @@ describe 'registry configuration' do
                   enabled: true
                   host: redis.example.com
                   port: 12345
+                  username: registry
                   db: 0
                   password:
                     enabled: true
@@ -754,6 +755,7 @@ describe 'registry configuration' do
               ratelimiter:
                 enabled: true
                 addr: "redis.example.com:12345"
+                username: registry
                 password: "REDIS_RATE_LIMITER_PASSWORD"
                 db: 0
                 dialtimeout: 10ms

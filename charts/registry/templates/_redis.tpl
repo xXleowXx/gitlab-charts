@@ -125,7 +125,7 @@ redis:
     addr: {{ printf "%s:%s" ( include "gitlab.redis.host" . ) ( include "gitlab.redis.port" . ) | quote }}
     {{- end }}
     {{- if .Values.redis.rateLimiter.username }}
-    username: .Values.redis.rateLimiter.username
+    username: {{ .Values.redis.rateLimiter.username }}
     {{- end }}
     {{- if .Values.redis.rateLimiter.password.enabled }}
     password: "REDIS_RATE_LIMITER_PASSWORD"
