@@ -103,7 +103,9 @@ include:
       aws_secret_access_key_variable_name: "QA_ALLURE_AWS_SECRET_ACCESS_KEY"
       allure_results_glob: "gitlab-qa-run-*/**/allure-results"
     rules:
-      - if: '$CI_SERVER_HOST == "gitlab.com"'
+      - if: '$CI_SERVER_HOST != "gitlab.com"'
+        when: never
+      - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
 
 dependency_scanning:
   needs: []
