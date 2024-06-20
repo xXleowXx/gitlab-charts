@@ -102,6 +102,7 @@ include:
       aws_access_key_id_variable_name: "QA_ALLURE_AWS_ACCESS_KEY_ID"
       aws_secret_access_key_variable_name: "QA_ALLURE_AWS_SECRET_ACCESS_KEY"
       allure_results_glob: "gitlab-qa-run-*/**/allure-results"
+      allure_job_name: "${QA_RUN_TYPE}"
     rules:
       - if: '$CI_SERVER_HOST != "gitlab.com"'
         when: never
