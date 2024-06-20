@@ -267,6 +267,9 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `redis.cache.password.enabled`              | `false`                                                              | Indicates whether the Redis cache used by the Registry is password protected. |
 | `redis.cache.password.secret`               | `gitlab-redis-secret`                                                | Name of the secret containing the Redis password. This will be automatically created if not provided, when the `shared-secrets` feature is enabled. |
 | `redis.cache.password.key`                  | `redis-password`                                                     | Secret key in which the Redis password is stored. |
+| `redis.cache.sentinelpassword.enabled`      | `false`                                                              | Indicates whether Redis Sentinels are password protected. If `redis.cache.sentinelpassword` is empty, the values from `global.redis.sentinelAuth` are used. Only used when `redis.cache.sentinels` is defined. |
+| `redis.cache.sentinelpassword.secret`       | `gitlab-redis-secret`                                                | Name of the secret containing the Redis Sentinel password. |
+| `redis.cache.sentinelpassword.key`          | `redis-sentinel-password`                                            | Secret key in which the Redis Sentinel password is stored. |
 | `redis.cache.db`                            | `0`                                                                  | The name of the database to use for each connection. |
 | `redis.cache.dialtimeout`                   | `0s`                                                                 | The timeout for connecting to the Redis instance. Defaults to no timeout. |
 | `redis.cache.readtimeout`                   | `0s`                                                                 | The timeout for reading from the Redis instance. Defaults to no timeout. |
@@ -1066,6 +1069,30 @@ redis:
         port: 16379
       - host: sentinel2.example.com
         port: 16379
+```
+
+#### Sentinel password support
+
+> - [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3805) in GitLab 17.2.
+
+The `redis.cache` can also use the [`global.redis.sentinelAuth` configuration](../globals.md#redis-sentinel-password-support)
+to use an authentication password for Redis Sentinel. Local values can
+be provided and take precedence over the global values. For example:
+
+```yaml
+redis:
+  cache:
+    enabled: true
+    host: redis.example.com
+    sentinels:
+      - host: sentinel1.example.com
+        port: 16379
+      - host: sentinel2.example.com
+        port: 16379
+    sentinelpassword:
+      enabled: true
+      secret: registry-redis-sentinel
+      key: password
 ```
 
 ## Garbage Collection
