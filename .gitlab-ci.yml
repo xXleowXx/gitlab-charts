@@ -105,7 +105,7 @@ include:
     rules:
       - if: '$CI_SERVER_HOST != "gitlab.com"'
         when: never
-      - if: '$PIPELINE_TYPE =~ /_MR_PIPELINE$/'
+      - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 dependency_scanning:
   needs: []
