@@ -28,10 +28,10 @@ in GitLab 17.0. It will be removed in GitLab 18.0.
 
 To use the recommended workflow:
 
-- [You must generate a authentication token.](https://docs.gitlab.com/ee/ci/runners/new_creation_workflow.html#prevent-your-runner-registration-workflow-from-breaking)
-- The configuration is not handled by the [`shared-secrets`](../../shared-secrets.md) Job and the
-  runner secret (`<release>-gitlab-runner-secret`) must be updated manually.
-- You must unset `gitlab-runner.runners.locked`:
+- [Generate an authentication token.](https://docs.gitlab.com/ee/ci/runners/new_creation_workflow.html#prevent-your-runner-registration-workflow-from-breaking)
+- Update the runner secret (`<release>-gitlab-runner-secret`) manually, as the configuration
+  is not handled by the [`shared-secrets`](../../shared-secrets.md) job.
+- Set `gitlab-runner.runners.locked` to `null`:
 
   ```yaml
   gitlab-runner:
