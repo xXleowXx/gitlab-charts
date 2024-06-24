@@ -10,7 +10,7 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Deprecated features are features that are still supported, but are scheduled for removal in a later
 milestone. The chart's [NOTES.txt](https://helm.sh/docs/chart_template_guide/notes_files/) checks
-for enabled deprecated features and displays a informational message if so.
+for enabled deprecated features and displays a informational message if found.
 
 ### Considerations in detection
 
