@@ -61,6 +61,7 @@ The table below maps some of the key previous supported chart versions and suppo
 | 7.9.2 | 16.9.2 |
 | 7.9.1 | 16.9.1 |
 | 7.9.0 | 16.9.0 |
+| 7.8.8 | 16.8.8 |
 | 7.8.7 | 16.8.7 |
 | 7.8.6 | 16.8.6 |
 | 7.8.5 | 16.8.5 |
