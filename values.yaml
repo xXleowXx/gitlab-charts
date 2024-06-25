@@ -173,6 +173,10 @@ global:
     # sentinels:
     #   - host:
     #     port:
+    sentinelAuth:
+      enabled: false
+      # secret:
+      # key:
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-gitaly-settings
   gitaly:
@@ -621,6 +625,8 @@ global:
   rails:
     bootsnap: # Enable / disable Shopify/Bootsnap cache
       enabled: true
+    sessionStore:
+      sessionCookieTokenPrefix: ""
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-registry-settings
   registry:
@@ -646,7 +652,8 @@ global:
       #   - name: FooListener
       #     url: https://foolistener.com/event
       #     timeout: 500ms
-      #     threshold: 10
+      #     threshold: 10 # DEPRECATED: use maxretries instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.
+      #     maxretries: 5
       #     backoff: 1s
       #     headers:
       #       FooBar: ['1', '2']
@@ -1168,7 +1175,7 @@ redis:
   metrics:
     enabled: true
 
-## Installation & configuration of stable/prostgresql
+## Installation & configuration of stable/postgresql
 ## See requirements.yaml for current version
 postgresql:
   install: true

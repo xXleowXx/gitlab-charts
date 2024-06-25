@@ -149,6 +149,7 @@ backups:
     suspend: false
     backoffLimit: 6
     # activeDeadlineSeconds:
+    # ttlSecondsAfterFinished:
     safeToEvict: false
     restartPolicy: "OnFailure"
     extraArgs: ""
