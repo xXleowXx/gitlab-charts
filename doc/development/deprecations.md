@@ -73,6 +73,5 @@ deprecation is related to.
 
 ### Activating new removals
 
-Once a template has been defined, and logic placed within it for the detection of affected properties, activating
-this new template is simple. Simple add a line beneath `add templates here` in the `gitlab.removals` template,
+Once a template has been defined, and logic placed within it for the detection of affected properties, activate the new template by adding a line beneath `add templates here` in the `gitlab.removals` template,
 according to the format presented.
