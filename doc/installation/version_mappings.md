@@ -35,6 +35,7 @@ The table below maps some of the key previous supported chart versions and suppo
 |---------------|----------------|
 | 8.1.1 | 17.1.1 |
 | 8.1.0 | 17.1.0 |
+| 8.0.3 | 17.0.3 |
 | 8.0.2 | 17.0.2 |
 | 8.0.1 | 17.0.1 |
 | 8.0.0 | 17.0.0 |
