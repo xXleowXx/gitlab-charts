@@ -122,9 +122,9 @@ Selector Labels by subchart for podAntiAffinity
 
 {{- define "selectorLabelsBySubchart.Labels" -}}
 {{- if eq .Chart.Name "gitaly" }}
-  {{- if .storage }}
-  storage: {{ .storage.name }}
-  {{- end }}
+{{- if .storage }}
+storage: {{ .storage.name }}
+{{- end }}
 {{- end -}}
 {{- if eq .Chart.Name "toolbox" }}
 {{- toYaml .Values.antiAffinityLabels.matchLabels }}
