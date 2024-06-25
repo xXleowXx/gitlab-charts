@@ -128,5 +128,6 @@ Selector Labels by subchart for podAntiAffinity
 {{- end -}}
 {{- if eq .Chart.Name "toolbox" }}
 {{- toYaml .Values.antiAffinityLabels.matchLabels }}
+release: {{ .Release.Name }}
 {{- end }}
 {{- end }}
