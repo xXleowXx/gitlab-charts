@@ -10,12 +10,12 @@ info: To determine the technical writer assigned to the Stage/Group associated w
 
 Deprecated features are features that are still supported, but are scheduled for removal in a later
 milestone. The chart's [NOTES.txt](https://helm.sh/docs/chart_template_guide/notes_files/) checks
-for enabled deprecated features and displays a informational message if found.
+for enabled deprecated features and displays an informational message if found.
 
 ### Considerations in detection
 
-The developer should be careful not to assume that a key, or parent key will exist. Judicious application of
-`if`, `hasKey` and `empty` are strongly recommended. It is just as likely for a single key to be present as
+You should be careful not to assume that a key, or parent key will exist. Judicious application of
+`if`, `hasKey`, and `empty` are strongly recommended. It is just as likely for a single key to be present as
 it is for the entire property map to be missing several branches before that key. Helm _will_ complain if you
 attempt to access a property that does not exist within the map structure, generally in a vague manor. Save
 time, be explicit.
@@ -30,9 +30,9 @@ chart:
     message
 ```
 
-- The `if` statement preceding the message _should not_ trim the newline after it. (`}}` not `-}}`)
-  This ensures the formatting and readability for the user.
-- The message should declare which chart, relative to the global chart, that is affected. This helps
+- The `if` statement preceding the message _should not_ trim the newline after it (`}}` not `-}}`).
+  This ensures proper formatting, and readability for the user.
+- The message should declare the chart, relative to the global chart, that is affected. This helps
   the user understand where the property came from in the charts, and configuration properties.
   Example: `gitlab.webservice`, `minio`, `registry`.
 - The message should inform the user of the property that has been altered / relocated / deprecated,
@@ -50,7 +50,7 @@ gitlab.webservice:
 
 ## Removals
 
-Once a deprecated feature is removed, the deprecation message is moved to a removal template. If a
+After a deprecated feature is removed, the deprecation message is moved to a removal template. If a
 removed feature is enabled, the `helm upgrade` will be blocked.
 
 ### General concept
@@ -73,5 +73,5 @@ deprecation is related to.
 
 ### Activating new removals
 
-Once a template has been defined, and logic placed within it for the detection of affected properties, activate the new template by adding a line beneath `add templates here` in the `gitlab.removals` template,
+After a template has been defined, and logic placed in it for the detection of affected properties, activate the new template by adding a line beneath `add templates here` in the `gitlab.removals` template,
 according to the format presented.
