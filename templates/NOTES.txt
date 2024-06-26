@@ -147,6 +147,16 @@ redis:
     https://docs.gitlab.com/charts/installation/upgrade.html#use-of-globalredispassword
 {{- end -}}
 
+{{/* WARN: Usage of unsupported persistence with minio */}}
+{{- if .Values.minio.persistence.annotations }}
+{{-   if eq (index .Values.minio.persistence.annotations "helm.sh/resource-policy" | default "missing-key" ) "keep" }}
+{{ $WARNING }}
+You've told Helm to keep the MinIO PVC by setting
+`minio.persistence.annotations`.
+As a reminder, the in-chart MinIO should not be used for production deployments.
+{{-   end }}
+{{- end }}
+
 {{- /* run deprecations */}}
 {{ include "gitlab.deprecations" . }}
 {{- /* run checkConfig */}}
