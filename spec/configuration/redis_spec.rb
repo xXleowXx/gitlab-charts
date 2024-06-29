@@ -1,10 +1,51 @@
 require 'spec_helper'
 require 'helm_template_helper'
+require 'runtime_template_helper'
 require 'yaml'
 
 describe 'Redis configuration' do
   let(:default_values) do
     HelmTemplate.defaults
+  end
+
+  let(:template) { HelmTemplate.new(values) }
+  let(:resque_yml_erb) { template.dig('ConfigMap/test-webservice', 'data', 'resque.yml.erb') }
+  let(:resque_yml) { render_erb(resque_yml_erb) }
+
+  def render_erb(raw_template)
+    yaml = RuntimeTemplate.erb(raw_template: raw_template, files: RuntimeTemplate.mock_files)
+    YAML.safe_load(yaml, aliases: true)
+  end
+
+  describe 'global.redis.{connect,read,write}Timeout' do
+    context 'default values' do
+      let(:values) { default_values }
+      let(:connect_timeout) { 1 }
+
+      it 'renders no timeout values' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+        expect(resque_yml["production"].keys).not_to include("connect_timeout", "read_timeout", "write_timeout")
+      end
+    end
+
+    context 'timeouts set' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            redis:
+              connectTimeout: 3
+              readTimeout: 4
+              writeTimeout: 5
+        )).merge(default_values)
+      end
+
+      it 'renders {connect,read,write}_timeout values' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+        expect(resque_yml.dig('production', 'connect_timeout')).to eq(3)
+        expect(resque_yml.dig('production', 'read_timeout')).to eq(4)
+        expect(resque_yml.dig('production', 'write_timeout')).to eq(5)
+      end
+    end
   end
 
   describe 'global.redis.auth.enabled' do
