@@ -449,6 +449,7 @@ configuration.
 ```yaml
 global:
   redis:
+    connectTimeout: 1
     host: redis.example.com
     serviceName: redis
     port: 6379
@@ -461,6 +462,7 @@ global:
 
 | Name               | Type    | Default | Description |
 |:------------------ |:-------:|:------- |:----------- |
+| `connectTimeout`   | Integer | 1       | The nubmer of seconds to wait for a Redis coonnection. |
 | `host`             | String  |         | The hostname of the Redis server with the database to use. This can be omitted in lieu of `serviceName`. |
 | `serviceName`      | String  | `redis` | The name of the `service` which is operating the Redis database. If this is present, and `host` is not, the chart will template the hostname of the service (and current `.Release.Name`) in place of the `host` value. This is convenient when using Redis as a part of the overall GitLab chart. |
 | `port`             | Integer | `6379`  | The port on which to connect to the Redis server. |

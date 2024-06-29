@@ -7,6 +7,37 @@ describe 'Redis configuration' do
     HelmTemplate.defaults
   end
 
+  describe 'global.redis.connectTimeout' do
+    context 'default values' do
+      let(:values) { default_values }
+      let(:connect_timeout) { 1 }
+
+      it 'renders connect_timeout of 1' do
+        t = HelmTemplate.new(values)
+        expect(t.exit_code).to eq(0)
+        expect(t.dig('ConfigMap/test-webservice','data','resque.yml.erb')).to include("connect_timeout: 1")
+      end
+    end
+
+    context '3-second timeout' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            redis:
+              connectTimeout: 3
+        )).merge(default_values)
+      end
+
+      let(:connect_timeout) { 3 }
+
+      it 'renders connect_timeout of 3' do
+        t = HelmTemplate.new(values)
+        expect(t.exit_code).to eq(0)
+        expect(t.dig('ConfigMap/test-webservice','data','resque.yml.erb')).to include("connect_timeout: 3")
+      end
+    end
+  end
+
   describe 'global.redis.auth.enabled' do
     let(:values) do
       YAML.safe_load(%(

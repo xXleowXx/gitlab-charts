@@ -53,6 +53,13 @@ Return the redis url.
 {{- end -}}
 
 {{/*
+Return the redis connection timeout.
+*/}}
+{{- define "gitlab.redis.connectTimeout" -}}
+{{ default 1 .Values.global.redis.connectTimeout }}
+{{- end -}}
+
+{{/*
 Return the user section of the Redis URI, if needed.
 */}}
 {{- define "gitlab.redis.url.user" -}}
