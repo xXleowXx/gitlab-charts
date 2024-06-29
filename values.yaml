@@ -167,6 +167,9 @@ global:
       enabled: true
       # secret:
       # key:
+    # connectTimeout: 1
+    # readTimeout: 1
+    # writeTimeout: 1
     # host: redis.hostedsomewhere.else
     # port: 6379
     # user: webservice

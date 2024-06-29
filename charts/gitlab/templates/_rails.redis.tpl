@@ -16,6 +16,18 @@ Input: dict "context" $ "name" string
 {{ .name }}.yml.erb: |
   production:
     url: {{ template "gitlab.redis.url" .context }}
+    {{- $connect_timeout := include "gitlab.redis.connectTimeout" .context }}
+    {{- if $connect_timeout }}
+    connect_timeout: {{ $connect_timeout }}
+    {{- end }}
+    {{- $read_timeout := include "gitlab.redis.readTimeout" .context  }}
+    {{- if $read_timeout }}
+    read_timeout: {{ $read_timeout }}
+    {{- end }}
+    {{- $write_timeout := include "gitlab.redis.writeTimeout" .context }}
+    {{- if $write_timeout }}
+    write_timeout: {{ $write_timeout }}
+    {{- end }}
     {{- include "gitlab.redis.sentinels" .context | nindent 4 }}
     {{- $password := include "gitlab.redis.sentinel.password" .context }}
     {{- if $password }}
