@@ -312,7 +312,7 @@ describe 'checkConfig registry' do
                      error_description: 'when redis cache password is enabled, with empty key'
   end
 
-  describe 'registry.redis.rateLimiter (host)' do
+  describe 'registry.redis.rateLimiting (host)' do
     let(:success_values) do
       YAML.safe_load(%(
         postgresql:
@@ -321,7 +321,7 @@ describe 'checkConfig registry' do
 
         registry:
           redis:
-            rateLimiter:
+            rateLimiting:
               enabled: true
               host: 'localhost'
       )).merge(default_required_values)
@@ -335,7 +335,7 @@ describe 'checkConfig registry' do
 
         registry:
           redis:
-            rateLimiter:
+            rateLimiting:
               enabled: true
               host: ''
       )).merge(default_required_values)
@@ -348,7 +348,7 @@ describe 'checkConfig registry' do
                      error_description: 'when redis rate-limiter is enabled, with empty host'
   end
 
-  describe 'registry.redis.rateLimiter (sentinels)' do
+  describe 'registry.redis.rateLimiting (sentinels)' do
     let(:success_values) do
       YAML.safe_load(%(
         postgresql:
@@ -357,7 +357,7 @@ describe 'checkConfig registry' do
 
         registry:
           redis:
-            rateLimiter:
+            rateLimiting:
               enabled: true
               host: 'localhost'
               sentinels:
@@ -376,7 +376,7 @@ describe 'checkConfig registry' do
 
         registry:
           redis:
-            rateLimiter:
+            rateLimiting:
               enabled: true
               host: ''
               sentinels:
@@ -387,14 +387,14 @@ describe 'checkConfig registry' do
       )).merge(default_required_values)
     end
 
-    let(:error_output) { 'Enabling the Redis rate-limiter with sentinels requires the registry.redis.rateLimiter.host to be set.' }
+    let(:error_output) { 'Enabling the Redis rate-limiter with sentinels requires the registry.redis.rateLimiting.host to be set.' }
 
     include_examples 'config validation',
                      success_description: 'when redis rate-limiter is enabled, with sentinels',
                      error_description: 'when redis rate-limiter is enabled, with sentinels and empty host'
   end
 
-  describe 'registry.redis.rateLimiter.password (secret)' do
+  describe 'registry.redis.rateLimiting.password (secret)' do
     let(:success_values) do
       YAML.safe_load(%(
         postgresql:
@@ -403,7 +403,7 @@ describe 'checkConfig registry' do
 
         registry:
           redis:
-            rateLimiter:
+            rateLimiting:
               enabled: true
               host: 'localhost'
               password:
@@ -421,7 +421,7 @@ describe 'checkConfig registry' do
 
         registry:
           redis:
-            rateLimiter:
+            rateLimiting:
               enabled: true
               host: ''
               password:
@@ -430,14 +430,14 @@ describe 'checkConfig registry' do
       )).merge(default_required_values)
     end
 
-    let(:error_output) { ' Enabling the Redis rate-limiter password requires \'registry.redis.rateLimiter.password.secret\' to be set.' }
+    let(:error_output) { ' Enabling the Redis rate-limiter password requires \'registry.redis.rateLimiting.password.secret\' to be set.' }
 
     include_examples 'config validation',
                      success_description: 'when redis rate-limiter password is enabled, with secret and key',
                      error_description: 'when redis rate-limiter password is enabled, with empty secret'
   end
 
-  describe 'registry.redis.rateLimiter.password (key)' do
+  describe 'registry.redis.rateLimiting.password (key)' do
     let(:success_values) do
       YAML.safe_load(%(
         postgresql:
@@ -446,7 +446,7 @@ describe 'checkConfig registry' do
 
         registry:
           redis:
-            rateLimiter:
+            rateLimiting:
               enabled: true
               host: 'localhost'
               password:
@@ -464,7 +464,7 @@ describe 'checkConfig registry' do
 
         registry:
           redis:
-            rateLimiter:
+            rateLimiting:
               enabled: true
               host: ''
               password:
@@ -474,7 +474,7 @@ describe 'checkConfig registry' do
       )).merge(default_required_values)
     end
 
-    let(:error_output) { ' Enabling the Redis rate-limiter password requires \'registry.redis.rateLimiter.password.key\' to be set.' }
+    let(:error_output) { ' Enabling the Redis rate-limiter password requires \'registry.redis.rateLimiting.password.key\' to be set.' }
 
     include_examples 'config validation',
                      success_description: 'when redis rate-limiter password is enabled, with secret and key',

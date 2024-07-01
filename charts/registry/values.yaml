@@ -185,8 +185,8 @@ init:
       sed -i -e 's@REDIS_CACHE_PASSWORD@'"$(cat /config/registry/redis-password)"'@' /registry/config.yml
     fi
     # Insert Redis(rate-limiter) password, if enabled
-    if [ -f /config/registry/redis-rateLimiter-password ] ; then
-      sed -i -e 's@REDIS_RATE_LIMITER_PASSWORD@'"$(cat /config/registry/redis-rateLimiter-password)"'@' /registry/config.yml
+    if [ -f /config/registry/redis-rateLimiting-password ] ; then
+      sed -i -e 's@REDIS_RATE_LIMITER_PASSWORD@'"$(cat /config/registry/redis-rateLimiting-password)"'@' /registry/config.yml
     fi
     # Copy the database TLS connection files to the expected location and set permissions
     if [ -d /config/ssl ]; then
@@ -405,7 +405,7 @@ redis:
   # Redis rate-limiter connection settings
   # https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md?ref_type=heads#ratelimiter
   # TODO: add behavior settings https://gitlab.com/gitlab-org/container-registry/-/issues/1224
-  rateLimiter:
+  rateLimiting:
     enabled: false
     password:
       enabled: false

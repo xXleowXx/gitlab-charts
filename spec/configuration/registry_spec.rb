@@ -698,7 +698,7 @@ describe 'registry configuration' do
                 port: 16379
             registry:
               redis:
-                rateLimiter:
+                rateLimiting:
                   enabled: true
           )).deep_merge(default_values)
         end
@@ -710,7 +710,7 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              ratelimiter:
+              rateLimiting:
                 enabled: true
                 addr: "global.redis.example.com:16379"
             CONFIG
@@ -723,7 +723,7 @@ describe 'registry configuration' do
           YAML.safe_load(%(
             registry:
               redis:
-                rateLimiter:
+                rateLimiting:
                   enabled: true
                   host: redis.example.com
                   port: 12345
@@ -752,7 +752,7 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              ratelimiter:
+              rateLimiting:
                 enabled: true
                 addr: "redis.example.com:12345"
                 username: registry
@@ -781,7 +781,7 @@ describe 'registry configuration' do
           YAML.safe_load(%(
             registry:
               redis:
-                rateLimiter:
+                rateLimiting:
                   enabled: true
                   host: redis.example.com
           )).deep_merge(default_values)
@@ -793,7 +793,7 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              ratelimiter:
+              rateLimiting:
                 enabled: true
                 addr: "redis.example.com:6379"
             CONFIG
@@ -814,7 +814,7 @@ describe 'registry configuration' do
                     port: 26379
             registry:
               redis:
-                rateLimiter:
+                rateLimiting:
                   enabled: true
         )).deep_merge(default_values)
         end
@@ -825,7 +825,7 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              ratelimiter:
+              rateLimiting:
                 enabled: true
                 addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
                 mainname: redis.example.com
@@ -839,7 +839,7 @@ describe 'registry configuration' do
           YAML.safe_load(%(
             registry:
               redis:
-                rateLimiter:
+                rateLimiting:
                   enabled: true
                   host: redis.example.com
                   sentinels:
@@ -856,7 +856,7 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              ratelimiter:
+              rateLimiting:
                 enabled: true
                 addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
                 mainname: redis.example.com
@@ -878,7 +878,7 @@ describe 'registry configuration' do
                     port: 26379
             registry:
               redis:
-                rateLimiter:
+                rateLimiting:
                   enabled: true
                   host: local.example.com
                   sentinels:
@@ -895,7 +895,7 @@ describe 'registry configuration' do
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
             <<~CONFIG
             redis:
-              ratelimiter:
+              rateLimiting:
                 enabled: true
                 addr: "local1.example.com:26379,local2.example.com:26379"
                 mainname: local.example.com
@@ -930,7 +930,7 @@ describe 'registry configuration' do
                     size: 10
                     maxlifetime: 1h
                     idletimeout: 300s
-                rateLimiter:
+                rateLimiting:
                   enabled: true
                   host: redis.rate-limiter.example.com
                   port: 54321
@@ -973,7 +973,7 @@ describe 'registry configuration' do
                   size: 10
                   maxlifetime: 1h
                   idletimeout: 300s
-              ratelimiter:
+              rateLimiting:
                 enabled: true
                 addr: "redis.rate-limiter.example.com:54321"
                 password: "REDIS_RATE_LIMITER_PASSWORD"

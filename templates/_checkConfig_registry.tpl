@@ -86,35 +86,35 @@ registry:
 {{/*
 Ensure Registry Redis rate-limiter is configured properly and dependencies are met
 */}}
-{{- define "gitlab.checkConfig.registry.redis.rateLimiter" -}}
-{{-   if $.Values.registry.redis.rateLimiter.enabled }}
-{{-     if  and (kindIs "string" $.Values.registry.redis.rateLimiter.host) (empty $.Values.registry.redis.rateLimiter.host) }}
+{{- define "gitlab.checkConfig.registry.redis.rateLimiting" -}}
+{{-   if $.Values.registry.redis.rateLimiting.enabled }}
+{{-     if  and (kindIs "string" $.Values.registry.redis.rateLimiting.host) (empty $.Values.registry.redis.rateLimiting.host) }}
 registry:
     Enabling the Redis rate-limiter requires the host to not be empty.
     See https://docs.gitlab.com/charts/charts/registry#redis-rate-limiter
 {{-     end -}}
 {{- end -}}
-{{-   if and $.Values.registry.redis.rateLimiter.enabled $.Values.registry.redis.rateLimiter.sentinels}}
-{{-     if  and (kindIs "string" $.Values.registry.redis.rateLimiter.host) (empty $.Values.registry.redis.rateLimiter.host) }}
+{{-   if and $.Values.registry.redis.rateLimiting.enabled $.Values.registry.redis.rateLimiting.sentinels}}
+{{-     if  and (kindIs "string" $.Values.registry.redis.rateLimiting.host) (empty $.Values.registry.redis.rateLimiting.host) }}
 registry:
-    Enabling the Redis rate-limiter with sentinels requires the registry.redis.rateLimiter.host to be set.
+    Enabling the Redis rate-limiter with sentinels requires the registry.redis.rateLimiting.host to be set.
     See https://docs.gitlab.com/charts/charts/registry#redis-rate-limiter
 {{-     end -}}
 {{- end -}}
-{{-   if and $.Values.registry.redis.rateLimiter.enabled $.Values.registry.redis.rateLimiter.password.enabled }}
-{{-     if and (kindIs "string" $.Values.registry.redis.rateLimiter.password.secret) (empty $.Values.registry.redis.rateLimiter.password.secret) }}
+{{-   if and $.Values.registry.redis.rateLimiting.enabled $.Values.registry.redis.rateLimiting.password.enabled }}
+{{-     if and (kindIs "string" $.Values.registry.redis.rateLimiting.password.secret) (empty $.Values.registry.redis.rateLimiting.password.secret) }}
 registry:
-    Enabling the Redis rate-limiter password requires 'registry.redis.rateLimiter.password.secret' to be set.
+    Enabling the Redis rate-limiter password requires 'registry.redis.rateLimiting.password.secret' to be set.
     See https://docs.gitlab.com/charts/charts/registry#redis-rate-limiter
 {{-     end -}}
-{{-     if and (kindIs "string" $.Values.registry.redis.rateLimiter.password.key) (empty $.Values.registry.redis.rateLimiter.password.key) }}
+{{-     if and (kindIs "string" $.Values.registry.redis.rateLimiting.password.key) (empty $.Values.registry.redis.rateLimiting.password.key) }}
 registry:
-    Enabling the Redis rate-limiter password requires 'registry.redis.rateLimiter.password.key' to be set.
+    Enabling the Redis rate-limiter password requires 'registry.redis.rateLimiting.password.key' to be set.
     See https://docs.gitlab.com/charts/charts/registry#redis-cache
 {{-     end -}}
 {{- end -}}
 {{- end -}}
-{{/* END gitlab.checkConfig.registry.redis.rateLimiter */}}
+{{/* END gitlab.checkConfig.registry.redis.rateLimiting */}}
 
 {{/*
 Ensure Registry TLS has a secret when enabled
