@@ -186,7 +186,7 @@ init:
     fi
     # Insert Redis(rate-limiter) password, if enabled
     if [ -f /config/registry/redis-rateLimiting-password ] ; then
-      sed -i -e 's@REDIS_RATE_LIMITER_PASSWORD@'"$(cat /config/registry/redis-rateLimiting-password)"'@' /registry/config.yml
+      sed -i -e 's@REDIS_RATE_LIMITING_PASSWORD@'"$(cat /config/registry/redis-rateLimiting-password)"'@' /registry/config.yml
     fi
     # Copy the database TLS connection files to the expected location and set permissions
     if [ -d /config/ssl ]; then

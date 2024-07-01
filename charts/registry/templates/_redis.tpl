@@ -111,7 +111,7 @@ redis:
     {{- end -}}
   {{- end }}
   {{- if .Values.redis.rateLimiting.enabled }}
-  rateLimiting:
+  ratelimiter:
     enabled: {{ .Values.redis.rateLimiting.enabled | eq true }}
     {{- if .Values.redis.rateLimiting.sentinels }}
     addr: {{ include "registry.redis.host.sentinels" .Values.redis.rateLimiting | quote }}
@@ -128,7 +128,7 @@ redis:
     username: {{ .Values.redis.rateLimiting.username }}
     {{- end }}
     {{- if .Values.redis.rateLimiting.password.enabled }}
-    password: "REDIS_RATE_LIMITER_PASSWORD"
+    password: "REDIS_RATE_LIMITING_PASSWORD"
     {{- end }}
     {{- if hasKey .Values.redis.rateLimiting "db" }}
     db: {{ .Values.redis.rateLimiting.db }}

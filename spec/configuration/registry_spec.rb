@@ -707,10 +707,10 @@ describe 'registry configuration' do
           t = HelmTemplate.new(values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl')).to include(
             <<~CONFIG
             redis:
-              rateLimiting:
+              ratelimiter:
                 enabled: true
                 addr: "global.redis.example.com:16379"
             CONFIG
@@ -749,14 +749,14 @@ describe 'registry configuration' do
         it 'populates the redis rate-limiter settings in the expected manner' do
           t = HelmTemplate.new(values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl')).to include(
             <<~CONFIG
             redis:
-              rateLimiting:
+              ratelimiter:
                 enabled: true
                 addr: "redis.example.com:12345"
                 username: registry
-                password: "REDIS_RATE_LIMITER_PASSWORD"
+                password: "REDIS_RATE_LIMITING_PASSWORD"
                 db: 0
                 dialtimeout: 10ms
                 readtimeout: 10ms
@@ -790,10 +790,10 @@ describe 'registry configuration' do
         it 'populates the redis rate-limiter settings with the default port' do
           t = HelmTemplate.new(values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl')).to include(
             <<~CONFIG
             redis:
-              rateLimiting:
+              ratelimiter:
                 enabled: true
                 addr: "redis.example.com:6379"
             CONFIG
@@ -822,10 +822,10 @@ describe 'registry configuration' do
         it 'populates the redis rate-limiter settings in the expected manner' do
           t = HelmTemplate.new(values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl')).to include(
             <<~CONFIG
             redis:
-              rateLimiting:
+              ratelimiter:
                 enabled: true
                 addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
                 mainname: redis.example.com
@@ -853,10 +853,10 @@ describe 'registry configuration' do
         it 'populates the redis rate-limiter settings in the expected manner' do
           t = HelmTemplate.new(values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl')).to include(
             <<~CONFIG
             redis:
-              rateLimiting:
+              ratelimiter:
                 enabled: true
                 addr: "sentinel1.example.com:26379,sentinel2.example.com:26379"
                 mainname: redis.example.com
@@ -892,10 +892,10 @@ describe 'registry configuration' do
         it 'populates the redis rate-limiter settings with the local sentinels' do
           t = HelmTemplate.new(values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl')).to include(
             <<~CONFIG
             redis:
-              rateLimiting:
+              ratelimiter:
                 enabled: true
                 addr: "local1.example.com:26379,local2.example.com:26379"
                 mainname: local.example.com
@@ -937,7 +937,7 @@ describe 'registry configuration' do
                   db: 1
                   password:
                     enabled: true
-                    secret: registry-redis-rate-limiter-secret
+                    secret: registry-redis-rate-limiting-secret
                     key: password
                   dialtimeout: 20ms
                   readtimeout: 20ms
@@ -955,7 +955,7 @@ describe 'registry configuration' do
         it 'populates the redis rate-limiter and cache settings in the expected manner' do
           t = HelmTemplate.new(values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
-          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml')).to include(
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl')).to include(
             <<~CONFIG
             redis:
               cache:
@@ -973,10 +973,10 @@ describe 'registry configuration' do
                   size: 10
                   maxlifetime: 1h
                   idletimeout: 300s
-              rateLimiting:
+              ratelimiter:
                 enabled: true
                 addr: "redis.rate-limiter.example.com:54321"
-                password: "REDIS_RATE_LIMITER_PASSWORD"
+                password: "REDIS_RATE_LIMITING_PASSWORD"
                 db: 1
                 dialtimeout: 20ms
                 readtimeout: 20ms
@@ -991,8 +991,8 @@ describe 'registry configuration' do
             CONFIG
           )
 
-          rate_limiter_secret = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'registry-redis-rate-limiter-secret', 'password')
-          expect(rate_limiter_secret).not_to be_nil
+          rate_limiting_secret = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'registry-redis-rate-limiting-secret', 'password')
+          expect(rate_limiting_secret).not_to be_nil
           cache_secret = t.find_projected_secret_key('Deployment/test-registry', 'registry-secrets', 'registry-redis-cache-secret', 'password')
           expect(cache_secret).not_to be_empty
         end
