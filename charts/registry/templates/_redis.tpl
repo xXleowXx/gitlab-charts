@@ -44,12 +44,23 @@ Expectation: input contents has .sentinels, which is a List of Dict
 {{- end -}}
 {{- end -}}
 
+{{- define "gitlab.registry.redisRateLimitingSecret.mount" -}}
+{{- if .Values.redis.rateLimiting.password.enabled }}
+- secret:
+    name: {{ default (include  "redis.secretName" . ) ( .Values.redis.rateLimiting.password.secret | quote) }}
+    items:
+      - key: {{ default (include "redis.secretPasswordKey" . ) ( .Values.redis.rateLimiting.password.key | quote) }}
+        path: registry/redis-rateLimiting-password
+{{- end }}
+{{- end -}}
+
 {{/*
-Return migration configuration.
+Return Redis configuration.
 */}}
 {{- define "registry.redis.config" -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
 redis:
+  {{- if .Values.redis.cache.enabled }}
   cache:
     enabled: {{ .Values.redis.cache.enabled | eq true }}
     {{- if .Values.redis.cache.sentinels }}
@@ -98,4 +109,55 @@ redis:
       idletimeout: {{ .Values.redis.cache.pool.idletimeout }}
       {{- end -}}
     {{- end -}}
+  {{- end }}
+  {{- if .Values.redis.rateLimiting.enabled }}
+  ratelimiter:
+    enabled: {{ .Values.redis.rateLimiting.enabled | eq true }}
+    {{- if .Values.redis.rateLimiting.sentinels }}
+    addr: {{ include "registry.redis.host.sentinels" .Values.redis.rateLimiting | quote }}
+    mainname: {{ .Values.redis.rateLimiting.host }}
+    {{- else if .redisMergedConfig.sentinels }}
+    addr: {{ include "registry.redis.host.sentinels" .redisMergedConfig | quote }}
+    mainname: {{ template "gitlab.redis.host" . }}
+    {{- else if .Values.redis.rateLimiting.host  }}
+    addr: {{ printf "%s:%d" .Values.redis.rateLimiting.host (int .Values.redis.rateLimiting.port | default 6379) | quote }}
+    {{- else }}
+    addr: {{ printf "%s:%s" ( include "gitlab.redis.host" . ) ( include "gitlab.redis.port" . ) | quote }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiting.username }}
+    username: {{ .Values.redis.rateLimiting.username }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiting.password.enabled }}
+    password: "REDIS_RATE_LIMITING_PASSWORD"
+    {{- end }}
+    {{- if hasKey .Values.redis.rateLimiting "db" }}
+    db: {{ .Values.redis.rateLimiting.db }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiting.dialtimeout }}
+    dialtimeout: {{ .Values.redis.rateLimiting.dialtimeout }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiting.readtimeout }}
+    readtimeout: {{ .Values.redis.rateLimiting.readtimeout }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiting.writetimeout }}
+    writetimeout: {{ .Values.redis.rateLimiting.writetimeout }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiting.tls }}
+    tls:
+      enabled: {{ .Values.redis.rateLimiting.tls.enabled | eq true }}
+      insecure: {{ .Values.redis.rateLimiting.tls.insecure | eq true }}
+    {{- end }}
+    {{- if .Values.redis.rateLimiting.pool }}
+    pool:
+      {{- if .Values.redis.rateLimiting.pool.size }}
+      size: {{ .Values.redis.rateLimiting.pool.size }}
+      {{- end }}
+      {{- if .Values.redis.rateLimiting.pool.maxlifetime }}
+      maxlifetime: {{ .Values.redis.rateLimiting.pool.maxlifetime }}
+      {{- end }}
+      {{- if .Values.redis.rateLimiting.pool.idletimeout }}
+      idletimeout: {{ .Values.redis.rateLimiting.pool.idletimeout }}
+      {{- end -}}
+    {{- end -}}
+  {{- end }}
 {{- end -}}
