@@ -91,7 +91,7 @@ include:
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
   - template: Jobs/SAST-IaC.latest.gitlab-ci.yml
-  - component: ${CI_SERVER_FQDN}/gitlab-org/components/danger-review/danger-review@1.2.0
+  - component: ${CI_SERVER_FQDN}/gitlab-org/components/danger-review/danger-review@1.4.1
     rules:
       - if: '$CI_SERVER_HOST == "gitlab.com"'
   - component: "gitlab.com/gitlab-org/quality/pipeline-common/allure-report@8.16.0"
