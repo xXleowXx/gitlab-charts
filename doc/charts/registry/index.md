@@ -279,7 +279,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `redis.cache.pool.size`                     | `10`                                                                 | The maximum number of socket connections. Default is 10 connections. |
 | `redis.cache.pool.maxlifetime`              | `1h`                                                                 | The connection age at which client retires a connection. Default is to not close aged connections. |
 | `redis.cache.pool.idletimeout`              | `300s`                                                               | How long to wait before closing inactive connections. |
-| `redis.rateLimiter.enabled`                 | `false`                                                              | When set to `true`, the Redis cache is enabled. This feature is under development. |
+| `redis.rateLimiter.enabled`                 | `false`                                                              | When set to `true`, the Redis rate limiter is enabled. This feature is under development. |
 | `redis.rateLimiter.host`                    | `<Redis URL>`                                                        | The hostname of the Redis instance. If empty, the value will be filled as `global.redis.host:global.redis.port`. |
 | `redis.rateLimiter.port`                    | `6379`                                                               | The port of the Redis instance. |
 | `redis.rateLimiter.sentinels`               | `[]`                                                                 | List sentinels with host and port. |
@@ -294,8 +294,8 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `redis.rateLimiter.writetimeout`            | `0s`                                                                 | The timeout for writing to the Redis instance. Defaults to no timeout. |
 | `redis.rateLimiter.tls.enabled`             | `false`                                                              | Set to `true` to enable TLS.  |
 | `redis.rateLimiter.tls.insecure`            | `false`                                                              | Set to `true` to disable server name verification when connecting over TLS. |
-| `redis.rateLimiter.pool.size`               | `10`                                                                 | The maximum number of socket connections. Default is 10 connections. |
-| `redis.rateLimiter.pool.maxlifetime`        | `1h`                                                                 | The connection age at which client retires a connection. Default is to not close aged connections. |
+| `redis.rateLimiter.pool.size`               | `10`                                                                 | The maximum number of socket connections. |
+| `redis.rateLimiter.pool.maxlifetime`        | `1h`                                                                 | The connection age at which the client retires a connection. Default is to not close aged connections. |
 | `redis.rateLimiter.pool.idletimeout`        | `300s`                                                               | How long to wait before closing inactive connections. |
 
 ## Chart configuration examples
@@ -1115,8 +1115,8 @@ redis:
 
 ### Redis rate-limiter
 
-NOTE:
-The Redis rate-limiting is currently [under development](https://gitlab.com/groups/gitlab-org/-/epics/13237).
+WARNING:
+The Redis rate-limiting is [under development](https://gitlab.com/groups/gitlab-org/-/epics/13237).
 More functionality details will be added to this section as they become available.
 
 The `redis.rateLimiter` property is optional and provides options related to the
