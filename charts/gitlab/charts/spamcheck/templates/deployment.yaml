@@ -30,7 +30,7 @@ spec:
         {{ $key }}: {{ $value | quote }}
       {{- end }}
     spec:
-      {{- with.Values.topologySpreadConstraints }}
+      {{- with .Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- include "gitlab.nodeSelector" . | nindent 6 }}
