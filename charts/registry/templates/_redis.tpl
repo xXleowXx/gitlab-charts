@@ -59,6 +59,7 @@ Return Redis configuration.
 */}}
 {{- define "registry.redis.config" -}}
 {{- include "gitlab.redis.selectedMergedConfig" . -}}
+{{- $parsedSentinels := "" -}}
 redis:
   {{- if .Values.redis.cache.enabled }}
   cache:
@@ -67,7 +68,8 @@ redis:
     addr: {{ include "registry.redis.host.sentinels" .Values.redis.cache | quote }}
     mainname: {{ .Values.redis.cache.host }}
     {{- else if .redisMergedConfig.sentinels }}
-    addr: {{ include "registry.redis.host.sentinels" .redisMergedConfig | quote }}
+    {{- $parsedSentinels = include "registry.redis.host.sentinels" .redisMergedConfig | quote }}
+    addr: {{ $parsedSentinels }}
     mainname: {{ template "gitlab.redis.host" . }}
     {{-   if .redisMergedConfig.sentinelAuth.enabled }}
     sentinelpassword: {% file.Read "/config/redis-sentinel/redis-sentinel-password" | strings.TrimSpace | data.ToJSON %}
@@ -116,6 +118,9 @@ redis:
     {{- if .Values.redis.rateLimiting.sentinels }}
     addr: {{ include "registry.redis.host.sentinels" .Values.redis.rateLimiting | quote }}
     mainname: {{ .Values.redis.rateLimiting.host }}
+    {{- else if  $parsedSentinels }}
+    addr: {{ $parsedSentinels }}
+    mainname: {{ template "gitlab.redis.host" . }}
     {{- else if .redisMergedConfig.sentinels }}
     addr: {{ include "registry.redis.host.sentinels" .redisMergedConfig | quote }}
     mainname: {{ template "gitlab.redis.host" . }}
