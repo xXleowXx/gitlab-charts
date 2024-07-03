@@ -29,7 +29,7 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
-      {{- if .Values.topologySpreadConstraints }}
+      {{- if $.Values.topologySpreadConstraints }}
       topologySpreadConstraints: {{- toYaml $.Values.topologySpreadConstraints | nindent 8 }}
       {{- end }}
       {{- if .Values.tolerations }}
