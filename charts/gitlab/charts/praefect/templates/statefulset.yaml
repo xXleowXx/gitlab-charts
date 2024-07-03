@@ -39,7 +39,7 @@ spec:
       {{- end }}
     spec:
       {{- if .Values.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- toYaml .Values.topologySpreadConstraints | nindent 8 }}
+      topologySpreadConstraints: {{- toYaml $.Values.topologySpreadConstraints | nindent 8 }}
       {{- end }}
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
