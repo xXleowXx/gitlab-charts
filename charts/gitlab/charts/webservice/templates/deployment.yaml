@@ -70,9 +70,8 @@ spec:
       {{- end }}
       {{- end }}
     spec:
-      {{- if .Values.topologySpreadConstraints }}
-      topologySpreadConstraints:
-        {{- toYaml .Values.topologySpreadConstraints | nindent 8 }}
+      {{- if $.Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- toYaml $.Values.topologySpreadConstraints | nindent 8 }}
       {{- end }}
       {{- if .tolerations }}
       tolerations:
