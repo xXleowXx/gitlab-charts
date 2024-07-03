@@ -133,6 +133,37 @@ describe 'toolbox configuration' do
     end
   end
 
+  context 'cron job ttlSecondsAfterFinished' do
+    context 'default' do
+      it 'ttlSecondsAfterFinished should not be set by default' do
+        t = HelmTemplate.new(default_values)
+        expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+        expect(t.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'ttlSecondsAfterFinished')).to eq(nil)
+      end
+    end
+
+    let(:values) do
+      HelmTemplate.with_defaults %(
+      gitlab:
+       toolbox:
+         backups:
+           cron:
+             enabled: true
+             ttlSecondsAfterFinished: 3600
+         enabled: true
+      )
+    end
+
+    let(:template) { HelmTemplate.new(values) }
+
+    context "when ttlSecondsAfterFinished is set" do
+      it 'configures ttlSecondsAfterFinished in the cron job spec' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+        expect(template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'ttlSecondsAfterFinished')).to eq(3600)
+      end
+    end
+  end
+
   context 'cron job ephemeral volume' do
     let(:useGenericEphemeralVolume) { false }
 
@@ -206,6 +237,47 @@ describe 'toolbox configuration' do
       it 'sets the safe-to-evict annotation to true' do
         expect(template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'template', 'metadata', 'annotations', 'cluster-autoscaler.kubernetes.io/safe-to-evict')).to eq("true")
       end
+    end
+  end
+
+  context 'when setting cron job nodeSelector' do
+    let(:values) do
+      HelmTemplate.with_defaults %(
+          gitlab:
+            toolbox:
+              backups:
+                cron:
+                  enabled: true
+                  nodeSelector:
+                    key: "value"
+        )
+    end
+    let(:template) { HelmTemplate.new(values) }
+
+    it 'populates nodeSelector for toolbox cronjob' do
+      expect(template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'template', 'spec', 'nodeSelector')).to eq({ 'key' => 'value' })
+    end
+  end
+
+  context 'when setting cron job tolerations' do
+    let(:values) do
+      HelmTemplate.with_defaults %(
+          gitlab:
+            toolbox:
+              backups:
+                cron:
+                  enabled: true
+                  tolerations:
+                    - key: "key1"
+                      operator: "Equal"
+                      value: "value1"
+                      effect: "NoSchedule"
+        )
+    end
+    let(:template) { HelmTemplate.new(values) }
+
+    it 'populates tolerations for toolbox cronjob' do
+      expect(template.dig('CronJob/test-toolbox-backup', 'spec', 'jobTemplate', 'spec', 'template', 'spec', 'tolerations')).to eq([{ 'key' => 'key1', 'operator' => 'Equal', 'value' => 'value1', 'effect' => 'NoSchedule' }])
     end
   end
 

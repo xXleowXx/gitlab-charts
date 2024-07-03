@@ -70,7 +70,7 @@ spec:
           {{- include "gitlab.init.containerSecurityContext" $ | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
-          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
+          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 12 }}
           volumeMounts:
           {{- include "gitlab.extraVolumeMounts" . | nindent 10 }}
           - name: mailroom-config
@@ -94,7 +94,7 @@ spec:
           {{- include "gitlab.containerSecurityContext" $ | indent 10 }}
           env:
           {{- include "gitlab.extraEnv" . | nindent 10 }}
-          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
+          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
           volumeMounts:
             - name: mailroom-config
               mountPath: /var/opt/gitlab/mail_room.yml
@@ -128,6 +128,7 @@ spec:
           defaultMode: 0400
           sources:
           {{- include "gitlab.redis.secret" . | nindent 10 }}
+          {{- include "gitlab.redisSentinel.secret" . | nindent 10 }}
           {{- if eq .Values.global.appConfig.incomingEmail.inboxMethod "microsoft_graph" }}
           - secret:
               name: {{ .Values.global.appConfig.incomingEmail.clientSecret.secret | required "Missing required secret containing the OAuth2 Client ID for incoming email. Make sure to set `.Values.global.appConfig.incomingEmail.clientSecret.secret`" }}

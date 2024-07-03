@@ -64,7 +64,7 @@ global:
     hostSuffix:
     https: true
     externalIP:
-    ssh: ~
+    ssh:
     gitlab: {}
     minio: {}
     registry: {}
@@ -173,6 +173,10 @@ global:
     # sentinels:
     #   - host:
     #     port:
+    sentinelAuth:
+      enabled: false
+      # secret:
+      # key:
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-gitaly-settings
   gitaly:
@@ -564,7 +568,7 @@ global:
     ## Geo Secondary only
     # nodeName allows multiple instances behind a load balancer.
     nodeName: # defaults to `gitlab.gitlab.host`
-    # ingressClass: 
+    # ingressClass:
     # PostgreSQL connection details only needed for `secondary`
     psql:
       password: {}
@@ -621,6 +625,8 @@ global:
   rails:
     bootsnap: # Enable / disable Shopify/Bootsnap cache
       enabled: true
+    sessionStore:
+      sessionCookieTokenPrefix: ""
 
   ## https://docs.gitlab.com/charts/charts/globals#configure-registry-settings
   registry:
@@ -646,7 +652,8 @@ global:
       #   - name: FooListener
       #     url: https://foolistener.com/event
       #     timeout: 500ms
-      #     threshold: 10
+      #     threshold: 10 # DEPRECATED: use maxretries instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.
+      #     maxretries: 5
       #     backoff: 1s
       #     headers:
       #       FooBar: ['1', '2']
@@ -745,10 +752,19 @@ global:
   deployment:
     annotations: {}
 
+
+  # Setting a global nodeAffinity only applies to the registry chart for now.
+  # See issue https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25403 for more information
+
+  nodeAffinity:
+
   antiAffinity: soft
   affinity:
     podAntiAffinity:
       topologyKey: "kubernetes.io/hostname"
+    nodeAffinity:
+      key: topology.kubernetes.io/zone
+      values: []
 
   # Priority class assigned to pods, may be overridden for individual components
   # https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
@@ -856,6 +872,10 @@ global:
   #       name: useful-config
   #       key: some-string
   #       # optional: boolean
+
+  ## https://docs.gitlab.com/charts/charts/globals/#jobs
+  job:
+    nameSuffixOverride:
 ## End of global
 
 upgradeCheck:
@@ -1155,7 +1175,7 @@ redis:
   metrics:
     enabled: true
 
-## Installation & configuration of stable/prostgresql
+## Installation & configuration of stable/postgresql
 ## See requirements.yaml for current version
 postgresql:
   install: true

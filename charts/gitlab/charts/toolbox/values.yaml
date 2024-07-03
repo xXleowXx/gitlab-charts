@@ -146,6 +146,7 @@ backups:
     suspend: false
     backoffLimit: 6
     # activeDeadlineSeconds:
+    # ttlSecondsAfterFinished:
     safeToEvict: false
     restartPolicy: "OnFailure"
     extraArgs: ""
@@ -254,6 +255,7 @@ persistence:
 ## Allow to overwrite under which User and Group the Pod will be running.
 securityContext:
   runAsUser: 1000
+  runAsGroup: 1000
   fsGroup: 1000
   # fsGroupChangePolicy: OnRootMismatch
 

@@ -184,7 +184,6 @@ pods:
     extraEnv:
       SOME_POD_KEY: some_pod_value
   - name: catchall
-    negateQueues: mailers
 ```
 
 This will set `SOME_POD_KEY` only for application containers in the `mailers`
@@ -435,8 +434,6 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `concurrency`                         | Integer |                                                                     | The number of tasks to process simultaneously. If not provided, it will be pulled from the chart-wide default.                                                                                                                                                          |
 | `name`                                | String  |                                                                     | Used to name the `Deployment` and `ConfigMap` for this pod. It should be kept short, and should not be duplicated between any two entries.                                                                                                                              |
 | `queues`                              | String  |                                                                     | [See below](#queues).                                                                                                                                                                                                                                                   |
-| `negateQueues`                        | String  |                                                                     | **DEPRECATED** [See below](#negatequeues).                                                                                                                                                                                                                              |
-| `queueSelector`                       | Boolean | `false`                                                             | **DEPRECATED** Use the [queue selector](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#queue-selectors).                                                                                                                        |
 | `timeout`                             | Integer |                                                                     | The Sidekiq shutdown timeout. The number of seconds after Sidekiq gets the TERM signal before it forcefully shuts down its processes. If not provided, it will be pulled from the chart-wide default. This value **must** be less than `terminationGracePeriodSeconds`. |
 | `resources`                           |         |                                                                     | Each pod can present it's own `resources` requirements, which will be added to the `Deployment` created for it, if present. These match the Kubernetes documentation.                                                                                                   |
 | `nodeSelector`                        |         |                                                                     | Each pod can be configured with a `nodeSelector` attribute, which will be added to the `Deployment` created for it, if present. These definitions match the Kubernetes documentation.                                                                                   |
@@ -460,7 +457,7 @@ a different pod configuration. It will not add a new pod in addition to the defa
 | `hpa.memory.targetAverageValue`       | String  |                                                                     | Overrides the autoscaling memory target value                                                                                                                                                                                                                           |
 | `hpa.memory.targetAverageUtilization` | Integer |                                                                     | Overrides the autoscaling memory target utilization                                                                                                                                                                                                                     |
 | `hpa.targetAverageValue`              | String  |                                                                     | **DEPRECATED** Overrides the autoscaling CPU target value                                                                                                                                                                                                               |
-| `keda.enabled`                        | Boolean | `false`                                                             | Overrides enabling KEDA
+| `keda.enabled`                        | Boolean | `false`                                                             | Overrides enabling KEDA |
 | `keda.pollingInterval`                | Integer | `30`                                                                | Overrides the KEDA polling interval                                                                                                                                                                                                                                     |
 | `keda.cooldownPeriod`                 | Integer | `300`                                                               | Overrides the KEDA cooldown period                                                                                                                                                                                                                                      |
 | `keda.minReplicaCount`                | Integer |                                                                     | Overrides the KEDA minimum replica count                                                                                                                                                                                                                                |
@@ -489,20 +486,8 @@ these files in the GitLab source:
 1. [`app/workers/all_queues.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/workers/all_queues.yml)
 1. [`ee/app/workers/all_queues.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/app/workers/all_queues.yml)
 
-### negateQueues
-
-`negateQueues` is in the same format as [`queues`](#queues), but it represents
-queues to be ignored rather than processed.
-
-The string should not contain spaces: `merge,post_receive,process_commit` will
-work, but `merge, post_receive, process_commit` will not.
-
-This is useful if you have a pod processing important queues, and another pod
-processing other queues: they can use the same list of queues, with one being in
-`queues` and the other being in `negateQueues`.
-
-NOTE:
-`negateQueues` *should not* be provided alongside `queues`, as it will have no effect.
+In addition to configuring `gitlab.sidekiq.pods[].queues`, you must also configure `global.appConfig.sidekiq.routingRules`. For more information, see
+[Sidekiq routing rules settings](../../globals.md#sidekiq-routing-rules-settings).
 
 ### Example `pod` entry
 
@@ -529,6 +514,36 @@ pods:
       cpu:
         targetType: Value
         targetAverageValue: 350m
+```
+
+### Full example of Sidekiq configuration
+
+The following is a full example of Sidekiq configuration using a separate Sidekiq pod for import-related jobs, a Sidekiq pod for export-related jobs using a separate Redis instance and another pod for everything else.
+
+```yaml
+...
+global:
+  appConfig:
+    sidekiq:
+      routingRules:
+      - ["feature_category=importers", "import"]
+      - ["feature_category=exporters", "export", "queues_shard_extra_shard"]
+      - ["*", "default"]
+  redis:
+    redisYmlOverride:
+      queues_shard_extra_shard: ...
+...
+gitlab:
+  sidekiq:
+    pods:
+    - name: import
+      queues: import
+    - name: export
+      queues: export
+      extraEnv:
+        SIDEKIQ_SHARD_NAME: queues_shard_extra_shard # to match key in global.redis.redisYmlOverride
+    - name: default
+...
 ```
 
 ## Configuring the `networkpolicy`

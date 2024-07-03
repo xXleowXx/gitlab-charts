@@ -59,6 +59,9 @@ gitlab:
     securityContext:
       fsGroup: '1000'
       runAsUser: '1000'
+      runAsGroup: '1000'
+    containerSecurityContext:
+      runAsUser: '1000'
 ```
 
 | Parameter                                   | Description                                  | Default                      |
@@ -67,6 +70,7 @@ gitlab:
 | `common.labels`                             | Supplemental labels that are applied to all objects created by this chart.  | `{}` |
 | `antiAffinityLabels.matchLabels`            | Labels for setting anti-affinity options     |                              |
 | `backups.cron.activeDeadlineSeconds`        | Backup CronJob active deadline seconds (if null, no active deadline is applied)| `null` |
+| `backups.cron.ttlSecondsAfterFinished`      | Backup CronJob job time to live after finished (if null, no time to live is applied) | `null` |
 | `backups.cron.safeToEvict`                  | Autoscaling safe-to-evict annotation         | false                        |
 | `backups.cron.backoffLimit`                 | Backup CronJob backoff limit| `6` |
 | `backups.cron.concurrencyPolicy`            | Kubernetes Job concurrency policy            | `Replace`                    |
@@ -89,6 +93,8 @@ gitlab:
 | `backups.cron.startingDeadlineSeconds`      | Backup cron job starting deadline, in seconds (if null, no starting deadline is applied) | `null`                      |
 | `backups.cron.successfulJobsHistoryLimit`   | Number of successful backup jobs list in history | `3`                      |
 | `backups.cron.suspend`                      | Backup cron job is suspended | `false`                      |
+| `backups.cron.tolerations`                  | Tolerations to add to the backup cron job    | ""                           |
+| `backups.cron.nodeSelector`                 | Backup cron job node selection               | ""                           |
 | `backups.objectStorage.backend`             | Object storage provider to use (`s3`, `gcs` or `azure`) | `s3`                       |
 | `backups.objectStorage.config.gcpProject`   | GCP Project to use when backend is `gcs`     | ""                           |
 | `backups.objectStorage.config.key`          | Key containing credentials in secret         | ""                           |
@@ -118,8 +124,9 @@ gitlab:
 | `priorityClassName`                         | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods. |                              |
 | `replicas`                                  | Number of Toolbox Pods to run            | `1`                          |
 | `resources.requests`                        | Toolbox minimum requested resources      | { `cpu`: `50m`, `memory`: `350M` |
-| `securityContext.fsGroup`                   | Group ID under which the pod should be started | `1000`                     |
+| `securityContext.fsGroup`                   | File System Group ID under which the pod should be started | `1000`                     |
 | `securityContext.runAsUser`                 | User ID under which the pod should be started  | `1000`                     |
+| `securityContext.runAsGroup`                | Group ID under which the pod should be started | `1000`                     |
 | `securityContext.fsGroupChangePolicy`       | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) | |
 | `containerSecurityContext`                  | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started | |
 | `containerSecurityContext.runAsUser`        | Allow to overwrite the specific security context under which the container is started | `1000` |

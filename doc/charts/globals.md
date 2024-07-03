@@ -46,6 +46,7 @@ for more information on how the global variables work.
 - [Affinity](#affinity)
 - [Pod priority and preemption](#pod-priority-and-preemption)
 - [Log rotation](#log-rotation)
+- [Jobs](#jobs)
 
 ## Configure Host settings
 
@@ -103,7 +104,7 @@ global:
 | `kas.https`               | Boolean   | `false`        | If `hosts.https` or `kas.https` are `true`, the KAS external URL will use `wss://` instead of `ws://`.                                                                                                                                                                                                                    |
 | `pages.name`              | String    | `pages`        | The hostname for GitLab Pages. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings.                                                                                                                                                                             |
 | `pages.https`             | String    |                | If `global.pages.https` or `global.hosts.pages.https` or `global.hosts.https` are `true`, then URL for GitLab Pages in the Project settings UI will use `https://` instead of `http://`.                                                                                                                                  |
-| `ssh`                     | String    |                | The hostname for cloning repositories over SSH. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings.
+| `ssh`                     | String    |                | The hostname for cloning repositories over SSH. If set, this hostname is used, regardless of the `global.hosts.domain` and `global.hosts.hostSuffix` settings. |
 
 ### hostSuffix
 
@@ -159,7 +160,7 @@ The GitLab global host settings for Ingress are located under the `global.ingres
 
 | Name                           | Type    | Default        | Description |
 |:------------------------------ |:-------:|:-------        |:----------- |
-| `apiVersion`                   | String  |                | API version to use in the Ingress object definitions.
+| `apiVersion`                   | String  |                | API version to use in the Ingress object definitions. |
 | `annotations.*annotation-key*` | String  |                | Where `annotation-key` is a string that will be used with the value as an annotation on every Ingress. For Example: `global.ingress.annotations."nginx\.ingress\.kubernetes\.io/enable-access-log"=true`. No global annotations are provided by default. |
 | `configureCertmanager`         | Boolean | `true`         | [See below](#globalingressconfigurecertmanager). |
 | `useNewIngressForCerts`        | Boolean | `false`        | [See below](#globalingressusenewingressforcerts). |
@@ -434,15 +435,6 @@ global:
 In GitLab 16.0, GitLab defaults to using two database connections
 that point to the same PostgreSQL database.
 
-If you wish to switch back to single database connection, set the `ci.enabled` key to `false`:
-
-```yaml
-global:
-  psql:
-    ci:
-      enabled: false
-```
-
 ## Configure Redis settings
 
 The GitLab global Redis settings are located under the `global.redis` key.
@@ -480,7 +472,7 @@ global:
 
 ### Configure Redis chart-specific settings
 
-Settings to configure the [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis)
+Settings to configure the [Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis)
 directly are located under the `redis` key:
 
 ```yaml
@@ -539,6 +531,45 @@ global:
 
 All the prior Redis attributes in the general [configure Redis settings](#configure-redis-settings)
 continue to apply with the Sentinel support unless re-specified in the table above.
+
+#### Redis Sentinel password support
+
+> - [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3792) in GitLab 17.1.
+
+```yaml
+redis:
+  install: false
+global:
+  redis:
+    host: redis.example.com
+    serviceName: redis
+    port: 6379
+    sentinels:
+      - host: sentinel1.example.com
+        port: 26379
+      - host: sentinel2.example.com
+        port: 26379
+    auth:
+      enabled: true
+      secret: gitlab-redis
+      key: redis-password
+    sentinelAuth:
+      enabled: false
+      secret: gitlab-redis-sentinel
+      key: sentinel-password
+```
+
+| Name                       | Type       | Default | Description |
+|:-------------------------- |:----------:|:------- |:----------- |
+| `sentinelAuth.enabled`     | Boolean    | false   | The `sentinelAuth.enabled` provides a toggle for using a password with the Redis Sentinel instance. |
+| `sentinelAuth.key`         | String     |         | The `sentinelAuth.key` attribute for Redis defines the name of the key in the secret (below) that contains the password. |
+| `sentinelAuth.secret`      | String     |         | The `sentinelAuth.secret` attribute for Redis defines the name of the Kubernetes `Secret` to pull from. |
+
+`global.redis.sentinelAuth` can be used to configure a Sentinel password
+for all Sentinel instances.
+
+Note that `sentinelAuth` cannot be overridden with [Redis instance-specific settings](#multiple-redis-support)
+or [`global.redis.redisYmlOverride`](../advanced/external-redis/index.md#redisyml-override).
 
 ### Multiple Redis support
 
@@ -688,9 +719,9 @@ To connect to Redis with SSL:
        authClients: false
    ```
 
-   This configuration is required because [Redis defaults to mutual TLS](https://redis.io/docs/management/security/encryption/#client-certificate-authentication), which not all chart components support.
+   This configuration is required because [Redis defaults to mutual TLS](https://redis.io/docs/latest/operate/oss_and_stack/management/security/encryption/), which not all chart components support.
 
-1. Follow Bitnami's [steps to enable TLS](https://docs.bitnami.com/kubernetes/infrastructure/redis/administration/enable-tls/). Make sure the chart components trust the certificate authority used to create Redis certificates.
+1. Follow Bitnami's [steps to enable TLS](https://github.com/bitnami/charts/tree/main/bitnami/redis#securing-traffic-using-tls). Make sure the chart components trust the certificate authority used to create Redis certificates.
 1. Optional. If you use a custom certificate authority, see the [Custom Certificate Authorities](#custom-certificate-authorities) global configuration.
 
 ### Password-less Redis Servers
@@ -739,7 +770,7 @@ For details on `enabled`, `host`, `api` and `tokenIssuer` see documentation for 
 ### notifications
 
 This setting is used to configure
-[Registry notifications](https://docs.docker.com/registry/configuration/#notifications).
+[Registry notifications](https://distribution.github.io/distribution/about/notifications/).
 It takes in a map (following upstream specification), but with an added feature
 of providing sensitive headers as Kubernetes secrets. For example, consider the
 following snippet where the Authorization header contains sensitive data while
@@ -755,7 +786,10 @@ global:
         - name: CustomListener
           url: https://mycustomlistener.com
           timeout: 500mx
+          # DEPRECATED: use `maxretries` instead https://gitlab.com/gitlab-org/container-registry/-/issues/1243.
+          # When using `maxretries`, `threshold` is ignored: https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md?ref_type=heads#endpoints
           threshold: 5
+          maxretries: 5
           backoff: 1s
           headers:
             X-Random-Config: [plain direct]
@@ -922,7 +956,7 @@ global:
 | psql.host       | String  |             | The hostname of the database server to use (when using an external database) |
 | psql.port       | String  |             | The port number of the database server (when using an external database) |
 | psql.user       | String  | `praefect` | The database user to use                                           |
-| psql.dbName | String | `praefect` | The name of the database to use
+| psql.dbName | String | `praefect` | The name of the database to use |
 
 ## Configure MinIO settings
 
@@ -1568,7 +1602,7 @@ See [Custom Certificate Authorities](#custom-certificate-authorities) for more i
 
 ### DuoAuth
 
-Use these settings to enable [two-factor authentication (2FA) with Duo](https://docs.gitlab.com/ee/user/profile/account/two_factor_authentication.html#enable-one-time-password).
+Use these settings to enable [two-factor authentication (2FA) with GitLab Duo](https://docs.gitlab.com/ee/user/profile/account/two_factor_authentication.html#enable-one-time-password).
 
 ```yaml
 global:
@@ -1584,16 +1618,16 @@ global:
 
 | Name              | Type    | Default | Description                                |
 |:----------------- |:-------:|:------- |:------------------------------------------ |
-| `enabled`         | Boolean | `false` | Enable or disable the integration with Duo |
-| `hostname`        | String  |         | Duo API hostname                           |
-| `integrationKey` | String  |         | Duo API integration key                    |
-| `secretKey`      |         |         | Duo API secret key that must be [configured with the name of secret and key name](#configure-the-duo-secret-key) |
+| `enabled`         | Boolean | `false` | Enable or disable the integration with GitLab Duo |
+| `hostname`        | String  |         | GitLab Duo API hostname                           |
+| `integrationKey` | String  |         | GitLab Duo API integration key                    |
+| `secretKey`      |         |         | GitLab Duo API secret key that must be [configured with the name of secret and key name](#configure-the-gitlab-duo-secret-key) |
 
-### Configure the Duo secret key
+### Configure the GitLab Duo secret key
 
-To configure Duo auth integration in the GitLab Helm chart you must provide a secret in the `global.appConfig.duoAuth.secretKey.secret` setting containing Duo auth secret_key value.
+To configure GitLab Duo auth integration in the GitLab Helm chart you must provide a secret in the `global.appConfig.duoAuth.secretKey.secret` setting containing GitLab Duo auth secret_key value.
 
-To create a Kubernetes secret object to store your Duo account `secretKey`, from the command line, run:
+To create a Kubernetes secret object to store your GitLab Duo account `secretKey`, from the command line, run:
 
 ```shell
 kubectl create secret generic <secret_object_name> --from-literal=secretKey=<duo_secret_key_value>
@@ -1776,7 +1810,7 @@ global:
 | `enabled`        | Boolean | `false`  | Enable or Disable the integration |
 | `dsn`            | String  |        | Sentry DSN for backend errors |
 | `clientside_dsn` | String  |        | Sentry DSN for front-end errors |
-| `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/product/sentry-basics/environments/) |
+| `environment`    | String  |        | See [Sentry environments](https://docs.sentry.io/concepts/key-terms/environments/) |
 
 ### `gitlab_docs` settings
 
@@ -1835,7 +1869,7 @@ corresponding queue:
   [worker matching query](https://docs.gitlab.com/ee/administration/sidekiq/processing_specific_job_classes.html#worker-matching-query) syntax.
 - The `<queue_name>` must match a valid Sidekiq queue name `sidekiq.pods[].queues` defined under [`sidekiq.pods`](gitlab/sidekiq/index.md#per-pod-settings). If the queue name
   is `nil`, or an empty string, the worker is routed to the queue generated
-  by the name of the worker instead.
+  by the name of the worker instead. See [Full example of Sidekiq configuration](gitlab/sidekiq/index.md#full-example-of-sidekiq-configuration) as a reference.
 
 The query supports wildcard matching `*`, which matches all workers. As a
 result, the wildcard query must stay at the end of the list or the later rules
@@ -2127,12 +2161,6 @@ certmanager:
 
 GitLab Helm chart uses a common GitLab base image for various initialization tasks.
 This image support UBI builds and shares layers with other images.
-It replaces the now deprecated busybox image.
-
-NOTE:
-If custom busybox settings are defined, the chart falls back to the legacy busybox.
-This `busybox` configuration fallback will eventually be removed.
-Please migrate your settings to `global.gitlabBase`.
 
 ## Service Accounts
 
@@ -2518,3 +2546,43 @@ see information on:
 
 - [`GITLAB_LOGGER_TRUNCATE_INTERVAL`](https://gitlab.com/gitlab-org/cloud-native/gitlab-logger#truncate-logs-interval).
 - [`GITLAB_LOGGER_MAX_FILESIZE`](https://gitlab.com/gitlab-org/cloud-native/gitlab-logger#max-log-file-size).
+
+## Jobs
+
+Originally, jobs in GitLab were suffixed with the Helm `.Release.Revision` which was not ideal because it would always cause an update of the
+job when running `helm upgrade --install`, even if nothing has changed. And it also prevented the proper work with workflows that are
+based on `helm template`, for example when using ArgoCD. The decision to use the `.Release.Revision` in the name was based on the preconditions that
+the job might only be executed once and that `helm uninstall` wouldn't delete jobs, which are (now) wrong.
+
+With GitLab Helm chart 7.9 and later, job names by default are suffixed with a hash that is based on the chart's app version and the chart's values, which also might contain
+the `global.gitlabVersion`. This approach ensures job names remain stable across multiple `helm template` and `helm upgrade --install`
+executions (if nothing changed), and it's even possible to modify values of immutable fields of the job without errors during deployments
+(the jobs are just replaced with new ones due to the new names).
+
+It is possible to override the hash that gets generated by default with a custom suffix by setting `global.job.nameSuffixOverride`.
+The field supports templating, so it is possible to reproduce the old behavior of using the `.Release.Revision` as a name suffix:
+
+```yaml
+global:
+  job:
+    nameSuffixOverride: '{{ .Release.Revision }}'
+```
+
+If you intentionally always want to trigger a change, for example, because you are working with floating tags such as `latest` for all your versions,
+you can override the hash that gets generated by default with a dynamic value such as a timestamp:
+
+```yaml
+global:
+  job:
+    nameSuffixOverride: '{{ dateInZone "2006-01-02-15-04-05" (now) "UTC" }}'
+```
+
+Alternatively, you can use it with `helm` in the command line:
+
+```shell
+helm <command> <options> --set global.job.nameSuffixOverride=$(date +%Y-%m-%d-%H-%M-%S)
+```
+
+| Name                 | Type   | Default | Description                                               |
+| :--------------------| :--:   | :------ | :-------------------------------------------------------- |
+| `nameSuffixOverride` | String |         | Custom suffix to replace the automatically generated hash |

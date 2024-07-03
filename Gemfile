@@ -6,14 +6,13 @@ group :test do
   gem 'rspec-parameterized', require: false
   gem 'aws-sdk-s3', '>= 1.120'
   gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'capybara-screenshot'
   gem 'docker-api'
   gem 'rake'
   gem 'hash-deep-merge'
   gem 'knapsack'
   gem 'tomlrb'
   gem 'fugit'
+  gem 'rest-client'
 end
 
 group :rubocop do
@@ -21,7 +20,7 @@ group :rubocop do
 end
 
 group :development, :test do
-  gem 'pry'
+  gem 'pry', '~> 0.14'
 end
 
 group :development, :test, :danger do
@@ -30,4 +29,5 @@ end
 
 group :development do
   gem 'solargraph'
+  gem 'jaro_winkler', '> 1.5.4'
 end

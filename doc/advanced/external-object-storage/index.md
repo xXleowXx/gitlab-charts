@@ -24,8 +24,6 @@ This documentation specifies usage of access and secret keys for AWS. It is also
 
 ## S3 encryption
 
-> - [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2251) in GitLab 13.4.
-
 GitLab supports [Amazon KMS](https://aws.amazon.com/kms/)
 to [encrypt data stored in S3 buckets](https://docs.gitlab.com/ee/administration/object_storage.html#encrypted-s3-buckets).
 You can enable this in two ways:
@@ -96,7 +94,7 @@ the global is used by GitLab backups.
 
 Create the secret per [registry chart documentation on storage](../../charts/registry/index.md#storage), then configure the chart to make use of this secret.
 
-Examples for [S3](https://docs.docker.com/registry/storage-drivers/s3/)(S3 compatible storages, but Azure MinIO gateway not supported, see [Azure Blob Storage](#azure-blob-storage)), [Azure](https://docs.docker.com/registry/storage-drivers/azure/) and [GCS](https://docs.docker.com/registry/storage-drivers/gcs/) drivers can be found in
+Examples for [S3](https://distribution.github.io/distribution/storage-drivers/s3/)(S3 compatible storages, but Azure MinIO gateway not supported, see [Azure Blob Storage](#azure-blob-storage)), [Azure](https://distribution.github.io/distribution/storage-drivers/azure/) and [GCS](https://distribution.github.io/distribution/storage-drivers/gcs/) drivers can be found in
 [`examples/objectstorage`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage).
 
 - [`registry.s3.yaml`](https://gitlab.com/gitlab-org/charts/gitlab/tree/master/examples/objectstorage/registry.s3.yaml)
@@ -206,7 +204,7 @@ are supported backends. You can configure the backend type by setting `global.ap
 to `s3` for AWS S3, `gcs` for Google Cloud Storage, or `azure` for Azure Blob Storage.
 You must also provide a connection configuration through the `gitlab.toolbox.backups.objectStorage.config` key.
 
-When using Google Cloud Storage, the GCP project must be set with the `global.appConfig.backups.objectStorage.config.gcpProject` value.
+When using Google Cloud Storage with a secret, the GCP project must be set with the `global.appConfig.backups.objectStorage.config.gcpProject` value.
 
 For S3-compatible storage:
 
@@ -217,7 +215,7 @@ For S3-compatible storage:
 --set gitlab.toolbox.backups.objectStorage.config.key=config
 ```
 
-For Google Cloud Storage (GCS):
+For Google Cloud Storage (GCS) with a secret:
 
 ```shell
 --set global.appConfig.backups.bucket=gitlab-backup-storage
@@ -226,6 +224,16 @@ For Google Cloud Storage (GCS):
 --set gitlab.toolbox.backups.objectStorage.config.gcpProject=my-gcp-project-id
 --set gitlab.toolbox.backups.objectStorage.config.secret=storage-config
 --set gitlab.toolbox.backups.objectStorage.config.key=config
+```
+
+For Google Cloud Storage (GCS) with [Workload Identity Federation for GKE](gke-workload-identity.md), only the backend and buckets need to be set.
+Make sure `gitlab.toolbox.backups.objectStorage.config.secret` and `gitlab.toolbox.backups.objectStorage.config.key` are not set,
+so that the cluster uses [Google's Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials):
+
+```shell
+--set global.appConfig.backups.bucket=gitlab-backup-storage
+--set global.appConfig.backups.tmpBucket=gitlab-tmp-storage
+--set gitlab.toolbox.backups.objectStorage.backend=gcs
 ```
 
 For Azure Blob Storage:

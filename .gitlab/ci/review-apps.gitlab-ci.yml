@@ -1,9 +1,9 @@
 .review_app_common:
   stage: review
   variables:
-    AGENT_NAME: "gke125-ci-cluster" # connect to 1.25 cluster until we have a dedicated cluster
+    AGENT_NAME: "gke129-ci-cluster" # connect to 1.29 cluster until we have a dedicated cluster
   environment:
-    name: gke125_vcluster/${VCLUSTER_NAME}
+    name: gke129_vcluster/${VCLUSTER_NAME}
     auto_stop_in: 1 hour
   before_script:
     - source scripts/ci/vcluster.sh
@@ -19,9 +19,9 @@
     - pin_image_versions
   script:
     - cluster_connect
-    - kubectl version
+    - kubectl version --output=json
     - vcluster_create
-    - vcluster_run kubectl version
+    - vcluster_run kubectl version --output=json
     - vcluster_helm_deploy
     - vcluster_helm_rollout_status
     - vcluster_info
@@ -40,30 +40,30 @@
 #  - one to create the environment
 #  - one to stop the environment
 
-# Kubernetes 1.27
-
-review_vcluster_127:
-  extends: .review_app_template
-  variables:
-    VCLUSTER_K8S_VERSION: "1.27"
-    VCLUSTER_NAME: vcluster-1-27-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}
-  environment:
-    on_stop: stop_review_vcluster_127
-
-stop_review_vcluster_127:
-  extends: .stop_review_app_template
-  variables: !reference [review_vcluster_127, variables]
-
 # Kubernetes 1.28
 
 review_vcluster_128:
   extends: .review_app_template
   variables:
     VCLUSTER_K8S_VERSION: "1.28"
-    VCLUSTER_NAME: vcluster-1-28-${REVIEW_REF_PREFIX}${CI_COMMIT_REF_SLUG}
+    VCLUSTER_NAME: vcluster-1-28-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}
   environment:
     on_stop: stop_review_vcluster_128
 
 stop_review_vcluster_128:
   extends: .stop_review_app_template
   variables: !reference [review_vcluster_128, variables]
+
+# Kubernetes 1.29
+
+review_vcluster_129:
+  extends: .review_app_template
+  variables:
+    VCLUSTER_K8S_VERSION: "1.29"
+    VCLUSTER_NAME: vcluster-1-29-${REVIEW_REF_PREFIX}${CI_COMMIT_SHORT_SHA}
+  environment:
+    on_stop: stop_review_vcluster_129
+
+stop_review_vcluster_129:
+  extends: .stop_review_app_template
+  variables: !reference [review_vcluster_129, variables]

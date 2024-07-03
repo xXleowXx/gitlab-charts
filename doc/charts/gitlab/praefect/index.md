@@ -12,7 +12,7 @@ DETAILS:
 **Status:** Experiment
 
 WARNING:
-The Praefect chart is still under development. The alpha version is not yet suitable for production use. Upgrades may require significant manual intervention.
+The Praefect chart is still under development. This experimental version is not yet suitable for production use. Upgrades may require significant manual intervention.
 See our [Praefect GA release Epic](https://gitlab.com/groups/gitlab-org/charts/-/epics/33) for more information.
 
 The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/ee/administration/gitaly/praefect.html) inside a GitLab installment deployed with the Helm charts.
@@ -22,7 +22,6 @@ The Praefect chart is used to manage a [Gitaly cluster](https://docs.gitlab.com/
 1. The database has to be [manually created](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2310).
 1. The cluster size is fixed: [Gitaly Cluster does not currently support autoscaling](https://gitlab.com/gitlab-org/gitaly/-/issues/2997).
 1. Using a Praefect instance in the cluster to manage Gitaly instances outside the cluster is [not supported](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/2662).
-1. Upgrades to version 4.8 of the chart (GitLab 13.8) [will encounter an issue that makes it _appear_ that repository data is lost](../../../installation/upgrade.md#48-repository-data-appears-to-be-lost-upgrading-praefect). Data is not lost, but requires manual intervention.
 
 ## Requirements
 
@@ -282,7 +281,7 @@ the `helm install` command using the `--set` flags.
 | autoMigrate                               | true                                              | Automatically run migrations on startup                                                                                                                                    |
 | image.repository                          | `registry.gitlab.com/gitlab-org/build/cng/gitaly` | The default image repository to use. Praefect is bundled as part of the Gitaly image                                                                                       |
 | podLabels                                 | `{}`                                              | Supplemental Pod labels. Will not be used for selectors.                                                                                                                   |
-| ntpHost                                   | `pool.ntp.org`                                    | Configure the NTP server Praefect should ask the for the current time.
+| ntpHost                                   | `pool.ntp.org`                                    | Configure the NTP server Praefect should ask the for the current time. |
 | service.name                              | `praefect`                                        | The name of the service to create                                                                                                                                          |
 | service.type                              | ClusterIP                                         | The type of service to create                                                                                                                                              |
 | service.internalPort                      | 8075                                              | The internal port number that the Praefect pod will be listening on                                                                                                        |

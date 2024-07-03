@@ -41,9 +41,9 @@ describe 'middleware configuration' do
           t.dig(
             'ConfigMap/test-registry',
             'data',
-            'config.yml'
+            'config.yml.tpl'
           ),
-          [Symbol]
+          permitted_classes: [Symbol]
         )['middleware']).to include(YAML.safe_load(%(
           storage:
             - name: cloudfront

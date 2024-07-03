@@ -47,6 +47,7 @@ helm inspect values gitlab/gitlab
 | `global.psql.password.secret`                  | Global name of the secret containing the psql password                                      | _Uses in-cluster non-production PostgreSQL_   |
 | `global.registry.bucket`                       | registry bucket name                                                                        | `registry`                                    |
 | `global.service.annotations`                   | Annotations to add to every `Service`                                                       | {}                                            |
+| `global.raills.sessionStore.sessionCookieTokenPrefix`  | Prefix for the generated session cookies                                        | ""                                            |
 | `global.deployment.annotations`                | Annotations to add to every `Deployment`                                                    | {}                                            |
 | `global.time_zone`                             | Global time zone                                                                            | UTC                                           |
 
@@ -246,7 +247,7 @@ See [`nginx-ingress` chart](../charts/nginx/index.md).
 | `redis.existingSecretKey`            | Secret key where password is stored         | `redis-password`      |
 
 Any additional configuration of the Redis service should use the configuration
-settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis).
+settings from the [Redis chart](https://github.com/bitnami/charts/tree/main/bitnami/redis).
 
 ## Advanced registry configuration
 
@@ -287,7 +288,6 @@ settings from the [Redis chart](https://github.com/bitnami/charts/tree/master/bi
 | `minio.persistence.storageClass`     | MinIO storageClassName for provisioning |                                |
 | `minio.persistence.subPath`          | MinIO persistence volume mount path     |                                |
 | `minio.persistence.volumeName`       | MinIO existing persistent volume name   |                                |
-| `minio.replicas`                     | MinIO number of replicas                | `4`                            |
 | `minio.resources.requests.cpu`       | MinIO minimum CPU requested             | `250m`                         |
 | `minio.resources.requests.memory`    | MinIO minimum memory requested          | `256Mi`                        |
 | `minio.service.annotations`          | Annotations to add to the `Service`     | {}                             |
