@@ -190,8 +190,8 @@ statefulset:
   startupProbe:
     enabled: false
     initialDelaySeconds: 5
-    periodSeconds: 1
-    timeoutSeconds: 2
+    periodSeconds: 2
+    timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 30
 
