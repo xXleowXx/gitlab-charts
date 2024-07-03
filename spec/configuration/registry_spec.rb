@@ -904,6 +904,47 @@ describe 'registry configuration' do
         end
       end
 
+      context 'when customer provides a custom redis cache and rate-limiter configuration with global sentinels' do
+        let(:values) do
+          YAML.safe_load(%(
+            global:
+              redis:
+                host: redis.example.com
+                sentinels:
+                  - host: global1.example.com
+                    port: 26379
+                  - host: global2.example.com
+                    port: 26379
+            registry:
+              database:
+                enabled: true
+              redis:
+                cache:
+                  enabled: true
+                rateLimiting:
+                  enabled: true
+        )).deep_merge(default_values)
+        end
+
+        it 'populates the redis cache and rate-limiter settings with the global sentinels' do
+          t = HelmTemplate.new(values)
+          expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
+          expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl')).to include(
+            <<~CONFIG
+            redis:
+              cache:
+                enabled: true
+                addr: "global1.example.com:26379,global2.example.com:26379"
+                mainname: redis.example.com
+              ratelimiter:
+                enabled: true
+                addr: "global1.example.com:26379,global2.example.com:26379"
+                mainname: redis.example.com
+            CONFIG
+          )
+        end
+      end
+
       context 'when customer provides a custom redis rate-limiter and cache configuration' do
         let(:values) do
           YAML.safe_load(%(
