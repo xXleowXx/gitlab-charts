@@ -168,7 +168,7 @@ statefulset:
     failureThreshold: 3
   startupProbe:
     enabled: false
-    initialDelaySeconds: 5
+    initialDelaySeconds: 1
     periodSeconds: 2
     timeoutSeconds: 1
     successThreshold: 1
