@@ -24,7 +24,7 @@ For more information, see the
 
 In GitLab 16.0, we introduced a new runner creation workflow that uses runner authentication tokens to
 register runners. The legacy workflow that uses registration tokens is deprecated and disabled by default
-in GitLab 17.0. It will be removed in GitLab 18.0. 
+in GitLab 17.0. It will be removed in GitLab 18.0.
 
 To use the recommended workflow:
 
@@ -90,3 +90,4 @@ gitlab-runner:
 All customized GitLab Runner chart configuration is available in the
 [top-level `values.yaml` file](https://gitlab.com/gitlab-org/charts/gitlab/raw/master/values.yaml)
 under the `gitlab-runner` key.
+
