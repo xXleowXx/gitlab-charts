@@ -90,4 +90,3 @@ gitlab-runner:
 All customized GitLab Runner chart configuration is available in the
 [top-level `values.yaml` file](https://gitlab.com/gitlab-org/charts/gitlab/raw/master/values.yaml)
 under the `gitlab-runner` key.
-

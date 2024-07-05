@@ -152,6 +152,7 @@ tolerations:
   value: "true"
   effect: "NoExecute"
 ```
+
 ### affinity
 
 `affinity` is an optional parameter that allows you to set either or both:
@@ -165,7 +166,7 @@ tolerations:
   - Schedule pods to nodes that belong to a specific zone or zones.
   - Set two modes of `nodeAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
     (`preferredDuringSchedulingIgnoredDuringExecution`). When set to `soft`, the preferred mode is applied. When set to `hard`, the required mode is applied. This
-    rule is implemented only for the registry chart and the gitlab chart alongwith all its subcharts except webservice and sidekiq.
+    rule is implemented only for the `registry` chart and the `gitlab` chart alongwith all its subcharts except `webservice` and `sidekiq`.
 
 `nodeAffinity` only implements the [`In` operator](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#operators).
 
@@ -185,7 +186,6 @@ affinity:
   podAntiAffinity:
     topologyKey: "test.com/hostname"
 ```
-
 
 ### annotations
 
