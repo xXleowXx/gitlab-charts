@@ -111,7 +111,8 @@ redis:
     {{- end -}}
   {{- end }}
   {{- /* reload template so that sentinels are included if they were set for the cache block first
-  TODO: replace gitlab.redis.host with redisMergedConfig */ -}}
+  TODO: replace gitlab.redis.host with redisMergedConfig
+  https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5628 */ -}}
   {{- include "gitlab.redis.selectedMergedConfig" . -}}
   {{- if .Values.redis.rateLimiting.enabled }}
   ratelimiter:
