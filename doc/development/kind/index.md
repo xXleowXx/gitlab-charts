@@ -100,9 +100,9 @@ git clone https://gitlab.com/gitlab-org/charts/gitlab.git
 
 ### Spin up the Kind cluster
 
-There are a few example configurations pending your desires and needs for testing.
+There are a few example configurations in `doc/examples/kind` pending your desires and needs for testing.
 Please review these configurations and make adjustments as necessary.
-You can now spin up the cluster example:
+You can now spin up the cluster. Example:
 
 ```shell
 kind create cluster --config examples/kind/kind-ssl.yaml
