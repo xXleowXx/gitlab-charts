@@ -279,6 +279,24 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `redis.cache.pool.size`                     | `10`                                                                 | The maximum number of socket connections. Default is 10 connections. |
 | `redis.cache.pool.maxlifetime`              | `1h`                                                                 | The connection age at which client retires a connection. Default is to not close aged connections. |
 | `redis.cache.pool.idletimeout`              | `300s`                                                               | How long to wait before closing inactive connections. |
+| `redis.rateLimiting.enabled`                 | `false`                                                              | When set to `true`, the Redis rate limiter is enabled. This feature is under development. |
+| `redis.rateLimiting.host`                    | `<Redis URL>`                                                        | The hostname of the Redis instance. If empty, the value will be filled as `global.redis.host:global.redis.port`. |
+| `redis.rateLimiting.port`                    | `6379`                                                               | The port of the Redis instance. |
+| `redis.rateLimiting.sentinels`               | `[]`                                                                 | List sentinels with host and port. |
+| `redis.rateLimiting.mainname`                |                                                                      | The main server name. Only applicable for Sentinel. |
+| `redis.rateLimiting.username`                |                                                                      | The username used to connect to the Redis instance. |
+| `redis.rateLimiting.password.enabled`        | `false`                                                              | Indicates whether the Redis instance is password protected. |
+| `redis.rateLimiting.password.secret`         | `gitlab-redis-secret`                                                | Name of the secret containing the Redis password. This will be automatically created if not provided, when the `shared-secrets` feature is enabled. |
+| `redis.rateLimiting.password.key`            | `redis-password`                                                     | Secret key in which the Redis password is stored. |
+| `redis.rateLimiting.db`                      | `0`                                                                  | The name of the database to use for each connection. |
+| `redis.rateLimiting.dialtimeout`             | `0s`                                                                 | The timeout for connecting to the Redis instance. Defaults to no timeout. |
+| `redis.rateLimiting.readtimeout`             | `0s`                                                                 | The timeout for reading from the Redis instance. Defaults to no timeout. |
+| `redis.rateLimiting.writetimeout`            | `0s`                                                                 | The timeout for writing to the Redis instance. Defaults to no timeout. |
+| `redis.rateLimiting.tls.enabled`             | `false`                                                              | Set to `true` to enable TLS.  |
+| `redis.rateLimiting.tls.insecure`            | `false`                                                              | Set to `true` to disable server name verification when connecting over TLS. |
+| `redis.rateLimiting.pool.size`               | `10`                                                                 | The maximum number of socket connections. |
+| `redis.rateLimiting.pool.maxlifetime`        | `1h`                                                                 | The connection age at which the client retires a connection. Default is to not close aged connections. |
+| `redis.rateLimiting.pool.idletimeout`        | `300s`                                                               | How long to wait before closing inactive connections. |
 
 ## Chart configuration examples
 
@@ -1093,6 +1111,40 @@ redis:
       enabled: true
       secret: registry-redis-sentinel
       key: password
+```
+
+### Redis rate-limiter
+
+WARNING:
+The Redis rate-limiting is [under development](https://gitlab.com/groups/gitlab-org/-/epics/13237).
+More functionality details will be added to this section as they become available.
+
+The `redis.rateLimiting` property is optional and provides options related to the
+[Redis rate-limiter](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#ratelimiter).
+
+For example:
+
+```yaml
+redis:
+  rateLimiting:
+    enabled: true
+    host: localhost
+    port: 16379
+    username: registry
+    password:
+      secret: gitlab-redis-secret
+      key: redis-password
+    db: 0
+    dialtimeout: 10ms
+    readtimeout: 10ms
+    writetimeout: 10ms
+    tls:
+      enabled: true
+      insecure: true
+    pool:
+      size: 10
+      maxlifetime: 1h
+      idletimeout: 300s
 ```
 
 ## Garbage Collection
