@@ -23,7 +23,7 @@
 https://{{ template "gitlab.pages.hostname" . }}/projects/auth
 {{-     else -}}
 https://projects.{{ template "gitlab.pages.hostname" . }}/auth
-{{-   end -}}
+{{-     end -}}
 {{-   else -}}
 {{-     if $.Values.global.pages.namespaceInPath -}}
 http://{{ template "gitlab.pages.hostname" . }}/projects/auth
