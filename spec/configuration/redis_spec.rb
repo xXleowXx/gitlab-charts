@@ -700,6 +700,40 @@ describe 'Redis configuration' do
       end
     end
 
+    context 'When timeouts are defined' do
+      let(:values) do
+        YAML.safe_load(%(
+          global:
+            redis:
+              connectTimeout: 3
+              readTimeout: 4
+              writeTimeout: 5
+              host: resque.redis
+              auth:
+                enabled: false
+              clusterCache:
+                user: cluster-cache-user
+                password:
+                  enabled: true
+                cluster:
+                - host: s1.cluster-cache.redis
+                - host: s2.cluster-cache.redis
+          redis:
+            install: false
+        )).merge(default_values)
+      end
+
+      let(:redis_cluster_yml_erb) { template.dig('ConfigMap/test-webservice', 'data', 'redis.cluster_cache.yml.erb') }
+      let(:redis_cluster_yml) { render_erb(redis_cluster_yml_erb) }
+
+      it 'timeouts are populated' do
+        expect(template.exit_code).to eq(0)
+        expect(redis_cluster_yml.dig('production', 'connect_timeout')).to eq(3)
+        expect(redis_cluster_yml.dig('production', 'read_timeout')).to eq(4)
+        expect(redis_cluster_yml.dig('production', 'write_timeout')).to eq(5)
+      end
+    end
+
     context 'When top level user and password are defined' do
       let(:values) do
         YAML.safe_load(%(
