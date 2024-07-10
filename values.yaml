@@ -646,6 +646,8 @@ global:
     redis:
       cache:
         password: {}
+      rateLimiting:
+        password: {}
     # https://docs.docker.com/registry/notifications/#configuration
     notifications: {}
       # endpoints:
@@ -700,6 +702,7 @@ global:
     authSecret: {}
       # secret:
       # key:
+    namespaceInPath: false
 
   ## GitLab Runner
   ## Secret created according to https://docs.gitlab.com/charts/installation/secrets#gitlab-runner-secret
