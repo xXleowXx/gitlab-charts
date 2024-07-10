@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 8.1.2 (2024-07-09)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.65.0 to 0.66.0](https://gitlab.com/gitlab-org/security/charts/gitlab/-/commit/43e0538a7ed30d43729cb107b54525fa86a35fd7)
+
 ## 8.1.1 (2024-06-25)
 
 No changes.
@@ -38,6 +44,10 @@ No changes.
 ### Removed (1 change)
 
 - [Remove gke125 CI jobs](gitlab-org/charts/gitlab@57ced9243021af6de6e324f2ec5ad17b5dcf975e) ([merge request](gitlab-org/charts/gitlab!3760))
+
+## 8.0.4 (2024-07-09)
+
+No changes.
 
 ## 8.0.3 (2024-06-25)
 
@@ -82,6 +92,10 @@ No changes.
 - [Remove kas.privateApi.tls.enabled and secretName](gitlab-org/charts/gitlab@bb51a4de6f204e854f287463712d665e9c6370a2) ([merge request](gitlab-org/charts/gitlab!3716))
 - [Remove deprecated queue selector and negate options from Sidekiq chart](gitlab-org/charts/gitlab@6c3bf44290e29b230132bb17d244d38e218eb15b) ([merge request](gitlab-org/charts/gitlab!3697))
 - [Remove support for busybox init containers](gitlab-org/charts/gitlab@f85e7f94cc4863038461daece756081e9d1d960a) ([merge request](gitlab-org/charts/gitlab!3709))
+
+## 7.11.6 (2024-07-09)
+
+No changes.
 
 ## 7.11.5 (2024-06-25)
 
