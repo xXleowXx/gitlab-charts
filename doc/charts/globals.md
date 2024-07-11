@@ -2044,7 +2044,7 @@ global:
 | `localStore.path`               | String    | `/srv/gitlab/shared/pages` | Path where pages files will be stored; only used if localStore is set to true. |
 | `apiSecret.secret`              | String    |                            | Secret containing 32 bit API key in Base64 encoded form. |
 | `apiSecret.key`                 | String    |                            | Key within the API key secret where the API key is stored. |
-| `namespaceInPath`               | Boolean   | False                      | (Beta) Enable or disable namespace in the URL path to support without wildcard DNS setup. See: [Pages domain without wildcard DNS](gitlab/gitlab-pages/index.md#pages-domain-without-wildcard-dns) |
+| `namespaceInPath`               | Boolean   | False                      | (Beta) Enable or disable namespace in the URL path to support without wildcard DNS setup. For more information, see the [Pages domain without wildcard DNS documentation](gitlab/gitlab-pages/index.md#pages-domain-without-wildcard-dns). |
 
 ## Configure Webservice
 
