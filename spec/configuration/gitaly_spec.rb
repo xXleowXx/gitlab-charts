@@ -613,4 +613,72 @@ describe 'Gitaly configuration' do
       end
     end
   end
+
+  context 'startupProbe' do
+    let(:values) do
+      YAML.safe_load(%(
+        gitlab:
+          gitaly:
+            statefulset:
+              startupProbe:
+                enabled: #{startup_probe_enabled}
+                initialDelaySeconds: 5
+                periodSeconds: 1
+                timeoutSeconds: 2
+                successThreshold: 1
+                failureThreshold: 30
+      )).merge(default_values)
+    end
+
+    let(:gitaly_stateful_set) { 'StatefulSet/test-gitaly' }
+
+    context 'when enabled' do
+      let(:startup_probe_enabled) { 'true' }
+
+      it 'sets the startup probe config' do
+        t = HelmTemplate.new(values)
+        gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
+        gitaly_startup_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['startupProbe']
+        gitaly_readiness_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['readinessProbe']
+        gitaly_liveness_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['livenessProbe']
+
+        expect(gitaly_startup_probe).to include(
+          'initialDelaySeconds' => 5,
+          'exec' => { "command" => ["/scripts/healthcheck"] },
+          'failureThreshold' => 30,
+          'periodSeconds' => 1,
+          'timeoutSeconds' => 2,
+          'successThreshold' => 1
+        )
+
+        expect(gitaly_readiness_probe).to include(
+          'initialDelaySeconds' => 0
+        )
+
+        expect(gitaly_liveness_probe).to include(
+          'initialDelaySeconds' => 0
+        )
+      end
+    end
+
+    context 'when not enabled' do
+      let(:startup_probe_enabled) { 'false' }
+
+      it 'does not set startup probe for the Gitaly container' do
+        t = HelmTemplate.new(values)
+        gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
+        gitaly_container = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]
+        gitaly_readiness_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['readinessProbe']
+        gitaly_liveness_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['livenessProbe']
+
+        expect(gitaly_container).not_to have_key('startupProbe')
+        expect(gitaly_readiness_probe).to include(
+          'initialDelaySeconds' => 10
+        )
+        expect(gitaly_liveness_probe).to include(
+          'initialDelaySeconds' => 30
+        )
+      end
+    end
+  end
 end
