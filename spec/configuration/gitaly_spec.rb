@@ -549,6 +549,9 @@ describe 'Gitaly configuration' do
         t = HelmTemplate.new(values)
         gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
         gitaly_startup_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['startupProbe']
+        gitaly_readiness_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['readinessProbe']
+        gitaly_liveness_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['livenessProbe']
+
         expect(gitaly_startup_probe).to include(
           'initialDelaySeconds' => 5,
           'exec' => { "command" => ["/scripts/healthcheck"] },
@@ -556,6 +559,14 @@ describe 'Gitaly configuration' do
           'periodSeconds' => 1,
           'timeoutSeconds' => 2,
           'successThreshold' => 1
+        )
+
+        expect(gitaly_readiness_probe).to include(
+          'initialDelaySeconds' => 0
+        )
+
+        expect(gitaly_liveness_probe).to include(
+          'initialDelaySeconds' => 0
         )
       end
     end
@@ -567,7 +578,16 @@ describe 'Gitaly configuration' do
         t = HelmTemplate.new(values)
         gitaly_set = t.resources_by_kind('StatefulSet').select { |key| key == gitaly_stateful_set }
         gitaly_container = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]
+        gitaly_readiness_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['readinessProbe']
+        gitaly_liveness_probe = gitaly_set[gitaly_stateful_set]['spec']['template']['spec']['containers'][0]['livenessProbe']
+
         expect(gitaly_container).not_to have_key('startupProbe')
+        expect(gitaly_readiness_probe).to include(
+          'initialDelaySeconds' => 30
+        )
+        expect(gitaly_liveness_probe).to include(
+          'initialDelaySeconds' => 30
+        )
       end
     end
   end
