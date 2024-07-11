@@ -334,7 +334,7 @@ GitLab Pages supports only one URL scheme at a time: Either with wildcard DNS, o
        accessControl: true
    ```
 
-1. If [TLS access](#tls-access-to-gitlab-pages-domain-without-wildcard-dns) is configured, update the redirect URI in the GitLab Pages
+1. Optional. If [TLS access](#tls-access-to-gitlab-pages-domain-without-wildcard-dns) is configured, update the redirect URI in the GitLab Pages
    [System OAuth application](https://docs.gitlab.com/ee/integration/oauth_provider.html#create-an-instance-wide-application)
    to use the HTTPS protocol.
 
