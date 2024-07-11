@@ -57,7 +57,7 @@ Return priorityClassName for Pod definitions
 */}}
 {{- define "gitlab.priorityClassName" -}}
 {{- $pcName := default .Values.global.priorityClassName .Values.priorityClassName -}}
-{{- if $pcName }}
+{{- if $pcName -}}
 priorityClassName: {{ $pcName }}
 {{- end -}}
 {{- end -}}

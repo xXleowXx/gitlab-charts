@@ -59,7 +59,7 @@ spec:
       {{- if .Values.cgroups.enabled }}
         - name: init-cgroups
           image: {{ include "gitlab.configure.image" (dict "root" $ "image" .Values.cgroups.initContainer.image) | quote }}
-          {{- include "gitlab.image.pullPolicy" $initCgroupsImageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $initCgroupsImageCfg | nindent 10 }}
           {{- include "gitlab.podSecurityContextRoot" .Values.cgroups.initContainer.securityContext | nindent 10 }}
           env:
             - name: GITALY_POD_UID
@@ -88,8 +88,8 @@ spec:
         - name: configure
           command: ['sh', '/config/configure']
           image: {{ include "gitlab.configure.image" (dict "root" $ "image" .Values.init.image) | quote }}
-          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
-          {{- include "gitlab.init.containerSecurityContext" . | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $initImageCfg | nindent 10 }}
+          {{- include "gitlab.init.containerSecurityContext" . | nindent 10 }}
           env:
             {{- include "gitlab.extraEnv" . | nindent 12 }}
             {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 12 }}
@@ -107,7 +107,7 @@ spec:
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
       {{- include "gitlab.podSecurityContext" .Values.securityContext | nindent 6 }}
-      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6 }}
+      {{- include "gitlab.image.pullSecrets" $imageCfg | nindent 6 }}
       {{- if eq (default .Values.global.antiAffinity .Values.antiAffinity) "hard" }}
       affinity:
         podAntiAffinity:
@@ -141,8 +141,8 @@ spec:
         {{- include "gitlab.extraContainers" . | nindent 8 }}
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ coalesce .Values.image.tag (include "gitlab.parseAppVersion" (dict "appVersion" .Chart.AppVersion "prepend" "true")) }}{{ include "gitlab.image.tagSuffix" . }}"
-          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
-          {{- include "gitlab.containerSecurityContext" . | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | nindent 10 }}
+          {{- include "gitlab.containerSecurityContext" . | nindent 10 }}
           ports:
             - containerPort: {{ coalesce .Values.service.internalPort .Values.global.gitaly.service.internalPort }}
               name: grpc-gitaly

@@ -67,7 +67,7 @@ spec:
         - name: run-check
           image: {{ include "gitlab.configure.image" (dict "root" $ "image" .Values.upgradeCheck.image) | quote }}
           command: ['/bin/sh', '/scripts/runcheck']
-          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | nindent 10 }}
           env:
             - name: GITLAB_VERSION
               value: '{{ coalesce .Values.global.gitlabVersion .Chart.AppVersion }}'
