@@ -304,6 +304,8 @@ On GitLab.com this feature is not available. This feature is not ready for produ
 
 #### TLS access to GitLab Pages domain without wildcard DNS
 
+You can enable the cert manager configuration (`configureCertmanager=true`) to use the bundled cert-manager and HTTP01 issuer or configure pages to use a prepared certificate:  
+
 1. Create a certificate for your GitLab Pages domain in this format: `pages.<yourdomain>`. 
 1. Create the secret in Kubernetes:
    
