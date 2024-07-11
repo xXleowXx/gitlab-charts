@@ -71,8 +71,8 @@ spec:
               value: /run/gitaly/cgroup/kubepods.slice/
             - name: OUTPUT_PATH
               value: /init-secrets/gitaly-pod-cgroup
-          {{- include "gitlab.extraEnv" . | nindent 10 }}
-          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 10 }}
+            {{- include "gitlab.extraEnv" . | nindent 12 }}
+            {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" (dict)) | nindent 12 }}
           volumeMounts:
             - name: gitaly-secrets
               mountPath: /init-secrets
@@ -91,19 +91,19 @@ spec:
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           {{- include "gitlab.init.containerSecurityContext" . | indent 10 }}
           env:
-          {{- include "gitlab.extraEnv" . | nindent 10 }}
-          {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
+            {{- include "gitlab.extraEnv" . | nindent 12 }}
+            {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 12 }}
           volumeMounts:
-          {{- include "gitlab.extraVolumeMounts" . | nindent 10 }}
-          - name: gitaly-config
-            mountPath: /config
-            readOnly: true
-          - name: init-gitaly-secrets
-            mountPath: /init-config
-            readOnly: true
-          - name: gitaly-secrets
-            mountPath: /init-secrets
-            readOnly: false
+            {{- include "gitlab.extraVolumeMounts" . | nindent 12 }}
+            - name: gitaly-config
+              mountPath: /config
+              readOnly: true
+            - name: init-gitaly-secrets
+              mountPath: /init-config
+              readOnly: true
+            - name: gitaly-secrets
+              mountPath: /init-secrets
+              readOnly: false
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
       {{- include "gitlab.podSecurityContext" .Values.securityContext | nindent 6 }}
@@ -146,10 +146,10 @@ spec:
           ports:
             - containerPort: {{ coalesce .Values.service.internalPort .Values.global.gitaly.service.internalPort }}
               name: grpc-gitaly
-           {{- if .Values.metrics.enabled }}
+            {{- if .Values.metrics.enabled }}
             - containerPort: {{ default $.Values.metrics.port $.Values.metrics.metricsPort }}
               name: http-metrics
-           {{- end }}
+            {{- end }}
           env:
             - name: CONFIG_TEMPLATE_DIRECTORY
               value: '/etc/gitaly/templates'
@@ -221,90 +221,90 @@ spec:
             failureThreshold: {{ .Values.statefulset.readinessProbe.failureThreshold }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      volumes:
-      {{- include "gitlab.extraVolumes" . | nindent 6 }}
-      {{- if .Values.cgroups.enabled }}
-      - name: cgroup
-        hostPath:
-          path: /sys/fs/cgroup
-          type: Directory
-      {{- end }}
-      - name: gitaly-config
-        configMap:
-          {{- $cmName := include "fullname" . -}}
-          {{- if .storage}}
-          {{-   $cmName = printf "%s-%s" $cmName "praefect" -}}
-          {{- end }}
-          name: {{ $cmName }}
-      {{- if not .Values.persistence.enabled }}
-      - name: repo-data
-        emptyDir: {}
-      {{- end }}
-      - name: gitaly-secrets
-        emptyDir:
-          medium: "Memory"
-      - name: init-gitaly-secrets
-        projected:
-          defaultMode: 0440
-          sources:
-          - secret:
-              name: {{ template "gitlab.gitaly.authToken.secret" . }}
-              items:
-                - key: {{ template "gitlab.gitaly.authToken.key" . }}
-                  path: "gitaly_token"
-          - secret:
-              name: {{ template "gitlab.gitlab-shell.authToken.secret" . }}
-              items:
-                - key: {{ template "gitlab.gitlab-shell.authToken.key" . }}
-                  path: ".gitlab_shell_secret"
-          {{- if .Values.gpgSigning.enabled }}
-          - secret:
-              name: {{ .Values.gpgSigning.secret }}
-              items:
-                - key: {{ .Values.gpgSigning.key }}
-                  path: "signing_key.gpg"
-          {{- end }}
-          {{- if .Values.global.gitaly.tls.enabled }}
-          {{- $secretName := include "gitlab.gitaly.tls.secret" . -}}
-          {{- if .storage }}
-          {{-   $secretName = .storage.tlsSecretName -}}
-          {{- end }}
-          - secret:
-              name: {{ $secretName }}
-              items:
-                - key: "tls.crt"
-                  path: "gitaly.crt"
-                - key: "tls.key"
-                  path: "gitaly.key"
-          {{- end }}
-      {{- with .Values.global.gitaly.hooks }}
-      {{-   if .preReceive }}
-      {{-     if .preReceive.configmap }}
-      - name: gitaly-hooks-pre-receive
-        configMap:
-          name: {{ .preReceive.configmap }}
-          defaultMode: 0555
-      {{-     end }}
-      {{-   end }}
-      {{-   if .postReceive }}
-      {{-     if .postReceive.configmap }}
-      - name: gitaly-hooks-post-receive
-        configMap:
-          name: {{ .postReceive.configmap }}
-          defaultMode: 0555
-      {{-   end }}
-      {{-   end }}
-      {{-   if .update }}
-      {{-     if .update.configmap }}
-      - name: gitaly-hooks-update
-        configMap:
-          name: {{ .update.configmap }}
-          defaultMode: 0555
-      {{-     end }}
-      {{-   end }}
-      {{- end }}
-      {{- include "gitlab.certificates.volumes" . | nindent 6 }}
       {{- include "gitlab.nodeSelector" . | nindent 6 }}
+      volumes:
+        {{- include "gitlab.extraVolumes" . | nindent 8 }}
+        {{- if .Values.cgroups.enabled }}
+        - name: cgroup
+          hostPath:
+            path: /sys/fs/cgroup
+            type: Directory
+        {{- end }}
+        - name: gitaly-config
+          configMap:
+            {{- $cmName := include "fullname" . -}}
+            {{- if .storage}}
+            {{-   $cmName = printf "%s-%s" $cmName "praefect" -}}
+            {{- end }}
+            name: {{ $cmName }}
+        {{- if not .Values.persistence.enabled }}
+        - name: repo-data
+          emptyDir: {}
+        {{- end }}
+        - name: gitaly-secrets
+          emptyDir:
+            medium: "Memory"
+        - name: init-gitaly-secrets
+          projected:
+            defaultMode: 0440
+            sources:
+            - secret:
+                name: {{ template "gitlab.gitaly.authToken.secret" . }}
+                items:
+                  - key: {{ template "gitlab.gitaly.authToken.key" . }}
+                    path: "gitaly_token"
+            - secret:
+                name: {{ template "gitlab.gitlab-shell.authToken.secret" . }}
+                items:
+                  - key: {{ template "gitlab.gitlab-shell.authToken.key" . }}
+                    path: ".gitlab_shell_secret"
+            {{- if .Values.gpgSigning.enabled }}
+            - secret:
+                name: {{ .Values.gpgSigning.secret }}
+                items:
+                  - key: {{ .Values.gpgSigning.key }}
+                    path: "signing_key.gpg"
+            {{- end }}
+            {{- if .Values.global.gitaly.tls.enabled }}
+            {{- $secretName := include "gitlab.gitaly.tls.secret" . -}}
+            {{- if .storage }}
+            {{-   $secretName = .storage.tlsSecretName -}}
+            {{- end }}
+            - secret:
+                name: {{ $secretName }}
+                items:
+                  - key: "tls.crt"
+                    path: "gitaly.crt"
+                  - key: "tls.key"
+                    path: "gitaly.key"
+            {{- end }}
+        {{- with .Values.global.gitaly.hooks }}
+        {{-   if .preReceive }}
+        {{-     if .preReceive.configmap }}
+        - name: gitaly-hooks-pre-receive
+          configMap:
+            name: {{ .preReceive.configmap }}
+            defaultMode: 0555
+        {{-     end }}
+        {{-   end }}
+        {{-   if .postReceive }}
+        {{-     if .postReceive.configmap }}
+        - name: gitaly-hooks-post-receive
+          configMap:
+            name: {{ .postReceive.configmap }}
+            defaultMode: 0555
+        {{-   end }}
+        {{-   end }}
+        {{-   if .update }}
+        {{-     if .update.configmap }}
+        - name: gitaly-hooks-update
+          configMap:
+            name: {{ .update.configmap }}
+            defaultMode: 0555
+        {{-     end }}
+        {{-   end }}
+        {{- end }}
+        {{- include "gitlab.certificates.volumes" . | nindent 8 }}
 
   {{-  $persistence := .Values.persistence.enabled -}}
   {{-  $accessMode := .Values.persistence.accessMode -}}
