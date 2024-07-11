@@ -232,7 +232,7 @@ workhorse:
       tls: {}
         # enabled: false
   metrics:
-    enabled: false
+    enabled: true
     port: 9229
     path: /metrics
     serviceMonitor:
