@@ -339,12 +339,7 @@ GitLab Pages supports only one URL scheme at a time: Either with wildcard DNS, o
    to use the HTTPS protocol.
 
 WARNING:
-GitLab Pages does not update the OAuth application, and
-the default `authRedirectUri` is updated to `https://pages.<yourdomaindomain>/projects/auth`.
-While accessing private Pages site, if you encounter an error 'The redirect URI included is not valid',
-update the redirect URI in the GitLab Pages
-[System OAuth application](https://docs.gitlab.com/ee/integration/oauth_provider.html#create-an-instance-wide-application)
-to `https://pages.<yourdomaindomain>/projects/auth`.
+GitLab Pages does not update the OAuth application, and the default `authRedirectUri` is updated to `https://pages.<yourdomaindomain>/projects/auth`. While accessing a private Pages site, if you encounter an error 'The redirect URI included is not valid', update the redirect URI in the GitLab Pages [System OAuth application](https://docs.gitlab.com/ee/integration/oauth_provider.html#create-an-instance-wide-application) to `https://pages.<yourdomaindomain>/projects/auth`.
 
 WARNING:
 GitLab Pages supports only one URL scheme at a time:
