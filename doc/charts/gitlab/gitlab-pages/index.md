@@ -341,12 +341,6 @@ GitLab Pages supports only one URL scheme at a time: Either with wildcard DNS, o
 WARNING:
 GitLab Pages does not update the OAuth application, and the default `authRedirectUri` is updated to `https://pages.<yourdomaindomain>/projects/auth`. While accessing a private Pages site, if you encounter an error 'The redirect URI included is not valid', update the redirect URI in the GitLab Pages [System OAuth application](https://docs.gitlab.com/ee/integration/oauth_provider.html#create-an-instance-wide-application) to `https://pages.<yourdomaindomain>/projects/auth`.
 
-WARNING:
-GitLab Pages supports only one URL scheme at a time:
-with wildcard DNS, or without wildcard DNS.
-If you enable `namespaceInPath`, existing GitLab Pages websites
-are accessible only on domains without wildcard DNS.
-
 ### Configuring KEDA
 
 This `keda` section enables the installation of [KEDA](https://keda.sh/) `ScaledObjects` instead of regular `HorizontalPodAutoscalers`.
