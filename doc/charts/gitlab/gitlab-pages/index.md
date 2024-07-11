@@ -161,7 +161,6 @@ configurations that can be supplied to the `helm install` command using the
 | `serverKeepAlive`           | `15s`    | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `authTimeout`               | `5s`     | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `authCookieSessionTimeout`  | `10m`    | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
-| `namespaceInPath`           | `false`  | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 
 ### Configuring the `ingress`
 
@@ -282,6 +281,65 @@ To have TLS access to the GitLab Pages feature you must:
 
 1. Create a DNS entry in your DNS provider with the name `*.pages.<yourdomaindomain>`
    pointing to your LoadBalancer.
+
+### Pages domain without wildcard DNS
+
+DETAILS:
+**Status:** Beta
+
+> - [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/issues/5570) as an [beta](https://docs.gitlab.com/ee/policy/experiment-beta-support.html) in GitLab 17.2.
+
+FLAG:
+On GitLab.com this feature is not available. This feature is not ready for production use.
+
+WARNING:
+GitLab Pages supports only one URL scheme at a time: Either with wildcard DNS, or without wildcard DNS. If you enable `namespaceInPath`, existing GitLab Pages websites are accessible only on domains without wildcard DNS.
+
+1. Enable `namespaceInPath` in the global Pages settings.
+
+   ```yaml
+   global:
+     pages:
+       namespaceInPath: true
+   ```
+
+1. Create a DNS entry in your DNS provider with the name `pages.<yourdomaindomain>` pointing to your LoadBalancer.
+
+#### TLS access to GitLab Pages domain without wildcard DNS
+
+1. Create a certificate for your GitLab Pages domain in this format: `pages.<yourdomain>`. 
+1. Create the secret in Kubernetes:
+   
+   ```shell
+   kubectl create secret tls tls-star-pages-<mysecret> --cert=<path/to/fullchain.pem> --key=<path/to/privkey.pem>
+   ```
+   
+1. Configure GitLab Pages to use this secret:
+   
+   ```yaml
+   gitlab:
+     gitlab-pages:
+       ingress:
+         tls:
+           secretName: tls-star-pages-<mysecret>
+   ```
+
+#### Configure access control
+
+1. Enable `accessControl` in the global pages settings.
+
+   ```yaml
+   global:
+     pages:
+       accessControl: true
+   ```
+
+1. Optional. If [TLS access](#tls-access-to-gitlab-pages-domain-without-wildcard-dns) is configured, update the redirect URI in the GitLab Pages
+   [System OAuth application](https://docs.gitlab.com/ee/integration/oauth_provider.html#create-an-instance-wide-application)
+   to use the HTTPS protocol.
+
+WARNING:
+GitLab Pages does not update the OAuth application, and the default `authRedirectUri` is updated to `https://pages.<yourdomaindomain>/projects/auth`. While accessing a private Pages site, if you encounter an error 'The redirect URI included is not valid', update the redirect URI in the GitLab Pages [System OAuth application](https://docs.gitlab.com/ee/integration/oauth_provider.html#create-an-instance-wide-application) to `https://pages.<yourdomaindomain>/projects/auth`.
 
 ### Configuring KEDA
 
