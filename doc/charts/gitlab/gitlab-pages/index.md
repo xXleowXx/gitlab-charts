@@ -321,7 +321,17 @@ On GitLab.com this feature is not available. This feature is not ready for produ
            secretName: tls-star-pages-<mysecret>
    ```
 
-1. If `accessControl` is enabled under `global` > `pages`, update the redirect URI in the GitLab Pages
+#### Configure access control
+
+1. Enable `accessControl` in the global pages settings.
+
+   ```yaml
+   global:
+     pages:
+       accessControl: true
+   ```
+
+1. If [TLS access](#tls-access-to-gitlab-pages-domain-without-wildcard-dns) is configured, update the redirect URI in the GitLab Pages
    [System OAuth application](https://docs.gitlab.com/ee/integration/oauth_provider.html#create-an-instance-wide-application)
    to use the HTTPS protocol.
 
