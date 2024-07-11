@@ -292,7 +292,10 @@ DETAILS:
 FLAG:
 On GitLab.com this feature is not available. This feature is not ready for production use.
 
-1. Enable `namespaceInPath` in the global pages settings.
+WARNING:
+GitLab Pages supports only one URL scheme at a time: Either with wildcard DNS, or without wildcard DNS. If you enable `namespaceInPath`, existing GitLab Pages websites are accessible only on domains without wildcard DNS.
+
+1. Enable `namespaceInPath` in the global Pages settings.
 
    ```yaml
    global:
