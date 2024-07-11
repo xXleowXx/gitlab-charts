@@ -187,6 +187,13 @@ statefulset:
     timeoutSeconds: 3
     successThreshold: 1
     failureThreshold: 3
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 1
+    periodSeconds: 2
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 30
 
 affinity:
   podAntiAffinity:

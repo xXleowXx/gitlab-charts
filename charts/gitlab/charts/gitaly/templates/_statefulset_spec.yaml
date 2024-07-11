@@ -201,11 +201,22 @@ spec:
               mountPath: "/home/git/custom_hooks/update.d"
             {{- end }}
             {{- end }}
+          {{-  if .Values.statefulset.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+              - /scripts/healthcheck
+            initialDelaySeconds: {{ .Values.statefulset.startupProbe.initialDelaySeconds }}
+            periodSeconds:  {{ .Values.statefulset.startupProbe.periodSeconds }}
+            timeoutSeconds:  {{ .Values.statefulset.startupProbe.timeoutSeconds }}
+            successThreshold:  {{ .Values.statefulset.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.statefulset.startupProbe.failureThreshold }}
+          {{- end }}
           livenessProbe:
             exec:
               command:
               - /scripts/healthcheck
-            initialDelaySeconds: {{ .Values.statefulset.livenessProbe.initialDelaySeconds }}
+            initialDelaySeconds: {{ ternary 0 .Values.statefulset.livenessProbe.initialDelaySeconds .Values.statefulset.startupProbe.enabled }}
             periodSeconds: {{ .Values.statefulset.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.statefulset.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.statefulset.livenessProbe.successThreshold }}
@@ -214,7 +225,7 @@ spec:
             exec:
               command:
               - /scripts/healthcheck
-            initialDelaySeconds: {{ .Values.statefulset.readinessProbe.initialDelaySeconds }}
+            initialDelaySeconds: {{ ternary 0 .Values.statefulset.readinessProbe.initialDelaySeconds .Values.statefulset.startupProbe.enabled }}
             periodSeconds: {{ .Values.statefulset.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.statefulset.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.statefulset.readinessProbe.successThreshold }}
