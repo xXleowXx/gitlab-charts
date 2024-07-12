@@ -67,7 +67,7 @@ gitlab:
 
 | Parameter                                   | Description                                  | Default                      |
 |---------------------------------------------|----------------------------------------------|------------------------------|
-| `affinity`                                  | Affinity rules for pod assignment            | `{}`                         |
+| `affinity`                                  | [Affinity rules](#affinity) for pod assignment            | `{}`                         |
 | `annotations`                               | Annotations to add to the Toolbox Pods and Jobs | `{}`                      |
 | `common.labels`                             | Supplemental labels that are applied to all objects created by this chart.  | `{}` |
 | `antiAffinityLabels.matchLabels`            | Labels for setting anti-affinity options     |                              |

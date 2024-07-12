@@ -46,7 +46,7 @@ Table below contains all the possible charts configurations that can be supplied
 | `init.image.containerSecurityContext` | init container securityContext overrides | `{}`    |
 | `enabled`                   | Migrations enable flag                   | `true`            |
 | `tolerations`               | Toleration labels for pod assignment     | `[]`              |
-| `affinity`                  | Affinity rules for pod assignment            | `{}`              |
+| `affinity`                  | [Affinity rules](#affinity) for pod assignment            | `{}`              |
 | `annotations`               | Annotations for the job spec             | `{}`              |
 | `podAnnotations`            | Annotations for the pob spec             | `{}`              |
 | `podLabels`                 | Supplemental Pod labels. Will not be used for selectors. |   |
