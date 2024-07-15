@@ -34,6 +34,7 @@ This deployment is for trial purposes only and **not recommended for use in prod
 You should set up an
 [external, production-ready PostgreSQL instance](../advanced/external-db/index.md).
 Recommended default versions:
+
 - PostgreSQL 13 since GitLab chart 6.0.
 - PostgreSQL 14 since GitLab chart 8.0.
 
