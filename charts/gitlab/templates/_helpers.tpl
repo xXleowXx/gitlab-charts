@@ -78,7 +78,7 @@ affinity:
               {{- if ne .Chart.Name "toolbox" }}
                 {{- include "gitlab.selectorLabels" . | nindent 18 }}
               {{- end -}}
-              {{- include "selectorLabelsBySubchart.Labels" . | nindent 18 }}
+              {{- include "gitlab.affinity.selectorLabelsBySubchart" . | nindent 18 }}
   {{- else if eq (default .Values.global.antiAffinity .Values.antiAffinity) "soft" }}
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -90,7 +90,7 @@ affinity:
                 {{- if ne .Chart.Name "toolbox" }}
                   {{- include "gitlab.selectorLabels" . | nindent 18 }}
                 {{- end -}}
-                {{- include "selectorLabelsBySubchart.Labels" . | nindent 18 }}
+                {{- include "gitlab.affinity.selectorLabelsBySubchart" . | nindent 18 }}
   {{- end -}}
   {{- if eq (default .Values.global.nodeAffinity .Values.nodeAffinity) "hard" }}
     nodeAffinity:
@@ -117,7 +117,7 @@ affinity:
 {{/*
 Selector Labels by subchart for podAntiAffinity
 */}}
-{{- define "selectorLabelsBySubchart.Labels" -}}
+{{- define "gitlab.affinity.selectorLabelsBySubchart" -}}
 {{- if eq .Chart.Name "gitaly" }}
 {{- if .storage }}
 storage: {{ .storage.name }}
