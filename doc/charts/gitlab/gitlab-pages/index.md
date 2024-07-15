@@ -307,15 +307,15 @@ GitLab Pages supports only one URL scheme at a time: Either with wildcard DNS, o
 
 #### TLS access to GitLab Pages domain without wildcard DNS
 
-1. Create a certificate for your GitLab Pages domain in this format: `pages.<yourdomain>`. 
+1. Create a certificate for your GitLab Pages domain in this format: `pages.<yourdomain>`.
 1. Create the secret in Kubernetes:
-   
+
    ```shell
    kubectl create secret tls tls-star-pages-<mysecret> --cert=<path/to/fullchain.pem> --key=<path/to/privkey.pem>
    ```
-   
+
 1. Configure GitLab Pages to use this secret:
-   
+
    ```yaml
    gitlab:
      gitlab-pages:
