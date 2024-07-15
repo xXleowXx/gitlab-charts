@@ -264,12 +264,12 @@ git:
 
 ### cgroups
 
-To prevent exhaustion, Gitaly uses **cgroups** to assign Git processes to a 
- cgroup based on the repository being operated on. Each cgroup has memory 
+To prevent exhaustion, Gitaly uses **cgroups** to assign Git processes to a
+cgroup based on the repository being operated on. Each cgroup has memory
 and CPU limits, ensuring system stability and preventing resource saturation.
 
-Please note that the initContainer that runs before Gitaly starts requires to be 
-**executed as root**. This container will configure the permissions so that Gitaly can manage cgroups. 
+Please note that the `initContainer` that runs before Gitaly starts requires to be
+**executed as root**. This container will configure the permissions so that Gitaly can manage cgroups.
 Hence, it will mount a volume on the filesystem to have write access to `/sys/fs/cgroup`.
 
 [Example of Oversubscription](https://docs.gitlab.com/ee/administration/gitaly/configure_gitaly.html#configuring-oversubscription)
