@@ -36,7 +36,7 @@ chart:
   the user understand where the property came from in the charts, and configuration properties.
   Example: `gitlab.webservice`, `minio`, `registry`.
 - The message should inform the user of the property that has been altered / relocated / deprecated,
-  and what action should be taken. Name the property relative to the affected chart. For example, 
+  and what action should be taken. Name the property relative to the affected chart. For example,
   `gitlab.webservice.minio.enabled` would be referenced as `minio.enabled` because the chart
   affected by the deprecation is `gitlab.webservice`.
 
