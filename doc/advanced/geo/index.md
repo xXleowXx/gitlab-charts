@@ -284,9 +284,9 @@ To deploy this chart as a Geo Primary, start [from this example configuration](h
    - [`global.psql.host`](../../charts/globals.md#configure-postgresql-settings)
    - `global.geo.nodeName` must match
      [the Name field of a Geo site in the Admin Area](https://docs.gitlab.com/ee/administration/geo_sites.html#common-settings)
-   - Set [`nginx-ingress-geo.enabled`](../../charts/nginx/index.md#gitlab-geo) enables a Ingress controller
+   - Set [`nginx-ingress-geo.enabled`](../../charts/nginx/index.md#gitlab-geo) to enable an Ingress controller
      for Geo traffic forwarded from secondaries.
-   - Configure the primary Geo site's [gitlab.webservice](../../charts/gitlab/webservice/index.md#ingress-settings) Ingresses for Geo traffic
+   - Configure the primary Geo site's [`gitlab.webservice`](../../charts/gitlab/webservice/index.md#ingress-settings) Ingresses for Geo traffic.
    - Also configure any additional settings, such as:
      - [Configuring SSL/TLS](../../installation/tools.md#tls-certificates)
      - [Using external Redis](../external-redis/index.md)
@@ -619,10 +619,10 @@ To deploy this chart as a Geo Secondary site, start [from this example configura
    - [`global.geo.psql.host`](../../charts/globals.md#configure-postgresql-settings)
    - `global.geo.nodeName` must match
      [the Name field of a Geo site in the Admin Area](https://docs.gitlab.com/ee/administration/geo_sites.html#common-settings)
-   - Optionally set `nginx-ingress-geo.enabled` to enable a ingress controller pre-configured for internal Geo traffic.
-     [This makes it easier to promote the site to a primary.](../../charts/nginx/index.md#gitlab-geo)
-   - Configure a extra Ingress for [gitlab.webservice](../../charts/gitlab/webservice/index.md#ingress-settings) to handle
-     traffic send to the secondary site's internal URL.
+   - Optionally set `nginx-ingress-geo.enabled` to enable an ingress controller pre-configured for internal Geo traffic.
+     [This makes it easier to promote the site to a primary.](../../charts/nginx/index.md#gitlab-geo).
+   - Configure an extra Ingress for [gitlab.webservice](../../charts/gitlab/webservice/index.md#ingress-settings) to handle
+     traffic sent to the secondary site's internal URL.
    - Also configure any additional settings, such as:
      - [Configuring SSL/TLS](../../installation/tools.md#tls-certificates)
      - [Using external Redis](../external-redis/index.md)
