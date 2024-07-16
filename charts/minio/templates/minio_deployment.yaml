@@ -70,7 +70,7 @@ spec:
       initContainers:
         - name: configure
           image: {{ include "gitlab.configure.image" (dict "root" $ "image" .Values.init.image) | quote }}
-          {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $initImageCfg | nindent 10 }}
           command: ["sh", "/config/configure"]
           volumeMounts:
             - name: minio-configuration
@@ -78,12 +78,12 @@ spec:
             - name: minio-server-config
               mountPath: /minio
           resources:
-{{ toYaml .Values.init.resources | indent 12 }}
-      {{- include "gitlab.image.pullSecrets" $imageCfg | indent 6}}
+            {{ toYaml .Values.init.resources | nindent 12 }}
+      {{- include "gitlab.image.pullSecrets" $imageCfg | nindent 6}}
       containers:
         - name: minio
           image: {{ .Values.image }}:{{ .Values.imageTag }}
-          {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
+          {{- include "gitlab.image.pullPolicy" $imageCfg | nindent 10 }}
           args: ["-C", "{{ default "/tmp/.minio" .Values.configPath }}", "--quiet", "server", "{{ .Values.mountPath }}"]
           volumeMounts:
             - name: export

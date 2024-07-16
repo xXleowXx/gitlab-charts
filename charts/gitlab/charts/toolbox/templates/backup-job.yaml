@@ -59,8 +59,8 @@ spec:
             - name: configure
               command: ['sh', '/config/configure']
               image: {{ include "gitlab.configure.image" (dict "root" $ "image" .Values.init.image) | quote }}
-              {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 14 }}
-              {{- include "gitlab.init.containerSecurityContext" . | indent 14 }}
+              {{- include "gitlab.image.pullPolicy" $initImageCfg | nindent 14 }}
+              {{- include "gitlab.init.containerSecurityContext" . | nindent 14 }}
               env:
                 {{- include "gitlab.extraEnv" $ | nindent 16 }}
                 {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 16 }}
@@ -78,7 +78,7 @@ spec:
                   readOnly: false
               resources:
                 {{- toYaml .Values.init.resources | nindent 16 }}
-          {{- include "gitlab.image.pullSecrets" $imageCfg | indent 10 }}
+          {{- include "gitlab.image.pullSecrets" $imageCfg | nindent 10 }}
           containers:
             {{- include "gitlab.extraContainers" . | nindent 12 }}
             - name: {{ .Chart.Name }}-backup
@@ -93,8 +93,8 @@ spec:
                 - backup-utility {{ .Values.backups.cron.extraArgs }}
                  {{- end }}
               image: "{{ coalesce .Values.image.repository (include "image.repository" .) }}:{{ coalesce .Values.image.tag (include "gitlab.versionTag" . ) }}{{ include "gitlab.image.tagSuffix" . }}"
-              {{- include "gitlab.image.pullPolicy" $imageCfg | indent 14 }}
-              {{- include "gitlab.containerSecurityContext" . | indent 14 }}
+              {{- include "gitlab.image.pullPolicy" $imageCfg | nindent 14 }}
+              {{- include "gitlab.containerSecurityContext" . | nindent 14 }}
               env:
                 {{- include "gitlab.extraEnv" $ | nindent 16 }}
                 {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 16 }}

@@ -504,12 +504,12 @@ emptyDir: {{ toYaml $values | nindent 2 }}
 {{/*
 Return init container specific securityContext template
 */}}
-{{- define "gitlab.init.containerSecurityContext" }}
-{{- if .Values.init.containerSecurityContext }}
+{{- define "gitlab.init.containerSecurityContext" -}}
+{{- if .Values.init.containerSecurityContext -}}
 securityContext:
   {{- toYaml .Values.init.containerSecurityContext | nindent 2 }}
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Return container specific securityContext template
@@ -518,8 +518,8 @@ Return container specific securityContext template
 {{- if .Values.containerSecurityContext }}
 securityContext:
   {{- toYaml .Values.containerSecurityContext | nindent 2 }}
-{{- end }}
-{{- end }}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Return a PodSecurityContext definition.
@@ -528,22 +528,22 @@ Usage:
   {{ include "gitlab.podSecurityContext" .Values.securityContext }}
 */}}
 {{- define "gitlab.podSecurityContext" -}}
-{{- $psc := . }}
-{{- if $psc }}
+{{- $psc := . -}}
+{{- if $psc -}}
 securityContext:
 {{-   if not (empty $psc.runAsUser) }}
   runAsUser: {{ $psc.runAsUser }}
-{{-   end }}
+{{-   end -}}
 {{-   if not (empty $psc.runAsGroup) }}
   runAsGroup: {{ $psc.runAsGroup }}
-{{-   end }}
+{{-   end -}}
 {{-   if not (empty $psc.fsGroup) }}
   fsGroup: {{ $psc.fsGroup }}
-{{-   end }}
+{{-   end -}}
 {{-   if not (empty $psc.fsGroupChangePolicy) }}
   fsGroupChangePolicy: {{ $psc.fsGroupChangePolicy }}
-{{-   end }}
-{{- end }}
+{{-   end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -553,22 +553,22 @@ Usage:
   {{ include "gitlab.podSecurityContextRoot" .Values.securityContext }}
 */}}
 {{- define "gitlab.podSecurityContextRoot" -}}
-{{- $psc := . }}
-{{- if $psc }}
+{{- $psc := . -}}
+{{- if $psc -}}
 securityContext:
 {{-   if not (eq $psc.runAsUser nil) }}
   runAsUser: {{ $psc.runAsUser }}
-{{-   end }}
+{{-   end -}}
 {{-   if not (eq $psc.runAsGroup nil) }}
   runAsGroup: {{ $psc.runAsGroup }}
-{{-   end }}
+{{-   end -}}
 {{-   if not (eq $psc.fsGroup nil) }}
   fsGroup: {{ $psc.fsGroup }}
-{{-   end }}
+{{-   end -}}
 {{-   if not (eq $psc.fsGroupChangePolicy nil) }}
   fsGroupChangePolicy: {{ $psc.fsGroupChangePolicy }}
-{{-   end }}
-{{- end }}
+{{-   end -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

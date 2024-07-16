@@ -36,12 +36,12 @@ Usage:
 {{- if .local.pullSecrets -}}
 {{-   $pullSecrets = concat $pullSecrets .local.pullSecrets -}}
 {{- end -}}
-{{- if $pullSecrets }}
+{{- if $pullSecrets -}}
 imagePullSecrets:
 {{-   range $index, $entry := $pullSecrets }}
-- name: {{ $entry.name }}
+  - name: {{ $entry.name }}
 {{-   end }}
-{{- end }}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -53,7 +53,7 @@ imagePullSecrets:
 */}}
 {{- define "gitlab.image.pullPolicy" -}}
 {{- $pullPolicy := coalesce .local.pullPolicy .global.pullPolicy -}}
-{{- if $pullPolicy }}
+{{- if $pullPolicy -}}
 imagePullPolicy: {{ $pullPolicy | quote }}
 {{- end -}}
 {{- end -}}
@@ -66,7 +66,7 @@ Allow configuring a standard suffix on all images in chart
 {{ .Values.global.image.tagSuffix }}
 {{- else if hasKey . "global" -}}
 {{ .global.image.tagSuffix }}
-{{- else }}
+{{- else -}}
 ""
 {{- end -}}
 {{- end -}}
