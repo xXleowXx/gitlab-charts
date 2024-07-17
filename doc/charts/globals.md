@@ -1942,6 +1942,8 @@ global:
     hostKeys: {}
     tcp:
       proxyProtocol: false
+    lfs:
+      pureSSHProtocol: false
 ```
 
 | Name                  | Type    | Default | Description |
@@ -1950,6 +1952,7 @@ global:
 | `authToken`           |         |         | See [authToken](gitlab/gitlab-shell/index.md#authtoken) in the GitLab Shell chart specific documentation. |
 | `hostKeys`            |         |         | See [hostKeys](gitlab/gitlab-shell/index.md#hostkeyssecret) in the GitLab Shell chart specific documentation. |
 | `tcp.proxyProtocol`   | Boolean | `false` | See [TCP proxy protocol](#tcp-proxy-protocol) below for specific documentation. |
+| `lfs.pureSSHProtocol` | Boolean | `false` | See [LFS pure SSH protocol support](#lfs-pure-ssh-protocol-support) below for specific documentation. |
 
 ### Port
 
@@ -1991,6 +1994,18 @@ global:
   shell:
     tcp:
       proxyProtocol: true # default false
+```
+
+### LFS Pure SSH protocol support
+
+LFS Pure SSH support offers the ability to perform LFS operations over SSH (instead
+of the HTTP which is the default).
+
+```yaml
+global:
+  shell:
+    lfs:
+      pureSSHProtocol: true # default false
 ```
 
 ## Configure GitLab Pages
