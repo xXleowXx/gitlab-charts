@@ -282,6 +282,7 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `redis.rateLimiting.enabled`                 | `false`                                                              | When set to `true`, the Redis rate limiter is enabled. This feature is under development. |
 | `redis.rateLimiting.host`                    | `<Redis URL>`                                                        | The hostname of the Redis instance. If empty, the value will be filled as `global.redis.host:global.redis.port`. |
 | `redis.rateLimiting.port`                    | `6379`                                                               | The port of the Redis instance. |
+| `redis.rateLimiting.cluster`                 | `[]`                                                                 | List of addresses with host and port. |
 | `redis.rateLimiting.sentinels`               | `[]`                                                                 | List sentinels with host and port. |
 | `redis.rateLimiting.mainname`                |                                                                      | The main server name. Only applicable for Sentinel. |
 | `redis.rateLimiting.username`                |                                                                      | The username used to connect to the Redis instance. |
@@ -1070,6 +1071,23 @@ redis:
       size: 10
       maxlifetime: 1h
       idletimeout: 300s
+```
+
+#### Cluster
+
+The `redis.rateLimiting` can use a list of host and port
+to connect to a Redis cluster. For example:
+
+```yaml
+redis:
+  cache:
+    enabled: true
+    host: redis.example.com
+    cluster:
+      - host: host1.example.com
+        port: 6379
+      - host: host2.example.com
+        port: 6379
 ```
 
 #### Sentinels

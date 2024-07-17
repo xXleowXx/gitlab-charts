@@ -12,6 +12,19 @@ Expectation: input contents has .sentinels, which is a List of Dict
 {{ join "," $sentinels }}
 {{- end -}}
 
+{{/*
+Helper for Cluster as a string
+
+Expectation: input contents has .cluster, which is a List of Dict
+    in the format of [{host: , port:}, ...]
+*/}}
+{{- define "registry.redis.host.cluster" -}}
+{{- $cluster := list -}}
+{{- range .cluster -}}
+{{-   $cluster = append $cluster (printf "%s:%d" .host (default 6379 .port | int)) -}}
+{{- end -}}
+{{ join "," $cluster }}
+{{- end -}}
 
 {{- define "gitlab.registry.redisCacheSecret.mount" -}}
 {{- if .Values.redis.cache.password.enabled }}
@@ -123,6 +136,8 @@ redis:
     {{- else if .redisMergedConfig.sentinels }}
     addr: {{ include "registry.redis.host.sentinels" .redisMergedConfig | quote }}
     mainname: {{ template "gitlab.redis.host" . }}
+    {{- else if .Values.redis.rateLimiting.cluster }}
+    addr: {{ include "registry.redis.host.cluster" .Values.redis.rateLimiting | quote }}
     {{- else if .Values.redis.rateLimiting.host  }}
     addr: {{ printf "%s:%d" .Values.redis.rateLimiting.host (int .Values.redis.rateLimiting.port | default 6379) | quote }}
     {{- else }}
