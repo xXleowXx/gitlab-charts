@@ -47,6 +47,7 @@ for more information on how the global variables work.
 - [Pod priority and preemption](#pod-priority-and-preemption)
 - [Log rotation](#log-rotation)
 - [Jobs](#jobs)
+- [Traefik](#traefik)
 
 ## Configure Host settings
 
@@ -2588,3 +2589,17 @@ helm <command> <options> --set global.job.nameSuffixOverride=$(date +%Y-%m-%d-%H
 | Name                 | Type   | Default | Description                                               |
 | :--------------------| :--:   | :------ | :-------------------------------------------------------- |
 | `nameSuffixOverride` | String |         | Custom suffix to replace the automatically generated hash |
+
+## Traefik
+
+The Traefik settings can be configured via `globals.traefik`.
+
+```yaml
+global:
+  traefik:
+    apiVersion: ""
+```
+
+| Name         | Type   | Default | Description                                             |
+| :------------| :----- | :------ | :------------------------------------------------------ |
+| `apiVersion` | String |         | Overrides the default `apiVersion` of Traefik resources |
