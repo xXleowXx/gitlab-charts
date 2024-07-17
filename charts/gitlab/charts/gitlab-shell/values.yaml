@@ -190,3 +190,6 @@ sshDaemon: openssh
 affinity:
   podAntiAffinity:
     topologyKey:
+  nodeAffinity:
+       key:
+       values:

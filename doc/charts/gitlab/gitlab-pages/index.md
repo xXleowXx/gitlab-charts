@@ -39,6 +39,7 @@ configurations that can be supplied to the `helm install` command using the
 
 | Parameter                                 | Default                                                    | Description                                                                                                                                                                                        |
 | ----------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `affinity`                             | `{}`                                                       | [Affinity rules](#affinity) for pod assignment                                                                                                                                                               |
 | `annotations`                             |                                                            | Pod annotations                                                                                                                                                                                    |
 | `common.labels`                           | `{}`                                                       | Supplemental labels that are applied to all objects created by this chart.                                                                                                                         |
 | `deployment.strategy`                     | `{}`                                                       | Allows one to configure the update strategy used by the deployment. When not provided, the cluster default is used.                                                                                |
@@ -386,3 +387,37 @@ This section controls if a ServiceAccount should be created and if the default a
 | `create`                       | Boolean | `false` | Indicates whether or not a ServiceAccount should be created.                                                                                                                     |
 | `enabled`                      | Boolean | `false` | Indicates whether or not to use a ServiceAccount.                                                                                                                                |
 | `name`                         | String  |         | Name of the ServiceAccount. If not set, the chart full name is used.                                                                                                             |
+
+### affinity
+
+`affinity` is an optional parameter that allows you to set either or both:
+
+- `podAntiAffinity` rules to:
+  - Not schedule pods in the same domain as the pods that match the expression corresponding to the `topology key`.
+  - Set two modes of `podAntiAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
+    (`preferredDuringSchedulingIgnoredDuringExecution`). Using the variable `antiAffinity` in `values.yaml`, set the setting to `soft` so that the preferred mode is
+    applied or set it to `hard` so that the required mode is applied.
+- `nodeAffinity` rules to:
+  - Schedule pods to nodes that belong to a specific zone or zones.
+  - Set two modes of `nodeAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
+    (`preferredDuringSchedulingIgnoredDuringExecution`). When set to `soft`, the preferred mode is applied. When set to `hard`, the required mode is applied. This
+    rule is implemented only for the `registry` chart and the `gitlab` chart alongwith all its subcharts except `webservice` and `sidekiq`.
+
+`nodeAffinity` only implements the [`In` operator](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#operators).
+
+For more information, see [the relevant Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).
+
+The following example sets `affinity`, with both `nodeAffinity` and `antiAffinity` set to `hard`:
+
+```yaml
+nodeAffinity: "hard"
+antiAffinity: "hard"
+affinity:
+  nodeAffinity:
+    key: "test.com/zone"
+    values:
+    - us-east1-a
+    - us-east1-b
+  podAntiAffinity:
+    topologyKey: "test.com/hostname"
+```
