@@ -87,6 +87,7 @@ stages:
 include:
   - local: '/.gitlab/ci/rules.gitlab-ci.yml'
   - local: '/.gitlab/ci/review-apps.gitlab-ci.yml'
+  - local: '/.gitlab/ci/operator.gitlab-ci.yml'
   - template: Jobs/Dependency-Scanning.latest.gitlab-ci.yml
   - template: Jobs/Secret-Detection.latest.gitlab-ci.yml
   - template: Jobs/SAST.latest.gitlab-ci.yml
