@@ -673,10 +673,10 @@ describe 'Gitaly configuration' do
 
         expect(gitaly_container).not_to have_key('startupProbe')
         expect(gitaly_readiness_probe).to include(
-          'initialDelaySeconds' => 10
+          'initialDelaySeconds' => 0
         )
         expect(gitaly_liveness_probe).to include(
-          'initialDelaySeconds' => 30
+          'initialDelaySeconds' => 0
         )
       end
     end
