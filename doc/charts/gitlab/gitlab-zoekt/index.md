@@ -100,4 +100,4 @@ Zoekt can now index projects in that group after any project is updated or creat
 ## Enable exact code search
 
 After you install and configure Zoekt, you can
-[enable exact code search](https://docs.gitlab.com/ee/integration/exact_code_search/zoekt.html#enable-exact-code-search).
+[enable exact code search](https://docs.gitlab.com/ee/integration/exact_code_search/zoekt.html#enable-exact-code-search) in GitLab.
