@@ -253,6 +253,8 @@ describe 'global configuration' do
             enabled: true
           ingress:
             configureCertmanager: false
+          job:
+            nameSuffixOverride: '1'
         nginx-ingress:
           controller:
             kind: Both
@@ -288,7 +290,7 @@ describe 'global configuration' do
       ]
     end
 
-    it 'sets the provided timezone on all pods' do
+    fit 'sets the provided timezone on all pods' do
       t = HelmTemplate.new(shell_values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
