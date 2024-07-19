@@ -290,7 +290,7 @@ describe 'global configuration' do
       ]
     end
 
-    fit 'sets the provided timezone on all pods' do
+    it 'sets the provided timezone on all pods' do
       t = HelmTemplate.new(shell_values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
