@@ -176,14 +176,12 @@ serviceAccount:
 statefulset:
   strategy: {}
   livenessProbe:
-    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 3
     successThreshold: 1
     failureThreshold: 3
   readinessProbe:
-    initialDelaySeconds: 10
-    periodSeconds: 10
+    periodSeconds: 5
     timeoutSeconds: 3
     successThreshold: 1
     failureThreshold: 3
