@@ -48,6 +48,8 @@ spec:
           {{- include "gitlab.image.pullPolicy" $initImageCfg | indent 10 }}
           {{- include "gitlab.init.containerSecurityContext" $ | indent 10 }}
           env:
+          - name: TZ
+            value: {{ $.Values.global.time_zone | quote }}
           {{- include "gitlab.extraEnv" . | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 12 }}
           volumeMounts:
@@ -72,6 +74,8 @@ spec:
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           {{- include "gitlab.containerSecurityContext" $ | indent 10 }}
           env:
+          - name: TZ
+            value: {{ $.Values.global.time_zone | quote }}
           {{- include "gitlab.extraEnv" . | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
           volumeMounts:

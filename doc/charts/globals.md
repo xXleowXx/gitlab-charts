@@ -256,6 +256,14 @@ with the `-fips` extension to the image tag.
 --set global.image.tagSuffix="-fips"
 ```
 
+## Custom timezone for all containers 
+
+If you wish to set a custom timezone for all the GitLab containers, you can use the `global.time_zone` key. Default value is `UTC`.
+
+```shell
+--set global.time_zone="US"
+```
+
 ## Configure PostgreSQL settings
 
 The GitLab global PostgreSQL settings are located under the `global.psql` key.
