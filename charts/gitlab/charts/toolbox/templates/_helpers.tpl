@@ -45,11 +45,14 @@ Usage:
 */}}
 {{- define "toolbox.backups.objectStorage.config.secret" -}}
 {{-   if eq .backend "gcs" -}}
+{{- if not .config -}}
+{{- else -}}
 - secret:
     name: {{ .config.secret }}
     items:
       - key: {{ default "config" .config.key }}
         path: objectstorage/{{ default "config" .config.key }}
+{{- end -}}
 {{-   else if eq .backend "azure" -}}
 - secret:
     name: {{ .config.secret }}
