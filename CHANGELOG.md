@@ -469,6 +469,10 @@ No changes.
 
 - [Deprecate namespace in mailroom.yml](gitlab-org/charts/gitlab@781a94d070a5ae221c33f1a31fdd9ecde15f2be6) ([merge request](gitlab-org/charts/gitlab!3419))
 
+## 7.5.9 (2024-07-23)
+
+No changes.
+
 ## 7.5.8 (2024-01-24)
 
 No changes.
