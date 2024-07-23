@@ -774,6 +774,12 @@ No changes.
 - [Add troubleshooting docs on s3cmd PermissionError](gitlab-org/charts/gitlab@fb92de457cd14c19218db9c8f37a8672051becdf) ([merge request](gitlab-org/charts/gitlab!3198))
 - [Postgres: correct minimum version in NOTES](gitlab-org/charts/gitlab@5ea24b44e59236bd82b3a81f6c9f0601159778d7) by @jouve ([merge request](gitlab-org/charts/gitlab!3213))
 
+## 7.0.9 (2024-07-23)
+
+### Fixed (1 change)
+
+- [Use tcp prefix for KAS service port names](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/78b9f549790ec74398ab53826991b1a9c3e9f2a6) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3339))
+
 ## 7.0.8 (2023-08-01)
 
 No changes.
