@@ -50,6 +50,7 @@ The table below maps some of the key previous supported chart versions and suppo
 | 7.11.2 | 16.11.2 |
 | 7.11.1 | 16.11.1 |
 | 7.11.0 | 16.11.0 |
+| 7.10.9 | 16.10.9 |
 | 7.10.8 | 16.10.8 |
 | 7.10.7 | 16.10.7 |
 | 7.10.6 | 16.10.6 |
