@@ -487,6 +487,21 @@ Create the name of the service account to use for shared-secrets job
 {{- end -}}
 
 {{/*
+Return the fullname template for upgrade-check job.
+*/}}
+{{- define "upgrade-check.fullname" -}}
+{{- printf "%s-upgrade-check" .Release.Name -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified job name for upgrade-check.
+*/}}
+{{- define "upgrade-check.jobname" -}}
+{{- $name := include "upgrade-check.fullname" . | trunc 55 | trimSuffix "-" -}}
+{{- printf "%s-%s" $name ( include "gitlab.jobNameSuffix" . ) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return a emptyDir definition for Volume declarations
 
 Scope is the configuration of that emptyDir.
