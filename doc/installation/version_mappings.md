@@ -138,6 +138,7 @@ The table below maps some of the key previous supported chart versions and suppo
 | 7.2.2 | 16.2.2 |
 | 7.2.1 | 16.2.1 |
 | 7.2.0 | 16.2.0 |
+| 7.1.7 | 16.1.7 |
 | 7.1.6 | 16.1.6 |
 | 7.1.5 | 16.1.5 |
 | 7.1.4 | 16.1.4 |
