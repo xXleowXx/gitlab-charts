@@ -406,6 +406,10 @@ No changes.
 
 - [Doc: FIPS Add note of UBI expectations for FIPS mode host](gitlab-org/charts/gitlab@4274d077ab7d6b08b9ac640182640b02ea22b4f7) ([merge request](gitlab-org/charts/gitlab!3487))
 
+## 7.6.9 (2024-07-23)
+
+No changes.
+
 ## 7.6.8 (2024-06-25)
 
 No changes.
