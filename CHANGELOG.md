@@ -346,6 +346,10 @@ No changes.
 
 - [Provide option to configure kas redis using global.redis.kas](gitlab-org/charts/gitlab@3e03a63726406922b39057c804d1d7d43508946f) ([merge request](gitlab-org/charts/gitlab!3544))
 
+## 7.7.9 (2024-07-23)
+
+No changes.
+
 ## 7.7.8 (2024-06-25)
 
 No changes.
