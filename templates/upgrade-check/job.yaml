@@ -42,6 +42,9 @@ spec:
       securityContext:
         runAsUser: {{ .Values.upgradeCheck.securityContext.runAsUser }}
         fsGroup: {{ .Values.upgradeCheck.securityContext.fsGroup }}
+      {{- if or .Values.upgradeCheck.serviceAccount.enabled .Values.global.serviceAccount.enabled }}
+      serviceAccountName: {{ template "upgrade-check.serviceAccountName" . }}
+      {{- end }}
       restartPolicy: Never
       {{- include "gitlab.image.pullSecrets" $imageCfg | nindent 6 }}
       containers:
