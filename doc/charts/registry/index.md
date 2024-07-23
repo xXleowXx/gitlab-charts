@@ -1075,7 +1075,7 @@ redis:
 
 #### Cluster
 
-The `redis.rateLimiting` can use a list of host and port
+The `redis.rateLimiting.cluster` property is a list of hosts and ports
 to connect to a Redis cluster. For example:
 
 ```yaml
