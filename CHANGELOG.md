@@ -166,6 +166,10 @@ No changes.
 
 - [Allow routing rules to contain shard information](gitlab-org/charts/gitlab@aad02140fdabbf2a045e2701b8f1f5b6c3ab81c5) ([merge request](gitlab-org/charts/gitlab!3682))
 
+## 7.10.9 (2024-07-23)
+
+No changes.
+
 ## 7.10.8 (2024-06-25)
 
 No changes.
