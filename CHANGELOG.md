@@ -220,6 +220,10 @@ No changes.
 
 - [Removed kubernetes 1.22 testing](gitlab-org/charts/gitlab@ca9ec21a32e28e63b8e731c317d5089384c9c782) ([merge request](gitlab-org/charts/gitlab!3597))
 
+## 7.9.10 (2024-07-23)
+
+No changes.
+
 ## 7.9.9 (2024-06-25)
 
 No changes.
