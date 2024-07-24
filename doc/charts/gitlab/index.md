@@ -48,11 +48,11 @@ Use these charts as optional additions:
 - [_Unprivileged_](https://docs.gitlab.com/runner/install/kubernetes.html#running-docker-in-docker-containers-with-gitlab-runner) [GitLab Runner](https://docs.gitlab.com/runner/) that uses the Kubernetes executor
 - Automatically provisioned SSL from [Let's Encrypt](https://letsencrypt.org/), which uses [Jetstack](https://venafi.com/jetstack-consult/)'s [cert-manager](https://cert-manager.io/docs/) with [certmanager-issuer](../certmanager-issuer/index.md)
 
-## Gitlab Helm Subchart Optional Parameter
+## GitLab Helm Subchart Optional Parameter
 
 ### affinity
 
-`affinity` is an optional parameter in all GitLab Helm subcharts ( the `webservice` and `sidekiq` helm chart currently do not support configuring/customizing affinity rules via template , they also do not support `nodeAffinity`) that allows you to set either or both:
+`affinity` is an optional parameter in all GitLab Helm subcharts ( the `webservice` and `sidekiq` Helm chart currently do not support configuring/customizing affinity rules via template , they also do not support `nodeAffinity`) that allows you to set either or both:
 
 - `podAntiAffinity` rules to:
   - Not schedule pods in the same domain as the pods that match the expression corresponding to the `topology key`.

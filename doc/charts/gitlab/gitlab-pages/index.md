@@ -373,4 +373,4 @@ Refer to the [KEDA documentation](https://keda.sh/docs/2.10/concepts/scaling-dep
 
 ### affinity
 
-For more details please refer [Gitlab Helm Subchart Optional Parameter Section](../index.md)
+For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md)

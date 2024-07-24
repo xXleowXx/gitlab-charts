@@ -228,7 +228,7 @@ tolerations:
 
 ### affinity
 
-For more details please refer [Gitlab Helm Subchart Optional Parameter Section](../index.md)
+For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md)
 
 ### annotations
 
