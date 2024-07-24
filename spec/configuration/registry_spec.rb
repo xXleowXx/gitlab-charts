@@ -995,7 +995,7 @@ describe 'registry configuration' do
         )).deep_merge(default_values)
         end
 
-        it 'populates the redis rate-limiter settings with the rate-limiting cluster host:port' do
+        it 'populates the redis rate-limiter settings with the local cluster host:port instead of global.redis.sentinels' do
           t = HelmTemplate.new(values)
           expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
           expect(t.dig('ConfigMap/test-registry', 'data', 'config.yml.tpl')).to include(
