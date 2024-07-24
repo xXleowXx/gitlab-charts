@@ -47,3 +47,39 @@ Use these charts as optional additions:
 - [Prometheus](https://artifacthub.io/packages/helm/prometheus-community/prometheus)
 - [_Unprivileged_](https://docs.gitlab.com/runner/install/kubernetes.html#running-docker-in-docker-containers-with-gitlab-runner) [GitLab Runner](https://docs.gitlab.com/runner/) that uses the Kubernetes executor
 - Automatically provisioned SSL from [Let's Encrypt](https://letsencrypt.org/), which uses [Jetstack](https://venafi.com/jetstack-consult/)'s [cert-manager](https://cert-manager.io/docs/) with [certmanager-issuer](../certmanager-issuer/index.md)
+
+## Gitlab Helm Subchart Optional Parameter
+
+### affinity
+
+`affinity` is an optional parameter in all GitLab Helm subcharts ( the `webservice` and `sidekiq` helm chart currently do not support configuring/customizing affinity rules via template , they also do not support `nodeAffinity`) that allows you to set either or both:
+
+- `podAntiAffinity` rules to:
+  - Not schedule pods in the same domain as the pods that match the expression corresponding to the `topology key`.
+  - Set two modes of `podAntiAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
+    (`preferredDuringSchedulingIgnoredDuringExecution`). Using the variable `antiAffinity` in `values.yaml`, set the setting to `soft` so that the preferred mode is
+    applied or set it to `hard` so that the required mode is applied.
+- `nodeAffinity` rules to:
+  - Schedule pods to nodes that belong to a specific zone or zones.
+  - Set two modes of `nodeAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
+    (`preferredDuringSchedulingIgnoredDuringExecution`). When set to `soft`, the preferred mode is applied. When set to `hard`, the required mode is applied. This
+    rule is implemented only for the `registry` chart and the `gitlab` chart alongwith all its subcharts except `webservice` and `sidekiq`.
+
+`nodeAffinity` only implements the [`In` operator](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#operators).
+
+For more information, see [the relevant Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).
+
+The following example sets `affinity`, with both `nodeAffinity` and `antiAffinity` set to `hard`:
+
+```yaml
+nodeAffinity: "hard"
+antiAffinity: "hard"
+affinity:
+  nodeAffinity:
+    key: "test.com/zone"
+    values:
+    - us-east1-a
+    - us-east1-b
+  podAntiAffinity:
+    topologyKey: "test.com/hostname"
+```
