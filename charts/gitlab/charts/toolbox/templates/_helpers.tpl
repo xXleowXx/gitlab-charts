@@ -45,8 +45,7 @@ Usage:
 */}}
 {{- define "toolbox.backups.objectStorage.config.secret" -}}
 {{-   if eq .backend "gcs" -}}
-{{- if not .config -}}
-{{- else -}}
+{{- if .config -}}
 - secret:
     name: {{ .config.secret }}
     items:
