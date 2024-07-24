@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 8.2.1 (2024-07-24)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.66.0 to 0.67.0](https://gitlab.com/gitlab-org/security/charts/gitlab/-/commit/28a61a472f39a3da9aba14a518b3375f3831274d)
+
 ## 8.2.0 (2024-07-17)
 
 ### Added (5 changes)
@@ -18,6 +24,10 @@ entry.
 - [Update gitlab-org/container-registry from 4.5.0-gitlab to 4.6.0-gitlab](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/6732226e39aab24b8a478a4a841e2bd94355a4d4) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3826))
 - [Update cert-manager/cert-manager from 1.12.11 to 1.12.12](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/726af7eb0d223e28ba35b0287a3134ba267ddd01) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3817))
 - [Update gitlab-org/charts/gitlab-runner from 0.65.0 to 0.66.0](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/4b2f9346d27fa467ea97cc4f44794288e61325a8) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3810))
+
+## 8.1.3 (2024-07-24)
+
+No changes.
 
 ## 8.1.2 (2024-07-09)
 
@@ -61,6 +71,10 @@ No changes.
 ### Removed (1 change)
 
 - [Remove gke125 CI jobs](gitlab-org/charts/gitlab@57ced9243021af6de6e324f2ec5ad17b5dcf975e) ([merge request](gitlab-org/charts/gitlab!3760))
+
+## 8.0.5 (2024-07-24)
+
+No changes.
 
 ## 8.0.4 (2024-07-09)
 
