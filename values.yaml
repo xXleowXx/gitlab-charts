@@ -825,6 +825,8 @@ global:
       # in most base images, this is `nobody:nogroup`
       runAsUser: 65534
       fsGroup: 65534
+      seccompProfile:
+        type: "RuntimeDefault"
   gitlabBase:
     image:
       repository: registry.gitlab.com/gitlab-org/build/cng/gitlab-base
@@ -899,6 +901,15 @@ upgradeCheck:
     # in alpine/debian/busybox based images, this is `nobody:nogroup`
     runAsUser: 65534
     fsGroup: 65534
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Allow to overwrite the specific security context under which the container is running.
+  containerSecurityContext:
+    runAsUser: 65534
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
   tolerations: []
   annotations: {}
   configMapAnnotations: {}
@@ -1046,6 +1057,26 @@ prometheus:
       type: Recreate
     image:
       tag: v2.38.0
+    containerSecurityContext:
+      runAsUser: 1000
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      capabilities:
+        drop: [ "ALL" ]
+      seccompProfile:
+        type: "RuntimeDefault"
+  podSecurityPolicy:
+    enabled: false
+  configmapReload:
+    prometheus:
+      containerSecurityContext:
+        runAsUser: 1000
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        capabilities:
+          drop: [ "ALL" ]
+        seccompProfile:
+          type: "RuntimeDefault"
   serverFiles:
     prometheus.yml:
       scrape_configs:
@@ -1259,6 +1290,13 @@ shared-secrets:
     # in debian/alpine based images, this is `nobody:nogroup`
     runAsUser: 65534
     fsGroup: 65534
+    seccompProfile:
+      type: "RuntimeDefault"
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
   tolerations: []
   podLabels: {}
   annotations: {}
@@ -1292,6 +1330,9 @@ gitlab-runner:
   podAnnotations:
     gitlab.com/prometheus_scrape: "true"
     gitlab.com/prometheus_port: 9252
+  podSecurityContext:
+    seccompProfile:
+      type: "RuntimeDefault"
 
 traefik:
   install: false
