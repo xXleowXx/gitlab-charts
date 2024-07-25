@@ -125,13 +125,13 @@ redis:
     {{- if .Values.redis.rateLimiting.sentinels }}
     addr: {{ include "registry.redis.host.addresses" .Values.redis.rateLimiting | quote }}
     mainname: {{ .Values.redis.rateLimiting.host }}
-    {{- else if .redisMergedConfig.sentinels }}
-    addr: {{ include "registry.redis.host.addresses" .redisMergedConfig | quote }}
-    mainname: {{ template "gitlab.redis.host" . }}
     {{- else if .Values.redis.rateLimiting.cluster }}
     addr: {{ include "registry.redis.host.addresses" .Values.redis.rateLimiting | quote }}
     {{- else if .Values.redis.rateLimiting.host  }}
     addr: {{ printf "%s:%d" .Values.redis.rateLimiting.host (int .Values.redis.rateLimiting.port | default 6379) | quote }}
+    {{- else if .redisMergedConfig.sentinels }}
+    addr: {{ include "registry.redis.host.addresses" .redisMergedConfig | quote }}
+    mainname: {{ template "gitlab.redis.host" . }}
     {{- else }}
     addr: {{ printf "%s:%s" ( include "gitlab.redis.host" . ) ( include "gitlab.redis.port" . ) | quote }}
     {{- end }}
