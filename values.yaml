@@ -883,7 +883,7 @@ global:
   ## https://docs.gitlab.com/charts/charts/globals/#jobs
   job:
     nameSuffixOverride:
-  
+
   traefik:
     apiVersion: "" # newer apiVersion: "traefik.io/v1alpha1"
 
