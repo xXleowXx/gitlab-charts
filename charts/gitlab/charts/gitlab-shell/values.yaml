@@ -142,6 +142,8 @@ config:
       key: keytab
     krb5Config: ""
     servicePrincipalName: ""
+  lfs:
+    pureSSHProtocol: false
 
 ## Allow to overwrite under which User and Group the Pod will be running.
 securityContext:
