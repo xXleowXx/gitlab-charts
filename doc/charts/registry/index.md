@@ -966,7 +966,7 @@ DETAILS:
 The `database` property is optional and enables the [metadata database](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs/configuration.md#database).
 
 See the [administration documentation](https://docs.gitlab.com/ee/administration/packages/container_registry_metadata_database.html)
-and associated documentation before enabling this feature.
+before enabling this feature.
 
 NOTE:
 This feature requires PostgreSQL 12 or newer.
