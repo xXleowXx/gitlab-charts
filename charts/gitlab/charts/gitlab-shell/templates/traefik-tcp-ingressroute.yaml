@@ -14,7 +14,7 @@ spec:
     - {{ .Values.traefik.entrypoint }}
   routes:
   - match: HostSNI(`*`)
-    {{- with .Values.traefik.middlewares }}
+    {{- with .Values.traefik.tcpMiddlewares }}
     middlewares:
       {{- toYaml . | nindent 6 }}
     {{- end }}
