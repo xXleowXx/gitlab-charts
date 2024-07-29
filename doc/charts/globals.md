@@ -2187,7 +2187,7 @@ global:
 - Setting `global.serviceAccount.enabled` controls reference to a ServiceAccount for each component via `spec.serviceAccountName`.
 - Setting `global.serviceAccount.create` controls ServiceAccount object creation via Helm.
 - Setting `global.serviceAccount.name` controls the ServiceAccount object name and the name referenced by each component.
-- Setting `global.serviceAccount.automountServiceAccountToken` controls if the default ServiceAccount access token should be mounted in pods. Generally enabling this is undesired, but may be necessary for certain sidecars to work properly (like Istio)
+- Setting `global.serviceAccount.automountServiceAccountToken` controls if the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio).
 
 NOTE:
 Do not use `global.serviceAccount.create=true` with `global.serviceAccount.name`, as it instructs the charts
