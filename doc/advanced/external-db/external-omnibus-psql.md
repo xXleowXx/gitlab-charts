@@ -60,6 +60,7 @@ gitlab_workhorse['enable'] = false
 nginx['enable'] = false
 prometheus_monitoring['enable'] = false
 redis['enable'] = false
+gitlab_kas['enable'] = false
 ```
 
 After creating `gitlab.rb`, we'll reconfigure the package with `gitlab-ctl reconfigure`. Once the task has completed, check the running processes with `gitlab-ctl status`. The output should appear as such:
