@@ -67,6 +67,7 @@ maxReplicas: 10
 traefik:
   entrypoint: gitlab-shell
   apiVersion: ""
+  tcpMiddlewares: []
 
 hpa:
   # targetAverageValue: 100m  # DEPRECATED: in favor of `hpa.cpu.targetAverageValue` below
