@@ -50,6 +50,8 @@ Before the migration, a few prerequisites must be met:
    it.
 
    - Option 2: [Configure Object Storage to be backup target for your legacy system](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#using-amazon-s3)
+   configure in `vi /etc/gitlab/gitlab.rb`:
+
    ```
    gitlab_rails['backup_upload_connection'] = {
    'provider' => 'AWS',
