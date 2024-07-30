@@ -49,7 +49,7 @@ Before the migration, a few prerequisites must be met:
    [explicitly changed](https://docs.gitlab.com/omnibus/settings/backups.html#manually-manage-backup-directory)
    it.
 
-   - Option 2: [Configure Object Storage to be backup target for your legacy system](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#using-amazon-s3)
+   - Option 2: [Configure Object Storage to be backup target for your legacy system](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#using-amazon-s3)  
    configure in `vi /etc/gitlab/gitlab.rb`:
 
    ```
