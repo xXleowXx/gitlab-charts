@@ -184,6 +184,6 @@ If you are using Let's Encrypt as your TLS provider and you are facing certifica
    and re-install the Helm Chart. For example, assuming a release named `gitlab`:
 
    ```shell
-   kubectl -n <namespace> delete deployment gitlab-certmanager gitlab-certmanager-cainjector gitlab-certmanager-webhook
+   kubectl -n <namespace> delete deployment gitlab-cert-manager gitlab-cert-manager-cainjector gitlab-cert-manager-webhook
    helm upgrade --install -n <namespace> gitlab gitlab/gitlab
    ```
