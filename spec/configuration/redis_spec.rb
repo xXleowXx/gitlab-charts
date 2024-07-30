@@ -20,7 +20,6 @@ describe 'Redis configuration' do
   describe 'global.redis.{connect,read,write}Timeout' do
     context 'default values' do
       let(:values) { default_values }
-      let(:connect_timeout) { 1 }
 
       it 'renders no timeout values' do
         expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
@@ -727,7 +726,7 @@ describe 'Redis configuration' do
       let(:redis_cluster_yml) { render_erb(redis_cluster_yml_erb) }
 
       it 'timeouts are populated' do
-        expect(template.exit_code).to eq(0)
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
         expect(redis_cluster_yml.dig('production', 'connect_timeout')).to eq(3)
         expect(redis_cluster_yml.dig('production', 'read_timeout')).to eq(4)
         expect(redis_cluster_yml.dig('production', 'write_timeout')).to eq(5)
