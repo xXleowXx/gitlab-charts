@@ -222,4 +222,4 @@ gitlab-rake gitlab:env:info
 
 ### affinity
 
-For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md)
+For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md#gitlab-helm-subchart-optional-parameter)
