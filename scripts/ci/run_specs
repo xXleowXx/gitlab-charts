@@ -4,9 +4,8 @@ set -e
 if [[ -n "${VARIABLES_FILE}" ]]; then
   source "${VARIABLES_FILE}"
   ./scripts/ci/feature_spec_setup
-else
-  ./scripts/ci/integration_spec_setup
 fi
+./scripts/ci/integration_spec_setup
 
 bundle config set --local path 'gems'
 bundle config set --local frozen 'true'
