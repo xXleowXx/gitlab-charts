@@ -39,7 +39,7 @@ describe 'GitLab Pages' do
       HelmTemplate.new(values.merge(pages_enabled_values))
     end
 
-    it 'renders cert-manager.io/issuer annotation correctly', focus: true do
+    it 'renders cert-manager.io/issuer annotation correctly' do
       annotations = pages_enabled_template.dig('Ingress/test-webservice-default', 'metadata', 'annotations')
       expect(annotations).to include({ 'cert-manager.io/issuer' => 'test-issuer' })
     end
