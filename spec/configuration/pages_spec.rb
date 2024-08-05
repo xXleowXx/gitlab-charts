@@ -39,6 +39,11 @@ describe 'GitLab Pages' do
       HelmTemplate.new(values.merge(pages_enabled_values))
     end
 
+    it 'renders cert-manager.io/issuer annotation correctly' do
+      annotations = pages_enabled_template.dig('Ingress/test-webservice-default', 'metadata', 'annotations')
+      expect(annotations).to include({ 'cert-manager.io/issuer' => 'test-issuer' })
+    end
+
     it 'creates all pages related required_resources' do
       required_resources.each do |resource|
         resource_name = "#{resource}/test-gitlab-pages"
