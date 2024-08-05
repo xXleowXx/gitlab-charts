@@ -46,7 +46,7 @@ Table below contains all the possible charts configurations that can be supplied
 | `init.image.containerSecurityContext` | init container securityContext overrides | `{}`    |
 | `enabled`                   | Migrations enable flag                   | `true`            |
 | `tolerations`               | Toleration labels for pod assignment     | `[]`              |
-| `affinity`                  | [Affinity rules](#affinity) for pod assignment            | `{}`              |
+| `affinity`                  | [Affinity rules](../index.md#affinity) for pod assignment            | `{}`              |
 | `annotations`               | Annotations for the job spec             | `{}`              |
 | `podAnnotations`            | Annotations for the pob spec             | `{}`              |
 | `podLabels`                 | Supplemental Pod labels. Will not be used for selectors. |   |
@@ -139,7 +139,7 @@ image:
 
 ### affinity
 
-For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md#gitlab-helm-subchart-optional-parameter)
+For more information, see [`affinity`](../index.md#affinity).
 
 ## Using the Community Edition of this chart
 

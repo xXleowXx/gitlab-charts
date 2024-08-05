@@ -298,7 +298,7 @@ the `helm install` command using the `--set` flags.
 | `metrics.separate_database_metrics`       | `true`                                            | If true then metrics scrapes will not perform database queries, setting to false [may cause performance problems](https://gitlab.com/gitlab-org/gitaly/-/issues/3796)      |
 | `metrics.path`                            | `/metrics`                                        | Metrics endpoint path                                                                                                                                                      |
 | `metrics.serviceMonitor.enabled`          | `false`                                           | If a ServiceMonitor should be created to enable Prometheus Operator to manage the metrics scraping, note that enabling this removes the `prometheus.io` scrape annotations |
-| `affinity`                             | `{}`                                                       | [Affinity rules](#affinity) for pod assignment                                                                                                                                                               |
+| `affinity`                             | `{}`                                                       | [Affinity rules](../index.md#affinity) for pod assignment                                                                                                                                                               |
 | `metrics.serviceMonitor.additionalLabels` | `{}`                                              | Additional labels to add to the ServiceMonitor                                                                                                                             |
 | `metrics.serviceMonitor.endpointConfig`   | `{}`                                              | Additional endpoint configuration for the ServiceMonitor                                                                                                                   |
 | securityContext.runAsUser                 | 1000                                              |                                                                                                                                                                            |
@@ -309,4 +309,4 @@ the `helm install` command using the `--set` flags.
 
 ### affinity
 
-For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md#gitlab-helm-subchart-optional-parameter)
+For more information, see [`affinity`](../index.md#affinity).

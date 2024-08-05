@@ -78,7 +78,7 @@ the `helm install` command using the `--set` flags.
 | `containerSecurityContext`             |                                             | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the Gitaly container is started                                                                                                                                  |
 | `containerSecurityContext.runAsUser`             | `1000`                                            | Allow to overwrite the specific security context under which the Gitaly container is started                                                                                                                                  |
 | `tolerations`                                    | `[]`                                              | Toleration labels for pod assignment                                                                                                                                           |
-| `affinity`                                    | `{}`                                              | [Affinity rules](#affinity) for pod assignment                                                                                                                                           |
+| `affinity`                                    | `{}`                                              | [Affinity rules](../index.md#affinity) for pod assignment                                                                                                                                           |
 | `persistence.accessMode`                         | `ReadWriteOnce`                                   | Gitaly persistence access mode                                                                                                                                                 |
 | `persistence.annotations`                        |                                                   | Gitaly persistence annotations                                                                                                                                                 |
 | `persistence.enabled`                            | `true`                                            | Gitaly enable persistence flag                                                                                                                                                 |
@@ -228,7 +228,7 @@ tolerations:
 
 ### affinity
 
-For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md#gitlab-helm-subchart-optional-parameter)
+For more information, see [`affinity`](../index.md#affinity).
 
 ### annotations
 

@@ -47,7 +47,7 @@ The table below contains all the possible charts configurations that can be supp
 
 | Parameter                                       | Default                                                                                              | Description                                                                                                                                                                                        |
 | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------                                                                                |
-| `affinity`                             | `{}`                                                       | [Affinity rules](#affinity) for pod assignment                                                                                                                                                               |
+| `affinity`                             | `{}`                                                       | [Affinity rules](../index.md#affinity) for pod assignment                                                                                                                                                               |
 | `annotations`                                   | `{}`                                                                                                 | Pod annotations                                                                                                                                                                                    |
 | `common.labels`                                 | `{}`                                                                                                 | Supplemental labels that are applied to all objects created by this chart.                                                                                                                         |
 | `deployment.livenessProbe.initialDelaySeconds`  | 20                                                                                                   | Delay before liveness probe is initiated                                                                                                                                                           |
@@ -155,7 +155,7 @@ tolerations:
 
 ### affinity
 
-For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md#gitlab-helm-subchart-optional-parameter)
+For more information, see [`affinity`](../index.md#affinity).
 
 ### annotations
 

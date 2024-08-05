@@ -36,7 +36,7 @@ controlled by `global.shell.port`.
 
 | Parameter                                       | Default                                                                                                                                                                     | Description                                                                                                                                                                                        |
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `affinity`                             | `{}`                                                       | [Affinity rules](#affinity) for pod assignment                                                                                                                                                               |
+| `affinity`                             | `{}`                                                       | [Affinity rules](../index.md#affinity) for pod assignment                                                                                                                                                               |
 | `annotations`                                   |                                                                                                                                                                             | Pod annotations                                                                                                                                                                                    |
 | `podLabels`                                     |                                                                                                                                                                             | Supplemental Pod labels. Will not be used for selectors.                                                                                                                                           |
 | `common.labels`                                 |                                                                                                                                                                             | Supplemental labels that are applied to all objects created by this chart.                                                                                                                         |
@@ -254,7 +254,7 @@ tolerations:
 
 ### affinity
 
-For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md#gitlab-helm-subchart-optional-parameter)
+For more information, see [`affinity`](../index.md#affinity).
 
 ### annotations
 

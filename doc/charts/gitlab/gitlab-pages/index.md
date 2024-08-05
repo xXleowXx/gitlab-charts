@@ -39,7 +39,7 @@ configurations that can be supplied to the `helm install` command using the
 
 | Parameter                                 | Default                                                    | Description                                                                                                                                                                                        |
 | ----------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `affinity`                             | `{}`                                                       | [Affinity rules](#affinity) for pod assignment                                                                                                                                                               |
+| `affinity`                             | `{}`                                                       | [Affinity rules](../index.md#affinity) for pod assignment                                                                                                                                                               |
 | `annotations`                             |                                                            | Pod annotations                                                                                                                                                                                    |
 | `common.labels`                           | `{}`                                                       | Supplemental labels that are applied to all objects created by this chart.                                                                                                                         |
 | `deployment.strategy`                     | `{}`                                                       | Allows one to configure the update strategy used by the deployment. When not provided, the cluster default is used.                                                                                |
@@ -373,4 +373,4 @@ Refer to the [KEDA documentation](https://keda.sh/docs/2.10/concepts/scaling-dep
 
 ### affinity
 
-For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md#gitlab-helm-subchart-optional-parameter)
+For more information, see [`affinity`](../index.md#affinity).

@@ -67,7 +67,7 @@ You can pass these parameters to the `helm install` command by using the `--set`
 
 | Parameter                                    | Default                                                 | Description                                                                                                                                                                                                                                                  |
 | -------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `affinity`                             | `{}`                                                       | [Affinity rules](#affinity) for pod assignment                                                                                                                                                               |
+| `affinity`                             | `{}`                                                       | [Affinity rules](../index.md#affinity) for pod assignment                                                                                                                                                               |
 | `annotations`                                | `{}`                                                    | Pod annotations.                                                                                                                                                                                                                                             |
 | `common.labels`                              | `{}`                                                    | Supplemental labels that are applied to all objects created by this chart.                                                                                                                                                                                   |
 | `containerSecurityContext.runAsUser`         | `65532`                                                 | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started                                                                                      |
@@ -208,4 +208,4 @@ Refer to the [KEDA documentation](https://keda.sh/docs/2.10/concepts/scaling-dep
 
 ### affinity
 
-For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md#gitlab-helm-subchart-optional-parameter)
+For more information, see [`affinity`](../index.md#affinity).

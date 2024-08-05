@@ -67,7 +67,7 @@ gitlab:
 
 | Parameter                                   | Description                                  | Default                      |
 |---------------------------------------------|----------------------------------------------|------------------------------|
-| `affinity`                                  | [Affinity rules](#affinity) for pod assignment            | `{}`                         |
+| `affinity`                                  | [Affinity rules](../index.md#affinity) for pod assignment            | `{}`                         |
 | `annotations`                               | Annotations to add to the Toolbox Pods and Jobs | `{}`                      |
 | `common.labels`                             | Supplemental labels that are applied to all objects created by this chart.  | `{}` |
 | `antiAffinityLabels.matchLabels`            | Labels for setting anti-affinity options     |                              |
@@ -222,4 +222,4 @@ gitlab-rake gitlab:env:info
 
 ### affinity
 
-For more details please refer [GitLab Helm Subchart Optional Parameter Section](../index.md#gitlab-helm-subchart-optional-parameter)
+For more information, see [`affinity`](../index.md#affinity).

@@ -48,9 +48,11 @@ Use these charts as optional additions:
 - [_Unprivileged_](https://docs.gitlab.com/runner/install/kubernetes.html#running-docker-in-docker-containers-with-gitlab-runner) [GitLab Runner](https://docs.gitlab.com/runner/) that uses the Kubernetes executor
 - Automatically provisioned SSL from [Let's Encrypt](https://letsencrypt.org/), which uses [Jetstack](https://venafi.com/jetstack-consult/)'s [cert-manager](https://cert-manager.io/docs/) with [certmanager-issuer](../certmanager-issuer/index.md)
 
-## GitLab Helm Subchart Optional Parameter
+## GitLab Helm subchart optional parameters
 
 ### affinity
+
+> - [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3770) in GitLab 17.3 (Charts 8.3).
 
 `affinity` is an optional parameter in all GitLab Helm subcharts ( the `webservice` and `sidekiq` Helm chart currently do not support configuring/customizing affinity rules via template , they also do not support `nodeAffinity`) that allows you to set either or both:
 
