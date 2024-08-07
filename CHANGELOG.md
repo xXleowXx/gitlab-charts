@@ -2,6 +2,12 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 8.0.6 (2024-08-06)
+
+### Changed (1 change)
+
+- [Update gitlab-org/charts/gitlab-runner from 0.64.1 to 0.65.0](https://gitlab.com/gitlab-org/security/charts/gitlab/-/commit/62619d53b4d05b3ea740fda9bde573e659172cad)
+
 ## 8.0.5 (2024-07-24)
 
 No changes.
