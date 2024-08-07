@@ -249,3 +249,4 @@ affinity:
 # rateLimitTLSSourceIPBurst:
 # rateLimitTLSDomain:
 # rateLimitTLSDomainBurst:
+# rateLimitSubnetsAllowList:
