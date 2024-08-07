@@ -125,5 +125,26 @@ describe 'security context' do
         expect(policy).to eq("OnRootMismatch"), "Unexpected fsGroupChangePolicy `#{policy}` for #{r}"
       end
     end
+
+    describe 'container security context configuration' do
+      let(:template) do
+        values = HelmTemplate.with_defaults(%(
+          upgradeCheck:
+            enabled: true
+            containerSecurityContext:
+              fsGroupChangePolicy: "OnRootMismatch"
+        ))
+        HelmTemplate.new(values)
+      end
+
+      it 'renders successfully' do
+        expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+      end
+
+      it 'applied fsGroupChangePolicy to the migrations job' do
+        policy = template.dig("Job/test-upgrade-check", 'spec', 'template', 'spec', 'containers', 'securityContext', 'fsGroupChangePolicy')
+        expect(policy).to eq("OnRootMismatch"), "Unexpected fsGroupChangePolicy #{policy}"
+      end
+    end
   end
 end
