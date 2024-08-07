@@ -148,15 +148,15 @@ configurations that can be supplied to the `helm install` command using the
 | `zipCache.refresh`          | int      | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration)                                                                                                   |
 | `zipOpenTimeout`            | int      | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration)                                                                                                   |
 | `zipHTTPClientTimeout`      | int      | See: [Zip Serving and Cache Configuration](https://docs.gitlab.com/ee/administration/pages/index.html#zip-serving-and-cache-configuration)                                                                                                   |
-| `rateLimitSourceIP`         |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits). To enable rate-limiting use `extraEnv=["FF_ENFORCE_IP_RATE_LIMITS=true"]`                                                           |
+| `rateLimitSourceIP`         |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits).                                                                                                                                     |
 | `rateLimitSourceIPBurst`    |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits)                                                                                                                                      |
-| `rateLimitDomain`           |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits). To enable rate-limiting use `extraEnv=["FF_ENFORCE_DOMAIN_RATE_LIMITS=true"]`                                                       |
+| `rateLimitDomain`           |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits).                                                                                                                                     |
 | `rateLimitDomainBurst`      |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits)                                                                                                                                      |
-| `rateLimitTLSSourceIP`      |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits). To enable rate-limiting use `extraEnv=["FF_ENFORCE_IP_TLS_RATE_LIMITS=true"]`                                                       |
+| `rateLimitTLSSourceIP`      |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits).                                                                                                                                     |
 | `rateLimitTLSSourceIPBurst` |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits)                                                                                                                                      |
-| `rateLimitTLSDomain`        |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits). To enable rate-limiting use `extraEnv=["FF_ENFORCE_DOMAIN_TLS_RATE_LIMITS=true"]`                                                   |
+| `rateLimitTLSDomain`        |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits).                                                                                                                                     |
 | `rateLimitTLSDomainBurst`   |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits)                                                                                                                                      |
-| `rateLimitSubnetsAllowList` |          | See: [GitLab Pages rate-limits](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits)                                                                                                                                      |
+| `rateLimitSubnetsAllowList` |          | See: [GitLab Pages rate-limits](#rate-limits)                                                                                                                                      |
 | `serverReadTimeout`         | `5s`     | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `serverReadHeaderTimeout`   | `1s`     | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
 | `serverWriteTimeout`        | `5m`     | See: [GitLab Pages global settings](https://docs.gitlab.com/ee/administration/pages/#global-settings)                                                                                                                                        |
@@ -342,6 +342,26 @@ GitLab Pages supports only one URL scheme at a time: Either with wildcard DNS, o
 
 WARNING:
 GitLab Pages does not update the OAuth application, and the default `authRedirectUri` is updated to `https://pages.<yourdomaindomain>/projects/auth`. While accessing a private Pages site, if you encounter an error 'The redirect URI included is not valid', update the redirect URI in the GitLab Pages [System OAuth application](https://docs.gitlab.com/ee/integration/oauth_provider.html#create-an-instance-wide-application) to `https://pages.<yourdomaindomain>/projects/auth`.
+
+### Rate limits
+
+You can enforce rate limits to help minimize the risk of a Denial of Service (DoS) attack. Detailed [rate limits documentation](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits) is available.
+
+To allow certain IP ranges (subnets) to bypass all rate limits:
+
+- `rateLimitSubnetsAllowList`: Sets the allow list with the IP ranges (subnets) that should bypass all rate limits.
+
+#### Configure rate limits subnets allow list
+
+Set the allow list with the IP ranges (subnets) in `charts/gitlab/charts/gitlab-pages/values.yaml`:
+
+```yaml
+gitlab:
+  gitlab-pages:
+    rateLimitSubnetsAllowList:
+     - "1.2.3.4/24"
+     - "2001:db8::1/32"
+```
 
 ### Configuring KEDA
 
