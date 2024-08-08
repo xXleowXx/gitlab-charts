@@ -130,8 +130,8 @@ the `helm install` command using the `--set` flags.
 | `cgroups.initContainer.image.repository`         | `registry.com/gitlab-org/build/cng/gitaly-init-cgroups`        | Gitaly image repository |
 | `cgroups.initContainer.image.tag`                | `master`                                          | Gitaly image tag |
 | `cgroups.initContainer.image.pullPolicy`         | `IfNotPresent`                                    | Gitaly image pull policy |
-| `cgroups.mountpoint`                             |`/etc/gitlab-secrets/gitaly-pod-cgroup`            | Where the parent cgroup directory is mounted.|
-| `cgroups.hierarchyRoot`                          |`gitaly`                                           | Parent cgroup under which Gitaly creates groups, and is expected to be owned by the user and group Gitaly runs as.|
+| `cgroups.mountpoint`                             | `/etc/gitlab-secrets/gitaly-pod-cgroup`           | Where the parent cgroup directory is mounted.|
+| `cgroups.hierarchyRoot`                          | `gitaly`                                          | Parent cgroup under which Gitaly creates groups, and is expected to be owned by the user and group Gitaly runs as.|
 | `cgroups.memoryBytes`                           |                                                   | The total memory limit that is imposed collectively on all Git processes that Gitaly spawns. 0 implies no limit.|
 | `cgroups.cpuShares`                             |                                                   | The CPU limit that is imposed collectively on all Git processes that Gitaly spawns. 0 implies no limit. The maximum is 1024 shares, which represents 100% of CPU. |
 | `cgroups.cpuQuotaUs`                           |                                                   | Used to throttle the cgroups’ processes if they exceed this quota value. We set cpuQuotaUs to 100ms so 1 core is 100000. 0 implies no limit.  |
@@ -139,6 +139,7 @@ the `helm install` command using the `--set` flags.
 | `cgroups.repositories.memoryBytes`              |                                                   | The total memory limit imposed on all Git processes contained in a repository cgroup. 0 implies no limit. This value cannot exceed that of the top level memoryBytes.                                                                                |
 | `cgroups.repositories.cpuShares`                |                                                   | The CPU limit that is imposed on all Git processes contained in a repository cgroup. 0 implies no limit. The maximum is 1024 shares, which represents 100% of CPU. This value cannot exceed that of the top level cpuShares.                                                                                |
 | `cgroups.repositories.cpuQuotaUs`              |                                                   | The cpuQuotaUs that is imposed on all Git processes contained in a repository cgroup. A Git process can’t use more then the given quota. We set cpuQuotaUs to 100ms so 1 core is 100000. 0 implies no limit.                                                                                |
+| `gracefulRestartTimeout`                        | `25`                                | Gitaly shutdown grace period, how long to wait for in-flight requests to complete (seconds). Pod `terminationGracePeriodSeconds` is set to this value + 5 seconds.                                                                          |
 
 ## Chart configuration examples
 
