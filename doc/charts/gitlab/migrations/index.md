@@ -54,16 +54,21 @@ Table below contains all the possible charts configurations that can be supplied
 | `psql.password.secret`      | psql secret                              | `gitlab-postgres` |
 | `psql.password.key`         | key to psql password in psql secret      | `psql-password`   |
 | `psql.port`                 | Set PostgreSQL server port. Takes precedence over `global.psql.port` |   |
-| `resources.requests.cpu`    | `250m`                                   | GitLab Migrations minimum CPU |
-| `resources.requests.memory` | `200Mi`                                  | GitLab Migrations minimum memory |
-| `securityContext.fsGroup`   | `1000`                                   | Group ID under which the pod should be started |
-| `securityContext.runAsUser` | `1000`                                   | User ID under which the pod should be started |
-| `securityContext.fsGroupChangePolicy` |                                | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) |
+| `resources.requests.cpu`    | GitLab Migrations minimum CPU                  | `250m`                                   |
+| `resources.requests.memory` | GitLab Migrations minimum memory               | `200Mi`                                  |
+| `securityContext.fsGroup`   | Group ID under which the pod should be started | `1000`                                   |
+| `securityContext.runAsUser` | User ID under which the pod should be started  | `1000`                                   |
+| `securityContext.fsGroupChangePolicy` | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) |    |
 | `containerSecurityContext.runAsUser`  | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started | `1000` |
+| `serviceAccount.annotations` | ServiceAccount annotations              | `{}`                                                    |
+| `serviceAccount.automountServiceAccountToken`| If the default ServiceAccount access token should be mounted in pods | `false`    |
+| `serviceAccount.create`     | Flag to create a ServiceAccount                                      | `false`           |
+| `serviceAccount.enabled`    | Flag to enable using a ServiceAccount                                | `false`           |
+| `serviceAccount.name`       | Name of the ServiceAccount. If not set, the chart full name is used  |                   |
 | `extraInitContainers`       | List of extra init containers to include |                   |
 | `extraContainers`           | List of extra containers to include      |                   |
 | `extraVolumes`              | List of extra volumes to create          |                   |
-| `extraVolumeMounts`         | List of extra volumes mounts to do      |                   |
+| `extraVolumeMounts`         | List of extra volumes mounts to do       |                   |
 | `extraEnv`                  | List of extra environment variables to expose |              |
 | `extraEnvFrom`              | List of extra environment variables from other data sources to expose|                              |
 | `bootsnap.enabled`          | Enable the Bootsnap cache for Rails      | `true`            |
@@ -135,6 +140,18 @@ image:
   - name: my-secret-name
   - name: my-secondary-secret-name
 ```
+
+### serviceAccount
+
+This section controls if a ServiceAccount should be created and if the default access token should be mounted in pods.
+
+| Name                           |  Type   | Default | Description                                                                                                                                                                      |
+| :----------------------------- | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `annotations`                  | Map     | `{}`    | ServiceAccount annotations                                                                                                                                                       |
+| `automountServiceAccountToken` | Boolean | `false` | If the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio) |
+| `create`                       | Boolean | `false` | Flag to create a ServiceAccount                                                                                                                                                  |
+| `enabled`                      | Boolean | `false` | Flag to enable using a ServiceAccount                                                                                                                                            |
+| `name`                         | String  |         | Name of the ServiceAccount. If not set, the chart full name is used                                                                                                              |
 
 ## Using the Community Edition of this chart
 

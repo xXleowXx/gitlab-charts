@@ -133,6 +133,9 @@ registry:
     ingress:
       enabled: false
       rules: []
+  serviceAccount:
+    create: false
+    automountServiceAccountToken: false
   tls:
     enabled: false
     secretName:
@@ -250,6 +253,8 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `securityContext.fsGroupChangePolicy`                                                                                                        |                                                                                | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23)                                                                                                                                                                                                                                                        |
 | `containerSecurityContext`                                                                                                                   |                                                                                | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started                                                                                                                                                                      |
 | `containerSecurityContext.runAsUser`                                                                                                         | `1000`                                                                         | Allow to overwrite the specific security context under which the container is started                                                                                                                                                                                                                                                        |
+| `serviceAccount.automountServiceAccountToken`                                                                                                | `false`                                                                        | If the default ServiceAccount access token should be mounted in pods                                                                                                                                                                                                                                                                         |
+| `serviceAccount.enabled`                                                                                                                     | `false`                                                                        | Flag to enable using a ServiceAccount                                                                                                                                                                                                                                                                                                        |
 | `serviceLabels`                                                                                                                              | `{}`                                                                           | Supplemental service labels                                                                                                                                                                                                                                                                                                                  |
 | `tokenService`                                                                                                                               | `container_registry`                                                           | JWT token service                                                                                                                                                                                                                                                                                                                            |
 | `tokenIssuer`                                                                                                                                | `gitlab-issuer`                                                                | JWT token issuer                                                                                                                                                                                                                                                                                                                             |
@@ -293,6 +298,15 @@ image:
   - name: my-secret-name
   - name: my-secondary-secret-name
 ```
+
+### serviceAccount
+
+This section controls if a ServiceAccount should be created and if the default access token should be mounted in pods.
+
+| Name                           |  Type   | Default | Description                                                                                                                                                                      |
+| :----------------------------- | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `automountServiceAccountToken` | Boolean | `false` | If the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio) |
+| `enabled`                      | Boolean | `false` | Set to `true` to create a ServiceAccount                                                                                                                                         |
 
 ### tolerations
 

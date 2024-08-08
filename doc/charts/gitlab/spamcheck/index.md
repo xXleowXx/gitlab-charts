@@ -97,8 +97,9 @@ The table below contains all the possible charts configurations that can be supp
 | `service.externalPort`                          | `8001`                                                                                               | Spamcheck external port                                                                                                                                                                            |
 | `service.internalPort`                          | `8001`                                                                                               | Spamcheck internal port                                                                                                                                                                            |
 | `service.type`                                  | `ClusterIP`                                                                                          | Spamcheck service type                                                                                                                                                                             |
-| `serviceAccount.enabled`                        | Flag for using ServiceAccount                                                                        | `false`                                                                                                                                                                                            |
-| `serviceAccount.create`                         | Flag for creating a ServiceAccount                                                                   | `false`                                                                                                                                                                                            |
+| `serviceAccount.automountServiceAccountToken`   | `false`                                                                                              | If the default ServiceAccount access token should be mounted in pods                                                                                                                               |
+| `serviceAccount.enabled`                        | `false`                                                                                              | Flag to enable using a ServiceAccount                                                                                                                                                              | 
+| `serviceAccount.create`                         | `false`                                                                                              | Flag to create a ServiceAccount                                                                                                                                                                    |
 | `tolerations`                                   | `[]`                                                                                                 | Toleration labels for pod assignment                                                                                                                                                               |
 | `extraEnvFrom`                                  | `{}`                                                                                                 | List of extra environment variables from other data sources to expose                                                                                                                              |
 | `priorityClassName`                             |                                                                                                      | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods.                                                                               |
@@ -133,6 +134,16 @@ Refer to the [KEDA documentation](https://keda.sh/docs/2.10/concepts/scaling-dep
 | `triggers`                      | Array   |         | List of triggers to activate scaling of the target resource, defaults to triggers computed from `hpa.cpu` and `hpa.memory`                                                      |
 
 ## Chart configuration examples
+
+### serviceAccount
+
+This section controls if a ServiceAccount should be created and if the default access token should be mounted in pods.
+
+| Name                           |  Type   | Default | Description                                                                                                                                                                      |
+| :----------------------------- | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `automountServiceAccountToken` | Boolean | `false` | If the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio) |
+| `create`                       | Boolean | `false` | Flag to create a ServiceAccount                                                                                                                                                  |
+| `enabled`                      | Boolean | `false` | Flag to enable using a ServiceAccount                                                                                                                                            |
 
 ### tolerations
 

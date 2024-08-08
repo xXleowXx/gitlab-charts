@@ -68,11 +68,16 @@ to the `helm install` command using the `--set` flags.
 | `service.internalPort`                    | `9168`                                                     | GitLab Exporter internal port                                                                                                                                              |
 | `service.name`                            | `gitlab-exporter`                                          | GitLab Exporter service name                                                                                                                                               |
 | `service.type`                            | `ClusterIP`                                                | GitLab Exporter service type                                                                                                                                               |
+| `serviceAccount.annotations`              | `{}`                                                       | ServiceAccount annotations                                                                                                                                                 |
+| `serviceAccount.automountServiceAccountToken` | `false`                                                | If the default ServiceAccount access token should be mounted in pods                                                                                                       |
+| `serviceAccount.create`                   | `false`                                                    | Flag to create a ServiceAccount                                                                                                                                            |
+| `serviceAccount.enabled`                  | `false`                                                    | Flag to enable using a ServiceAccount                                                                                                                                      |
+| `serviceAccount.name`                     |                                                            | Name of the ServiceAccount. If not set, the chart full name is used                                                                                                        |
 | `securityContext.fsGroup`                 | `1000`                                                     | Group ID under which the pod should be started                                                                                                                             |
 | `securityContext.runAsUser`               | `1000`                                                     | User ID under which the pod should be started                                                                                                                              |
 | `securityContext.fsGroupChangePolicy`     |                                                            | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23)                                                                                      |
-| `containerSecurityContext`                |                                                            | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started                                                                                                                                  |
-| `containerSecurityContext.runAsUser`      | `1000`                                                     | Allow to overwrite the specific security context under which the container is started                                                                                                                                  |
+| `containerSecurityContext`                |                                                            | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started    |
+| `containerSecurityContext.runAsUser`      | `1000`                                                     | Allow to overwrite the specific security context under which the container is started                                                                                      |
 | `tolerations`                             | `[]`                                                       | Toleration labels for pod assignment                                                                                                                                       |
 | `psql.port`                               |                                                            | Set PostgreSQL server port. Takes precedence over `global.psql.port`                                                                                                       |
 | `tls.enabled`                             | `false`                                                    | GitLab Exporter TLS enabled                                                                                                                                                |
@@ -144,6 +149,18 @@ image:
   - name: my-secret-name
   - name: my-secondary-secret-name
 ```
+
+### serviceAccount
+
+This section controls if a ServiceAccount should be created and if the default access token should be mounted in pods.
+
+| Name                           |  Type   | Default | Description                                                                                                                                                                      |
+| :----------------------------- | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `annotations`                  | Map     | `{}`    | ServiceAccount annotations                                                                                                                                                       |
+| `automountServiceAccountToken` | Boolean | `false` | If the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio) |
+| `create`                       | Boolean | `false` | Flag to create a ServiceAccount                                                                                                                                                  |
+| `enabled`                      | Boolean | `false` | Flag to enable using a ServiceAccount                                                                                                                                            |
+| `name`                         | String  |         | Name of the ServiceAccount. If not set, the chart full name is used                                                                                                                                          |
 
 ### annotations
 

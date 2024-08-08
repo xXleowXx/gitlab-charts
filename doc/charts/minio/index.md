@@ -93,6 +93,7 @@ to the `helm install` command using the `--set` flags:
 | `securityContext.fsGroup`      | `1000`                        | Group ID to start the pod with          |
 | `securityContext.runAsUser`    | `1000`                        | User ID to start the pod with           |
 | `securityContext.fsGroupChangePolicy` |                        | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) |
+| `serviceAccount.automountServiceAccountToken` | `false`        | If the default ServiceAccount access token should be mounted in pods |
 | `servicePort`                  | `9000`                        | MinIO service port                      |
 | `serviceType`                  | `ClusterIP`                   | MinIO service type                      |
 | `tolerations`                  | `[]`                          | Toleration labels for pod assignment    |
@@ -117,6 +118,14 @@ pullSecrets:
 - name: my-secret-name
 - name: my-secondary-secret-name
 ```
+
+### serviceAccount
+
+This section controls if the default ServiceAccount access token should be mounted in pods.
+
+| Name                           |  Type   | Default | Description                                                                                                                                                                      |
+| :----------------------------- | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `automountServiceAccountToken` | Boolean | `false` | If the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio) |
 
 ### tolerations
 

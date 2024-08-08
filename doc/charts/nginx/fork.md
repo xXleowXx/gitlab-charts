@@ -42,3 +42,5 @@ The following adjustments were made to the NGINX fork:
   - `controller.service.enableShell`.
   - `controller.service.internal.enableShell`.
   (follows the exisiting chart pattern of `controller.service.enableHttp(s)`)
+- Add the template call `{{ include "gitlab.automountServiceAccountToken" . }}` to controller-serviceaccount.yaml
+- Add the template call `{{ include "gitlab.automountServiceAccountToken" .defaultBackend }}` to default-backend-serviceaccount.yaml
