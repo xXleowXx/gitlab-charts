@@ -54,7 +54,13 @@ Use these charts as optional additions:
 
 > - [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3770) in GitLab 17.3 (Charts 8.3).
 
-`affinity` is an optional parameter in all GitLab Helm subcharts ( the `webservice` and `sidekiq` Helm chart currently do not support configuring/customizing affinity rules via template , they also do not support `nodeAffinity`) that allows you to set either or both:
+`affinity` is an optional parameter in all GitLab Helm subcharts. When you set it, it takes precedence over the [global `affinity`](../charts/globals.md#affinity) value.
+For more information about `affinity`, see [the relevant Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).
+
+NOTE:
+The `webservice` and `sidekiq` Helm charts can only use the [global `affinity`](../charts/globals.md#affinity) value. Follow [issue 25403](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25403) to learn when the local `affinity` is implemented for `webservice` and `sidekiq`.
+
+With `affinity`, you can set either or both:
 
 - `podAntiAffinity` rules to:
   - Not schedule pods in the same domain as the pods that match the expression corresponding to the `topology key`.
