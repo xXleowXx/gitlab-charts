@@ -58,7 +58,7 @@ Use these charts as optional additions:
 For more information about `affinity`, see [the relevant Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).
 
 NOTE:
-The `webservice` and `sidekiq` Helm charts can only use the [global `affinity`](../charts/globals.md#affinity) value. Follow [issue 25403](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25403) to learn when the local `affinity` is implemented for `webservice` and `sidekiq`.
+The `webservice` and `sidekiq` Helm charts can only use the [global `affinity`](../globals.md#affinity) value. Follow [issue 25403](https://gitlab.com/gitlab-com/gl-infra/production-engineering/-/issues/25403) to learn when the local `affinity` is implemented for `webservice` and `sidekiq`.
 
 With `affinity`, you can set either or both:
 
