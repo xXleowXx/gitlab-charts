@@ -497,7 +497,7 @@ Set if the default ServiceAccount token should be mounted by Kubernetes or not.
 Default is 'false'
 */}}
 {{- define "gitlab.automountServiceAccountToken" -}}
-automountServiceAccountToken: {{ or .Values.global.serviceAccount.automountServiceAccountToken .Values.serviceAccount.automountServiceAccountToken }}
+automountServiceAccountToken: {{ pluck "automountServiceAccountToken" .Values.serviceAccount .Values.global.serviceAccount | first }}
 {{- end -}}
 
 {{/*

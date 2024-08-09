@@ -262,5 +262,6 @@ deployment:
     type: Recreate
     rollingUpdate: null
 
-serviceAccount:
-  automountServiceAccountToken: false
+serviceAccount: {}
+  ## Used for local override of global ServiceAccount token mounting
+  # automountServiceAccountToken: false

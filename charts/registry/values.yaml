@@ -365,7 +365,8 @@ profiling:
 
 serviceAccount:
   create: false
-  automountServiceAccountToken: false
+  ## Used for local override of global ServiceAccount token mounting
+  # automountServiceAccountToken: false
 
 # Disable metadata database by default
 # NOTE: The metadata database is a beta feature from version 16.4 and later. Please
