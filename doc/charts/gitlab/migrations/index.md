@@ -61,7 +61,7 @@ Table below contains all the possible charts configurations that can be supplied
 | `securityContext.fsGroupChangePolicy` | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) |    |
 | `containerSecurityContext.runAsUser`  | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started | `1000` |
 | `serviceAccount.annotations` | ServiceAccount annotations              | `{}`                                                    |
-| `serviceAccount.automountServiceAccountToken`| If the default ServiceAccount access token should be mounted in pods | `false`    |
+| `serviceAccount.automountServiceAccountToken`| Controls if the default ServiceAccount access token should be mounted in pods | `false`    |
 | `serviceAccount.create`     | Flag to create a ServiceAccount                                      | `false`           |
 | `serviceAccount.enabled`    | Flag to enable using a ServiceAccount                                | `false`           |
 | `serviceAccount.name`       | Name of the ServiceAccount. If not set, the chart full name is used  |                   |
@@ -147,11 +147,11 @@ This section controls if a ServiceAccount should be created and if the default a
 
 | Name                           |  Type   | Default | Description                                                                                                                                                                      |
 | :----------------------------- | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `annotations`                  | Map     | `{}`    | ServiceAccount annotations                                                                                                                                                       |
-| `automountServiceAccountToken` | Boolean | `false` | If the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio) |
-| `create`                       | Boolean | `false` | Flag to create a ServiceAccount                                                                                                                                                  |
-| `enabled`                      | Boolean | `false` | Flag to enable using a ServiceAccount                                                                                                                                            |
-| `name`                         | String  |         | Name of the ServiceAccount. If not set, the chart full name is used                                                                                                              |
+| `annotations`                  | Map     | `{}`    | ServiceAccount annotations.                                                                                                                                                      |
+| `automountServiceAccountToken` | Boolean | `false` | Controls if the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio). |
+| `create`                       | Boolean | `false` | Flag to create a ServiceAccount.                                                                                                                                                 |
+| `enabled`                      | Boolean | `false` | Flag to enable using a ServiceAccount.                                                                                                                                           |
+| `name`                         | String  |         | Name of the ServiceAccount. If not set, the chart full name is used.                                                                                                             |
 
 ## Using the Community Edition of this chart
 

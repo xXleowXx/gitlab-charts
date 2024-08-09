@@ -124,7 +124,7 @@ gitlab:
 | `containerSecurityContext`                  | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started | |
 | `containerSecurityContext.runAsUser`        | Allow to overwrite the specific security context under which the container is started | `1000` |
 | `serviceAccount.annotations`                | Annotations for ServiceAccount               | {}                           |
-| `serviceAccount.automountServiceAccountToken`| If the default ServiceAccount access token should be mounted in pods | `false`    |
+| `serviceAccount.automountServiceAccountToken`| Controls if the default ServiceAccount access token should be mounted in pods | `false`    |
 | `serviceAccount.enabled`                    | Flag for using ServiceAccount                | false                        |
 | `serviceAccount.create`                     | Flag for creating a ServiceAccount           | false                        |
 | `serviceAccount.name`                       | Name of ServiceAccount to use                |                              |
