@@ -54,7 +54,7 @@ Use these charts as optional additions:
 
 > - [Introduced](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3770) in GitLab 17.3 (Charts 8.3) for all GitLab Helm subcharts except `webservice` and `sidekiq`.
 
-`affinity` is an optional parameter in all GitLab Helm subcharts. When you set it, it takes precedence over the [global `affinity`](../charts/globals.md#affinity) value.
+`affinity` is an optional parameter in all GitLab Helm subcharts. When you set it, it takes precedence over the [global `affinity`](../globals.md#affinity) value.
 For more information about `affinity`, see [the relevant Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).
 
 NOTE:
