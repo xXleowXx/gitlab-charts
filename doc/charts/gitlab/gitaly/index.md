@@ -83,7 +83,7 @@ the `helm install` command using the `--set` flags.
 | `containerSecurityContext`             |                                             | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the Gitaly container is started                 |
 | `containerSecurityContext.runAsUser`             | `1000`                                            | Allow overwriting of the specific security context under which the Gitaly container is started |
 | `tolerations`                                    | `[]`                                              | Toleration labels for pod assignment                                                                                                                                           |
-| `affinity`                                    | `{}`                                              | [Affinity rules](#affinity) for pod assignment                                                                                                                                           |
+| `affinity`                                    | `{}`                                              | [Affinity rules](../index.md#affinity) for pod assignment                                                                                                                                           |
 | `persistence.accessMode`                         | `ReadWriteOnce`                                   | Gitaly persistence access mode                                                                                                                                                 |
 | `persistence.annotations`                        |                                                   | Gitaly persistence annotations                                                                                                                                                 |
 | `persistence.enabled`                            | `true`                                            | Gitaly enable persistence flag                                                                                                                                                 |
@@ -246,37 +246,7 @@ tolerations:
 
 ### affinity
 
-`affinity` is an optional parameter that allows you to set either or both:
-
-- `podAntiAffinity` rules to:
-  - Not schedule pods in the same domain as the pods that match the expression corresponding to the `topology key`.
-  - Set two modes of `podAntiAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
-    (`preferredDuringSchedulingIgnoredDuringExecution`). Using the variable `antiAffinity` in `values.yaml`, set the setting to `soft` so that the preferred mode is
-    applied or set it to `hard` so that the required mode is applied.
-- `nodeAffinity` rules to:
-  - Schedule pods to nodes that belong to a specific zone or zones.
-  - Set two modes of `nodeAffinity` rules: required (`requiredDuringSchedulingIgnoredDuringExecution`) and preferred
-    (`preferredDuringSchedulingIgnoredDuringExecution`). When set to `soft`, the preferred mode is applied. When set to `hard`, the required mode is applied. This
-    rule is implemented only for the `registry` chart and the `gitlab` chart alongwith all its subcharts except `webservice` and `sidekiq`.
-
-`nodeAffinity` only implements the [`In` operator](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#operators).
-
-For more information, see [the relevant Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity).
-
-The following example sets `affinity`, with both `nodeAffinity` and `antiAffinity` set to `hard`:
-
-```yaml
-nodeAffinity: "hard"
-antiAffinity: "hard"
-affinity:
-  nodeAffinity:
-    key: "test.com/zone"
-    values:
-    - us-east1-a
-    - us-east1-b
-  podAntiAffinity:
-    topologyKey: "test.com/hostname"
-```
+For more information, see [`affinity`](../index.md#affinity).
 
 ### annotations
 
