@@ -42,38 +42,12 @@ Before the migration, a few prerequisites must be met:
       avatars are rendered fine, image and other files added to issues load
       correctly, etc.
 
-1. Backup the legacy system to recover in Helm
-   - Option 1: [Create a backup tarball](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html) and [exclude all the already migrated directories](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#excluding-specific-directories-from-the-backup).
+1. [Create a backup tarball](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html) and [exclude all the already migrated directories](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#excluding-specific-directories-from-the-backup).
 
-   The backup file will be stored under `/var/opt/gitlab/backups`, unless you
-   [explicitly changed](https://docs.gitlab.com/omnibus/settings/backups.html#manually-manage-backup-directory)
-   it.
-
-   - Option 2: [Configure Object Storage to be backup target for your legacy system](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#using-amazon-s3)  
-   configure in `vi /etc/gitlab/gitlab.rb`:
-
-   ```
-   gitlab_rails['backup_upload_connection'] = {
-   'provider' => 'AWS',
-   'aws_access_key_id' => 'your-minio-access-key',
-   'aws_secret_access_key' => 'your-minio-secret-key',
-   'endpoint' => 'http://minio-endpoint:9000',
-   'path_style' => true
-   }
-
-   # Gitlab Helm Chart should have created the bucket gitlab-backups in your minio
-   gitlab_rails['backup_upload_remote_directory'] = 'gitlab-backups' 
-
-   # Set the multipart chunk size to 100MB
-   gitlab_rails['backup_multipart_chunk_size'] = 104857600
-
-   ```
-   After editing the configuration, apply the changes:
-
-   ```   
-   sudo gitlab-ctl reconfigure
-   ```
-
+   For local backups (default), the backup file is stored under `/var/opt/gitlab/backups`, unless you
+   [explicitly changed the location](https://docs.gitlab.com/omnibus/settings/backups.html#manually-manage-backup-directory).
+   For [remote storage backups](https://docs.gitlab.com/ee/administration/backup_restore/backup_gitlab.html#upload-backups-to-a-remote-cloud-storage),
+   the backup file is stored in the configured bucket.
 1. [Restore from the package-based installation](../../backup-restore/restore.md)
    to the Helm chart, starting with the secrets. You will need to migrate the
    values of `/etc/gitlab/gitlab-secrets.json` to the YAML file that will be
