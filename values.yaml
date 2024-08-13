@@ -903,6 +903,7 @@ upgradeCheck:
     # in alpine/debian/busybox based images, this is `nobody:nogroup`
     runAsUser: 65534
     fsGroup: 65534
+  containerSecurityContext: {}
   tolerations: []
   annotations: {}
   configMapAnnotations: {}
