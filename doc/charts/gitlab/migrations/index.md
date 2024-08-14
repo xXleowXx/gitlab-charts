@@ -61,10 +61,10 @@ Table below contains all the possible charts configurations that can be supplied
 | `securityContext.fsGroupChangePolicy` | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23) |    |
 | `containerSecurityContext.runAsUser`  | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started | `1000` |
 | `serviceAccount.annotations` | ServiceAccount annotations              | `{}`                                                    |
-| `serviceAccount.automountServiceAccountToken`| Controls if the default ServiceAccount access token should be mounted in pods | `false`    |
-| `serviceAccount.create`     | Flag to create a ServiceAccount                                      | `false`           |
-| `serviceAccount.enabled`    | Flag to enable using a ServiceAccount                                | `false`           |
-| `serviceAccount.name`       | Name of the ServiceAccount. If not set, the chart full name is used  |                   |
+| `serviceAccount.automountServiceAccountToken`| Indicates whether or not the default ServiceAccount access token should be mounted in pods | `false`    |
+| `serviceAccount.create`     | Indicates whether or not a ServiceAccount should be created                                      | `false`           |
+| `serviceAccount.enabled`    | Indicates whether or not to use a ServiceAccount                                | `false`           |
+| `serviceAccount.name`       | Name of the ServiceAccount. If not set, the full chart name is used  |                   |
 | `extraInitContainers`       | List of extra init containers to include |                   |
 | `extraContainers`           | List of extra containers to include      |                   |
 | `extraVolumes`              | List of extra volumes to create          |                   |
