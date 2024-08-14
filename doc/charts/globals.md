@@ -258,10 +258,10 @@ with the `-fips` extension to the image tag.
 
 ## Custom timezone for all containers 
 
-If you wish to set a custom timezone for all the GitLab containers, you can use the `global.time_zone` key. Default value is `UTC`.
+If you wish to set a custom timezone for all the GitLab containers, you can use the `global.time_zone` key. Refer to `TZ identifier` on the [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for the available values. Default is `UTC.
 
 ```shell
---set global.time_zone="US"
+--set global.time_zone="America/Chicago"
 ```
 
 ## Configure PostgreSQL settings

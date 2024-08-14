@@ -235,7 +235,7 @@ describe 'global configuration' do
         certmanager:
           install: false
         global:
-          time_zone: CET
+          time_zone: "America/Chicago"
           gitlabBase:
             image:
               tag: fixed-version
@@ -304,7 +304,7 @@ describe 'global configuration' do
         content['spec']['template']['spec']['containers'].each do |c|
           c['env'].each do |tz|
             if tz['name'] == 'TZ'
-              expect(tz['value']).to match('CET'), "Expected #{o}'s 'containers' have the env variable 'TZ' set to 'CET'. Container is #{c}"
+              expect(tz['value']).to match('America/Chicago'), "Expected #{o}'s 'containers' have the env variable 'TZ' set to 'America/Chicago'. Container is #{c}"
               break
             end
           end
@@ -315,7 +315,7 @@ describe 'global configuration' do
         content['spec']['template']['spec']['initContainers'].each do |ic|
           ic['env'].each do |tz|
             if tz['name'] == 'TZ'
-              expect(tz['value']).to match('CET'), "Expected #{o}'s 'containers' have the env variable 'TZ' set to 'CET'. Container is #{ic}"
+              expect(tz['value']).to match('America/Chicago'), "Expected #{o}'s 'containers' have the env variable 'TZ' set to 'America/Chicago'. Container is #{ic}"
               break
             end
           end
