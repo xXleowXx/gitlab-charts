@@ -2,6 +2,27 @@
 documentation](doc/development/changelog.md) for instructions on adding your own
 entry.
 
+## 8.3.0 (2024-08-14)
+
+### Added (4 changes)
+
+- [Add support for Redis usernames in Workhorse config](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/9d39fcf7abf8dc8c987592b6a8e69739740a2c32) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3877))
+- [Add support for configuring Redis client timeouts](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/d0cb87cbc5b07d2a7f80cf63376a8893b1c7e150) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3825))
+- [Support Redis cluster configuration for registry rate-limiting](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/0658f782489dd8d9d2d351773ecae817d1d4c106) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3844))
+- [Traefik: implement template for apiVersion](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/dab859121cf325d508f732d6b92f5871c93076c2) by @marcel1802 ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3837))
+
+### Fixed (3 changes)
+
+- [Support Redis usernames for gitlab-kas](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/ee710780e678c82a8af49424dbc77d60fd4d8c70) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3877))
+- [Sync Gitaly graceful shutdown with pod](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/3d91502b4b57d5466e3ab5c62cdc4763cd7617ba) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3870))
+- [Make GitLab Exporter work with global.redis.queues definition](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/1da8f2d29c5b720be1f2f654246d447b05cc8b6e) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3795))
+
+### Changed (3 changes)
+
+- [Update Helm release gitlab-runner to v0.67.1](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/f44a22b79ca6c1193b342306dd5b2a295e03e09a) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3871))
+- [Update gitlab-org/charts/gitlab-runner from 0.66.0 to 0.67.0](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/b467affed97511abb50aacc2dbfab479694624b5) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3849))
+- [Update gitlab-org/gitlab-qa from 14.12.0 to 14.13.0](https://gitlab.com/gitlab-org/charts/gitlab/-/commit/8c71f92f9de6e01ffddc7d004987f18901104a26) ([merge request](https://gitlab.com/gitlab-org/charts/gitlab/-/merge_requests/3848))
+
 ## 8.2.2 (2024-08-06)
 
 No changes.
