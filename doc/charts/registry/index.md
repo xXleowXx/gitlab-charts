@@ -306,7 +306,7 @@ This section controls if a ServiceAccount should be created and if the default a
 | Name                           |  Type   | Default | Description                                                                                                                                                                      |
 | :----------------------------- | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `automountServiceAccountToken` | Boolean | `false` | Controls if the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio). |
-| `enabled`                      | Boolean | `false` | Flag to enable using a ServiceAccount.                                                                                                                                           |
+| `enabled`                      | Boolean | `false` | Indicates whether or not to use a ServiceAccount.                                                                                                                                          |
 
 ### tolerations
 
