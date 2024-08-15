@@ -308,10 +308,9 @@ the `helm install` command using the `--set` flags.
 | `serviceAccount.automountServiceAccountToken` | `false`                                           | Indicates whether or not the default ServiceAccount access token should be mounted in pods                                                                             |
 | `serviceAccount.create`                   | `false`                                           | Indicates whether or not a ServiceAccount should be created                                                                                                                |
 | `serviceAccount.enabled`                  | `false`                                           | Indicates whether or not to use a ServiceAccount                                                                                                                           |
-| `serviceAccount.name`                     |                                                   | Name of the ServiceAccount. If not set, the full chart full name is used                                                                                                   |
+| `serviceAccount.name`                     |                                                   | Name of the ServiceAccount. If not set, the full chart name is used                                                                                                   |
 | serviceLabels                             | `{}`                                              | Supplemental service labels                                                                                                                                                |
 | statefulset.strategy                      | `{}`                                              | Allows one to configure the update strategy utilized by the statefulset                                                                                                    |
-
 
 ### serviceAccount
 
@@ -323,4 +322,4 @@ This section controls if a ServiceAccount should be created and if the default a
 | `automountServiceAccountToken` | Boolean | `false` | Controls if the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio). |
 | `create`                       | Boolean | `false` | Flag to create a ServiceAccount.                                                                                                                                                 |
 | `enabled`                      | Boolean | `false` | Flag to enable using a ServiceAccount.                                                                                                                                           |
-| `name`                         | String  |         | Name of the ServiceAccount. If not set, the chart full name is used.                                                                                                             |
+| `name`                         | String  |         | Name of the ServiceAccount. If not set, the full chart name is used.                                                                                                             |

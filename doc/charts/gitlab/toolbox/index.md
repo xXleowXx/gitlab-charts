@@ -127,7 +127,7 @@ gitlab:
 | `serviceAccount.automountServiceAccountToken`| Indicates whether or not the default ServiceAccount access token should be mounted in pods | `false`    |
 | `serviceAccount.enabled`                    | Indicates whether or not to use a ServiceAccount                | false                        |
 | `serviceAccount.create`                     | Indicates whether or not a ServiceAccount should be created           | false                        |
-| `serviceAccount.name`                       | Name of the ServiceAccount. If not set, the full chart full name is used                |                              |
+| `serviceAccount.name`                       | Name of the ServiceAccount. If not set, the full chart name is used                |                              |
 | `tolerations`                               | Tolerations to add to the Toolbox        |                              |
 | `extraEnvFrom`                              | List of extra environment variables from other data sources to expose  | |
 
