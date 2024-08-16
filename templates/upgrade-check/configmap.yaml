@@ -1,0 +1,20 @@
+{{- if .Values.upgradeCheck.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}-upgrade-check
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "gitlab.standardLabels" . | nindent 4 }}
+    {{- include "gitlab.commonLabels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-11"
+    "helm.sh/hook-delete-policy": before-hook-creation
+    {{- range $key, $value := .Values.upgradeCheck.configMapAnnotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+data:
+  runcheck: |
+    {{- include (print $.Template.BasePath "/upgrade-check/_runcheck.tpl") . | nindent 4 }}
+{{- end }}

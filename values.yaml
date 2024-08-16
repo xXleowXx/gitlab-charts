@@ -898,6 +898,12 @@ upgradeCheck:
     # tag:
     # pullPolicy: IfNotPresent
     # pullSecrets: []
+  serviceAccount:
+    enabled: false
+    create: false
+    annotations: { }
+    ## Name to be used for serviceAccount, otherwise defaults to chart fullname
+    # name:
   securityContext:
     # in alpine/debian/busybox based images, this is `nobody:nogroup`
     runAsUser: 65534
