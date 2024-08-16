@@ -55,6 +55,7 @@ The following adjustments were made to the NGINX fork:
    automountServiceAccountToken: {{ pluck "automountServiceAccountToken" .Values.serviceAccount .Values.global.serviceAccount | first }}
    {{- end -}}
    ```
+
 - Add the template call `{{ include "ingress-nginx.defaultBackend.automountServiceAccountToken" . }}` to `default-backend-serviceaccount.yaml`
 - Add the template to `_helpers.tpl`:
 
