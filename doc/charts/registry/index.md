@@ -205,6 +205,10 @@ If you chose to deploy this chart as a standalone, remove the `registry` at the 
 | `maintenance.uploadpurging.interval`        | `24h`                                                                | Frequency at which upload purging is performed |
 | `maintenance.uploadpurging.dryrun`          | `false`                                                              | Only list which uploads will be purged without deleting |
 | `priorityClassName`                         |                                                                      | [Priority class](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) assigned to pods. |
+| `resource.limits.cpu`                       |                                                                      | GitLab registry maximum CPU |
+| `resource.limits.memory`                    |                                                                      | GitLab registry maximum memory |
+| `resource.requests.cpu`                     | `50m`                                                                | GitLab registry minimum CPU |
+| `resource.requests.memory`                  | `32Mi`                                                               | GitLab registry minimum memory |
 | `reporting.sentry.enabled`                  | `false`                                                              | Enable reporting using Sentry |
 | `reporting.sentry.dsn`                      |                                                                      | The Sentry DSN (Data Source Name) |
 | `reporting.sentry.environment`              |                                                                      | The Sentry [environment](https://docs.sentry.io/concepts/key-terms/environments/) |
