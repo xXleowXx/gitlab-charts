@@ -39,6 +39,7 @@ metadata:
   annotations:
     {{- include "gitlab.deploymentAnnotations" $ | nindent 4 }}
 spec:
+  {{- include "gitlab.deploymentRevisionHistoryLimit" (dict "local" $.Values.deployment "context" $) | nindent 2 }}
   selector:
     matchLabels:
       {{- include "gitlab.selectorLabels" $ | nindent 6 }}

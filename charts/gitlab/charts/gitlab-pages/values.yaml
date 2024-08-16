@@ -95,6 +95,7 @@ init:
   containerSecurityContext: {}
 
 deployment:
+  # revisionHistoryLimit: 10
   strategy: {}
   readinessProbe:
     initialDelaySeconds: 0

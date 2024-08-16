@@ -177,6 +177,7 @@ keda:
 
 
 deployment:
+  # revisionHistoryLimit: 10
   # terminationGracePeriodSeconds: 30
   startupProbe: {}
   livenessProbe:

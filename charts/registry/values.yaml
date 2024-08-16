@@ -5,6 +5,7 @@ image:
   # pullSecrets: []
 
 deployment:
+  # revisionHistoryLimit: 10
   terminationGracePeriodSeconds: 30
   readinessProbe:
     enabled: true

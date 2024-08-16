@@ -121,6 +121,7 @@ privateApi: {}
   # secret:
   # key:
 deployment:
+  # revisionHistoryLimit: 10
   terminationGracePeriodSeconds: 300
   strategy: {}
   # minReadySeconds: 0
