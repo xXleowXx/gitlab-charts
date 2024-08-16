@@ -182,24 +182,24 @@ serviceAccount:
 statefulset:
   strategy: {}
   livenessProbe:
-    initialDelaySeconds: 30
+    initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 3
     successThreshold: 1
     failureThreshold: 3
   readinessProbe:
-    initialDelaySeconds: 10
-    periodSeconds: 10
+    initialDelaySeconds: 0
+    periodSeconds: 5
     timeoutSeconds: 3
     successThreshold: 1
     failureThreshold: 3
   startupProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 1
-    periodSeconds: 2
+    periodSeconds: 1
     timeoutSeconds: 1
     successThreshold: 1
-    failureThreshold: 30
+    failureThreshold: 60
 
 affinity:
   podAntiAffinity:
