@@ -8,6 +8,20 @@ Return the registry certificate secret name
 {{- end -}}
 
 {{/*
+Return the registry certificate crt secret key
+*/}}
+{{- define "gitlab.registry.certificate.crt" -}}
+{{- default (printf "registry-auth.crt" .Release.Name) .Values.global.registry.certificate.crt | quote -}}
+{{- end -}}
+
+{{/*
+Return the registry certificate key secret key
+*/}}
+{{- define "gitlab.registry.certificate.privateKey" -}}
+{{- default (printf "registry-auth.key" .Release.Name) .Values.global.registry.certificate.privateKey | quote -}}
+{{- end -}}
+
+{{/*
 Return the registry TLS secret name
 */}}
 {{- define "gitlab.registry.tls.secret" -}}
