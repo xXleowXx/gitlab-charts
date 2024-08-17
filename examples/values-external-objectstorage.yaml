@@ -26,6 +26,16 @@ global:
       connection:
         secret: objectstore-packages
         key: connection
+    terraformState:
+      bucket: gitlab-terraformstate-storage
+      connection:
+        secret: objectstore-terraformstate
+        key: connection
+    dependencyProxy:
+      bucket: gitlab-dependencyproxy-storage
+      connection:
+        secret: objectstore-dependencyproxy
+        key: connection
     backups:
       bucket: gitlab-backup-storage
       tmpBucket: gitlab-tmp-storage
