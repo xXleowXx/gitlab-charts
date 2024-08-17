@@ -14,8 +14,7 @@ item, ensuring presence of all keys.
 {{/* make sure we always have at least one */}}
 {{- if not $.Values.deployments -}}
 {{-   $blank := fromYaml (include "webservice.datamodel.blank" $) -}}
-{{-   $_ := set $blank.ingress "path" (coalesce $.Values.ingress.path $.Values.global.ingress.path) -}}
-{{-   $_ := set $blank.extraIngress "path" (coalesce $.Values.extraIngress.path $.Values.global.ingress.path) -}}
+{{-   $_ := set $blank.ingress "paths" (list (coalesce $.Values.ingress.path $.Values.global.ingress.path)) -}}
 {{-   $_ := set $.Values "deployments" (dict "default" (dict)) -}}
 {{-   $_ := set $.Values.deployments "default" $blank -}}
 {{- end -}}
@@ -28,13 +27,20 @@ item, ensuring presence of all keys.
 {{/* -   $_ := mergeOverwrite $filledValues $values - */}}
 {{-   $_ := set $filledValues "name" $deployment -}}
 {{-   $_ := set $filledValues "fullname" $fullname -}}
+{{/* move top level `path` to the `paths` list */}}
+{{-   if $filledValues.ingress.path -}}
+{{-   $_ := prepend $filledValues.ingress.paths $filledValues.ingress.path -}}
+{{-   $_ := unset $filledValues.ingress "path" -}}
+{{-   end -}}
 {{-   $_ := set $.Values.deployments $deployment $filledValues -}}
-{{-   if has ($filledValues.ingress.path | toString ) (list "/" "/*") -}}
-{{-     $_ := set $checks "hasBasePath" true -}}
+{{-   range $path := $filledValues.ingress.paths -}}
+{{-     if has ($path | toString ) (list "/" "/*") -}}
+{{-       $_ := set $checks "hasBasePath" true -}}
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
 {{- if and (not $.Values.ingress.requireBaseBath) (not $checks.hasBasePath) -}}
-{{-   fail "FATAL: Webservice: no deployment with ingress.path '/' or '/*' specified." -}}
+{{-   fail "FATAL: Webservice: no deployment with ingress.paths '/' or '/*' specified." -}}
 {{- end -}}
 {{- end -}}
 
@@ -50,7 +56,7 @@ This is output as YAML, it can be read back in as a dict via `toYaml`.
 {{- define "webservice.datamodel.blank" -}}
 {{- range $k, $v := (dict "ingress" .Values.ingress "extraIngress" .Values.extraIngress) }}
 {{ $k }}:
-  path: # intentionally not setting a value. User must set.
+  paths: [] # intentionally not setting a value. User must set.
   pathType: Prefix
   annotations:
     {{- $v.annotations | toYaml | nindent 4 }}
