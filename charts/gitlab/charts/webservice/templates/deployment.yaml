@@ -338,7 +338,7 @@ spec:
           resources:
             {{- toYaml .resources | nindent 12 }}
         - name: gitlab-workhorse
-          image: "{{ coalesce $.Values.workhorse.image (include "workhorse.repository" $) }}:{{ coalesce $.Values.workhorse.tag (include "gitlab.versionTag" $ ) }}{{ include "gitlab.image.tagSuffix" $ }}"
+          image: "{{ coalesce $.Values.workhorse.image.repository (include "workhorse.repository" $) }}:{{ coalesce $.Values.workhorse.image.tag (include "gitlab.versionTag" $ ) }}{{ include "gitlab.image.tagSuffix" $ }}"
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           {{- if $.Values.workhorse.containerSecurityContext }}
           securityContext:
