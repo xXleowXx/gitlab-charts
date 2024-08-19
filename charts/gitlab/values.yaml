@@ -3,6 +3,9 @@
 
 global:
   edition: ee
+  kas:
+    service:
+      apiExternalPort: 8153
   hosts:
     domain: example.com
     https: true
