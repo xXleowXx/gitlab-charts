@@ -64,6 +64,7 @@ Due to gotpl scoping, we can't make use of `range`, so we have to add action lin
 {{- $removals = append $removals (include "gitlab.removal.global.grafana" .) -}}
 {{- $removals = append $removals (include "gitlab.removal.busybox" .) -}}
 {{- $removals = append $removals (include "gitlab.removal.kas.privateApi.tls" .) -}}
+{{- /* $removals = append $removals (include "gitlab.removal.psql.unified" .) */ -}}
 
 {{- /* we're ready to deprecate top-level registry entries for workhorse and sidekiq, but not enforcing yet */ -}}
 {{- /* $removals = append $removals (include "gitlab.removal.registry.topLevel" .) */ -}}
@@ -546,4 +547,11 @@ kas:
     Other components of the GitLab chart other than KAS also need to be configured to talk to KAS via TLS.
     With a global value the chart can take care of these configurations without the need for other specific values.
 {{- end -}}
+{{- end -}}
+
+{{- define "gitlab.removal.psql.unified" -}}
+{{-   if or ( not ( hasKey $.Values.global.psql "main" ) ) ( not ( hasKey $.Values.global.psql "ci" )) -}}
+global.psql:
+    Unified configuration for PostgreSQL is deprecated. Please define `global.psql.main` and `global.psql.ci` instances.
+{{-   end -}}
 {{- end -}}
