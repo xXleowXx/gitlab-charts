@@ -96,6 +96,10 @@ metrics:
     enabled: false
     additionalLabels: {}
     endpointConfig: {}
+  podMonitor:
+    enabled: false
+    additionalLabels: {}
+    endpointConfig: {}
 observability:
   port: 8151
   livenessProbe:

@@ -32,6 +32,10 @@ describe 'monitoring object configuration' do
           metrics:
             podMonitor:
               enabled: true
+        kas:
+          metrics:
+            podMonitor:
+              enabled: true
     )).merge(default_values)
   end
 
@@ -73,6 +77,12 @@ describe 'monitoring object configuration' do
 
       expect(template['PodMonitor/test-sidekiq']).not_to be_nil, "missing PodMonitor for Sidekiq"
     end
+    it 'creates PodMonitor for kas' do
+      template = HelmTemplate.new(podmonitor_enabled_values.deep_merge(global_monitoring_enabled))
+      expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+
+      expect(template['PodMonitor/test-kas']).not_to be_nil, "missing PodMonitor for kas"
+    end
   end
 
   context 'when monitoring is enabled via Capabilities' do
@@ -90,6 +100,12 @@ describe 'monitoring object configuration' do
       expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
 
       expect(template['PodMonitor/test-sidekiq']).not_to be_nil, "missing PodMonitor for Sidekiq"
+    end
+    it 'creates PodMonitor for kas' do
+      template = HelmTemplate.new(podmonitor_enabled_values, 'test', api_versions_args)
+      expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
+
+      expect(template['PodMonitor/test-kas']).not_to be_nil, "missing PodMonitor for kas"
     end
   end
 end
