@@ -80,6 +80,8 @@ spec:
               value: /templates
             - name: CONFIG_DIRECTORY
               value: /registry
+            - name: TZ
+              value: {{ $.Values.global.time_zone | quote }}
           {{- include "gitlab.extraEnv" . | nindent 12 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 12 }}
         {{- if or .Values.database.enabled .Values.database.configure }}
@@ -95,6 +97,8 @@ spec:
           resources:
             {{- toYaml .Values.init.resources | nindent 12 }}
           env:
+          - name: TZ
+            value: {{ $.Values.global.time_zone | quote }}
           {{- include "gitlab.extraEnv" . | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
         {{- end }}
@@ -105,6 +109,8 @@ spec:
           {{- include "gitlab.image.pullPolicy" $imageCfg | indent 10 }}
           {{- include "gitlab.containerSecurityContext" $ | indent 10 }}
           env:
+          - name: TZ
+            value: {{ $.Values.global.time_zone | quote }}
           {{- include "gitlab.extraEnv" . | nindent 10 }}
           {{- include "gitlab.extraEnvFrom" (dict "root" $ "local" .) | nindent 10 }}
           volumeMounts:
