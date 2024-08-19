@@ -230,21 +230,12 @@ describe 'global configuration' do
   end
 
   describe 'global.time_zone: set timezone for each GitLab pod' do
-    let(:shell_values) do
+    let(:values) do
       YAML.safe_load(%(
         certmanager:
           install: false
         global:
           time_zone: "America/Chicago"
-          gitlabBase:
-            image:
-              tag: fixed-version
-          certificates:
-            image:
-              tag: fixed-version
-          kubectl:
-            image:
-              tag: fixed-version
           praefect:
             enabled: true
           spamcheck:
@@ -255,11 +246,6 @@ describe 'global configuration' do
             configureCertmanager: false
           job:
             nameSuffixOverride: '1'
-        nginx-ingress:
-          controller:
-            kind: Both
-            image:
-              tag: fixed-version
       )).deep_merge(default_values)
     end
 
@@ -291,7 +277,7 @@ describe 'global configuration' do
     end
 
     it 'sets the provided timezone on all pods' do
-      t = HelmTemplate.new(shell_values)
+      t = HelmTemplate.new(values)
       expect(t.exit_code).to eq(0), "Unexpected error code #{t.exit_code} -- #{t.stderr}"
 
       objects = t.resources_by_kind('Deployment').reject { |key, _| ignored_deployments.include? key }
