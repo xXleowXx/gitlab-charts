@@ -304,8 +304,25 @@ the `helm install` command using the `--set` flags.
 | securityContext.runAsUser                 | 1000                                              |                                                                                                                                                                            |
 | securityContext.fsGroup                   | 1000                                              |                                                                                                                                                                            |
 | securityContext.fsGroupChangePolicy       |                                                   | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23)                                                                                      |
+| `serviceAccount.annotations`              | `{}`                                              | ServiceAccount annotations                                                                                                                                                 |
+| `serviceAccount.automountServiceAccountToken` | `false`                                           | Indicates whether or not the default ServiceAccount access token should be mounted in pods                                                                             |
+| `serviceAccount.create`                   | `false`                                           | Indicates whether or not a ServiceAccount should be created                                                                                                                |
+| `serviceAccount.enabled`                  | `false`                                           | Indicates whether or not to use a ServiceAccount                                                                                                                           |
+| `serviceAccount.name`                     |                                                   | Name of the ServiceAccount. If not set, the full chart name is used                                                                                                   |
 | serviceLabels                             | `{}`                                              | Supplemental service labels                                                                                                                                                |
 | statefulset.strategy                      | `{}`                                              | Allows one to configure the update strategy utilized by the statefulset                                                                                                    |
+
+### serviceAccount
+
+This section controls if a ServiceAccount should be created and if the default access token should be mounted in pods.
+
+| Name                           |  Type   | Default | Description                                                                                                                                                                      |
+| :----------------------------- | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `annotations`                  | Map     | `{}`    | ServiceAccount annotations.                                                                                                                                                      |
+| `automountServiceAccountToken` | Boolean | `false` | Controls if the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio). |
+| `create`                       | Boolean | `false` | Indicates whether or not a ServiceAccount should be created.                                                                                                                     |
+| `enabled`                      | Boolean | `false` | Indicates whether or not to use a ServiceAccount.                                                                                                                                |
+| `name`                         | String  |         | Name of the ServiceAccount. If not set, the full chart name is used.                                                                                                             |
 
 ### affinity
 

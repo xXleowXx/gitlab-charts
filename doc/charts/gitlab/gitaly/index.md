@@ -72,11 +72,16 @@ the `helm install` command using the `--set` flags.
 | `service.internalPort`                           | `8075`                                            | Gitaly internal port                                                                                                                                                           |
 | `service.name`                                   | `gitaly`                                          | The name of the Service port that Gitaly is behind in the Service object.                                                                                                      |
 | `service.type`                                   | `ClusterIP`                                       | Gitaly service type                                                                                                                                                            |
+| `serviceAccount.annotations`                     | `{}`                                              | ServiceAccount annotations                                                                                                                                                     |
+| `serviceAccount.automountServiceAccountToken`    | `false`                                           | Indicates whether or not the default ServiceAccount access token should be mounted in pods |
+| `serviceAccount.create`                          | `false`                                           | Indicates whether or not a ServiceAccount should be created |
+| `serviceAccount.enabled`                         | `false`                                           | Indicates whether or not to use a ServiceAccount |
+| `serviceAccount.name`                            |                                                   | Name of the ServiceAccount. If not set, the full chart name is used |
 | `securityContext.fsGroup`                        | `1000`                                            | Group ID under which the pod should be started                                                                                                                                 |
 | `securityContext.fsGroupChangePolicy`            |                                                   | Policy for changing ownership and permission of the volume (requires Kubernetes 1.23)                                                                                          |
 | `securityContext.runAsUser`                      | `1000`                                            | User ID under which the pod should be started                                                                                                                                  |
-| `containerSecurityContext`             |                                             | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the Gitaly container is started                                                                                                                                  |
-| `containerSecurityContext.runAsUser`             | `1000`                                            | Allow to overwrite the specific security context under which the Gitaly container is started                                                                                                                                  |
+| `containerSecurityContext`             |                                             | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the Gitaly container is started                 |
+| `containerSecurityContext.runAsUser`             | `1000`                                            | Allow overwriting of the specific security context under which the Gitaly container is started |
 | `tolerations`                                    | `[]`                                              | Toleration labels for pod assignment                                                                                                                                           |
 | `affinity`                                    | `{}`                                              | [Affinity rules](../index.md#affinity) for pod assignment                                                                                                                                           |
 | `persistence.accessMode`                         | `ReadWriteOnce`                                   | Gitaly persistence access mode                                                                                                                                                 |
@@ -97,7 +102,7 @@ the `helm install` command using the `--set` flags.
 | `packObjectsCache.enabled`                       | `false`                                           | Enable the Gitaly pack-objects cache                                                                                                                                           |
 | `packObjectsCache.dir`                           | `/home/git/repositories/+gitaly/PackObjectsCache` | Directory where cache files get stored                                                                                                                                         |
 | `packObjectsCache.max_age`                       | `5m`                                              | Cache entries lifespan                                                                                                                                                         |
-| `packObjectsCache.min_occurrences`               | `1`                                               | Key must hit a minimum count to create a cache entry                                                                                                                                                         |
+| `packObjectsCache.min_occurrences`               | `1`                                               | Minimum count required to create a cache entry |
 | `git.catFileCacheSize`                           |                                                   | Cache size used by Git cat-file process                                                                                                                                        |
 | `git.config[]`                                   | `[]`                                              | Git configuration that Gitaly should set when spawning Git commands                                                                                                            |
 | `prometheus.grpcLatencyBuckets`                  |                                                   | Buckets corresponding to histogram latencies on GRPC method calls to be recorded by Gitaly. A string form of the array (for example, `"[1.0, 1.5, 2.0]"`) is required as input |
@@ -208,6 +213,18 @@ image:
   - name: my-secret-name
   - name: my-secondary-secret-name
 ```
+
+### serviceAccount
+
+This section controls if a ServiceAccount should be created and if the default access token should be mounted in pods.
+
+| Name                           |  Type   | Default | Description                                                                                                                                                                      |
+| :----------------------------- | :-----: | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `annotations`                  | Map     | `{}`    | ServiceAccount annotations.                                                                                                                                                      |
+| `automountServiceAccountToken` | Boolean | `false` | Controls if the default ServiceAccount access token should be mounted in pods. You should not enable this unless it is required by certain sidecars to work properly (for example, Istio). |
+| `create`                       | Boolean | `false` | Indicates whether or not to create a ServiceAccount.                                                                                                                                                 |
+| `enabled`                      | Boolean | `false` | Indicates whether or not to use a ServiceAccount.                                                                                                                                |
+| `name`                         | String  |         | Name of the ServiceAccount. If not set, the full chart name is used.                                                                                                             |
 
 ### tolerations
 

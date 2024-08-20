@@ -133,9 +133,10 @@ gitlab:
 | `containerSecurityContext`                  | Override container [securityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#securitycontext-v1-core) under which the container is started | |
 | `containerSecurityContext.runAsUser`        | Allow to overwrite the specific security context under which the container is started | `1000` |
 | `serviceAccount.annotations`                | Annotations for ServiceAccount               | {}                           |
-| `serviceAccount.enabled`                    | Flag for using ServiceAccount                | false                        |
-| `serviceAccount.create`                     | Flag for creating a ServiceAccount           | false                        |
-| `serviceAccount.name`                       | Name of ServiceAccount to use                |                              |
+| `serviceAccount.automountServiceAccountToken`| Indicates whether or not the default ServiceAccount access token should be mounted in pods | `false`    |
+| `serviceAccount.enabled`                    | Indicates whether or not to use a ServiceAccount                | false                        |
+| `serviceAccount.create`                     | Indicates whether or not a ServiceAccount should be created           | false                        |
+| `serviceAccount.name`                       | Name of the ServiceAccount. If not set, the full chart name is used                |                              |
 | `tolerations`                               | Tolerations to add to the Toolbox        |                              |
 | `extraEnvFrom`                              | List of extra environment variables from other data sources to expose  | |
 

@@ -370,6 +370,9 @@ profiling:
 
 serviceAccount:
   create: false
+  ## Used for local override of global ServiceAccount token mounting
+  # automountServiceAccountToken: false
+
 
 
 # Disable metadata database by default

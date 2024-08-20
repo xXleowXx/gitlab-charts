@@ -487,6 +487,15 @@ Create the name of the service account to use for shared-secrets job
 {{- end -}}
 
 {{/*
+Set if the default ServiceAccount token should be mounted by Kubernetes or not.
+
+Default is 'false'
+*/}}
+{{- define "gitlab.automountServiceAccountToken" -}}
+automountServiceAccountToken: {{ pluck "automountServiceAccountToken" .Values.serviceAccount .Values.global.serviceAccount | first }}
+{{- end -}}
+
+{{/*
 Return a emptyDir definition for Volume declarations
 
 Scope is the configuration of that emptyDir.
