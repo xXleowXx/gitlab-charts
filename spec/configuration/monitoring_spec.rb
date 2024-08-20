@@ -39,6 +39,18 @@ describe 'monitoring object configuration' do
     )).merge(default_values)
   end
 
+  let(:servicemonitor_podmonitor_enabled_values_kas) do
+    YAML.safe_load(%(
+      gitlab:
+        kas:
+          metrics:
+            serviceMonitor:
+              enabled: true
+            podMonitor:
+              enabled: true
+    )).merge(default_values)
+  end
+
   let(:global_monitoring_enabled) do
     YAML.safe_load(%(
       global:
@@ -106,6 +118,15 @@ describe 'monitoring object configuration' do
       expect(template.exit_code).to eq(0), "Unexpected error code #{template.exit_code} -- #{template.stderr}"
 
       expect(template['PodMonitor/test-kas']).not_to be_nil, "missing PodMonitor for kas"
+    end
+  end
+
+  context 'when ServiceMonitor and PodMonitor for KAS are enabled' do
+    it 'fails to render' do
+      template = HelmTemplate.new(servicemonitor_podmonitor_enabled_values_kas, 'test', api_versions_args)
+      expect(template.exit_code).not_to eq(0)
+
+      expect(template.stderr).to include('Both metrics.serviceMonitor.enabled and metrics.podMonitor.enabled cannot be set to true at the same time.')
     end
   end
 end
