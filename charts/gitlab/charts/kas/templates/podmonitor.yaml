@@ -1,4 +1,7 @@
 {{- if and .Values.global.kas.enabled .Values.metrics.enabled .Values.metrics.podMonitor.enabled -}}
+{{- if .Values.metrics.serviceMonitor.enabled }}
+{{- fail "Both metrics.serviceMonitor.enabled and metrics.podMonitor.enabled cannot be set to true at the same time." }}
+{{- end }}
 {{- if eq (include "gitlab.monitoring.enabled" .) "true" -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
